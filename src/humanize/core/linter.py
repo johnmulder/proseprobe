@@ -1,0 +1,103 @@
+"""Main linting orchestrator."""
+
+from pathlib import Path
+
+from humanize.config import Config
+from humanize.rules.base import Issue, Rule
+
+
+class Linter:
+    """Orchestrates file discovery and rule execution."""
+
+    def __init__(self, config: Config) -> None:
+        """Initialize linter with configuration.
+
+        Args:
+            config: Linter configuration.
+        """
+        self.config = config
+        self._rules: list[Rule] = []
+
+    def register_rule(self, rule: Rule) -> None:
+        """Register a rule for linting.
+
+        Args:
+            rule: Rule instance to register.
+        """
+        self._rules.append(rule)
+
+    def discover_files(self, paths: list[Path]) -> list[Path]:
+        """Discover files to lint from paths.
+
+        Args:
+            paths: List of files or directories.
+
+        Returns:
+            List of files matching include/exclude patterns.
+        """
+        # TODO: Implement file discovery with glob patterns
+        files: list[Path] = []
+        for path in paths:
+            if path.is_file():
+                files.append(path)
+            elif path.is_dir():
+                for pattern in self.config.include:
+                    files.extend(path.rglob(pattern))
+
+        # TODO: Apply exclude patterns
+        return files
+
+    def check_file(self, path: Path) -> list[Issue]:
+        """Check a single file for issues.
+
+        Args:
+            path: Path to file.
+
+        Returns:
+            List of issues found.
+        """
+        content = path.read_text(encoding="utf-8")
+        issues: list[Issue] = []
+
+        for rule in self._rules:
+            if self._rule_enabled(rule, path):
+                issues.extend(rule.check(content, str(path)))
+
+        return issues
+
+    def check(self, paths: list[Path]) -> dict[Path, list[Issue]]:
+        """Check multiple paths for issues.
+
+        Args:
+            paths: Files or directories to check.
+
+        Returns:
+            Mapping of file paths to issues.
+        """
+        files = self.discover_files(paths)
+        results: dict[Path, list[Issue]] = {}
+
+        for file in files:
+            issues = self.check_file(file)
+            if issues:
+                results[file] = issues
+
+        return results
+
+    def _rule_enabled(self, rule: Rule, path: Path) -> bool:
+        """Check if a rule is enabled for a file.
+
+        Args:
+            rule: Rule to check.
+            path: File path.
+
+        Returns:
+            True if rule should run on file.
+        """
+        # Check global select/ignore
+        if rule.id in self.config.ignore:
+            return False
+
+        prefix = rule.id[0]  # V, S, T, etc.
+        # TODO: Check per-file ignores
+        return prefix in self.config.select or rule.id in self.config.select
