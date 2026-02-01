@@ -138,6 +138,4 @@ class TestComparativeAnalysis:
         categories = {issue.rule_id[0] for issue in all_issues}
 
         # Should trigger at least 3 different categories
-        assert len(categories) >= 3, (
-            f"Expected 3+ categories, got {categories}"
-        )
+        assert len(categories) >= 3, f"Expected 3+ categories, got {categories}"

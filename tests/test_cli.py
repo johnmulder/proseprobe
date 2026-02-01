@@ -252,7 +252,8 @@ class TestShowConfigFlag:
         test_file.write_text("Clean content.")
 
         result = runner.invoke(
-            app, ["check", str(test_file), "--show-config", "--config", str(config_file)]
+            app,
+            ["check", str(test_file), "--show-config", "--config", str(config_file)],
         )
 
         assert result.exit_code == 0
