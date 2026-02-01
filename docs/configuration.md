@@ -123,3 +123,112 @@ CLI arguments override config file settings:
 # Config says ignore T001, but CLI enables it
 humanize check --select T001 .
 ```
+
+## CLI Options Reference
+
+| Option | Short | Description |
+|--------|-------|-------------|
+| `--fix` | | Apply auto-fixes for fixable issues |
+| `--dry-run` | | Show what fixes would be applied without writing |
+| `--show-config` | | Display configuration and exit |
+| `--format` | `-f` | Output format: text, json, sarif |
+| `--select` | `-s` | Rules to enable (comma-separated) |
+| `--ignore` | `-i` | Rules to disable (comma-separated) |
+| `--config` | `-c` | Path to configuration file |
+| `--severity` | | Minimum severity: error, warning, info |
+| `--quiet` | `-q` | Only output errors |
+| `--verbose` | `-v` | Show additional diagnostic info |
+
+## Output Formats
+
+### Text (default)
+
+```
+docs/guide.md:15:5: V001 Avoid overused AI word "delve"
+docs/guide.md:23:1: S001 Rule of three pattern detected
+Found 2 issue(s)
+```
+
+### JSON
+
+```bash
+humanize check --format json . > report.json
+```
+
+```json
+{
+  "version": "0.1.0",
+  "files": [
+    {
+      "path": "docs/guide.md",
+      "issues": [
+        {
+          "rule_id": "V001",
+          "message": "Avoid overused AI word \"delve\"",
+          "line": 15,
+          "column": 5,
+          "severity": "warning",
+          "fixable": true
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_issues": 2,
+    "errors": 0,
+    "warnings": 2
+  }
+}
+```
+
+### SARIF
+
+For GitHub Code Scanning integration:
+
+```bash
+humanize check --format sarif . > results.sarif
+```
+
+## Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | Success, no issues found |
+| `1` | Issues found |
+| `2` | Configuration or usage error |
+| `3` | Internal error |
+
+## Pre-commit Integration
+
+```yaml
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/yourusername/humanize-cli
+    rev: v1.0.0
+    hooks:
+      - id: humanize
+        args: [--select, "V001,V002,M002,M003"]
+```
+
+## GitHub Actions Integration
+
+```yaml
+# .github/workflows/lint.yml
+name: Lint for AI Content
+on: [push, pull_request]
+
+jobs:
+  humanize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install humanize-cli
+      - run: humanize check --format sarif docs/ > results.sarif
+        continue-on-error: true
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
+```
