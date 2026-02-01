@@ -1,0 +1,28 @@
+# Pre-commit hooks for humanize-cli
+# Add to your .pre-commit-config.yaml:
+#
+# repos:
+#   - repo: https://github.com/yourusername/humanize-cli
+#     rev: v1.0.0
+#     hooks:
+#       - id: humanize
+#
+- id: humanize
+  name: humanize
+  description: Detect AI-generated content patterns
+  entry: humanize check
+  language: python
+  types: [text]
+  types_or: [markdown, python]
+  require_serial: false
+  minimum_pre_commit_version: '2.9.0'
+
+- id: humanize-fix
+  name: humanize (with auto-fix)
+  description: Detect and fix AI-generated content patterns
+  entry: humanize check --fix
+  language: python
+  types: [text]
+  types_or: [markdown, python]
+  require_serial: false
+  minimum_pre_commit_version: '2.9.0'
