@@ -1,0 +1,48 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- `--dry-run` flag to preview fixes without modifying files
+- `--show-config` flag to display current configuration
+- Pre-commit hook configuration (`.pre-commit-hooks.yaml`)
+- GitHub Actions CI workflow for testing on Python 3.11, 3.12, 3.13
+- Comprehensive documentation for all 29 rules with examples
+- Full CLI options reference in configuration docs
+
+## [0.1.0] - 2026-02-01
+
+### Added
+- Initial release of humanize CLI
+- 29 detection rules across 6 categories:
+  - **V (Vocabulary)**: V001-V005 - AI-specific words and phrases
+  - **S (Structure)**: S001-S007 - Organizational patterns
+  - **T (Style)**: T001-T006 - Formatting and style issues
+  - **G (Grammar)**: G001-G003 - Grammar patterns
+  - **C (Code)**: C001-C004 - Python code-specific issues
+  - **M (Markup)**: M001-M004 - Markdown artifacts
+- CLI commands:
+  - `check` - Lint files for AI content patterns
+  - `rules` - List all available rules
+  - `explain` - Explain a specific rule
+  - `init` - Create a `.humanize.toml` config file
+  - `version` - Show version information
+- Output formats: text, JSON, SARIF
+- Auto-fix support for fixable rules
+- Configuration via `.humanize.toml` or `pyproject.toml`
+- Per-file ignore patterns
+- Custom vocabulary (additional/allowed words)
+- 129 tests with 90%+ code coverage
+
+### Technical
+- Python 3.11+ required
+- Strict mypy type checking
+- Dependencies: typer, rich, tomli, mistune, regex
+
+[Unreleased]: https://github.com/yourusername/humanize-cli/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/yourusername/humanize-cli/releases/tag/v0.1.0
