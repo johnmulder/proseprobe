@@ -40,6 +40,14 @@ def check(
         bool,
         typer.Option("--fix", help="Apply auto-fixes for fixable issues"),
     ] = False,
+    dry_run: Annotated[
+        bool,
+        typer.Option("--dry-run", help="Show what fixes would be applied without writing"),
+    ] = False,
+    show_config: Annotated[
+        bool,
+        typer.Option("--show-config", help="Display configuration and exit"),
+    ] = False,
     format: Annotated[
         str,
         typer.Option("--format", "-f", help="Output format: text, json, sarif"),
@@ -80,6 +88,20 @@ def check(
         ignore_list = ignore.split(",")
         config.ignore = list(set(config.ignore) | set(ignore_list))
 
+    # Handle --show-config
+    if show_config:
+        console.print("[bold]Configuration:[/bold]")
+        console.print(f"  Config file: {config_path or 'default'}")
+        console.print(f"  Select: {config.select}")
+        console.print(f"  Ignore: {config.ignore}")
+        console.print(f"  Include patterns: {config.include}")
+        console.print(f"  Exclude patterns: {config.exclude}")
+        console.print(f"  Severity threshold: {severity}")
+        console.print(f"  Output format: {format}")
+        console.print(f"  Fix mode: {fix}")
+        console.print(f"  Dry run: {dry_run}")
+        raise typer.Exit(0)
+
     # Create linter and register rules
     linter = Linter(config)
     min_severity = _severity_from_str(severity)
@@ -96,6 +118,40 @@ def check(
         if not quiet:
             console.print("[green]✓[/green] No issues found!")
         raise typer.Exit(0)
+
+    # Handle --fix mode
+    if fix:
+        from humanize.core.fixer import Fixer
+
+        fixer = Fixer(get_all_rules())
+        total_fixed = 0
+
+        for file_path, issues in results.items():
+            fixable = [i for i in issues if i.fixable]
+            if not fixable:
+                continue
+
+            if dry_run:
+                # Show what would be fixed without modifying
+                content, num_fixes = fixer.fix_file(file_path, issues)
+                if num_fixes > 0:
+                    console.print(f"[bold]{file_path}[/bold]: Would fix {num_fixes} issue(s)")
+                    if verbose:
+                        for issue in fixable:
+                            console.print(f"  - {issue.rule_id}: {issue.message}")
+            else:
+                # Actually apply fixes
+                num_fixes = fixer.fix_and_write(file_path, issues)
+                if num_fixes > 0:
+                    console.print(f"[bold]{file_path}[/bold]: Fixed {num_fixes} issue(s)")
+                total_fixed += num_fixes
+
+        if dry_run:
+            console.print("\n[yellow]Dry run:[/yellow] No files were modified.")
+            raise typer.Exit(0)
+        elif total_fixed > 0:
+            console.print(f"\n[green]Fixed {total_fixed} issue(s)[/green]")
+            raise typer.Exit(0)
 
     # Output results
     total_issues = 0

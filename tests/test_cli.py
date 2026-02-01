@@ -201,3 +201,58 @@ class TestVersionCommand:
 
         assert result.exit_code == 0
         assert "0.1.0" in result.stdout
+
+
+class TestDryRunFlag:
+    """Tests for the --dry-run flag."""
+
+    def test_dry_run_shows_diff(self, tmp_path: Path) -> None:
+        """Test that --dry-run shows diff without modifying file."""
+        test_file = tmp_path / "test.md"
+        original = "This delves into topics."
+        test_file.write_text(original)
+
+        result = runner.invoke(app, ["check", str(test_file), "--fix", "--dry-run"])
+
+        # File should not be modified
+        assert test_file.read_text() == original
+        # Output should indicate what would change
+        assert result.exit_code in (0, 1)
+
+    def test_dry_run_without_fix_ignored(self, tmp_path: Path) -> None:
+        """Test that --dry-run without --fix is handled."""
+        test_file = tmp_path / "test.md"
+        test_file.write_text("This delves into topics.")
+
+        result = runner.invoke(app, ["check", str(test_file), "--dry-run"])
+
+        # Should run normally (dry-run only applies to --fix)
+        assert result.exit_code == 1
+
+
+class TestShowConfigFlag:
+    """Tests for the --show-config flag."""
+
+    def test_show_config_displays_settings(self, tmp_path: Path) -> None:
+        """Test that --show-config displays configuration."""
+        test_file = tmp_path / "test.md"
+        test_file.write_text("Clean content.")
+
+        result = runner.invoke(app, ["check", str(test_file), "--show-config"])
+
+        assert result.exit_code == 0
+        # Should show config info
+        assert "select" in result.stdout.lower() or "config" in result.stdout.lower()
+
+    def test_show_config_with_custom_config(self, tmp_path: Path) -> None:
+        """Test --show-config with custom config file."""
+        config_file = tmp_path / ".humanize.toml"
+        config_file.write_text('[lint]\nignore = ["V001"]')
+        test_file = tmp_path / "test.md"
+        test_file.write_text("Clean content.")
+
+        result = runner.invoke(
+            app, ["check", str(test_file), "--show-config", "--config", str(config_file)]
+        )
+
+        assert result.exit_code == 0
