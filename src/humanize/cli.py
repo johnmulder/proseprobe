@@ -1,5 +1,6 @@
 """Command-line interface for humanize."""
 
+import time
 from pathlib import Path
 from typing import Annotated
 
@@ -78,6 +79,22 @@ def check(
         bool,
         typer.Option("--verbose", "-v", help="Show additional diagnostic info"),
     ] = False,
+    baseline: Annotated[
+        Path | None,
+        typer.Option("--baseline", "-b", help="Baseline file for only-new-issues mode"),
+    ] = None,
+    generate_baseline: Annotated[
+        bool,
+        typer.Option(
+            "--generate-baseline", help="Generate baseline file from current issues"
+        ),
+    ] = False,
+    interactive: Annotated[
+        bool,
+        typer.Option(
+            "--interactive", "-I", help="Interactively confirm each fix"
+        ),
+    ] = False,
 ) -> None:
     """Check files for AI content patterns."""
     # Load config
@@ -116,6 +133,47 @@ def check(
     # Run checks
     results = linter.check(paths)
 
+    # Handle baseline mode
+    if generate_baseline:
+        from humanize.core.baseline import Baseline
+
+        baseline_obj = Baseline(baseline)
+        workspace = paths[0].parent if paths else Path.cwd()
+
+        for file_path, issues in results.items():
+            try:
+                content = file_path.read_text()
+                for issue in issues:
+                    baseline_obj.add_issue(issue, file_path, content, workspace)
+            except OSError:
+                continue
+
+        baseline_obj.save()
+        console.print(
+            f"[green]Generated baseline with {baseline_obj.count} issue(s)[/green] "
+            f"at {baseline_obj.baseline_path}"
+        )
+        raise typer.Exit(0)
+
+    if baseline:
+        from humanize.core.baseline import Baseline, filter_new_issues
+
+        baseline_obj = Baseline(baseline)
+        if baseline_obj.load():
+            workspace = paths[0].parent if paths else Path.cwd()
+            original_count = sum(len(issues) for issues in results.values())
+            results = filter_new_issues(results, baseline_obj, workspace)
+            new_count = sum(len(issues) for issues in results.values())
+            if not quiet and verbose:
+                console.print(
+                    f"[dim]Baseline: {original_count} total, "
+                    f"{new_count} new issue(s)[/dim]"
+                )
+        else:
+            console.print(
+                f"[yellow]Warning: Baseline file not found: {baseline}[/yellow]"
+            )
+
     if not results:
         if not quiet:
             console.print("[green]✓[/green] No issues found!")
@@ -127,6 +185,7 @@ def check(
 
         fixer = Fixer(get_all_rules())
         total_fixed = 0
+        total_skipped = 0
 
         for file_path, issues in results.items():
             fixable = [i for i in issues if i.fixable]
@@ -143,6 +202,83 @@ def check(
                     if verbose:
                         for issue in fixable:
                             console.print(f"  - {issue.rule_id}: {issue.message}")
+            elif interactive:
+                # Interactive mode: prompt for each fix
+                content = file_path.read_text(encoding="utf-8")
+                file_fixed = 0
+
+                # Sort by position (reverse) for safe application
+                fixable.sort(key=lambda i: (i.line, i.column), reverse=True)
+
+                for issue in fixable:
+                    # Show context
+                    lines = content.split("\n")
+                    line_idx = issue.line - 1
+                    start = max(0, line_idx - 1)
+                    end = min(len(lines), line_idx + 2)
+
+                    console.print(f"\n[bold]{file_path}:{issue.line}[/bold]")
+                    console.print(f"[cyan]{issue.rule_id}[/cyan]: {issue.message}")
+                    if issue.suggestion:
+                        console.print(f"[green]Suggestion:[/green] {issue.suggestion}")
+                    console.print("\n[dim]Context:[/dim]")
+                    for i, line in enumerate(lines[start:end], start=start + 1):
+                        marker = "→" if i == issue.line else " "
+                        console.print(f"  {marker} {i:4d} | {line}")
+
+                    # Prompt user
+                    response = typer.prompt(
+                        "\nApply fix? [y]es / [n]o / [a]ll / [q]uit",
+                        default="y",
+                    ).lower()
+
+                    if response in ("y", "yes"):
+                        fix_rule = fixer._rules.get(issue.rule_id)
+                        if fix_rule:
+                            new_content = fix_rule.fix(content, issue)
+                            if new_content != content:
+                                content = new_content
+                                file_fixed += 1
+                                console.print("[green]✓ Fixed[/green]")
+                    elif response in ("a", "all"):
+                        # Fix this and all remaining
+                        fix_rule = fixer._rules.get(issue.rule_id)
+                        if fix_rule:
+                            new_content = fix_rule.fix(content, issue)
+                            if new_content != content:
+                                content = new_content
+                                file_fixed += 1
+
+                        # Fix remaining without prompting
+                        remaining = fixable[fixable.index(issue) + 1 :]
+                        for rem_issue in remaining:
+                            rem_rule = fixer._rules.get(rem_issue.rule_id)
+                            if rem_rule:
+                                new_content = rem_rule.fix(content, rem_issue)
+                                if new_content != content:
+                                    content = new_content
+                                    file_fixed += 1
+                        console.print(
+                            "[green]✓ Applied all remaining fixes[/green]"
+                        )
+                        break
+                    elif response in ("q", "quit"):
+                        console.print("[yellow]Quitting...[/yellow]")
+                        if file_fixed > 0:
+                            file_path.write_text(content, encoding="utf-8")
+                            total_fixed += file_fixed
+                        raise typer.Exit(0)
+                    else:
+                        total_skipped += 1
+                        console.print("[dim]Skipped[/dim]")
+
+                # Write changes for this file
+                if file_fixed > 0:
+                    file_path.write_text(content, encoding="utf-8")
+                    total_fixed += file_fixed
+                    console.print(
+                        f"\n[bold]{file_path}[/bold]: Fixed {file_fixed} issue(s)"
+                    )
             else:
                 # Actually apply fixes
                 num_fixes = fixer.fix_and_write(file_path, issues)
@@ -156,7 +292,10 @@ def check(
             console.print("\n[yellow]Dry run:[/yellow] No files were modified.")
             raise typer.Exit(0)
         elif total_fixed > 0:
-            console.print(f"\n[green]Fixed {total_fixed} issue(s)[/green]")
+            msg = f"Fixed {total_fixed} issue(s)"
+            if interactive and total_skipped > 0:
+                msg += f", skipped {total_skipped}"
+            console.print(f"\n[green]{msg}[/green]")
             raise typer.Exit(0)
 
     # Output results
@@ -251,6 +390,116 @@ def version() -> None:
     from humanize import __version__
 
     typer.echo(f"humanize {__version__}")
+
+
+@app.command()
+def watch(
+    paths: Annotated[
+        list[Path],
+        typer.Argument(help="Files or directories to watch"),
+    ],
+    select: Annotated[
+        str | None,
+        typer.Option("--select", "-s", help="Rules to enable (comma-separated)"),
+    ] = None,
+    ignore: Annotated[
+        str | None,
+        typer.Option("--ignore", "-i", help="Rules to disable (comma-separated)"),
+    ] = None,
+    config_path: Annotated[
+        Path | None,
+        typer.Option("--config", "-c", help="Path to configuration file"),
+    ] = None,
+    interval: Annotated[
+        float,
+        typer.Option("--interval", "-n", help="Check interval in seconds"),
+    ] = 2.0,
+    clear: Annotated[
+        bool,
+        typer.Option("--clear", help="Clear screen between checks"),
+    ] = True,
+) -> None:
+    """Watch files for changes and report issues continuously.
+
+    Press Ctrl+C to stop watching.
+    """
+    # Load config
+    config = load_config(config_path)
+
+    # Apply CLI overrides
+    if select:
+        config.select = select.split(",")
+    if ignore:
+        ignore_list = ignore.split(",")
+        config.ignore = list(set(config.ignore) | set(ignore_list))
+
+    # Create linter and register rules
+    linter = Linter(config)
+    for rule in get_all_rules():
+        linter.register_rule(rule)
+
+    # Track file modification times
+    file_mtimes: dict[Path, float] = {}
+    last_issues: dict[Path, int] = {}
+
+    console.print(f"[bold]Watching {len(paths)} path(s)...[/bold] Press Ctrl+C to stop")
+
+    try:
+        while True:
+            # Discover all files
+            files = linter.discover_files(paths)
+            changed_files: list[Path] = []
+
+            # Check for modified files
+            for file in files:
+                try:
+                    mtime = file.stat().st_mtime
+                    if file not in file_mtimes or file_mtimes[file] < mtime:
+                        file_mtimes[file] = mtime
+                        changed_files.append(file)
+                except OSError:
+                    continue  # File may have been deleted
+
+            if changed_files:
+                if clear:
+                    console.clear()
+
+                console.print(
+                    f"[dim]{time.strftime('%H:%M:%S')}[/dim] "
+                    f"Checking {len(changed_files)} changed file(s)..."
+                )
+
+                total_issues = 0
+                for file in changed_files:
+                    try:
+                        issues = linter.check_file(file)
+                        last_issues[file] = len(issues)
+                        total_issues += len(issues)
+
+                        for issue in issues:
+                            severity_color = {
+                                Severity.ERROR: "red",
+                                Severity.WARNING: "yellow",
+                                Severity.INFO: "blue",
+                            }[issue.severity]
+                            console.print(
+                                f"[bold]{file}[/bold]:{issue.line}:{issue.column}: "
+                                f"[{severity_color}]{issue.rule_id}[/{severity_color}] "
+                                f"{issue.message}"
+                            )
+                    except Exception as e:
+                        console.print(f"[red]Error checking {file}: {e}[/red]")
+
+                if total_issues == 0:
+                    console.print("[green]✓[/green] No issues found!")
+                else:
+                    console.print(f"\n[bold]Found {total_issues} issue(s)[/bold]")
+
+            time.sleep(interval)
+
+    except KeyboardInterrupt:
+        console.print("\n[yellow]Stopped watching.[/yellow]")
+        raise typer.Exit(0) from None
 
 
 if __name__ == "__main__":

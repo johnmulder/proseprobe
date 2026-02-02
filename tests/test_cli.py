@@ -257,3 +257,90 @@ class TestShowConfigFlag:
         )
 
         assert result.exit_code == 0
+
+
+class TestBaselineMode:
+    """Tests for baseline mode."""
+
+    def test_generate_baseline(self, tmp_path: Path) -> None:
+        """Test generating a baseline file."""
+        test_file = tmp_path / "test.md"
+        test_file.write_text("This delves into topics.")
+        baseline_file = tmp_path / ".humanize-baseline.json"
+
+        result = runner.invoke(
+            app,
+            [
+                "check",
+                str(test_file),
+                "--generate-baseline",
+                "--baseline",
+                str(baseline_file),
+            ],
+        )
+
+        assert result.exit_code == 0
+        assert baseline_file.exists()
+        assert "Generated baseline" in result.stdout
+
+    def test_baseline_filters_known_issues(self, tmp_path: Path) -> None:
+        """Test that baseline mode filters known issues."""
+        test_file = tmp_path / "test.md"
+        test_file.write_text("This delves into topics.")
+        baseline_file = tmp_path / ".humanize-baseline.json"
+
+        # Generate baseline first
+        runner.invoke(
+            app,
+            [
+                "check",
+                str(test_file),
+                "--generate-baseline",
+                "--baseline",
+                str(baseline_file),
+            ],
+        )
+
+        # Now check with baseline - should show no new issues
+        result = runner.invoke(
+            app,
+            ["check", str(test_file), "--baseline", str(baseline_file)],
+        )
+
+        assert result.exit_code == 0
+        assert "No issues found" in result.stdout
+
+    def test_baseline_warning_on_missing_file(self, tmp_path: Path) -> None:
+        """Test warning when baseline file doesn't exist."""
+        test_file = tmp_path / "test.md"
+        test_file.write_text("This delves into topics.")
+
+        result = runner.invoke(
+            app,
+            ["check", str(test_file), "--baseline", str(tmp_path / "missing.json")],
+        )
+
+        assert "Warning" in result.stdout or "not found" in result.stdout
+
+
+class TestWatchCommand:
+    """Tests for the watch command."""
+
+    def test_watch_help(self) -> None:
+        """Test that watch command help is available."""
+        result = runner.invoke(app, ["watch", "--help"])
+
+        assert result.exit_code == 0
+        assert "Watch files" in result.stdout
+        assert "--interval" in result.stdout
+
+
+class TestInteractiveMode:
+    """Tests for interactive fix mode."""
+
+    def test_interactive_help(self, tmp_path: Path) -> None:
+        """Test that interactive option is available in help."""
+        result = runner.invoke(app, ["check", "--help"])
+
+        assert result.exit_code == 0
+        assert "--interactive" in result.stdout or "-I" in result.stdout
