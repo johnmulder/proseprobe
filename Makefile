@@ -58,6 +58,9 @@ quick:
 	ruff check src/ --fix
 	pytest tests/ -x -q
 
+# Run benchmarks
+benchmark:
+	python -m benchmarks.bench_rules
 # Full validation (lint + type-check + test)
 all: lint typecheck test
 

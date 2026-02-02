@@ -42,7 +42,9 @@ def check(
     ] = False,
     dry_run: Annotated[
         bool,
-        typer.Option("--dry-run", help="Show what fixes would be applied without writing"),
+        typer.Option(
+            "--dry-run", help="Show what fixes would be applied without writing"
+        ),
     ] = False,
     show_config: Annotated[
         bool,
@@ -135,7 +137,9 @@ def check(
                 # Show what would be fixed without modifying
                 content, num_fixes = fixer.fix_file(file_path, issues)
                 if num_fixes > 0:
-                    console.print(f"[bold]{file_path}[/bold]: Would fix {num_fixes} issue(s)")
+                    console.print(
+                        f"[bold]{file_path}[/bold]: Would fix {num_fixes} issue(s)"
+                    )
                     if verbose:
                         for issue in fixable:
                             console.print(f"  - {issue.rule_id}: {issue.message}")
@@ -143,7 +147,9 @@ def check(
                 # Actually apply fixes
                 num_fixes = fixer.fix_and_write(file_path, issues)
                 if num_fixes > 0:
-                    console.print(f"[bold]{file_path}[/bold]: Fixed {num_fixes} issue(s)")
+                    console.print(
+                        f"[bold]{file_path}[/bold]: Fixed {num_fixes} issue(s)"
+                    )
                 total_fixed += num_fixes
 
         if dry_run:
