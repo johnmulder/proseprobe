@@ -42,8 +42,20 @@ humanize check README.md docs/
 # Auto-fix safe issues
 humanize check --fix .
 
+# Interactive fix (confirm each change)
+humanize check --fix --interactive .
+
 # Output as JSON
 humanize check --format json .
+
+# Watch mode (continuous checking)
+humanize watch .
+
+# Generate baseline for gradual adoption
+humanize check --generate-baseline .
+
+# Check only new issues (not in baseline)
+humanize check --baseline .humanize-baseline.json .
 
 # List all rules
 humanize rules
