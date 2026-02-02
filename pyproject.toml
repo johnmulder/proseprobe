@@ -10,7 +10,7 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
 authors = [
-    { name = "Your Name", email = "you@example.com" },
+    { name = "humanize-cli contributors" },
 ]
 keywords = [
     "ai",
@@ -54,10 +54,11 @@ dev = [
 humanize = "humanize.cli:app"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/humanize-cli"
-Documentation = "https://github.com/yourusername/humanize-cli#readme"
-Repository = "https://github.com/yourusername/humanize-cli"
-Issues = "https://github.com/yourusername/humanize-cli/issues"
+Homepage = "https://github.com/humanize-cli/humanize-cli"
+Documentation = "https://github.com/humanize-cli/humanize-cli#readme"
+Repository = "https://github.com/humanize-cli/humanize-cli"
+Issues = "https://github.com/humanize-cli/humanize-cli/issues"
+Changelog = "https://github.com/humanize-cli/humanize-cli/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/humanize"]
