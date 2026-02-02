@@ -299,10 +299,19 @@ def check(
             raise typer.Exit(0)
 
     # Output results
-    total_issues = 0
-    for file_path, issues in results.items():
-        total_issues += len(issues)
-        if format == "text":
+    total_issues = sum(len(issues) for issues in results.values())
+
+    if format == "json":
+        from humanize.core.reporter import Reporter
+        reporter = Reporter(format="json")
+        print(reporter.report(results))
+    elif format == "sarif":
+        from humanize.core.reporter import Reporter
+        reporter = Reporter(format="sarif")
+        print(reporter.report(results))
+    else:
+        # Text format (default)
+        for file_path, issues in results.items():
             for issue in issues:
                 severity_color = {
                     Severity.ERROR: "red",
@@ -314,9 +323,8 @@ def check(
                     f"[{severity_color}]{issue.rule_id}[/{severity_color}] "
                     f"{issue.message}"
                 )
-
-    if not quiet:
-        console.print(f"\n[bold]Found {total_issues} issue(s)[/bold]")
+        if not quiet:
+            console.print(f"\n[bold]Found {total_issues} issue(s)[/bold]")
 
     # Exit with error code if issues found
     raise typer.Exit(1 if total_issues > 0 else 0)
