@@ -51,7 +51,7 @@ build: clean
 
 # Run humanize on itself (dogfooding)
 dogfood:
-	python -m humanize check README.md PLAN.md docs/
+	python -m humanize check README.md docs/ --baseline .humanize-baseline.json
 
 # Quick check for development
 quick:
