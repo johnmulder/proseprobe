@@ -175,7 +175,15 @@ def check(
             )
 
     if not results:
-        if not quiet:
+        if format == "json":
+            from humanize.core.reporter import Reporter
+            reporter = Reporter(format="json")
+            print(reporter.report({}))
+        elif format == "sarif":
+            from humanize.core.reporter import Reporter
+            reporter = Reporter(format="sarif")
+            print(reporter.report({}))
+        elif not quiet:
             console.print("[green]✓[/green] No issues found!")
         raise typer.Exit(0)
 

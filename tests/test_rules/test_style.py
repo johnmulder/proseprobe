@@ -76,6 +76,35 @@ class TestQuoteInconsistency:
         rule = QuoteInconsistencyRule()
         assert rule.id == "T004"
 
+    def test_detects_mixed_curly_straight(self) -> None:
+        """Test detecting mixed curly and straight quotes."""
+        # Content with both straight " and curly " quotes
+        text = 'He said "hello" and \u201cgoodbye\u201d'
+        rule = QuoteInconsistencyRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 1
+        assert "Mixed quote" in issues[0].message
+
+    def test_fix_normalizes_quotes(self) -> None:
+        """Test that fix normalizes curly quotes to straight."""
+        from humanize.rules.base import Issue, Severity
+
+        text = "He said \u201chello\u201d and \u2018goodbye\u2019"
+        rule = QuoteInconsistencyRule()
+        fake_issue = Issue(
+            rule_id="T004",
+            message="Mixed quote styles",
+            line=1,
+            column=1,
+            severity=Severity.INFO,
+            fixable=True,
+        )
+        fixed = rule.fix(text, fake_issue)
+        assert "\u201c" not in fixed  # No left double curly
+        assert "\u201d" not in fixed  # No right double curly
+        assert "\u2018" not in fixed  # No left single curly
+        assert "\u2019" not in fixed  # No right single curly
+
 
 class TestEmojiInProse:
     """Tests for T005: Emoji in Prose."""

@@ -49,12 +49,23 @@ class Linter:
         for file in files:
             excluded = False
             for exclude_pattern in self.config.exclude:
-                # Match against the file path string
-                if fnmatch.fnmatch(str(file), f"*/{exclude_pattern}") or \
-                   fnmatch.fnmatch(str(file), exclude_pattern) or \
-                   any(fnmatch.fnmatch(part, exclude_pattern.rstrip("/*").rstrip("/**")) 
-                       for part in file.parts):
+                # Normalize pattern: remove trailing ** or /*
+                base_pattern = exclude_pattern.rstrip("*").rstrip("/")
+
+                # Check if any part of the path matches the base pattern
+                for part in file.parts:
+                    if fnmatch.fnmatch(part, base_pattern):
+                        excluded = True
+                        break
+
+                # Also check the full path against the pattern
+                if not excluded and (
+                    fnmatch.fnmatch(str(file), exclude_pattern)
+                    or fnmatch.fnmatch(str(file), f"*/{exclude_pattern}")
+                ):
                     excluded = True
+
+                if excluded:
                     break
             if not excluded:
                 filtered.append(file)
@@ -116,9 +127,13 @@ class Linter:
 
         # Check per-file ignores
         for per_file in self.config.per_file_ignores:
-            if fnmatch.fnmatch(path.name, per_file.pattern) or \
-               fnmatch.fnmatch(str(path), per_file.pattern):
-                if rule.id in per_file.ignore or prefix in per_file.ignore:
-                    return False
+            pattern_matches = (
+                fnmatch.fnmatch(path.name, per_file.pattern)
+                or fnmatch.fnmatch(str(path), per_file.pattern)
+            )
+            if pattern_matches and (
+                rule.id in per_file.ignore or prefix in per_file.ignore
+            ):
+                return False
 
         return prefix in self.config.select or rule.id in self.config.select

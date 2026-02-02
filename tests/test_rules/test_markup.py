@@ -84,6 +84,17 @@ class TestUTMParameters:
         rule = UTMParametersRule()
         assert rule.id == "M003"
 
+    def test_fix_removes_utm_params(self) -> None:
+        """Test that fix removes UTM parameters from URLs."""
+        text = "Check [link](https://example.com?utm_source=chatgpt.com&other=1)"
+        rule = UTMParametersRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 1
+
+        fixed = rule.fix(text, issues[0])
+        assert "utm_source=chatgpt.com" not in fixed
+        assert "other=1" in fixed
+
 
 class TestBrokenReferences:
     """Tests for M004: Broken References."""
@@ -106,3 +117,35 @@ class TestBrokenReferences:
         """Test rule has correct metadata."""
         rule = BrokenReferencesRule()
         assert rule.id == "M004"
+
+    def test_detects_attached_file_ref(self) -> None:
+        """Test detecting [attached_file:N] references."""
+        text = "See [attached_file:1] for details"
+        rule = BrokenReferencesRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 1
+        assert "attached_file" in issues[0].message
+
+    def test_fix_removes_broken_ref(self) -> None:
+        """Test that fix removes broken AI references."""
+        text = "See [attached_file:1] for details"
+        rule = BrokenReferencesRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 1
+
+        fixed = rule.fix(text, issues[0])
+        assert "[attached_file:1]" not in fixed
+
+
+class TestChatGPTMarkersFix:
+    """Tests for ChatGPT markers fix."""
+
+    def test_fix_removes_turn_search_marker(self) -> None:
+        """Test that fix removes turn0search0 markers."""
+        text = "See turn0search0 for more info"
+        rule = ChatGPTMarkersRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 1
+
+        fixed = rule.fix(text, issues[0])
+        assert "turn0search0" not in fixed

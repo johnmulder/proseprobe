@@ -2,9 +2,10 @@
 
 from pathlib import Path
 
-from humanize.config import Config
+from humanize.config import Config, PerFileIgnore
 from humanize.core.linter import Linter
 from humanize.rules import get_all_rules
+from humanize.rules.vocab import AIVocabularyRule
 
 
 class TestLinter:
@@ -62,6 +63,70 @@ class TestDiscoverFiles:
         files = linter.discover_files([tmp_path])
 
         assert len(files) >= 2
+
+    def test_discover_excludes_venv(self, tmp_path: Path) -> None:
+        """Test that venv directory is excluded."""
+        venv_dir = tmp_path / "venv"
+        venv_dir.mkdir()
+        (tmp_path / "good.md").write_text("content")
+        (venv_dir / "bad.md").write_text("content")
+
+        config = Config(exclude=["venv/**"])
+        linter = Linter(config)
+        files = linter.discover_files([tmp_path])
+
+        # Should only find good.md, not the one in venv
+        assert len(files) == 1
+        # Check filename (pytest tmp_path may contain "venv" in directory name)
+        assert files[0].name == "good.md"
+
+    def test_discover_excludes_node_modules(self, tmp_path: Path) -> None:
+        """Test that node_modules directory is excluded."""
+        node_dir = tmp_path / "node_modules"
+        node_dir.mkdir()
+        (tmp_path / "good.md").write_text("content")
+        (node_dir / "package.md").write_text("content")
+
+        config = Config(exclude=["node_modules/**"])
+        linter = Linter(config)
+        files = linter.discover_files([tmp_path])
+
+        assert len(files) == 1
+        assert all("node_modules" not in str(f) for f in files)
+
+
+class TestPerFileIgnores:
+    """Tests for per-file rule ignores."""
+
+    def test_per_file_ignore_disables_rule(self, tmp_path: Path) -> None:
+        """Test that per-file ignores disable rules for specific files."""
+        config = Config(
+            per_file_ignores=[
+                PerFileIgnore(pattern="CHANGELOG.md", ignore=["V001"])
+            ]
+        )
+        linter = Linter(config)
+        rule = AIVocabularyRule()
+
+        # V001 should be disabled for CHANGELOG.md
+        assert not linter._rule_enabled(rule, Path("CHANGELOG.md"))
+        # V001 should be enabled for other files
+        assert linter._rule_enabled(rule, Path("README.md"))
+
+    def test_per_file_ignore_by_category(self, tmp_path: Path) -> None:
+        """Test that per-file ignores work with category prefixes."""
+        config = Config(
+            per_file_ignores=[
+                PerFileIgnore(pattern="*.test.md", ignore=["V"])
+            ]
+        )
+        linter = Linter(config)
+        rule = AIVocabularyRule()
+
+        # All V rules should be disabled for test files
+        assert not linter._rule_enabled(rule, Path("example.test.md"))
+        # V rules should be enabled for non-test files
+        assert linter._rule_enabled(rule, Path("example.md"))
 
 
 class TestCheckFile:

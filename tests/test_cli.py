@@ -344,3 +344,53 @@ class TestInteractiveMode:
 
         assert result.exit_code == 0
         assert "--interactive" in result.stdout or "-I" in result.stdout
+
+
+class TestOutputFormats:
+    """Tests for JSON and SARIF output formats."""
+
+    def test_json_format_valid(self, tmp_path: Path) -> None:
+        """Test that --format json outputs valid JSON."""
+        import json
+
+        test_file = tmp_path / "test.md"
+        test_file.write_text("This delves into topics.")
+
+        result = runner.invoke(app, ["check", str(test_file), "--format", "json"])
+
+        assert result.exit_code == 1
+        # Should be valid JSON
+        data = json.loads(result.stdout)
+        assert "files" in data
+        assert "summary" in data
+        assert data["summary"]["total_issues"] >= 1
+
+    def test_sarif_format_valid(self, tmp_path: Path) -> None:
+        """Test that --format sarif outputs valid SARIF."""
+        import json
+
+        test_file = tmp_path / "test.md"
+        test_file.write_text("This delves into topics.")
+
+        result = runner.invoke(app, ["check", str(test_file), "--format", "sarif"])
+
+        assert result.exit_code == 1
+        # Should be valid JSON (SARIF is JSON)
+        data = json.loads(result.stdout)
+        assert data.get("version") == "2.1.0"
+        assert "runs" in data
+        assert len(data["runs"]) > 0
+        assert len(data["runs"][0]["results"]) >= 1
+
+    def test_json_format_no_issues(self, tmp_path: Path) -> None:
+        """Test JSON output with no issues."""
+        import json
+
+        test_file = tmp_path / "clean.md"
+        test_file.write_text("This is clean content.")
+
+        result = runner.invoke(app, ["check", str(test_file), "--format", "json"])
+
+        assert result.exit_code == 0
+        data = json.loads(result.stdout)
+        assert data["summary"]["total_issues"] == 0
