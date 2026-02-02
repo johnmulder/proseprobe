@@ -126,8 +126,8 @@ def _parse_config(data: dict[str, Any]) -> Config:
         exclude=data.get("exclude", ["venv/**", "node_modules/**", ".git/**"]),
         select=data.get("select", ["V", "S", "T", "G", "C", "M"]),
         ignore=data.get("ignore", []),
-        severity=data.get("severity", "warning"),
-        severity_overrides=data.get("severity", {}),
+        severity=data.get("severity", "warning") if isinstance(data.get("severity"), str) else "warning",
+        severity_overrides=data.get("severity", {}) if isinstance(data.get("severity"), dict) else {},
         vocabulary=vocabulary,
         per_file_ignores=per_file_ignores,
     )

@@ -1,5 +1,6 @@
 """Main linting orchestrator."""
 
+import fnmatch
 from pathlib import Path
 
 from humanize.config import Config
@@ -35,7 +36,6 @@ class Linter:
         Returns:
             List of files matching include/exclude patterns.
         """
-        # TODO: Implement file discovery with glob patterns
         files: list[Path] = []
         for path in paths:
             if path.is_file():
@@ -44,8 +44,22 @@ class Linter:
                 for pattern in self.config.include:
                     files.extend(path.rglob(pattern))
 
-        # TODO: Apply exclude patterns
-        return files
+        # Apply exclude patterns
+        filtered: list[Path] = []
+        for file in files:
+            excluded = False
+            for exclude_pattern in self.config.exclude:
+                # Match against the file path string
+                if fnmatch.fnmatch(str(file), f"*/{exclude_pattern}") or \
+                   fnmatch.fnmatch(str(file), exclude_pattern) or \
+                   any(fnmatch.fnmatch(part, exclude_pattern.rstrip("/*").rstrip("/**")) 
+                       for part in file.parts):
+                    excluded = True
+                    break
+            if not excluded:
+                filtered.append(file)
+
+        return filtered
 
     def check_file(self, path: Path) -> list[Issue]:
         """Check a single file for issues.
@@ -99,5 +113,12 @@ class Linter:
             return False
 
         prefix = rule.id[0]  # V, S, T, etc.
-        # TODO: Check per-file ignores
+
+        # Check per-file ignores
+        for per_file in self.config.per_file_ignores:
+            if fnmatch.fnmatch(path.name, per_file.pattern) or \
+               fnmatch.fnmatch(str(path), per_file.pattern):
+                if rule.id in per_file.ignore or prefix in per_file.ignore:
+                    return False
+
         return prefix in self.config.select or rule.id in self.config.select
