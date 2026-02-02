@@ -91,6 +91,27 @@ class ChatGPTMarkersRule(Rule):
 
         return issues
 
+    def fix(self, content: str, issue: Issue) -> str:
+        """Remove ChatGPT marker from content."""
+        lines = content.split("\n")
+        line_idx = issue.line - 1
+        line = lines[line_idx]
+
+        col_start = issue.column - 1
+        col_end = issue.end_column - 1 if issue.end_column else col_start + 10
+
+        # Remove the marker, clean up any extra whitespace
+        before = line[:col_start].rstrip()
+        after = line[col_end:].lstrip()
+
+        # Rejoin with single space if both parts exist
+        if before and after:
+            lines[line_idx] = before + " " + after
+        else:
+            lines[line_idx] = before + after
+
+        return "\n".join(lines)
+
 
 class UTMParametersRule(Rule):
     """M003: Detect AI-related UTM parameters in URLs."""
@@ -126,8 +147,32 @@ class UTMParametersRule(Rule):
 
     def fix(self, content: str, issue: Issue) -> str:
         """Remove UTM parameters from URL."""
-        # TODO: Implement proper URL parameter stripping
-        return content
+        lines = content.split("\n")
+        line_idx = issue.line - 1
+        line = lines[line_idx]
+
+        # Find and remove the UTM parameter
+        col_start = issue.column - 1
+        col_end = issue.end_column - 1 if issue.end_column else col_start + 20
+
+        # Get the matched text
+        matched = line[col_start:col_end]
+
+        # If it starts with ?, we need to handle the next parameter
+        if matched.startswith("?"):
+            # Check if there are more parameters after
+            rest = line[col_end:]
+            if rest.startswith("&"):
+                # Remove the ? param and the following &, replace with ?
+                lines[line_idx] = line[:col_start] + "?" + rest[1:]
+            else:
+                # Just remove the whole ?param
+                lines[line_idx] = line[:col_start] + rest
+        else:
+            # Starts with &, just remove the &param
+            lines[line_idx] = line[:col_start] + line[col_end:]
+
+        return "\n".join(lines)
 
 
 class BrokenReferencesRule(Rule):
@@ -166,3 +211,24 @@ class BrokenReferencesRule(Rule):
                     )
 
         return issues
+
+    def fix(self, content: str, issue: Issue) -> str:
+        """Remove broken AI reference from content."""
+        lines = content.split("\n")
+        line_idx = issue.line - 1
+        line = lines[line_idx]
+
+        col_start = issue.column - 1
+        col_end = issue.end_column - 1 if issue.end_column else col_start + 10
+
+        # Remove the reference, clean up any extra whitespace
+        before = line[:col_start].rstrip()
+        after = line[col_end:].lstrip()
+
+        # Rejoin with single space if both parts exist
+        if before and after:
+            lines[line_idx] = before + " " + after
+        else:
+            lines[line_idx] = before + after
+
+        return "\n".join(lines)

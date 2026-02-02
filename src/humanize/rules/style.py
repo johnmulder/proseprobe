@@ -182,12 +182,14 @@ class QuoteInconsistencyRule(Rule):
         lines = content.split("\n")
 
         has_straight = '"' in content or "'" in content
-        has_curly = any(c in content for c in '""')
+        # Check for curly quotes using explicit Unicode
+        curly_quotes = "\u201c\u201d\u2018\u2019"  # ""''
+        has_curly = any(c in content for c in curly_quotes)
 
         if has_straight and has_curly:
             # Find first curly quote to report
             for line_num, line in enumerate(lines, start=1):
-                for match in re.finditer(r"[" "'']", line):
+                for match in re.finditer(r"[\u201c\u201d\u2018\u2019]", line):
                     issues.append(
                         Issue(
                             rule_id=self.id,
@@ -201,6 +203,20 @@ class QuoteInconsistencyRule(Rule):
                     return issues  # Only report once
 
         return issues
+
+    def fix(self, content: str, issue: Issue) -> str:
+        """Normalize curly quotes to straight quotes."""
+        # Replace all curly quotes with straight quotes
+        # Using explicit Unicode code points for reliability
+        replacements = {
+            "\u201c": '"',  # left double curly quote
+            "\u201d": '"',  # right double curly quote
+            "\u2018": "'",  # left single curly quote
+            "\u2019": "'",  # right single curly quote
+        }
+        for curly, straight in replacements.items():
+            content = content.replace(curly, straight)
+        return content
 
 
 class EmojiInProseRule(Rule):

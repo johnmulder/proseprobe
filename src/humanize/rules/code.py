@@ -16,20 +16,20 @@ class DocstringVocabularyRule(Rule):
     severity = Severity.WARNING
     fixable = True
 
-    # AI vocabulary to flag in docstrings
-    _ai_words: ClassVar[list[tuple[str, str]]] = [
-        (r"\bdelve\b", "delve"),
-        (r"\bleverage\b", "leverage"),
-        (r"\butilize\b", "utilize"),
-        (r"\bfacilitate\b", "facilitate"),
-        (r"\bseamless(?:ly)?\b", "seamless"),
-        (r"\brobust\b", "robust"),
-        (r"\bcomprehensive\b", "comprehensive"),
-        (r"\bbespoke\b", "bespoke"),
-        (r"\bholistic\b", "holistic"),
-        (r"\bfoster\b", "foster"),
-        (r"\bsynergy\b", "synergy"),
-        (r"\bparadigm\b", "paradigm"),
+    # AI vocabulary to flag in docstrings with replacements
+    _ai_words: ClassVar[list[tuple[str, str, str]]] = [
+        (r"\bdelve\b", "delve", "explore"),
+        (r"\bleverage\b", "leverage", "use"),
+        (r"\butilize\b", "utilize", "use"),
+        (r"\bfacilitate\b", "facilitate", "help"),
+        (r"\bseamless(?:ly)?\b", "seamless", "smooth"),
+        (r"\brobust\b", "robust", "strong"),
+        (r"\bcomprehensive\b", "comprehensive", "complete"),
+        (r"\bbespoke\b", "bespoke", "custom"),
+        (r"\bholistic\b", "holistic", "complete"),
+        (r"\bfoster\b", "foster", "encourage"),
+        (r"\bsynergy\b", "synergy", "cooperation"),
+        (r"\bparadigm\b", "paradigm", "model"),
     ]
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -53,7 +53,7 @@ class DocstringVocabularyRule(Rule):
                 continue
             docstring = ast.get_docstring(node)
             if docstring:
-                for pattern, word in self._ai_words:
+                for pattern, word, replacement in self._ai_words:
                     match = re.search(pattern, docstring, re.IGNORECASE)
                     if match:
                         # Get line number from node
@@ -66,10 +66,40 @@ class DocstringVocabularyRule(Rule):
                                 column=1,
                                 severity=self.severity,
                                 fixable=True,
+                                suggestion=replacement,
                             )
                         )
 
         return issues
+
+    def fix(self, content: str, issue: Issue) -> str:
+        """Replace AI vocabulary in docstrings with suggestion."""
+        if not issue.suggestion:
+            return content
+
+        # Extract the word from the message
+        # Message format: "AI vocabulary in docstring: 'word'"
+        import re as re_module
+        word_match = re_module.search(r"'(\w+)'", issue.message)
+        if not word_match:
+            return content
+
+        word = word_match.group(1)
+
+        # Replace the word case-insensitively, preserving case
+        def replace_preserving_case(match: re_module.Match[str]) -> str:
+            original = match.group(0)
+            replacement = issue.suggestion
+            if not replacement:
+                return original
+            if original.isupper():
+                return replacement.upper()
+            elif original[0].isupper():
+                return replacement.capitalize()
+            return replacement
+
+        pattern = rf"\b{word}\b"
+        return re_module.sub(pattern, replace_preserving_case, content, flags=re_module.IGNORECASE)
 
 
 class VerboseCommentsRule(Rule):
