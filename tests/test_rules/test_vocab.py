@@ -72,6 +72,29 @@ class TestCollaborativePhrasesRule:
 
         assert len(issues) == 1
 
+    def test_fix_removes_phrase_with_exclamation(
+        self, rule: CollaborativePhrasesRule
+    ) -> None:
+        """Test fixing phrase at start followed by exclamation."""
+        content = "Certainly! Here is the code."
+        issues = rule.check(content, "test.md")
+
+        assert len(issues) == 1
+        fixed = rule.fix(content, issues[0])
+        assert fixed == "Here is the code."
+
+    def test_fix_removes_phrase_mid_sentence(
+        self, rule: CollaborativePhrasesRule
+    ) -> None:
+        """Test fixing phrase in middle of text."""
+        content = "Thanks for asking. I hope this helps!"
+        issues = rule.check(content, "test.md")
+
+        # Find the "I hope this helps" issue
+        issue = next(i for i in issues if "I hope this helps" in i.message)
+        fixed = rule.fix(content, issue)
+        assert "I hope this helps" not in fixed
+
 
 class TestKnowledgeCutoffRule:
     """Tests for V003: Knowledge Cutoff."""

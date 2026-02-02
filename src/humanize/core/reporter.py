@@ -128,6 +128,24 @@ class Reporter:
     def _format_sarif(self, results: dict[Path, list[Issue]]) -> str:
         """Format results as SARIF 2.1.0."""
         from humanize import __version__
+        from humanize.rules import get_all_rules
+
+        # Build rule definitions
+        rule_definitions = []
+        for rule in get_all_rules():
+            rule_definitions.append(
+                {
+                    "id": rule.id,
+                    "name": rule.name,
+                    "shortDescription": {"text": rule.description},
+                    "defaultConfiguration": {
+                        "level": self._sarif_level(rule.severity),
+                    },
+                    "properties": {
+                        "category": self._rule_category(rule.id),
+                    },
+                }
+            )
 
         sarif: dict[str, Any] = {
             "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
@@ -138,8 +156,8 @@ class Reporter:
                         "driver": {
                             "name": "humanize",
                             "version": __version__,
-                            "informationUri": "https://github.com/yourusername/humanize-cli",
-                            "rules": [],  # TODO: Add rule definitions
+                            "informationUri": "https://github.com/humanize-cli/humanize",
+                            "rules": rule_definitions,
                         }
                     },
                     "results": [],
@@ -181,3 +199,15 @@ class Reporter:
             Severity.OFF: "none",
         }
         return mapping.get(severity, "warning")
+
+    def _rule_category(self, rule_id: str) -> str:
+        """Get category name from rule ID prefix."""
+        categories = {
+            "V": "Vocabulary",
+            "S": "Structure",
+            "T": "Style",
+            "G": "Grammar",
+            "C": "Code",
+            "M": "Markup",
+        }
+        return categories.get(rule_id[0], "Other")

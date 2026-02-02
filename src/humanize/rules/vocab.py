@@ -110,7 +110,7 @@ class CollaborativePhrasesRule(Rule):
     name = "Collaborative Phrases"
     description = "Detects chat-like communication patterns"
     severity = Severity.WARNING
-    fixable = False
+    fixable = True
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for collaborative phrases."""
@@ -130,10 +130,55 @@ class CollaborativePhrasesRule(Rule):
                             column=col + 1,
                             end_column=col + len(phrase) + 1,
                             severity=self.severity,
+                            fixable=True,
                         )
                     )
 
         return issues
+
+    def fix(self, content: str, issue: Issue) -> str:
+        """Remove collaborative phrase from content.
+
+        Strategy: Remove the phrase. If the phrase is at the start of a
+        sentence (followed by punctuation and space), also remove trailing
+        punctuation and space.
+        """
+        lines = content.split("\n")
+        line_idx = issue.line - 1
+        line = lines[line_idx]
+
+        col_start = issue.column - 1
+        col_end = issue.end_column - 1 if issue.end_column else col_start
+
+        # Check what comes after the phrase
+        after = line[col_end:]
+
+        # If phrase ends with punctuation + space (e.g., "Certainly! "), remove it
+        if after and after[0] in "!.,:;":
+            # Remove punctuation
+            col_end += 1
+            # Also remove trailing space
+            if len(line) > col_end and line[col_end] == " ":
+                col_end += 1
+
+        # If phrase has leading space and nothing meaningful before, trim it
+        before = line[:col_start]
+        if before.rstrip() == "":
+            # Phrase is at start of line - strip any remaining whitespace after removal
+            new_line = line[col_end:].lstrip()
+        elif before.endswith(". ") or before.endswith(".\n"):
+            # After sentence boundary - keep as is
+            new_line = line[:col_start] + line[col_end:]
+        elif before.endswith(" "):
+            # Remove leading space to avoid double space
+            new_line = line[: col_start - 1] + line[col_end:]
+        else:
+            new_line = line[:col_start] + line[col_end:]
+
+        lines[line_idx] = new_line
+
+        # If line is now empty or just whitespace, keep it (don't remove lines)
+        return "\n".join(lines)
 
 
 class KnowledgeCutoffRule(Rule):
