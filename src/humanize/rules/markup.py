@@ -5,7 +5,6 @@ from typing import ClassVar
 
 from humanize.parsers.markdown import (
     is_markdown_file,
-    iter_non_code_lines,
     iter_prose_lines,
 )
 from humanize.rules.base import Issue, Rule, Severity
@@ -133,24 +132,28 @@ class UTMParametersRule(Rule):
         """Check for AI-related UTM parameters."""
         issues: list[Issue] = []
         if is_markdown_file(filename):
-            link_re = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
-            for line_num, line in iter_non_code_lines(content, filename):
-                for link_match in link_re.finditer(line):
-                    url = link_match.group(2)
-                    for utm_match in re.finditer(self._pattern, url):
-                        column = link_match.start(2) + utm_match.start() + 1
-                        end_column = link_match.start(2) + utm_match.end() + 1
-                        issues.append(
-                            Issue(
-                                rule_id=self.id,
-                                message=f"AI tracking parameter: '{utm_match.group()}'",
-                                line=line_num,
-                                column=column,
-                                end_column=end_column,
-                                severity=self.severity,
-                                fixable=True,
-                            )
+            from humanize.parsers.markdown import MarkdownParser
+
+            parser = MarkdownParser(content)
+            for link in parser.get_links():
+                for utm_match in re.finditer(self._pattern, link.url):
+                    if link.url_start:
+                        column = link.url_start + utm_match.start()
+                        end_column = link.url_start + utm_match.end()
+                    else:
+                        column = link.column + utm_match.start()
+                        end_column = link.column + utm_match.end()
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"AI tracking parameter: '{utm_match.group()}'",
+                            line=link.line,
+                            column=column,
+                            end_column=end_column,
+                            severity=self.severity,
+                            fixable=True,
                         )
+                    )
         else:
             lines = content.split("\n")
             for line_num, line in enumerate(lines, start=1):

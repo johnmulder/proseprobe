@@ -68,6 +68,13 @@ class TestAIVocabularyRule:
 
         assert len(issues) == 1
 
+    def test_ignores_inline_code_in_markdown(self) -> None:
+        rule = AIVocabularyRule()
+        content = "Use `delve` sparingly in docs."
+        issues = rule.check(content, "test.md")
+
+        assert len(issues) == 0
+
     def test_fix_preserves_case(self, rule: AIVocabularyRule) -> None:
         content = "Let's Delve into this topic."
         issues = rule.check(content, "test.md")

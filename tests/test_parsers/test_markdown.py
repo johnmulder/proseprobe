@@ -53,6 +53,13 @@ class TestMarkdownParser:
         assert links[0].url == "https://example.com"
         assert links[0].line == 1
 
+    def test_get_links_ignores_inline_code(self) -> None:
+        """Test that links inside inline code are ignored."""
+        content = "Use `[Example](https://example.com)` in text."
+        parser = MarkdownParser(content)
+        links = parser.get_links()
+
+        assert links == []
     def test_get_code_blocks_empty(self) -> None:
         """Test getting code blocks from empty document."""
         parser = MarkdownParser("")

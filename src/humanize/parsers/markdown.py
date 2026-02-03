@@ -30,6 +30,8 @@ class MarkdownLink:
     url: str
     line: int
     column: int
+    url_start: int = 0
+    url_end: int = 0
 
 
 class MarkdownParser:
@@ -63,17 +65,16 @@ class MarkdownParser:
         start_line = 0
         content_lines: list[str] = []
 
-        fence_re = re.compile(r"^(`{3,}|~{3,})\s*([\w+-]+)?\s*$")
+        fence_re = re.compile(r"^( {0,3})(`{3,}|~{3,})\s*([\w+-]+)?\s*$")
 
         for line_num, line in enumerate(self._lines, start=1):
-            stripped = line.strip()
             if not in_block:
-                match = fence_re.match(stripped)
+                match = fence_re.match(line)
                 if match:
-                    fence = match.group(1)
+                    fence = match.group(2)
                     fence_char = fence[0]
                     fence_len = len(fence)
-                    language = match.group(2) or ""
+                    language = match.group(3) or ""
                     start_line = line_num
                     content_lines = []
                     in_block = True
@@ -81,8 +82,10 @@ class MarkdownParser:
                 continue
 
             code_lines.add(line_num)
-            close_re = re.compile(rf"^{re.escape(fence_char)}{{{fence_len},}}\s*$")
-            if close_re.match(stripped):
+            close_re = re.compile(
+                rf"^ {{0,3}}{re.escape(fence_char)}{{{fence_len},}}\s*$"
+            )
+            if close_re.match(line):
                 blocks.append(
                     (start_line, line_num, language, "\n".join(content_lines))
                 )
@@ -124,6 +127,7 @@ class MarkdownParser:
             if match:
                 level = len(match.group(1))
                 title = match.group(2).strip()
+                title = re.sub(r"\s+#+\s*$", "", title).strip()
                 headings.append((line_num, level, title))
 
         sections: list[MarkdownSection] = []
@@ -211,6 +215,8 @@ class MarkdownParser:
                         url=match.group(2),
                         line=line_num,
                         column=match.start() + 1,
+                        url_start=match.start(2) + 1,
+                        url_end=match.end(2) + 1,
                     )
                 )
 
@@ -280,19 +286,45 @@ class MarkdownParser:
             for line_num, line in lines
         ]
 
+    def _find_inline_code_spans(self, line: str) -> list[tuple[int, int]]:
+        spans: list[tuple[int, int]] = []
+        length = len(line)
+        i = 0
+        while i < length:
+            if line[i] != "`":
+                i += 1
+                continue
+            run_len = 1
+            while i + run_len < length and line[i + run_len] == "`":
+                run_len += 1
+            j = i + run_len
+            while j < length:
+                if line[j] != "`":
+                    j += 1
+                    continue
+                close_len = 1
+                while j + close_len < length and line[j + close_len] == "`":
+                    close_len += 1
+                if close_len == run_len:
+                    spans.append((i, j + close_len))
+                    i = j + close_len
+                    break
+                j += close_len
+            else:
+                i += run_len
+        return spans
+
     def _mask_inline_code(self, line: str) -> str:
         chars = list(line)
-        for match in re.finditer(r"`[^`]*`", line):
-            for idx in range(match.start(), match.end()):
+        for start, end in self._find_inline_code_spans(line):
+            for idx in range(start, end):
                 chars[idx] = " "
         return "".join(chars)
 
     def _mask_inline_code_and_links(self, line: str) -> str:
-        chars = list(line)
-        for match in re.finditer(r"`[^`]*`", line):
-            for idx in range(match.start(), match.end()):
-                chars[idx] = " "
-        for match in re.finditer(r"\[([^\]]+)\]\(([^)]+)\)", line):
+        masked = self._mask_inline_code(line)
+        chars = list(masked)
+        for match in re.finditer(r"\[([^\]]+)\]\(([^)]+)\)", masked):
             url_start = match.start(2)
             url_end = match.end(2)
             for idx in range(url_start, url_end):
