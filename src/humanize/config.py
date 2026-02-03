@@ -28,7 +28,12 @@ class Config:
 
     include: list[str] = field(default_factory=lambda: ["*.md", "*.py"])
     exclude: list[str] = field(
-        default_factory=lambda: ["venv/**", "node_modules/**", ".git/**"]
+        default_factory=lambda: [
+            "venv/**",
+            ".venv/**",
+            "node_modules/**",
+            ".git/**",
+        ]
     )
     select: list[str] = field(default_factory=lambda: ["V", "S", "T", "G", "C", "M"])
     ignore: list[str] = field(default_factory=list)
@@ -107,27 +112,63 @@ def load_config(config_path: Path | None = None) -> Config:
 
 def _parse_config(data: dict[str, Any]) -> Config:
     """Parse configuration dictionary into Config object."""
-    vocabulary_data = data.get("vocabulary", {})
+    lint_data = data.get("lint", {}) if isinstance(data.get("lint"), dict) else {}
+    effective: dict[str, Any] = {}
+
+    # Support legacy [lint] configuration by overlaying with top-level keys
+    effective.update(lint_data)
+    for key, value in data.items():
+        if key in {"lint", "format"}:
+            continue
+        effective[key] = value
+
+    vocabulary_data = effective.get("vocabulary", {})
     vocabulary = VocabularyConfig(
         additional=vocabulary_data.get("additional", []),
         allowed=vocabulary_data.get("allowed", []),
     )
 
-    per_file_ignores = [
-        PerFileIgnore(
-            pattern=item.get("pattern", ""),
-            ignore=item.get("ignore", []),
-        )
-        for item in data.get("per-file-ignores", [])
-    ]
+    per_file_raw = effective.get("per-file-ignores", [])
+    per_file_ignores: list[PerFileIgnore] = []
+    if isinstance(per_file_raw, dict):
+        # Legacy [lint.per-file-ignores] mapping
+        for pattern, ignore_list in per_file_raw.items():
+            per_file_ignores.append(
+                PerFileIgnore(
+                    pattern=pattern,
+                    ignore=list(ignore_list) if isinstance(ignore_list, list) else [],
+                )
+            )
+    else:
+        per_file_ignores = [
+            PerFileIgnore(
+                pattern=item.get("pattern", ""),
+                ignore=item.get("ignore", []),
+            )
+            for item in per_file_raw
+            if isinstance(item, dict)
+        ]
+
+    raw_severity = effective.get("severity", "warning")
+    if isinstance(raw_severity, str):
+        min_severity = raw_severity
+        severity_overrides: dict[str, str] = {}
+    elif isinstance(raw_severity, dict):
+        min_severity = "warning"
+        severity_overrides = raw_severity
+    else:
+        min_severity = "warning"
+        severity_overrides = {}
 
     return Config(
-        include=data.get("include", ["*.md", "*.py"]),
-        exclude=data.get("exclude", ["venv/**", "node_modules/**", ".git/**"]),
-        select=data.get("select", ["V", "S", "T", "G", "C", "M"]),
-        ignore=data.get("ignore", []),
-        severity=data.get("severity", "warning") if isinstance(data.get("severity"), str) else "warning",
-        severity_overrides=data.get("severity", {}) if isinstance(data.get("severity"), dict) else {},
+        include=effective.get("include", ["*.md", "*.py"]),
+        exclude=effective.get(
+            "exclude", ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
+        ),
+        select=effective.get("select", ["V", "S", "T", "G", "C", "M"]),
+        ignore=effective.get("ignore", []),
+        severity=min_severity,
+        severity_overrides=severity_overrides,
         vocabulary=vocabulary,
         per_file_ignores=per_file_ignores,
     )

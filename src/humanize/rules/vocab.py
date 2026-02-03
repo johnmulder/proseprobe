@@ -37,6 +37,15 @@ class AIVocabularyRule(Rule):
         "unravel": r"unravel(?:s|ed|ing)?",
     }
 
+    def __init__(
+        self,
+        allowed: set[str] | None = None,
+        additional: set[str] | None = None,
+    ) -> None:
+        self._allowed = {w.lower() for w in (allowed or set())}
+        self._additional = {w.lower() for w in (additional or set())} - self._allowed
+        self._vocabulary = AI_VOCABULARY | self._additional
+
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for AI vocabulary words."""
         issues: list[Issue] = []
@@ -44,7 +53,9 @@ class AIVocabularyRule(Rule):
 
         for line_num, line in enumerate(lines, start=1):
             line_lower = line.lower()
-            for word in AI_VOCABULARY:
+            for word in sorted(self._vocabulary):
+                if word in self._allowed:
+                    continue
                 # Use custom pattern if available, otherwise exact match
                 if word in self._WORD_PATTERNS:
                     pattern = rf"\b{self._WORD_PATTERNS[word]}\b"

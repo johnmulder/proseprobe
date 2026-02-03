@@ -37,40 +37,64 @@ class Linter:
             List of files matching include/exclude patterns.
         """
         files: list[Path] = []
+        roots: list[Path] = []
         for path in paths:
             if path.is_file():
                 files.append(path)
+                roots.append(path.parent)
             elif path.is_dir():
+                roots.append(path)
                 for pattern in self.config.include:
                     files.extend(path.rglob(pattern))
+
+        # De-duplicate while preserving order
+        files = list(dict.fromkeys(files))
 
         # Apply exclude patterns
         filtered: list[Path] = []
         for file in files:
-            excluded = False
-            for exclude_pattern in self.config.exclude:
-                # Normalize pattern: remove trailing ** or /*
-                base_pattern = exclude_pattern.rstrip("*").rstrip("/")
-
-                # Check if any part of the path matches the base pattern
-                for part in file.parts:
-                    if fnmatch.fnmatch(part, base_pattern):
-                        excluded = True
-                        break
-
-                # Also check the full path against the pattern
-                if not excluded and (
-                    fnmatch.fnmatch(str(file), exclude_pattern)
-                    or fnmatch.fnmatch(str(file), f"*/{exclude_pattern}")
-                ):
-                    excluded = True
-
-                if excluded:
-                    break
-            if not excluded:
-                filtered.append(file)
+            if self._is_excluded(file, roots):
+                continue
+            filtered.append(file)
 
         return filtered
+
+    def _is_excluded(self, file: Path, roots: list[Path]) -> bool:
+        """Check if a file should be excluded."""
+        rel_candidates: list[Path] = []
+        for root in roots:
+            try:
+                rel_candidates.append(file.relative_to(root))
+            except ValueError:
+                continue
+
+        for raw_pattern in self.config.exclude:
+            pattern = raw_pattern.strip()
+            if not pattern:
+                continue
+
+            anchored = pattern.startswith("/")
+            if anchored:
+                pattern = pattern.lstrip("/")
+
+            # Treat directory patterns as recursive globs
+            if pattern.endswith("/"):
+                pattern = pattern + "**"
+
+            candidates = rel_candidates if anchored else rel_candidates + [file]
+            if self._match_pattern_any(candidates, pattern):
+                return True
+
+        return False
+
+    def _match_pattern_any(self, candidates: list[Path], pattern: str) -> bool:
+        """Match a glob pattern against multiple candidates."""
+        for candidate in candidates:
+            if candidate.match(pattern):
+                return True
+            if not pattern.startswith("**/") and candidate.match(f"**/{pattern}"):
+                return True
+        return False
 
     def check_file(self, path: Path) -> list[Issue]:
         """Check a single file for issues.

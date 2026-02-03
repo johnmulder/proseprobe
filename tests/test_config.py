@@ -135,6 +135,43 @@ allowed = ["delve"]
         assert config.vocabulary.additional == ["synergy", "leverage"]
         assert config.vocabulary.allowed == ["delve"]
 
+    def test_load_legacy_lint_section(self, tmp_path: Path) -> None:
+        """Test loading legacy [lint] config shape."""
+        config_file = tmp_path / ".humanize.toml"
+        config_file.write_text("""
+[lint]
+select = ["V001"]
+ignore = ["S001"]
+severity = "error"
+
+[lint.per-file-ignores]
+"CHANGELOG.md" = ["V001"]
+""")
+
+        config = load_config(config_file)
+
+        assert config.select == ["V001"]
+        assert config.ignore == ["S001"]
+        assert config.severity == "error"
+        assert len(config.per_file_ignores) == 1
+        assert config.per_file_ignores[0].pattern == "CHANGELOG.md"
+
+    def test_load_severity_overrides_table(self, tmp_path: Path) -> None:
+        """Test parsing severity overrides table."""
+        config_file = tmp_path / ".humanize.toml"
+        config_file.write_text("""
+[tool.humanize]
+select = ["V"]
+
+[tool.humanize.severity]
+V001 = "error"
+""")
+
+        config = load_config(config_file)
+
+        assert config.severity == "warning"
+        assert config.severity_overrides["V001"] == "error"
+
     def test_load_invalid_toml(self, tmp_path: Path) -> None:
         """Test loading invalid TOML raises error."""
         config_file = tmp_path / ".humanize.toml"
@@ -154,6 +191,7 @@ class TestConfig:
         assert config.select == ["V", "S", "T", "G", "C", "M"]
         assert config.ignore == []
         assert config.severity == "warning"
+        assert ".venv/**" in config.exclude
 
     def test_custom_values(self) -> None:
         """Test custom configuration values."""

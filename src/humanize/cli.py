@@ -11,7 +11,7 @@ from rich.table import Table
 from humanize.config import load_config
 from humanize.core.linter import Linter
 from humanize.rules import get_all_rules
-from humanize.rules.base import Severity
+from humanize.rules.base import Severity, severity_rank
 
 app = typer.Typer(
     name="humanize",
@@ -27,6 +27,7 @@ def _severity_from_str(s: str) -> Severity:
         "error": Severity.ERROR,
         "warning": Severity.WARNING,
         "info": Severity.INFO,
+        "off": Severity.OFF,
     }
     return mapping.get(s.lower(), Severity.WARNING)
 
@@ -68,9 +69,9 @@ def check(
         typer.Option("--config", "-c", help="Path to configuration file"),
     ] = None,
     severity: Annotated[
-        str,
+        str | None,
         typer.Option("--severity", help="Minimum severity: error, warning, info"),
-    ] = "warning",
+    ] = None,
     quiet: Annotated[
         bool,
         typer.Option("--quiet", "-q", help="Only output errors"),
@@ -115,7 +116,10 @@ def check(
         console.print(f"  Ignore: {config.ignore}")
         console.print(f"  Include patterns: {config.include}")
         console.print(f"  Exclude patterns: {config.exclude}")
-        console.print(f"  Severity threshold: {severity}")
+        config_severity = severity or config.severity
+        console.print(f"  Severity threshold: {config_severity}")
+        if config.severity_overrides:
+            console.print(f"  Severity overrides: {config.severity_overrides}")
         console.print(f"  Output format: {format}")
         console.print(f"  Fix mode: {fix}")
         console.print(f"  Dry run: {dry_run}")
@@ -123,11 +127,11 @@ def check(
 
     # Create linter and register rules
     linter = Linter(config)
-    min_severity = _severity_from_str(severity)
+    min_severity = _severity_from_str(severity or config.severity)
 
-    for rule in get_all_rules():
+    for rule in get_all_rules(config):
         # Filter by severity
-        if rule.severity.value >= min_severity.value:
+        if severity_rank(rule.severity) >= severity_rank(min_severity):
             linter.register_rule(rule)
 
     # Run checks
@@ -191,7 +195,7 @@ def check(
     if fix:
         from humanize.core.fixer import Fixer
 
-        fixer = Fixer(get_all_rules())
+        fixer = Fixer(get_all_rules(config))
         total_fixed = 0
         total_skipped = 0
 
@@ -366,17 +370,26 @@ def init() -> None:
     default_config = """# humanize configuration
 # See: https://github.com/humanize-cli/humanize
 
-[lint]
-# select = ["V001", "V002"]  # Only enable specific rules
-# ignore = ["T003"]  # Disable specific rules
+[tool.humanize]
+# include = ["*.md", "*.py"]
+# exclude = ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
+# select = ["V", "S", "T", "G", "C", "M"]
+# ignore = ["T003"]
 severity = "warning"  # Minimum severity: error, warning, info
 
-[format]
-output = "text"  # Output format: text, json, sarif
+# Per-rule severity overrides
+# NOTE: TOML does not allow both `severity = "warning"` and the table below.
+# If you use overrides, remove the `severity` line above.
+# [tool.humanize.severity]
+# V001 = "error"
 
-# [lint.per-file-ignores]
-# "tests/*" = ["V001", "V002"]
-# "docs/*" = ["S001"]
+[tool.humanize.vocabulary]
+# additional = ["synergy", "leverage"]
+# allowed = ["crucial"]
+
+[[tool.humanize.per-file-ignores]]
+# pattern = "tests/*"
+# ignore = ["V001", "V002"]
 """
     config_path.write_text(default_config)
     typer.echo(f"Created {config_path}")
@@ -451,7 +464,7 @@ def watch(
 
     # Create linter and register rules
     linter = Linter(config)
-    for rule in get_all_rules():
+    for rule in get_all_rules(config):
         linter.register_rule(rule)
 
     # Track file modification times

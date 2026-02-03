@@ -2,6 +2,9 @@
 
 import pytest
 
+from humanize.config import Config
+from humanize.rules import get_all_rules
+from humanize.rules.base import Severity
 from humanize.rules.vocab import (
     AIVocabularyRule,
     CollaborativePhrasesRule,
@@ -42,6 +45,22 @@ class TestAIVocabularyRule:
 
         assert len(issues) == 0
 
+    def test_respects_allowed_vocabulary(self) -> None:
+        rule = AIVocabularyRule(allowed={"delve"})
+        content = "This article delves into the topic."
+        issues = rule.check(content, "test.md")
+
+        assert len(issues) == 0
+
+    def test_flags_additional_vocabulary(self) -> None:
+        rule = AIVocabularyRule(additional={"foobar"})
+        content = "The foobar feature is enabled."
+        issues = rule.check(content, "test.md")
+
+        assert len(issues) == 1
+        assert "foobar" in issues[0].message.lower()
+        assert issues[0].fixable is False
+
     def test_fix_preserves_case(self, rule: AIVocabularyRule) -> None:
         content = "Let's Delve into this topic."
         issues = rule.check(content, "test.md")
@@ -50,6 +69,12 @@ class TestAIVocabularyRule:
         fixed = rule.fix(content, issues[0])
         assert "Explore" in fixed
         assert "Delve" not in fixed
+
+    def test_severity_override_from_config(self) -> None:
+        config = Config(severity_overrides={"V001": "error"})
+        rules = get_all_rules(config)
+        rule = next(r for r in rules if r.id == "V001")
+        assert rule.severity == Severity.ERROR
 
 
 class TestCollaborativePhrasesRule:

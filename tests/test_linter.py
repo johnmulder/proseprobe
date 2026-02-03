@@ -80,6 +80,20 @@ class TestDiscoverFiles:
         # Check filename (pytest tmp_path may contain "venv" in directory name)
         assert files[0].name == "good.md"
 
+    def test_discover_excludes_dot_venv(self, tmp_path: Path) -> None:
+        """Test that .venv directory is excluded."""
+        venv_dir = tmp_path / ".venv"
+        venv_dir.mkdir()
+        (tmp_path / "good.md").write_text("content")
+        (venv_dir / "bad.md").write_text("content")
+
+        config = Config(exclude=[".venv/**"])
+        linter = Linter(config)
+        files = linter.discover_files([tmp_path])
+
+        assert len(files) == 1
+        assert files[0].name == "good.md"
+
     def test_discover_excludes_node_modules(self, tmp_path: Path) -> None:
         """Test that node_modules directory is excluded."""
         node_dir = tmp_path / "node_modules"

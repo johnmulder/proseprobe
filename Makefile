@@ -1,33 +1,50 @@
 .PHONY: install dev test lint typecheck format clean build all doc-audit spec-verify coverage-analyze
 
+VENV ?= .venv
+VENV_BIN = $(VENV)/bin
+
+PYTHON = $(VENV_BIN)/python
+PIP = $(VENV_BIN)/pip
+PYTEST = $(VENV_BIN)/pytest
+RUFF = $(VENV_BIN)/ruff
+MYPY = $(VENV_BIN)/mypy
+
+ifeq ($(wildcard $(PYTHON)),)
+PYTHON = python
+PIP = pip
+PYTEST = pytest
+RUFF = ruff
+MYPY = mypy
+endif
+
 # Install production dependencies
 install:
-	pip install -e .
+	$(PIP) install -e .
 
 # Install development dependencies
 dev:
-	pip install -e ".[dev]"
+	$(PIP) install -e ".[dev]"
 
 # Run tests
 test:
-	pytest tests/ -v
+	$(PYTEST) tests/ -v
 
 # Run tests with coverage
 test-cov:
-	pytest tests/ -v --cov=src/humanize --cov-report=term-missing --cov-report=html
+	$(PYTEST) tests/ -v --cov=src/humanize --cov-report=term-missing --cov-report=html
 
 # Run linter
 lint:
-	ruff check src/ tests/
+	$(RUFF) check src/ tests/
 
 # Run type checker
 typecheck:
-	mypy src/
+	$(MYPY) src/
 
 # Format code
 format:
-	ruff format src/ tests/
-	ruff check --fix src/ tests/
+	$(RUFF) format src/ tests/
+	$(RUFF) check --fix src/ tests/
 
 # Run all checks
 check: lint typecheck test
@@ -47,20 +64,20 @@ clean:
 
 # Build package
 build: clean
-	python -m build
+	$(PYTHON) -m build
 
 # Run humanize on itself (dogfooding)
 dogfood:
-	python -m humanize check README.md docs/ --baseline .humanize-baseline.json
+	$(PYTHON) -m humanize check README.md docs/ --baseline .humanize-baseline.json
 
 # Quick check for development
 quick:
-	ruff check src/ --fix
-	pytest tests/ -x -q
+	$(RUFF) check src/ --fix
+	$(PYTEST) tests/ -x -q
 
 # Run benchmarks
 benchmark:
-	python -m benchmarks.bench_rules
+	$(PYTHON) -m benchmarks.bench_rules
 # Full validation (lint + type-check + test)
 all: lint typecheck test
 
@@ -81,23 +98,23 @@ doc-audit:
 # Verify CLI matches documented commands
 spec-verify:
 	@echo "Verifying CLI commands match SPEC.md..."
-	@humanize --help | grep -q "check" || (echo "ERROR: 'check' command missing" && exit 1)
-	@humanize --help | grep -q "rules" || (echo "ERROR: 'rules' command missing" && exit 1)
-	@humanize --help | grep -q "explain" || (echo "ERROR: 'explain' command missing" && exit 1)
-	@humanize --help | grep -q "init" || (echo "ERROR: 'init' command missing" && exit 1)
-	@humanize --help | grep -q "version" || (echo "ERROR: 'version' command missing" && exit 1)
+	@$(PYTHON) -m humanize --help | grep -q "check" || (echo "ERROR: 'check' command missing" && exit 1)
+	@$(PYTHON) -m humanize --help | grep -q "rules" || (echo "ERROR: 'rules' command missing" && exit 1)
+	@$(PYTHON) -m humanize --help | grep -q "explain" || (echo "ERROR: 'explain' command missing" && exit 1)
+	@$(PYTHON) -m humanize --help | grep -q "init" || (echo "ERROR: 'init' command missing" && exit 1)
+	@$(PYTHON) -m humanize --help | grep -q "version" || (echo "ERROR: 'version' command missing" && exit 1)
 	@echo "Verifying check command options..."
-	@humanize check --help | grep -q "\-\-fix" || (echo "ERROR: --fix option missing" && exit 1)
-	@humanize check --help | grep -q "\-\-format" || (echo "ERROR: --format option missing" && exit 1)
-	@humanize check --help | grep -q "\-\-select" || (echo "ERROR: --select option missing" && exit 1)
-	@humanize check --help | grep -q "\-\-ignore" || (echo "ERROR: --ignore option missing" && exit 1)
-	@humanize check --help | grep -q "\-\-config" || (echo "ERROR: --config option missing" && exit 1)
-	@humanize check --help | grep -q "\-\-severity" || (echo "ERROR: --severity option missing" && exit 1)
+	@$(PYTHON) -m humanize check --help | grep -q "\-\-fix" || (echo "ERROR: --fix option missing" && exit 1)
+	@$(PYTHON) -m humanize check --help | grep -q "\-\-format" || (echo "ERROR: --format option missing" && exit 1)
+	@$(PYTHON) -m humanize check --help | grep -q "\-\-select" || (echo "ERROR: --select option missing" && exit 1)
+	@$(PYTHON) -m humanize check --help | grep -q "\-\-ignore" || (echo "ERROR: --ignore option missing" && exit 1)
+	@$(PYTHON) -m humanize check --help | grep -q "\-\-config" || (echo "ERROR: --config option missing" && exit 1)
+	@$(PYTHON) -m humanize check --help | grep -q "\-\-severity" || (echo "ERROR: --severity option missing" && exit 1)
 	@echo "✓ CLI matches specification"
 
 # Check test coverage meets threshold (90%)
 coverage-analyze:
 	@echo "Running coverage analysis..."
-	@pytest tests/ --cov=src/humanize --cov-report=term-missing --cov-fail-under=90 -q || \
+	@$(PYTEST) tests/ --cov=src/humanize --cov-report=term-missing --cov-fail-under=90 -q || \
 		(echo "WARNING: Coverage below 90% threshold. Run 'make test-cov' for details." && exit 1)
 	@echo "✓ Coverage meets 90% threshold"

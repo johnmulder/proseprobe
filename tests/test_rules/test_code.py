@@ -36,6 +36,29 @@ def process():
         issues = rule.check(text, "test.py")
         assert len(issues) == 0
 
+    def test_respects_allowed_vocabulary(self) -> None:
+        """Test allowed words are not flagged."""
+        text = '''
+def process():
+    """We facilitate the workflow."""
+    pass
+'''
+        rule = DocstringVocabularyRule(allowed={"facilitate"})
+        issues = rule.check(text, "test.py")
+        assert len(issues) == 0
+
+    def test_flags_additional_vocabulary(self) -> None:
+        """Test additional words are flagged without suggestions."""
+        text = '''
+def process():
+    """Foobar is used here."""
+    pass
+'''
+        rule = DocstringVocabularyRule(additional={"foobar"})
+        issues = rule.check(text, "test.py")
+        assert len(issues) == 1
+        assert issues[0].fixable is False
+
     def test_rule_metadata(self) -> None:
         """Test rule has correct metadata."""
         rule = DocstringVocabularyRule()

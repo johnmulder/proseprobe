@@ -14,6 +14,19 @@ class Severity(Enum):
     OFF = "off"
 
 
+_SEVERITY_RANK = {
+    Severity.ERROR: 3,
+    Severity.WARNING: 2,
+    Severity.INFO: 1,
+    Severity.OFF: 0,
+}
+
+
+def severity_rank(severity: Severity) -> int:
+    """Return numeric rank for severity comparisons."""
+    return _SEVERITY_RANK.get(severity, 0)
+
+
 @dataclass
 class Issue:
     """A detected issue in content."""

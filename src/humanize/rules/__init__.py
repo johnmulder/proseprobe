@@ -1,5 +1,6 @@
 """Detection rules for AI content patterns."""
 
+from humanize.config import Config
 from humanize.rules.base import Issue, Rule, Severity
 from humanize.rules.code import (
     AIPlaceholdersRule,
@@ -86,15 +87,45 @@ __all__ = [
 ]
 
 
-def get_all_rules() -> list[Rule]:
+def _severity_from_str(value: str) -> Severity | None:
+    mapping = {
+        "error": Severity.ERROR,
+        "warning": Severity.WARNING,
+        "info": Severity.INFO,
+        "off": Severity.OFF,
+    }
+    return mapping.get(value.lower())
+
+
+def _apply_severity_overrides(
+    rules: list[Rule], overrides: dict[str, str]
+) -> list[Rule]:
+    for rule in rules:
+        override = overrides.get(rule.id)
+        if override:
+            new_severity = _severity_from_str(override)
+            if new_severity is not None:
+                rule.severity = new_severity
+    return rules
+
+
+def get_all_rules(config: Config | None = None) -> list[Rule]:
     """Get instances of all available rules.
 
     Returns:
         List of all rule instances.
     """
-    return [
+    allowed: set[str] = set()
+    additional: set[str] = set()
+    severity_overrides: dict[str, str] = {}
+    if config is not None:
+        allowed = {w.lower() for w in config.vocabulary.allowed}
+        additional = {w.lower() for w in config.vocabulary.additional}
+        severity_overrides = config.severity_overrides
+
+    rules = [
         # Vocabulary (V001-V005)
-        AIVocabularyRule(),
+        AIVocabularyRule(allowed=allowed, additional=additional),
         CollaborativePhrasesRule(),
         KnowledgeCutoffRule(),
         PromotionalLanguageRule(),
@@ -119,7 +150,7 @@ def get_all_rules() -> list[Rule]:
         ExcessiveHedgingRule(),
         ParticipleChainsRule(),
         # Code (C001-C004)
-        DocstringVocabularyRule(),
+        DocstringVocabularyRule(allowed=allowed, additional=additional),
         VerboseCommentsRule(),
         CollaborativeCommentsRule(),
         AIPlaceholdersRule(),
@@ -129,3 +160,8 @@ def get_all_rules() -> list[Rule]:
         UTMParametersRule(),
         BrokenReferencesRule(),
     ]
+
+    if severity_overrides:
+        rules = _apply_severity_overrides(rules, severity_overrides)
+
+    return rules

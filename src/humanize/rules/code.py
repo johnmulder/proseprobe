@@ -17,7 +17,7 @@ class DocstringVocabularyRule(Rule):
     fixable = True
 
     # AI vocabulary to flag in docstrings with replacements
-    _ai_words: ClassVar[list[tuple[str, str, str]]] = [
+    _base_ai_words: ClassVar[list[tuple[str, str, str]]] = [
         (r"\bdelve\b", "delve", "explore"),
         (r"\bleverage\b", "leverage", "use"),
         (r"\butilize\b", "utilize", "use"),
@@ -31,6 +31,26 @@ class DocstringVocabularyRule(Rule):
         (r"\bsynergy\b", "synergy", "cooperation"),
         (r"\bparadigm\b", "paradigm", "model"),
     ]
+
+    def __init__(
+        self,
+        allowed: set[str] | None = None,
+        additional: set[str] | None = None,
+    ) -> None:
+        self._allowed = {w.lower() for w in (allowed or set())}
+        extra_words = {
+            w.lower()
+            for w in (additional or set())
+            if isinstance(w, str)
+        }
+
+        base_words = {word.lower() for _, word, _ in self._base_ai_words}
+        extra_words = extra_words - self._allowed - base_words
+
+        self._ai_words: list[tuple[str, str, str | None]] = list(self._base_ai_words)
+        for word in sorted(extra_words):
+            pattern = rf"\b{re.escape(word)}\b"
+            self._ai_words.append((pattern, word, None))
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for AI vocabulary in docstrings."""
@@ -54,6 +74,8 @@ class DocstringVocabularyRule(Rule):
             docstring = ast.get_docstring(node)
             if docstring:
                 for pattern, word, replacement in self._ai_words:
+                    if word.lower() in self._allowed:
+                        continue
                     match = re.search(pattern, docstring, re.IGNORECASE)
                     if match:
                         # Get line number from node
@@ -65,7 +87,7 @@ class DocstringVocabularyRule(Rule):
                                 line=line,
                                 column=1,
                                 severity=self.severity,
-                                fixable=True,
+                                fixable=replacement is not None,
                                 suggestion=replacement,
                             )
                         )
