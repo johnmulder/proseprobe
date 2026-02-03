@@ -9,6 +9,7 @@ from humanize.data.phrases import (
     WEASEL_PHRASES,
 )
 from humanize.data.vocabulary import AI_VOCABULARY, VOCABULARY_SUGGESTIONS
+from humanize.parsers.markdown import iter_prose_lines
 from humanize.rules.base import Issue, Rule, Severity
 
 
@@ -49,9 +50,9 @@ class AIVocabularyRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for AI vocabulary words."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             line_lower = line.lower()
             for word in sorted(self._vocabulary):
                 if word in self._allowed:
@@ -126,9 +127,9 @@ class CollaborativePhrasesRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for collaborative phrases."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             line_lower = line.lower()
             for phrase in COLLABORATIVE_PHRASES:
                 if phrase.lower() in line_lower:
@@ -204,9 +205,9 @@ class KnowledgeCutoffRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for knowledge cutoff patterns."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             for pattern in KNOWLEDGE_CUTOFF_PATTERNS:
                 match = re.search(pattern, line, re.IGNORECASE)
                 if match:
@@ -236,9 +237,9 @@ class PromotionalLanguageRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for promotional language."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             line_lower = line.lower()
             for phrase in PROMOTIONAL_PHRASES:
                 if phrase.lower() in line_lower:
@@ -269,9 +270,9 @@ class WeaselWordsRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for weasel words."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             for pattern in WEASEL_PHRASES:
                 match = re.search(pattern, line, re.IGNORECASE)
                 if match:

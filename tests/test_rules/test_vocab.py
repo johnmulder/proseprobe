@@ -61,6 +61,13 @@ class TestAIVocabularyRule:
         assert "foobar" in issues[0].message.lower()
         assert issues[0].fixable is False
 
+    def test_ignores_code_fences_in_markdown(self) -> None:
+        rule = AIVocabularyRule()
+        content = "```python\n# delve\n```\nThis delves into topics."
+        issues = rule.check(content, "test.md")
+
+        assert len(issues) == 1
+
     def test_fix_preserves_case(self, rule: AIVocabularyRule) -> None:
         content = "Let's Delve into this topic."
         issues = rule.check(content, "test.md")

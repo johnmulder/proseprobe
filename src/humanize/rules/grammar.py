@@ -3,6 +3,7 @@
 import re
 
 from humanize.data.patterns import COPULA_AVOIDANCE_PATTERNS, HEDGING_PATTERNS
+from humanize.parsers.markdown import iter_prose_lines
 from humanize.rules.base import Issue, Rule, Severity
 
 
@@ -18,9 +19,9 @@ class CopulaAvoidanceRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for copula avoidance."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             for pattern in COPULA_AVOIDANCE_PATTERNS:
                 for match in re.finditer(pattern, line, re.IGNORECASE):
                     issues.append(
@@ -49,9 +50,9 @@ class ExcessiveHedgingRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for excessive hedging."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             for pattern in HEDGING_PATTERNS:
                 for match in re.finditer(pattern, line, re.IGNORECASE):
                     issues.append(
@@ -83,9 +84,9 @@ class ParticipleChainsRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for participle chains."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             match = re.search(self._pattern, line, re.IGNORECASE)
             if match:
                 # Extract the -ing words

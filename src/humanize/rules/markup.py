@@ -3,6 +3,11 @@
 import re
 from typing import ClassVar
 
+from humanize.parsers.markdown import (
+    is_markdown_file,
+    iter_non_code_lines,
+    iter_prose_lines,
+)
 from humanize.rules.base import Issue, Rule, Severity
 
 
@@ -72,9 +77,9 @@ class ChatGPTMarkersRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for ChatGPT markers."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             for pattern in self._patterns:
                 for match in re.finditer(pattern, line):
                     issues.append(
@@ -127,21 +132,40 @@ class UTMParametersRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for AI-related UTM parameters."""
         issues: list[Issue] = []
-        lines = content.split("\n")
-
-        for line_num, line in enumerate(lines, start=1):
-            for match in re.finditer(self._pattern, line):
-                issues.append(
-                    Issue(
-                        rule_id=self.id,
-                        message=f"AI tracking parameter: '{match.group()}'",
-                        line=line_num,
-                        column=match.start() + 1,
-                        end_column=match.end() + 1,
-                        severity=self.severity,
-                        fixable=True,
+        if is_markdown_file(filename):
+            link_re = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+            for line_num, line in iter_non_code_lines(content, filename):
+                for link_match in link_re.finditer(line):
+                    url = link_match.group(2)
+                    for utm_match in re.finditer(self._pattern, url):
+                        column = link_match.start(2) + utm_match.start() + 1
+                        end_column = link_match.start(2) + utm_match.end() + 1
+                        issues.append(
+                            Issue(
+                                rule_id=self.id,
+                                message=f"AI tracking parameter: '{utm_match.group()}'",
+                                line=line_num,
+                                column=column,
+                                end_column=end_column,
+                                severity=self.severity,
+                                fixable=True,
+                            )
+                        )
+        else:
+            lines = content.split("\n")
+            for line_num, line in enumerate(lines, start=1):
+                for match in re.finditer(self._pattern, line):
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"AI tracking parameter: '{match.group()}'",
+                            line=line_num,
+                            column=match.start() + 1,
+                            end_column=match.end() + 1,
+                            severity=self.severity,
+                            fixable=True,
+                        )
                     )
-                )
 
         return issues
 
@@ -193,9 +217,9 @@ class BrokenReferencesRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for broken references."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             for pattern in self._patterns:
                 for match in re.finditer(pattern, line):
                     issues.append(

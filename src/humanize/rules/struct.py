@@ -10,6 +10,7 @@ from humanize.data.patterns import (
     RULE_OF_THREE_PATTERNS,
     SIGNIFICANCE_PATTERNS,
 )
+from humanize.parsers.markdown import iter_prose_lines
 from humanize.rules.base import Issue, Rule, Severity
 
 
@@ -28,10 +29,10 @@ class RuleOfThreeRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for rule of three patterns."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
         triads_found: list[tuple[int, int, str]] = []
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             for pattern in RULE_OF_THREE_PATTERNS:
                 for match in re.finditer(pattern, line, re.IGNORECASE):
                     triads_found.append((line_num, match.start() + 1, match.group()))
@@ -64,9 +65,9 @@ class NegativeParallelismRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for negative parallelism."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             for pattern in NEGATIVE_PARALLELISM_PATTERNS:
                 match = re.search(pattern, line, re.IGNORECASE)
                 if match:
@@ -96,9 +97,9 @@ class ChallengeConclusionsRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for challenge conclusions."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             for pattern in CHALLENGE_CONCLUSION_PATTERNS:
                 match = re.search(pattern, line, re.IGNORECASE)
                 if match:
@@ -131,11 +132,11 @@ class InlineHeaderListsRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for inline header lists."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
         consecutive_count = 0
         consecutive_start = 0
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             if re.match(INLINE_HEADER_LIST_PATTERN, line.strip()):
                 if consecutive_count == 0:
                     consecutive_start = line_num
@@ -184,9 +185,9 @@ class SignificanceEmphasisRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for significance emphasis."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             for pattern in SIGNIFICANCE_PATTERNS:
                 for match in re.finditer(pattern, line, re.IGNORECASE):
                     issues.append(
@@ -215,9 +216,9 @@ class SuperficialAnalysisRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for superficial analysis patterns."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             for pattern in PARTICIPLE_CHAIN_PATTERNS:
                 match = re.search(pattern, line, re.IGNORECASE)
                 if match:
@@ -264,9 +265,9 @@ class FalseRangesRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for false ranges."""
         issues: list[Issue] = []
-        lines = content.split("\n")
+        lines = iter_prose_lines(content, filename)
 
-        for line_num, line in enumerate(lines, start=1):
+        for line_num, line in lines:
             for pattern in self._patterns:
                 for match in re.finditer(pattern, line, re.IGNORECASE):
                     word1 = match.group(1).lower()

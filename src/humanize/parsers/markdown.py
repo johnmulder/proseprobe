@@ -1,6 +1,14 @@
 """Markdown parser for extracting structured content."""
 
+import re
 from dataclasses import dataclass
+
+MARKDOWN_EXTENSIONS = (".md", ".mdx", ".markdown")
+
+
+def is_markdown_file(filename: str) -> bool:
+    """Return True if filename looks like Markdown."""
+    return filename.lower().endswith(MARKDOWN_EXTENSIONS)
 
 
 @dataclass
@@ -38,6 +46,65 @@ class MarkdownParser:
         """
         self.content = content
         self._lines = content.split("\n")
+        self._code_blocks: list[tuple[int, int, str, str]] | None = None
+        self._code_block_lines: set[int] | None = None
+
+    def _ensure_code_blocks(self) -> None:
+        if self._code_blocks is not None and self._code_block_lines is not None:
+            return
+
+        blocks: list[tuple[int, int, str, str]] = []
+        code_lines: set[int] = set()
+
+        in_block = False
+        fence_char = ""
+        fence_len = 0
+        language = ""
+        start_line = 0
+        content_lines: list[str] = []
+
+        fence_re = re.compile(r"^(`{3,}|~{3,})\s*([\w+-]+)?\s*$")
+
+        for line_num, line in enumerate(self._lines, start=1):
+            stripped = line.strip()
+            if not in_block:
+                match = fence_re.match(stripped)
+                if match:
+                    fence = match.group(1)
+                    fence_char = fence[0]
+                    fence_len = len(fence)
+                    language = match.group(2) or ""
+                    start_line = line_num
+                    content_lines = []
+                    in_block = True
+                    code_lines.add(line_num)
+                continue
+
+            code_lines.add(line_num)
+            close_re = re.compile(rf"^{re.escape(fence_char)}{{{fence_len},}}\s*$")
+            if close_re.match(stripped):
+                blocks.append(
+                    (start_line, line_num, language, "\n".join(content_lines))
+                )
+                in_block = False
+                fence_char = ""
+                fence_len = 0
+                language = ""
+                content_lines = []
+            else:
+                content_lines.append(line)
+
+        if in_block:
+            blocks.append(
+                (start_line, len(self._lines), language, "\n".join(content_lines))
+            )
+
+        self._code_blocks = blocks
+        self._code_block_lines = code_lines
+
+    def _code_lines(self) -> set[int]:
+        self._ensure_code_blocks()
+        return self._code_block_lines or set()
 
     def get_headings(self) -> list[MarkdownSection]:
         """Extract all headings from the document.
@@ -45,8 +112,40 @@ class MarkdownParser:
         Returns:
             List of heading sections.
         """
-        # TODO: Implement heading extraction
-        return []
+        self._ensure_code_blocks()
+        code_lines = self._code_lines()
+        headings: list[tuple[int, int, str]] = []
+        heading_re = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
+
+        for line_num, line in enumerate(self._lines, start=1):
+            if line_num in code_lines:
+                continue
+            match = heading_re.match(line)
+            if match:
+                level = len(match.group(1))
+                title = match.group(2).strip()
+                headings.append((line_num, level, title))
+
+        sections: list[MarkdownSection] = []
+        for idx, (line_num, level, title) in enumerate(headings):
+            next_line = headings[idx + 1][0] if idx + 1 < len(headings) else None
+            end_line = (next_line - 1) if next_line else len(self._lines)
+            content_lines: list[str] = []
+            for content_line in range(line_num + 1, end_line + 1):
+                if content_line in code_lines:
+                    continue
+                content_lines.append(self._lines[content_line - 1])
+            sections.append(
+                MarkdownSection(
+                    level=level,
+                    title=title,
+                    content="\n".join(content_lines).rstrip(),
+                    start_line=line_num,
+                    end_line=end_line,
+                )
+            )
+
+        return sections
 
     def get_paragraphs(self) -> list[tuple[int, int, str]]:
         """Extract all paragraphs with line numbers.
@@ -54,8 +153,41 @@ class MarkdownParser:
         Returns:
             List of (start_line, end_line, text) tuples.
         """
-        # TODO: Implement paragraph extraction
-        return []
+        self._ensure_code_blocks()
+        code_lines = self._code_lines()
+        paragraphs: list[tuple[int, int, str]] = []
+        heading_re = re.compile(r"^(#{1,6})\s+")
+        list_re = re.compile(r"^\s*(?:[-*+]|\d+\.)\s+")
+
+        current_lines: list[str] = []
+        start_line = 0
+
+        def flush(end_line: int) -> None:
+            nonlocal current_lines, start_line
+            if current_lines:
+                paragraphs.append(
+                    (start_line, end_line, "\n".join(current_lines).rstrip())
+                )
+                current_lines = []
+                start_line = 0
+
+        for line_num, line in enumerate(self._lines, start=1):
+            if line_num in code_lines:
+                flush(line_num - 1)
+                continue
+            if heading_re.match(line) or list_re.match(line):
+                flush(line_num - 1)
+                continue
+            if not line.strip():
+                flush(line_num - 1)
+                continue
+
+            if not current_lines:
+                start_line = line_num
+            current_lines.append(line)
+
+        flush(len(self._lines))
+        return paragraphs
 
     def get_links(self) -> list[MarkdownLink]:
         """Extract all links from the document.
@@ -63,8 +195,26 @@ class MarkdownParser:
         Returns:
             List of links with positions.
         """
-        # TODO: Implement link extraction
-        return []
+        self._ensure_code_blocks()
+        code_lines = self._code_lines()
+        links: list[MarkdownLink] = []
+        link_re = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+
+        for line_num, line in enumerate(self._lines, start=1):
+            if line_num in code_lines:
+                continue
+            masked = self._mask_inline_code(line)
+            for match in link_re.finditer(masked):
+                links.append(
+                    MarkdownLink(
+                        text=match.group(1),
+                        url=match.group(2),
+                        line=line_num,
+                        column=match.start() + 1,
+                    )
+                )
+
+        return links
 
     def get_code_blocks(self) -> list[tuple[int, int, str, str]]:
         """Extract fenced code blocks.
@@ -72,8 +222,8 @@ class MarkdownParser:
         Returns:
             List of (start_line, end_line, language, content) tuples.
         """
-        # TODO: Implement code block extraction
-        return []
+        self._ensure_code_blocks()
+        return self._code_blocks or []
 
     def get_bullet_lists(self) -> list[tuple[int, int, list[str]]]:
         """Extract bullet lists.
@@ -81,5 +231,84 @@ class MarkdownParser:
         Returns:
             List of (start_line, end_line, items) tuples.
         """
-        # TODO: Implement bullet list extraction
-        return []
+        self._ensure_code_blocks()
+        code_lines = self._code_lines()
+        list_re = re.compile(r"^\s*(?:[-*+]|\d+\.)\s+(.*)")
+        lists: list[tuple[int, int, list[str]]] = []
+
+        current_items: list[str] = []
+        start_line = 0
+
+        def flush(end_line: int) -> None:
+            nonlocal current_items, start_line
+            if current_items:
+                lists.append((start_line, end_line, current_items))
+                current_items = []
+                start_line = 0
+
+        for line_num, line in enumerate(self._lines, start=1):
+            if line_num in code_lines:
+                flush(line_num - 1)
+                continue
+            match = list_re.match(line)
+            if match:
+                if not current_items:
+                    start_line = line_num
+                current_items.append(match.group(1).strip())
+                continue
+
+            flush(line_num - 1)
+
+        flush(len(self._lines))
+        return lists
+
+    def get_lines(self) -> list[tuple[int, str]]:
+        """Return non-code lines with line numbers."""
+        self._ensure_code_blocks()
+        code_lines = self._code_lines()
+        return [
+            (line_num, line)
+            for line_num, line in enumerate(self._lines, start=1)
+            if line_num not in code_lines
+        ]
+
+    def get_prose_lines(self) -> list[tuple[int, str]]:
+        """Return non-code lines with inline code and link URLs masked."""
+        lines = self.get_lines()
+        return [
+            (line_num, self._mask_inline_code_and_links(line))
+            for line_num, line in lines
+        ]
+
+    def _mask_inline_code(self, line: str) -> str:
+        chars = list(line)
+        for match in re.finditer(r"`[^`]*`", line):
+            for idx in range(match.start(), match.end()):
+                chars[idx] = " "
+        return "".join(chars)
+
+    def _mask_inline_code_and_links(self, line: str) -> str:
+        chars = list(line)
+        for match in re.finditer(r"`[^`]*`", line):
+            for idx in range(match.start(), match.end()):
+                chars[idx] = " "
+        for match in re.finditer(r"\[([^\]]+)\]\(([^)]+)\)", line):
+            url_start = match.start(2)
+            url_end = match.end(2)
+            for idx in range(url_start, url_end):
+                chars[idx] = " "
+        return "".join(chars)
+
+
+def iter_prose_lines(content: str, filename: str) -> list[tuple[int, str]]:
+    """Return line-numbered prose lines for Markdown, raw lines otherwise."""
+    if is_markdown_file(filename):
+        return MarkdownParser(content).get_prose_lines()
+    return list(enumerate(content.split("\n"), start=1))
+
+
+def iter_non_code_lines(content: str, filename: str) -> list[tuple[int, str]]:
+    """Return line-numbered lines excluding code blocks for Markdown."""
+    if is_markdown_file(filename):
+        return MarkdownParser(content).get_lines()
+    return list(enumerate(content.split("\n"), start=1))

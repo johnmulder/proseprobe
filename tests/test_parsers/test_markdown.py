@@ -26,7 +26,9 @@ class TestMarkdownParser:
         parser = MarkdownParser(content)
         headings = parser.get_headings()
 
-        assert len(headings) >= 0  # May or may not be implemented
+        assert len(headings) == 1
+        assert headings[0].level == 1
+        assert headings[0].title == "Main Title"
 
     def test_get_paragraphs_empty(self) -> None:
         """Test getting paragraphs from empty document."""
@@ -40,17 +42,63 @@ class TestMarkdownParser:
         links = parser.get_links()
         assert links == []
 
+    def test_get_links(self) -> None:
+        """Test extracting markdown links."""
+        content = "See [Example](https://example.com) for details."
+        parser = MarkdownParser(content)
+        links = parser.get_links()
+
+        assert len(links) == 1
+        assert links[0].text == "Example"
+        assert links[0].url == "https://example.com"
+        assert links[0].line == 1
+
     def test_get_code_blocks_empty(self) -> None:
         """Test getting code blocks from empty document."""
         parser = MarkdownParser("")
         blocks = parser.get_code_blocks()
         assert blocks == []
 
+    def test_get_code_blocks(self) -> None:
+        """Test extracting fenced code blocks."""
+        content = "Text\n```python\nprint('hi')\n```\nAfter"
+        parser = MarkdownParser(content)
+        blocks = parser.get_code_blocks()
+
+        assert len(blocks) == 1
+        start_line, end_line, language, code = blocks[0]
+        assert language == "python"
+        assert "print('hi')" in code
+        assert start_line == 2
+        assert end_line == 4
+
     def test_get_bullet_lists_empty(self) -> None:
         """Test getting bullet lists from empty document."""
         parser = MarkdownParser("")
         lists = parser.get_bullet_lists()
         assert lists == []
+
+    def test_get_bullet_lists(self) -> None:
+        """Test extracting bullet lists."""
+        content = "- One\n- Two\n\nAfter"
+        parser = MarkdownParser(content)
+        lists = parser.get_bullet_lists()
+
+        assert len(lists) == 1
+        start_line, end_line, items = lists[0]
+        assert start_line == 1
+        assert end_line == 2
+        assert items == ["One", "Two"]
+
+    def test_get_paragraphs_skips_code(self) -> None:
+        """Test paragraphs skip fenced code blocks."""
+        content = "Para one.\n\n```txt\ncode line\n```\n\nPara two."
+        parser = MarkdownParser(content)
+        paragraphs = parser.get_paragraphs()
+
+        assert len(paragraphs) == 2
+        assert "Para one." in paragraphs[0][2]
+        assert "Para two." in paragraphs[1][2]
 
 
 class TestMarkdownSection:
