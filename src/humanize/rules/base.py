@@ -50,6 +50,7 @@ class Rule(ABC):
     description: str
     severity: Severity = Severity.WARNING
     fixable: bool = False
+    applies_to: set[str] = {"any"}  # "markdown", "python", "any"
 
     @abstractmethod
     def check(self, content: str, filename: str) -> list[Issue]:
