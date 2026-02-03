@@ -346,6 +346,25 @@ class TestInteractiveMode:
         assert "--interactive" in result.stdout or "-I" in result.stdout
 
 
+class TestHelpFlags:
+    """Tests for help flag aliases."""
+
+    def test_root_help_short_flag(self) -> None:
+        """Test that -h shows top-level help."""
+        result = runner.invoke(app, ["-h"])
+
+        assert result.exit_code == 0
+        assert "Detect AI-generated content patterns" in result.stdout
+        assert "check" in result.stdout
+
+    def test_check_help_short_flag(self) -> None:
+        """Test that -h shows check command help."""
+        result = runner.invoke(app, ["check", "-h"])
+
+        assert result.exit_code == 0
+        assert "--interactive" in result.stdout or "-I" in result.stdout
+
+
 class TestOutputFormats:
     """Tests for JSON and SARIF output formats."""
 
