@@ -1,6 +1,8 @@
 """Python parser for extracting docstrings and comments."""
 
 import ast
+import io
+import tokenize
 from dataclasses import dataclass
 
 
@@ -64,32 +66,41 @@ class PythonParser:
         docstrings: list[Docstring] = []
 
         for node in ast.walk(self._tree):
-            if isinstance(
+            if not isinstance(
                 node, (ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)
             ):
-                docstring = ast.get_docstring(node)
-                if docstring:
-                    # Find the line number of the docstring
-                    if isinstance(node, ast.Module):
-                        line = 1
-                        node_type = "module"
-                    else:
-                        line = node.lineno + 1  # Docstring is after the def line
-                        node_type = (
-                            "class" if isinstance(node, ast.ClassDef) else "function"
-                        )
+                continue
 
-                    # Estimate end line based on docstring length
-                    end_line = line + docstring.count("\n")
+            if not getattr(node, "body", None):
+                continue
 
-                    docstrings.append(
-                        Docstring(
-                            content=docstring,
-                            line=line,
-                            end_line=end_line,
-                            node_type=node_type,
-                        )
-                    )
+            first = node.body[0]
+            if not isinstance(first, ast.Expr):
+                continue
+            if not isinstance(first.value, ast.Constant):
+                continue
+            if not isinstance(first.value.value, str):
+                continue
+
+            docstring = first.value.value
+            if isinstance(node, ast.Module):
+                node_type = "module"
+            else:
+                node_type = "class" if isinstance(node, ast.ClassDef) else "function"
+
+            line = getattr(first, "lineno", 1)
+            end_line = getattr(first, "end_lineno", None)
+            if end_line is None:
+                end_line = line + docstring.count("\n")
+
+            docstrings.append(
+                Docstring(
+                    content=docstring,
+                    line=line,
+                    end_line=end_line,
+                    node_type=node_type,
+                )
+            )
 
         return docstrings
 
@@ -101,34 +112,27 @@ class PythonParser:
         """
         comments: list[Comment] = []
 
-        for line_num, line in enumerate(self._lines, start=1):
-            stripped = line.strip()
+        try:
+            tokens = tokenize.generate_tokens(io.StringIO(self.content).readline)
+            for token in tokens:
+                if token.type != tokenize.COMMENT:
+                    continue
 
-            # Full-line comment
-            if stripped.startswith("#"):
+                line_num, col = token.start
+                line_text = token.line or ""
+                before = line_text[:col]
+                is_inline = bool(before.strip())
+                comment_text = token.string[1:].strip()
                 comments.append(
                     Comment(
-                        content=stripped[1:].strip(),
+                        content=comment_text,
                         line=line_num,
-                        column=line.index("#") + 1,
-                        is_inline=False,
+                        column=col + 1,
+                        is_inline=is_inline,
                     )
                 )
-            # Inline comment (simple heuristic)
-            elif "#" in line:
-                # Check if # is in a string - simple check
-                comment_idx = line.find("#")
-                before = line[:comment_idx]
-                # Very basic check - not inside quotes
-                if before.count('"') % 2 == 0 and before.count("'") % 2 == 0:
-                    comments.append(
-                        Comment(
-                            content=line[comment_idx + 1 :].strip(),
-                            line=line_num,
-                            column=comment_idx + 1,
-                            is_inline=True,
-                        )
-                    )
+        except (tokenize.TokenError, UnicodeDecodeError):
+            return comments
 
         return comments
 

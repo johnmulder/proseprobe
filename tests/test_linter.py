@@ -179,7 +179,7 @@ class TestCheckFile:
     def test_check_python_file(self, tmp_path: Path) -> None:
         """Test checking Python file."""
         test_file = tmp_path / "script.py"
-        test_file.write_text('"""This module delves into algorithms."""')
+        test_file.write_text('"""This module will delve into algorithms."""')
 
         config = Config()
         linter = Linter(config)

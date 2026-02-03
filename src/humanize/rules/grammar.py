@@ -3,7 +3,6 @@
 import re
 
 from humanize.data.patterns import COPULA_AVOIDANCE_PATTERNS, HEDGING_PATTERNS
-from humanize.parsers.markdown import iter_prose_lines
 from humanize.rules.base import Issue, Rule, Severity
 
 
@@ -15,13 +14,13 @@ class CopulaAvoidanceRule(Rule):
     description = "Detects 'serves as' instead of 'is'"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for copula avoidance."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             for pattern in COPULA_AVOIDANCE_PATTERNS:
                 for match in re.finditer(pattern, line, re.IGNORECASE):
                     issues.append(
@@ -46,13 +45,13 @@ class ExcessiveHedgingRule(Rule):
     description = "Detects 'It is important to note that...' patterns"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for excessive hedging."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             for pattern in HEDGING_PATTERNS:
                 for match in re.finditer(pattern, line, re.IGNORECASE):
                     issues.append(
@@ -77,6 +76,8 @@ class ParticipleChainsRule(Rule):
     description = "Detects 'highlighting..., emphasizing..., fostering...' chains"
     severity = Severity.WARNING
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     # Pattern for multiple -ing words in a row (3+)
     _pattern = r"\b(\w+ing)\b[^.]*\b(\w+ing)\b[^.]*\b(\w+ing)\b"
@@ -84,9 +85,7 @@ class ParticipleChainsRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for participle chains."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             match = re.search(self._pattern, line, re.IGNORECASE)
             if match:
                 # Extract the -ing words

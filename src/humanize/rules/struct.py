@@ -10,7 +10,6 @@ from humanize.data.patterns import (
     RULE_OF_THREE_PATTERNS,
     SIGNIFICANCE_PATTERNS,
 )
-from humanize.parsers.markdown import iter_prose_lines
 from humanize.rules.base import Issue, Rule, Severity
 
 
@@ -22,6 +21,8 @@ class RuleOfThreeRule(Rule):
     description = "Detects excessive 'X, Y, and Z' patterns"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     # Threshold: flag if more than N triads in content
     _threshold = 3
@@ -29,10 +30,9 @@ class RuleOfThreeRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for rule of three patterns."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
         triads_found: list[tuple[int, int, str]] = []
 
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             for pattern in RULE_OF_THREE_PATTERNS:
                 for match in re.finditer(pattern, line, re.IGNORECASE):
                     triads_found.append((line_num, match.start() + 1, match.group()))
@@ -61,13 +61,13 @@ class NegativeParallelismRule(Rule):
     description = "Detects 'Not only... but also...' patterns"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for negative parallelism."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             for pattern in NEGATIVE_PARALLELISM_PATTERNS:
                 match = re.search(pattern, line, re.IGNORECASE)
                 if match:
@@ -93,13 +93,13 @@ class ChallengeConclusionsRule(Rule):
     description = "Detects 'Despite its... faces challenges...' patterns"
     severity = Severity.WARNING
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for challenge conclusions."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             for pattern in CHALLENGE_CONCLUSION_PATTERNS:
                 match = re.search(pattern, line, re.IGNORECASE)
                 if match:
@@ -125,6 +125,8 @@ class InlineHeaderListsRule(Rule):
     description = "Detects '- **Header:** Description' pattern"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     # Threshold: flag if more than N consecutive inline headers
     _threshold = 3
@@ -132,11 +134,10 @@ class InlineHeaderListsRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for inline header lists."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
         consecutive_count = 0
         consecutive_start = 0
 
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             if re.match(INLINE_HEADER_LIST_PATTERN, line.strip()):
                 if consecutive_count == 0:
                     consecutive_start = line_num
@@ -181,13 +182,13 @@ class SignificanceEmphasisRule(Rule):
     description = "Detects 'pivotal moment', 'key turning point' patterns"
     severity = Severity.WARNING
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for significance emphasis."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             for pattern in SIGNIFICANCE_PATTERNS:
                 for match in re.finditer(pattern, line, re.IGNORECASE):
                     issues.append(
@@ -212,13 +213,13 @@ class SuperficialAnalysisRule(Rule):
     description = "Detects 'highlighting...underscoring...' chains"
     severity = Severity.WARNING
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for superficial analysis patterns."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             for pattern in PARTICIPLE_CHAIN_PATTERNS:
                 match = re.search(pattern, line, re.IGNORECASE)
                 if match:
@@ -244,6 +245,8 @@ class FalseRangesRule(Rule):
     description = "Detects 'from X to Y' with incoherent extremes"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     # Common AI false range patterns
     _patterns = [
@@ -265,9 +268,7 @@ class FalseRangesRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for false ranges."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             for pattern in self._patterns:
                 for match in re.finditer(pattern, line, re.IGNORECASE):
                     word1 = match.group(1).lower()

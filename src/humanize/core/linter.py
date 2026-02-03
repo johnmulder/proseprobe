@@ -4,6 +4,7 @@ import fnmatch
 from pathlib import Path
 
 from humanize.config import Config
+from humanize.parsers.markdown import is_markdown_file
 from humanize.rules.base import Issue, Rule
 
 
@@ -143,6 +144,8 @@ class Linter:
         Returns:
             True if rule should run on file.
         """
+        if not self._rule_applies_to_file(rule, path):
+            return False
         # Check global select/ignore
         if rule.id in self.config.ignore:
             return False
@@ -161,3 +164,12 @@ class Linter:
                 return False
 
         return prefix in self.config.select or rule.id in self.config.select
+
+    def _rule_applies_to_file(self, rule: Rule, path: Path) -> bool:
+        """Check if a rule applies to the file type."""
+        applies = rule.applies_to
+        if "any" in applies:
+            return True
+        if "markdown" in applies and is_markdown_file(path.name):
+            return True
+        return bool("python" in applies and path.suffix == ".py")

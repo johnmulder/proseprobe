@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
 
+from humanize.parsers.markdown import iter_non_code_lines, iter_prose_lines
+
 
 class Severity(Enum):
     """Issue severity levels."""
@@ -51,6 +53,7 @@ class Rule(ABC):
     severity: Severity = Severity.WARNING
     fixable: bool = False
     applies_to: set[str] = {"any"}  # "markdown", "python", "any"
+    content_scope: str = "raw"  # "raw", "prose", "non_code"
 
     @abstractmethod
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -78,3 +81,11 @@ class Rule(ABC):
             Modified content with fix applied.
         """
         return content
+
+    def iter_lines(self, content: str, filename: str) -> list[tuple[int, str]]:
+        """Return line-numbered content based on the rule's scope."""
+        if self.content_scope == "prose":
+            return iter_prose_lines(content, filename)
+        if self.content_scope == "non_code":
+            return iter_non_code_lines(content, filename)
+        return list(enumerate(content.split("\n"), start=1))

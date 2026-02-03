@@ -2,7 +2,7 @@
 
 import re
 
-from humanize.parsers.markdown import MarkdownParser, is_markdown_file, iter_prose_lines
+from humanize.parsers.markdown import MarkdownParser, is_markdown_file
 from humanize.rules.base import Issue, Rule, Severity
 
 
@@ -14,6 +14,7 @@ class TitleCaseHeadingsRule(Rule):
     description = "Detects improper capitalization in headings"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"markdown"}
 
     # Words that should not be capitalized in title case (except at start)
     _small_words = {
@@ -77,6 +78,7 @@ class BoldOveruseRule(Rule):
     description = "Detects excessive **bold** usage per paragraph"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"markdown"}
 
     # Threshold: max bold phrases per paragraph
     _threshold = 3
@@ -131,6 +133,8 @@ class EmDashOveruseRule(Rule):
     description = "Detects excessive — for dramatic effect"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     # Threshold: max em dashes per document
     _threshold = 5
@@ -138,12 +142,10 @@ class EmDashOveruseRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for em dash overuse."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
         # Find all em dashes
         em_dash_locations: list[tuple[int, int]] = []
 
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             # Match em dash (—) or double hyphen (--)
             for match in re.finditer(r"—|--", line):
                 em_dash_locations.append((line_num, match.start() + 1))
@@ -172,11 +174,13 @@ class QuoteInconsistencyRule(Rule):
     description = "Detects mixed curly and straight quotes"
     severity = Severity.INFO
     fixable = True
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for quote inconsistency."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
+        lines = self.iter_lines(content, filename)
         masked_content = "\n".join(line for _, line in lines)
 
         has_straight = '"' in masked_content or "'" in masked_content
@@ -225,6 +229,8 @@ class EmojiInProseRule(Rule):
     description = "Detects 🚀, ✨, etc. in headings or body text"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     # Common promotional/decorative emoji
     _emoji_pattern = r"[\U0001F300-\U0001F9FF]"
@@ -232,9 +238,7 @@ class EmojiInProseRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for emoji in prose."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             for match in re.finditer(self._emoji_pattern, line):
                 issues.append(
                     Issue(
@@ -257,6 +261,8 @@ class ElegantVariationRule(Rule):
     description = "Detects awkward synonyms to avoid repetition"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     # Pairs of formal/informal synonyms often used by AI
     _synonym_pairs = [
@@ -274,7 +280,7 @@ class ElegantVariationRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for elegant variation."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
+        lines = self.iter_lines(content, filename)
         content_lower = "\n".join(line for _, line in lines).lower()
 
         for simple, formal in self._synonym_pairs:

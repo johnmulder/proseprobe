@@ -3,10 +3,7 @@
 import re
 from typing import ClassVar
 
-from humanize.parsers.markdown import (
-    is_markdown_file,
-    iter_prose_lines,
-)
+from humanize.parsers.markdown import is_markdown_file
 from humanize.rules.base import Issue, Rule, Severity
 
 
@@ -18,6 +15,7 @@ class WrongMarkupRule(Rule):
     description = "Detects **bold** in Python comments"
     severity = Severity.WARNING
     fixable = False
+    applies_to = {"python"}
 
     # Markdown patterns that don't belong in code
     _md_patterns: ClassVar[list[tuple[str, str]]] = [
@@ -66,6 +64,8 @@ class ChatGPTMarkersRule(Rule):
     description = "Detects turn0search0, oai_citation, contentReference"
     severity = Severity.ERROR
     fixable = True
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     _patterns = [
         r"turn\d+search\d+",
@@ -76,9 +76,7 @@ class ChatGPTMarkersRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for ChatGPT markers."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             for pattern in self._patterns:
                 for match in re.finditer(pattern, line):
                     issues.append(
@@ -125,6 +123,7 @@ class UTMParametersRule(Rule):
     description = "Detects utm_source=chatgpt.com or openai"
     severity = Severity.WARNING
     fixable = True
+    applies_to = {"markdown"}
 
     _pattern = r"[?&]utm_source=(chatgpt\.com|openai)[^&\s]*"
 
@@ -210,6 +209,8 @@ class BrokenReferencesRule(Rule):
     description = "Detects [attached_file:1], grok_card tags"
     severity = Severity.ERROR
     fixable = True
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     _patterns = [
         r"\[attached_file:\d+\]",
@@ -220,9 +221,7 @@ class BrokenReferencesRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for broken references."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             for pattern in self._patterns:
                 for match in re.finditer(pattern, line):
                     issues.append(

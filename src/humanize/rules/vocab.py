@@ -9,7 +9,6 @@ from humanize.data.phrases import (
     WEASEL_PHRASES,
 )
 from humanize.data.vocabulary import AI_VOCABULARY, VOCABULARY_SUGGESTIONS
-from humanize.parsers.markdown import iter_prose_lines
 from humanize.rules.base import Issue, Rule, Severity
 
 
@@ -21,6 +20,8 @@ class AIVocabularyRule(Rule):
     description = "Detects overused AI-specific words"
     severity = Severity.WARNING
     fixable = True
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     # Patterns for words that need suffix matching (verbs, etc.)
     _WORD_PATTERNS: dict[str, str] = {
@@ -50,9 +51,7 @@ class AIVocabularyRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for AI vocabulary words."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             line_lower = line.lower()
             for word in sorted(self._vocabulary):
                 if word in self._allowed:
@@ -123,13 +122,13 @@ class CollaborativePhrasesRule(Rule):
     description = "Detects chat-like communication patterns"
     severity = Severity.WARNING
     fixable = True
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for collaborative phrases."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             line_lower = line.lower()
             for phrase in COLLABORATIVE_PHRASES:
                 if phrase.lower() in line_lower:
@@ -201,13 +200,13 @@ class KnowledgeCutoffRule(Rule):
     description = "Detects temporal/knowledge cutoff disclaimers"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for knowledge cutoff patterns."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             for pattern in KNOWLEDGE_CUTOFF_PATTERNS:
                 match = re.search(pattern, line, re.IGNORECASE)
                 if match:
@@ -233,13 +232,13 @@ class PromotionalLanguageRule(Rule):
     description = "Detects puffery and marketing speak"
     severity = Severity.WARNING
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for promotional language."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             line_lower = line.lower()
             for phrase in PROMOTIONAL_PHRASES:
                 if phrase.lower() in line_lower:
@@ -266,13 +265,13 @@ class WeaselWordsRule(Rule):
     description = "Detects vague attributions and weasel phrases"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"markdown"}
+    content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for weasel words."""
         issues: list[Issue] = []
-        lines = iter_prose_lines(content, filename)
-
-        for line_num, line in lines:
+        for line_num, line in self.iter_lines(content, filename):
             for pattern in WEASEL_PHRASES:
                 match = re.search(pattern, line, re.IGNORECASE)
                 if match:

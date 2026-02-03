@@ -1,9 +1,9 @@
 """Code-specific detection rules (C001-C004)."""
 
-import ast
 import re
 from typing import ClassVar
 
+from humanize.parsers.python import PythonParser
 from humanize.rules.base import Issue, Rule, Severity
 
 
@@ -15,6 +15,7 @@ class DocstringVocabularyRule(Rule):
     description = "Detects AI-specific words in Python docstrings"
     severity = Severity.WARNING
     fixable = True
+    applies_to = {"python"}
 
     # AI vocabulary to flag in docstrings with replacements
     _base_ai_words: ClassVar[list[tuple[str, str, str]]] = [
@@ -60,37 +61,27 @@ class DocstringVocabularyRule(Rule):
         if not filename.endswith(".py"):
             return issues
 
-        try:
-            tree = ast.parse(content)
-        except SyntaxError:
+        parser = PythonParser(content)
+        if not parser.parse():
             return issues
 
-        for node in ast.walk(tree):
-            # Only get docstrings from nodes that can have them
-            if not isinstance(
-                node, (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
-            ):
-                continue
-            docstring = ast.get_docstring(node)
-            if docstring:
-                for pattern, word, replacement in self._ai_words:
-                    if word.lower() in self._allowed:
-                        continue
-                    match = re.search(pattern, docstring, re.IGNORECASE)
-                    if match:
-                        # Get line number from node
-                        line = getattr(node, "lineno", 1)
-                        issues.append(
-                            Issue(
-                                rule_id=self.id,
-                                message=f"AI vocabulary in docstring: '{word}'",
-                                line=line,
-                                column=1,
-                                severity=self.severity,
-                                fixable=replacement is not None,
-                                suggestion=replacement,
-                            )
+        for doc in parser.get_docstrings():
+            for pattern, word, replacement in self._ai_words:
+                if word.lower() in self._allowed:
+                    continue
+                match = re.search(pattern, doc.content, re.IGNORECASE)
+                if match:
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"AI vocabulary in docstring: '{word}'",
+                            line=doc.line,
+                            column=1,
+                            severity=self.severity,
+                            fixable=replacement is not None,
+                            suggestion=replacement,
                         )
+                    )
 
         return issues
 
@@ -132,6 +123,7 @@ class VerboseCommentsRule(Rule):
     description = "Detects comments with AI verbosity patterns"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"python"}
 
     # Patterns indicating over-explanation
     _verbose_patterns: ClassVar[list[tuple[str, str]]] = [
@@ -152,18 +144,20 @@ class VerboseCommentsRule(Rule):
         if not filename.endswith(".py"):
             return issues
 
-        lines = content.split("\n")
+        parser = PythonParser(content)
+        comments = parser.get_comments()
 
-        for line_num, line in enumerate(lines, start=1):
+        for comment in comments:
+            comment_line = f"# {comment.content}".strip()
             for pattern, reason in self._verbose_patterns:
-                match = re.search(pattern, line, re.IGNORECASE)
+                match = re.search(pattern, comment_line, re.IGNORECASE)
                 if match:
                     issues.append(
                         Issue(
                             rule_id=self.id,
                             message=f"Verbose comment: {reason}",
-                            line=line_num,
-                            column=match.start() + 1,
+                            line=comment.line,
+                            column=comment.column + match.start(),
                             severity=self.severity,
                         )
                     )
@@ -180,6 +174,7 @@ class CollaborativeCommentsRule(Rule):
     description = "Detects 'I hope this helps' in # comments"
     severity = Severity.WARNING
     fixable = False
+    applies_to = {"python"}
 
     # Chat-like phrases that shouldn't be in code
     _chat_patterns: ClassVar[list[tuple[str, str]]] = [
@@ -197,20 +192,20 @@ class CollaborativeCommentsRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for collaborative comments."""
         issues: list[Issue] = []
+        parser = PythonParser(content)
+        comments = parser.get_comments()
 
-        # Check both Python and other files with # comments
-        lines = content.split("\n")
-
-        for line_num, line in enumerate(lines, start=1):
+        for comment in comments:
+            comment_line = f"# {comment.content}".strip()
             for pattern, phrase in self._chat_patterns:
-                match = re.search(pattern, line, re.IGNORECASE)
+                match = re.search(pattern, comment_line, re.IGNORECASE)
                 if match:
                     issues.append(
                         Issue(
                             rule_id=self.id,
                             message=f"Chat phrase in comment: '{phrase}'",
-                            line=line_num,
-                            column=match.start() + 1,
+                            line=comment.line,
+                            column=comment.column + match.start(),
                             severity=self.severity,
                         )
                     )
@@ -227,17 +222,22 @@ class AIPlaceholdersRule(Rule):
     description = "Detects generic TODO patterns from AI"
     severity = Severity.INFO
     fixable = False
+    applies_to = {"python"}
 
-    # Formulaic placeholder patterns
-    _placeholder_patterns: ClassVar[list[tuple[str, str]]] = [
+    # Formulaic placeholder patterns (comment-only)
+    _comment_patterns: ClassVar[list[tuple[str, str]]] = [
         (r"#\s*TODO:\s*Implement\s*$", "bare 'Implement'"),
         (r"#\s*TODO:\s*Add (?:logic|code) here", "generic placeholder"),
         (r"#\s*TODO:\s*Fill in", "generic placeholder"),
         (r"#\s*TODO:\s*Replace with actual", "generic placeholder"),
         (r"#\s*TODO:\s*Complete this", "generic placeholder"),
-        (r"pass\s*#\s*(?:TODO|placeholder)", "pass with placeholder"),
+    ]
+    _code_patterns: ClassVar[list[tuple[str, str]]] = [
         (r"raise NotImplementedError\([\"'].*[\"']\)", "template error"),
-        (r"\.\.\.\s*#\s*(?:TODO|your code)", "ellipsis placeholder"),
+    ]
+    _inline_comment_markers: ClassVar[list[tuple[str, str, str]]] = [
+        (r"\bpass\b", r"(?:TODO|placeholder)", "pass with placeholder"),
+        (r"\.\.\.", r"(?:TODO|your code)", "ellipsis placeholder"),
     ]
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -249,9 +249,47 @@ class AIPlaceholdersRule(Rule):
             return issues
 
         lines = content.split("\n")
+        parser = PythonParser(content)
+        comments = parser.get_comments()
 
+        # Comment-only placeholders
+        for comment in comments:
+            comment_line = f"# {comment.content}".strip()
+            for pattern, kind in self._comment_patterns:
+                match = re.search(pattern, comment_line, re.IGNORECASE)
+                if match:
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"AI placeholder: {kind}",
+                            line=comment.line,
+                            column=comment.column + match.start(),
+                            severity=self.severity,
+                        )
+                    )
+                    break
+
+            # Inline code + comment placeholders
+            line_text = lines[comment.line - 1]
+            before = line_text[: comment.column - 1]
+            for code_pattern, todo_pattern, kind in self._inline_comment_markers:
+                if re.search(code_pattern, before) and re.search(
+                    todo_pattern, comment.content, re.IGNORECASE
+                ):
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"AI placeholder: {kind}",
+                            line=comment.line,
+                            column=comment.column,
+                            severity=self.severity,
+                        )
+                    )
+                    break
+
+        # Code-only placeholders
         for line_num, line in enumerate(lines, start=1):
-            for pattern, kind in self._placeholder_patterns:
+            for pattern, kind in self._code_patterns:
                 match = re.search(pattern, line, re.IGNORECASE)
                 if match:
                     issues.append(

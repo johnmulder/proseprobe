@@ -92,6 +92,12 @@ def process(data):
         rule = VerboseCommentsRule()
         assert rule.id == "C002"
 
+    def test_ignores_string_literals(self) -> None:
+        """Test that patterns inside strings are ignored."""
+        text = 'value = "# This function is designed to process data"'
+        rule = VerboseCommentsRule()
+        issues = rule.check(text, "test.py")
+        assert len(issues) == 0
 
 class TestCollaborativeComments:
     """Tests for C003: Collaborative Comments."""
@@ -114,6 +120,12 @@ def process():
         rule = CollaborativeCommentsRule()
         assert rule.id == "C003"
 
+    def test_ignores_chat_phrases_in_strings(self) -> None:
+        """Test chat phrases inside strings are ignored."""
+        text = 'message = "# I hope this helps"'
+        rule = CollaborativeCommentsRule()
+        issues = rule.check(text, "test.py")
+        assert len(issues) == 0
 
 class TestAIPlaceholders:
     """Tests for C004: AI Placeholders."""
@@ -130,3 +142,10 @@ class TestAIPlaceholders:
         """Test rule has correct metadata."""
         rule = AIPlaceholdersRule()
         assert rule.id == "C004"
+
+    def test_ignores_placeholder_in_strings(self) -> None:
+        """Test placeholder patterns inside strings are ignored."""
+        text = 'value = "# TODO: Implement"'
+        rule = AIPlaceholdersRule()
+        issues = rule.check(text, "test.py")
+        assert len(issues) == 0
