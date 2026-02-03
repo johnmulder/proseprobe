@@ -39,6 +39,15 @@ class TestMarkdownParser:
         assert len(headings) == 1
         assert headings[0].title == "Heading"
 
+    def test_get_headings_preserves_punctuation_and_emoji(self) -> None:
+        """Test headings preserve punctuation and emoji."""
+        content = "## Plan: Launch! 🚀\nText"
+        parser = MarkdownParser(content)
+        headings = parser.get_headings()
+
+        assert len(headings) == 1
+        assert headings[0].title == "Plan: Launch! 🚀"
+
     def test_get_paragraphs_empty(self) -> None:
         """Test getting paragraphs from empty document."""
         parser = MarkdownParser("")
@@ -77,6 +86,15 @@ class TestMarkdownParser:
         links = parser.get_links()
 
         assert links == []
+
+    def test_get_links_with_inline_code_and_link(self) -> None:
+        """Test links still parse when inline code appears before."""
+        content = "Use ``code `with` ticks`` and [Example](https://example.com)."
+        parser = MarkdownParser(content)
+        links = parser.get_links()
+
+        assert len(links) == 1
+        assert links[0].text == "Example"
     def test_get_code_blocks_empty(self) -> None:
         """Test getting code blocks from empty document."""
         parser = MarkdownParser("")
@@ -152,6 +170,15 @@ class TestMarkdownParser:
         assert lists[1][1] == 4
         assert lists[1][2] == ["Three"]
 
+    def test_get_bullet_lists_nested(self) -> None:
+        """Test extracting nested list items."""
+        content = "- Parent\n  - Child\n- Sibling"
+        parser = MarkdownParser(content)
+        lists = parser.get_bullet_lists()
+
+        assert len(lists) == 1
+        assert lists[0][2] == ["Parent", "Child", "Sibling"]
+
     def test_get_paragraphs_skips_code(self) -> None:
         """Test paragraphs skip fenced code blocks."""
         content = "Para one.\n\n```txt\ncode line\n```\n\nPara two."
@@ -171,6 +198,15 @@ class TestMarkdownParser:
         assert len(paragraphs) == 2
         assert "Para one." in paragraphs[0][2]
         assert "Para two." in paragraphs[1][2]
+
+    def test_get_headings_ignores_code_block(self) -> None:
+        """Test headings inside code blocks are ignored."""
+        content = "```md\n# Not a heading\n```\n# Real Heading"
+        parser = MarkdownParser(content)
+        headings = parser.get_headings()
+
+        assert len(headings) == 1
+        assert headings[0].title == "Real Heading"
 
 
 class TestMarkdownSection:
