@@ -29,6 +29,25 @@ def severity_rank(severity: Severity) -> int:
     return _SEVERITY_RANK.get(severity, 0)
 
 
+def severity_from_str(value: str, default: Severity | None = None) -> Severity | None:
+    """Convert string to Severity enum.
+
+    Args:
+        value: Severity string (error, warning, info, off).
+        default: Default value if string is not recognized.
+
+    Returns:
+        Corresponding Severity enum value, or default if not found.
+    """
+    mapping = {
+        "error": Severity.ERROR,
+        "warning": Severity.WARNING,
+        "info": Severity.INFO,
+        "off": Severity.OFF,
+    }
+    return mapping.get(value.lower(), default)
+
+
 @dataclass
 class Issue:
     """A detected issue in content."""

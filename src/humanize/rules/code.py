@@ -57,10 +57,6 @@ class DocstringVocabularyRule(Rule):
         """Check for AI vocabulary in docstrings."""
         issues: list[Issue] = []
 
-        # Only check Python files
-        if not filename.endswith(".py"):
-            return issues
-
         parser = PythonParser(content)
         if not parser.parse():
             return issues
@@ -139,10 +135,6 @@ class VerboseCommentsRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for verbose comments."""
         issues: list[Issue] = []
-
-        # Only check Python files
-        if not filename.endswith(".py"):
-            return issues
 
         parser = PythonParser(content)
         comments = parser.get_comments()
@@ -243,10 +235,6 @@ class AIPlaceholdersRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for AI placeholders."""
         issues: list[Issue] = []
-
-        # Only check Python files
-        if not filename.endswith(".py"):
-            return issues
 
         lines = content.split("\n")
         parser = PythonParser(content)

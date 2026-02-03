@@ -1,7 +1,7 @@
 """Detection rules for AI content patterns."""
 
 from humanize.config import Config
-from humanize.rules.base import Issue, Rule, Severity
+from humanize.rules.base import Issue, Rule, Severity, severity_from_str
 from humanize.rules.code import (
     AIPlaceholdersRule,
     CollaborativeCommentsRule,
@@ -87,23 +87,13 @@ __all__ = [
 ]
 
 
-def _severity_from_str(value: str) -> Severity | None:
-    mapping = {
-        "error": Severity.ERROR,
-        "warning": Severity.WARNING,
-        "info": Severity.INFO,
-        "off": Severity.OFF,
-    }
-    return mapping.get(value.lower())
-
-
 def _apply_severity_overrides(
     rules: list[Rule], overrides: dict[str, str]
 ) -> list[Rule]:
     for rule in rules:
         override = overrides.get(rule.id)
         if override:
-            new_severity = _severity_from_str(override)
+            new_severity = severity_from_str(override)
             if new_severity is not None:
                 rule.severity = new_severity
     return rules

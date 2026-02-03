@@ -11,7 +11,7 @@ from rich.table import Table
 from humanize.config import load_config
 from humanize.core.linter import Linter
 from humanize.rules import get_all_rules
-from humanize.rules.base import Severity, severity_rank
+from humanize.rules.base import Severity, severity_from_str, severity_rank
 
 app = typer.Typer(
     name="humanize",
@@ -20,17 +20,6 @@ app = typer.Typer(
     context_settings={"help_option_names": ["-h", "--help"]},
 )
 console = Console()
-
-
-def _severity_from_str(s: str) -> Severity:
-    """Convert string to Severity enum."""
-    mapping = {
-        "error": Severity.ERROR,
-        "warning": Severity.WARNING,
-        "info": Severity.INFO,
-        "off": Severity.OFF,
-    }
-    return mapping.get(s.lower(), Severity.WARNING)
 
 
 @app.command()
@@ -128,7 +117,8 @@ def check(
 
     # Create linter and register rules
     linter = Linter(config)
-    min_severity = _severity_from_str(severity or config.severity)
+    min_severity = severity_from_str(severity or config.severity, Severity.WARNING)
+    assert min_severity is not None  # default ensures this
 
     for rule in get_all_rules(config):
         # Filter by severity

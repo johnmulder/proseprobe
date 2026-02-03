@@ -30,10 +30,6 @@ class WrongMarkupRule(Rule):
         """Check for wrong markup."""
         issues: list[Issue] = []
 
-        # Only check Python files
-        if not filename.endswith(".py"):
-            return issues
-
         lines = content.split("\n")
 
         for line_num, line in enumerate(lines, start=1):
