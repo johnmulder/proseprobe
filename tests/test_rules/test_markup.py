@@ -95,6 +95,20 @@ class TestUTMParameters:
         assert "utm_source=chatgpt.com" not in fixed
         assert "other=1" in fixed
 
+    def test_detects_utm_in_autolink(self) -> None:
+        """Test detecting UTM parameters in autolinks."""
+        text = "See <https://example.com?utm_source=chatgpt.com> for details."
+        rule = UTMParametersRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 1
+
+    def test_detects_utm_in_reference_definition(self) -> None:
+        """Test detecting UTM parameters in reference link definitions."""
+        text = "[ref]: https://example.com?utm_source=openai\n\nSee [ref][ref]."
+        rule = UTMParametersRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 1
+
 
 class TestBrokenReferences:
     """Tests for M004: Broken References."""

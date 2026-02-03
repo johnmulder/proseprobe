@@ -50,6 +50,31 @@ class MarkdownParser:
         self._lines = content.split("\n")
         self._code_blocks: list[tuple[int, int, str, str]] | None = None
         self._code_block_lines: set[int] | None = None
+        self._setext_heading_lines: set[int] | None = None
+        self._setext_underline_lines: set[int] | None = None
+        self._html_block_lines: set[int] | None = None
+        self._blockquote_re = re.compile(r"^(?:\s{0,3}>\s?)+")
+        self._html_block_tags = {
+            "div",
+            "section",
+            "article",
+            "aside",
+            "nav",
+            "header",
+            "footer",
+            "table",
+            "thead",
+            "tbody",
+            "tr",
+            "td",
+            "th",
+            "pre",
+            "code",
+            "details",
+            "summary",
+            "figure",
+            "figcaption",
+        }
 
     def _ensure_code_blocks(self) -> None:
         if self._code_blocks is not None and self._code_block_lines is not None:
@@ -109,6 +134,99 @@ class MarkdownParser:
         self._ensure_code_blocks()
         return self._code_block_lines or set()
 
+    def _ensure_html_blocks(self) -> None:
+        if self._html_block_lines is not None:
+            return
+
+        self._ensure_code_blocks()
+        code_lines = self._code_lines()
+        html_lines: set[int] = set()
+
+        comment_start_re = re.compile(r"^\s*<!--")
+        comment_end_re = re.compile(r".*-->\s*$")
+        tag_start_re = re.compile(r"^\s*<([a-zA-Z][\w:-]*)\b[^>]*>\s*$")
+        tag_end_template = r"^\s*</{tag}>\s*$"
+
+        in_comment = False
+        open_tag: str | None = None
+
+        for line_num, line in enumerate(self._lines, start=1):
+            if line_num in code_lines:
+                continue
+
+            if in_comment:
+                html_lines.add(line_num)
+                if comment_end_re.match(line):
+                    in_comment = False
+                continue
+
+            if comment_start_re.match(line):
+                html_lines.add(line_num)
+                if not comment_end_re.match(line):
+                    in_comment = True
+                continue
+
+            if open_tag:
+                html_lines.add(line_num)
+                end_re = re.compile(tag_end_template.format(tag=re.escape(open_tag)))
+                if end_re.match(line):
+                    open_tag = None
+                continue
+
+            start_match = tag_start_re.match(line)
+            if start_match:
+                tag = start_match.group(1).lower()
+                if tag in self._html_block_tags:
+                    html_lines.add(line_num)
+                    if line.strip().endswith("/>"):
+                        continue
+                    end_re = re.compile(tag_end_template.format(tag=re.escape(tag)))
+                    if end_re.match(line):
+                        continue
+                    open_tag = tag
+
+        self._html_block_lines = html_lines
+
+    def _html_lines(self) -> set[int]:
+        self._ensure_html_blocks()
+        return self._html_block_lines or set()
+
+    def _ensure_setext_headings(self) -> None:
+        if (
+            self._setext_heading_lines is not None
+            and self._setext_underline_lines is not None
+        ):
+            return
+
+        self._ensure_code_blocks()
+        code_lines = self._code_lines()
+        heading_lines: set[int] = set()
+        underline_lines: set[int] = set()
+        setext_re = re.compile(r"^ {0,3}(=+|-+)\s*$")
+
+        for idx in range(len(self._lines) - 1):
+            line_num = idx + 1
+            next_line_num = idx + 2
+            if line_num in code_lines or next_line_num in code_lines:
+                continue
+            line_text, _ = self._strip_blockquote_prefix(self._lines[idx])
+            next_text, _ = self._strip_blockquote_prefix(self._lines[idx + 1])
+            if not line_text.strip():
+                continue
+            if setext_re.match(next_text):
+                heading_lines.add(line_num)
+                underline_lines.add(next_line_num)
+
+        self._setext_heading_lines = heading_lines
+        self._setext_underline_lines = underline_lines
+
+    def _setext_lines(self) -> tuple[set[int], set[int]]:
+        self._ensure_setext_headings()
+        return (
+            self._setext_heading_lines or set(),
+            self._setext_underline_lines or set(),
+        )
+
     def get_headings(self) -> list[MarkdownSection]:
         """Extract all headings from the document.
 
@@ -117,18 +235,41 @@ class MarkdownParser:
         """
         self._ensure_code_blocks()
         code_lines = self._code_lines()
+        html_lines = self._html_lines()
         headings: list[tuple[int, int, str]] = []
         heading_re = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
-
-        for line_num, line in enumerate(self._lines, start=1):
-            if line_num in code_lines:
+        setext_re = re.compile(r"^ {0,3}(=+|-+)\s*$")
+        idx = 0
+        while idx < len(self._lines):
+            line_num = idx + 1
+            if line_num in code_lines or line_num in html_lines:
+                idx += 1
                 continue
-            match = heading_re.match(line)
+            raw_line = self._lines[idx]
+            stripped_line, _ = self._strip_blockquote_prefix(raw_line)
+            match = heading_re.match(stripped_line)
             if match:
                 level = len(match.group(1))
                 title = match.group(2).strip()
                 title = re.sub(r"\s+#+\s*$", "", title).strip()
                 headings.append((line_num, level, title))
+                idx += 1
+                continue
+
+            if idx + 1 < len(self._lines):
+                next_line_num = idx + 2
+                if next_line_num not in code_lines and next_line_num not in html_lines:
+                    next_stripped, _ = self._strip_blockquote_prefix(
+                        self._lines[idx + 1]
+                    )
+                    setext_match = setext_re.match(next_stripped)
+                    if setext_match and stripped_line.strip():
+                        level = 1 if setext_match.group(1).startswith("=") else 2
+                        headings.append((line_num, level, stripped_line.strip()))
+                        idx += 2
+                        continue
+
+            idx += 1
 
         sections: list[MarkdownSection] = []
         for idx, (line_num, level, title) in enumerate(headings):
@@ -159,6 +300,8 @@ class MarkdownParser:
         """
         self._ensure_code_blocks()
         code_lines = self._code_lines()
+        html_lines = self._html_lines()
+        setext_headings, setext_underline = self._setext_lines()
         paragraphs: list[tuple[int, int, str]] = []
         heading_re = re.compile(r"^(#{1,6})\s+")
         list_re = re.compile(r"^\s*(?:[-*+]|\d+\.)\s+")
@@ -176,19 +319,23 @@ class MarkdownParser:
                 start_line = 0
 
         for line_num, line in enumerate(self._lines, start=1):
-            if line_num in code_lines:
+            if line_num in code_lines or line_num in html_lines:
                 flush(line_num - 1)
                 continue
-            if heading_re.match(line) or list_re.match(line):
+            stripped_line, _ = self._strip_blockquote_prefix(line)
+            if line_num in setext_headings or line_num in setext_underline:
                 flush(line_num - 1)
                 continue
-            if not line.strip():
+            if heading_re.match(stripped_line) or list_re.match(stripped_line):
+                flush(line_num - 1)
+                continue
+            if not stripped_line.strip():
                 flush(line_num - 1)
                 continue
 
             if not current_lines:
                 start_line = line_num
-            current_lines.append(line)
+            current_lines.append(stripped_line)
 
         flush(len(self._lines))
         return paragraphs
@@ -201,24 +348,83 @@ class MarkdownParser:
         """
         self._ensure_code_blocks()
         code_lines = self._code_lines()
+        html_lines = self._html_lines()
         links: list[MarkdownLink] = []
         link_re = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+        ref_def_re = re.compile(r"^\s*\[([^\]]+)\]:\s*(\S+)")
+        ref_use_re = re.compile(r"\[([^\]]+)\]\[([^\]]*)\]")
+        autolink_re = re.compile(r"<(https?://[^>\s]+)>")
+
+        reference_defs: dict[str, tuple[str, int, int, int]] = {}
+        used_refs: set[str] = set()
 
         for line_num, line in enumerate(self._lines, start=1):
-            if line_num in code_lines:
+            if line_num in code_lines or line_num in html_lines:
                 continue
-            masked = self._mask_inline_code(line)
+            stripped_line, prefix_len = self._strip_blockquote_prefix(line)
+            match = ref_def_re.match(stripped_line)
+            if match:
+                ref_id = match.group(1).strip().lower()
+                url = match.group(2)
+                url_start = match.start(2) + 1 + prefix_len
+                url_end = match.end(2) + 1 + prefix_len
+                reference_defs[ref_id] = (url, line_num, url_start, url_end)
+
+        for line_num, line in enumerate(self._lines, start=1):
+            if line_num in code_lines or line_num in html_lines:
+                continue
+            stripped_line, prefix_len = self._strip_blockquote_prefix(line)
+            masked = self._mask_inline_code(stripped_line)
             for match in link_re.finditer(masked):
                 links.append(
                     MarkdownLink(
                         text=match.group(1),
                         url=match.group(2),
                         line=line_num,
-                        column=match.start() + 1,
-                        url_start=match.start(2) + 1,
-                        url_end=match.end(2) + 1,
+                        column=match.start() + 1 + prefix_len,
+                        url_start=match.start(2) + 1 + prefix_len,
+                        url_end=match.end(2) + 1 + prefix_len,
                     )
                 )
+            for match in ref_use_re.finditer(masked):
+                ref_text = match.group(1).strip()
+                ref_id = match.group(2).strip().lower() or ref_text.lower()
+                if ref_id in reference_defs:
+                    url, _, _, _ = reference_defs[ref_id]
+                    used_refs.add(ref_id)
+                    links.append(
+                        MarkdownLink(
+                            text=ref_text,
+                            url=url,
+                            line=line_num,
+                            column=match.start() + 1 + prefix_len,
+                        )
+                    )
+            for match in autolink_re.finditer(masked):
+                links.append(
+                    MarkdownLink(
+                        text=match.group(1),
+                        url=match.group(1),
+                        line=line_num,
+                        column=match.start() + 1 + prefix_len,
+                        url_start=match.start(1) + 1 + prefix_len,
+                        url_end=match.end(1) + 1 + prefix_len,
+                    )
+                )
+
+        for ref_id, (url, line_num, url_start, url_end) in reference_defs.items():
+            if ref_id in used_refs:
+                continue
+            links.append(
+                MarkdownLink(
+                    text=ref_id,
+                    url=url,
+                    line=line_num,
+                    column=url_start,
+                    url_start=url_start,
+                    url_end=url_end,
+                )
+            )
 
         return links
 
@@ -239,6 +445,7 @@ class MarkdownParser:
         """
         self._ensure_code_blocks()
         code_lines = self._code_lines()
+        html_lines = self._html_lines()
         list_re = re.compile(r"^\s*(?:[-*+]|\d+\.)\s+(.*)")
         lists: list[tuple[int, int, list[str]]] = []
 
@@ -253,10 +460,11 @@ class MarkdownParser:
                 start_line = 0
 
         for line_num, line in enumerate(self._lines, start=1):
-            if line_num in code_lines:
+            if line_num in code_lines or line_num in html_lines:
                 flush(line_num - 1)
                 continue
-            match = list_re.match(line)
+            stripped_line, _ = self._strip_blockquote_prefix(line)
+            match = list_re.match(stripped_line)
             if match:
                 if not current_items:
                     start_line = line_num
@@ -272,10 +480,11 @@ class MarkdownParser:
         """Return non-code lines with line numbers."""
         self._ensure_code_blocks()
         code_lines = self._code_lines()
+        html_lines = self._html_lines()
         return [
             (line_num, line)
             for line_num, line in enumerate(self._lines, start=1)
-            if line_num not in code_lines
+            if line_num not in code_lines and line_num not in html_lines
         ]
 
     def get_prose_lines(self) -> list[tuple[int, str]]:
@@ -322,14 +531,31 @@ class MarkdownParser:
         return "".join(chars)
 
     def _mask_inline_code_and_links(self, line: str) -> str:
-        masked = self._mask_inline_code(line)
+        stripped_line, _ = self._strip_blockquote_prefix(line)
+        masked = self._mask_inline_code(stripped_line)
         chars = list(masked)
         for match in re.finditer(r"\[([^\]]+)\]\(([^)]+)\)", masked):
             url_start = match.start(2)
             url_end = match.end(2)
             for idx in range(url_start, url_end):
                 chars[idx] = " "
+        for match in re.finditer(r"^\s*\[([^\]]+)\]:\s*(\S+)", masked):
+            url_start = match.start(2)
+            url_end = match.end(2)
+            for idx in range(url_start, url_end):
+                chars[idx] = " "
+        for match in re.finditer(r"<(https?://[^>\s]+)>", masked):
+            url_start = match.start(1)
+            url_end = match.end(1)
+            for idx in range(url_start, url_end):
+                chars[idx] = " "
         return "".join(chars)
+
+    def _strip_blockquote_prefix(self, line: str) -> tuple[str, int]:
+        match = self._blockquote_re.match(line)
+        if not match:
+            return line, 0
+        return line[match.end() :], match.end()
 
 
 def iter_prose_lines(content: str, filename: str) -> list[tuple[int, str]]:

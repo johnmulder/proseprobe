@@ -1,6 +1,13 @@
 """Tests for Markdown parser."""
 
-from humanize.parsers.markdown import MarkdownLink, MarkdownParser, MarkdownSection
+from humanize.parsers.markdown import (
+    MarkdownLink,
+    MarkdownParser,
+    MarkdownSection,
+    is_markdown_file,
+    iter_non_code_lines,
+    iter_prose_lines,
+)
 
 
 class TestMarkdownParser:
@@ -29,6 +36,28 @@ class TestMarkdownParser:
         assert len(headings) == 1
         assert headings[0].level == 1
         assert headings[0].title == "Main Title"
+
+    def test_get_headings_setext(self) -> None:
+        """Test extracting setext headings."""
+        content = "Main Title\n====\n\nSub Title\n----\n"
+        parser = MarkdownParser(content)
+        headings = parser.get_headings()
+
+        assert len(headings) == 2
+        assert headings[0].level == 1
+        assert headings[0].title == "Main Title"
+        assert headings[1].level == 2
+        assert headings[1].title == "Sub Title"
+
+    def test_get_headings_setext_blockquote(self) -> None:
+        """Test extracting setext headings inside blockquotes."""
+        content = "> Quoted Title\n> ----\n\nText"
+        parser = MarkdownParser(content)
+        headings = parser.get_headings()
+
+        assert len(headings) == 1
+        assert headings[0].level == 2
+        assert headings[0].title == "Quoted Title"
 
     def test_get_headings_strips_trailing_hashes(self) -> None:
         """Test stripping trailing heading markers."""
@@ -71,6 +100,67 @@ class TestMarkdownParser:
         assert links[0].url == "https://example.com"
         assert links[0].line == 1
 
+    def test_get_links_url_span(self) -> None:
+        """Test link URL spans map to the source line."""
+        content = "See [Example](https://example.com/path) for details."
+        parser = MarkdownParser(content)
+        links = parser.get_links()
+
+        assert len(links) == 1
+        link = links[0]
+        assert (
+            content[link.url_start - 1 : link.url_end - 1]
+            == "https://example.com/path"
+        )
+
+    def test_get_links_autolink(self) -> None:
+        """Test extracting autolink URLs."""
+        content = "See <https://example.com/path> for details."
+        parser = MarkdownParser(content)
+        links = parser.get_links()
+
+        assert len(links) == 1
+        assert links[0].url == "https://example.com/path"
+        assert (
+            content[links[0].url_start - 1 : links[0].url_end - 1]
+            == "https://example.com/path"
+        )
+
+    def test_get_links_reference_definition(self) -> None:
+        """Test extracting reference link definitions."""
+        content = "[ref]: https://example.com"
+        parser = MarkdownParser(content)
+        links = parser.get_links()
+
+        assert len(links) == 1
+        assert links[0].url == "https://example.com"
+        assert links[0].line == 1
+
+    def test_get_links_reference_usage(self) -> None:
+        """Test extracting reference link usage."""
+        content = "[ref]: https://example.com\n\nSee [ref][ref]."
+        parser = MarkdownParser(content)
+        links = parser.get_links()
+
+        assert any(link.url == "https://example.com" and link.line == 3 for link in links)
+
+    def test_get_links_reference_collapsed(self) -> None:
+        """Test extracting collapsed reference link usage."""
+        content = "[ref]: https://example.com\n\nSee [ref][]."
+        parser = MarkdownParser(content)
+        links = parser.get_links()
+
+        assert any(link.url == "https://example.com" and link.line == 3 for link in links)
+
+    def test_get_links_in_table(self) -> None:
+        """Test extracting links inside markdown tables."""
+        content = "| Name | Link |\n| --- | --- |\n| Example | [Site](https://example.com) |"
+        parser = MarkdownParser(content)
+        links = parser.get_links()
+
+        assert len(links) == 1
+        assert links[0].url == "https://example.com"
+
     def test_get_links_ignores_inline_code(self) -> None:
         """Test that links inside inline code are ignored."""
         content = "Use `[Example](https://example.com)` in text."
@@ -95,6 +185,7 @@ class TestMarkdownParser:
 
         assert len(links) == 1
         assert links[0].text == "Example"
+
     def test_get_code_blocks_empty(self) -> None:
         """Test getting code blocks from empty document."""
         parser = MarkdownParser("")
@@ -137,6 +228,18 @@ class TestMarkdownParser:
         assert start_line == 2
         assert end_line == 4
         assert code.strip() == "code"
+
+    def test_get_code_blocks_unclosed(self) -> None:
+        """Test unclosed fenced code blocks extend to EOF."""
+        content = "Text\n```\ncode line"
+        parser = MarkdownParser(content)
+        blocks = parser.get_code_blocks()
+
+        assert len(blocks) == 1
+        start_line, end_line, _, code = blocks[0]
+        assert start_line == 2
+        assert end_line == 3
+        assert "code line" in code
 
     def test_get_bullet_lists_empty(self) -> None:
         """Test getting bullet lists from empty document."""
@@ -208,6 +311,120 @@ class TestMarkdownParser:
         assert len(headings) == 1
         assert headings[0].title == "Real Heading"
 
+    def test_get_headings_blockquote(self) -> None:
+        """Test headings inside blockquotes are detected."""
+        content = "> # Quoted Heading\n\nText"
+        parser = MarkdownParser(content)
+        headings = parser.get_headings()
+
+        assert len(headings) == 1
+        assert headings[0].title == "Quoted Heading"
+
+    def test_get_paragraphs_strips_blockquote_prefix(self) -> None:
+        """Test paragraphs strip blockquote markers."""
+        content = "> This is quoted text.\n\nNext paragraph."
+        parser = MarkdownParser(content)
+        paragraphs = parser.get_paragraphs()
+
+        assert len(paragraphs) == 2
+        assert paragraphs[0][2] == "This is quoted text."
+
+    def test_get_paragraphs_skip_setext_headings(self) -> None:
+        """Test paragraphs skip setext headings."""
+        content = "Title\n----\n\nPara."
+        parser = MarkdownParser(content)
+        paragraphs = parser.get_paragraphs()
+
+        assert len(paragraphs) == 1
+        assert "Para." in paragraphs[0][2]
+
+    def test_get_lines_excludes_code_blocks(self) -> None:
+        """Test get_lines omits fenced code lines."""
+        content = "Intro\n```\ncode\n```\nOutro"
+        parser = MarkdownParser(content)
+        lines = parser.get_lines()
+
+        line_numbers = [line_num for line_num, _ in lines]
+        assert 2 not in line_numbers
+        assert 3 not in line_numbers
+        assert 4 not in line_numbers
+
+    def test_iter_non_code_lines_excludes_code(self) -> None:
+        """Test iter_non_code_lines omits code blocks."""
+        content = "Intro\n```python\ncode\n```\nOutro"
+        lines = iter_non_code_lines(content, "test.md")
+
+        line_numbers = [line_num for line_num, _ in lines]
+        assert 2 not in line_numbers
+        assert 3 not in line_numbers
+        assert 4 not in line_numbers
+
+    def test_iter_prose_lines_masks_inline_code_and_links(self) -> None:
+        """Test iter_prose_lines masks inline code and link URLs."""
+        content = "Use `delve` and [Example](https://example.com) here."
+        lines = iter_prose_lines(content, "test.md")
+
+        assert len(lines) == 1
+        masked = lines[0][1]
+        assert "delve" not in masked
+        assert "https://example.com" not in masked
+        assert "Example" in masked
+
+    def test_iter_prose_lines_masks_autolink(self) -> None:
+        """Test iter_prose_lines masks autolink URLs."""
+        content = "See <https://example.com/delve>."
+        lines = iter_prose_lines(content, "test.md")
+
+        assert len(lines) == 1
+        masked = lines[0][1]
+        assert "delve" not in masked
+
+    def test_iter_prose_lines_masks_reference_def(self) -> None:
+        """Test iter_prose_lines masks reference definition URLs."""
+        content = "[ref]: https://example.com/delve"
+        lines = iter_prose_lines(content, "test.md")
+
+        assert len(lines) == 1
+        masked = lines[0][1]
+        assert "delve" not in masked
+
+    def test_iter_prose_lines_includes_table_text(self) -> None:
+        """Test table text is included in prose lines."""
+        content = "| Word |\n| --- |\n| delve |"
+        lines = iter_prose_lines(content, "test.md")
+
+        assert any("delve" in line for _, line in lines)
+
+    def test_iter_prose_lines_skips_html_block(self) -> None:
+        """Test HTML block lines are excluded from prose."""
+        content = "<div>\ndelve here\n</div>\n\nText"
+        lines = iter_prose_lines(content, "test.md")
+
+        assert all("delve" not in line for _, line in lines)
+        assert any("Text" in line for _, line in lines)
+
+    def test_get_links_ignores_html_block(self) -> None:
+        """Test links inside HTML blocks are ignored."""
+        content = "<div>\n[Site](https://example.com)\n</div>\n\nText"
+        parser = MarkdownParser(content)
+        links = parser.get_links()
+
+        assert links == []
+
+    def test_iter_prose_lines_non_markdown_pass_through(self) -> None:
+        """Test iter_prose_lines returns raw lines for non-Markdown."""
+        content = "Use `delve` in code."
+        lines = iter_prose_lines(content, "test.txt")
+
+        assert len(lines) == 1
+        assert lines[0][1] == content
+
+    def test_is_markdown_file_variants(self) -> None:
+        """Test markdown file extension detection."""
+        assert is_markdown_file("README.md")
+        assert is_markdown_file("notes.mdx")
+        assert is_markdown_file("doc.MARKDOWN")
+        assert not is_markdown_file("script.py")
 
 class TestMarkdownSection:
     """Tests for MarkdownSection dataclass."""
