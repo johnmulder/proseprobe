@@ -1,5 +1,12 @@
 """Data files for vocabulary and patterns."""
 
+from humanize.data.code_patterns import (
+    AI_PLACEHOLDER_CODE_PATTERNS,
+    AI_PLACEHOLDER_COMMENT_PATTERNS,
+    AI_PLACEHOLDER_INLINE_PATTERNS,
+    COLLABORATIVE_COMMENT_PATTERNS,
+    VERBOSE_COMMENT_PATTERNS,
+)
 from humanize.data.patterns import STRUCTURAL_PATTERNS
 from humanize.data.phrases import (
     COLLABORATIVE_PHRASES,
@@ -7,14 +14,35 @@ from humanize.data.phrases import (
     PROMOTIONAL_PHRASES,
     WEASEL_PHRASES,
 )
-from humanize.data.vocabulary import AI_VOCABULARY, VOCABULARY_SUGGESTIONS
+from humanize.data.style_patterns import (
+    ELEGANT_VARIATION_PAIRS,
+    TITLE_CASE_SMALL_WORDS,
+)
+from humanize.data.vocabulary import (
+    AI_VOCABULARY,
+    DOCSTRING_AI_VOCABULARY,
+    VOCABULARY_SUGGESTIONS,
+)
 
 __all__ = [
+    # Vocabulary
     "AI_VOCABULARY",
+    "DOCSTRING_AI_VOCABULARY",
     "VOCABULARY_SUGGESTIONS",
+    # Phrases
     "COLLABORATIVE_PHRASES",
     "KNOWLEDGE_CUTOFF_PATTERNS",
     "PROMOTIONAL_PHRASES",
     "WEASEL_PHRASES",
+    # Structural patterns
     "STRUCTURAL_PATTERNS",
+    # Code patterns
+    "VERBOSE_COMMENT_PATTERNS",
+    "COLLABORATIVE_COMMENT_PATTERNS",
+    "AI_PLACEHOLDER_COMMENT_PATTERNS",
+    "AI_PLACEHOLDER_CODE_PATTERNS",
+    "AI_PLACEHOLDER_INLINE_PATTERNS",
+    # Style patterns
+    "TITLE_CASE_SMALL_WORDS",
+    "ELEGANT_VARIATION_PAIRS",
 ]

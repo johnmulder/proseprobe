@@ -5,6 +5,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+__all__ = ["Config", "PerFileIgnore", "VocabularyConfig", "find_config_file", "load_config"]
+
 
 @dataclass
 class PerFileIgnore:

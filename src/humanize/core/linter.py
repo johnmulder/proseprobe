@@ -7,6 +7,8 @@ from humanize.config import Config
 from humanize.parsers.markdown import is_markdown_file
 from humanize.rules.base import Issue, Rule
 
+__all__ = ["Linter"]
+
 
 class Linter:
     """Orchestrates file discovery and rule execution."""

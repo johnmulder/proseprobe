@@ -2,6 +2,7 @@
 
 import re
 
+from humanize.data.style_patterns import ELEGANT_VARIATION_PAIRS, TITLE_CASE_SMALL_WORDS
 from humanize.parsers.markdown import MarkdownParser, is_markdown_file
 from humanize.rules.base import Issue, Rule, Severity
 
@@ -15,28 +16,6 @@ class TitleCaseHeadingsRule(Rule):
     severity = Severity.INFO
     fixable = False
     applies_to = {"markdown"}
-
-    # Words that should not be capitalized in title case (except at start)
-    _small_words = {
-        "a",
-        "an",
-        "and",
-        "as",
-        "at",
-        "but",
-        "by",
-        "for",
-        "in",
-        "nor",
-        "of",
-        "on",
-        "or",
-        "so",
-        "the",
-        "to",
-        "up",
-        "yet",
-    }
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for title case headings."""
@@ -52,7 +31,7 @@ class TitleCaseHeadingsRule(Rule):
             capitalized_count = sum(
                 1
                 for w in words
-                if w[0].isupper() and w.lower() not in self._small_words
+                if w[0].isupper() and w.lower() not in TITLE_CASE_SMALL_WORDS
             )
 
             # If more than 60% of words are capitalized, it's likely title case
@@ -264,26 +243,13 @@ class ElegantVariationRule(Rule):
     applies_to = {"markdown"}
     content_scope = "prose"
 
-    # Pairs of formal/informal synonyms often used by AI
-    _synonym_pairs = [
-        (r"\bsaid\b", r"\bstated\b"),
-        (r"\bsaid\b", r"\bremarked\b"),
-        (r"\bsaid\b", r"\bnoted\b"),
-        (r"\bsaid\b", r"\bopined\b"),
-        (r"\buse\b", r"\butilize\b"),
-        (r"\buse\b", r"\bemploy\b"),
-        (r"\bshow\b", r"\bdemonstrate\b"),
-        (r"\bget\b", r"\bobtain\b"),
-        (r"\bget\b", r"\bacquire\b"),
-    ]
-
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for elegant variation."""
         issues: list[Issue] = []
         lines = self.iter_lines(content, filename)
         content_lower = "\n".join(line for _, line in lines).lower()
 
-        for simple, formal in self._synonym_pairs:
+        for simple, formal in ELEGANT_VARIATION_PAIRS:
             has_simple = re.search(simple, content_lower)
             has_formal = re.search(formal, content_lower)
 

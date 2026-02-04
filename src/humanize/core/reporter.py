@@ -6,6 +6,8 @@ from typing import Any
 
 from humanize.rules.base import Issue, Severity
 
+__all__ = ["Reporter"]
+
 
 class Reporter:
     """Formats and outputs lint results."""

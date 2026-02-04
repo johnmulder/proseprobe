@@ -4,6 +4,8 @@ from pathlib import Path
 
 from humanize.rules.base import Issue, Rule
 
+__all__ = ["Fixer"]
+
 
 class Fixer:
     """Applies fixes to files."""

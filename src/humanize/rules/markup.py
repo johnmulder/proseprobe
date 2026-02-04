@@ -4,7 +4,7 @@ import re
 from typing import ClassVar
 
 from humanize.parsers.markdown import is_markdown_file
-from humanize.rules.base import Issue, Rule, Severity
+from humanize.rules.base import Issue, Rule, Severity, remove_text_range
 
 
 class WrongMarkupRule(Rule):
@@ -91,24 +91,7 @@ class ChatGPTMarkersRule(Rule):
 
     def fix(self, content: str, issue: Issue) -> str:
         """Remove ChatGPT marker from content."""
-        lines = content.split("\n")
-        line_idx = issue.line - 1
-        line = lines[line_idx]
-
-        col_start = issue.column - 1
-        col_end = issue.end_column - 1 if issue.end_column else col_start + 10
-
-        # Remove the marker, clean up any extra whitespace
-        before = line[:col_start].rstrip()
-        after = line[col_end:].lstrip()
-
-        # Rejoin with single space if both parts exist
-        if before and after:
-            lines[line_idx] = before + " " + after
-        else:
-            lines[line_idx] = before + after
-
-        return "\n".join(lines)
+        return remove_text_range(content, issue.line, issue.column, issue.end_column)
 
 
 class UTMParametersRule(Rule):
@@ -236,21 +219,4 @@ class BrokenReferencesRule(Rule):
 
     def fix(self, content: str, issue: Issue) -> str:
         """Remove broken AI reference from content."""
-        lines = content.split("\n")
-        line_idx = issue.line - 1
-        line = lines[line_idx]
-
-        col_start = issue.column - 1
-        col_end = issue.end_column - 1 if issue.end_column else col_start + 10
-
-        # Remove the reference, clean up any extra whitespace
-        before = line[:col_start].rstrip()
-        after = line[col_end:].lstrip()
-
-        # Rejoin with single space if both parts exist
-        if before and after:
-            lines[line_idx] = before + " " + after
-        else:
-            lines[line_idx] = before + after
-
-        return "\n".join(lines)
+        return remove_text_range(content, issue.line, issue.column, issue.end_column)

@@ -1,7 +1,9 @@
 """AI vocabulary word lists."""
 
+from typing import Final
+
 # Tier 1: High confidence AI markers (rarely used naturally)
-AI_VOCABULARY_TIER1 = {
+AI_VOCABULARY_TIER1: Final[set[str]] = {
     "delve",
     "tapestry",
     "multifaceted",
@@ -110,3 +112,20 @@ VOCABULARY_SUGGESTIONS: dict[str, str] = {
     "endeavor": "effort",
     "paramount": "important",
 }
+
+# Vocabulary specific to code/docstrings (used by C001)
+# Format: (regex_pattern, display_word, replacement)
+DOCSTRING_AI_VOCABULARY: Final[list[tuple[str, str, str]]] = [
+    (r"\bdelve\b", "delve", "explore"),
+    (r"\bleverage\b", "leverage", "use"),
+    (r"\butilize\b", "utilize", "use"),
+    (r"\bfacilitate\b", "facilitate", "help"),
+    (r"\bseamless(?:ly)?\b", "seamless", "smooth"),
+    (r"\brobust\b", "robust", "strong"),
+    (r"\bcomprehensive\b", "comprehensive", "complete"),
+    (r"\bbespoke\b", "bespoke", "custom"),
+    (r"\bholistic\b", "holistic", "complete"),
+    (r"\bfoster\b", "foster", "encourage"),
+    (r"\bsynergy\b", "synergy", "cooperation"),
+    (r"\bparadigm\b", "paradigm", "model"),
+]

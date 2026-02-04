@@ -6,6 +6,15 @@ from enum import Enum
 
 from humanize.parsers.markdown import iter_non_code_lines, iter_prose_lines
 
+__all__ = [
+    "Severity",
+    "Issue",
+    "Rule",
+    "severity_rank",
+    "severity_from_str",
+    "remove_text_range",
+]
+
 
 class Severity(Enum):
     """Issue severity levels."""
@@ -108,3 +117,44 @@ class Rule(ABC):
         if self.content_scope == "non_code":
             return iter_non_code_lines(content, filename)
         return list(enumerate(content.split("\n"), start=1))
+
+
+def remove_text_range(
+    content: str,
+    line: int,
+    col_start: int,
+    col_end: int | None,
+    default_length: int = 10,
+) -> str:
+    """Remove a text range from content and clean up whitespace.
+
+    This is a helper for fix() methods that need to remove text.
+
+    Args:
+        content: Full file content.
+        line: 1-based line number.
+        col_start: 1-based start column.
+        col_end: 1-based end column (exclusive), or None.
+        default_length: Length to remove if col_end is None.
+
+    Returns:
+        Content with text removed and whitespace cleaned up.
+    """
+    lines = content.split("\n")
+    line_idx = line - 1
+    line_text = lines[line_idx]
+
+    start = col_start - 1
+    end = (col_end - 1) if col_end else (start + default_length)
+
+    # Remove the text and clean up whitespace
+    before = line_text[:start].rstrip()
+    after = line_text[end:].lstrip()
+
+    # Rejoin with single space if both parts exist
+    if before and after:
+        lines[line_idx] = before + " " + after
+    else:
+        lines[line_idx] = before + after
+
+    return "\n".join(lines)

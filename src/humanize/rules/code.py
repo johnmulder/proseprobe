@@ -1,8 +1,15 @@
 """Code-specific detection rules (C001-C004)."""
 
 import re
-from typing import ClassVar
 
+from humanize.data.code_patterns import (
+    AI_PLACEHOLDER_CODE_PATTERNS,
+    AI_PLACEHOLDER_COMMENT_PATTERNS,
+    AI_PLACEHOLDER_INLINE_PATTERNS,
+    COLLABORATIVE_COMMENT_PATTERNS,
+    VERBOSE_COMMENT_PATTERNS,
+)
+from humanize.data.vocabulary import DOCSTRING_AI_VOCABULARY
 from humanize.parsers.python import PythonParser
 from humanize.rules.base import Issue, Rule, Severity
 
@@ -17,22 +24,6 @@ class DocstringVocabularyRule(Rule):
     fixable = True
     applies_to = {"python"}
 
-    # AI vocabulary to flag in docstrings with replacements
-    _base_ai_words: ClassVar[list[tuple[str, str, str]]] = [
-        (r"\bdelve\b", "delve", "explore"),
-        (r"\bleverage\b", "leverage", "use"),
-        (r"\butilize\b", "utilize", "use"),
-        (r"\bfacilitate\b", "facilitate", "help"),
-        (r"\bseamless(?:ly)?\b", "seamless", "smooth"),
-        (r"\brobust\b", "robust", "strong"),
-        (r"\bcomprehensive\b", "comprehensive", "complete"),
-        (r"\bbespoke\b", "bespoke", "custom"),
-        (r"\bholistic\b", "holistic", "complete"),
-        (r"\bfoster\b", "foster", "encourage"),
-        (r"\bsynergy\b", "synergy", "cooperation"),
-        (r"\bparadigm\b", "paradigm", "model"),
-    ]
-
     def __init__(
         self,
         allowed: set[str] | None = None,
@@ -45,10 +36,10 @@ class DocstringVocabularyRule(Rule):
             if isinstance(w, str)
         }
 
-        base_words = {word.lower() for _, word, _ in self._base_ai_words}
+        base_words = {word.lower() for _, word, _ in DOCSTRING_AI_VOCABULARY}
         extra_words = extra_words - self._allowed - base_words
 
-        self._ai_words: list[tuple[str, str, str | None]] = list(self._base_ai_words)
+        self._ai_words: list[tuple[str, str, str | None]] = list(DOCSTRING_AI_VOCABULARY)
         for word in sorted(extra_words):
             pattern = rf"\b{re.escape(word)}\b"
             self._ai_words.append((pattern, word, None))
@@ -121,17 +112,6 @@ class VerboseCommentsRule(Rule):
     fixable = False
     applies_to = {"python"}
 
-    # Patterns indicating over-explanation
-    _verbose_patterns: ClassVar[list[tuple[str, str]]] = [
-        (r"#\s*This (?:function|method|class|variable|code)", "explains obvious"),
-        (r"#\s*The following (?:code|section)", "announces code"),
-        (r"#\s*As (?:you can see|mentioned)", "conversational"),
-        (r"#\s*In order to\b", "wordy (use 'to')"),
-        (r"#\s*It is (?:important|worth|necessary) to note", "hedging"),
-        (r"#\s*Basically,?\s", "filler word"),
-        (r"#\s*Essentially,?\s", "filler word"),
-    ]
-
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for verbose comments."""
         issues: list[Issue] = []
@@ -141,7 +121,7 @@ class VerboseCommentsRule(Rule):
 
         for comment in comments:
             comment_line = f"# {comment.content}".strip()
-            for pattern, reason in self._verbose_patterns:
+            for pattern, reason in VERBOSE_COMMENT_PATTERNS:
                 match = re.search(pattern, comment_line, re.IGNORECASE)
                 if match:
                     issues.append(
@@ -168,19 +148,6 @@ class CollaborativeCommentsRule(Rule):
     fixable = False
     applies_to = {"python"}
 
-    # Chat-like phrases that shouldn't be in code
-    _chat_patterns: ClassVar[list[tuple[str, str]]] = [
-        (r"#\s*I hope this helps", "I hope this helps"),
-        (r"#\s*Let me know if", "Let me know if"),
-        (r"#\s*Feel free to", "Feel free to"),
-        (r"#\s*Happy coding", "Happy coding"),
-        (r"#\s*Hope this (?:helps|works)", "Hope this"),
-        (r"#\s*Here's (?:a|an|the)", "Here's..."),
-        (r"#\s*I've (?:added|created|implemented)", "I've..."),
-        (r"#\s*As requested", "As requested"),
-        (r"#\s*As per your", "As per your"),
-    ]
-
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for collaborative comments."""
         issues: list[Issue] = []
@@ -189,7 +156,7 @@ class CollaborativeCommentsRule(Rule):
 
         for comment in comments:
             comment_line = f"# {comment.content}".strip()
-            for pattern, phrase in self._chat_patterns:
+            for pattern, phrase in COLLABORATIVE_COMMENT_PATTERNS:
                 match = re.search(pattern, comment_line, re.IGNORECASE)
                 if match:
                     issues.append(
@@ -216,22 +183,6 @@ class AIPlaceholdersRule(Rule):
     fixable = False
     applies_to = {"python"}
 
-    # Formulaic placeholder patterns (comment-only)
-    _comment_patterns: ClassVar[list[tuple[str, str]]] = [
-        (r"#\s*TODO:\s*Implement\s*$", "bare 'Implement'"),
-        (r"#\s*TODO:\s*Add (?:logic|code) here", "generic placeholder"),
-        (r"#\s*TODO:\s*Fill in", "generic placeholder"),
-        (r"#\s*TODO:\s*Replace with actual", "generic placeholder"),
-        (r"#\s*TODO:\s*Complete this", "generic placeholder"),
-    ]
-    _code_patterns: ClassVar[list[tuple[str, str]]] = [
-        (r"raise NotImplementedError\([\"'].*[\"']\)", "template error"),
-    ]
-    _inline_comment_markers: ClassVar[list[tuple[str, str, str]]] = [
-        (r"\bpass\b", r"(?:TODO|placeholder)", "pass with placeholder"),
-        (r"\.\.\.", r"(?:TODO|your code)", "ellipsis placeholder"),
-    ]
-
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for AI placeholders."""
         issues: list[Issue] = []
@@ -243,7 +194,7 @@ class AIPlaceholdersRule(Rule):
         # Comment-only placeholders
         for comment in comments:
             comment_line = f"# {comment.content}".strip()
-            for pattern, kind in self._comment_patterns:
+            for pattern, kind in AI_PLACEHOLDER_COMMENT_PATTERNS:
                 match = re.search(pattern, comment_line, re.IGNORECASE)
                 if match:
                     issues.append(
@@ -260,7 +211,7 @@ class AIPlaceholdersRule(Rule):
             # Inline code + comment placeholders
             line_text = lines[comment.line - 1]
             before = line_text[: comment.column - 1]
-            for code_pattern, todo_pattern, kind in self._inline_comment_markers:
+            for code_pattern, todo_pattern, kind in AI_PLACEHOLDER_INLINE_PATTERNS:
                 if re.search(code_pattern, before) and re.search(
                     todo_pattern, comment.content, re.IGNORECASE
                 ):
@@ -277,7 +228,7 @@ class AIPlaceholdersRule(Rule):
 
         # Code-only placeholders
         for line_num, line in enumerate(lines, start=1):
-            for pattern, kind in self._code_patterns:
+            for pattern, kind in AI_PLACEHOLDER_CODE_PATTERNS:
                 match = re.search(pattern, line, re.IGNORECASE)
                 if match:
                     issues.append(
