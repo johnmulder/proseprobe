@@ -24,8 +24,13 @@ class RuleOfThreeRule(Rule):
     applies_to = {"markdown"}
     content_scope = "prose"
 
-    # Threshold: flag if more than N triads in content
-    _threshold = 3
+    def __init__(self, threshold: int = 3) -> None:
+        """Initialize rule with configurable threshold.
+
+        Args:
+            threshold: Flag if more than N triads in content.
+        """
+        self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for rule of three patterns."""
@@ -128,8 +133,13 @@ class InlineHeaderListsRule(Rule):
     applies_to = {"markdown"}
     content_scope = "prose"
 
-    # Threshold: flag if more than N consecutive inline headers
-    _threshold = 3
+    def __init__(self, threshold: int = 3) -> None:
+        """Initialize rule with configurable threshold.
+
+        Args:
+            threshold: Flag if >= N consecutive inline headers.
+        """
+        self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for inline header lists."""

@@ -1,6 +1,6 @@
 """Detection rules for AI content patterns."""
 
-from humanize.config import Config
+from humanize.config import Config, ThresholdsConfig
 from humanize.rules.base import Issue, Rule, Severity, severity_from_str
 from humanize.rules.code import (
     AIPlaceholdersRule,
@@ -108,10 +108,12 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
     allowed: set[str] = set()
     additional: set[str] = set()
     severity_overrides: dict[str, str] = {}
+    thresholds = ThresholdsConfig()
     if config is not None:
         allowed = {w.lower() for w in config.vocabulary.allowed}
         additional = {w.lower() for w in config.vocabulary.additional}
         severity_overrides = config.severity_overrides
+        thresholds = config.thresholds
 
     rules = [
         # Vocabulary (V001-V005)
@@ -121,17 +123,17 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         PromotionalLanguageRule(),
         WeaselWordsRule(),
         # Structural (S001-S007)
-        RuleOfThreeRule(),
+        RuleOfThreeRule(threshold=thresholds.rule_of_three),
         NegativeParallelismRule(),
         ChallengeConclusionsRule(),
-        InlineHeaderListsRule(),
+        InlineHeaderListsRule(threshold=thresholds.inline_header_lists),
         SignificanceEmphasisRule(),
         SuperficialAnalysisRule(),
         FalseRangesRule(),
         # Style (T001-T006)
         TitleCaseHeadingsRule(),
-        BoldOveruseRule(),
-        EmDashOveruseRule(),
+        BoldOveruseRule(threshold=thresholds.bold_overuse),
+        EmDashOveruseRule(threshold=thresholds.em_dash_overuse),
         QuoteInconsistencyRule(),
         EmojiInProseRule(),
         ElegantVariationRule(),

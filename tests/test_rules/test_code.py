@@ -99,6 +99,7 @@ def process(data):
         issues = rule.check(text, "test.py")
         assert len(issues) == 0
 
+
 class TestCollaborativeComments:
     """Tests for C003: Collaborative Comments."""
 
@@ -126,6 +127,7 @@ def process():
         rule = CollaborativeCommentsRule()
         issues = rule.check(text, "test.py")
         assert len(issues) == 0
+
 
 class TestAIPlaceholders:
     """Tests for C004: AI Placeholders."""

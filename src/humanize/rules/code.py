@@ -30,16 +30,14 @@ class DocstringVocabularyRule(Rule):
         additional: set[str] | None = None,
     ) -> None:
         self._allowed = {w.lower() for w in (allowed or set())}
-        extra_words = {
-            w.lower()
-            for w in (additional or set())
-            if isinstance(w, str)
-        }
+        extra_words = {w.lower() for w in (additional or set()) if isinstance(w, str)}
 
         base_words = {word.lower() for _, word, _ in DOCSTRING_AI_VOCABULARY}
         extra_words = extra_words - self._allowed - base_words
 
-        self._ai_words: list[tuple[str, str, str | None]] = list(DOCSTRING_AI_VOCABULARY)
+        self._ai_words: list[tuple[str, str, str | None]] = list(
+            DOCSTRING_AI_VOCABULARY
+        )
         for word in sorted(extra_words):
             pattern = rf"\b{re.escape(word)}\b"
             self._ai_words.append((pattern, word, None))
@@ -80,6 +78,7 @@ class DocstringVocabularyRule(Rule):
         # Extract the word from the message
         # Message format: "AI vocabulary in docstring: 'word'"
         import re as re_module
+
         word_match = re_module.search(r"'(\w+)'", issue.message)
         if not word_match:
             return content
@@ -99,7 +98,9 @@ class DocstringVocabularyRule(Rule):
             return replacement
 
         pattern = rf"\b{word}\b"
-        return re_module.sub(pattern, replace_preserving_case, content, flags=re_module.IGNORECASE)
+        return re_module.sub(
+            pattern, replace_preserving_case, content, flags=re_module.IGNORECASE
+        )
 
 
 class VerboseCommentsRule(Rule):

@@ -5,7 +5,14 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-__all__ = ["Config", "PerFileIgnore", "VocabularyConfig", "find_config_file", "load_config"]
+__all__ = [
+    "Config",
+    "PerFileIgnore",
+    "ThresholdsConfig",
+    "VocabularyConfig",
+    "find_config_file",
+    "load_config",
+]
 
 
 @dataclass
@@ -14,6 +21,23 @@ class PerFileIgnore:
 
     pattern: str
     ignore: list[str] = field(default_factory=list)
+
+
+@dataclass
+class ThresholdsConfig:
+    """Configurable detection thresholds.
+
+    These control when rules trigger based on counts/occurrences.
+    """
+
+    # S001: RuleOfThreeRule - flag if more than N triads in content
+    rule_of_three: int = 3
+    # S004: InlineHeaderListsRule - flag if >= N consecutive inline headers
+    inline_header_lists: int = 3
+    # T002: BoldOveruseRule - max bold phrases per paragraph
+    bold_overuse: int = 3
+    # T003: EmDashOveruseRule - max em dashes per document
+    em_dash_overuse: int = 5
 
 
 @dataclass
@@ -42,6 +66,7 @@ class Config:
     severity: str = "warning"
     severity_overrides: dict[str, str] = field(default_factory=dict)
     vocabulary: VocabularyConfig = field(default_factory=VocabularyConfig)
+    thresholds: ThresholdsConfig = field(default_factory=ThresholdsConfig)
     per_file_ignores: list[PerFileIgnore] = field(default_factory=list)
 
 
@@ -130,6 +155,14 @@ def _parse_config(data: dict[str, Any]) -> Config:
         allowed=vocabulary_data.get("allowed", []),
     )
 
+    thresholds_data = effective.get("thresholds", {})
+    thresholds = ThresholdsConfig(
+        rule_of_three=thresholds_data.get("rule_of_three", 3),
+        inline_header_lists=thresholds_data.get("inline_header_lists", 3),
+        bold_overuse=thresholds_data.get("bold_overuse", 3),
+        em_dash_overuse=thresholds_data.get("em_dash_overuse", 5),
+    )
+
     per_file_raw = effective.get("per-file-ignores", [])
     per_file_ignores: list[PerFileIgnore] = []
     if isinstance(per_file_raw, dict):
@@ -172,5 +205,6 @@ def _parse_config(data: dict[str, Any]) -> Config:
         severity=min_severity,
         severity_overrides=severity_overrides,
         vocabulary=vocabulary,
+        thresholds=thresholds,
         per_file_ignores=per_file_ignores,
     )

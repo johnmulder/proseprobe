@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from humanize.config import Config, find_config_file, load_config
+from humanize.config import Config, ThresholdsConfig, find_config_file, load_config
 
 
 class TestFindConfigFile:
@@ -204,3 +204,72 @@ class TestConfig:
         assert config.select == ["V001", "V002"]
         assert config.ignore == ["S001"]
         assert config.severity == "error"
+
+    def test_default_thresholds(self) -> None:
+        """Test default threshold values."""
+        config = Config()
+
+        assert config.thresholds.rule_of_three == 3
+        assert config.thresholds.inline_header_lists == 3
+        assert config.thresholds.bold_overuse == 3
+        assert config.thresholds.em_dash_overuse == 5
+
+    def test_load_thresholds_config(self, tmp_path: Path) -> None:
+        """Test loading custom thresholds from config file."""
+        config_file = tmp_path / ".humanize.toml"
+        config_file.write_text("""
+[thresholds]
+rule_of_three = 5
+inline_header_lists = 4
+bold_overuse = 2
+em_dash_overuse = 10
+""")
+
+        config = load_config(config_file)
+
+        assert config.thresholds.rule_of_three == 5
+        assert config.thresholds.inline_header_lists == 4
+        assert config.thresholds.bold_overuse == 2
+        assert config.thresholds.em_dash_overuse == 10
+
+    def test_partial_thresholds_config(self, tmp_path: Path) -> None:
+        """Test loading partial thresholds uses defaults for missing values."""
+        config_file = tmp_path / ".humanize.toml"
+        config_file.write_text("""
+[thresholds]
+rule_of_three = 10
+""")
+
+        config = load_config(config_file)
+
+        assert config.thresholds.rule_of_three == 10
+        assert config.thresholds.inline_header_lists == 3  # default
+        assert config.thresholds.bold_overuse == 3  # default
+        assert config.thresholds.em_dash_overuse == 5  # default
+
+
+class TestThresholdsConfig:
+    """Tests for ThresholdsConfig class."""
+
+    def test_default_values(self) -> None:
+        """Test default threshold values."""
+        thresholds = ThresholdsConfig()
+
+        assert thresholds.rule_of_three == 3
+        assert thresholds.inline_header_lists == 3
+        assert thresholds.bold_overuse == 3
+        assert thresholds.em_dash_overuse == 5
+
+    def test_custom_values(self) -> None:
+        """Test custom threshold values."""
+        thresholds = ThresholdsConfig(
+            rule_of_three=10,
+            inline_header_lists=5,
+            bold_overuse=4,
+            em_dash_overuse=8,
+        )
+
+        assert thresholds.rule_of_three == 10
+        assert thresholds.inline_header_lists == 5
+        assert thresholds.bold_overuse == 4
+        assert thresholds.em_dash_overuse == 8

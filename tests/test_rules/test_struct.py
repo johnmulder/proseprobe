@@ -33,6 +33,24 @@ class TestRuleOfThree:
         assert rule.id == "S001"
         assert rule.name == "Rule of Three"
 
+    def test_custom_threshold(self) -> None:
+        """Test rule respects custom threshold."""
+        # 4 triads - should trigger with threshold=3, not with threshold=5
+        text = """
+        One, two, and three.
+        Four, five, and six.
+        Seven, eight, and nine.
+        Ten, eleven, and twelve.
+        """
+        rule_low = RuleOfThreeRule(threshold=3)
+        rule_high = RuleOfThreeRule(threshold=5)
+        issues_low = rule_low.check(text, "test.md")
+        issues_high = rule_high.check(text, "test.md")
+        # Low threshold should flag all 4 triads
+        assert len(issues_low) == 4
+        # High threshold should not flag any
+        assert len(issues_high) == 0
+
 
 class TestNegativeParallelism:
     """Tests for S002: Negative Parallelism."""
@@ -81,6 +99,24 @@ class TestInlineHeaderLists:
         """Test rule has correct metadata."""
         rule = InlineHeaderListsRule()
         assert rule.id == "S004"
+
+    def test_custom_threshold(self) -> None:
+        """Test rule respects custom threshold."""
+        # 4 consecutive inline headers - pattern: "- **Header**: Description"
+        text = (
+            "- **One**: Description one.\n"
+            "- **Two**: Description two.\n"
+            "- **Three**: Description three.\n"
+            "- **Four**: Description four.\n"
+        )
+        rule_low = InlineHeaderListsRule(threshold=3)
+        rule_high = InlineHeaderListsRule(threshold=5)
+        issues_low = rule_low.check(text, "test.md")
+        issues_high = rule_high.check(text, "test.md")
+        # Low threshold should flag (4 >= 3)
+        assert len(issues_low) == 1
+        # High threshold should not flag (4 < 5)
+        assert len(issues_high) == 0
 
 
 class TestSignificanceEmphasis:

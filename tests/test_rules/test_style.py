@@ -44,6 +44,17 @@ class TestBoldOveruse:
         rule = BoldOveruseRule()
         assert rule.id == "T002"
 
+    def test_custom_threshold(self) -> None:
+        """Test rule respects custom threshold."""
+        # 4 bold phrases - should trigger with threshold=3, not with threshold=5
+        text = "This is **one** and **two** and **three** and **four**."
+        rule_low = BoldOveruseRule(threshold=3)
+        rule_high = BoldOveruseRule(threshold=5)
+        issues_low = rule_low.check(text, "test.md")
+        issues_high = rule_high.check(text, "test.md")
+        assert len(issues_low) == 1
+        assert len(issues_high) == 0
+
 
 class TestEmDashOveruse:
     """Tests for T003: Em Dash Overuse."""
@@ -59,6 +70,17 @@ class TestEmDashOveruse:
         """Test rule has correct metadata."""
         rule = EmDashOveruseRule()
         assert rule.id == "T003"
+
+    def test_custom_threshold(self) -> None:
+        """Test rule respects custom threshold."""
+        # 6 em dashes - should trigger with threshold=5, not with threshold=10
+        text = "One—two—three—four—five—six—seven"
+        rule_low = EmDashOveruseRule(threshold=5)
+        rule_high = EmDashOveruseRule(threshold=10)
+        issues_low = rule_low.check(text, "test.md")
+        issues_high = rule_high.check(text, "test.md")
+        assert len(issues_low) == 1
+        assert len(issues_high) == 0
 
 
 class TestQuoteInconsistency:

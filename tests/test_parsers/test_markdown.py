@@ -4,6 +4,9 @@ from humanize.parsers.markdown import (
     MarkdownLink,
     MarkdownParser,
     MarkdownSection,
+    _get_cached_parser,
+    _parser_cache,
+    clear_parser_cache,
     is_markdown_file,
     iter_non_code_lines,
     iter_prose_lines,
@@ -109,8 +112,7 @@ class TestMarkdownParser:
         assert len(links) == 1
         link = links[0]
         assert (
-            content[link.url_start - 1 : link.url_end - 1]
-            == "https://example.com/path"
+            content[link.url_start - 1 : link.url_end - 1] == "https://example.com/path"
         )
 
     def test_get_links_autolink(self) -> None:
@@ -142,7 +144,9 @@ class TestMarkdownParser:
         parser = MarkdownParser(content)
         links = parser.get_links()
 
-        assert any(link.url == "https://example.com" and link.line == 3 for link in links)
+        assert any(
+            link.url == "https://example.com" and link.line == 3 for link in links
+        )
 
     def test_get_links_reference_collapsed(self) -> None:
         """Test extracting collapsed reference link usage."""
@@ -150,11 +154,15 @@ class TestMarkdownParser:
         parser = MarkdownParser(content)
         links = parser.get_links()
 
-        assert any(link.url == "https://example.com" and link.line == 3 for link in links)
+        assert any(
+            link.url == "https://example.com" and link.line == 3 for link in links
+        )
 
     def test_get_links_in_table(self) -> None:
         """Test extracting links inside markdown tables."""
-        content = "| Name | Link |\n| --- | --- |\n| Example | [Site](https://example.com) |"
+        content = (
+            "| Name | Link |\n| --- | --- |\n| Example | [Site](https://example.com) |"
+        )
         parser = MarkdownParser(content)
         links = parser.get_links()
 
@@ -426,6 +434,7 @@ class TestMarkdownParser:
         assert is_markdown_file("doc.MARKDOWN")
         assert not is_markdown_file("script.py")
 
+
 class TestMarkdownSection:
     """Tests for MarkdownSection dataclass."""
 
@@ -462,3 +471,56 @@ class TestMarkdownLink:
         assert link.url == "https://example.com"
         assert link.line == 5
         assert link.column == 10
+
+
+class TestParserCache:
+    """Tests for MarkdownParser caching."""
+
+    def test_cache_returns_same_parser(self) -> None:
+        """Test that cache returns the same parser for same content."""
+        clear_parser_cache()
+        content = "# Test\n\nSome content."
+        parser1 = _get_cached_parser(content)
+        parser2 = _get_cached_parser(content)
+        assert parser1 is parser2
+
+    def test_cache_different_content(self) -> None:
+        """Test that cache returns different parsers for different content."""
+        clear_parser_cache()
+        content1 = "# Test 1\n\nContent one."
+        content2 = "# Test 2\n\nContent two."
+        parser1 = _get_cached_parser(content1)
+        parser2 = _get_cached_parser(content2)
+        assert parser1 is not parser2
+
+    def test_clear_cache(self) -> None:
+        """Test clearing the parser cache."""
+        content = "# Cached\n\nContent."
+        _get_cached_parser(content)
+        assert len(_parser_cache) > 0
+        clear_parser_cache()
+        assert len(_parser_cache) == 0
+
+    def test_iter_prose_lines_uses_cache(self) -> None:
+        """Test that iter_prose_lines uses cached parser."""
+        clear_parser_cache()
+        content = "# Heading\n\nParagraph text."
+        # First call should populate cache
+        lines1 = iter_prose_lines(content, "test.md")
+        cache_size = len(_parser_cache)
+        # Second call should use cache (no new entries)
+        lines2 = iter_prose_lines(content, "test.md")
+        assert len(_parser_cache) == cache_size
+        assert lines1 == lines2
+
+    def test_iter_non_code_lines_uses_cache(self) -> None:
+        """Test that iter_non_code_lines uses cached parser."""
+        clear_parser_cache()
+        content = "# Heading\n\n```python\ncode\n```\n\nText."
+        # First call should populate cache
+        lines1 = iter_non_code_lines(content, "test.md")
+        cache_size = len(_parser_cache)
+        # Second call should use cache (no new entries)
+        lines2 = iter_non_code_lines(content, "test.md")
+        assert len(_parser_cache) == cache_size
+        assert lines1 == lines2

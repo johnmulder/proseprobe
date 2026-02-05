@@ -59,8 +59,13 @@ class BoldOveruseRule(Rule):
     fixable = False
     applies_to = {"markdown"}
 
-    # Threshold: max bold phrases per paragraph
-    _threshold = 3
+    def __init__(self, threshold: int = 3) -> None:
+        """Initialize rule with configurable threshold.
+
+        Args:
+            threshold: Max bold phrases per paragraph.
+        """
+        self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for bold overuse."""
@@ -115,8 +120,13 @@ class EmDashOveruseRule(Rule):
     applies_to = {"markdown"}
     content_scope = "prose"
 
-    # Threshold: max em dashes per document
-    _threshold = 5
+    def __init__(self, threshold: int = 5) -> None:
+        """Initialize rule with configurable threshold.
+
+        Args:
+            threshold: Max em dashes per document.
+        """
+        self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for em dash overuse."""

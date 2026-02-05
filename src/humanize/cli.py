@@ -82,9 +82,7 @@ def check(
     ] = False,
     interactive: Annotated[
         bool,
-        typer.Option(
-            "--interactive", "-I", help="Interactively confirm each fix"
-        ),
+        typer.Option("--interactive", "-I", help="Interactively confirm each fix"),
     ] = False,
 ) -> None:
     """Check files for AI content patterns."""
@@ -172,10 +170,12 @@ def check(
     if not results:
         if format == "json":
             from humanize.core.reporter import Reporter
+
             reporter = Reporter(format="json")
             print(reporter.report({}))
         elif format == "sarif":
             from humanize.core.reporter import Reporter
+
             reporter = Reporter(format="sarif")
             print(reporter.report({}))
         elif not quiet:
@@ -261,9 +261,7 @@ def check(
                                 if new_content != content:
                                     content = new_content
                                     file_fixed += 1
-                        console.print(
-                            "[green]✓ Applied all remaining fixes[/green]"
-                        )
+                        console.print("[green]✓ Applied all remaining fixes[/green]")
                         break
                     elif response in ("q", "quit"):
                         console.print("[yellow]Quitting...[/yellow]")
@@ -306,10 +304,12 @@ def check(
 
     if format == "json":
         from humanize.core.reporter import Reporter
+
         reporter = Reporter(format="json")
         print(reporter.report(results))
     elif format == "sarif":
         from humanize.core.reporter import Reporter
+
         reporter = Reporter(format="sarif")
         print(reporter.report(results))
     else:

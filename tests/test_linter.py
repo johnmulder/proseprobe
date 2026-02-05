@@ -115,9 +115,7 @@ class TestPerFileIgnores:
     def test_per_file_ignore_disables_rule(self, tmp_path: Path) -> None:
         """Test that per-file ignores disable rules for specific files."""
         config = Config(
-            per_file_ignores=[
-                PerFileIgnore(pattern="CHANGELOG.md", ignore=["V001"])
-            ]
+            per_file_ignores=[PerFileIgnore(pattern="CHANGELOG.md", ignore=["V001"])]
         )
         linter = Linter(config)
         rule = AIVocabularyRule()
@@ -130,9 +128,7 @@ class TestPerFileIgnores:
     def test_per_file_ignore_by_category(self, tmp_path: Path) -> None:
         """Test that per-file ignores work with category prefixes."""
         config = Config(
-            per_file_ignores=[
-                PerFileIgnore(pattern="*.test.md", ignore=["V"])
-            ]
+            per_file_ignores=[PerFileIgnore(pattern="*.test.md", ignore=["V"])]
         )
         linter = Linter(config)
         rule = AIVocabularyRule()

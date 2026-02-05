@@ -5,6 +5,35 @@ from dataclasses import dataclass
 
 MARKDOWN_EXTENSIONS = (".md", ".mdx", ".markdown")
 
+# Cache for MarkdownParser instances (keyed by content hash)
+_parser_cache: dict[int, "MarkdownParser"] = {}
+_CACHE_MAX_SIZE = 32
+
+
+def _get_cached_parser(content: str) -> "MarkdownParser":
+    """Get or create a cached MarkdownParser for content.
+
+    Uses content hash as key to avoid redundant parsing for the same content.
+    """
+    content_hash = hash(content)
+    if content_hash in _parser_cache:
+        return _parser_cache[content_hash]
+
+    # Evict oldest entries if cache is full
+    if len(_parser_cache) >= _CACHE_MAX_SIZE:
+        # Remove first (oldest) entry
+        oldest_key = next(iter(_parser_cache))
+        del _parser_cache[oldest_key]
+
+    parser = MarkdownParser(content)
+    _parser_cache[content_hash] = parser
+    return parser
+
+
+def clear_parser_cache() -> None:
+    """Clear the parser cache. Useful for testing."""
+    _parser_cache.clear()
+
 
 def is_markdown_file(filename: str) -> bool:
     """Return True if filename looks like Markdown."""
@@ -561,12 +590,12 @@ class MarkdownParser:
 def iter_prose_lines(content: str, filename: str) -> list[tuple[int, str]]:
     """Return line-numbered prose lines for Markdown, raw lines otherwise."""
     if is_markdown_file(filename):
-        return MarkdownParser(content).get_prose_lines()
+        return _get_cached_parser(content).get_prose_lines()
     return list(enumerate(content.split("\n"), start=1))
 
 
 def iter_non_code_lines(content: str, filename: str) -> list[tuple[int, str]]:
     """Return line-numbered lines excluding code blocks for Markdown."""
     if is_markdown_file(filename):
-        return MarkdownParser(content).get_lines()
+        return _get_cached_parser(content).get_lines()
     return list(enumerate(content.split("\n"), start=1))

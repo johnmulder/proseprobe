@@ -156,10 +156,9 @@ class Linter:
 
         # Check per-file ignores
         for per_file in self.config.per_file_ignores:
-            pattern_matches = (
-                fnmatch.fnmatch(path.name, per_file.pattern)
-                or fnmatch.fnmatch(str(path), per_file.pattern)
-            )
+            pattern_matches = fnmatch.fnmatch(
+                path.name, per_file.pattern
+            ) or fnmatch.fnmatch(str(path), per_file.pattern)
             if pattern_matches and (
                 rule.id in per_file.ignore or prefix in per_file.ignore
             ):
