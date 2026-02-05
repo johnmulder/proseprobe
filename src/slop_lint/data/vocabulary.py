@@ -1,8 +1,8 @@
-"""AI vocabulary word lists."""
+"""Overused vocabulary word lists."""
 
 from typing import Final
 
-# Tier 1: High confidence AI markers (rarely used naturally)
+# Tier 1: High confidence markers (rarely used naturally)
 AI_VOCABULARY_TIER1: Final[set[str]] = {
     "delve",
     "tapestry",
@@ -50,7 +50,7 @@ AI_VOCABULARY_TIER2 = {
     "paramount",
 }
 
-# Tier 3: Low confidence (common but overused by AI)
+# Tier 3: Low confidence (common but frequently overused)
 AI_VOCABULARY_TIER3 = {
     "key",
     "important",

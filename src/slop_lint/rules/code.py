@@ -15,11 +15,11 @@ from slop_lint.rules.base import Issue, Rule, Severity
 
 
 class DocstringVocabularyRule(Rule):
-    """C001: Detect AI vocabulary in docstrings."""
+    """C001: Detect overused vocabulary in docstrings."""
 
     id = "C001"
     name = "Docstring Vocabulary"
-    description = "Detects AI-specific words in Python docstrings"
+    description = "Detects overused words in Python docstrings"
     severity = Severity.WARNING
     fixable = True
     applies_to = {"python"}
@@ -43,7 +43,7 @@ class DocstringVocabularyRule(Rule):
             self._ai_words.append((pattern, word, None))
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check for AI vocabulary in docstrings."""
+        """Check for overused vocabulary in docstrings."""
         issues: list[Issue] = []
 
         parser = PythonParser(content)
@@ -59,7 +59,7 @@ class DocstringVocabularyRule(Rule):
                     issues.append(
                         Issue(
                             rule_id=self.id,
-                            message=f"AI vocabulary in docstring: '{word}'",
+                            message=f"Overused word in docstring: '{word}'",
                             line=doc.line,
                             column=1,
                             severity=self.severity,
@@ -71,12 +71,12 @@ class DocstringVocabularyRule(Rule):
         return issues
 
     def fix(self, content: str, issue: Issue) -> str:
-        """Replace AI vocabulary in docstrings with suggestion."""
+        """Replace overused vocabulary in docstrings with suggestion."""
         if not issue.suggestion:
             return content
 
         # Extract the word from the message
-        # Message format: "AI vocabulary in docstring: 'word'"
+        # Message format: "Overused word in docstring: 'word'"
         import re as re_module
 
         word_match = re_module.search(r"'(\w+)'", issue.message)
@@ -108,7 +108,7 @@ class VerboseCommentsRule(Rule):
 
     id = "C002"
     name = "Verbose Comments"
-    description = "Detects comments with AI verbosity patterns"
+    description = "Detects comments with excessive verbosity patterns"
     severity = Severity.INFO
     fixable = False
     applies_to = {"python"}
@@ -175,17 +175,17 @@ class CollaborativeCommentsRule(Rule):
 
 
 class AIPlaceholdersRule(Rule):
-    """C004: Detect formulaic AI placeholders."""
+    """C004: Detect formulaic placeholders."""
 
     id = "C004"
-    name = "AI Placeholders"
-    description = "Detects generic TODO patterns from AI"
+    name = "Formulaic Placeholders"
+    description = "Detects generic TODO patterns and boilerplate"
     severity = Severity.INFO
     fixable = False
     applies_to = {"python"}
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check for AI placeholders."""
+        """Check for formulaic placeholders."""
         issues: list[Issue] = []
 
         lines = content.split("\n")
@@ -201,7 +201,7 @@ class AIPlaceholdersRule(Rule):
                     issues.append(
                         Issue(
                             rule_id=self.id,
-                            message=f"AI placeholder: {kind}",
+                            message=f"Formulaic placeholder: {kind}",
                             line=comment.line,
                             column=comment.column + match.start(),
                             severity=self.severity,
@@ -219,7 +219,7 @@ class AIPlaceholdersRule(Rule):
                     issues.append(
                         Issue(
                             rule_id=self.id,
-                            message=f"AI placeholder: {kind}",
+                            message=f"Formulaic placeholder: {kind}",
                             line=comment.line,
                             column=comment.column,
                             severity=self.severity,
@@ -235,7 +235,7 @@ class AIPlaceholdersRule(Rule):
                     issues.append(
                         Issue(
                             rule_id=self.id,
-                            message=f"AI placeholder: {kind}",
+                            message=f"Formulaic placeholder: {kind}",
                             line=line_num,
                             column=match.start() + 1,
                             severity=self.severity,

@@ -258,7 +258,7 @@ class FalseRangesRule(Rule):
     applies_to = {"markdown"}
     content_scope = "prose"
 
-    # Common AI false range patterns
+    # Common false range patterns
     _patterns = [
         r"from\s+(\w+)\s+to\s+(\w+)",
         r"ranging from\s+(\w+)\s+to\s+(\w+)",

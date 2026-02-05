@@ -30,14 +30,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release of slop-lint CLI
 - 29 detection rules across 6 categories:
-  - **V (Vocabulary)**: V001-V005 - AI-specific words and phrases
+  - **V (Vocabulary)**: V001-V005 - Overused and clichéd words and phrases
   - **S (Structure)**: S001-S007 - Organizational patterns
   - **T (Style)**: T001-T006 - Formatting and style issues
   - **G (Grammar)**: G001-G003 - Grammar patterns
   - **C (Code)**: C001-C004 - Python code-specific issues
   - **M (Markup)**: M001-M004 - Markdown artifacts
 - CLI commands:
-  - `check` - Lint files for AI content patterns
+  - `check` - Lint files for bad writing practices
   - `rules` - List all available rules
   - `explain` - Explain a specific rule
   - `init` - Create a `.slop-lint.toml` config file

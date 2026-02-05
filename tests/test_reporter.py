@@ -40,7 +40,7 @@ class TestTextFormat:
             Path("doc.md"): [
                 Issue(
                     rule_id="V001",
-                    message="AI vocabulary: 'delve'",
+                    message="Overused word: 'delve'",
                     line=10,
                     column=5,
                     severity=Severity.WARNING,

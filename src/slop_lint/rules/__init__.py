@@ -1,4 +1,4 @@
-"""Detection rules for AI content patterns."""
+"""Detection rules for bad writing practices."""
 
 from slop_lint.config import Config, ThresholdsConfig
 from slop_lint.rules.base import Issue, Rule, Severity, severity_from_str

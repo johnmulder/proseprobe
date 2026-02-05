@@ -1,4 +1,4 @@
-"""Tests using AI-generated and human-written fixtures."""
+"""Tests using fixture samples with known bad practices and clean writing."""
 
 from pathlib import Path
 
@@ -24,7 +24,7 @@ def linter() -> Linter:
 
 
 class TestAIGeneratedFixtures:
-    """Tests that AI-generated samples trigger rules."""
+    """Tests that samples with bad practices trigger rules."""
 
     def test_ai_markdown_sample1_has_issues(self, linter: Linter) -> None:
         """sample1.md should trigger multiple rules."""
@@ -35,9 +35,9 @@ class TestAIGeneratedFixtures:
         for issues in results.values():
             all_issues.extend(issues)
 
-        # Should find AI vocabulary
+        # Should find overused vocabulary
         rule_ids = {issue.rule_id for issue in all_issues}
-        assert "V001" in rule_ids, "Expected V001 (AI vocabulary) to trigger"
+        assert "V001" in rule_ids, "Expected V001 (overused vocabulary) to trigger"
 
     def test_ai_markdown_sample2_has_multiple_rule_types(self, linter: Linter) -> None:
         """sample2.md should trigger vocabulary, markup, and structural rules."""
@@ -63,7 +63,9 @@ class TestAIGeneratedFixtures:
             all_issues.extend(issues)
 
         # Should find issues in docstrings
-        assert len(all_issues) > 0, "Expected issues in AI-generated Python"
+        assert len(all_issues) > 0, (
+            "Expected issues in Python sample with bad practices"
+        )
 
     def test_ai_python_sample2_has_code_issues(self, linter: Linter) -> None:
         """sample2.py should trigger multiple code rules."""
@@ -74,7 +76,9 @@ class TestAIGeneratedFixtures:
             all_issues.extend(issues)
 
         # Should have code-specific issues
-        assert len(all_issues) >= 3, "Expected multiple issues in AI Python sample"
+        assert len(all_issues) >= 3, (
+            "Expected multiple issues in bad-practice Python sample"
+        )
 
 
 class TestHumanWrittenFixtures:
@@ -111,10 +115,10 @@ class TestHumanWrittenFixtures:
 
 
 class TestComparativeAnalysis:
-    """Compare AI-generated vs human-written samples."""
+    """Compare bad-practice samples vs clean samples."""
 
     def test_ai_samples_have_more_issues_than_human(self, linter: Linter) -> None:
-        """AI-generated samples should trigger more rules than human-written."""
+        """Bad-practice samples should trigger more rules than clean samples."""
         ai_results = linter.check([AI_GENERATED])
         human_results = linter.check([HUMAN_WRITTEN])
 
@@ -122,12 +126,12 @@ class TestComparativeAnalysis:
         human_total = sum(len(issues) for issues in human_results.values())
 
         assert ai_total > human_total, (
-            f"AI samples ({ai_total}) should have more issues than "
+            f"Bad-practice samples ({ai_total}) should have more issues than "
             f"human samples ({human_total})"
         )
 
     def test_ai_samples_trigger_more_rule_categories(self, linter: Linter) -> None:
-        """AI samples should trigger rules from more categories."""
+        """Bad-practice samples should trigger rules from more categories."""
         ai_results = linter.check([AI_GENERATED])
 
         all_issues = []

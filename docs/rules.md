@@ -6,9 +6,9 @@ This document describes all detection rules available in slop-lint.
 
 ## Vocabulary Rules (V)
 
-### V001: AI Vocabulary
+### V001: Overused Vocabulary
 
-Detects overused AI-specific words that rarely appear in natural human writing.
+Detects overused and clichéd words that weaken writing.
 
 **Severity:** Warning  
 **Fixable:** Yes
@@ -34,7 +34,7 @@ This article explores the complex structure of modern software architecture.
 
 ### V002: Collaborative Phrases
 
-Detects chat-like communication patterns from AI assistants.
+Detects chat-like communication patterns that don't belong in documentation.
 
 **Severity:** Warning  
 **Fixable:** No
@@ -480,7 +480,7 @@ The system uses modern techniques to deliver fast results.
 
 ### C001: Docstring Vocabulary
 
-Detects AI vocabulary in Python docstrings.
+Detects overused vocabulary in Python docstrings.
 
 **Severity:** Warning  
 **Fixable:** Yes
@@ -549,7 +549,7 @@ def helper():
 
 ---
 
-### C004: AI Placeholders
+### C004: Formulaic Placeholders
 
 Detects formulaic TODO patterns.
 
@@ -616,7 +616,7 @@ According to Smith et al. (2023), the approach works.
 
 ### M003: UTM Parameters
 
-Detects AI-related tracking parameters in URLs.
+Detects tracking parameters in URLs that should be stripped.
 
 **Severity:** Warning  
 **Fixable:** Yes
@@ -639,7 +639,7 @@ See [documentation](https://example.com)
 
 ### M004: Broken References
 
-Detects invalid citation formats from AI.
+Detects invalid or broken citation formats.
 
 **Severity:** Error  
 **Fixable:** No

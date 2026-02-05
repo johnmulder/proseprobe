@@ -12,7 +12,7 @@ class TestDocstringVocabulary:
     """Tests for C001: Docstring Vocabulary."""
 
     def test_detects_ai_vocabulary(self) -> None:
-        """Test detecting AI vocabulary in docstrings."""
+        """Test detecting overused vocabulary in docstrings."""
         text = '''
 def process():
     """
@@ -130,7 +130,7 @@ def process():
 
 
 class TestAIPlaceholders:
-    """Tests for C004: AI Placeholders."""
+    """Tests for C004: Formulaic Placeholders."""
 
     def test_detects_placeholder_patterns(self) -> None:
         """Test detecting placeholder patterns."""

@@ -137,7 +137,7 @@ class PythonParser:
         return comments
 
     def get_string_literals(self) -> list[tuple[int, int, str]]:
-        """Extract string literals (for catching AI patterns in strings).
+        """Extract string literals (for catching bad patterns in strings).
 
         Returns:
             List of (line, column, content) tuples.

@@ -13,7 +13,7 @@ def fixtures_dir() -> Path:
 
 @pytest.fixture
 def ai_samples_dir(fixtures_dir: Path) -> Path:
-    """Return path to AI-generated samples."""
+    """Return path to samples with bad writing practices."""
     return fixtures_dir / "ai_generated"
 
 
@@ -25,7 +25,7 @@ def human_samples_dir(fixtures_dir: Path) -> Path:
 
 @pytest.fixture
 def sample_markdown() -> str:
-    """Return sample Markdown with AI patterns."""
+    """Return sample Markdown with bad writing patterns."""
     return """\
 # A Comprehensive Guide
 
@@ -46,7 +46,7 @@ I hope this helps! Let me know if you need more information.
 
 @pytest.fixture
 def sample_python() -> str:
-    """Return sample Python with AI patterns."""
+    """Return sample Python with bad writing patterns."""
     return '''\
 """A comprehensive module for data processing.
 

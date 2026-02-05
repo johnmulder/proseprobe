@@ -141,7 +141,7 @@ class TestBrokenReferences:
         assert "attached_file" in issues[0].message
 
     def test_fix_removes_broken_ref(self) -> None:
-        """Test that fix removes broken AI references."""
+        """Test that fix removes broken references."""
         text = "See [attached_file:1] for details"
         rule = BrokenReferencesRule()
         issues = rule.check(text, "test.md")

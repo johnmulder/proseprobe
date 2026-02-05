@@ -95,7 +95,7 @@ class ChatGPTMarkersRule(Rule):
 
 
 class UTMParametersRule(Rule):
-    """M003: Detect AI-related UTM parameters in URLs."""
+    """M003: Detect tracking UTM parameters in URLs."""
 
     id = "M003"
     name = "UTM Parameters"
@@ -107,7 +107,7 @@ class UTMParametersRule(Rule):
     _pattern = r"[?&]utm_source=(chatgpt\.com|openai)[^&\s]*"
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check for AI-related UTM parameters."""
+        """Check for tracking UTM parameters."""
         issues: list[Issue] = []
         if is_markdown_file(filename):
             from slop_lint.parsers.markdown import MarkdownParser
@@ -124,7 +124,7 @@ class UTMParametersRule(Rule):
                     issues.append(
                         Issue(
                             rule_id=self.id,
-                            message=f"AI tracking parameter: '{utm_match.group()}'",
+                            message=f"Tracking parameter: '{utm_match.group()}'",
                             line=link.line,
                             column=column,
                             end_column=end_column,
@@ -139,7 +139,7 @@ class UTMParametersRule(Rule):
                     issues.append(
                         Issue(
                             rule_id=self.id,
-                            message=f"AI tracking parameter: '{match.group()}'",
+                            message=f"Tracking parameter: '{match.group()}'",
                             line=line_num,
                             column=match.start() + 1,
                             end_column=match.end() + 1,
@@ -181,7 +181,7 @@ class UTMParametersRule(Rule):
 
 
 class BrokenReferencesRule(Rule):
-    """M004: Detect broken AI references."""
+    """M004: Detect broken references."""
 
     id = "M004"
     name = "Broken References"
@@ -206,7 +206,7 @@ class BrokenReferencesRule(Rule):
                     issues.append(
                         Issue(
                             rule_id=self.id,
-                            message=f"Broken AI reference: '{match.group()}'",
+                            message=f"Broken reference: '{match.group()}'",
                             line=line_num,
                             column=match.start() + 1,
                             end_column=match.end() + 1,
@@ -218,5 +218,5 @@ class BrokenReferencesRule(Rule):
         return issues
 
     def fix(self, content: str, issue: Issue) -> str:
-        """Remove broken AI reference from content."""
+        """Remove broken reference from content."""
         return remove_text_range(content, issue.line, issue.column, issue.end_column)

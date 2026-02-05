@@ -1,4 +1,4 @@
-"""AI phrase patterns."""
+"""Bad phrase patterns."""
 
 # Collaborative/chat-like phrases (V002)
 COLLABORATIVE_PHRASES = [

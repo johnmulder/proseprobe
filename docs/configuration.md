@@ -144,7 +144,7 @@ slop-lint check --select T001 .
 ### Text (default)
 
 ```
-docs/guide.md:15:5: V001 Avoid overused AI word "delve"
+docs/guide.md:15:5: V001 Overused word: 'delve'
 docs/guide.md:23:1: S001 Rule of three pattern detected
 Found 2 issue(s)
 ```
@@ -164,7 +164,7 @@ slop-lint check --format json . > report.json
       "issues": [
         {
           "rule_id": "V001",
-          "message": "Avoid overused AI word \"delve\"",
+          "message": "Overused word: 'delve'",
           "line": 15,
           "column": 5,
           "severity": "warning",
@@ -214,7 +214,7 @@ repos:
 
 ```yaml
 # .github/workflows/lint.yml
-name: Lint for AI Content
+name: Lint for Bad Writing Practices
 on: [push, pull_request]
 
 jobs:

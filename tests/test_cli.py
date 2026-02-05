@@ -23,7 +23,7 @@ class TestCheckCommand:
         assert "No issues found" in result.stdout
 
     def test_check_file_with_issues(self, tmp_path: Path) -> None:
-        """Test checking a file with AI vocabulary."""
+        """Test checking a file with overused vocabulary."""
         test_file = tmp_path / "test.md"
         test_file.write_text("This article delves into the topic.")
 
@@ -354,7 +354,7 @@ class TestHelpFlags:
         result = runner.invoke(app, ["-h"])
 
         assert result.exit_code == 0
-        assert "Detect AI-generated content patterns" in result.stdout
+        assert "Detect and fix bad writing practices" in result.stdout
         assert "check" in result.stdout
 
     def test_check_help_short_flag(self) -> None:

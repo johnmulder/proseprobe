@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "slop-lint"
 version = "0.1.0"
-description = "Detect AI-generated content patterns in Markdown and Python files"
+description = "Detect and fix bad writing practices in Markdown and Python files"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
@@ -13,7 +13,7 @@ authors = [
     { name = "slop-lint contributors" },
 ]
 keywords = [
-    "ai",
+    "writing",
     "linter",
     "markdown",
     "python",

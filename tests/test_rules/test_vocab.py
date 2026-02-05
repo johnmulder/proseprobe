@@ -15,7 +15,7 @@ from slop_lint.rules.vocab import (
 
 
 class TestAIVocabularyRule:
-    """Tests for V001: AI Vocabulary."""
+    """Tests for V001: Overused Vocabulary."""
 
     @pytest.fixture
     def rule(self) -> AIVocabularyRule:

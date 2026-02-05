@@ -15,7 +15,7 @@ from slop_lint.rules.base import Severity, severity_from_str, severity_rank
 
 app = typer.Typer(
     name="slop-lint",
-    help="Detect AI-generated content patterns in Markdown and Python files.",
+    help="Detect and fix bad writing practices in Markdown and Python files.",
     no_args_is_help=True,
     context_settings={"help_option_names": ["-h", "--help"]},
 )
@@ -85,7 +85,7 @@ def check(
         typer.Option("--interactive", "-I", help="Interactively confirm each fix"),
     ] = False,
 ) -> None:
-    """Check files for AI content patterns."""
+    """Check files for bad writing practices."""
     # Load config
     config = load_config(config_path)
 

@@ -28,7 +28,7 @@ COLLABORATIVE_COMMENT_PATTERNS: Final[list[tuple[str, str]]] = [
     (r"#\s*As per your", "As per your"),
 ]
 
-# AI placeholder patterns (C004)
+# Formulaic placeholder patterns (C004)
 # Comment-only patterns: (regex_pattern, kind_description)
 AI_PLACEHOLDER_COMMENT_PATTERNS: Final[list[tuple[str, str]]] = [
     (r"#\s*TODO:\s*Implement\s*$", "bare 'Implement'"),

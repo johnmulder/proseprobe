@@ -5,7 +5,7 @@
 
 ## 1. Purpose
 
-`slop-lint` is a command-line linting tool that detects AI-generated content patterns in Markdown and Python files. It identifies vocabulary, structural, stylistic, and markup patterns commonly associated with AI text generation.
+`slop-lint` is a command-line linting tool that detects bad writing practices in Markdown and Python files. It identifies overused vocabulary, structural clichés, stylistic problems, and markup errors.
 
 ## 2. Requirements
 
@@ -13,8 +13,8 @@
 
 | ID | Requirement | Priority |
 |----|-------------|----------|
-| FR-01 | Scan Markdown files (`.md`, `.mdx`, `.markdown`) for AI patterns | Must |
-| FR-02 | Scan Python files (`.py`) for AI patterns in docstrings and comments | Must |
+| FR-01 | Scan Markdown files (`.md`, `.mdx`, `.markdown`) for bad writing practices | Must |
+| FR-02 | Scan Python files (`.py`) for bad practices in docstrings and comments | Must |
 | FR-03 | Report issues with file path, line number, column, and severity | Must |
 | FR-04 | Support configurable rule selection via CLI and config file | Must |
 | FR-05 | Output in text, JSON, and SARIF formats | Must |
@@ -41,10 +41,10 @@
 
 | Prefix | Category | Count | Description |
 |--------|----------|-------|-------------|
-| `V` | Vocabulary | 5 | AI-specific word and phrase patterns |
+| `V` | Vocabulary | 5 | Overused and clichéd word patterns |
 | `S` | Structure | 7 | Structural and organizational patterns |
 | `T` | Style | 6 | Typographic and formatting issues |
-| `G` | Grammar | 3 | Grammatical patterns characteristic of AI |
+| `G` | Grammar | 3 | Grammatical anti-patterns |
 | `C` | Code | 4 | Python-specific documentation issues |
 | `M` | Markup | 4 | Markdown artifacts and markup errors |
 | **Total** | | **29** | |
@@ -53,8 +53,8 @@
 
 | Level | Description | Default Exit Code Impact |
 |-------|-------------|--------------------------|
-| `error` | Critical issue, likely AI-generated | Contributes to exit code 1 |
-| `warning` | Probable AI pattern | Contributes to exit code 1 |
+| `error` | Critical issue | Contributes to exit code 1 |
+| `warning` | Probable bad practice | Contributes to exit code 1 |
 | `info` | Possible issue, review recommended | Does not affect exit code |
 | `off` | Rule disabled | — |
 
@@ -64,7 +64,7 @@ The following rules support auto-fix with `--fix`:
 
 | Rule | Fix Strategy |
 |------|--------------|
-| V001 | Replace AI vocabulary with suggested alternatives |
+| V001 | Replace overused vocabulary with suggested alternatives |
 | V002 | Remove or rephrase collaborative phrases |
 | M003 | Strip UTM parameters from URLs |
 | T004 | Normalize quote characters |
@@ -74,7 +74,7 @@ The following rules support auto-fix with `--fix`:
 ### 4.1 Commands
 
 ```
-slop-lint check [OPTIONS] [PATHS]...   Check files for AI patterns
+slop-lint check [OPTIONS] [PATHS]...   Check files for bad writing practices
 slop-lint rules                        List all available rules
 slop-lint explain RULE_ID              Show detailed rule documentation
 slop-lint init                         Create .slop-lint.toml config file
@@ -150,9 +150,9 @@ ignore = ["S004"]
 ### 6.1 Text (Default)
 
 ```
-docs/api.md:15:10: V001 AI vocabulary: 'delve' → consider 'explore'
+docs/api.md:15:10: V001 Overused word: 'delve' → consider 'explore'
 docs/api.md:23:1: S001 Rule of three pattern detected
-src/main.py:45:5: C001 AI vocabulary in docstring: 'crucial'
+src/main.py:45:5: C001 Overused word in docstring: 'crucial'
 
 Found 3 issues (2 warnings, 1 info) in 2 files
 ```
@@ -168,7 +168,7 @@ Found 3 issues (2 warnings, 1 info) in 2 files
       "issues": [
         {
           "rule_id": "V001",
-          "message": "AI vocabulary: 'delve' → consider 'explore'",
+          "message": "Overused word: 'delve' → consider 'explore'",
           "line": 15,
           "column": 10,
           "severity": "warning",
@@ -214,7 +214,7 @@ All rules must implement:
 ```python
 class Rule(Protocol):
     id: str           # e.g., "V001"
-    name: str         # e.g., "AI Vocabulary"
+    name: str         # e.g., "Overused Vocabulary"
     description: str  # Full description
     severity: Severity
     fixable: bool
@@ -231,13 +231,13 @@ class Rule(Protocol):
 |----------|---------|----------|
 | Unit tests | Individual rule behavior | `tests/test_rules/` |
 | Integration tests | CLI and full pipeline | `tests/test_integration.py` |
-| Fixture tests | Known AI/human samples | `tests/fixtures/` |
+| Fixture tests | Known bad/clean samples | `tests/fixtures/` |
 | Property tests | Edge cases via hypothesis | `tests/test_properties.py` |
 
 ### 8.2 Fixtures
 
-- `tests/fixtures/ai_generated/` — Known AI-generated samples
-- `tests/fixtures/human_written/` — Human-authored samples for false positive testing
+- `tests/fixtures/ai_generated/` — Samples with known bad practices
+- `tests/fixtures/human_written/` — Clean samples for false positive testing
 
 ## 9. Dependencies
 

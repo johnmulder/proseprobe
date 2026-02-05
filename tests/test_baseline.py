@@ -52,7 +52,7 @@ class TestBaseline:
         # Add an issue
         issue = Issue(
             rule_id="V001",
-            message="AI vocabulary: 'delve'",
+            message="Overused word: 'delve'",
             line=5,
             column=10,
             severity=Severity.WARNING,
@@ -78,7 +78,7 @@ class TestBaseline:
 
         issue = Issue(
             rule_id="V001",
-            message="AI vocabulary: 'delve'",
+            message="Overused word: 'delve'",
             line=5,
             column=10,
             severity=Severity.WARNING,
@@ -101,7 +101,7 @@ class TestBaseline:
 
         issue1 = Issue(
             rule_id="V001",
-            message="AI vocabulary: 'delve'",
+            message="Overused word: 'delve'",
             line=5,
             column=10,
             severity=Severity.WARNING,
@@ -131,7 +131,7 @@ class TestFilterNewIssues:
 
         issue1 = Issue(
             rule_id="V001",
-            message="AI vocabulary: 'delve'",
+            message="Overused word: 'delve'",
             line=5,
             column=10,
             severity=Severity.WARNING,
@@ -164,7 +164,7 @@ class TestFilterNewIssues:
 
         issue = Issue(
             rule_id="V001",
-            message="AI vocabulary: 'delve'",
+            message="Overused word: 'delve'",
             line=5,
             column=10,
             severity=Severity.WARNING,

@@ -1,13 +1,13 @@
 # slop-lint
 
-A Unix-style command-line tool to detect AI-generated content patterns in Markdown and Python files.
+A Unix-style command-line tool to detect and fix bad writing practices in Markdown and Python files.
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Overview
 
-Wikipedia editors have identified numerous patterns that reveal AI-generated content—overused vocabulary, structural tells, promotional language, and markup artifacts. **slop-lint** helps developers and writers detect these patterns in their documentation and code.
+Overused vocabulary, structural clichés, promotional language, and sloppy markup creep into documentation and code all the time. **slop-lint** detects these bad practices and helps you write clearer, more direct prose.
 
 ## Features
 
@@ -68,7 +68,7 @@ slop-lint explain V001
 
 | Prefix | Category | Rules | Description |
 |--------|----------|-------|-------------|
-| `V` | Vocabulary | 5 | AI-specific words and phrases |
+| `V` | Vocabulary | 5 | Overused and clichéd words and phrases |
 | `S` | Structure | 7 | Organizational patterns |
 | `T` | Style | 6 | Typographic issues |
 | `G` | Grammar | 3 | Grammatical patterns |
@@ -78,9 +78,9 @@ slop-lint explain V001
 ### Example Detections
 
 ```
-docs/guide.md:15:10: V001 AI vocabulary: 'delve' → consider 'explore'
+docs/guide.md:15:10: V001 Overused word: 'delve' → consider 'explore'
 docs/guide.md:23:1: S001 Rule of three pattern detected
-src/main.py:45:5: C001 AI vocabulary in docstring: 'crucial'
+src/main.py:45:5: C001 Overused word in docstring: 'crucial'
 ```
 
 ## Configuration
@@ -130,7 +130,7 @@ ignore = ["T001"]
 ### GitHub Actions
 
 ```yaml
-- name: Check for AI patterns
+- name: Check for bad writing practices
   run: |
     pip install slop-lint
     slop-lint check --format sarif . > results.sarif
@@ -178,12 +178,8 @@ ruff check src/
 
 ## Why "slop-lint"?
 
-The tool helps you *clean up* your writing by removing patterns that make text sound machine-generated. Clear, direct writing is better writing—whether for documentation, READMEs, or code comments.
+Sloppy writing is everywhere—vague buzzwords, wall-of-text paragraphs, promotional fluff, broken markup. slop-lint catches these patterns so you can write documentation and code comments that are clear, direct, and worth reading.
 
 ## License
 
 MIT License. See [LICENSE](LICENSE) for details.
-
-## Acknowledgments
-
-Detection patterns are based on research by Wikipedia editors documenting [signs of AI-generated content](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_use) and the characteristics of [large language model](https://en.wikipedia.org/wiki/Large_language_model) outputs.

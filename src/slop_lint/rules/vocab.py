@@ -13,11 +13,11 @@ from slop_lint.rules.base import Issue, Rule, Severity
 
 
 class AIVocabularyRule(Rule):
-    """V001: Detect AI-specific vocabulary."""
+    """V001: Detect overused and clichéd vocabulary."""
 
     id = "V001"
-    name = "AI Vocabulary"
-    description = "Detects overused AI-specific words"
+    name = "Overused Vocabulary"
+    description = "Detects overused and clichéd words"
     severity = Severity.WARNING
     fixable = True
     applies_to = {"markdown"}
@@ -49,7 +49,7 @@ class AIVocabularyRule(Rule):
         self._vocabulary = AI_VOCABULARY | self._additional
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check for AI vocabulary words."""
+        """Check for overused vocabulary words."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             line_lower = line.lower()
@@ -65,7 +65,7 @@ class AIVocabularyRule(Rule):
                 for match in re.finditer(pattern, line_lower):
                     suggestion = VOCABULARY_SUGGESTIONS.get(word)
                     matched_word = match.group()
-                    message = f"AI vocabulary: '{matched_word}'"
+                    message = f"Overused word: '{matched_word}'"
                     if suggestion:
                         message += f" → consider '{suggestion}'"
 
@@ -85,7 +85,7 @@ class AIVocabularyRule(Rule):
         return issues
 
     def fix(self, content: str, issue: Issue) -> str:
-        """Replace AI vocabulary with suggestion."""
+        """Replace overused vocabulary with suggestion."""
         if not issue.suggestion:
             return content
 

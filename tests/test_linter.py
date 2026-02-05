@@ -158,7 +158,7 @@ class TestCheckFile:
         assert isinstance(issues, list)
 
     def test_check_markdown_with_vocabulary(self, tmp_path: Path) -> None:
-        """Test checking markdown file with AI vocabulary."""
+        """Test checking markdown file with overused vocabulary."""
         test_file = tmp_path / "ai.md"
         test_file.write_text("This article delves into the topic deeply.")
 
