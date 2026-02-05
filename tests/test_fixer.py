@@ -2,8 +2,8 @@
 
 from pathlib import Path
 
-from humanize.core.fixer import Fixer
-from humanize.rules.base import Issue, Rule, Severity
+from slop_lint.core.fixer import Fixer
+from slop_lint.rules.base import Issue, Rule, Severity
 
 
 class SimpleMockRule(Rule):

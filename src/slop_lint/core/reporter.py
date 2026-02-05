@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from humanize.rules.base import Issue, Severity
+from slop_lint.rules.base import Issue, Severity
 
 __all__ = ["Reporter"]
 
@@ -82,7 +82,7 @@ class Reporter:
 
     def _format_json(self, results: dict[Path, list[Issue]]) -> str:
         """Format results as JSON."""
-        from humanize import __version__
+        from slop_lint import __version__
 
         output: dict[str, Any] = {
             "version": __version__,
@@ -129,8 +129,8 @@ class Reporter:
 
     def _format_sarif(self, results: dict[Path, list[Issue]]) -> str:
         """Format results as SARIF 2.1.0."""
-        from humanize import __version__
-        from humanize.rules import get_all_rules
+        from slop_lint import __version__
+        from slop_lint.rules import get_all_rules
 
         # Build rule definitions
         rule_definitions = []
@@ -156,9 +156,9 @@ class Reporter:
                 {
                     "tool": {
                         "driver": {
-                            "name": "humanize",
+                            "name": "slop-lint",
                             "version": __version__,
-                            "informationUri": "https://github.com/humanize-cli/humanize",
+                            "informationUri": "https://github.com/slop-lint/slop-lint",
                             "rules": rule_definitions,
                         }
                     },

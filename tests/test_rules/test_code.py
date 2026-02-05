@@ -1,6 +1,6 @@
 """Tests for code rules (C001-C004)."""
 
-from humanize.rules.code import (
+from slop_lint.rules.code import (
     AIPlaceholdersRule,
     CollaborativeCommentsRule,
     DocstringVocabularyRule,

@@ -2,9 +2,12 @@
 
 import re
 
-from humanize.data.style_patterns import ELEGANT_VARIATION_PAIRS, TITLE_CASE_SMALL_WORDS
-from humanize.parsers.markdown import MarkdownParser, is_markdown_file
-from humanize.rules.base import Issue, Rule, Severity
+from slop_lint.data.style_patterns import (
+    ELEGANT_VARIATION_PAIRS,
+    TITLE_CASE_SMALL_WORDS,
+)
+from slop_lint.parsers.markdown import MarkdownParser, is_markdown_file
+from slop_lint.rules.base import Issue, Rule, Severity
 
 
 class TitleCaseHeadingsRule(Rule):

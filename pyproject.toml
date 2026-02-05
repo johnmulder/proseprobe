@@ -3,14 +3,14 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "humanize-cli"
+name = "slop-lint"
 version = "0.1.0"
 description = "Detect AI-generated content patterns in Markdown and Python files"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
 authors = [
-    { name = "humanize-cli contributors" },
+    { name = "slop-lint contributors" },
 ]
 keywords = [
     "ai",
@@ -51,17 +51,17 @@ dev = [
 ]
 
 [project.scripts]
-humanize = "humanize.cli:app"
+slop-lint = "slop_lint.cli:app"
 
 [project.urls]
-Homepage = "https://github.com/humanize-cli/humanize-cli"
-Documentation = "https://github.com/humanize-cli/humanize-cli#readme"
-Repository = "https://github.com/humanize-cli/humanize-cli"
-Issues = "https://github.com/humanize-cli/humanize-cli/issues"
-Changelog = "https://github.com/humanize-cli/humanize-cli/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/slop-lint/slop-lint"
+Documentation = "https://github.com/slop-lint/slop-lint#readme"
+Repository = "https://github.com/slop-lint/slop-lint"
+Issues = "https://github.com/slop-lint/slop-lint/issues"
+Changelog = "https://github.com/slop-lint/slop-lint/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/humanize"]
+packages = ["src/slop_lint"]
 
 [tool.mypy]
 python_version = "3.11"
@@ -94,14 +94,14 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["humanize"]
+known-first-party = ["slop_lint"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra -q"
 
 [tool.coverage.run]
-source = ["src/humanize"]
+source = ["src/slop_lint"]
 branch = true
 
 [tool.coverage.report]

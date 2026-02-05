@@ -1,1 +1,1 @@
-"""Test suite for humanize."""
+"""Test suite for slop-lint."""

@@ -1,4 +1,4 @@
-"""Command-line interface for humanize."""
+"""Command-line interface for slop-lint."""
 
 import time
 from pathlib import Path
@@ -8,13 +8,13 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from humanize.config import load_config
-from humanize.core.linter import Linter
-from humanize.rules import get_all_rules
-from humanize.rules.base import Severity, severity_from_str, severity_rank
+from slop_lint.config import load_config
+from slop_lint.core.linter import Linter
+from slop_lint.rules import get_all_rules
+from slop_lint.rules.base import Severity, severity_from_str, severity_rank
 
 app = typer.Typer(
-    name="humanize",
+    name="slop-lint",
     help="Detect AI-generated content patterns in Markdown and Python files.",
     no_args_is_help=True,
     context_settings={"help_option_names": ["-h", "--help"]},
@@ -128,7 +128,7 @@ def check(
 
     # Handle baseline mode
     if generate_baseline:
-        from humanize.core.baseline import Baseline
+        from slop_lint.core.baseline import Baseline
 
         baseline_obj = Baseline(baseline)
         workspace = paths[0].parent if paths else Path.cwd()
@@ -149,7 +149,7 @@ def check(
         raise typer.Exit(0)
 
     if baseline:
-        from humanize.core.baseline import Baseline, filter_new_issues
+        from slop_lint.core.baseline import Baseline, filter_new_issues
 
         baseline_obj = Baseline(baseline)
         if baseline_obj.load():
@@ -169,12 +169,12 @@ def check(
 
     if not results:
         if format == "json":
-            from humanize.core.reporter import Reporter
+            from slop_lint.core.reporter import Reporter
 
             reporter = Reporter(format="json")
             print(reporter.report({}))
         elif format == "sarif":
-            from humanize.core.reporter import Reporter
+            from slop_lint.core.reporter import Reporter
 
             reporter = Reporter(format="sarif")
             print(reporter.report({}))
@@ -184,7 +184,7 @@ def check(
 
     # Handle --fix mode
     if fix:
-        from humanize.core.fixer import Fixer
+        from slop_lint.core.fixer import Fixer
 
         fixer = Fixer(get_all_rules(config))
         total_fixed = 0
@@ -303,12 +303,12 @@ def check(
     total_issues = sum(len(issues) for issues in results.values())
 
     if format == "json":
-        from humanize.core.reporter import Reporter
+        from slop_lint.core.reporter import Reporter
 
         reporter = Reporter(format="json")
         print(reporter.report(results))
     elif format == "sarif":
-        from humanize.core.reporter import Reporter
+        from slop_lint.core.reporter import Reporter
 
         reporter = Reporter(format="sarif")
         print(reporter.report(results))
@@ -352,16 +352,16 @@ def rules() -> None:
 
 @app.command()
 def init() -> None:
-    """Create a .humanize.toml config file."""
-    config_path = Path(".humanize.toml")
+    """Create a .slop-lint.toml config file."""
+    config_path = Path(".slop-lint.toml")
     if config_path.exists():
         typer.echo(f"Config file already exists: {config_path}", err=True)
         raise typer.Exit(2)
 
-    default_config = """# humanize configuration
-# See: https://github.com/humanize-cli/humanize
+    default_config = """# slop-lint configuration
+# See: https://github.com/slop-lint/slop-lint
 
-[tool.humanize]
+[tool.slop-lint]
 # include = ["*.md", "*.py"]
 # exclude = ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
 # select = ["V", "S", "T", "G", "C", "M"]
@@ -371,14 +371,14 @@ severity = "warning"  # Minimum severity: error, warning, info
 # Per-rule severity overrides
 # NOTE: TOML does not allow both `severity = "warning"` and the table below.
 # If you use overrides, remove the `severity` line above.
-# [tool.humanize.severity]
+# [tool.slop-lint.severity]
 # V001 = "error"
 
-[tool.humanize.vocabulary]
+[tool.slop-lint.vocabulary]
 # additional = ["synergy", "leverage"]
 # allowed = ["crucial"]
 
-[[tool.humanize.per-file-ignores]]
+[[tool.slop-lint.per-file-ignores]]
 # pattern = "tests/*"
 # ignore = ["V001", "V002"]
 """
@@ -407,9 +407,9 @@ def explain(
 @app.command()
 def version() -> None:
     """Show version information."""
-    from humanize import __version__
+    from slop_lint import __version__
 
-    typer.echo(f"humanize {__version__}")
+    typer.echo(f"slop-lint {__version__}")
 
 
 @app.command()

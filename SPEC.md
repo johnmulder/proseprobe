@@ -1,11 +1,11 @@
-# humanize - Technical Specification
+# slop-lint - Technical Specification
 
 > Version: 0.1.0 (Draft)  
 > Last Updated: 2026-01-31
 
 ## 1. Purpose
 
-`humanize` is a command-line linting tool that detects AI-generated content patterns in Markdown and Python files. It identifies vocabulary, structural, stylistic, and markup patterns commonly associated with AI text generation.
+`slop-lint` is a command-line linting tool that detects AI-generated content patterns in Markdown and Python files. It identifies vocabulary, structural, stylistic, and markup patterns commonly associated with AI text generation.
 
 ## 2. Requirements
 
@@ -19,7 +19,7 @@
 | FR-04 | Support configurable rule selection via CLI and config file | Must |
 | FR-05 | Output in text, JSON, and SARIF formats | Must |
 | FR-06 | Auto-fix safe issues (vocabulary substitutions) with `--fix` flag | Should |
-| FR-07 | Support `.humanize.toml` configuration file | Must |
+| FR-07 | Support `.slop-lint.toml` configuration file | Must |
 | FR-08 | Respect `.gitignore` patterns for file discovery | Should |
 | FR-09 | Process files in parallel for performance | Could |
 | FR-10 | Provide `explain` command for rule documentation | Should |
@@ -74,11 +74,11 @@ The following rules support auto-fix with `--fix`:
 ### 4.1 Commands
 
 ```
-humanize check [OPTIONS] [PATHS]...   Check files for AI patterns
-humanize rules                        List all available rules
-humanize explain RULE_ID              Show detailed rule documentation
-humanize init                         Create .humanize.toml config file
-humanize version                      Show version information
+slop-lint check [OPTIONS] [PATHS]...   Check files for AI patterns
+slop-lint rules                        List all available rules
+slop-lint explain RULE_ID              Show detailed rule documentation
+slop-lint init                         Create .slop-lint.toml config file
+slop-lint version                      Show version information
 ```
 
 ### 4.2 Check Command Options
@@ -109,15 +109,15 @@ humanize version                      Show version information
 
 Search order (first found wins):
 1. `--config` CLI argument
-2. `.humanize.toml` in current directory
-3. `pyproject.toml` `[tool.humanize]` section
-4. `.humanize.toml` in parent directories (up to git root)
-5. `~/.config/humanize/config.toml`
+2. `.slop-lint.toml` in current directory
+3. `pyproject.toml` `[tool.slop-lint]` section
+4. `.slop-lint.toml` in parent directories (up to git root)
+5. `~/.config/slop-lint/config.toml`
 
 ### 5.2 Config Schema
 
 ```toml
-[tool.humanize]
+[tool.slop-lint]
 # File patterns (glob syntax)
 include = ["*.md", "*.py"]
 exclude = ["venv/**", "node_modules/**", ".git/**"]
@@ -130,17 +130,17 @@ ignore = []
 severity = "warning"
 
 # Severity overrides per rule
-[tool.humanize.severity]
+[tool.slop-lint.severity]
 V001 = "error"
 S002 = "info"
 
 # Custom vocabulary additions
-[tool.humanize.vocabulary]
+[tool.slop-lint.vocabulary]
 additional = []  # Extra words to flag
 allowed = []     # Domain-specific words to permit
 
 # Per-file rule overrides
-[[tool.humanize.per-file-ignores]]
+[[tool.slop-lint.per-file-ignores]]
 pattern = "CHANGELOG.md"
 ignore = ["S004"]
 ```

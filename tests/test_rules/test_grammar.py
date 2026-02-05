@@ -1,6 +1,6 @@
 """Tests for grammar rules (G001-G003)."""
 
-from humanize.rules.grammar import (
+from slop_lint.rules.grammar import (
     CopulaAvoidanceRule,
     ExcessiveHedgingRule,
     ParticipleChainsRule,

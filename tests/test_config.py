@@ -5,15 +5,15 @@ from pathlib import Path
 
 import pytest
 
-from humanize.config import Config, ThresholdsConfig, find_config_file, load_config
+from slop_lint.config import Config, ThresholdsConfig, find_config_file, load_config
 
 
 class TestFindConfigFile:
     """Tests for find_config_file function."""
 
-    def test_finds_humanize_toml(self, tmp_path: Path) -> None:
-        """Test finding .humanize.toml file."""
-        config_file = tmp_path / ".humanize.toml"
+    def test_finds_slop_lint_toml(self, tmp_path: Path) -> None:
+        """Test finding .slop-lint.toml file."""
+        config_file = tmp_path / ".slop-lint.toml"
         config_file.write_text("[lint]")
 
         result = find_config_file(tmp_path)
@@ -21,25 +21,25 @@ class TestFindConfigFile:
         assert result == config_file
 
     def test_finds_pyproject_toml(self, tmp_path: Path) -> None:
-        """Test finding pyproject.toml with humanize config."""
+        """Test finding pyproject.toml with slop-lint config."""
         config_file = tmp_path / "pyproject.toml"
-        config_file.write_text("[tool.humanize]\nrules = {}")
+        config_file.write_text("[tool.slop-lint]\nrules = {}")
 
         result = find_config_file(tmp_path)
 
         assert result == config_file
 
-    def test_prefers_humanize_toml(self, tmp_path: Path) -> None:
-        """Test that .humanize.toml is preferred over pyproject.toml."""
-        humanize_toml = tmp_path / ".humanize.toml"
-        humanize_toml.write_text("[lint]")
+    def test_prefers_slop_lint_toml(self, tmp_path: Path) -> None:
+        """Test that .slop-lint.toml is preferred over pyproject.toml."""
+        slop_lint_toml = tmp_path / ".slop-lint.toml"
+        slop_lint_toml.write_text("[lint]")
 
         pyproject = tmp_path / "pyproject.toml"
-        pyproject.write_text("[tool.humanize]")
+        pyproject.write_text("[tool.slop-lint]")
 
         result = find_config_file(tmp_path)
 
-        assert result == humanize_toml
+        assert result == slop_lint_toml
 
     def test_returns_none_if_not_found(self, tmp_path: Path) -> None:
         """Test returns None when no config file exists."""
@@ -50,8 +50,8 @@ class TestFindConfigFile:
 
         assert result is None
 
-    def test_ignores_pyproject_without_humanize(self, tmp_path: Path) -> None:
-        """Test ignores pyproject.toml without [tool.humanize]."""
+    def test_ignores_pyproject_without_slop_lint(self, tmp_path: Path) -> None:
+        """Test ignores pyproject.toml without [tool.slop-lint]."""
         pyproject = tmp_path / "pyproject.toml"
         pyproject.write_text("[project]\nname = 'test'")
         # Create a .git to stop search
@@ -63,7 +63,7 @@ class TestFindConfigFile:
 
     def test_searches_parent_directories(self, tmp_path: Path) -> None:
         """Test that config is found in parent directories."""
-        config_file = tmp_path / ".humanize.toml"
+        config_file = tmp_path / ".slop-lint.toml"
         config_file.write_text("[lint]")
 
         subdir = tmp_path / "subdir" / "deep"
@@ -77,10 +77,10 @@ class TestFindConfigFile:
 class TestLoadConfig:
     """Tests for load_config function."""
 
-    def test_load_humanize_toml(self, tmp_path: Path, monkeypatch) -> None:
-        """Test loading .humanize.toml."""
+    def test_load_slop_lint_toml(self, tmp_path: Path, monkeypatch) -> None:
+        """Test loading .slop-lint.toml."""
         monkeypatch.chdir(tmp_path)
-        config_file = tmp_path / ".humanize.toml"
+        config_file = tmp_path / ".slop-lint.toml"
         config_file.write_text("""
 select = ["V001", "V002"]
 ignore = ["S001"]
@@ -100,7 +100,7 @@ severity = "warning"
 [project]
 name = "test"
 
-[tool.humanize]
+[tool.slop-lint]
 select = ["G001"]
 """)
 
@@ -122,7 +122,7 @@ select = ["G001"]
 
     def test_load_config_with_vocabulary(self, tmp_path: Path) -> None:
         """Test loading custom vocabulary config."""
-        config_file = tmp_path / ".humanize.toml"
+        config_file = tmp_path / ".slop-lint.toml"
         config_file.write_text("""
 [vocabulary]
 additional = ["synergy", "leverage"]
@@ -137,7 +137,7 @@ allowed = ["delve"]
 
     def test_load_legacy_lint_section(self, tmp_path: Path) -> None:
         """Test loading legacy [lint] config shape."""
-        config_file = tmp_path / ".humanize.toml"
+        config_file = tmp_path / ".slop-lint.toml"
         config_file.write_text("""
 [lint]
 select = ["V001"]
@@ -158,12 +158,12 @@ severity = "error"
 
     def test_load_severity_overrides_table(self, tmp_path: Path) -> None:
         """Test parsing severity overrides table."""
-        config_file = tmp_path / ".humanize.toml"
+        config_file = tmp_path / ".slop-lint.toml"
         config_file.write_text("""
-[tool.humanize]
+[tool.slop-lint]
 select = ["V"]
 
-[tool.humanize.severity]
+[tool.slop-lint.severity]
 V001 = "error"
 """)
 
@@ -174,7 +174,7 @@ V001 = "error"
 
     def test_load_invalid_toml(self, tmp_path: Path) -> None:
         """Test loading invalid TOML raises error."""
-        config_file = tmp_path / ".humanize.toml"
+        config_file = tmp_path / ".slop-lint.toml"
         config_file.write_text("invalid [ toml ][")
 
         with pytest.raises(tomllib.TOMLDecodeError):
@@ -216,7 +216,7 @@ class TestConfig:
 
     def test_load_thresholds_config(self, tmp_path: Path) -> None:
         """Test loading custom thresholds from config file."""
-        config_file = tmp_path / ".humanize.toml"
+        config_file = tmp_path / ".slop-lint.toml"
         config_file.write_text("""
 [thresholds]
 rule_of_three = 5
@@ -234,7 +234,7 @@ em_dash_overuse = 10
 
     def test_partial_thresholds_config(self, tmp_path: Path) -> None:
         """Test loading partial thresholds uses defaults for missing values."""
-        config_file = tmp_path / ".humanize.toml"
+        config_file = tmp_path / ".slop-lint.toml"
         config_file.write_text("""
 [thresholds]
 rule_of_three = 10

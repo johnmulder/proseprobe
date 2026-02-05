@@ -1,1 +1,1 @@
-"""Benchmarks package for humanize performance testing."""
+"""Benchmarks package for slop-lint performance testing."""

@@ -1,24 +1,24 @@
 """Data files for vocabulary and patterns."""
 
-from humanize.data.code_patterns import (
+from slop_lint.data.code_patterns import (
     AI_PLACEHOLDER_CODE_PATTERNS,
     AI_PLACEHOLDER_COMMENT_PATTERNS,
     AI_PLACEHOLDER_INLINE_PATTERNS,
     COLLABORATIVE_COMMENT_PATTERNS,
     VERBOSE_COMMENT_PATTERNS,
 )
-from humanize.data.patterns import STRUCTURAL_PATTERNS
-from humanize.data.phrases import (
+from slop_lint.data.patterns import STRUCTURAL_PATTERNS
+from slop_lint.data.phrases import (
     COLLABORATIVE_PHRASES,
     KNOWLEDGE_CUTOFF_PATTERNS,
     PROMOTIONAL_PHRASES,
     WEASEL_PHRASES,
 )
-from humanize.data.style_patterns import (
+from slop_lint.data.style_patterns import (
     ELEGANT_VARIATION_PAIRS,
     TITLE_CASE_SMALL_WORDS,
 )
-from humanize.data.vocabulary import (
+from slop_lint.data.vocabulary import (
     AI_VOCABULARY,
     DOCSTRING_AI_VOCABULARY,
     VOCABULARY_SUGGESTIONS,

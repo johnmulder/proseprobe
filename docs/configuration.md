@@ -1,23 +1,23 @@
 # Configuration Reference
 
-humanize can be configured via a `.humanize.toml` file or the `[tool.humanize]` section of `pyproject.toml`.
+slop-lint can be configured via a `.slop-lint.toml` file or the `[tool.slop-lint]` section of `pyproject.toml`.
 
 ## Config File Discovery
 
 Config files are discovered in this order:
 
 1. `--config` CLI argument
-2. `.humanize.toml` in current directory
-3. `pyproject.toml` with `[tool.humanize]` section
-4. `.humanize.toml` in parent directories (up to git root)
-5. `~/.config/humanize/config.toml`
+2. `.slop-lint.toml` in current directory
+3. `pyproject.toml` with `[tool.slop-lint]` section
+4. `.slop-lint.toml` in parent directories (up to git root)
+5. `~/.config/slop-lint/config.toml`
 
 ## Configuration Options
 
 ### File Patterns
 
 ```toml
-[tool.humanize]
+[tool.slop-lint]
 # Glob patterns for files to include
 include = ["*.md", "*.py"]
 
@@ -28,7 +28,7 @@ exclude = ["venv/**", "node_modules/**", ".git/**"]
 ### Rule Selection
 
 ```toml
-[tool.humanize]
+[tool.slop-lint]
 # Rule prefixes or specific rules to enable
 select = ["V", "S", "T", "G", "C", "M"]
 
@@ -39,12 +39,12 @@ ignore = ["T001", "T005"]
 ### Severity Configuration
 
 ```toml
-[tool.humanize]
+[tool.slop-lint]
 # Minimum severity to report
 severity = "warning"  # error, warning, info
 
 # Per-rule severity overrides
-[tool.humanize.severity]
+[tool.slop-lint.severity]
 V001 = "error"      # Upgrade to error
 S002 = "info"       # Downgrade to info
 ```
@@ -52,7 +52,7 @@ S002 = "info"       # Downgrade to info
 ### Custom Vocabulary
 
 ```toml
-[tool.humanize.vocabulary]
+[tool.slop-lint.vocabulary]
 # Additional words to flag
 additional = ["synergy", "utilize"]
 
@@ -63,11 +63,11 @@ allowed = ["crucial", "comprehensive"]
 ### Per-File Ignores
 
 ```toml
-[[tool.humanize.per-file-ignores]]
+[[tool.slop-lint.per-file-ignores]]
 pattern = "CHANGELOG.md"
 ignore = ["S004"]
 
-[[tool.humanize.per-file-ignores]]
+[[tool.slop-lint.per-file-ignores]]
 pattern = "tests/**"
 ignore = ["C001", "C002"]
 ```
@@ -75,7 +75,7 @@ ignore = ["C001", "C002"]
 ## Example Configuration
 
 ```toml
-[tool.humanize]
+[tool.slop-lint]
 include = ["*.md", "*.py", "*.rst"]
 exclude = [
     "venv/**",
@@ -89,20 +89,20 @@ select = ["V", "S", "T", "G", "C", "M"]
 ignore = ["T001", "T005"]
 severity = "warning"
 
-[tool.humanize.severity]
+[tool.slop-lint.severity]
 V001 = "error"
 M002 = "error"
 M004 = "error"
 
-[tool.humanize.vocabulary]
+[tool.slop-lint.vocabulary]
 additional = ["leverage", "synergy"]
 allowed = ["comprehensive"]
 
-[[tool.humanize.per-file-ignores]]
+[[tool.slop-lint.per-file-ignores]]
 pattern = "CHANGELOG.md"
 ignore = ["S004", "V004"]
 
-[[tool.humanize.per-file-ignores]]
+[[tool.slop-lint.per-file-ignores]]
 pattern = "tests/**"
 ignore = ["C001", "C002", "C003"]
 ```
@@ -121,7 +121,7 @@ CLI arguments override config file settings:
 
 ```bash
 # Config says ignore T001, but CLI enables it
-humanize check --select T001 .
+slop-lint check --select T001 .
 ```
 
 ## CLI Options Reference
@@ -152,7 +152,7 @@ Found 2 issue(s)
 ### JSON
 
 ```bash
-humanize check --format json . > report.json
+slop-lint check --format json . > report.json
 ```
 
 ```json
@@ -186,7 +186,7 @@ humanize check --format json . > report.json
 For GitHub Code Scanning integration:
 
 ```bash
-humanize check --format sarif . > results.sarif
+slop-lint check --format sarif . > results.sarif
 ```
 
 ## Exit Codes
@@ -203,10 +203,10 @@ humanize check --format sarif . > results.sarif
 ```yaml
 # .pre-commit-config.yaml
 repos:
-  - repo: https://github.com/yourusername/humanize-cli
+  - repo: https://github.com/yourusername/slop-lint
     rev: v1.0.0
     hooks:
-      - id: humanize
+      - id: slop-lint
         args: [--select, "V001,V002,M002,M003"]
 ```
 
@@ -218,15 +218,15 @@ name: Lint for AI Content
 on: [push, pull_request]
 
 jobs:
-  humanize:
+  slop-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install humanize-cli
-      - run: humanize check --format sarif docs/ > results.sarif
+      - run: pip install slop-lint
+      - run: slop-lint check --format sarif docs/ > results.sarif
         continue-on-error: true
       - uses: github/codeql-action/upload-sarif@v3
         with:

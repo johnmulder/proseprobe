@@ -2,16 +2,16 @@
 
 import re
 
-from humanize.data.code_patterns import (
+from slop_lint.data.code_patterns import (
     AI_PLACEHOLDER_CODE_PATTERNS,
     AI_PLACEHOLDER_COMMENT_PATTERNS,
     AI_PLACEHOLDER_INLINE_PATTERNS,
     COLLABORATIVE_COMMENT_PATTERNS,
     VERBOSE_COMMENT_PATTERNS,
 )
-from humanize.data.vocabulary import DOCSTRING_AI_VOCABULARY
-from humanize.parsers.python import PythonParser
-from humanize.rules.base import Issue, Rule, Severity
+from slop_lint.data.vocabulary import DOCSTRING_AI_VOCABULARY
+from slop_lint.parsers.python import PythonParser
+from slop_lint.rules.base import Issue, Rule, Severity
 
 
 class DocstringVocabularyRule(Rule):

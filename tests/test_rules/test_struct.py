@@ -1,6 +1,6 @@
 """Tests for structural rules (S001-S007)."""
 
-from humanize.rules.struct import (
+from slop_lint.rules.struct import (
     ChallengeConclusionsRule,
     FalseRangesRule,
     InlineHeaderListsRule,

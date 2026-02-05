@@ -4,9 +4,9 @@ from pathlib import Path
 
 import pytest
 
-from humanize.config import Config
-from humanize.core.linter import Linter
-from humanize.rules import get_all_rules
+from slop_lint.config import Config
+from slop_lint.core.linter import Linter
+from slop_lint.rules import get_all_rules
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 AI_GENERATED = FIXTURES_DIR / "ai_generated"

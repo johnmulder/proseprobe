@@ -3,9 +3,9 @@
 import fnmatch
 from pathlib import Path
 
-from humanize.config import Config
-from humanize.parsers.markdown import is_markdown_file
-from humanize.rules.base import Issue, Rule
+from slop_lint.config import Config
+from slop_lint.parsers.markdown import is_markdown_file
+from slop_lint.rules.base import Issue, Rule
 
 __all__ = ["Linter"]
 

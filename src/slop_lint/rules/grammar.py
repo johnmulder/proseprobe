@@ -2,8 +2,8 @@
 
 import re
 
-from humanize.data.patterns import COPULA_AVOIDANCE_PATTERNS, HEDGING_PATTERNS
-from humanize.rules.base import Issue, Rule, Severity
+from slop_lint.data.patterns import COPULA_AVOIDANCE_PATTERNS, HEDGING_PATTERNS
+from slop_lint.rules.base import Issue, Rule, Severity
 
 
 class CopulaAvoidanceRule(Rule):

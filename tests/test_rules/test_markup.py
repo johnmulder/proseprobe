@@ -1,6 +1,6 @@
 """Tests for markup rules (M001-M004)."""
 
-from humanize.rules.markup import (
+from slop_lint.rules.markup import (
     BrokenReferencesRule,
     ChatGPTMarkersRule,
     UTMParametersRule,

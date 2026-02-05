@@ -1,6 +1,6 @@
 """Tests for style rules (T001-T006)."""
 
-from humanize.rules.style import (
+from slop_lint.rules.style import (
     BoldOveruseRule,
     ElegantVariationRule,
     EmDashOveruseRule,
@@ -109,7 +109,7 @@ class TestQuoteInconsistency:
 
     def test_fix_normalizes_quotes(self) -> None:
         """Test that fix normalizes curly quotes to straight."""
-        from humanize.rules.base import Issue, Severity
+        from slop_lint.rules.base import Issue, Severity
 
         text = "He said \u201chello\u201d and \u2018goodbye\u2019"
         rule = QuoteInconsistencyRule()

@@ -1,6 +1,6 @@
 """Tests for Markdown parser."""
 
-from humanize.parsers.markdown import (
+from slop_lint.parsers.markdown import (
     MarkdownLink,
     MarkdownParser,
     MarkdownSection,

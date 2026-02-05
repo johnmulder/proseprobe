@@ -74,10 +74,10 @@ def find_config_file(start_dir: Path | None = None) -> Path | None:
     """Find configuration file.
 
     Search order:
-    1. .humanize.toml in current directory
-    2. pyproject.toml [tool.humanize] section
-    3. .humanize.toml in parent directories (up to git root)
-    4. ~/.config/humanize/config.toml
+    1. .slop-lint.toml in current directory
+    2. pyproject.toml [tool.slop-lint] section
+    3. .slop-lint.toml in parent directories (up to git root)
+    4. ~/.config/slop-lint/config.toml
     """
     if start_dir is None:
         start_dir = Path.cwd()
@@ -85,15 +85,15 @@ def find_config_file(start_dir: Path | None = None) -> Path | None:
     # Check current and parent directories
     current = start_dir.resolve()
     while current != current.parent:
-        humanize_config = current / ".humanize.toml"
-        if humanize_config.exists():
-            return humanize_config
+        slop_lint_config = current / ".slop-lint.toml"
+        if slop_lint_config.exists():
+            return slop_lint_config
 
         pyproject = current / "pyproject.toml"
         if pyproject.exists():
             with open(pyproject, "rb") as f:
                 data = tomllib.load(f)
-                if "tool" in data and "humanize" in data["tool"]:
+                if "tool" in data and "slop-lint" in data["tool"]:
                     return pyproject
 
         # Stop at git root
@@ -103,7 +103,7 @@ def find_config_file(start_dir: Path | None = None) -> Path | None:
         current = current.parent
 
     # Check user config
-    user_config = Path.home() / ".config" / "humanize" / "config.toml"
+    user_config = Path.home() / ".config" / "slop-lint" / "config.toml"
     if user_config.exists():
         return user_config
 
@@ -130,9 +130,9 @@ def load_config(config_path: Path | None = None) -> Config:
 
     # Handle pyproject.toml structure
     if config_path.name == "pyproject.toml":
-        data = data.get("tool", {}).get("humanize", {})
+        data = data.get("tool", {}).get("slop-lint", {})
     else:
-        data = data.get("tool", {}).get("humanize", data)
+        data = data.get("tool", {}).get("slop-lint", data)
 
     return _parse_config(data)
 

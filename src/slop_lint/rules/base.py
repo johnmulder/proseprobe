@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
 
-from humanize.parsers.markdown import iter_non_code_lines, iter_prose_lines
+from slop_lint.parsers.markdown import iter_non_code_lines, iter_prose_lines
 
 __all__ = [
     "Severity",

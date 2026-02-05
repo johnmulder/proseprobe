@@ -2,10 +2,10 @@
 
 from pathlib import Path
 
-from humanize.config import Config, PerFileIgnore
-from humanize.core.linter import Linter
-from humanize.rules import get_all_rules
-from humanize.rules.vocab import AIVocabularyRule
+from slop_lint.config import Config, PerFileIgnore
+from slop_lint.core.linter import Linter
+from slop_lint.rules import get_all_rules
+from slop_lint.rules.vocab import AIVocabularyRule
 
 
 class TestLinter:

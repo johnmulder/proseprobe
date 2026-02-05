@@ -3,8 +3,8 @@
 import json
 from pathlib import Path
 
-from humanize.core.reporter import Reporter
-from humanize.rules.base import Issue, Severity
+from slop_lint.core.reporter import Reporter
+from slop_lint.rules.base import Issue, Severity
 
 
 class TestReporter:

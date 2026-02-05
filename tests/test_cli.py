@@ -4,7 +4,7 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from humanize.cli import app
+from slop_lint.cli import app
 
 runner = CliRunner()
 
@@ -180,12 +180,12 @@ class TestInitCommand:
         result = runner.invoke(app, ["init"])
 
         assert result.exit_code == 0
-        assert (tmp_path / ".humanize.toml").exists()
+        assert (tmp_path / ".slop-lint.toml").exists()
 
     def test_init_fails_if_exists(self, tmp_path: Path, monkeypatch) -> None:
         """Test that init fails if config already exists."""
         monkeypatch.chdir(tmp_path)
-        (tmp_path / ".humanize.toml").write_text("[tool.humanize]")
+        (tmp_path / ".slop-lint.toml").write_text("[tool.slop-lint]")
 
         result = runner.invoke(app, ["init"])
 
@@ -246,7 +246,7 @@ class TestShowConfigFlag:
 
     def test_show_config_with_custom_config(self, tmp_path: Path) -> None:
         """Test --show-config with custom config file."""
-        config_file = tmp_path / ".humanize.toml"
+        config_file = tmp_path / ".slop-lint.toml"
         config_file.write_text('[lint]\nignore = ["V001"]')
         test_file = tmp_path / "test.md"
         test_file.write_text("Clean content.")
@@ -266,7 +266,7 @@ class TestBaselineMode:
         """Test generating a baseline file."""
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
-        baseline_file = tmp_path / ".humanize-baseline.json"
+        baseline_file = tmp_path / ".slop-lint-baseline.json"
 
         result = runner.invoke(
             app,
@@ -287,7 +287,7 @@ class TestBaselineMode:
         """Test that baseline mode filters known issues."""
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
-        baseline_file = tmp_path / ".humanize-baseline.json"
+        baseline_file = tmp_path / ".slop-lint-baseline.json"
 
         # Generate baseline first
         runner.invoke(

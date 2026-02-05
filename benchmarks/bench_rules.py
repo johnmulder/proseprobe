@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Benchmark suite for humanize performance testing.
+"""Benchmark suite for slop-lint performance testing.
 
 Usage:
     python -m benchmarks.bench_rules     # Run benchmarks
@@ -12,8 +12,8 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
-from humanize.rules import get_all_rules
-from humanize.rules.base import Issue, Rule
+from slop_lint.rules import get_all_rules
+from slop_lint.rules.base import Issue, Rule
 
 
 @dataclass

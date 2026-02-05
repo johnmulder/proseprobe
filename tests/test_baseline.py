@@ -2,8 +2,8 @@
 
 from pathlib import Path
 
-from humanize.core.baseline import Baseline, IssueFingerprint, filter_new_issues
-from humanize.rules.base import Issue, Severity
+from slop_lint.core.baseline import Baseline, IssueFingerprint, filter_new_issues
+from slop_lint.rules.base import Issue, Severity
 
 
 class TestIssueFingerprint:
@@ -36,7 +36,7 @@ class TestBaseline:
     """Tests for Baseline class."""
 
     def test_empty_baseline(self, tmp_path: Path) -> None:
-        baseline = Baseline(tmp_path / ".humanize-baseline.json")
+        baseline = Baseline(tmp_path / ".slop-lint-baseline.json")
         assert baseline.count == 0
         assert not baseline.is_loaded
 
@@ -46,7 +46,7 @@ class TestBaseline:
         assert not baseline.is_loaded
 
     def test_save_and_load(self, tmp_path: Path) -> None:
-        baseline_path = tmp_path / ".humanize-baseline.json"
+        baseline_path = tmp_path / ".slop-lint-baseline.json"
         baseline = Baseline(baseline_path)
 
         # Add an issue
@@ -74,7 +74,7 @@ class TestBaseline:
         assert baseline2.count == 1
 
     def test_is_new_issue(self, tmp_path: Path) -> None:
-        baseline = Baseline(tmp_path / ".humanize-baseline.json")
+        baseline = Baseline(tmp_path / ".slop-lint-baseline.json")
 
         issue = Issue(
             rule_id="V001",
@@ -97,7 +97,7 @@ class TestBaseline:
         assert not baseline.is_new_issue(issue, file_path, content, tmp_path)
 
     def test_different_issues_are_new(self, tmp_path: Path) -> None:
-        baseline = Baseline(tmp_path / ".humanize-baseline.json")
+        baseline = Baseline(tmp_path / ".slop-lint-baseline.json")
 
         issue1 = Issue(
             rule_id="V001",
@@ -127,7 +127,7 @@ class TestFilterNewIssues:
     """Tests for filter_new_issues function."""
 
     def test_filter_removes_known_issues(self, tmp_path: Path) -> None:
-        baseline = Baseline(tmp_path / ".humanize-baseline.json")
+        baseline = Baseline(tmp_path / ".slop-lint-baseline.json")
 
         issue1 = Issue(
             rule_id="V001",
@@ -160,7 +160,7 @@ class TestFilterNewIssues:
         assert filtered[file_path][0].rule_id == "V002"
 
     def test_filter_empty_when_all_known(self, tmp_path: Path) -> None:
-        baseline = Baseline(tmp_path / ".humanize-baseline.json")
+        baseline = Baseline(tmp_path / ".slop-lint-baseline.json")
 
         issue = Issue(
             rule_id="V001",

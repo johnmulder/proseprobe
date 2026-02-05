@@ -1,6 +1,6 @@
 """Tests for Python parser."""
 
-from humanize.parsers.python import Comment, Docstring, PythonParser
+from slop_lint.parsers.python import Comment, Docstring, PythonParser
 
 
 class TestPythonParser:

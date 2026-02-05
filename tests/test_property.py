@@ -11,25 +11,25 @@ import pytest
 from hypothesis import HealthCheck, assume, given, settings
 from hypothesis import strategies as st
 
-from humanize.rules.base import Issue, Severity
-from humanize.rules.code import (
+from slop_lint.rules.base import Issue, Severity
+from slop_lint.rules.code import (
     AIPlaceholdersRule,
     CollaborativeCommentsRule,
     DocstringVocabularyRule,
     VerboseCommentsRule,
 )
-from humanize.rules.grammar import (
+from slop_lint.rules.grammar import (
     CopulaAvoidanceRule,
     ExcessiveHedgingRule,
     ParticipleChainsRule,
 )
-from humanize.rules.markup import (
+from slop_lint.rules.markup import (
     BrokenReferencesRule,
     ChatGPTMarkersRule,
     UTMParametersRule,
     WrongMarkupRule,
 )
-from humanize.rules.struct import (
+from slop_lint.rules.struct import (
     ChallengeConclusionsRule,
     FalseRangesRule,
     InlineHeaderListsRule,
@@ -38,7 +38,7 @@ from humanize.rules.struct import (
     SignificanceEmphasisRule,
     SuperficialAnalysisRule,
 )
-from humanize.rules.style import (
+from slop_lint.rules.style import (
     BoldOveruseRule,
     ElegantVariationRule,
     EmDashOveruseRule,
@@ -46,7 +46,7 @@ from humanize.rules.style import (
     QuoteInconsistencyRule,
     TitleCaseHeadingsRule,
 )
-from humanize.rules.vocab import (
+from slop_lint.rules.vocab import (
     AIVocabularyRule,
     CollaborativePhrasesRule,
     KnowledgeCutoffRule,

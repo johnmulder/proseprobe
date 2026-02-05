@@ -2,14 +2,14 @@
 
 import re
 
-from humanize.data.phrases import (
+from slop_lint.data.phrases import (
     COLLABORATIVE_PHRASES,
     KNOWLEDGE_CUTOFF_PATTERNS,
     PROMOTIONAL_PHRASES,
     WEASEL_PHRASES,
 )
-from humanize.data.vocabulary import AI_VOCABULARY, VOCABULARY_SUGGESTIONS
-from humanize.rules.base import Issue, Rule, Severity
+from slop_lint.data.vocabulary import AI_VOCABULARY, VOCABULARY_SUGGESTIONS
+from slop_lint.rules.base import Issue, Rule, Severity
 
 
 class AIVocabularyRule(Rule):

@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- **Watch mode**: `humanize watch <paths>` for continuous file monitoring
+- **Watch mode**: `slop-lint watch <paths>` for continuous file monitoring
 - **Baseline mode**: `--baseline` and `--generate-baseline` for gradual adoption
 - **Interactive fix**: `--fix --interactive` to confirm each fix individually
 - `--dry-run` flag to preview fixes without modifying files
@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2026-02-01
 
 ### Added
-- Initial release of humanize CLI
+- Initial release of slop-lint CLI
 - 29 detection rules across 6 categories:
   - **V (Vocabulary)**: V001-V005 - AI-specific words and phrases
   - **S (Structure)**: S001-S007 - Organizational patterns
@@ -40,11 +40,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `check` - Lint files for AI content patterns
   - `rules` - List all available rules
   - `explain` - Explain a specific rule
-  - `init` - Create a `.humanize.toml` config file
+  - `init` - Create a `.slop-lint.toml` config file
   - `version` - Show version information
 - Output formats: text, JSON, SARIF
 - Auto-fix support for fixable rules
-- Configuration via `.humanize.toml` or `pyproject.toml`
+- Configuration via `.slop-lint.toml` or `pyproject.toml`
 - Per-file ignore patterns
 - Custom vocabulary (additional/allowed words)
 - 129 tests with 90%+ code coverage
@@ -54,5 +54,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Strict mypy type checking
 - Dependencies: typer, rich, tomli, mistune, regex
 
-[Unreleased]: https://github.com/humanize-cli/humanize-cli/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/humanize-cli/humanize-cli/releases/tag/v0.1.0
+[Unreleased]: https://github.com/slop-lint/slop-lint/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/slop-lint/slop-lint/releases/tag/v0.1.0

@@ -2,7 +2,7 @@
 
 import re
 
-from humanize.data.patterns import (
+from slop_lint.data.patterns import (
     CHALLENGE_CONCLUSION_PATTERNS,
     INLINE_HEADER_LIST_PATTERN,
     NEGATIVE_PARALLELISM_PATTERNS,
@@ -10,7 +10,7 @@ from humanize.data.patterns import (
     RULE_OF_THREE_PATTERNS,
     SIGNIFICANCE_PATTERNS,
 )
-from humanize.rules.base import Issue, Rule, Severity
+from slop_lint.rules.base import Issue, Rule, Severity
 
 
 class RuleOfThreeRule(Rule):

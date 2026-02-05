@@ -9,7 +9,7 @@ import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-from humanize.rules.base import Issue
+from slop_lint.rules.base import Issue
 
 
 @dataclass
@@ -43,9 +43,9 @@ class Baseline:
         """Initialize baseline.
 
         Args:
-            baseline_path: Path to baseline file. Defaults to .humanize-baseline.json
+            baseline_path: Path to baseline file. Defaults to .slop-lint-baseline.json
         """
-        self.baseline_path = baseline_path or Path(".humanize-baseline.json")
+        self.baseline_path = baseline_path or Path(".slop-lint-baseline.json")
         self._fingerprints: set[str] = set()
         self._loaded = False
 

@@ -3,8 +3,8 @@
 import re
 from typing import ClassVar
 
-from humanize.parsers.markdown import is_markdown_file
-from humanize.rules.base import Issue, Rule, Severity, remove_text_range
+from slop_lint.parsers.markdown import is_markdown_file
+from slop_lint.rules.base import Issue, Rule, Severity, remove_text_range
 
 
 class WrongMarkupRule(Rule):
@@ -110,7 +110,7 @@ class UTMParametersRule(Rule):
         """Check for AI-related UTM parameters."""
         issues: list[Issue] = []
         if is_markdown_file(filename):
-            from humanize.parsers.markdown import MarkdownParser
+            from slop_lint.parsers.markdown import MarkdownParser
 
             parser = MarkdownParser(content)
             for link in parser.get_links():

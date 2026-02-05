@@ -31,7 +31,7 @@ test:
 
 # Run tests with coverage
 test-cov:
-	$(PYTEST) tests/ -v --cov=src/humanize --cov-report=term-missing --cov-report=html
+	$(PYTEST) tests/ -v --cov=src/slop_lint --cov-report=term-missing --cov-report=html
 
 # Run linter
 lint:
@@ -66,9 +66,9 @@ clean:
 build: clean
 	$(PYTHON) -m build
 
-# Run humanize on itself (dogfooding)
+# Run slop-lint on itself (dogfooding)
 dogfood:
-	$(PYTHON) -m humanize check README.md docs/ --baseline .humanize-baseline.json
+	$(PYTHON) -m slop_lint check README.md docs/ --baseline .slop-lint-baseline.json
 
 # Quick check for development
 quick:
@@ -98,23 +98,23 @@ doc-audit:
 # Verify CLI matches documented commands
 spec-verify:
 	@echo "Verifying CLI commands match SPEC.md..."
-	@$(PYTHON) -m humanize --help | grep -q "check" || (echo "ERROR: 'check' command missing" && exit 1)
-	@$(PYTHON) -m humanize --help | grep -q "rules" || (echo "ERROR: 'rules' command missing" && exit 1)
-	@$(PYTHON) -m humanize --help | grep -q "explain" || (echo "ERROR: 'explain' command missing" && exit 1)
-	@$(PYTHON) -m humanize --help | grep -q "init" || (echo "ERROR: 'init' command missing" && exit 1)
-	@$(PYTHON) -m humanize --help | grep -q "version" || (echo "ERROR: 'version' command missing" && exit 1)
+	@$(PYTHON) -m slop_lint --help | grep -q "check" || (echo "ERROR: 'check' command missing" && exit 1)
+	@$(PYTHON) -m slop_lint --help | grep -q "rules" || (echo "ERROR: 'rules' command missing" && exit 1)
+	@$(PYTHON) -m slop_lint --help | grep -q "explain" || (echo "ERROR: 'explain' command missing" && exit 1)
+	@$(PYTHON) -m slop_lint --help | grep -q "init" || (echo "ERROR: 'init' command missing" && exit 1)
+	@$(PYTHON) -m slop_lint --help | grep -q "version" || (echo "ERROR: 'version' command missing" && exit 1)
 	@echo "Verifying check command options..."
-	@$(PYTHON) -m humanize check --help | grep -q "\-\-fix" || (echo "ERROR: --fix option missing" && exit 1)
-	@$(PYTHON) -m humanize check --help | grep -q "\-\-format" || (echo "ERROR: --format option missing" && exit 1)
-	@$(PYTHON) -m humanize check --help | grep -q "\-\-select" || (echo "ERROR: --select option missing" && exit 1)
-	@$(PYTHON) -m humanize check --help | grep -q "\-\-ignore" || (echo "ERROR: --ignore option missing" && exit 1)
-	@$(PYTHON) -m humanize check --help | grep -q "\-\-config" || (echo "ERROR: --config option missing" && exit 1)
-	@$(PYTHON) -m humanize check --help | grep -q "\-\-severity" || (echo "ERROR: --severity option missing" && exit 1)
+	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-fix" || (echo "ERROR: --fix option missing" && exit 1)
+	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-format" || (echo "ERROR: --format option missing" && exit 1)
+	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-select" || (echo "ERROR: --select option missing" && exit 1)
+	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-ignore" || (echo "ERROR: --ignore option missing" && exit 1)
+	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-config" || (echo "ERROR: --config option missing" && exit 1)
+	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-severity" || (echo "ERROR: --severity option missing" && exit 1)
 	@echo "✓ CLI matches specification"
 
 # Check test coverage meets threshold (90%)
 coverage-analyze:
 	@echo "Running coverage analysis..."
-	@$(PYTEST) tests/ --cov=src/humanize --cov-report=term-missing --cov-fail-under=90 -q || \
+	@$(PYTEST) tests/ --cov=src/slop_lint --cov-report=term-missing --cov-fail-under=90 -q || \
 		(echo "WARNING: Coverage below 90% threshold. Run 'make test-cov' for details." && exit 1)
 	@echo "✓ Coverage meets 90% threshold"

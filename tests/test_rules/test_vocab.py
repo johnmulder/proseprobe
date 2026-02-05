@@ -2,10 +2,10 @@
 
 import pytest
 
-from humanize.config import Config
-from humanize.rules import get_all_rules
-from humanize.rules.base import Severity
-from humanize.rules.vocab import (
+from slop_lint.config import Config
+from slop_lint.rules import get_all_rules
+from slop_lint.rules.base import Severity
+from slop_lint.rules.vocab import (
     AIVocabularyRule,
     CollaborativePhrasesRule,
     KnowledgeCutoffRule,

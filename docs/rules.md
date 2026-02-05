@@ -1,6 +1,6 @@
 # Rule Reference
 
-This document describes all detection rules available in humanize.
+This document describes all detection rules available in slop-lint.
 
 ---
 

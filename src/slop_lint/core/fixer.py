@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from humanize.rules.base import Issue, Rule
+from slop_lint.rules.base import Issue, Rule
 
 __all__ = ["Fixer"]
 

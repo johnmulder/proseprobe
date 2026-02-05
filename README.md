@@ -1,4 +1,4 @@
-# humanize
+# slop-lint
 
 A Unix-style command-line tool to detect AI-generated content patterns in Markdown and Python files.
 
@@ -7,61 +7,61 @@ A Unix-style command-line tool to detect AI-generated content patterns in Markdo
 
 ## Overview
 
-Wikipedia editors have identified numerous patterns that reveal AI-generated content—overused vocabulary, structural tells, promotional language, and markup artifacts. **humanize** helps developers and writers detect these patterns in their documentation and code.
+Wikipedia editors have identified numerous patterns that reveal AI-generated content—overused vocabulary, structural tells, promotional language, and markup artifacts. **slop-lint** helps developers and writers detect these patterns in their documentation and code.
 
 ## Features
 
 - 🔍 **29 detection rules** across 6 categories
 - 📝 Scans Markdown (`.md`, `.mdx`) and Python (`.py`) files
 - 🔧 Auto-fix for safe vocabulary substitutions
-- ⚙️ Configurable via `.humanize.toml`
+- ⚙️ Configurable via `.slop-lint.toml`
 - 📊 Multiple output formats (text, JSON, SARIF)
 - 🚀 Fast, parallel file processing
 
 ## Installation
 
 ```bash
-pip install humanize-cli
+pip install slop-lint
 ```
 
 Or with [pipx](https://pipx.pypa.io/):
 
 ```bash
-pipx install humanize-cli
+pipx install slop-lint
 ```
 
 ## Quick Start
 
 ```bash
 # Check current directory
-humanize check .
+slop-lint check .
 
 # Check specific files
-humanize check README.md docs/
+slop-lint check README.md docs/
 
 # Auto-fix safe issues
-humanize check --fix .
+slop-lint check --fix .
 
 # Interactive fix (confirm each change)
-humanize check --fix --interactive .
+slop-lint check --fix --interactive .
 
 # Output as JSON
-humanize check --format json .
+slop-lint check --format json .
 
 # Watch mode (continuous checking)
-humanize watch .
+slop-lint watch .
 
 # Generate baseline for gradual adoption
-humanize check --generate-baseline .
+slop-lint check --generate-baseline .
 
 # Check only new issues (not in baseline)
-humanize check --baseline .humanize-baseline.json .
+slop-lint check --baseline .slop-lint-baseline.json .
 
 # List all rules
-humanize rules
+slop-lint rules
 
 # Explain a specific rule
-humanize explain V001
+slop-lint explain V001
 ```
 
 ## Detection Categories
@@ -85,10 +85,10 @@ src/main.py:45:5: C001 AI vocabulary in docstring: 'crucial'
 
 ## Configuration
 
-Create a `.humanize.toml` in your project root:
+Create a `.slop-lint.toml` in your project root:
 
 ```toml
-[tool.humanize]
+[tool.slop-lint]
 include = ["*.md", "*.py"]
 exclude = ["venv/**", "node_modules/**"]
 
@@ -96,15 +96,15 @@ exclude = ["venv/**", "node_modules/**"]
 ignore = ["T001", "T005"]
 
 # Upgrade severity
-[tool.humanize.severity]
+[tool.slop-lint.severity]
 V001 = "error"
 
 # Allow domain-specific vocabulary
-[tool.humanize.vocabulary]
+[tool.slop-lint.vocabulary]
 allowed = ["crucial", "comprehensive"]
 
 # Per-file overrides
-[[tool.humanize.per-file-ignores]]
+[[tool.slop-lint.per-file-ignores]]
 pattern = "CHANGELOG.md"
 ignore = ["S004"]
 ```
@@ -112,7 +112,7 @@ ignore = ["S004"]
 Or add to `pyproject.toml`:
 
 ```toml
-[tool.humanize]
+[tool.slop-lint]
 ignore = ["T001"]
 ```
 
@@ -132,8 +132,8 @@ ignore = ["T001"]
 ```yaml
 - name: Check for AI patterns
   run: |
-    pip install humanize-cli
-    humanize check --format sarif . > results.sarif
+    pip install slop-lint
+    slop-lint check --format sarif . > results.sarif
     
 - name: Upload SARIF
   uses: github/codeql-action/upload-sarif@v2
@@ -145,18 +145,18 @@ ignore = ["T001"]
 
 ```yaml
 repos:
-  - repo: https://github.com/yourusername/humanize-cli
+  - repo: https://github.com/yourusername/slop-lint
     rev: v0.1.0
     hooks:
-      - id: humanize
+      - id: slop-lint
 ```
 
 ## Development
 
 ```bash
 # Clone and install
-git clone https://github.com/yourusername/humanize-cli.git
-cd humanize-cli
+git clone https://github.com/yourusername/slop-lint.git
+cd slop-lint
 pip install -e ".[dev]"
 
 # Run tests
@@ -176,9 +176,9 @@ ruff check src/
 - [docs/rules.md](docs/rules.md) — Detailed rule documentation
 - [docs/configuration.md](docs/configuration.md) — Configuration reference
 
-## Why "humanize"?
+## Why "slop-lint"?
 
-The tool helps you *humanize* your writing by removing patterns that make text sound machine-generated. Clear, direct writing is better writing—whether for documentation, READMEs, or code comments.
+The tool helps you *clean up* your writing by removing patterns that make text sound machine-generated. Clear, direct writing is better writing—whether for documentation, READMEs, or code comments.
 
 ## License
 
