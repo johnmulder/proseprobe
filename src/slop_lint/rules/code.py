@@ -21,7 +21,6 @@ class DocstringVocabularyRule(Rule):
     name = "Docstring Vocabulary"
     description = "Detects overused words in Python docstrings"
     severity = Severity.WARNING
-    fixable = True
     applies_to = {"python"}
 
     def __init__(
@@ -63,44 +62,11 @@ class DocstringVocabularyRule(Rule):
                             line=doc.line,
                             column=1,
                             severity=self.severity,
-                            fixable=replacement is not None,
                             suggestion=replacement,
                         )
                     )
 
         return issues
-
-    def fix(self, content: str, issue: Issue) -> str:
-        """Replace overused vocabulary in docstrings with suggestion."""
-        if not issue.suggestion:
-            return content
-
-        # Extract the word from the message
-        # Message format: "Overused word in docstring: 'word'"
-        import re as re_module
-
-        word_match = re_module.search(r"'(\w+)'", issue.message)
-        if not word_match:
-            return content
-
-        word = word_match.group(1)
-
-        # Replace the word case-insensitively, preserving case
-        def replace_preserving_case(match: re_module.Match[str]) -> str:
-            original = match.group(0)
-            replacement = issue.suggestion
-            if not replacement:
-                return original
-            if original.isupper():
-                return replacement.upper()
-            elif original[0].isupper():
-                return replacement.capitalize()
-            return replacement
-
-        pattern = rf"\b{word}\b"
-        return re_module.sub(
-            pattern, replace_preserving_case, content, flags=re_module.IGNORECASE
-        )
 
 
 class VerboseCommentsRule(Rule):
@@ -110,7 +76,6 @@ class VerboseCommentsRule(Rule):
     name = "Verbose Comments"
     description = "Detects comments with excessive verbosity patterns"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"python"}
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -146,7 +111,6 @@ class CollaborativeCommentsRule(Rule):
     name = "Collaborative Comments"
     description = "Detects 'I hope this helps' in # comments"
     severity = Severity.WARNING
-    fixable = False
     applies_to = {"python"}
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -181,7 +145,6 @@ class AIPlaceholdersRule(Rule):
     name = "Formulaic Placeholders"
     description = "Detects generic TODO patterns and boilerplate"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"python"}
 
     def check(self, content: str, filename: str) -> list[Issue]:

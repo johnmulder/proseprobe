@@ -1,6 +1,6 @@
 # slop-lint
 
-A Unix-style command-line tool to detect and fix bad writing practices in Markdown and Python files.
+A Unix-style command-line tool to detect bad writing practices in Markdown and Python files.
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -14,7 +14,6 @@ Overused vocabulary, structural clichés, promotional language, and sloppy marku
 - 🔍 **29 detection rules** across 6 categories
 - 📝 Scans Markdown (`.md`, `.mdx`) and Python (`.py`) files
 - 🎯 **Confidence levels** (high/medium/low) to reduce noise
-- 🔧 Auto-fix for safe vocabulary substitutions
 - ⚙️ Configurable via `.slop-lint.toml`
 - 📊 Multiple output formats (text, JSON, SARIF)
 - 🚀 Fast, parallel file processing
@@ -39,12 +38,6 @@ slop-lint check .
 
 # Check specific files
 slop-lint check README.md docs/
-
-# Auto-fix safe issues
-slop-lint check --fix .
-
-# Interactive fix (confirm each change)
-slop-lint check --fix --interactive .
 
 # Output as JSON
 slop-lint check --format json .

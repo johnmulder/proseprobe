@@ -18,11 +18,10 @@
 | FR-03 | Report issues with file path, line number, column, and severity | Must |
 | FR-04 | Support configurable rule selection via CLI and config file | Must |
 | FR-05 | Output in text, JSON, and SARIF formats | Must |
-| FR-06 | Auto-fix safe issues (vocabulary substitutions) with `--fix` flag | Should |
-| FR-07 | Support `.slop-lint.toml` configuration file | Must |
-| FR-08 | Respect `.gitignore` patterns for file discovery | Should |
-| FR-09 | Process files in parallel for performance | Could |
-| FR-10 | Provide `explain` command for rule documentation | Should |
+| FR-06 | Support `.slop-lint.toml` configuration file | Must |
+| FR-07 | Respect `.gitignore` patterns for file discovery | Should |
+| FR-08 | Process files in parallel for performance | Could |
+| FR-09 | Provide `explain` command for rule documentation | Should |
 
 ### 2.2 Non-Functional Requirements
 
@@ -58,17 +57,6 @@
 | `info` | Possible issue, review recommended | Does not affect exit code |
 | `off` | Rule disabled | — |
 
-### 3.3 Fixable Rules
-
-The following rules support auto-fix with `--fix`:
-
-| Rule | Fix Strategy |
-|------|--------------|
-| V001 | Replace overused vocabulary with suggested alternatives |
-| V002 | Remove or rephrase collaborative phrases |
-| M003 | Strip UTM parameters from URLs |
-| T004 | Normalize quote characters |
-
 ## 4. Command-Line Interface
 
 ### 4.1 Commands
@@ -85,7 +73,6 @@ slop-lint version                      Show version information
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `--fix` | flag | false | Apply auto-fixes for fixable issues |
 | `--format` | choice | text | Output format: text, json, sarif |
 | `--select` | string | all | Comma-separated rules/prefixes to enable |
 | `--ignore` | string | none | Comma-separated rules/prefixes to disable |
@@ -179,8 +166,7 @@ Confidence: 1 high, 2 medium, 0 low
           "line": 15,
           "column": 10,
           "severity": "warning",
-          "confidence": "high",
-          "fixable": true
+          "confidence": "high"
         }
       ]
     }
@@ -209,7 +195,6 @@ Standard SARIF 2.1.0 format for GitHub Code Scanning integration.
 | `config` | Configuration loading and merging |
 | `core/linter` | File discovery, rule orchestration |
 | `core/reporter` | Output formatting (text/JSON/SARIF) |
-| `core/fixer` | Apply fixes to files |
 | `rules/base` | Abstract rule interface |
 | `rules/*` | Rule implementations by category |
 | `parsers/*` | Markdown and Python AST parsing |
@@ -225,10 +210,8 @@ class Rule(Protocol):
     name: str         # e.g., "Overused Vocabulary"
     description: str  # Full description
     severity: Severity
-    fixable: bool
     
     def check(self, content: str, filename: str) -> list[Issue]: ...
-    def fix(self, content: str, issue: Issue) -> str: ...
 ```
 
 ### 7.3 Confidence Levels

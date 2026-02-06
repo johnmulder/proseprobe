@@ -67,7 +67,7 @@ AI_VOCABULARY_TIER3 = {
 # Combined vocabulary (all tiers)
 AI_VOCABULARY = AI_VOCABULARY_TIER1 | AI_VOCABULARY_TIER2 | AI_VOCABULARY_TIER3
 
-# Suggested replacements for fixable rules
+# Suggested replacements for diagnostic output
 VOCABULARY_SUGGESTIONS: dict[str, str] = {
     # Tier 1
     "delve": "explore",

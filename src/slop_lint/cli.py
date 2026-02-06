@@ -29,7 +29,7 @@ def _parse_confidence(value: str) -> Confidence | None:
 
 app = typer.Typer(
     name="slop-lint",
-    help="Detect and fix bad writing practices in Markdown and Python files.",
+    help="Detect bad writing practices in Markdown and Python files.",
     no_args_is_help=True,
     context_settings={"help_option_names": ["-h", "--help"]},
 )
@@ -42,16 +42,6 @@ def check(
         list[Path],
         typer.Argument(help="Files or directories to check"),
     ],
-    fix: Annotated[
-        bool,
-        typer.Option("--fix", help="Apply auto-fixes for fixable issues"),
-    ] = False,
-    dry_run: Annotated[
-        bool,
-        typer.Option(
-            "--dry-run", help="Show what fixes would be applied without writing"
-        ),
-    ] = False,
     show_config: Annotated[
         bool,
         typer.Option("--show-config", help="Display configuration and exit"),
@@ -94,10 +84,6 @@ def check(
             "--generate-baseline", help="Generate baseline file from current issues"
         ),
     ] = False,
-    interactive: Annotated[
-        bool,
-        typer.Option("--interactive", "-I", help="Interactively confirm each fix"),
-    ] = False,
     min_confidence: Annotated[
         str | None,
         typer.Option(
@@ -134,8 +120,6 @@ def check(
         if config.severity_overrides:
             console.print(f"  Severity overrides: {config.severity_overrides}")
         console.print(f"  Output format: {format}")
-        console.print(f"  Fix mode: {fix}")
-        console.print(f"  Dry run: {dry_run}")
         raise typer.Exit(0)
 
     # Create linter and register rules
@@ -220,123 +204,6 @@ def check(
         elif not quiet:
             console.print("[green]✓[/green] No issues found!")
         raise typer.Exit(0)
-
-    # Handle --fix mode
-    if fix:
-        from slop_lint.core.fixer import Fixer
-
-        fixer = Fixer(get_all_rules(config))
-        total_fixed = 0
-        total_skipped = 0
-
-        for file_path, issues in results.items():
-            fixable = [i for i in issues if i.fixable]
-            if not fixable:
-                continue
-
-            if dry_run:
-                # Show what would be fixed without modifying
-                content, num_fixes = fixer.fix_file(file_path, issues)
-                if num_fixes > 0:
-                    console.print(
-                        f"[bold]{file_path}[/bold]: Would fix {num_fixes} issue(s)"
-                    )
-                    if verbose:
-                        for issue in fixable:
-                            console.print(f"  - {issue.rule_id}: {issue.message}")
-            elif interactive:
-                # Interactive mode: prompt for each fix
-                content = file_path.read_text(encoding="utf-8")
-                file_fixed = 0
-
-                # Sort by position (reverse) for safe application
-                fixable.sort(key=lambda i: (i.line, i.column), reverse=True)
-
-                for issue in fixable:
-                    # Show context
-                    lines = content.split("\n")
-                    line_idx = issue.line - 1
-                    start = max(0, line_idx - 1)
-                    end = min(len(lines), line_idx + 2)
-
-                    console.print(f"\n[bold]{file_path}:{issue.line}[/bold]")
-                    console.print(f"[cyan]{issue.rule_id}[/cyan]: {issue.message}")
-                    if issue.suggestion:
-                        console.print(f"[green]Suggestion:[/green] {issue.suggestion}")
-                    console.print("\n[dim]Context:[/dim]")
-                    for i, line in enumerate(lines[start:end], start=start + 1):
-                        marker = "→" if i == issue.line else " "
-                        console.print(f"  {marker} {i:4d} | {line}")
-
-                    # Prompt user
-                    response = typer.prompt(
-                        "\nApply fix? [y]es / [n]o / [a]ll / [q]uit",
-                        default="y",
-                    ).lower()
-
-                    if response in ("y", "yes"):
-                        fix_rule = fixer._rules.get(issue.rule_id)
-                        if fix_rule:
-                            new_content = fix_rule.fix(content, issue)
-                            if new_content != content:
-                                content = new_content
-                                file_fixed += 1
-                                console.print("[green]✓ Fixed[/green]")
-                    elif response in ("a", "all"):
-                        # Fix this and all remaining
-                        fix_rule = fixer._rules.get(issue.rule_id)
-                        if fix_rule:
-                            new_content = fix_rule.fix(content, issue)
-                            if new_content != content:
-                                content = new_content
-                                file_fixed += 1
-
-                        # Fix remaining without prompting
-                        remaining = fixable[fixable.index(issue) + 1 :]
-                        for rem_issue in remaining:
-                            rem_rule = fixer._rules.get(rem_issue.rule_id)
-                            if rem_rule:
-                                new_content = rem_rule.fix(content, rem_issue)
-                                if new_content != content:
-                                    content = new_content
-                                    file_fixed += 1
-                        console.print("[green]✓ Applied all remaining fixes[/green]")
-                        break
-                    elif response in ("q", "quit"):
-                        console.print("[yellow]Quitting...[/yellow]")
-                        if file_fixed > 0:
-                            file_path.write_text(content, encoding="utf-8")
-                            total_fixed += file_fixed
-                        raise typer.Exit(0)
-                    else:
-                        total_skipped += 1
-                        console.print("[dim]Skipped[/dim]")
-
-                # Write changes for this file
-                if file_fixed > 0:
-                    file_path.write_text(content, encoding="utf-8")
-                    total_fixed += file_fixed
-                    console.print(
-                        f"\n[bold]{file_path}[/bold]: Fixed {file_fixed} issue(s)"
-                    )
-            else:
-                # Actually apply fixes
-                num_fixes = fixer.fix_and_write(file_path, issues)
-                if num_fixes > 0:
-                    console.print(
-                        f"[bold]{file_path}[/bold]: Fixed {num_fixes} issue(s)"
-                    )
-                total_fixed += num_fixes
-
-        if dry_run:
-            console.print("\n[yellow]Dry run:[/yellow] No files were modified.")
-            raise typer.Exit(0)
-        elif total_fixed > 0:
-            msg = f"Fixed {total_fixed} issue(s)"
-            if interactive and total_skipped > 0:
-                msg += f", skipped {total_skipped}"
-            console.print(f"\n[green]{msg}[/green]")
-            raise typer.Exit(0)
 
     # Output results
     total_issues = sum(len(issues) for issues in results.values())
@@ -451,7 +318,6 @@ def explain(
     console.print(f"[bold cyan]{rule.id}[/bold cyan]: {rule.name}")
     console.print(f"\n[bold]Description:[/bold]\n{rule.description}")
     console.print(f"\n[bold]Severity:[/bold] {rule.severity.name}")
-    console.print(f"\n[bold]Fixable:[/bold] {'Yes' if rule.fixable else 'No'}")
 
 
 @app.command()

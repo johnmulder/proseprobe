@@ -26,7 +26,7 @@ class AIVocabularyRule(Rule):
     name = "Overused Vocabulary"
     description = "Detects overused and clichéd words"
     severity = Severity.WARNING
-    fixable = True
+
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -96,7 +96,6 @@ class AIVocabularyRule(Rule):
                             end_column=match.end() + 1,
                             severity=self.severity,
                             confidence=confidence,
-                            fixable=suggestion is not None,
                             suggestion=suggestion,
                         )
                     )
@@ -115,35 +114,6 @@ class AIVocabularyRule(Rule):
         # Additional user-supplied words default to MEDIUM
         return Confidence.MEDIUM
 
-    def fix(self, content: str, issue: Issue) -> str:
-        """Replace overused vocabulary with suggestion."""
-        if not issue.suggestion:
-            return content
-
-        lines = content.split("\n")
-        line_idx = issue.line - 1
-        line = lines[line_idx]
-
-        # Find and replace the word (case-preserving)
-        col_start = issue.column - 1
-        col_end = (
-            issue.end_column - 1
-            if issue.end_column
-            else col_start + len(issue.suggestion)
-        )
-        original = line[col_start:col_end]
-
-        # Preserve case
-        if original.isupper():
-            replacement = issue.suggestion.upper()
-        elif original[0].isupper():
-            replacement = issue.suggestion.capitalize()
-        else:
-            replacement = issue.suggestion
-
-        lines[line_idx] = line[:col_start] + replacement + line[col_end:]
-        return "\n".join(lines)
-
 
 class CollaborativePhrasesRule(Rule):
     """V002: Detect collaborative/chat-like phrases."""
@@ -152,7 +122,6 @@ class CollaborativePhrasesRule(Rule):
     name = "Collaborative Phrases"
     description = "Detects chat-like communication patterns"
     severity = Severity.WARNING
-    fixable = True
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -172,55 +141,10 @@ class CollaborativePhrasesRule(Rule):
                             column=col + 1,
                             end_column=col + len(phrase) + 1,
                             severity=self.severity,
-                            fixable=True,
                         )
                     )
 
         return issues
-
-    def fix(self, content: str, issue: Issue) -> str:
-        """Remove collaborative phrase from content.
-
-        Strategy: Remove the phrase. If the phrase is at the start of a
-        sentence (followed by punctuation and space), also remove trailing
-        punctuation and space.
-        """
-        lines = content.split("\n")
-        line_idx = issue.line - 1
-        line = lines[line_idx]
-
-        col_start = issue.column - 1
-        col_end = issue.end_column - 1 if issue.end_column else col_start
-
-        # Check what comes after the phrase
-        after = line[col_end:]
-
-        # If phrase ends with punctuation + space (e.g., "Certainly! "), remove it
-        if after and after[0] in "!.,:;":
-            # Remove punctuation
-            col_end += 1
-            # Also remove trailing space
-            if len(line) > col_end and line[col_end] == " ":
-                col_end += 1
-
-        # If phrase has leading space and nothing meaningful before, trim it
-        before = line[:col_start]
-        if before.rstrip() == "":
-            # Phrase is at start of line - strip any remaining whitespace after removal
-            new_line = line[col_end:].lstrip()
-        elif before.endswith(". ") or before.endswith(".\n"):
-            # After sentence boundary - keep as is
-            new_line = line[:col_start] + line[col_end:]
-        elif before.endswith(" "):
-            # Remove leading space to avoid double space
-            new_line = line[: col_start - 1] + line[col_end:]
-        else:
-            new_line = line[:col_start] + line[col_end:]
-
-        lines[line_idx] = new_line
-
-        # If line is now empty or just whitespace, keep it (don't remove lines)
-        return "\n".join(lines)
 
 
 class KnowledgeCutoffRule(Rule):
@@ -230,7 +154,6 @@ class KnowledgeCutoffRule(Rule):
     name = "Knowledge Cutoff"
     description = "Detects temporal/knowledge cutoff disclaimers"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -262,7 +185,6 @@ class PromotionalLanguageRule(Rule):
     name = "Promotional Language"
     description = "Detects puffery and marketing speak"
     severity = Severity.WARNING
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -295,7 +217,6 @@ class WeaselWordsRule(Rule):
     name = "Weasel Words"
     description = "Detects vague attributions and weasel phrases"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 

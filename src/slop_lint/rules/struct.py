@@ -20,7 +20,6 @@ class RuleOfThreeRule(Rule):
     name = "Rule of Three"
     description = "Detects excessive 'X, Y, and Z' patterns"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -65,7 +64,6 @@ class NegativeParallelismRule(Rule):
     name = "Negative Parallelism"
     description = "Detects 'Not only... but also...' patterns"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -97,7 +95,6 @@ class ChallengeConclusionsRule(Rule):
     name = "Challenge Conclusions"
     description = "Detects 'Despite its... faces challenges...' patterns"
     severity = Severity.WARNING
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -129,7 +126,6 @@ class InlineHeaderListsRule(Rule):
     name = "Inline-Header Lists"
     description = "Detects '- **Header:** Description' pattern"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -191,7 +187,6 @@ class SignificanceEmphasisRule(Rule):
     name = "Significance Emphasis"
     description = "Detects 'pivotal moment', 'key turning point' patterns"
     severity = Severity.WARNING
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -222,7 +217,6 @@ class SuperficialAnalysisRule(Rule):
     name = "Superficial Analysis"
     description = "Detects 'highlighting...underscoring...' chains"
     severity = Severity.WARNING
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -254,7 +248,6 @@ class FalseRangesRule(Rule):
     name = "False Ranges"
     description = "Detects 'from X to Y' with incoherent extremes"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 

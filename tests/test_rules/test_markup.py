@@ -96,17 +96,6 @@ class TestUTMParameters:
         rule = UTMParametersRule()
         assert rule.id == "M003"
 
-    def test_fix_removes_utm_params(self) -> None:
-        """Test that fix removes UTM parameters from URLs."""
-        text = "Check [link](https://example.com?utm_source=chatgpt.com&other=1)"
-        rule = UTMParametersRule()
-        issues = rule.check(text, "test.md")
-        assert len(issues) == 1
-
-        fixed = rule.fix(text, issues[0])
-        assert "utm_source=chatgpt.com" not in fixed
-        assert "other=1" in fixed
-
     def test_detects_utm_in_autolink(self) -> None:
         """Test detecting UTM parameters in autolinks."""
         text = "See <https://example.com?utm_source=chatgpt.com> for details."
@@ -151,27 +140,3 @@ class TestBrokenReferences:
         issues = rule.check(text, "test.md")
         assert len(issues) == 1
         assert "attached_file" in issues[0].message
-
-    def test_fix_removes_broken_ref(self) -> None:
-        """Test that fix removes broken references."""
-        text = "See [attached_file:1] for details"
-        rule = BrokenReferencesRule()
-        issues = rule.check(text, "test.md")
-        assert len(issues) == 1
-
-        fixed = rule.fix(text, issues[0])
-        assert "[attached_file:1]" not in fixed
-
-
-class TestChatGPTMarkersFix:
-    """Tests for ChatGPT markers fix."""
-
-    def test_fix_removes_turn_search_marker(self) -> None:
-        """Test that fix removes turn0search0 markers."""
-        text = "See turn0search0 for more info"
-        rule = ChatGPTMarkersRule()
-        issues = rule.check(text, "test.md")
-        assert len(issues) == 1
-
-        fixed = rule.fix(text, issues[0])
-        assert "turn0search0" not in fixed

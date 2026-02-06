@@ -17,7 +17,6 @@ class TitleCaseHeadingsRule(Rule):
     name = "Title Case Headings"
     description = "Detects improper capitalization in headings"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"markdown"}
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -59,7 +58,6 @@ class BoldOveruseRule(Rule):
     name = "Bold Overuse"
     description = "Detects excessive **bold** usage per paragraph"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"markdown"}
 
     def __init__(self, threshold: int = 3) -> None:
@@ -119,7 +117,6 @@ class EmDashOveruseRule(Rule):
     name = "Em Dash Overuse"
     description = "Detects excessive — for dramatic effect"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -165,7 +162,6 @@ class QuoteInconsistencyRule(Rule):
     name = "Quote Inconsistency"
     description = "Detects mixed curly and straight quotes"
     severity = Severity.INFO
-    fixable = True
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -191,26 +187,11 @@ class QuoteInconsistencyRule(Rule):
                             line=line_num,
                             column=match.start() + 1,
                             severity=self.severity,
-                            fixable=True,
                         )
                     )
                     return issues  # Only report once
 
         return issues
-
-    def fix(self, content: str, issue: Issue) -> str:
-        """Normalize curly quotes to straight quotes."""
-        # Replace all curly quotes with straight quotes
-        # Using explicit Unicode code points for reliability
-        replacements = {
-            "\u201c": '"',  # left double curly quote
-            "\u201d": '"',  # right double curly quote
-            "\u2018": "'",  # left single curly quote
-            "\u2019": "'",  # right single curly quote
-        }
-        for curly, straight in replacements.items():
-            content = content.replace(curly, straight)
-        return content
 
 
 class EmojiInProseRule(Rule):
@@ -220,7 +201,6 @@ class EmojiInProseRule(Rule):
     name = "Emoji in Prose"
     description = "Detects 🚀, ✨, etc. in headings or body text"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -252,7 +232,6 @@ class ElegantVariationRule(Rule):
     name = "Elegant Variation"
     description = "Detects awkward synonyms to avoid repetition"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 

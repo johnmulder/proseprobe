@@ -22,8 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - M001 now skips `#`-prefixed lines inside Python string literals
 - **Watch mode**: `slop-lint watch <paths>` for continuous file monitoring
 - **Baseline mode**: `--baseline` and `--generate-baseline` for gradual adoption
-- **Interactive fix**: `--fix --interactive` to confirm each fix individually
-- `--dry-run` flag to preview fixes without modifying files
 - `--show-config` flag to display current configuration
 - Pre-commit hook configuration (`.pre-commit-hooks.yaml`)
 - GitHub Actions CI workflow for testing on Python 3.11, 3.12, 3.13
@@ -36,6 +34,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Total test count: 436 tests passing
 - Improved package metadata and URLs
+
+### Removed
+- Auto-fix mechanism (`--fix`, `--dry-run`, `--interactive` flags)
+- `core/fixer` module and `fix()` method on rules
+- `fixable` field from `Issue` dataclass and rule classes
 
 ## [0.1.0] - 2026-02-01
 
@@ -55,7 +58,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `init` - Create a `.slop-lint.toml` config file
   - `version` - Show version information
 - Output formats: text, JSON, SARIF
-- Auto-fix support for fixable rules
 - Configuration via `.slop-lint.toml` or `pyproject.toml`
 - Per-file ignore patterns
 - Custom vocabulary (additional/allowed words)

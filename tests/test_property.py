@@ -3,7 +3,6 @@
 These tests verify invariants that should hold for all inputs:
 - Rules never crash on arbitrary input
 - Issue positions are always within bounds
-- Fixes produce valid content
 - Rules are deterministic
 """
 
@@ -173,52 +172,6 @@ class TestRuleRobustness:
             assert i1.message == i2.message
 
 
-class TestFixRobustness:
-    """Test that fixes produce valid output."""
-
-    @given(content=markdown_content, filename=filenames)
-    @settings(max_examples=50, suppress_health_check=[HealthCheck.too_slow])
-    def test_fix_preserves_content_length_approximately(
-        self, content: str, filename: str
-    ) -> None:
-        """Fixes should not drastically change content length."""
-        rule = AIVocabularyRule()
-        issues = rule.check(content, filename)
-
-        if not issues:
-            return
-
-        # Apply first fix
-        fixed = rule.fix(content, issues[0])
-
-        # Length should be approximately the same (within reason)
-        # Allow for word replacement differences
-        assert abs(len(fixed) - len(content)) < 100
-
-    @given(content=markdown_content, filename=filenames)
-    @settings(max_examples=30, suppress_health_check=[HealthCheck.too_slow])
-    def test_fix_does_not_introduce_new_instances(
-        self, content: str, filename: str
-    ) -> None:
-        """Fixing an issue should not introduce new instances of same issue."""
-        rule = AIVocabularyRule()
-        issues = rule.check(content, filename)
-
-        if not issues:
-            return
-
-        # Get the specific word being fixed
-        original_issue = issues[0]
-
-        # Apply fix
-        fixed = rule.fix(content, original_issue)
-        new_issues = rule.check(fixed, filename)
-
-        # The fixed content should have fewer or equal issues
-        # (equal if there were multiple instances and we only fixed one)
-        assert len(new_issues) <= len(issues)
-
-
 class TestEmptyAndEdgeCases:
     """Test edge cases that should be handled gracefully."""
 
@@ -288,7 +241,6 @@ class TestIssueInvariants:
         assert issue.line == line
         assert issue.column == column
         assert issue.severity == Severity.WARNING  # Default
-        assert issue.fixable is False  # Default
 
     @given(
         line=st.integers(min_value=1),

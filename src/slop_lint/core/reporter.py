@@ -133,7 +133,6 @@ class Reporter:
                         "end_column": issue.end_column,
                         "severity": issue.severity.value,
                         "confidence": issue.confidence.value,
-                        "fixable": issue.fixable,
                         "suggestion": issue.suggestion,
                     }
                     for issue in issues

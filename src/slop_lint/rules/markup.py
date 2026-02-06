@@ -5,7 +5,7 @@ from typing import ClassVar
 
 from slop_lint.parsers.markdown import is_markdown_file
 from slop_lint.parsers.python import PythonParser
-from slop_lint.rules.base import Confidence, Issue, Rule, Severity, remove_text_range
+from slop_lint.rules.base import Confidence, Issue, Rule, Severity
 
 
 class WrongMarkupRule(Rule):
@@ -15,7 +15,6 @@ class WrongMarkupRule(Rule):
     name = "Wrong Markup"
     description = "Detects **bold** in Python comments"
     severity = Severity.WARNING
-    fixable = False
     applies_to = {"python"}
 
     # Markdown patterns that don't belong in code
@@ -74,7 +73,6 @@ class ChatGPTMarkersRule(Rule):
     name = "ChatGPT Markers"
     description = "Detects turn0search0, oai_citation, contentReference"
     severity = Severity.ERROR
-    fixable = True
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -98,15 +96,10 @@ class ChatGPTMarkersRule(Rule):
                             column=match.start() + 1,
                             end_column=match.end() + 1,
                             severity=self.severity,
-                            fixable=True,
                         )
                     )
 
         return issues
-
-    def fix(self, content: str, issue: Issue) -> str:
-        """Remove ChatGPT marker from content."""
-        return remove_text_range(content, issue.line, issue.column, issue.end_column)
 
 
 class UTMParametersRule(Rule):
@@ -116,7 +109,6 @@ class UTMParametersRule(Rule):
     name = "UTM Parameters"
     description = "Detects utm_source=chatgpt.com or openai"
     severity = Severity.WARNING
-    fixable = True
     applies_to = {"markdown"}
 
     _pattern = r"[?&]utm_source=(chatgpt\.com|openai)[^&\s]*"
@@ -144,7 +136,6 @@ class UTMParametersRule(Rule):
                             column=column,
                             end_column=end_column,
                             severity=self.severity,
-                            fixable=True,
                         )
                     )
         else:
@@ -159,40 +150,10 @@ class UTMParametersRule(Rule):
                             column=match.start() + 1,
                             end_column=match.end() + 1,
                             severity=self.severity,
-                            fixable=True,
                         )
                     )
 
         return issues
-
-    def fix(self, content: str, issue: Issue) -> str:
-        """Remove UTM parameters from URL."""
-        lines = content.split("\n")
-        line_idx = issue.line - 1
-        line = lines[line_idx]
-
-        # Find and remove the UTM parameter
-        col_start = issue.column - 1
-        col_end = issue.end_column - 1 if issue.end_column else col_start + 20
-
-        # Get the matched text
-        matched = line[col_start:col_end]
-
-        # If it starts with ?, we need to handle the next parameter
-        if matched.startswith("?"):
-            # Check if there are more parameters after
-            rest = line[col_end:]
-            if rest.startswith("&"):
-                # Remove the ? param and the following &, replace with ?
-                lines[line_idx] = line[:col_start] + "?" + rest[1:]
-            else:
-                # Just remove the whole ?param
-                lines[line_idx] = line[:col_start] + rest
-        else:
-            # Starts with &, just remove the &param
-            lines[line_idx] = line[:col_start] + line[col_end:]
-
-        return "\n".join(lines)
 
 
 class BrokenReferencesRule(Rule):
@@ -202,7 +163,6 @@ class BrokenReferencesRule(Rule):
     name = "Broken References"
     description = "Detects [attached_file:1], grok_card tags"
     severity = Severity.ERROR
-    fixable = True
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -226,12 +186,7 @@ class BrokenReferencesRule(Rule):
                             column=match.start() + 1,
                             end_column=match.end() + 1,
                             severity=self.severity,
-                            fixable=True,
                         )
                     )
 
         return issues
-
-    def fix(self, content: str, issue: Issue) -> str:
-        """Remove broken reference from content."""
-        return remove_text_range(content, issue.line, issue.column, issue.end_column)

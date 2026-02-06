@@ -140,8 +140,6 @@ slop-lint check --select T001 .
 
 | Option | Short | Description |
 |--------|-------|-------------|
-| `--fix` | | Apply auto-fixes for fixable issues |
-| `--dry-run` | | Show what fixes would be applied without writing |
 | `--show-config` | | Display configuration and exit |
 | `--format` | `-f` | Output format: text, json, sarif |
 | `--select` | `-s` | Rules to enable (comma-separated) |
@@ -182,8 +180,7 @@ slop-lint check --format json . > report.json
           "line": 15,
           "column": 5,
           "severity": "warning",
-          "confidence": "high",
-          "fixable": true
+          "confidence": "high"
         }
       ]
     }

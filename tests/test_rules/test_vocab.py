@@ -59,7 +59,6 @@ class TestAIVocabularyRule:
 
         assert len(issues) == 1
         assert "foobar" in issues[0].message.lower()
-        assert issues[0].fixable is False
 
     def test_ignores_code_fences_in_markdown(self) -> None:
         rule = AIVocabularyRule()
@@ -74,15 +73,6 @@ class TestAIVocabularyRule:
         issues = rule.check(content, "test.md")
 
         assert len(issues) == 0
-
-    def test_fix_preserves_case(self, rule: AIVocabularyRule) -> None:
-        content = "Let's Delve into this topic."
-        issues = rule.check(content, "test.md")
-
-        assert len(issues) == 1
-        fixed = rule.fix(content, issues[0])
-        assert "Explore" in fixed
-        assert "Delve" not in fixed
 
     def test_severity_override_from_config(self) -> None:
         config = Config(severity_overrides={"V001": "error"})
@@ -141,29 +131,6 @@ class TestCollaborativePhrasesRule:
         issues = rule.check(content, "test.md")
 
         assert len(issues) == 1
-
-    def test_fix_removes_phrase_with_exclamation(
-        self, rule: CollaborativePhrasesRule
-    ) -> None:
-        """Test fixing phrase at start followed by exclamation."""
-        content = "Certainly! Here is the code."
-        issues = rule.check(content, "test.md")
-
-        assert len(issues) == 1
-        fixed = rule.fix(content, issues[0])
-        assert fixed == "Here is the code."
-
-    def test_fix_removes_phrase_mid_sentence(
-        self, rule: CollaborativePhrasesRule
-    ) -> None:
-        """Test fixing phrase in middle of text."""
-        content = "Thanks for asking. I hope this helps!"
-        issues = rule.check(content, "test.md")
-
-        # Find the "I hope this helps" issue
-        issue = next(i for i in issues if "I hope this helps" in i.message)
-        fixed = rule.fix(content, issue)
-        assert "I hope this helps" not in fixed
 
 
 class TestKnowledgeCutoffRule:

@@ -57,7 +57,6 @@ def process():
         rule = DocstringVocabularyRule(additional={"foobar"})
         issues = rule.check(text, "test.py")
         assert len(issues) == 1
-        assert issues[0].fixable is False
 
     def test_rule_metadata(self) -> None:
         """Test rule has correct metadata."""

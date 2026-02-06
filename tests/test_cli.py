@@ -203,33 +203,6 @@ class TestVersionCommand:
         assert "0.1.0" in result.stdout
 
 
-class TestDryRunFlag:
-    """Tests for the --dry-run flag."""
-
-    def test_dry_run_shows_diff(self, tmp_path: Path) -> None:
-        """Test that --dry-run shows diff without modifying file."""
-        test_file = tmp_path / "test.md"
-        original = "This delves into topics."
-        test_file.write_text(original)
-
-        result = runner.invoke(app, ["check", str(test_file), "--fix", "--dry-run"])
-
-        # File should not be modified
-        assert test_file.read_text() == original
-        # Output should indicate what would change
-        assert result.exit_code in (0, 1)
-
-    def test_dry_run_without_fix_ignored(self, tmp_path: Path) -> None:
-        """Test that --dry-run without --fix is handled."""
-        test_file = tmp_path / "test.md"
-        test_file.write_text("This delves into topics.")
-
-        result = runner.invoke(app, ["check", str(test_file), "--dry-run"])
-
-        # Should run normally (dry-run only applies to --fix)
-        assert result.exit_code == 1
-
-
 class TestShowConfigFlag:
     """Tests for the --show-config flag."""
 
@@ -335,17 +308,6 @@ class TestWatchCommand:
         assert "--interval" in result.stdout
 
 
-class TestInteractiveMode:
-    """Tests for interactive fix mode."""
-
-    def test_interactive_help(self, tmp_path: Path) -> None:
-        """Test that interactive option is available in help."""
-        result = runner.invoke(app, ["check", "--help"])
-
-        assert result.exit_code == 0
-        assert "--interactive" in result.stdout or "-I" in result.stdout
-
-
 class TestHelpFlags:
     """Tests for help flag aliases."""
 
@@ -354,7 +316,7 @@ class TestHelpFlags:
         result = runner.invoke(app, ["-h"])
 
         assert result.exit_code == 0
-        assert "Detect and fix bad writing practices" in result.stdout
+        assert "Detect bad writing practices" in result.stdout
         assert "check" in result.stdout
 
     def test_check_help_short_flag(self) -> None:
@@ -362,7 +324,7 @@ class TestHelpFlags:
         result = runner.invoke(app, ["check", "-h"])
 
         assert result.exit_code == 0
-        assert "--interactive" in result.stdout or "-I" in result.stdout
+        assert "--format" in result.stdout
 
 
 class TestOutputFormats:

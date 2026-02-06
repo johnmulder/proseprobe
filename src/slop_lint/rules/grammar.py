@@ -13,7 +13,6 @@ class CopulaAvoidanceRule(Rule):
     name = "Copula Avoidance"
     description = "Detects 'serves as' instead of 'is'"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -44,7 +43,6 @@ class ExcessiveHedgingRule(Rule):
     name = "Excessive Hedging"
     description = "Detects 'It is important to note that...' patterns"
     severity = Severity.INFO
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 
@@ -75,7 +73,6 @@ class ParticipleChainsRule(Rule):
     name = "Participle Chains"
     description = "Detects 'highlighting..., emphasizing..., fostering...' chains"
     severity = Severity.WARNING
-    fixable = False
     applies_to = {"markdown"}
     content_scope = "prose"
 
