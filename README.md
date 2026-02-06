@@ -13,6 +13,7 @@ Overused vocabulary, structural clichés, promotional language, and sloppy marku
 
 - 🔍 **29 detection rules** across 6 categories
 - 📝 Scans Markdown (`.md`, `.mdx`) and Python (`.py`) files
+- 🎯 **Confidence levels** (high/medium/low) to reduce noise
 - 🔧 Auto-fix for safe vocabulary substitutions
 - ⚙️ Configurable via `.slop-lint.toml`
 - 📊 Multiple output formats (text, JSON, SARIF)
@@ -47,6 +48,10 @@ slop-lint check --fix --interactive .
 
 # Output as JSON
 slop-lint check --format json .
+
+# Filter by confidence level
+slop-lint check --min-confidence high .
+slop-lint check --hide-low .
 
 # Watch mode (continuous checking)
 slop-lint watch .

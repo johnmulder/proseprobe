@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Confidence levels**: Each issue now carries a `confidence` field (high, medium, low)
+  - V001 assigns confidence by vocabulary tier (tier 1 → high, tier 2 → medium, tier 3 → low)
+  - M001 issues in Python files default to low confidence
+  - Issues under example headings in Markdown are downgraded to low
+- **`--min-confidence`** CLI flag to filter issues by confidence level
+- **`--hide-low`** flag as shorthand for `--min-confidence medium`
+- **`min_confidence`** config option in `.slop-lint.toml`
+- **`allowed_phrases`** vocabulary option to skip lines containing exact phrases
+  - Ships with defaults: "All notable changes", "Critical issue"
+- Confidence breakdown in text output summary line
+- Confidence field in JSON and SARIF output
+- M001 now skips `#`-prefixed lines inside Python string literals
 - **Watch mode**: `slop-lint watch <paths>` for continuous file monitoring
 - **Baseline mode**: `--baseline` and `--generate-baseline` for gradual adoption
 - **Interactive fix**: `--fix --interactive` to confirm each fix individually
@@ -15,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `--show-config` flag to display current configuration
 - Pre-commit hook configuration (`.pre-commit-hooks.yaml`)
 - GitHub Actions CI workflow for testing on Python 3.11, 3.12, 3.13
-- Comprehensive documentation for all 29 rules with examples
+- Complete documentation for all 29 rules with examples
 - Full CLI options reference in configuration docs
 - Property-based tests using Hypothesis (265 additional tests)
 - Benchmark suite (`make benchmark`) for performance tracking

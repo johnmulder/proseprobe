@@ -5,7 +5,13 @@ from pathlib import Path
 
 import pytest
 
-from slop_lint.config import Config, ThresholdsConfig, find_config_file, load_config
+from slop_lint.config import (
+    Config,
+    ThresholdsConfig,
+    VocabularyConfig,
+    find_config_file,
+    load_config,
+)
 
 
 class TestFindConfigFile:
@@ -273,3 +279,32 @@ class TestThresholdsConfig:
         assert thresholds.inline_header_lists == 5
         assert thresholds.bold_overuse == 4
         assert thresholds.em_dash_overuse == 8
+
+
+class TestVocabularyConfig:
+    """Tests for VocabularyConfig class."""
+
+    def test_default_allowed_phrases(self) -> None:
+        vocab = VocabularyConfig()
+        assert "All notable changes" in vocab.allowed_phrases
+        assert "Critical issue" in vocab.allowed_phrases
+
+    def test_custom_allowed_phrases(self) -> None:
+        vocab = VocabularyConfig(allowed_phrases=["my custom phrase"])
+        assert vocab.allowed_phrases == ["my custom phrase"]
+
+
+class TestMinConfidenceConfig:
+    """Tests for min_confidence config option."""
+
+    def test_default_min_confidence(self) -> None:
+        config = Config()
+        assert config.min_confidence == "low"
+
+    def test_load_min_confidence_from_toml(self, tmp_path: Path) -> None:
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text(
+            '[tool.slop-lint]\nmin_confidence = "medium"\n'
+        )
+        config = load_config(config_file)
+        assert config.min_confidence == "medium"

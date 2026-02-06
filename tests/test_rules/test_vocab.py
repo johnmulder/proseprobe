@@ -4,7 +4,7 @@ import pytest
 
 from slop_lint.config import Config
 from slop_lint.rules import get_all_rules
-from slop_lint.rules.base import Severity
+from slop_lint.rules.base import Confidence, Severity
 from slop_lint.rules.vocab import (
     AIVocabularyRule,
     CollaborativePhrasesRule,
@@ -89,6 +89,37 @@ class TestAIVocabularyRule:
         rules = get_all_rules(config)
         rule = next(r for r in rules if r.id == "V001")
         assert rule.severity == Severity.ERROR
+
+    def test_tier1_word_has_high_confidence(self, rule: AIVocabularyRule) -> None:
+        content = "Let's delve into this topic."
+        issues = rule.check(content, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].confidence == Confidence.HIGH
+
+    def test_tier2_word_has_medium_confidence(self, rule: AIVocabularyRule) -> None:
+        content = "This is a crucial decision."
+        issues = rule.check(content, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].confidence == Confidence.MEDIUM
+
+    def test_tier3_word_has_low_confidence(self, rule: AIVocabularyRule) -> None:
+        content = "This is a notable achievement."
+        issues = rule.check(content, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].confidence == Confidence.LOW
+
+    def test_example_heading_downgrades_confidence(self) -> None:
+        rule = AIVocabularyRule()
+        content = "## Example (bad)\n\nThis article delves into the topic."
+        issues = rule.check(content, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].confidence == Confidence.LOW
+
+    def test_allowed_phrases_skip_matching_line(self) -> None:
+        rule = AIVocabularyRule(allowed_phrases={"all notable changes"})
+        content = "All notable changes to this project."
+        issues = rule.check(content, "test.md")
+        assert len(issues) == 0
 
 
 class TestCollaborativePhrasesRule:

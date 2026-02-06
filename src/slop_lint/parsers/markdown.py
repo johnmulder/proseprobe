@@ -599,3 +599,30 @@ def iter_non_code_lines(content: str, filename: str) -> list[tuple[int, str]]:
     if is_markdown_file(filename):
         return _get_cached_parser(content).get_lines()
     return list(enumerate(content.split("\n"), start=1))
+
+
+# Pattern for headings that indicate example/demo content
+_EXAMPLE_HEADING_RE = re.compile(
+    r"\b(example|bad|detected|demo|before)\b", re.IGNORECASE
+)
+
+
+def is_example_line(content: str, filename: str, line_num: int) -> bool:
+    """Return True if *line_num* falls under an example-style heading.
+
+    Example-style headings contain words like "example", "bad", "detected",
+    "demo", or "before".  Content under such headings is expected to
+    demonstrate the very patterns a rule flags, so matches should be
+    downgraded to LOW confidence.
+    """
+    if not is_markdown_file(filename):
+        return False
+
+    parser = _get_cached_parser(content)
+    headings = parser.get_headings()
+
+    # Walk headings in reverse to find the nearest heading *before* line_num.
+    for section in reversed(headings):
+        if section.start_line <= line_num <= section.end_line and _EXAMPLE_HEADING_RE.search(section.title):
+            return True
+    return False

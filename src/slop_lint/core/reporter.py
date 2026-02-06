@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from slop_lint.rules.base import Issue, Severity
+from slop_lint.rules.base import Confidence, Issue, Severity
 
 __all__ = ["Reporter"]
 
@@ -43,9 +43,10 @@ class Reporter:
         for path, issues in sorted(results.items()):
             for issue in issues:
                 severity_char = issue.severity.value[0].upper()
+                conf_tag = f" [{issue.confidence.value}]" if issue.confidence != Confidence.MEDIUM else ""
                 lines.append(
                     f"{path}:{issue.line}:{issue.column}: "
-                    f"{severity_char}{issue.rule_id[1:]} {issue.message}"
+                    f"{severity_char}{issue.rule_id[1:]} {issue.message}{conf_tag}"
                 )
 
         # Summary
@@ -71,12 +72,35 @@ class Reporter:
                 for issue in issues
                 if issue.severity == Severity.INFO
             )
+            high_conf = sum(
+                1
+                for issues in results.values()
+                for issue in issues
+                if issue.confidence == Confidence.HIGH
+            )
+            medium_conf = sum(
+                1
+                for issues in results.values()
+                for issue in issues
+                if issue.confidence == Confidence.MEDIUM
+            )
+            low_conf = sum(
+                1
+                for issues in results.values()
+                for issue in issues
+                if issue.confidence == Confidence.LOW
+            )
             lines.append("")
             lines.append(
                 f"Found {total} issue(s) "
                 f"({errors} error, {warnings} warning, {info} info) "
                 f"in {file_count} file(s)"
             )
+            if high_conf or low_conf:
+                lines.append(
+                    f"Confidence: {high_conf} high, "
+                    f"{medium_conf} medium, {low_conf} low"
+                )
 
         return "\n".join(lines)
 
@@ -108,6 +132,7 @@ class Reporter:
                         "end_line": issue.end_line,
                         "end_column": issue.end_column,
                         "severity": issue.severity.value,
+                        "confidence": issue.confidence.value,
                         "fixable": issue.fixable,
                         "suggestion": issue.suggestion,
                     }
@@ -169,26 +194,35 @@ class Reporter:
 
         for path, issues in results.items():
             for issue in issues:
-                sarif["runs"][0]["results"].append(
-                    {
-                        "ruleId": issue.rule_id,
-                        "level": self._sarif_level(issue.severity),
-                        "message": {"text": issue.message},
-                        "locations": [
-                            {
-                                "physicalLocation": {
-                                    "artifactLocation": {"uri": str(path)},
-                                    "region": {
-                                        "startLine": issue.line,
-                                        "startColumn": issue.column,
-                                        "endLine": issue.end_line or issue.line,
-                                        "endColumn": issue.end_column or issue.column,
-                                    },
-                                }
+                result_entry: dict[str, Any] = {
+                    "ruleId": issue.rule_id,
+                    "level": self._sarif_level(issue.severity),
+                    "message": {"text": issue.message},
+                    "locations": [
+                        {
+                            "physicalLocation": {
+                                "artifactLocation": {"uri": str(path)},
+                                "region": {
+                                    "startLine": issue.line,
+                                    "startColumn": issue.column,
+                                    "endLine": issue.end_line or issue.line,
+                                    "endColumn": issue.end_column or issue.column,
+                                },
                             }
-                        ],
-                    }
-                )
+                        }
+                    ],
+                    "properties": {
+                        "confidence": issue.confidence.value,
+                    },
+                }
+                # Map confidence to SARIF rank (0.0-100.0)
+                rank_map = {
+                    Confidence.HIGH: 90.0,
+                    Confidence.MEDIUM: 50.0,
+                    Confidence.LOW: 10.0,
+                }
+                result_entry["rank"] = rank_map.get(issue.confidence, 50.0)
+                sarif["runs"][0]["results"].append(result_entry)
 
         return json.dumps(sarif, indent=2)
 

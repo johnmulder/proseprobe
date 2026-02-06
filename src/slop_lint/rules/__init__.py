@@ -1,7 +1,7 @@
 """Detection rules for bad writing practices."""
 
 from slop_lint.config import Config, ThresholdsConfig
-from slop_lint.rules.base import Issue, Rule, Severity, severity_from_str
+from slop_lint.rules.base import Confidence, Issue, Rule, Severity, severity_from_str
 from slop_lint.rules.code import (
     AIPlaceholdersRule,
     CollaborativeCommentsRule,
@@ -46,6 +46,7 @@ from slop_lint.rules.vocab import (
 
 __all__ = [
     # Base classes
+    "Confidence",
     "Issue",
     "Rule",
     "Severity",
@@ -107,17 +108,19 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
     """
     allowed: set[str] = set()
     additional: set[str] = set()
+    allowed_phrases: set[str] = set()
     severity_overrides: dict[str, str] = {}
     thresholds = ThresholdsConfig()
     if config is not None:
         allowed = {w.lower() for w in config.vocabulary.allowed}
         additional = {w.lower() for w in config.vocabulary.additional}
+        allowed_phrases = set(config.vocabulary.allowed_phrases)
         severity_overrides = config.severity_overrides
         thresholds = config.thresholds
 
     rules = [
         # Vocabulary (V001-V005)
-        AIVocabularyRule(allowed=allowed, additional=additional),
+        AIVocabularyRule(allowed=allowed, additional=additional, allowed_phrases=allowed_phrases),
         CollaborativePhrasesRule(),
         KnowledgeCutoffRule(),
         PromotionalLanguageRule(),

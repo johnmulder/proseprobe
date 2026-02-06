@@ -8,8 +8,15 @@ from slop_lint.data.phrases import (
     PROMOTIONAL_PHRASES,
     WEASEL_PHRASES,
 )
-from slop_lint.data.vocabulary import AI_VOCABULARY, VOCABULARY_SUGGESTIONS
-from slop_lint.rules.base import Issue, Rule, Severity
+from slop_lint.data.vocabulary import (
+    AI_VOCABULARY,
+    AI_VOCABULARY_TIER1,
+    AI_VOCABULARY_TIER2,
+    AI_VOCABULARY_TIER3,
+    VOCABULARY_SUGGESTIONS,
+)
+from slop_lint.parsers.markdown import is_example_line
+from slop_lint.rules.base import Confidence, Issue, Rule, Severity
 
 
 class AIVocabularyRule(Rule):
@@ -43,16 +50,23 @@ class AIVocabularyRule(Rule):
         self,
         allowed: set[str] | None = None,
         additional: set[str] | None = None,
+        allowed_phrases: set[str] | None = None,
     ) -> None:
         self._allowed = {w.lower() for w in (allowed or set())}
         self._additional = {w.lower() for w in (additional or set())} - self._allowed
         self._vocabulary = AI_VOCABULARY | self._additional
+        self._allowed_phrases = {p.lower() for p in (allowed_phrases or set())}
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for overused vocabulary words."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             line_lower = line.lower()
+
+            # Skip entire line if it contains an allowed phrase
+            if any(phrase in line_lower for phrase in self._allowed_phrases):
+                continue
+
             for word in sorted(self._vocabulary):
                 if word in self._allowed:
                     continue
@@ -69,6 +83,10 @@ class AIVocabularyRule(Rule):
                     if suggestion:
                         message += f" → consider '{suggestion}'"
 
+                    confidence = self._word_confidence(word)
+                    if is_example_line(content, filename, line_num):
+                        confidence = Confidence.LOW
+
                     issues.append(
                         Issue(
                             rule_id=self.id,
@@ -77,12 +95,25 @@ class AIVocabularyRule(Rule):
                             column=match.start() + 1,
                             end_column=match.end() + 1,
                             severity=self.severity,
+                            confidence=confidence,
                             fixable=suggestion is not None,
                             suggestion=suggestion,
                         )
                     )
 
         return issues
+
+    @staticmethod
+    def _word_confidence(word: str) -> Confidence:
+        """Return confidence level based on vocabulary tier."""
+        if word in AI_VOCABULARY_TIER1:
+            return Confidence.HIGH
+        if word in AI_VOCABULARY_TIER2:
+            return Confidence.MEDIUM
+        if word in AI_VOCABULARY_TIER3:
+            return Confidence.LOW
+        # Additional user-supplied words default to MEDIUM
+        return Confidence.MEDIUM
 
     def fix(self, content: str, issue: Issue) -> str:
         """Replace overused vocabulary with suggestion."""

@@ -36,6 +36,18 @@ class TestWrongMarkup:
         rule = WrongMarkupRule()
         assert rule.id == "M001"
 
+    def test_skips_hash_lines_inside_string_literals(self) -> None:
+        """M001 should not flag # lines inside triple-quoted strings."""
+        text = '''
+default_config = """
+# This is a **bold** TOML comment
+# [tool.slop-lint]
+"""
+'''
+        rule = WrongMarkupRule()
+        issues = rule.check(text, "test.py")
+        assert len(issues) == 0
+
 
 class TestChatGPTMarkers:
     """Tests for M002: ChatGPT Markers."""

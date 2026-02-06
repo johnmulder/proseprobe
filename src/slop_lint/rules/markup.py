@@ -4,7 +4,8 @@ import re
 from typing import ClassVar
 
 from slop_lint.parsers.markdown import is_markdown_file
-from slop_lint.rules.base import Issue, Rule, Severity, remove_text_range
+from slop_lint.parsers.python import PythonParser
+from slop_lint.rules.base import Confidence, Issue, Rule, Severity, remove_text_range
 
 
 class WrongMarkupRule(Rule):
@@ -30,9 +31,22 @@ class WrongMarkupRule(Rule):
         """Check for wrong markup."""
         issues: list[Issue] = []
 
+        # Build a set of line numbers inside string literals so we can
+        # skip #-prefixed lines that are really part of a string.
+        string_lines: set[int] = set()
+        parser = PythonParser(content)
+        if parser.parse():
+            for start_line, _col, value in parser.get_string_literals():
+                line_count = value.count("\n")
+                if line_count > 0:
+                    for ln in range(start_line, start_line + line_count + 1):
+                        string_lines.add(ln)
+
         lines = content.split("\n")
 
         for line_num, line in enumerate(lines, start=1):
+            if line_num in string_lines:
+                continue
             # Check for Markdown in # comments
             if line.strip().startswith("#"):
                 for pattern, markup_type in self._md_patterns[:4]:
@@ -45,6 +59,7 @@ class WrongMarkupRule(Rule):
                                 line=line_num,
                                 column=match.start() + 1,
                                 severity=self.severity,
+                                confidence=Confidence.LOW,
                             )
                         )
                         break

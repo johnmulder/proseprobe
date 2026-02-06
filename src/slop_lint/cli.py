@@ -11,7 +11,21 @@ from rich.table import Table
 from slop_lint.config import load_config
 from slop_lint.core.linter import Linter
 from slop_lint.rules import get_all_rules
-from slop_lint.rules.base import Severity, severity_from_str, severity_rank
+from slop_lint.rules.base import Confidence, Severity, severity_from_str, severity_rank
+
+_CONFIDENCE_RANK = {Confidence.LOW: 0, Confidence.MEDIUM: 1, Confidence.HIGH: 2}
+
+
+def _confidence_rank(confidence: Confidence) -> int:
+    """Return numeric rank for confidence comparisons."""
+    return _CONFIDENCE_RANK.get(confidence, 0)
+
+
+def _parse_confidence(value: str) -> Confidence | None:
+    """Parse a confidence string into a Confidence enum."""
+    mapping = {"high": Confidence.HIGH, "medium": Confidence.MEDIUM, "low": Confidence.LOW}
+    return mapping.get(value.lower())
+
 
 app = typer.Typer(
     name="slop-lint",
@@ -84,6 +98,17 @@ def check(
         bool,
         typer.Option("--interactive", "-I", help="Interactively confirm each fix"),
     ] = False,
+    min_confidence: Annotated[
+        str | None,
+        typer.Option(
+            "--min-confidence",
+            help="Minimum confidence: high, medium, low",
+        ),
+    ] = None,
+    hide_low: Annotated[
+        bool,
+        typer.Option("--hide-low", help="Hide low-confidence issues (shorthand for --min-confidence medium)"),
+    ] = False,
 ) -> None:
     """Check files for bad writing practices."""
     # Load config
@@ -125,6 +150,20 @@ def check(
 
     # Run checks
     results = linter.check(paths)
+
+    # Filter by confidence level
+    effective_confidence = min_confidence or ("medium" if hide_low else config.min_confidence)
+    confidence_threshold = _parse_confidence(effective_confidence)
+    if confidence_threshold and confidence_threshold != Confidence.LOW:
+        results = {
+            path: [
+                issue
+                for issue in issues
+                if _confidence_rank(issue.confidence) >= _confidence_rank(confidence_threshold)
+            ]
+            for path, issues in results.items()
+        }
+        results = {path: issues for path, issues in results.items() if issues}
 
     # Handle baseline mode
     if generate_baseline:
@@ -321,10 +360,21 @@ def check(
                     Severity.WARNING: "yellow",
                     Severity.INFO: "blue",
                 }[issue.severity]
+                conf_tag = ""
+                style_open = ""
+                style_close = ""
+                if issue.confidence == Confidence.LOW:
+                    conf_tag = " [low]"
+                    style_open = "[dim]"
+                    style_close = "[/dim]"
+                elif issue.confidence == Confidence.HIGH:
+                    conf_tag = " [high]"
+                    style_open = "[bold]"
+                    style_close = "[/bold]"
                 console.print(
-                    f"[bold]{file_path}[/bold]:{issue.line}:{issue.column}: "
-                    f"[{severity_color}]{issue.rule_id}[/{severity_color}] "
-                    f"{issue.message}"
+                    f"{style_open}[bold]{file_path}[/bold]:{issue.line}:{issue.column}: "
+                    f"[{severity_color}]{issue.rule_id}{conf_tag}[/{severity_color}] "
+                    f"{issue.message}{style_close}"
                 )
         if not quiet:
             console.print(f"\n[bold]Found {total_issues} issue(s)[/bold]")

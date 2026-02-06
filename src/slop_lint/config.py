@@ -46,6 +46,12 @@ class VocabularyConfig:
 
     additional: list[str] = field(default_factory=list)
     allowed: list[str] = field(default_factory=list)
+    allowed_phrases: list[str] = field(
+        default_factory=lambda: [
+            "All notable changes",
+            "Critical issue",
+        ]
+    )
 
 
 @dataclass
@@ -64,6 +70,7 @@ class Config:
     select: list[str] = field(default_factory=lambda: ["V", "S", "T", "G", "C", "M"])
     ignore: list[str] = field(default_factory=list)
     severity: str = "warning"
+    min_confidence: str = "low"
     severity_overrides: dict[str, str] = field(default_factory=dict)
     vocabulary: VocabularyConfig = field(default_factory=VocabularyConfig)
     thresholds: ThresholdsConfig = field(default_factory=ThresholdsConfig)
@@ -153,6 +160,10 @@ def _parse_config(data: dict[str, Any]) -> Config:
     vocabulary = VocabularyConfig(
         additional=vocabulary_data.get("additional", []),
         allowed=vocabulary_data.get("allowed", []),
+        allowed_phrases=vocabulary_data.get(
+            "allowed_phrases",
+            ["All notable changes", "Critical issue"],
+        ),
     )
 
     thresholds_data = effective.get("thresholds", {})
@@ -203,6 +214,7 @@ def _parse_config(data: dict[str, Any]) -> Config:
         select=effective.get("select", ["V", "S", "T", "G", "C", "M"]),
         ignore=effective.get("ignore", []),
         severity=min_severity,
+        min_confidence=effective.get("min_confidence", "low"),
         severity_overrides=severity_overrides,
         vocabulary=vocabulary,
         thresholds=thresholds,

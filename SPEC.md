@@ -91,6 +91,8 @@ slop-lint version                      Show version information
 | `--ignore` | string | none | Comma-separated rules/prefixes to disable |
 | `--config` | path | auto | Path to configuration file |
 | `--severity` | choice | warning | Minimum severity to report |
+| `--min-confidence` | choice | low | Minimum confidence: high, medium, low |
+| `--hide-low` | flag | false | Hide low-confidence issues |
 | `--quiet` | flag | false | Only output errors |
 | `--verbose` | flag | false | Show additional diagnostic info |
 
@@ -129,6 +131,9 @@ ignore = []
 # Minimum severity to report
 severity = "warning"
 
+# Minimum confidence to report
+min_confidence = "low"  # low, medium, high
+
 # Severity overrides per rule
 [tool.slop-lint.severity]
 V001 = "error"
@@ -138,6 +143,7 @@ S002 = "info"
 [tool.slop-lint.vocabulary]
 additional = []  # Extra words to flag
 allowed = []     # Domain-specific words to permit
+allowed_phrases = ["All notable changes"]  # Exact phrases to skip
 
 # Per-file rule overrides
 [[tool.slop-lint.per-file-ignores]]
@@ -150,11 +156,12 @@ ignore = ["S004"]
 ### 6.1 Text (Default)
 
 ```
-docs/api.md:15:10: V001 Overused word: 'delve' → consider 'explore'
+docs/api.md:15:10: V001 [high] Overused word: 'delve' → consider 'explore'
 docs/api.md:23:1: S001 Rule of three pattern detected
 src/main.py:45:5: C001 Overused word in docstring: 'crucial'
 
 Found 3 issues (2 warnings, 1 info) in 2 files
+Confidence: 1 high, 2 medium, 0 low
 ```
 
 ### 6.2 JSON
@@ -172,6 +179,7 @@ Found 3 issues (2 warnings, 1 info) in 2 files
           "line": 15,
           "column": 10,
           "severity": "warning",
+          "confidence": "high",
           "fixable": true
         }
       ]
@@ -222,6 +230,17 @@ class Rule(Protocol):
     def check(self, content: str, filename: str) -> list[Issue]: ...
     def fix(self, content: str, issue: Issue) -> str: ...
 ```
+
+### 7.3 Confidence Levels
+
+Each `Issue` carries a `confidence` field (`high`, `medium`, or `low`)
+indicating how certain the rule is that the match is a real problem.
+
+| Level | Meaning | Example |
+|-------|---------|--------|
+| `high` | Strong signal | V001 with tier-1 word ("delve") |
+| `medium` | Likely issue | V001 with tier-2 word ("crucial") |
+| `low` | Tentative | V001 with tier-3 word ("notable"), M001 in Python |
 
 ## 8. Testing Strategy
 

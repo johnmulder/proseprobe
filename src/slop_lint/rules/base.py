@@ -2,11 +2,12 @@
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from enum import Enum
+from enum import Enum, StrEnum
 
 from slop_lint.parsers.markdown import iter_non_code_lines, iter_prose_lines
 
 __all__ = [
+    "Confidence",
     "Severity",
     "Issue",
     "Rule",
@@ -23,6 +24,14 @@ class Severity(Enum):
     WARNING = "warning"
     INFO = "info"
     OFF = "off"
+
+
+class Confidence(StrEnum):
+    """How confident the rule is that a match is a real problem."""
+
+    HIGH = "high"
+    MEDIUM = "medium"
+    LOW = "low"
 
 
 _SEVERITY_RANK = {
@@ -68,6 +77,7 @@ class Issue:
     end_line: int | None = None
     end_column: int | None = None
     severity: Severity = Severity.WARNING
+    confidence: Confidence = Confidence.MEDIUM
     fixable: bool = False
     suggestion: str | None = None
 

@@ -58,6 +58,17 @@ additional = ["synergy", "utilize"]
 
 # Domain-specific words to allow
 allowed = ["crucial", "comprehensive"]
+
+# Exact phrases to skip (line is not checked if it contains one)
+allowed_phrases = ["All notable changes", "Critical issue"]
+```
+
+### Confidence Filtering
+
+```toml
+[tool.slop-lint]
+# Minimum confidence to report (low, medium, high)
+min_confidence = "low"  # default: show all
 ```
 
 ### Per-File Ignores
@@ -97,6 +108,7 @@ M004 = "error"
 [tool.slop-lint.vocabulary]
 additional = ["leverage", "synergy"]
 allowed = ["comprehensive"]
+allowed_phrases = ["All notable changes"]
 
 [[tool.slop-lint.per-file-ignores]]
 pattern = "CHANGELOG.md"
@@ -136,6 +148,8 @@ slop-lint check --select T001 .
 | `--ignore` | `-i` | Rules to disable (comma-separated) |
 | `--config` | `-c` | Path to configuration file |
 | `--severity` | | Minimum severity: error, warning, info |
+| `--min-confidence` | | Minimum confidence: high, medium, low |
+| `--hide-low` | | Hide low-confidence issues |
 | `--quiet` | `-q` | Only output errors |
 | `--verbose` | `-v` | Show additional diagnostic info |
 
@@ -168,6 +182,7 @@ slop-lint check --format json . > report.json
           "line": 15,
           "column": 5,
           "severity": "warning",
+          "confidence": "high",
           "fixable": true
         }
       ]

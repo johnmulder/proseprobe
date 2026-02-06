@@ -413,3 +413,41 @@ class TestOutputFormats:
         assert result.exit_code == 0
         data = json.loads(result.stdout)
         assert data["summary"]["total_issues"] == 0
+
+
+class TestMinConfidenceFlag:
+    """Tests for --min-confidence and --hide-low CLI flags."""
+
+    def test_min_confidence_high_filters_low(self, tmp_path: Path) -> None:
+        """Low-confidence issues (tier 3 words) are hidden at --min-confidence high."""
+        test_file = tmp_path / "test.md"
+        # 'notable' is tier 3 (LOW confidence), 'delve' is tier 1 (HIGH)
+        test_file.write_text("This is a notable achievement.")
+
+        result = runner.invoke(
+            app, ["check", str(test_file), "--min-confidence", "high"]
+        )
+        # 'notable' is LOW confidence, should be filtered out
+        assert "notable" not in result.stdout
+
+    def test_min_confidence_high_keeps_high(self, tmp_path: Path) -> None:
+        test_file = tmp_path / "test.md"
+        test_file.write_text("Let us delve into this topic.")
+
+        result = runner.invoke(
+            app, ["check", str(test_file), "--min-confidence", "high"]
+        )
+        assert "delve" in result.stdout
+
+    def test_hide_low_flag(self, tmp_path: Path) -> None:
+        test_file = tmp_path / "test.md"
+        # 'notable' is tier 3 (LOW), will appear via V001 without --hide-low
+        test_file.write_text("This is a notable achievement.")
+
+        # Without --hide-low, V001 reports 'notable'
+        result_all = runner.invoke(app, ["check", str(test_file)])
+        assert "V001" in result_all.stdout
+
+        # With --hide-low, V001 low-confidence hit is suppressed
+        result_filtered = runner.invoke(app, ["check", str(test_file), "--hide-low"])
+        assert "V001" not in result_filtered.stdout
