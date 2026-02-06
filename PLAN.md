@@ -1,6 +1,6 @@
 # Slop Lint — Development Plan
 
-## Phase 7 — Remove auto-fix mechanisms  *(in progress)*
+## Phase 7 — Remove auto-fix mechanisms  *(done)*
 
 ### Rationale
 
@@ -28,7 +28,7 @@ tool — it tells you what to look at; you decide what to change.
 
 ---
 
-## Phase 8 — Remove external dependencies
+## Phase 8 — Remove external dependencies  *(done)*
 
 ### Rationale
 
