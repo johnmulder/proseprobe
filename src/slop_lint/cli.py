@@ -1,13 +1,13 @@
 """Command-line interface for slop-lint."""
 
+from __future__ import annotations
+
+import argparse
+import sys
 import time
 from pathlib import Path
-from typing import Annotated
 
-import typer
-from rich.console import Console
-from rich.table import Table
-
+from slop_lint._ansi import clear_screen, style, table
 from slop_lint.config import load_config
 from slop_lint.core.linter import Linter
 from slop_lint.rules import get_all_rules
@@ -27,104 +27,46 @@ def _parse_confidence(value: str) -> Confidence | None:
     return mapping.get(value.lower())
 
 
-app = typer.Typer(
-    name="slop-lint",
-    help="Detect bad writing practices in Markdown and Python files.",
-    no_args_is_help=True,
-    context_settings={"help_option_names": ["-h", "--help"]},
-)
-console = Console()
+# ---------------------------------------------------------------------------
+# Subcommand handlers
+# ---------------------------------------------------------------------------
 
 
-@app.command()
-def check(
-    paths: Annotated[
-        list[Path],
-        typer.Argument(help="Files or directories to check"),
-    ],
-    show_config: Annotated[
-        bool,
-        typer.Option("--show-config", help="Display configuration and exit"),
-    ] = False,
-    format: Annotated[
-        str,
-        typer.Option("--format", "-f", help="Output format: text, json, sarif"),
-    ] = "text",
-    select: Annotated[
-        str | None,
-        typer.Option("--select", "-s", help="Rules to enable (comma-separated)"),
-    ] = None,
-    ignore: Annotated[
-        str | None,
-        typer.Option("--ignore", "-i", help="Rules to disable (comma-separated)"),
-    ] = None,
-    config_path: Annotated[
-        Path | None,
-        typer.Option("--config", "-c", help="Path to configuration file"),
-    ] = None,
-    severity: Annotated[
-        str | None,
-        typer.Option("--severity", help="Minimum severity: error, warning, info"),
-    ] = None,
-    quiet: Annotated[
-        bool,
-        typer.Option("--quiet", "-q", help="Only output errors"),
-    ] = False,
-    verbose: Annotated[
-        bool,
-        typer.Option("--verbose", "-v", help="Show additional diagnostic info"),
-    ] = False,
-    baseline: Annotated[
-        Path | None,
-        typer.Option("--baseline", "-b", help="Baseline file for only-new-issues mode"),
-    ] = None,
-    generate_baseline: Annotated[
-        bool,
-        typer.Option(
-            "--generate-baseline", help="Generate baseline file from current issues"
-        ),
-    ] = False,
-    min_confidence: Annotated[
-        str | None,
-        typer.Option(
-            "--min-confidence",
-            help="Minimum confidence: high, medium, low",
-        ),
-    ] = None,
-    hide_low: Annotated[
-        bool,
-        typer.Option("--hide-low", help="Hide low-confidence issues (shorthand for --min-confidence medium)"),
-    ] = False,
-) -> None:
+def _cmd_check(args: argparse.Namespace) -> int:
     """Check files for bad writing practices."""
+    paths = [Path(p) for p in args.paths]
+    config_path = Path(args.config) if args.config else None
+
     # Load config
     config = load_config(config_path)
 
     # Apply CLI overrides
-    if select:
-        config.select = select.split(",")
-    if ignore:
-        ignore_list = ignore.split(",")
+    if args.select:
+        config.select = args.select.split(",")
+    if args.ignore:
+        ignore_list = args.ignore.split(",")
         config.ignore = list(set(config.ignore) | set(ignore_list))
 
     # Handle --show-config
-    if show_config:
-        console.print("[bold]Configuration:[/bold]")
-        console.print(f"  Config file: {config_path or 'default'}")
-        console.print(f"  Select: {config.select}")
-        console.print(f"  Ignore: {config.ignore}")
-        console.print(f"  Include patterns: {config.include}")
-        console.print(f"  Exclude patterns: {config.exclude}")
-        config_severity = severity or config.severity
-        console.print(f"  Severity threshold: {config_severity}")
+    if args.show_config:
+        print(style("Configuration:", bold=True))
+        print(f"  Config file: {config_path or 'default'}")
+        print(f"  Select: {config.select}")
+        print(f"  Ignore: {config.ignore}")
+        print(f"  Include patterns: {config.include}")
+        print(f"  Exclude patterns: {config.exclude}")
+        config_severity = args.severity or config.severity
+        print(f"  Severity threshold: {config_severity}")
         if config.severity_overrides:
-            console.print(f"  Severity overrides: {config.severity_overrides}")
-        console.print(f"  Output format: {format}")
-        raise typer.Exit(0)
+            print(f"  Severity overrides: {config.severity_overrides}")
+        print(f"  Output format: {args.format}")
+        return 0
 
     # Create linter and register rules
     linter = Linter(config)
-    min_severity = severity_from_str(severity or config.severity, Severity.WARNING)
+    min_severity = severity_from_str(
+        args.severity or config.severity, Severity.WARNING
+    )
     assert min_severity is not None  # default ensures this
 
     for rule in get_all_rules(config):
@@ -136,24 +78,29 @@ def check(
     results = linter.check(paths)
 
     # Filter by confidence level
-    effective_confidence = min_confidence or ("medium" if hide_low else config.min_confidence)
+    effective_confidence = (
+        args.min_confidence
+        or ("medium" if args.hide_low else config.min_confidence)
+    )
     confidence_threshold = _parse_confidence(effective_confidence)
     if confidence_threshold and confidence_threshold != Confidence.LOW:
         results = {
             path: [
                 issue
                 for issue in issues
-                if _confidence_rank(issue.confidence) >= _confidence_rank(confidence_threshold)
+                if _confidence_rank(issue.confidence)
+                >= _confidence_rank(confidence_threshold)
             ]
             for path, issues in results.items()
         }
         results = {path: issues for path, issues in results.items() if issues}
 
     # Handle baseline mode
-    if generate_baseline:
+    if args.generate_baseline:
         from slop_lint.core.baseline import Baseline
 
-        baseline_obj = Baseline(baseline)
+        baseline_path = Path(args.baseline) if args.baseline else None
+        baseline_obj = Baseline(baseline_path)
         workspace = paths[0].parent if paths else Path.cwd()
 
         for file_path, issues in results.items():
@@ -165,117 +112,127 @@ def check(
                 continue
 
         baseline_obj.save()
-        console.print(
-            f"[green]Generated baseline with {baseline_obj.count} issue(s)[/green] "
-            f"at {baseline_obj.baseline_path}"
+        print(
+            style(
+                f"Generated baseline with {baseline_obj.count} issue(s)",
+                color="green",
+            )
+            + f" at {baseline_obj.baseline_path}"
         )
-        raise typer.Exit(0)
+        return 0
 
-    if baseline:
+    if args.baseline:
         from slop_lint.core.baseline import Baseline, filter_new_issues
 
-        baseline_obj = Baseline(baseline)
+        baseline_path = Path(args.baseline)
+        baseline_obj = Baseline(baseline_path)
         if baseline_obj.load():
             workspace = paths[0].parent if paths else Path.cwd()
             original_count = sum(len(issues) for issues in results.values())
             results = filter_new_issues(results, baseline_obj, workspace)
             new_count = sum(len(issues) for issues in results.values())
-            if not quiet and verbose:
-                console.print(
-                    f"[dim]Baseline: {original_count} total, "
-                    f"{new_count} new issue(s)[/dim]"
+            if not args.quiet and args.verbose:
+                print(
+                    style(
+                        f"Baseline: {original_count} total, "
+                        f"{new_count} new issue(s)",
+                        dim=True,
+                    )
                 )
         else:
-            console.print(
-                f"[yellow]Warning: Baseline file not found: {baseline}[/yellow]"
+            print(
+                style(
+                    f"Warning: Baseline file not found: {baseline_path}",
+                    color="yellow",
+                )
             )
 
     if not results:
-        if format == "json":
+        if args.format == "json":
             from slop_lint.core.reporter import Reporter
 
             reporter = Reporter(format="json")
             print(reporter.report({}))
-        elif format == "sarif":
+        elif args.format == "sarif":
             from slop_lint.core.reporter import Reporter
 
             reporter = Reporter(format="sarif")
             print(reporter.report({}))
-        elif not quiet:
-            console.print("[green]✓[/green] No issues found!")
-        raise typer.Exit(0)
+        elif not args.quiet:
+            print(style("\u2713", color="green") + " No issues found!")
+        return 0
 
     # Output results
     total_issues = sum(len(issues) for issues in results.values())
 
-    if format == "json":
+    if args.format == "json":
         from slop_lint.core.reporter import Reporter
 
         reporter = Reporter(format="json")
         print(reporter.report(results))
-    elif format == "sarif":
+    elif args.format == "sarif":
         from slop_lint.core.reporter import Reporter
 
         reporter = Reporter(format="sarif")
         print(reporter.report(results))
     else:
         # Text format (default)
+        _SEVERITY_COLOR = {
+            Severity.ERROR: "red",
+            Severity.WARNING: "yellow",
+            Severity.INFO: "blue",
+        }
         for file_path, issues in results.items():
             for issue in issues:
-                severity_color = {
-                    Severity.ERROR: "red",
-                    Severity.WARNING: "yellow",
-                    Severity.INFO: "blue",
-                }[issue.severity]
+                sev_color = _SEVERITY_COLOR[issue.severity]
                 conf_tag = ""
-                style_open = ""
-                style_close = ""
+                is_bold = False
+                is_dim = False
                 if issue.confidence == Confidence.LOW:
                     conf_tag = " [low]"
-                    style_open = "[dim]"
-                    style_close = "[/dim]"
+                    is_dim = True
                 elif issue.confidence == Confidence.HIGH:
                     conf_tag = " [high]"
-                    style_open = "[bold]"
-                    style_close = "[/bold]"
-                console.print(
-                    f"{style_open}[bold]{file_path}[/bold]:{issue.line}:{issue.column}: "
-                    f"[{severity_color}]{issue.rule_id}{conf_tag}[/{severity_color}] "
-                    f"{issue.message}{style_close}"
+                    is_bold = True
+                rule_part = style(
+                    f"{issue.rule_id}{conf_tag}", color=sev_color
                 )
-        if not quiet:
-            console.print(f"\n[bold]Found {total_issues} issue(s)[/bold]")
+                line_text = (
+                    f"{style(str(file_path), bold=True)}"
+                    f":{issue.line}:{issue.column}: "
+                    f"{rule_part} {issue.message}"
+                )
+                if is_dim:
+                    line_text = style(line_text, dim=True)
+                elif is_bold:
+                    line_text = style(line_text, bold=True)
+                print(line_text)
+        if not args.quiet:
+            print(style(f"\nFound {total_issues} issue(s)", bold=True))
 
     # Exit with error code if issues found
-    raise typer.Exit(1 if total_issues > 0 else 0)
+    return 1 if total_issues > 0 else 0
 
 
-@app.command()
-def rules() -> None:
+def _cmd_rules(_args: argparse.Namespace) -> int:
     """List all available rules."""
     all_rules = get_all_rules()
 
-    table = Table(title="Available Rules")
-    table.add_column("ID", style="cyan")
-    table.add_column("Name")
-    table.add_column("Severity", style="yellow")
-    table.add_column("Description")
-
-    for rule in all_rules:
-        table.add_row(rule.id, rule.name, rule.severity.name, rule.description)
-
-    console.print(table)
+    headers = ["ID", "Name", "Severity", "Description"]
+    rows = [[r.id, r.name, r.severity.name, r.description] for r in all_rules]
+    print(table(headers, rows, title="Available Rules"))
+    return 0
 
 
-@app.command()
-def init() -> None:
+def _cmd_init(_args: argparse.Namespace) -> int:
     """Create a .slop-lint.toml config file."""
-    config_path = Path(".slop-lint.toml")
-    if config_path.exists():
-        typer.echo(f"Config file already exists: {config_path}", err=True)
-        raise typer.Exit(2)
+    config_file = Path(".slop-lint.toml")
+    if config_file.exists():
+        print(f"Config file already exists: {config_file}", file=sys.stderr)
+        return 2
 
-    default_config = """# slop-lint configuration
+    default_config = """\
+# slop-lint configuration
 # See: https://github.com/slop-lint/slop-lint
 
 [tool.slop-lint]
@@ -299,74 +256,47 @@ severity = "warning"  # Minimum severity: error, warning, info
 # pattern = "tests/*"
 # ignore = ["V001", "V002"]
 """
-    config_path.write_text(default_config)
-    typer.echo(f"Created {config_path}")
+    config_file.write_text(default_config)
+    print(f"Created {config_file}")
+    return 0
 
 
-@app.command()
-def explain(
-    rule_id: Annotated[str, typer.Argument(help="Rule ID (e.g., V001)")],
-) -> None:
+def _cmd_explain(args: argparse.Namespace) -> int:
     """Explain a specific rule with examples."""
     all_rules = get_all_rules()
-    rule = next((r for r in all_rules if r.id == rule_id.upper()), None)
+    rule = next((r for r in all_rules if r.id == args.rule_id.upper()), None)
 
     if rule is None:
-        typer.echo(f"Unknown rule: {rule_id}", err=True)
-        raise typer.Exit(1)
+        print(f"Unknown rule: {args.rule_id}", file=sys.stderr)
+        return 1
 
-    console.print(f"[bold cyan]{rule.id}[/bold cyan]: {rule.name}")
-    console.print(f"\n[bold]Description:[/bold]\n{rule.description}")
-    console.print(f"\n[bold]Severity:[/bold] {rule.severity.name}")
+    print(f"{style(rule.id, bold=True, color='cyan')}: {rule.name}")
+    print(f"\n{style('Description:', bold=True)}\n{rule.description}")
+    print(f"\n{style('Severity:', bold=True)} {rule.severity.name}")
+    return 0
 
 
-@app.command()
-def version() -> None:
+def _cmd_version(_args: argparse.Namespace) -> int:
     """Show version information."""
     from slop_lint import __version__
 
-    typer.echo(f"slop-lint {__version__}")
+    print(f"slop-lint {__version__}")
+    return 0
 
 
-@app.command()
-def watch(
-    paths: Annotated[
-        list[Path],
-        typer.Argument(help="Files or directories to watch"),
-    ],
-    select: Annotated[
-        str | None,
-        typer.Option("--select", "-s", help="Rules to enable (comma-separated)"),
-    ] = None,
-    ignore: Annotated[
-        str | None,
-        typer.Option("--ignore", "-i", help="Rules to disable (comma-separated)"),
-    ] = None,
-    config_path: Annotated[
-        Path | None,
-        typer.Option("--config", "-c", help="Path to configuration file"),
-    ] = None,
-    interval: Annotated[
-        float,
-        typer.Option("--interval", "-n", help="Check interval in seconds"),
-    ] = 2.0,
-    clear: Annotated[
-        bool,
-        typer.Option("--clear", help="Clear screen between checks"),
-    ] = True,
-) -> None:
-    """Watch files for changes and report issues continuously.
+def _cmd_watch(args: argparse.Namespace) -> int:
+    """Watch files for changes and report issues continuously."""
+    paths = [Path(p) for p in args.paths]
+    config_path = Path(args.config) if args.config else None
 
-    Press Ctrl+C to stop watching.
-    """
     # Load config
     config = load_config(config_path)
 
     # Apply CLI overrides
-    if select:
-        config.select = select.split(",")
-    if ignore:
-        ignore_list = ignore.split(",")
+    if args.select:
+        config.select = args.select.split(",")
+    if args.ignore:
+        ignore_list = args.ignore.split(",")
         config.ignore = list(set(config.ignore) | set(ignore_list))
 
     # Create linter and register rules
@@ -376,9 +306,8 @@ def watch(
 
     # Track file modification times
     file_mtimes: dict[Path, float] = {}
-    last_issues: dict[Path, int] = {}
 
-    console.print(f"[bold]Watching {len(paths)} path(s)...[/bold] Press Ctrl+C to stop")
+    print(style(f"Watching {len(paths)} path(s)...", bold=True) + " Press Ctrl+C to stop")
 
     try:
         while True:
@@ -397,46 +326,199 @@ def watch(
                     continue  # File may have been deleted
 
             if changed_files:
-                if clear:
-                    console.clear()
+                if not args.no_clear:
+                    clear_screen()
 
-                console.print(
-                    f"[dim]{time.strftime('%H:%M:%S')}[/dim] "
-                    f"Checking {len(changed_files)} changed file(s)..."
+                print(
+                    style(time.strftime("%H:%M:%S"), dim=True)
+                    + f" Checking {len(changed_files)} changed file(s)..."
                 )
 
+                _SEVERITY_COLOR = {
+                    Severity.ERROR: "red",
+                    Severity.WARNING: "yellow",
+                    Severity.INFO: "blue",
+                }
                 total_issues = 0
                 for file in changed_files:
                     try:
                         issues = linter.check_file(file)
-                        last_issues[file] = len(issues)
                         total_issues += len(issues)
 
                         for issue in issues:
-                            severity_color = {
-                                Severity.ERROR: "red",
-                                Severity.WARNING: "yellow",
-                                Severity.INFO: "blue",
-                            }[issue.severity]
-                            console.print(
-                                f"[bold]{file}[/bold]:{issue.line}:{issue.column}: "
-                                f"[{severity_color}]{issue.rule_id}[/{severity_color}] "
+                            sev_color = _SEVERITY_COLOR[issue.severity]
+                            print(
+                                f"{style(str(file), bold=True)}"
+                                f":{issue.line}:{issue.column}: "
+                                f"{style(issue.rule_id, color=sev_color)} "
                                 f"{issue.message}"
                             )
                     except Exception as e:
-                        console.print(f"[red]Error checking {file}: {e}[/red]")
+                        print(style(f"Error checking {file}: {e}", color="red"))
 
                 if total_issues == 0:
-                    console.print("[green]✓[/green] No issues found!")
+                    print(style("\u2713", color="green") + " No issues found!")
                 else:
-                    console.print(f"\n[bold]Found {total_issues} issue(s)[/bold]")
+                    print(style(f"\nFound {total_issues} issue(s)", bold=True))
 
-            time.sleep(interval)
+            time.sleep(args.interval)
 
     except KeyboardInterrupt:
-        console.print("\n[yellow]Stopped watching.[/yellow]")
-        raise typer.Exit(0) from None
+        print(style("\nStopped watching.", color="yellow"))
+        return 0
+
+    return 0  # pragma: no cover
+
+
+# ---------------------------------------------------------------------------
+# Argument parser construction
+# ---------------------------------------------------------------------------
+
+
+def _build_parser() -> argparse.ArgumentParser:
+    """Build the argument parser with all subcommands."""
+    parser = argparse.ArgumentParser(
+        prog="slop-lint",
+        description="Detect bad writing practices in Markdown and Python files.",
+        add_help=False,
+    )
+    parser.add_argument(
+        "-h", "--help", action="help", help="Show this help message and exit"
+    )
+    subparsers = parser.add_subparsers(dest="command")
+
+    # --- check ---
+    p_check = subparsers.add_parser(
+        "check",
+        help="Check files for bad writing practices",
+        add_help=False,
+    )
+    p_check.add_argument(
+        "-h", "--help", action="help", help="Show this help message and exit"
+    )
+    p_check.add_argument("paths", nargs="+", help="Files or directories to check")
+    p_check.add_argument(
+        "--show-config", action="store_true", help="Display configuration and exit"
+    )
+    p_check.add_argument(
+        "--format", "-f", default="text", help="Output format: text, json, sarif"
+    )
+    p_check.add_argument(
+        "--select", "-s", default=None, help="Rules to enable (comma-separated)"
+    )
+    p_check.add_argument(
+        "--ignore", "-i", default=None, help="Rules to disable (comma-separated)"
+    )
+    p_check.add_argument(
+        "--config", "-c", default=None, help="Path to configuration file"
+    )
+    p_check.add_argument(
+        "--severity", default=None, help="Minimum severity: error, warning, info"
+    )
+    p_check.add_argument(
+        "--quiet", "-q", action="store_true", help="Only output errors"
+    )
+    p_check.add_argument(
+        "--verbose", "-v", action="store_true", help="Show additional diagnostic info"
+    )
+    p_check.add_argument(
+        "--baseline", "-b", default=None, help="Baseline file for only-new-issues mode"
+    )
+    p_check.add_argument(
+        "--generate-baseline",
+        action="store_true",
+        help="Generate baseline file from current issues",
+    )
+    p_check.add_argument(
+        "--min-confidence", default=None, help="Minimum confidence: high, medium, low"
+    )
+    p_check.add_argument(
+        "--hide-low",
+        action="store_true",
+        help="Hide low-confidence issues (shorthand for --min-confidence medium)",
+    )
+    p_check.set_defaults(func=_cmd_check)
+
+    # --- rules ---
+    p_rules = subparsers.add_parser(
+        "rules", help="List all available rules", add_help=False
+    )
+    p_rules.add_argument(
+        "-h", "--help", action="help", help="Show this help message and exit"
+    )
+    p_rules.set_defaults(func=_cmd_rules)
+
+    # --- init ---
+    p_init = subparsers.add_parser(
+        "init", help="Create a .slop-lint.toml config file", add_help=False
+    )
+    p_init.add_argument(
+        "-h", "--help", action="help", help="Show this help message and exit"
+    )
+    p_init.set_defaults(func=_cmd_init)
+
+    # --- explain ---
+    p_explain = subparsers.add_parser(
+        "explain", help="Explain a specific rule with examples", add_help=False
+    )
+    p_explain.add_argument(
+        "-h", "--help", action="help", help="Show this help message and exit"
+    )
+    p_explain.add_argument("rule_id", help="Rule ID (e.g., V001)")
+    p_explain.set_defaults(func=_cmd_explain)
+
+    # --- version ---
+    p_version = subparsers.add_parser(
+        "version", help="Show version information", add_help=False
+    )
+    p_version.add_argument(
+        "-h", "--help", action="help", help="Show this help message and exit"
+    )
+    p_version.set_defaults(func=_cmd_version)
+
+    # --- watch ---
+    p_watch = subparsers.add_parser(
+        "watch",
+        help="Watch files for changes and report issues continuously",
+        add_help=False,
+    )
+    p_watch.add_argument(
+        "-h", "--help", action="help", help="Show this help message and exit"
+    )
+    p_watch.add_argument("paths", nargs="+", help="Files or directories to watch")
+    p_watch.add_argument(
+        "--select", "-s", default=None, help="Rules to enable (comma-separated)"
+    )
+    p_watch.add_argument(
+        "--ignore", "-i", default=None, help="Rules to disable (comma-separated)"
+    )
+    p_watch.add_argument(
+        "--config", "-c", default=None, help="Path to configuration file"
+    )
+    p_watch.add_argument(
+        "--interval", "-n", type=float, default=2.0, help="Check interval in seconds"
+    )
+    p_watch.add_argument(
+        "--no-clear",
+        action="store_true",
+        help="Do not clear screen between checks",
+    )
+    p_watch.set_defaults(func=_cmd_watch)
+
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Entry point for the CLI."""
+    parser = _build_parser()
+    args = parser.parse_args(argv)
+
+    if not hasattr(args, "func"):
+        parser.print_help()
+        return 2
+
+    return args.func(args)  # type: ignore[no-any-return]
 
 
 if __name__ == "__main__":
-    app()
+    sys.exit(main())

@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "slop-lint"
 version = "0.1.0"
-description = "Detect and fix bad writing practices in Markdown and Python files"
+description = "Detect bad writing practices in Markdown and Python files"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
@@ -34,12 +34,7 @@ classifiers = [
     "Topic :: Text Processing :: Linguistic",
     "Typing :: Typed",
 ]
-dependencies = [
-    "typer>=0.9.0",
-    "rich>=13.0",
-    "mistune>=3.0",
-    "regex>=2023.0",
-]
+dependencies = []
 
 [project.optional-dependencies]
 dev = [
@@ -51,7 +46,7 @@ dev = [
 ]
 
 [project.scripts]
-slop-lint = "slop_lint.cli:app"
+slop-lint = "slop_lint.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/slop-lint/slop-lint"

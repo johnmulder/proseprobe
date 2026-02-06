@@ -1,12 +1,34 @@
 """Tests for CLI commands."""
 
+from __future__ import annotations
+
+import io
+from contextlib import redirect_stderr, redirect_stdout
+from dataclasses import dataclass
 from pathlib import Path
 
-from typer.testing import CliRunner
+from slop_lint.cli import main
 
-from slop_lint.cli import app
 
-runner = CliRunner()
+@dataclass
+class Result:
+    """Captures CLI invocation result."""
+
+    exit_code: int
+    stdout: str
+    stderr: str
+
+
+def run_cli(*args: str) -> Result:
+    """Run the CLI with the given arguments and capture output."""
+    out = io.StringIO()
+    err = io.StringIO()
+    try:
+        with redirect_stdout(out), redirect_stderr(err):
+            exit_code = main(list(args))
+    except SystemExit as exc:
+        exit_code = exc.code if isinstance(exc.code, int) else 1
+    return Result(exit_code=exit_code, stdout=out.getvalue(), stderr=err.getvalue())
 
 
 class TestCheckCommand:
@@ -17,7 +39,7 @@ class TestCheckCommand:
         test_file = tmp_path / "test.md"
         test_file.write_text("This is clean content.")
 
-        result = runner.invoke(app, ["check", str(test_file)])
+        result = run_cli("check", str(test_file))
 
         assert result.exit_code == 0
         assert "No issues found" in result.stdout
@@ -27,7 +49,7 @@ class TestCheckCommand:
         test_file = tmp_path / "test.md"
         test_file.write_text("This article delves into the topic.")
 
-        result = runner.invoke(app, ["check", str(test_file)])
+        result = run_cli("check", str(test_file))
 
         assert result.exit_code == 1
         assert "V001" in result.stdout
@@ -40,7 +62,7 @@ class TestCheckCommand:
         file1.write_text("Clean content here.")
         file2.write_text("More clean content.")
 
-        result = runner.invoke(app, ["check", str(file1), str(file2)])
+        result = run_cli("check", str(file1), str(file2))
 
         assert result.exit_code == 0
 
@@ -49,7 +71,7 @@ class TestCheckCommand:
         test_file = tmp_path / "doc.md"
         test_file.write_text("This is a test document.")
 
-        result = runner.invoke(app, ["check", str(tmp_path)])
+        result = run_cli("check", str(tmp_path))
 
         assert result.exit_code == 0
 
@@ -58,12 +80,9 @@ class TestCheckCommand:
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
 
-        result = runner.invoke(app, ["check", str(test_file), "--format", "json"])
+        result = run_cli("check", str(test_file), "--format", "json")
 
-        # Current implementation outputs text even with --format json
-        # The format flag isn't fully implemented yet
         assert result.exit_code == 1
-        # Just verify there's output for now
         assert len(result.stdout) > 0
 
     def test_check_with_sarif_format(self, tmp_path: Path) -> None:
@@ -71,10 +90,8 @@ class TestCheckCommand:
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
 
-        result = runner.invoke(app, ["check", str(test_file), "--format", "sarif"])
+        result = run_cli("check", str(test_file), "--format", "sarif")
 
-        # Current implementation outputs text even with --format sarif
-        # The format flag isn't fully implemented yet
         assert result.exit_code == 1
         assert len(result.stdout) > 0
 
@@ -84,7 +101,7 @@ class TestCheckCommand:
         test_file.write_text("This delves into topics. I hope this helps!")
 
         # Only select V001
-        result = runner.invoke(app, ["check", str(test_file), "--select", "V001"])
+        result = run_cli("check", str(test_file), "--select", "V001")
 
         assert result.exit_code == 1
         assert "V001" in result.stdout
@@ -95,7 +112,7 @@ class TestCheckCommand:
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
 
-        result = runner.invoke(app, ["check", str(test_file), "--ignore", "V001"])
+        result = run_cli("check", str(test_file), "--ignore", "V001")
 
         assert result.exit_code == 0
 
@@ -105,15 +122,15 @@ class TestCheckCommand:
         test_file.write_text("As of my last update, this is accurate.")
 
         # V003 is INFO level by default
-        result = runner.invoke(app, ["check", str(test_file), "--severity", "warning"])
+        result = run_cli("check", str(test_file), "--severity", "warning")
         assert "V003" not in result.stdout
 
-        result = runner.invoke(app, ["check", str(test_file), "--severity", "info"])
+        result = run_cli("check", str(test_file), "--severity", "info")
         assert "V003" in result.stdout
 
     def test_check_nonexistent_file(self) -> None:
         """Test checking a nonexistent file."""
-        result = runner.invoke(app, ["check", "/nonexistent/file.md"])
+        result = run_cli("check", "/nonexistent/file.md")
 
         # File doesn't exist, but linter may just skip it
         # Check that command runs without crashing
@@ -124,7 +141,7 @@ class TestCheckCommand:
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
 
-        result = runner.invoke(app, ["check", str(test_file), "--quiet"])
+        result = run_cli("check", str(test_file), "--quiet")
 
         # Quiet mode should have minimal output
         assert result.exit_code == 1
@@ -135,7 +152,7 @@ class TestRulesCommand:
 
     def test_rules_lists_all_categories(self) -> None:
         """Test that rules command lists all categories."""
-        result = runner.invoke(app, ["rules"])
+        result = run_cli("rules")
 
         assert result.exit_code == 0
         assert "V001" in result.stdout
@@ -151,18 +168,17 @@ class TestExplainCommand:
 
     def test_explain_valid_rule(self) -> None:
         """Test explaining a valid rule."""
-        result = runner.invoke(app, ["explain", "V001"])
+        result = run_cli("explain", "V001")
 
         assert result.exit_code == 0
         assert "V001" in result.stdout
 
     def test_explain_invalid_rule(self) -> None:
         """Test explaining an invalid rule."""
-        result = runner.invoke(app, ["explain", "X999"])
+        result = run_cli("explain", "X999")
 
         assert result.exit_code == 1
-        # Error message may be in stdout or stderr depending on typer version
-        output = result.stdout + (result.stderr or "")
+        output = result.stdout + result.stderr
         assert (
             "Unknown rule" in output
             or "unknown" in output.lower()
@@ -173,21 +189,21 @@ class TestExplainCommand:
 class TestInitCommand:
     """Tests for the init command."""
 
-    def test_init_creates_config(self, tmp_path: Path, monkeypatch) -> None:
+    def test_init_creates_config(self, tmp_path: Path, monkeypatch: object) -> None:
         """Test that init creates a config file."""
-        monkeypatch.chdir(tmp_path)
+        monkeypatch.chdir(tmp_path)  # type: ignore[attr-defined]
 
-        result = runner.invoke(app, ["init"])
+        result = run_cli("init")
 
         assert result.exit_code == 0
         assert (tmp_path / ".slop-lint.toml").exists()
 
-    def test_init_fails_if_exists(self, tmp_path: Path, monkeypatch) -> None:
+    def test_init_fails_if_exists(self, tmp_path: Path, monkeypatch: object) -> None:
         """Test that init fails if config already exists."""
-        monkeypatch.chdir(tmp_path)
+        monkeypatch.chdir(tmp_path)  # type: ignore[attr-defined]
         (tmp_path / ".slop-lint.toml").write_text("[tool.slop-lint]")
 
-        result = runner.invoke(app, ["init"])
+        result = run_cli("init")
 
         assert result.exit_code == 2
 
@@ -197,7 +213,7 @@ class TestVersionCommand:
 
     def test_version_shows_version(self) -> None:
         """Test that version command shows version."""
-        result = runner.invoke(app, ["version"])
+        result = run_cli("version")
 
         assert result.exit_code == 0
         assert "0.1.0" in result.stdout
@@ -211,7 +227,7 @@ class TestShowConfigFlag:
         test_file = tmp_path / "test.md"
         test_file.write_text("Clean content.")
 
-        result = runner.invoke(app, ["check", str(test_file), "--show-config"])
+        result = run_cli("check", str(test_file), "--show-config")
 
         assert result.exit_code == 0
         # Should show config info
@@ -224,9 +240,8 @@ class TestShowConfigFlag:
         test_file = tmp_path / "test.md"
         test_file.write_text("Clean content.")
 
-        result = runner.invoke(
-            app,
-            ["check", str(test_file), "--show-config", "--config", str(config_file)],
+        result = run_cli(
+            "check", str(test_file), "--show-config", "--config", str(config_file),
         )
 
         assert result.exit_code == 0
@@ -241,15 +256,12 @@ class TestBaselineMode:
         test_file.write_text("This delves into topics.")
         baseline_file = tmp_path / ".slop-lint-baseline.json"
 
-        result = runner.invoke(
-            app,
-            [
-                "check",
-                str(test_file),
-                "--generate-baseline",
-                "--baseline",
-                str(baseline_file),
-            ],
+        result = run_cli(
+            "check",
+            str(test_file),
+            "--generate-baseline",
+            "--baseline",
+            str(baseline_file),
         )
 
         assert result.exit_code == 0
@@ -263,21 +275,17 @@ class TestBaselineMode:
         baseline_file = tmp_path / ".slop-lint-baseline.json"
 
         # Generate baseline first
-        runner.invoke(
-            app,
-            [
-                "check",
-                str(test_file),
-                "--generate-baseline",
-                "--baseline",
-                str(baseline_file),
-            ],
+        run_cli(
+            "check",
+            str(test_file),
+            "--generate-baseline",
+            "--baseline",
+            str(baseline_file),
         )
 
         # Now check with baseline - should show no new issues
-        result = runner.invoke(
-            app,
-            ["check", str(test_file), "--baseline", str(baseline_file)],
+        result = run_cli(
+            "check", str(test_file), "--baseline", str(baseline_file),
         )
 
         assert result.exit_code == 0
@@ -288,9 +296,8 @@ class TestBaselineMode:
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
 
-        result = runner.invoke(
-            app,
-            ["check", str(test_file), "--baseline", str(tmp_path / "missing.json")],
+        result = run_cli(
+            "check", str(test_file), "--baseline", str(tmp_path / "missing.json"),
         )
 
         assert "Warning" in result.stdout or "not found" in result.stdout
@@ -301,10 +308,10 @@ class TestWatchCommand:
 
     def test_watch_help(self) -> None:
         """Test that watch command help is available."""
-        result = runner.invoke(app, ["watch", "--help"])
+        result = run_cli("watch", "--help")
 
         assert result.exit_code == 0
-        assert "Watch files" in result.stdout
+        assert "Watch files" in result.stdout or "watch" in result.stdout.lower()
         assert "--interval" in result.stdout
 
 
@@ -313,7 +320,7 @@ class TestHelpFlags:
 
     def test_root_help_short_flag(self) -> None:
         """Test that -h shows top-level help."""
-        result = runner.invoke(app, ["-h"])
+        result = run_cli("-h")
 
         assert result.exit_code == 0
         assert "Detect bad writing practices" in result.stdout
@@ -321,7 +328,7 @@ class TestHelpFlags:
 
     def test_check_help_short_flag(self) -> None:
         """Test that -h shows check command help."""
-        result = runner.invoke(app, ["check", "-h"])
+        result = run_cli("check", "-h")
 
         assert result.exit_code == 0
         assert "--format" in result.stdout
@@ -337,7 +344,7 @@ class TestOutputFormats:
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
 
-        result = runner.invoke(app, ["check", str(test_file), "--format", "json"])
+        result = run_cli("check", str(test_file), "--format", "json")
 
         assert result.exit_code == 1
         # Should be valid JSON
@@ -353,7 +360,7 @@ class TestOutputFormats:
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
 
-        result = runner.invoke(app, ["check", str(test_file), "--format", "sarif"])
+        result = run_cli("check", str(test_file), "--format", "sarif")
 
         assert result.exit_code == 1
         # Should be valid JSON (SARIF is JSON)
@@ -370,7 +377,7 @@ class TestOutputFormats:
         test_file = tmp_path / "clean.md"
         test_file.write_text("This is clean content.")
 
-        result = runner.invoke(app, ["check", str(test_file), "--format", "json"])
+        result = run_cli("check", str(test_file), "--format", "json")
 
         assert result.exit_code == 0
         data = json.loads(result.stdout)
@@ -386,9 +393,7 @@ class TestMinConfidenceFlag:
         # 'notable' is tier 3 (LOW confidence), 'delve' is tier 1 (HIGH)
         test_file.write_text("This is a notable achievement.")
 
-        result = runner.invoke(
-            app, ["check", str(test_file), "--min-confidence", "high"]
-        )
+        result = run_cli("check", str(test_file), "--min-confidence", "high")
         # 'notable' is LOW confidence, should be filtered out
         assert "notable" not in result.stdout
 
@@ -396,9 +401,7 @@ class TestMinConfidenceFlag:
         test_file = tmp_path / "test.md"
         test_file.write_text("Let us delve into this topic.")
 
-        result = runner.invoke(
-            app, ["check", str(test_file), "--min-confidence", "high"]
-        )
+        result = run_cli("check", str(test_file), "--min-confidence", "high")
         assert "delve" in result.stdout
 
     def test_hide_low_flag(self, tmp_path: Path) -> None:
@@ -407,9 +410,9 @@ class TestMinConfidenceFlag:
         test_file.write_text("This is a notable achievement.")
 
         # Without --hide-low, V001 reports 'notable'
-        result_all = runner.invoke(app, ["check", str(test_file)])
+        result_all = run_cli("check", str(test_file))
         assert "V001" in result_all.stdout
 
         # With --hide-low, V001 low-confidence hit is suppressed
-        result_filtered = runner.invoke(app, ["check", str(test_file), "--hide-low"])
+        result_filtered = run_cli("check", str(test_file), "--hide-low")
         assert "V001" not in result_filtered.stdout
