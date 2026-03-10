@@ -25,14 +25,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `--show-config` flag to display current configuration
 - Pre-commit hook configuration (`.pre-commit-hooks.yaml`)
 - GitHub Actions CI workflow for testing on Python 3.11, 3.12, 3.13
-- Complete documentation for all 29 rules with examples
+- **18 new AI-writing-trope rules** based on [tropes.fyi](https://tropes.fyi) catalogue:
+  - V006-V007 (grandiose stakes, invented concept labels)
+  - S008-S016 (dramatic countdown, rhetorical self-answer, anaphora abuse,
+    gerund fragment litany, listicle in prose, historical analogy stacking,
+    signposted conclusion, fractal summary, content duplication)
+  - T007 (short punchy fragments)
+  - G004-G009 (false suspense, patronizing analogy, futurist invitation,
+    false vulnerability, asserted simplicity, pedagogical voice)
+- Complete documentation for all 47 rules with examples
 - Full CLI options reference in configuration docs
 - Property-based tests using Hypothesis (265 additional tests)
 - Benchmark suite (`make benchmark`) for performance tracking
 - `py.typed` marker for PEP 561 type checking support
 
 ### Changed
-- Total test count: 436 tests passing
+- Total test count: 596 tests passing
 - Improved package metadata and URLs
 
 ### Removed

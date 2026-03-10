@@ -11,7 +11,7 @@ Overused vocabulary, structural clichés, promotional language, and sloppy marku
 
 ## Features
 
-- 🔍 **29 detection rules** across 6 categories
+- 🔍 **47 detection rules** across 6 categories
 - 📝 Scans Markdown (`.md`, `.mdx`) and Python (`.py`) files
 - 🎯 **Confidence levels** (high/medium/low) to reduce noise
 - ⚙️ Configurable via `.slop-lint.toml`
@@ -66,10 +66,10 @@ slop-lint explain V001
 
 | Prefix | Category | Rules | Description |
 |--------|----------|-------|-------------|
-| `V` | Vocabulary | 5 | Overused and clichéd words and phrases |
-| `S` | Structure | 7 | Organizational patterns |
-| `T` | Style | 6 | Typographic issues |
-| `G` | Grammar | 3 | Grammatical patterns |
+| `V` | Vocabulary | 7 | Overused and clichéd words and phrases |
+| `S` | Structure | 16 | Organizational patterns |
+| `T` | Style | 7 | Typographic issues |
+| `G` | Grammar | 9 | Grammatical patterns |
 | `C` | Code | 4 | Python docstring/comment issues |
 | `M` | Markup | 4 | Markdown artifacts |
 
@@ -170,7 +170,6 @@ ruff check src/
 ## Documentation
 
 - [SPEC.md](SPEC.md) — Technical specification
-- [PLAN.md](PLAN.md) — Implementation plan and AI coding agent guide
 - [docs/rules.md](docs/rules.md) — Detailed rule documentation
 - [docs/configuration.md](docs/configuration.md) — Configuration reference
 

@@ -1,7 +1,7 @@
 # slop-lint - Technical Specification
 
-> Version: 0.1.0 (Draft)  
-> Last Updated: 2026-01-31
+> Version: 0.1.0  
+> Last Updated: 2026-03-10
 
 ## 1. Purpose
 
@@ -40,13 +40,13 @@
 
 | Prefix | Category | Count | Description |
 |--------|----------|-------|-------------|
-| `V` | Vocabulary | 5 | Overused and clichéd word patterns |
-| `S` | Structure | 7 | Structural and organizational patterns |
-| `T` | Style | 6 | Typographic and formatting issues |
-| `G` | Grammar | 3 | Grammatical anti-patterns |
+| `V` | Vocabulary | 7 | Overused and clichéd word patterns |
+| `S` | Structure | 16 | Structural and organizational patterns |
+| `T` | Style | 7 | Typographic and formatting issues |
+| `G` | Grammar | 9 | Grammatical anti-patterns |
 | `C` | Code | 4 | Python-specific documentation issues |
 | `M` | Markup | 4 | Markdown artifacts and markup errors |
-| **Total** | | **29** | |
+| **Total** | | **47** | |
 
 ### 3.2 Rule Severity Levels
 
@@ -80,6 +80,9 @@ slop-lint version                      Show version information
 | `--severity` | choice | warning | Minimum severity to report |
 | `--min-confidence` | choice | low | Minimum confidence: high, medium, low |
 | `--hide-low` | flag | false | Hide low-confidence issues |
+| `--baseline` | path | none | Path to baseline file for incremental adoption |
+| `--generate-baseline` | flag | false | Generate baseline from current issues |
+| `--show-config` | flag | false | Display resolved configuration and exit |
 | `--quiet` | flag | false | Only output errors |
 | `--verbose` | flag | false | Show additional diagnostic info |
 

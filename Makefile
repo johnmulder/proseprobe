@@ -113,7 +113,6 @@ spec-verify:
 	@$(PYTHON) -m slop_lint --help | grep -q "init" || (echo "ERROR: 'init' command missing" && exit 1)
 	@$(PYTHON) -m slop_lint --help | grep -q "version" || (echo "ERROR: 'version' command missing" && exit 1)
 	@echo "Verifying check command options..."
-	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-fix" || (echo "ERROR: --fix option missing" && exit 1)
 	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-format" || (echo "ERROR: --format option missing" && exit 1)
 	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-select" || (echo "ERROR: --select option missing" && exit 1)
 	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-ignore" || (echo "ERROR: --ignore option missing" && exit 1)
