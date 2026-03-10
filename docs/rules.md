@@ -658,3 +658,426 @@ See the attached document [attached_file:1] for details.
 ```markdown
 See `docs/architecture.md` for details.
 ```
+
+---
+
+## Phase 10: AI Writing Tropes Rules
+
+The following rules were added based on the
+[AI Writing Tropes to Avoid](https://tropes.fyi) catalogue.
+
+---
+
+### V006: Grandiose Stakes
+
+Detects inflated importance claims that overstate significance.
+
+**Severity:** Warning  
+**Fixable:** No
+
+**Detected patterns:**
+- "fundamentally reshape", "define the next era"
+- "entirely new paradigm", "change everything"
+- "unprecedented opportunity", "reshape the future"
+
+**Example (bad):**
+```markdown
+AI will fundamentally reshape how society functions.
+```
+
+**Example (good):**
+```markdown
+AI is changing several industries, particularly customer service and logistics.
+```
+
+---
+
+### V007: Invented Concept Labels
+
+Detects compound pseudo-analytical labels ("the X paradox", "the Y trap")
+when 2+ appear in the same document.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected suffixes:** paradox, trap, creep, divide, vacuum, inversion,
+deficit, gap, spiral, dilemma
+
+**Example (bad):**
+```markdown
+This creates the automation paradox. Teams also face the innovation trap.
+Meanwhile, the complexity creep threatens progress.
+```
+
+**Example (good):**
+```markdown
+Automating too aggressively can backfire when teams lose the skills to
+intervene manually.
+```
+
+---
+
+### S008: Dramatic Countdown
+
+Detects "Not X. Not Y. Just/But Z." dramatic negation patterns.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Example (bad):**
+```markdown
+Not faster hardware. Not better algorithms. Just cleaner data.
+```
+
+**Example (good):**
+```markdown
+The improvement came from cleaning the data, not from hardware or algorithms.
+```
+
+---
+
+### S009: Rhetorical Self-Answer
+
+Detects "The X? A Y." patterns where a question is immediately answered
+with a short fragment.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Example (bad):**
+```markdown
+The result? A complete transformation of the industry.
+```
+
+**Example (good):**
+```markdown
+The result was a measurable improvement in delivery times.
+```
+
+---
+
+### S010: Anaphora Abuse
+
+Detects 3+ consecutive sentences starting with the same word.
+
+**Severity:** Warning  
+**Fixable:** No  
+**Configurable:** `threshold` (default: 3)
+
+**Example (bad):**
+```markdown
+Every team needs this. Every manager should know this. Every company benefits.
+```
+
+**Example (good):**
+```markdown
+Teams, managers, and companies all benefit from this approach.
+```
+
+---
+
+### S011: Gerund Fragment Litany
+
+Detects 3+ consecutive gerund-phrase fragments used for rhythmic effect.
+
+**Severity:** Info  
+**Fixable:** No  
+**Configurable:** `threshold` (default: 3)
+
+**Example (bad):**
+```markdown
+Building faster. Shipping sooner. Iterating constantly.
+```
+
+**Example (good):**
+```markdown
+The team focused on faster builds, shorter ship cycles, and constant iteration.
+```
+
+---
+
+### S012: Listicle in Prose
+
+Detects ordinal progressions ("The first… The second… The third…")
+disguised as continuous prose.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Example (bad):**
+```markdown
+The first reason is cost. The second reason is speed.
+The third reason is reliability.
+```
+
+**Example (good):**
+```markdown
+The main reasons are cost, speed, and reliability.
+```
+
+---
+
+### S013: Historical Analogy Stacking
+
+Detects 3+ tech company/product name-drops in rapid succession.
+
+**Severity:** Info  
+**Fixable:** No  
+**Configurable:** `threshold` (default: 3)
+
+**Example (bad):**
+```markdown
+Like Google, Amazon, and Netflix before them, these companies
+are following the path blazed by Apple and Microsoft.
+```
+
+**Example (good):**
+```markdown
+Several large tech companies have adopted this pattern.
+```
+
+---
+
+### S014: Signposted Conclusion
+
+Detects formulaic conclusion markers.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "In conclusion", "To sum up", "As we've seen"
+- "The bottom line is", "At the end of the day"
+
+**Example (bad):**
+```markdown
+In conclusion, the framework provides significant benefits.
+```
+
+**Example (good):**
+```markdown
+The framework reduces build times by 40% and eliminates flaky tests.
+```
+
+---
+
+### S015: Fractal Summary
+
+Detects "In this section, we'll explore" / "As we've seen in this
+section" intro/outro framing.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "in this section, we'll explore"
+- "as we've seen in this section"
+- "this section will cover"
+- "let's now turn to"
+
+**Example (bad):**
+```markdown
+In this section, we'll explore how caching improves performance.
+```
+
+**Example (good):**
+```markdown
+Caching improves performance by reducing database round-trips.
+```
+
+---
+
+### S016: Content Duplication
+
+Detects repeated paragraphs within the same document using hash-based
+comparison.
+
+**Severity:** Warning  
+**Fixable:** No
+
+**Example (bad):**
+```markdown
+The system processes data in real time for immediate insights.
+
+[several paragraphs later]
+
+The system processes data in real time for immediate insights.
+```
+
+**Example (good):**
+```markdown
+State each idea once. Refer back with cross-references if needed.
+```
+
+---
+
+### G004: False Suspense Transition
+
+Detects manufactured dramatic tension in transitions.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "Here's the thing", "Here's the kicker"
+- "Here's where it gets interesting"
+- "Here's what most people miss"
+- "But here's the catch"
+
+**Example (bad):**
+```markdown
+Here's the thing: most teams don't need microservices.
+```
+
+**Example (good):**
+```markdown
+Most teams don't need microservices.
+```
+
+---
+
+### G005: Patronizing Analogy
+
+Detects condescending "think of it as" explanatory patterns.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "Think of it as", "Think of it like"
+- "Imagine a world where", "Imagine a future where"
+- "Picture this"
+
+**Example (bad):**
+```markdown
+Think of it as a digital librarian that organizes your data.
+```
+
+**Example (good):**
+```markdown
+The service indexes and organizes data automatically.
+```
+
+---
+
+### G006: Futurist Invitation
+
+Detects speculative "imagine a world" framing.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "Imagine a world where"
+- "In that world"
+- "What if you could"
+- "Imagine a future where"
+
+**Example (bad):**
+```markdown
+Imagine a world where deployments never fail.
+```
+
+**Example (good):**
+```markdown
+Zero-downtime deployments are achievable with blue-green strategies.
+```
+
+---
+
+### G007: False Vulnerability
+
+Detects performative honesty or faux-candid phrasing.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "I'll be honest", "if I'm being honest"
+- "since we're being honest", "this is not a rant"
+- "can we be real for a moment"
+
+**Example (bad):**
+```markdown
+I'll be honest: most startups fail because of bad hiring.
+```
+
+**Example (good):**
+```markdown
+Most startups fail because of bad hiring.
+```
+
+---
+
+### G008: Asserted Simplicity
+
+Detects claims of simplicity that mask complexity or assert authority.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "The reality is simpler", "The truth is"
+- "History is clear", "The answer is simple"
+- "It really comes down to"
+
+**Example (bad):**
+```markdown
+The reality is simpler than you think.
+```
+
+**Example (good):**
+```markdown
+The main factor is cache hit rate, which accounts for 80% of latency reduction.
+```
+
+---
+
+### G009: Pedagogical Voice
+
+Detects overly instructional "let's explore" tone.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "Let's break this down", "Let's unpack this"
+- "Let's explore this", "Let's dive in"
+- "Let's take a closer look", "Let's examine"
+
+**Example (bad):**
+```markdown
+Let's break this down. First, we need to understand the basics.
+```
+
+**Example (good):**
+```markdown
+The system has three components: ingestion, processing, and storage.
+```
+
+---
+
+### T007: Short Punchy Fragments
+
+Detects 3+ consecutive very short paragraphs (≤ 5 words each) used for
+manufactured dramatic emphasis.
+
+**Severity:** Info  
+**Fixable:** No  
+**Configurable:** `threshold` (default: 3)
+
+**Example (bad):**
+```markdown
+It worked.
+
+Every single time.
+
+Without fail.
+
+No exceptions.
+```
+
+**Example (good):**
+```markdown
+It worked every single time without exception.
+```

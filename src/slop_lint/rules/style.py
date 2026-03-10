@@ -267,3 +267,77 @@ class ElegantVariationRule(Rule):
                         break
 
         return issues
+
+
+class ShortPunchyFragmentsRule(Rule):
+    """T007: Detect 3+ consecutive short-sentence paragraphs."""
+
+    id = "T007"
+    name = "Short Punchy Fragments"
+    description = "Detects consecutive very short paragraphs for manufactured emphasis"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    _MAX_WORDS = 5
+
+    def __init__(self, threshold: int = 3) -> None:
+        self._threshold = threshold
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+
+        # Group lines into paragraphs (separated by blank lines)
+        paragraphs: list[tuple[int, str]] = []
+        current_lines: list[str] = []
+        start_line = 0
+
+        all_lines = content.split("\n")
+        for i, raw_line in enumerate(all_lines, start=1):
+            if not raw_line.strip():
+                if current_lines:
+                    paragraphs.append((start_line, " ".join(current_lines)))
+                    current_lines = []
+                start_line = 0
+            else:
+                if not current_lines:
+                    start_line = i
+                current_lines.append(raw_line.strip())
+
+        if current_lines:
+            paragraphs.append((start_line, " ".join(current_lines)))
+
+        # Find consecutive short paragraphs
+        run_start = 0
+        run_count = 0
+        for i, (_line_num, text) in enumerate(paragraphs):
+            word_count = len(text.split())
+            if word_count <= self._MAX_WORDS:
+                if run_count == 0:
+                    run_start = i
+                run_count += 1
+            else:
+                if run_count >= self._threshold:
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Short punchy fragments: {run_count} consecutive short paragraphs",
+                            line=paragraphs[run_start][0],
+                            column=1,
+                            severity=self.severity,
+                        )
+                    )
+                run_count = 0
+
+        if run_count >= self._threshold:
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=f"Short punchy fragments: {run_count} consecutive short paragraphs",
+                    line=paragraphs[run_start][0],
+                    column=1,
+                    severity=self.severity,
+                )
+            )
+
+        return issues

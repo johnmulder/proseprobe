@@ -48,6 +48,11 @@ AI_VOCABULARY_TIER2 = {
     "empower",
     "endeavor",
     "paramount",
+    # Magic adverbs (tropes.fyi)
+    "quietly",
+    "deeply",
+    "fundamentally",
+    "arguably",
 }
 
 # Tier 3: Low confidence (common but frequently overused)
@@ -111,6 +116,11 @@ VOCABULARY_SUGGESTIONS: dict[str, str] = {
     "empower": "enable",
     "endeavor": "effort",
     "paramount": "important",
+    # Magic adverbs
+    "quietly": "silently",
+    "deeply": "very",
+    "fundamentally": "basically",
+    "arguably": "perhaps",
 }
 
 # Vocabulary specific to code/docstrings (used by C001)

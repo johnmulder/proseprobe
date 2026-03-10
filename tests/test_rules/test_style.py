@@ -145,3 +145,61 @@ class TestElegantVariation:
         """Test rule has correct metadata."""
         rule = ElegantVariationRule()
         assert rule.id == "T006"
+
+
+# ---------- Phase 10 TDD: T007 ----------
+
+
+class TestShortPunchyFragments:
+    """Tests for T007: Short Punchy Fragments."""
+
+    def test_detects_consecutive_short_paras(self) -> None:
+        """Detect 3+ consecutive short-sentence paragraphs."""
+        from slop_lint.rules.style import ShortPunchyFragmentsRule
+
+        text = "He published this.\n\nOpenly.\n\nIn a book.\n\nAs a priest."
+        rule = ShortPunchyFragmentsRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "T007"
+
+    def test_detects_punchy_prose(self) -> None:
+        """Detect 'But I adapted.' style fragments."""
+        from slop_lint.rules.style import ShortPunchyFragmentsRule
+
+        text = "These weren't just products.\n\nAnd the software matched.\n\nThen it changed.\n\nBut I adapted."
+        rule = ShortPunchyFragmentsRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_normal_paragraphs(self) -> None:
+        """Don't flag normal-length paragraphs."""
+        from slop_lint.rules.style import ShortPunchyFragmentsRule
+
+        text = (
+            "The system provides reliable error handling and comprehensive logging.\n\n"
+            "Users can configure retry policies and timeout settings through the TOML file.\n\n"
+            "The caching layer reduces database queries by approximately forty percent."
+        )
+        rule = ShortPunchyFragmentsRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_custom_threshold(self) -> None:
+        """Respect configurable threshold."""
+        from slop_lint.rules.style import ShortPunchyFragmentsRule
+
+        text = "Stop.\n\nThink.\n\nAct."
+        rule_low = ShortPunchyFragmentsRule(threshold=2)
+        rule_high = ShortPunchyFragmentsRule(threshold=5)
+        issues_low = rule_low.check(text, "test.md")
+        issues_high = rule_high.check(text, "test.md")
+        assert len(issues_low) >= 1
+        assert len(issues_high) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.style import ShortPunchyFragmentsRule
+
+        rule = ShortPunchyFragmentsRule()
+        assert rule.id == "T007"
+        assert rule.name == "Short Punchy Fragments"

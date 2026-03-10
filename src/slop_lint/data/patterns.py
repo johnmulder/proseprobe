@@ -65,6 +65,19 @@ HEDGING_PATTERNS = [
     r"in (some|many|most) (ways|respects|cases)",
 ]
 
+# Dramatic countdown patterns (S008)
+DRAMATIC_COUNTDOWN_PATTERN = r"(?:^|(?<=\n))\s*Not\s+[^.!?\n]+\.\s*Not\s+[^.!?\n]+\.\s*(?:Just|But|Only|Simply)\s+[^.!?\n]+\."
+
+# Rhetorical self-answer patterns (S009)
+RHETORICAL_SELF_ANSWER_PATTERN = r"(?:^|(?<=\n))([^\n?]*\?\s*)\n\s*([A-Z][^.!?\n]{0,50}[.!])"
+
+# Listicle in prose patterns (S012)
+LISTICLE_PROSE_PATTERNS = [
+    r"\bthe first\b.+\bthe second\b.+\bthe third\b",
+    r"\bfirst(?:ly)?,\b.+\bsecond(?:ly)?,\b.+\bthird(?:ly)?,\b",
+    r"\bthe (first|1st) (takeaway|point|lesson|wall|reason)",
+]
+
 # All structural patterns for easy access
 STRUCTURAL_PATTERNS = {
     "rule_of_three": RULE_OF_THREE_PATTERNS,
@@ -75,4 +88,7 @@ STRUCTURAL_PATTERNS = {
     "participle_chains": PARTICIPLE_CHAIN_PATTERNS,
     "copula_avoidance": COPULA_AVOIDANCE_PATTERNS,
     "hedging": HEDGING_PATTERNS,
+    "dramatic_countdown": DRAMATIC_COUNTDOWN_PATTERN,
+    "rhetorical_self_answer": RHETORICAL_SELF_ANSWER_PATTERN,
+    "listicle_prose": LISTICLE_PROSE_PATTERNS,
 }

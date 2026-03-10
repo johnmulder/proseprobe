@@ -10,6 +10,9 @@ from slop_lint.rules.struct import (
     SuperficialAnalysisRule,
 )
 
+# New S008-S016 imports will be added once implemented
+# (Tests written first — TDD red phase)
+
 
 class TestRuleOfThree:
     """Tests for S001: Rule of Three."""
@@ -165,3 +168,397 @@ class TestFalseRanges:
         """Test rule has correct metadata."""
         rule = FalseRangesRule()
         assert rule.id == "S007"
+
+
+# ---------- Phase 10 TDD: S008-S016 ----------
+
+
+class TestDramaticCountdown:
+    """Tests for S008: Dramatic Countdown."""
+
+    def test_detects_not_x_not_y_just_z(self) -> None:
+        """Detect 'Not X. Not Y. Just Z.' countdown pattern."""
+        from slop_lint.rules.struct import DramaticCountdownRule
+
+        text = "Not a bug. Not a feature. Just a fundamental design flaw."
+        rule = DramaticCountdownRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S008"
+
+    def test_detects_not_not_but(self) -> None:
+        """Detect variant with 'But' instead of 'Just'."""
+        from slop_lint.rules.struct import DramaticCountdownRule
+
+        text = "Not recklessly. Not completely. But enough."
+        rule = DramaticCountdownRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_normal_negation(self) -> None:
+        """Don't flag single negation in normal prose."""
+        from slop_lint.rules.struct import DramaticCountdownRule
+
+        text = "This is not the right approach for production use."
+        rule = DramaticCountdownRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import DramaticCountdownRule
+
+        rule = DramaticCountdownRule()
+        assert rule.id == "S008"
+        assert rule.name == "Dramatic Countdown"
+
+
+class TestRhetoricalSelfAnswer:
+    """Tests for S009: Rhetorical Self-Answer."""
+
+    def test_detects_the_result_devastating(self) -> None:
+        """Detect 'The result? Devastating.' pattern."""
+        from slop_lint.rules.struct import RhetoricalSelfAnswerRule
+
+        text = "The result? Devastating."
+        rule = RhetoricalSelfAnswerRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S009"
+
+    def test_detects_the_worst_part(self) -> None:
+        """Detect 'The worst part? Nobody saw it coming.' pattern."""
+        from slop_lint.rules.struct import RhetoricalSelfAnswerRule
+
+        text = "The worst part? Nobody saw it coming."
+        rule = RhetoricalSelfAnswerRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_real_questions(self) -> None:
+        """Don't flag genuine questions followed by long answers."""
+        from slop_lint.rules.struct import RhetoricalSelfAnswerRule
+
+        text = (
+            "What is the best way to handle errors in Python?\n"
+            "The recommended approach is to use try-except blocks "
+            "with specific exception types and provide meaningful error messages."
+        )
+        rule = RhetoricalSelfAnswerRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import RhetoricalSelfAnswerRule
+
+        rule = RhetoricalSelfAnswerRule()
+        assert rule.id == "S009"
+        assert rule.name == "Rhetorical Self-Answer"
+
+
+class TestAnaphoraAbuse:
+    """Tests for S010: Anaphora Abuse."""
+
+    def test_detects_repeated_they(self) -> None:
+        """Detect 3+ consecutive sentences starting with same word."""
+        from slop_lint.rules.struct import AnaphoraAbuseRule
+
+        text = (
+            "They built the platform. "
+            "They hired the team. "
+            "They launched the product."
+        )
+        rule = AnaphoraAbuseRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S010"
+
+    def test_detects_repeated_they_could(self) -> None:
+        """Detect 'They could... They could... They could...' pattern."""
+        from slop_lint.rules.struct import AnaphoraAbuseRule
+
+        text = (
+            "They could expose new APIs.\n"
+            "They could offer better pricing.\n"
+            "They could provide documentation.\n"
+            "They could create tooling."
+        )
+        rule = AnaphoraAbuseRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_varied_openings(self) -> None:
+        """Don't flag sentences with different openings."""
+        from slop_lint.rules.struct import AnaphoraAbuseRule
+
+        text = (
+            "The team built the platform. "
+            "Users loved the product. "
+            "Revenue grew significantly."
+        )
+        rule = AnaphoraAbuseRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_custom_threshold(self) -> None:
+        """Respect configurable threshold."""
+        from slop_lint.rules.struct import AnaphoraAbuseRule
+
+        text = (
+            "We built X. We built Y. We built Z."
+        )
+        rule_low = AnaphoraAbuseRule(threshold=2)
+        rule_high = AnaphoraAbuseRule(threshold=5)
+        issues_low = rule_low.check(text, "test.md")
+        issues_high = rule_high.check(text, "test.md")
+        assert len(issues_low) >= 1
+        assert len(issues_high) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import AnaphoraAbuseRule
+
+        rule = AnaphoraAbuseRule()
+        assert rule.id == "S010"
+        assert rule.name == "Anaphora Abuse"
+
+
+class TestGerundFragmentLitany:
+    """Tests for S011: Gerund Fragment Litany."""
+
+    def test_detects_gerund_litany(self) -> None:
+        """Detect 3+ consecutive gerund fragments."""
+        from slop_lint.rules.struct import GerundFragmentLitanyRule
+
+        text = "Fixing small bugs. Writing straightforward features. Implementing well-defined tickets."
+        rule = GerundFragmentLitanyRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S011"
+
+    def test_detects_shipping_litany(self) -> None:
+        """Detect short gerund fragments."""
+        from slop_lint.rules.struct import GerundFragmentLitanyRule
+
+        text = "Shipping faster. Moving quicker. Delivering more."
+        rule = GerundFragmentLitanyRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_normal_gerunds(self) -> None:
+        """Don't flag gerunds in normal sentences."""
+        from slop_lint.rules.struct import GerundFragmentLitanyRule
+
+        text = "Running the tests was easy. The team was coding all day."
+        rule = GerundFragmentLitanyRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import GerundFragmentLitanyRule
+
+        rule = GerundFragmentLitanyRule()
+        assert rule.id == "S011"
+        assert rule.name == "Gerund Fragment Litany"
+
+
+class TestListicleInProse:
+    """Tests for S012: Listicle in Prose."""
+
+    def test_detects_first_second_third(self) -> None:
+        """Detect 'The first... The second... The third...' pattern."""
+        from slop_lint.rules.struct import ListicleInProseRule
+
+        text = (
+            "The first wall is the absence of a free API. "
+            "The second wall is the lack of delegated access. "
+            "The third wall is the absence of scoped permissions."
+        )
+        rule = ListicleInProseRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S012"
+
+    def test_ignores_single_ordinal(self) -> None:
+        """Don't flag a single ordinal reference."""
+        from slop_lint.rules.struct import ListicleInProseRule
+
+        text = "The first thing to consider is performance."
+        rule = ListicleInProseRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import ListicleInProseRule
+
+        rule = ListicleInProseRule()
+        assert rule.id == "S012"
+        assert rule.name == "Listicle in Prose"
+
+
+class TestHistoricalAnalogyStacking:
+    """Tests for S013: Historical Analogy Stacking."""
+
+    def test_detects_company_stacking(self) -> None:
+        """Detect rapid-fire company name-drops."""
+        from slop_lint.rules.struct import HistoricalAnalogyStackingRule
+
+        text = (
+            "Apple didn't build Uber. Facebook didn't build Spotify. "
+            "Stripe didn't build Shopify. AWS didn't build Airbnb."
+        )
+        rule = HistoricalAnalogyStackingRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S013"
+
+    def test_detects_take_or_consider_pattern(self) -> None:
+        """Detect 'Take X... Or consider Y...' pattern."""
+        from slop_lint.rules.struct import HistoricalAnalogyStackingRule
+
+        text = (
+            "Take Spotify. Or consider Uber. "
+            "Airbnb followed a similar path. Shopify is another example."
+        )
+        rule = HistoricalAnalogyStackingRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_single_mention(self) -> None:
+        """Don't flag a single company mention."""
+        from slop_lint.rules.struct import HistoricalAnalogyStackingRule
+
+        text = "Apple released a new product last year."
+        rule = HistoricalAnalogyStackingRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import HistoricalAnalogyStackingRule
+
+        rule = HistoricalAnalogyStackingRule()
+        assert rule.id == "S013"
+        assert rule.name == "Historical Analogy Stacking"
+
+
+class TestSignpostedConclusion:
+    """Tests for S014: Signposted Conclusion."""
+
+    def test_detects_in_conclusion(self) -> None:
+        """Detect 'In conclusion' at sentence start."""
+        from slop_lint.rules.struct import SignpostedConclusionRule
+
+        text = "In conclusion, the future of AI depends on trust."
+        rule = SignpostedConclusionRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S014"
+
+    def test_detects_to_sum_up(self) -> None:
+        """Detect 'To sum up' phrase."""
+        from slop_lint.rules.struct import SignpostedConclusionRule
+
+        text = "To sum up, we've explored three key themes."
+        rule = SignpostedConclusionRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_normal_prose(self) -> None:
+        """Don't flag prose without signposted conclusions."""
+        from slop_lint.rules.struct import SignpostedConclusionRule
+
+        text = "The system handles errors gracefully and logs all events."
+        rule = SignpostedConclusionRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import SignpostedConclusionRule
+
+        rule = SignpostedConclusionRule()
+        assert rule.id == "S014"
+        assert rule.name == "Signposted Conclusion"
+
+
+class TestFractalSummary:
+    """Tests for S015: Fractal Summary."""
+
+    def test_detects_section_framing(self) -> None:
+        """Detect 'In this section, we'll explore...' framing."""
+        from slop_lint.rules.struct import FractalSummaryRule
+
+        text = "In this section, we'll explore the architecture of the system."
+        rule = FractalSummaryRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S015"
+
+    def test_detects_section_outro(self) -> None:
+        """Detect 'As we've seen in this section' outro."""
+        from slop_lint.rules.struct import FractalSummaryRule
+
+        text = "As we've seen in this section, the approach has clear benefits."
+        rule = FractalSummaryRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_normal_prose(self) -> None:
+        """Don't flag prose without fractal summaries."""
+        from slop_lint.rules.struct import FractalSummaryRule
+
+        text = "The module provides logging utilities for the application."
+        rule = FractalSummaryRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import FractalSummaryRule
+
+        rule = FractalSummaryRule()
+        assert rule.id == "S015"
+        assert rule.name == "Fractal Summary"
+
+
+class TestContentDuplication:
+    """Tests for S016: Content Duplication."""
+
+    def test_detects_duplicate_paragraphs(self) -> None:
+        """Detect verbatim repeated paragraphs."""
+        from slop_lint.rules.struct import ContentDuplicationRule
+
+        text = (
+            "The system provides reliable error handling and logging.\n\n"
+            "Other features include caching and retry logic.\n\n"
+            "The system provides reliable error handling and logging."
+        )
+        rule = ContentDuplicationRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S016"
+
+    def test_ignores_unique_paragraphs(self) -> None:
+        """Don't flag unique paragraphs."""
+        from slop_lint.rules.struct import ContentDuplicationRule
+
+        text = (
+            "First paragraph about one topic.\n\n"
+            "Second paragraph about another topic.\n\n"
+            "Third paragraph about a third topic."
+        )
+        rule = ContentDuplicationRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_ignores_short_paragraphs(self) -> None:
+        """Don't flag very short repeated paragraphs (e.g., 'Yes.')."""
+        from slop_lint.rules.struct import ContentDuplicationRule
+
+        text = "Yes.\n\nSomething else.\n\nYes."
+        rule = ContentDuplicationRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import ContentDuplicationRule
+
+        rule = ContentDuplicationRule()
+        assert rule.id == "S016"
+        assert rule.name == "Content Duplication"

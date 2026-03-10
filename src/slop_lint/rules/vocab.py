@@ -1,9 +1,10 @@
-"""Vocabulary detection rules (V001-V005)."""
+"""Vocabulary detection rules (V001-V007)."""
 
 import re
 
 from slop_lint.data.phrases import (
     COLLABORATIVE_PHRASES,
+    GRANDIOSE_STAKES_PHRASES,
     KNOWLEDGE_CUTOFF_PATTERNS,
     PROMOTIONAL_PHRASES,
     WEASEL_PHRASES,
@@ -237,5 +238,81 @@ class WeaselWordsRule(Rule):
                             severity=self.severity,
                         )
                     )
+
+        return issues
+
+
+# ---------- Phase 10: V006-V007 ----------
+
+
+class GrandioseStakesRule(Rule):
+    """V006: Detect inflated importance claims."""
+
+    id = "V006"
+    name = "Grandiose Stakes"
+    description = "Detects inflated stakes ('fundamentally reshape', 'define the next era')"
+    severity = Severity.WARNING
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            for pattern in GRANDIOSE_STAKES_PHRASES:
+                match = re.search(pattern, line, re.IGNORECASE)
+                if match:
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Grandiose stakes: '{match.group()}'",
+                            line=line_num,
+                            column=match.start() + 1,
+                            severity=self.severity,
+                        )
+                    )
+        return issues
+
+
+class InventedConceptLabelsRule(Rule):
+    """V007: Detect compound analytical labels used as established terms."""
+
+    id = "V007"
+    name = "Invented Concept Labels"
+    description = "Detects '[noun] paradox/trap/creep' pseudo-analytical labels"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    _suffixes = [
+        "paradox", "trap", "creep", "divide", "vacuum",
+        "inversion", "deficit", "gap", "spiral", "dilemma",
+    ]
+
+    def __init__(self, threshold: int = 2) -> None:
+        self._threshold = threshold
+        suffix_group = "|".join(self._suffixes)
+        self._pattern = re.compile(
+            rf"\b(\w+)\s+({suffix_group})\b", re.IGNORECASE
+        )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        matches: list[tuple[int, int, str]] = []
+
+        for line_num, line in self.iter_lines(content, filename):
+            for match in self._pattern.finditer(line):
+                matches.append((line_num, match.start() + 1, match.group()))
+
+        if len(matches) >= self._threshold:
+            for line_num, col, text in matches:
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Invented concept label: '{text}'",
+                        line=line_num,
+                        column=col,
+                        severity=self.severity,
+                    )
+                )
 
         return issues

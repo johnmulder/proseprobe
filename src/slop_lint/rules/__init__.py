@@ -9,9 +9,15 @@ from slop_lint.rules.code import (
     VerboseCommentsRule,
 )
 from slop_lint.rules.grammar import (
+    AssertedSimplicityRule,
     CopulaAvoidanceRule,
     ExcessiveHedgingRule,
+    FalseSuspenseTransitionRule,
+    FalseVulnerabilityRule,
+    FuturistInvitationRule,
     ParticipleChainsRule,
+    PatronizingAnalogyRule,
+    PedagogicalVoiceRule,
 )
 from slop_lint.rules.markup import (
     BrokenReferencesRule,
@@ -20,12 +26,21 @@ from slop_lint.rules.markup import (
     WrongMarkupRule,
 )
 from slop_lint.rules.struct import (
+    AnaphoraAbuseRule,
     ChallengeConclusionsRule,
+    ContentDuplicationRule,
+    DramaticCountdownRule,
     FalseRangesRule,
+    FractalSummaryRule,
+    GerundFragmentLitanyRule,
+    HistoricalAnalogyStackingRule,
     InlineHeaderListsRule,
+    ListicleInProseRule,
     NegativeParallelismRule,
+    RhetoricalSelfAnswerRule,
     RuleOfThreeRule,
     SignificanceEmphasisRule,
+    SignpostedConclusionRule,
     SuperficialAnalysisRule,
 )
 from slop_lint.rules.style import (
@@ -34,11 +49,14 @@ from slop_lint.rules.style import (
     EmDashOveruseRule,
     EmojiInProseRule,
     QuoteInconsistencyRule,
+    ShortPunchyFragmentsRule,
     TitleCaseHeadingsRule,
 )
 from slop_lint.rules.vocab import (
     AIVocabularyRule,
     CollaborativePhrasesRule,
+    GrandioseStakesRule,
+    InventedConceptLabelsRule,
     KnowledgeCutoffRule,
     PromotionalLanguageRule,
     WeaselWordsRule,
@@ -56,6 +74,8 @@ __all__ = [
     "KnowledgeCutoffRule",
     "PromotionalLanguageRule",
     "WeaselWordsRule",
+    "GrandioseStakesRule",
+    "InventedConceptLabelsRule",
     # Structural rules (S)
     "RuleOfThreeRule",
     "NegativeParallelismRule",
@@ -64,6 +84,15 @@ __all__ = [
     "SignificanceEmphasisRule",
     "SuperficialAnalysisRule",
     "FalseRangesRule",
+    "DramaticCountdownRule",
+    "RhetoricalSelfAnswerRule",
+    "AnaphoraAbuseRule",
+    "GerundFragmentLitanyRule",
+    "ListicleInProseRule",
+    "HistoricalAnalogyStackingRule",
+    "SignpostedConclusionRule",
+    "FractalSummaryRule",
+    "ContentDuplicationRule",
     # Style rules (T)
     "TitleCaseHeadingsRule",
     "BoldOveruseRule",
@@ -71,10 +100,17 @@ __all__ = [
     "QuoteInconsistencyRule",
     "EmojiInProseRule",
     "ElegantVariationRule",
+    "ShortPunchyFragmentsRule",
     # Grammar rules (G)
     "CopulaAvoidanceRule",
     "ExcessiveHedgingRule",
     "ParticipleChainsRule",
+    "FalseSuspenseTransitionRule",
+    "PatronizingAnalogyRule",
+    "FuturistInvitationRule",
+    "FalseVulnerabilityRule",
+    "AssertedSimplicityRule",
+    "PedagogicalVoiceRule",
     # Code rules (C)
     "DocstringVocabularyRule",
     "VerboseCommentsRule",
@@ -119,13 +155,15 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         thresholds = config.thresholds
 
     rules = [
-        # Vocabulary (V001-V005)
+        # Vocabulary (V001-V007)
         AIVocabularyRule(allowed=allowed, additional=additional, allowed_phrases=allowed_phrases),
         CollaborativePhrasesRule(),
         KnowledgeCutoffRule(),
         PromotionalLanguageRule(),
         WeaselWordsRule(),
-        # Structural (S001-S007)
+        GrandioseStakesRule(),
+        InventedConceptLabelsRule(),
+        # Structural (S001-S016)
         RuleOfThreeRule(threshold=thresholds.rule_of_three),
         NegativeParallelismRule(),
         ChallengeConclusionsRule(),
@@ -133,17 +171,33 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         SignificanceEmphasisRule(),
         SuperficialAnalysisRule(),
         FalseRangesRule(),
-        # Style (T001-T006)
+        DramaticCountdownRule(),
+        RhetoricalSelfAnswerRule(),
+        AnaphoraAbuseRule(),
+        GerundFragmentLitanyRule(),
+        ListicleInProseRule(),
+        HistoricalAnalogyStackingRule(),
+        SignpostedConclusionRule(),
+        FractalSummaryRule(),
+        ContentDuplicationRule(),
+        # Style (T001-T007)
         TitleCaseHeadingsRule(),
         BoldOveruseRule(threshold=thresholds.bold_overuse),
         EmDashOveruseRule(threshold=thresholds.em_dash_overuse),
         QuoteInconsistencyRule(),
         EmojiInProseRule(),
         ElegantVariationRule(),
-        # Grammar (G001-G003)
+        ShortPunchyFragmentsRule(),
+        # Grammar (G001-G009)
         CopulaAvoidanceRule(),
         ExcessiveHedgingRule(),
         ParticipleChainsRule(),
+        FalseSuspenseTransitionRule(),
+        PatronizingAnalogyRule(),
+        FuturistInvitationRule(),
+        FalseVulnerabilityRule(),
+        AssertedSimplicityRule(),
+        PedagogicalVoiceRule(),
         # Code (C001-C004)
         DocstringVocabularyRule(allowed=allowed, additional=additional),
         VerboseCommentsRule(),

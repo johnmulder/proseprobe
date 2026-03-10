@@ -175,3 +175,90 @@ class TestWeaselWordsRule:
 
         assert len(issues) == 1
         assert issues[0].rule_id == "V005"
+
+
+# ---------- Phase 10 TDD: V006-V007 ----------
+
+
+class TestGrandioseStakes:
+    """Tests for V006: Grandiose Stakes."""
+
+    def test_detects_fundamentally_reshape(self) -> None:
+        """Detect 'fundamentally reshape' grandiose claim."""
+        from slop_lint.rules.vocab import GrandioseStakesRule
+
+        content = "This will fundamentally reshape how we think about everything."
+        issues = GrandioseStakesRule().check(content, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "V006"
+
+    def test_detects_define_the_next_era(self) -> None:
+        """Detect 'define the next era' inflation."""
+        from slop_lint.rules.vocab import GrandioseStakesRule
+
+        content = "This technology will define the next era of computing."
+        issues = GrandioseStakesRule().check(content, "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_change_everything(self) -> None:
+        """Detect 'will change everything' inflation."""
+        from slop_lint.rules.vocab import GrandioseStakesRule
+
+        content = "AI will change everything about how we work."
+        issues = GrandioseStakesRule().check(content, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_normal_prose(self) -> None:
+        """Don't flag normal technical prose."""
+        from slop_lint.rules.vocab import GrandioseStakesRule
+
+        content = "The library provides a simple API for HTTP requests."
+        issues = GrandioseStakesRule().check(content, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.vocab import GrandioseStakesRule
+
+        rule = GrandioseStakesRule()
+        assert rule.id == "V006"
+        assert rule.name == "Grandiose Stakes"
+
+
+class TestInventedConceptLabels:
+    """Tests for V007: Invented Concept Labels."""
+
+    def test_detects_multiple_labels(self) -> None:
+        """Detect 2+ compound analytical labels in same document."""
+        from slop_lint.rules.vocab import InventedConceptLabelsRule
+
+        content = (
+            "The supervision paradox makes management harder.\n"
+            "Combined with the acceleration trap, teams burn out.\n"
+            "Workload creep compounds the problem."
+        )
+        issues = InventedConceptLabelsRule().check(content, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "V007"
+
+    def test_ignores_single_label(self) -> None:
+        """Don't flag a single compound label."""
+        from slop_lint.rules.vocab import InventedConceptLabelsRule
+
+        content = "The productivity paradox has been studied extensively."
+        issues = InventedConceptLabelsRule().check(content, "test.md")
+        assert len(issues) == 0
+
+    def test_ignores_normal_prose(self) -> None:
+        """Don't flag prose without compound labels."""
+        from slop_lint.rules.vocab import InventedConceptLabelsRule
+
+        content = "The system handles errors gracefully and logs all events."
+        issues = InventedConceptLabelsRule().check(content, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.vocab import InventedConceptLabelsRule
+
+        rule = InventedConceptLabelsRule()
+        assert rule.id == "V007"
+        assert rule.name == "Invented Concept Labels"

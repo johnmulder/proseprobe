@@ -25,6 +25,12 @@ COLLABORATIVE_PHRASES = [
     "As noted above",
     "As discussed",
     "As I mentioned",
+    # Pedagogical/dive-in phrases (tropes.fyi)
+    "Let's break this down",
+    "Let's unpack this",
+    "Let's explore this",
+    "Let's dive in",
+    "Let's dive into",
 ]
 
 # Knowledge cutoff patterns (V003)
@@ -68,6 +74,12 @@ PROMOTIONAL_PHRASES = [
     "move the needle",
     "low-hanging fruit",
     "circle back",
+    # Grandiose stakes (tropes.fyi)
+    "fundamentally reshape",
+    "define the next era",
+    "something entirely new",
+    "entirely new paradigm",
+    "will reshape how we",
 ]
 
 # Weasel words and vague attributions (V005)
@@ -84,4 +96,92 @@ WEASEL_PHRASES = [
     r"(some|many) would argue",
     r"it('s| is) (often|generally|commonly|widely) (said|believed|thought)",
     r"there is (growing|increasing|mounting) (evidence|concern|interest)",
+]
+
+# Patronizing analogy phrases (G005/G006)
+PATRONIZING_ANALOGY_PHRASES = [
+    "think of it as",
+    "think of it like",
+    "imagine a world where",
+    "imagine a future where",
+    "imagine a scenario where",
+]
+
+# Signposted conclusion phrases (S014)
+SIGNPOSTED_CONCLUSION_PHRASES = [
+    "in conclusion",
+    "to sum up",
+    "as we've seen",
+    "as we have seen",
+    "in closing",
+]
+
+# False suspense transition phrases (G004)
+FALSE_SUSPENSE_PHRASES = [
+    "here's the kicker",
+    "here's the thing",
+    "here's where it gets interesting",
+    "here's what most people miss",
+    "here's the catch",
+    "here's the twist",
+]
+
+# False vulnerability phrases (G007)
+FALSE_VULNERABILITY_PHRASES = [
+    r"and yes,? since we're being honest",
+    r"this is not a rant",
+    r"i'll be (the first to admit|honest)",
+    r"if i'm being honest",
+    r"let me be (frank|honest|candid|real)",
+]
+
+# Asserted simplicity phrases (G008)
+ASSERTED_SIMPLICITY_PHRASES = [
+    r"the (reality|truth|answer) is (simpler|simple|clear|obvious)",
+    r"history is (clear|unambiguous)",
+    r"the (metrics|evidence|examples|data) (are|is) clear",
+    r"\bthe truth is\b",
+    r"put simply",
+    r"it('s| is) (really )?that simple",
+]
+
+# Futurist invitation phrases (G006)
+FUTURIST_INVITATION_PHRASES = [
+    "imagine a world where",
+    "imagine a future where",
+    "in that world,",
+    "picture a world where",
+]
+
+# Pedagogical voice phrases (G009)
+PEDAGOGICAL_VOICE_PHRASES = [
+    "let's break this down",
+    "let's unpack this",
+    "let's unpack what",
+    "let's explore this",
+    "let's explore what",
+    "let's dive in",
+    "let's dive into",
+    "let's take a closer look",
+    "let's step back",
+]
+
+# Fractal summary phrases (S015)
+FRACTAL_SUMMARY_PHRASES = [
+    r"in this section,? we('ll| will) (explore|examine|look at|discuss|cover)",
+    r"as we('ve| have) seen in this section",
+    r"as we('ve| have) discussed",
+    r"and so we return to where we began",
+    r"as (we )?noted (earlier|above|at the (start|beginning))",
+]
+
+# Grandiose stakes phrases (V006)
+GRANDIOSE_STAKES_PHRASES = [
+    r"fundamentally reshape",
+    r"will (define|shape|determine) the next (era|decade|generation)",
+    r"something entirely new",
+    r"entirely new paradigm",
+    r"will reshape how we",
+    r"the most important.{1,30}(ever|in history|of our time)",
+    r"will change everything",
 ]

@@ -1,14 +1,19 @@
-"""Structural detection rules (S001-S007)."""
+"""Structural detection rules (S001-S016)."""
 
 import re
 
 from slop_lint.data.patterns import (
     CHALLENGE_CONCLUSION_PATTERNS,
     INLINE_HEADER_LIST_PATTERN,
+    LISTICLE_PROSE_PATTERNS,
     NEGATIVE_PARALLELISM_PATTERNS,
     PARTICIPLE_CHAIN_PATTERNS,
     RULE_OF_THREE_PATTERNS,
     SIGNIFICANCE_PATTERNS,
+)
+from slop_lint.data.phrases import (
+    FRACTAL_SUMMARY_PHRASES,
+    SIGNPOSTED_CONCLUSION_PHRASES,
 )
 from slop_lint.rules.base import Issue, Rule, Severity
 
@@ -291,5 +296,432 @@ class FalseRangesRule(Rule):
                                 )
                             )
                             break
+
+        return issues
+
+
+# ---------- Phase 10: S008-S016 ----------
+
+
+class DramaticCountdownRule(Rule):
+    """S008: Detect 'Not X. Not Y. Just Z.' countdown pattern."""
+
+    id = "S008"
+    name = "Dramatic Countdown"
+    description = "Detects 'Not X. Not Y. Just Z.' dramatic countdown"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    _pattern = re.compile(
+        r"Not\s+[^.!?\n]+[.!]\s*Not\s+[^.!?\n]+[.!]\s*"
+        r"(?:Just|But|Only|Simply)\s+[^.!?\n]+[.!]",
+        re.IGNORECASE,
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            match = self._pattern.search(line)
+            if match:
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Dramatic countdown: '{match.group().strip()}'",
+                        line=line_num,
+                        column=match.start() + 1,
+                        severity=self.severity,
+                    )
+                )
+        return issues
+
+
+class RhetoricalSelfAnswerRule(Rule):
+    """S009: Detect 'The X? A Y.' rhetorical self-answer."""
+
+    id = "S009"
+    name = "Rhetorical Self-Answer"
+    description = "Detects 'The X? Y.' self-posed rhetorical question"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    # Short question (<60 chars) followed by short answer (<60 chars)
+    _pattern = re.compile(
+        r"([A-Z][^.!?\n]{0,60}\?)\s+([A-Z][^.!?\n]{0,50}[.!])",
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            for match in self._pattern.finditer(line):
+                answer = match.group(2)
+                # Only flag if the answer is short (< 8 words) — fragment
+                if len(answer.split()) < 8:
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Rhetorical self-answer: '{match.group().strip()}'",
+                            line=line_num,
+                            column=match.start() + 1,
+                            severity=self.severity,
+                        )
+                    )
+        return issues
+
+
+class AnaphoraAbuseRule(Rule):
+    """S010: Detect 3+ consecutive sentences with the same opening."""
+
+    id = "S010"
+    name = "Anaphora Abuse"
+    description = "Detects repeated sentence openings (anaphora)"
+    severity = Severity.WARNING
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    def __init__(self, threshold: int = 3) -> None:
+        self._threshold = threshold
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        lines = self.iter_lines(content, filename)
+        # Split content into sentences (either by line or by period)
+        sentences: list[tuple[int, str]] = []
+        for line_num, line in lines:
+            # Split line into sentences on sentence-ending punctuation
+            parts = re.split(r"(?<=[.!?])\s+", line.strip())
+            for part in parts:
+                part = part.strip()
+                if part:
+                    sentences.append((line_num, part))
+
+        if len(sentences) < self._threshold:
+            return issues
+
+        # Check for consecutive sentences starting with the same word
+        run_start = 0
+        for i in range(1, len(sentences)):
+            prev_word = sentences[i - 1][1].split()[0].lower() if sentences[i - 1][1].split() else ""
+            curr_word = sentences[i][1].split()[0].lower() if sentences[i][1].split() else ""
+            if curr_word != prev_word:
+                run_len = i - run_start
+                if run_len >= self._threshold:
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Anaphora: {run_len} consecutive sentences starting with '{sentences[run_start][1].split()[0]}'",
+                            line=sentences[run_start][0],
+                            column=1,
+                            severity=self.severity,
+                        )
+                    )
+                run_start = i
+
+        # Check final run
+        run_len = len(sentences) - run_start
+        if run_len >= self._threshold:
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=f"Anaphora: {run_len} consecutive sentences starting with '{sentences[run_start][1].split()[0]}'",
+                    line=sentences[run_start][0],
+                    column=1,
+                    severity=self.severity,
+                )
+            )
+
+        return issues
+
+
+class GerundFragmentLitanyRule(Rule):
+    """S011: Detect 3+ consecutive gerund-phrase fragments."""
+
+    id = "S011"
+    name = "Gerund Fragment Litany"
+    description = "Detects consecutive gerund fragments ('Fixing X. Writing Y.')"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    _gerund_fragment = re.compile(
+        r"^[A-Z][a-z]*ing\b[^.!?]{0,60}[.!?]$"
+    )
+
+    def __init__(self, threshold: int = 3) -> None:
+        self._threshold = threshold
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        # Split into sentence fragments
+        sentences: list[tuple[int, str]] = []
+        for line_num, line in self.iter_lines(content, filename):
+            parts = re.split(r"(?<=[.!?])\s+", line.strip())
+            for part in parts:
+                part = part.strip()
+                if part:
+                    sentences.append((line_num, part))
+
+        run_start = 0
+        run_count = 0
+        for i, (_line_num, sent) in enumerate(sentences):
+            if self._gerund_fragment.match(sent):
+                if run_count == 0:
+                    run_start = i
+                run_count += 1
+            else:
+                if run_count >= self._threshold:
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Gerund fragment litany: {run_count} consecutive gerund fragments",
+                            line=sentences[run_start][0],
+                            column=1,
+                            severity=self.severity,
+                        )
+                    )
+                run_count = 0
+
+        # Check final run
+        if run_count >= self._threshold:
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=f"Gerund fragment litany: {run_count} consecutive gerund fragments",
+                    line=sentences[run_start][0],
+                    column=1,
+                    severity=self.severity,
+                )
+            )
+
+        return issues
+
+
+class ListicleInProseRule(Rule):
+    """S012: Detect 'The first... The second... The third...' in prose."""
+
+    id = "S012"
+    name = "Listicle in Prose"
+    description = "Detects ordinal-based listicle disguised as prose"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    _ordinals = ["first", "second", "third", "fourth", "fifth"]
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        lines = self.iter_lines(content, filename)
+        full_text = " ".join(line for _, line in lines).lower()
+
+        # Check for sequential ordinals
+        found_ordinals: list[str] = []
+        for ordinal in self._ordinals:
+            if re.search(rf"\bthe {ordinal}\b", full_text):
+                found_ordinals.append(ordinal)
+            else:
+                break  # Must be sequential
+
+        if len(found_ordinals) >= 3:
+            # Find first occurrence line
+            for line_num, line in lines:
+                if re.search(rf"\bthe {found_ordinals[0]}\b", line, re.IGNORECASE):
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Listicle in prose: 'the {found_ordinals[0]}... the {found_ordinals[1]}... the {found_ordinals[2]}...'",
+                            line=line_num,
+                            column=1,
+                            severity=self.severity,
+                        )
+                    )
+                    break
+
+        # Also check for "The first/1st takeaway/point/lesson" pattern
+        for line_num, line in lines:
+            for pattern in LISTICLE_PROSE_PATTERNS:
+                if re.search(pattern, line, re.IGNORECASE):
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message="Listicle in prose pattern",
+                            line=line_num,
+                            column=1,
+                            severity=self.severity,
+                        )
+                    )
+                    break
+
+        return issues
+
+
+class HistoricalAnalogyStackingRule(Rule):
+    """S013: Detect rapid-fire company/product name-drops."""
+
+    id = "S013"
+    name = "Historical Analogy Stacking"
+    description = "Detects rapid-fire historical company analogies"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    _tech_companies = {
+        "apple", "google", "microsoft", "amazon", "meta", "facebook",
+        "netflix", "uber", "airbnb", "spotify", "stripe", "shopify",
+        "twitter", "tesla", "openai", "anthropic", "discord", "slack",
+        "dropbox", "github", "aws", "ibm", "oracle", "salesforce",
+        "snapchat", "tiktok", "linkedin", "pinterest", "zoom",
+    }
+
+    def __init__(self, threshold: int = 3) -> None:
+        self._threshold = threshold
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        lines = self.iter_lines(content, filename)
+
+        # Check for company mentions per paragraph/nearby lines
+        window: list[tuple[int, str]] = []
+        for line_num, line in lines:
+            words = {w.lower().rstrip(".,;:!?'\"") for w in line.split()}
+            companies_in_line = words & self._tech_companies
+            if companies_in_line:
+                window.append((line_num, line))
+            else:
+                self._check_window(window, issues)
+                window = []
+
+        self._check_window(window, issues)
+        return issues
+
+    def _check_window(
+        self, window: list[tuple[int, str]], issues: list[Issue]
+    ) -> None:
+        if not window:
+            return
+        all_text = " ".join(line for _, line in window)
+        words = {w.lower().rstrip(".,;:!?'\"") for w in all_text.split()}
+        unique_companies = words & self._tech_companies
+        if len(unique_companies) >= self._threshold:
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=f"Historical analogy stacking: {len(unique_companies)} companies ({', '.join(sorted(unique_companies))})",
+                    line=window[0][0],
+                    column=1,
+                    severity=self.severity,
+                )
+            )
+
+
+class SignpostedConclusionRule(Rule):
+    """S014: Detect 'In conclusion', 'To sum up' signposted conclusions."""
+
+    id = "S014"
+    name = "Signposted Conclusion"
+    description = "Detects explicitly signposted conclusions"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            line_lower = line.lower().strip()
+            for phrase in SIGNPOSTED_CONCLUSION_PHRASES:
+                if phrase in line_lower:
+                    col = line_lower.find(phrase)
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Signposted conclusion: '{phrase}'",
+                            line=line_num,
+                            column=col + 1,
+                            severity=self.severity,
+                        )
+                    )
+        return issues
+
+
+class FractalSummaryRule(Rule):
+    """S015: Detect 'In this section, we'll explore...' framing."""
+
+    id = "S015"
+    name = "Fractal Summary"
+    description = "Detects section intro/outro summary framing"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            for pattern in FRACTAL_SUMMARY_PHRASES:
+                match = re.search(pattern, line, re.IGNORECASE)
+                if match:
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Fractal summary: '{match.group()}'",
+                            line=line_num,
+                            column=match.start() + 1,
+                            severity=self.severity,
+                        )
+                    )
+        return issues
+
+
+class ContentDuplicationRule(Rule):
+    """S016: Detect repeated paragraphs within the same document."""
+
+    id = "S016"
+    name = "Content Duplication"
+    description = "Detects duplicate paragraphs in the same document"
+    severity = Severity.WARNING
+    applies_to = {"markdown"}
+    content_scope = "raw"
+
+    _MIN_WORDS = 8  # Don't flag very short paragraphs
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        # Split into paragraphs (separated by blank lines)
+        paragraphs: list[tuple[int, str]] = []
+        current_lines: list[str] = []
+        start_line = 1
+
+        for i, line in enumerate(content.split("\n"), start=1):
+            if not line.strip():
+                if current_lines:
+                    paragraphs.append((start_line, " ".join(current_lines)))
+                    current_lines = []
+                start_line = i + 1
+            else:
+                if not current_lines:
+                    start_line = i
+                current_lines.append(line.strip())
+
+        if current_lines:
+            paragraphs.append((start_line, " ".join(current_lines)))
+
+        # Compare paragraphs by normalized word content
+        seen: dict[str, int] = {}
+        for line_num, text in paragraphs:
+            words = text.lower().split()
+            if len(words) < self._MIN_WORDS:
+                continue
+            key = " ".join(words)
+            if key in seen:
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Duplicate paragraph (first seen at line {seen[key]})",
+                        line=line_num,
+                        column=1,
+                        severity=self.severity,
+                    )
+                )
+            else:
+                seen[key] = line_num
 
         return issues
