@@ -145,7 +145,6 @@ ignore = ["C001", "C002", "C003"]
 
 | Variable | Description |
 |----------|-------------|
-| `HUMANIZE_CONFIG` | Path to config file |
 | `NO_COLOR` | Disable colored output |
 | `FORCE_COLOR` | Force colored output |
 

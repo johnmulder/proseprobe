@@ -11,7 +11,7 @@ Overused vocabulary, structural clichés, promotional language, and sloppy marku
 
 ## Features
 
-- 🔍 **50 detection rules** across 6 categories
+- 🔍 **59 detection rules** across 6 categories
 - 📝 Scans Markdown (`.md`, `.mdx`) and Python (`.py`) files
 - 🎯 **Confidence levels** (high/medium/low) to reduce noise
 - ⚙️ Configurable via `.slop-lint.toml`
@@ -66,10 +66,10 @@ slop-lint explain V001
 
 | Prefix | Category | Rules | Description |
 |--------|----------|-------|-------------|
-| `V` | Vocabulary | 7 | Overused and clichéd words and phrases |
-| `S` | Structure | 16 | Organizational patterns |
-| `T` | Style | 7 | Typographic issues |
-| `G` | Grammar | 9 | Grammatical patterns |
+| `V` | Vocabulary | 8 | Overused and clichéd words and phrases |
+| `S` | Structure | 21 | Organizational patterns |
+| `T` | Style | 8 | Typographic issues |
+| `G` | Grammar | 14 | Grammatical patterns |
 | `C` | Code | 4 | Python docstring/comment issues |
 | `M` | Markup | 4 | Markdown artifacts |
 
@@ -132,7 +132,7 @@ ignore = ["T001"]
   run: |
     pip install slop-lint
     slop-lint check --format sarif . > results.sarif
-    
+
 - name: Upload SARIF
   uses: github/codeql-action/upload-sarif@v2
   with:

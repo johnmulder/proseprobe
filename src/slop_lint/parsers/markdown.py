@@ -21,7 +21,6 @@ def _get_cached_parser(content: str) -> "MarkdownParser":
 
     # Evict oldest entries if cache is full
     if len(_parser_cache) >= _CACHE_MAX_SIZE:
-        # Remove first (oldest) entry
         oldest_key = next(iter(_parser_cache))
         del _parser_cache[oldest_key]
 

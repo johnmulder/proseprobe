@@ -1,6 +1,6 @@
 # slop-lint - Technical Specification
 
-> Version: 0.1.0  
+> Version: 0.1.0
 > Last Updated: 2026-03-10
 
 ## 1. Purpose
@@ -213,7 +213,7 @@ class Rule(Protocol):
     name: str         # e.g., "Overused Vocabulary"
     description: str  # Full description
     severity: Severity
-    
+
     def check(self, content: str, filename: str) -> list[Issue]: ...
 ```
 
@@ -274,5 +274,3 @@ indicating how certain the rule is that the match is a real problem.
 - Configuration format changes require major version bump
 
 ---
-
-*This specification is derived from [PLAN.md](PLAN.md). For implementation details and development workflow, see the plan document.*

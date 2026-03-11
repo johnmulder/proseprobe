@@ -10,8 +10,7 @@ This document describes all detection rules available in slop-lint.
 
 Detects overused and clichéd words that weaken writing.
 
-**Severity:** Warning  
-**Fixable:** Yes
+**Severity:** Warning
 
 **Detected words:**
 - delve, tapestry, multifaceted, intricate, underscore
@@ -36,8 +35,7 @@ This article explores the complex structure of modern software architecture.
 
 Detects chat-like communication patterns that don't belong in documentation.
 
-**Severity:** Warning  
-**Fixable:** No
+**Severity:** Warning
 
 **Detected patterns:**
 - "I hope this helps!"
@@ -63,8 +61,7 @@ Here's the code for the requested feature.
 
 Detects temporal disclaimers about training data.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "As of my last update..."
@@ -88,8 +85,7 @@ Python 3.12 is the latest version (as of January 2024).
 
 Detects puffery and marketing speak.
 
-**Severity:** Warning  
-**Fixable:** No
+**Severity:** Warning
 
 **Detected patterns:**
 - "world-class", "cutting-edge", "groundbreaking"
@@ -112,8 +108,7 @@ Our solution provides high performance for typical workloads.
 
 Detects vague attributions without sources.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "Experts say...", "Studies show..."
@@ -138,8 +133,7 @@ Martin Fowler recommends this approach in "Refactoring" (2018).
 
 Detects excessive triadic patterns ("X, Y, and Z").
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -160,8 +154,7 @@ The system is designed for security and horizontal scaling.
 
 Detects "Not only... but also..." constructions.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -181,8 +174,7 @@ It improves both speed and reliability.
 
 Detects formulaic "despite X, faces challenges" patterns.
 
-**Severity:** Warning  
-**Fixable:** No
+**Severity:** Warning
 
 **Example (bad):**
 ```markdown
@@ -200,8 +192,7 @@ The framework has some known limitations: performance degrades with large datase
 
 Detects "- **Header:** Description" bullet patterns.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -225,8 +216,7 @@ Handles millions of requests per second.
 
 Detects undue importance claims.
 
-**Severity:** Warning  
-**Fixable:** No
+**Severity:** Warning
 
 **Detected patterns:**
 - "pivotal moment", "key turning point"
@@ -248,8 +238,7 @@ This release adds async support and improves memory usage by 40%.
 
 Detects present participle chains suggesting filler text.
 
-**Severity:** Warning  
-**Fixable:** No
+**Severity:** Warning
 
 **Detected patterns:**
 - "highlighting its importance"
@@ -272,8 +261,7 @@ The update reduces API latency by 30%.
 
 Detects "from X to Y" with incoherent extremes.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -293,8 +281,7 @@ Suitable for both new and experienced developers.
 
 Detects improper capitalization in Markdown headings.
 
-**Severity:** Info  
-**Fixable:** Yes
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -312,8 +299,7 @@ Detects improper capitalization in Markdown headings.
 
 Detects excessive **bold** usage per paragraph.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -331,8 +317,7 @@ The quick brown fox jumps over the lazy dog.
 
 Detects excessive em dashes (—) for dramatic effect.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -350,8 +335,7 @@ The solution, which took months to develop, was finally ready and worked.
 
 Detects mixed curly and straight quote styles.
 
-**Severity:** Info  
-**Fixable:** Yes
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -369,8 +353,7 @@ He said "hello" and she replied "goodbye".
 
 Detects non-technical emoji in documentation.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -392,8 +375,7 @@ This guide covers installation and basic usage.
 
 Detects unnatural synonyms to avoid repetition.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -414,8 +396,7 @@ The function returns a value. See the function reference for details.
 
 Detects "serves as" instead of simpler "is".
 
-**Severity:** Info  
-**Fixable:** Yes
+**Severity:** Info
 
 **Detected patterns:**
 - "serves as", "stands as", "acts as"
@@ -437,8 +418,7 @@ This module is the main entry point.
 
 Detects over-qualification phrases and hedge stacking (multiple hedges in one sentence).
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "It is important to note that..."
@@ -462,8 +442,7 @@ The function may throw an exception.
 
 Detects dangling modifier chains.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -483,8 +462,7 @@ The system uses modern techniques to deliver fast results.
 
 Detects overused vocabulary in Python docstrings.
 
-**Severity:** Warning  
-**Fixable:** Yes
+**Severity:** Warning
 
 **Example (bad):**
 ```python
@@ -506,8 +484,7 @@ def process(data):
 
 Detects over-explained code comments.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```python
@@ -531,8 +508,7 @@ def add(a, b):
 
 Detects chat phrases in code comments.
 
-**Severity:** Warning  
-**Fixable:** No
+**Severity:** Warning
 
 **Example (bad):**
 ```python
@@ -554,8 +530,7 @@ def helper():
 
 Detects formulaic TODO patterns.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```python
@@ -576,8 +551,7 @@ Detects formulaic TODO patterns.
 
 Detects Markdown syntax in wrong context.
 
-**Severity:** Warning  
-**Fixable:** No
+**Severity:** Warning
 
 **Example (bad):**
 ```python
@@ -595,8 +569,7 @@ Detects Markdown syntax in wrong context.
 
 Detects ChatGPT reference artifacts.
 
-**Severity:** Error  
-**Fixable:** Yes
+**Severity:** Error
 
 **Detected patterns:**
 - `turn0search0`, `turn1search2`
@@ -619,8 +592,7 @@ According to Smith et al. (2023), the approach works.
 
 Detects tracking parameters in URLs that should be stripped.
 
-**Severity:** Warning  
-**Fixable:** Yes
+**Severity:** Warning
 
 **Detected patterns:**
 - `utm_source=chatgpt.com`
@@ -642,8 +614,7 @@ See [documentation](https://example.com)
 
 Detects invalid or broken citation formats.
 
-**Severity:** Error  
-**Fixable:** No
+**Severity:** Error
 
 **Detected patterns:**
 - `[attached_file:1]`
@@ -673,8 +644,7 @@ The following rules were added based on the
 
 Detects inflated importance claims that overstate significance.
 
-**Severity:** Warning  
-**Fixable:** No
+**Severity:** Warning
 
 **Detected patterns:**
 - "fundamentally reshape", "define the next era"
@@ -698,8 +668,7 @@ AI is changing several industries, particularly customer service and logistics.
 Detects compound pseudo-analytical labels ("the X paradox", "the Y trap")
 when 2+ appear in the same document.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected suffixes:** paradox, trap, creep, divide, vacuum, inversion,
 deficit, gap, spiral, dilemma
@@ -722,8 +691,7 @@ intervene manually.
 
 Detects "Not X. Not Y. Just/But Z." dramatic negation patterns.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -742,8 +710,7 @@ The improvement came from cleaning the data, not from hardware or algorithms.
 Detects "The X? A Y." patterns where a question is immediately answered
 with a short fragment.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -761,8 +728,7 @@ The result was a measurable improvement in delivery times.
 
 Detects 3+ consecutive sentences starting with the same word.
 
-**Severity:** Warning  
-**Fixable:** No  
+**Severity:** Warning
 **Configurable:** `threshold` (default: 3)
 
 **Example (bad):**
@@ -781,8 +747,7 @@ Teams, managers, and companies all benefit from this approach.
 
 Detects 3+ consecutive gerund-phrase fragments used for rhythmic effect.
 
-**Severity:** Info  
-**Fixable:** No  
+**Severity:** Info
 **Configurable:** `threshold` (default: 3)
 
 **Example (bad):**
@@ -802,8 +767,7 @@ The team focused on faster builds, shorter ship cycles, and constant iteration.
 Detects ordinal progressions ("The first… The second… The third…")
 disguised as continuous prose.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -822,8 +786,7 @@ The main reasons are cost, speed, and reliability.
 
 Detects 3+ tech company/product name-drops in rapid succession.
 
-**Severity:** Info  
-**Fixable:** No  
+**Severity:** Info
 **Configurable:** `threshold` (default: 3)
 
 **Example (bad):**
@@ -843,8 +806,7 @@ Several large tech companies have adopted this pattern.
 
 Detects formulaic conclusion markers.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "In conclusion", "To sum up", "As we've seen"
@@ -867,8 +829,7 @@ The framework reduces build times by 40% and eliminates flaky tests.
 Detects "In this section, we'll explore" / "As we've seen in this
 section" intro/outro framing.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "in this section, we'll explore"
@@ -893,8 +854,7 @@ Caching improves performance by reducing database round-trips.
 Detects repeated paragraphs within the same document using hash-based
 comparison.
 
-**Severity:** Warning  
-**Fixable:** No
+**Severity:** Warning
 
 **Example (bad):**
 ```markdown
@@ -916,8 +876,7 @@ State each idea once. Refer back with cross-references if needed.
 
 Detects manufactured dramatic tension in transitions.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "Here's the thing", "Here's the kicker"
@@ -941,8 +900,7 @@ Most teams don't need microservices.
 
 Detects condescending "think of it as" explanatory patterns.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "Think of it as", "Think of it like"
@@ -965,8 +923,7 @@ The service indexes and organizes data automatically.
 
 Detects speculative "imagine a world" framing.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "Imagine a world where"
@@ -990,8 +947,7 @@ Zero-downtime deployments are achievable with blue-green strategies.
 
 Detects performative honesty or faux-candid phrasing.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "I'll be honest", "if I'm being honest"
@@ -1014,8 +970,7 @@ Most startups fail because of bad hiring.
 
 Detects claims of simplicity that mask complexity or assert authority.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "The reality is simpler", "The truth is"
@@ -1038,8 +993,7 @@ The main factor is cache hit rate, which accounts for 80% of latency reduction.
 
 Detects overly instructional "let's explore" tone.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "Let's break this down", "Let's unpack this"
@@ -1063,8 +1017,7 @@ The system has three components: ingestion, processing, and storage.
 Detects 3+ consecutive very short paragraphs (≤ 5 words each) used for
 manufactured dramatic emphasis.
 
-**Severity:** Info  
-**Fixable:** No  
+**Severity:** Info
 **Configurable:** `threshold` (default: 3)
 
 **Example (bad):**
@@ -1089,8 +1042,7 @@ It worked every single time without exception.
 
 Detects excessively long sentences that exceed a word count threshold.
 
-**Severity:** Info  
-**Fixable:** No  
+**Severity:** Info
 **Configurable:** `sentence_length_max` (default: 40)
 
 **Example (bad):**
@@ -1115,8 +1067,7 @@ The following rules detect common low-quality journalism patterns.
 
 Detects unsubstantiated trend claims without evidence.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "more and more people", "a growing number of"
@@ -1140,8 +1091,7 @@ According to the 2025 Stack Overflow survey, 34% of respondents use this framewo
 Detects false-balance framing that presents opposing views as equally
 valid without evidence.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "Supporters say X. Critics say Y."
@@ -1167,8 +1117,7 @@ The Bureau of Labor Statistics projects a net gain of 12,000 jobs in the sector 
 Detects overuse of "the [nominalization] of" constructions that make prose
 unnecessarily abstract.
 
-**Severity:** Info  
-**Fixable:** No  
+**Severity:** Info
 **Configurable:** `nominalization_overload` (default: 3)
 
 **Detected patterns:**
@@ -1193,8 +1142,7 @@ We analyzed the data, identified patterns, and confirmed a baseline.
 
 Detects overuse of formulaic academic passive constructions.
 
-**Severity:** Info  
-**Fixable:** No  
+**Severity:** Info
 **Configurable:** `passive_voice_overuse` (default: 5)
 
 **Detected patterns:**
@@ -1218,8 +1166,7 @@ The results indicate a trend. The method performs well, and this approach works.
 
 Detects formulaic "gap in the literature" phrases common in academic writing.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "the literature has overlooked"
@@ -1245,8 +1192,7 @@ Prior work by Smith (2020) and Jones (2021) examined related aspects, but did no
 
 Detects single-anecdote openings used as evidence for broad claims.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "For [Name] of [Location], the…"
@@ -1271,8 +1217,7 @@ A 2024 Kaiser Family Foundation survey found that 12% of respondents in Ohio los
 Detects 3+ consecutive "Author (Year) verb" sentences that list citations
 without synthesizing them.
 
-**Severity:** Info  
-**Fixable:** No  
+**Severity:** Info
 **Configurable:** `citation_name_drop` (default: 3)
 
 **Detected patterns:**
@@ -1297,8 +1242,7 @@ Several scholars have examined the impact of technology on communities. Smith (2
 Detects corporate euphemisms that obscure plain meaning — language designed
 to soften layoffs, budget cuts, or organisational failure.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "restructuring", "right-sizing", "resource optimization"
@@ -1323,8 +1267,7 @@ The company is laying off 300 employees and closing two offices.
 Detects phrases that signal performative consensus-seeking rather than
 substantive agreement.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "fully aligned on", "on the same page"
@@ -1348,8 +1291,7 @@ We need the marketing and engineering teams to agree on the launch date before w
 Detects verbless, buzzword-heavy fragments that read like bullet points
 from a slide deck rather than prose.
 
-**Severity:** Info  
-**Fixable:** No  
+**Severity:** Info
 **Confidence:** Low
 
 **Detected patterns:**
@@ -1373,8 +1315,7 @@ The team will coordinate across three initiatives to improve scalability.
 Detects impersonal passive constructions that erase the actor, creating a
 sense of corporate inevitability where no one is responsible.
 
-**Severity:** Info  
-**Fixable:** No
+**Severity:** Info
 
 **Detected patterns:**
 - "It has been determined that…"
