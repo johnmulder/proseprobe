@@ -180,7 +180,9 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
 
     rules = [
         # Vocabulary (V001-V008)
-        AIVocabularyRule(allowed=allowed, additional=additional, allowed_phrases=allowed_phrases),
+        AIVocabularyRule(
+            allowed=allowed, additional=additional, allowed_phrases=allowed_phrases
+        ),
         CollaborativePhrasesRule(),
         KnowledgeCutoffRule(),
         PromotionalLanguageRule(),

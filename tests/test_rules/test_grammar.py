@@ -352,7 +352,9 @@ class TestFalseBalance:
         """Detect 'Supporters say X. Critics say Y.' false balance."""
         from slop_lint.rules.grammar import FalseBalanceRule
 
-        text = "Supporters say it will create jobs, but critics say it will destroy them."
+        text = (
+            "Supporters say it will create jobs, but critics say it will destroy them."
+        )
         rule = FalseBalanceRule()
         issues = rule.check(text, "test.md")
         assert len(issues) >= 1
@@ -434,7 +436,9 @@ class TestNominalizationOverload:
         """Respect configurable threshold."""
         from slop_lint.rules.grammar import NominalizationOverloadRule
 
-        text = "The implementation of the analysis led to the identification of patterns."
+        text = (
+            "The implementation of the analysis led to the identification of patterns."
+        )
         rule_low = NominalizationOverloadRule(threshold=1)
         rule_high = NominalizationOverloadRule(threshold=5)
         issues_low = rule_low.check(text, "test.md")
@@ -531,7 +535,11 @@ class TestHedgeStacking:
         rule = ExcessiveHedgingRule()
         text = "These results may potentially suggest that the findings could be interpreted as supportive."
         issues = rule.check(text, "test.md")
-        hedge_stack_issues = [i for i in issues if "hedge stacking" in i.message.lower() or "Hedge stacking" in i.message]
+        hedge_stack_issues = [
+            i
+            for i in issues
+            if "hedge stacking" in i.message.lower() or "Hedge stacking" in i.message
+        ]
         assert len(hedge_stack_issues) >= 1
 
     def test_ignores_single_hedge(self) -> None:
@@ -539,7 +547,11 @@ class TestHedgeStacking:
         rule = ExcessiveHedgingRule()
         text = "These results may suggest a trend."
         issues = rule.check(text, "test.md")
-        hedge_stack_issues = [i for i in issues if "hedge stacking" in i.message.lower() or "Hedge stacking" in i.message]
+        hedge_stack_issues = [
+            i
+            for i in issues
+            if "hedge stacking" in i.message.lower() or "Hedge stacking" in i.message
+        ]
         assert len(hedge_stack_issues) == 0
 
     def test_stacking_counts_correctly(self) -> None:
@@ -547,7 +559,11 @@ class TestHedgeStacking:
         rule = ExcessiveHedgingRule()
         text = "This arguably might indicate something."
         issues = rule.check(text, "test.md")
-        hedge_stack_issues = [i for i in issues if "hedge stacking" in i.message.lower() or "Hedge stacking" in i.message]
+        hedge_stack_issues = [
+            i
+            for i in issues
+            if "hedge stacking" in i.message.lower() or "Hedge stacking" in i.message
+        ]
         assert len(hedge_stack_issues) >= 1
 
 
@@ -595,7 +611,9 @@ class TestGapRitual:
         """Don't flag normal academic prose."""
         from slop_lint.rules.grammar import GapRitualRule
 
-        text = "The researchers examined the data carefully and reported their findings."
+        text = (
+            "The researchers examined the data carefully and reported their findings."
+        )
         rule = GapRitualRule()
         issues = rule.check(text, "test.md")
         assert len(issues) == 0

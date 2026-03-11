@@ -23,7 +23,11 @@ def _confidence_rank(confidence: Confidence) -> int:
 
 def _parse_confidence(value: str) -> Confidence | None:
     """Parse a confidence string into a Confidence enum."""
-    mapping = {"high": Confidence.HIGH, "medium": Confidence.MEDIUM, "low": Confidence.LOW}
+    mapping = {
+        "high": Confidence.HIGH,
+        "medium": Confidence.MEDIUM,
+        "low": Confidence.LOW,
+    }
     return mapping.get(value.lower())
 
 
@@ -64,9 +68,7 @@ def _cmd_check(args: argparse.Namespace) -> int:
 
     # Create linter and register rules
     linter = Linter(config)
-    min_severity = severity_from_str(
-        args.severity or config.severity, Severity.WARNING
-    )
+    min_severity = severity_from_str(args.severity or config.severity, Severity.WARNING)
     assert min_severity is not None  # default ensures this
 
     for rule in get_all_rules(config):
@@ -78,9 +80,8 @@ def _cmd_check(args: argparse.Namespace) -> int:
     results = linter.check(paths)
 
     # Filter by confidence level
-    effective_confidence = (
-        args.min_confidence
-        or ("medium" if args.hide_low else config.min_confidence)
+    effective_confidence = args.min_confidence or (
+        "medium" if args.hide_low else config.min_confidence
     )
     confidence_threshold = _parse_confidence(effective_confidence)
     if confidence_threshold and confidence_threshold != Confidence.LOW:
@@ -134,8 +135,7 @@ def _cmd_check(args: argparse.Namespace) -> int:
             if not args.quiet and args.verbose:
                 print(
                     style(
-                        f"Baseline: {original_count} total, "
-                        f"{new_count} new issue(s)",
+                        f"Baseline: {original_count} total, {new_count} new issue(s)",
                         dim=True,
                     )
                 )
@@ -194,9 +194,7 @@ def _cmd_check(args: argparse.Namespace) -> int:
                 elif issue.confidence == Confidence.HIGH:
                     conf_tag = " [high]"
                     is_bold = True
-                rule_part = style(
-                    f"{issue.rule_id}{conf_tag}", color=sev_color
-                )
+                rule_part = style(f"{issue.rule_id}{conf_tag}", color=sev_color)
                 line_text = (
                     f"{style(str(file_path), bold=True)}"
                     f":{issue.line}:{issue.column}: "
@@ -307,7 +305,9 @@ def _cmd_watch(args: argparse.Namespace) -> int:
     # Track file modification times
     file_mtimes: dict[Path, float] = {}
 
-    print(style(f"Watching {len(paths)} path(s)...", bold=True) + " Press Ctrl+C to stop")
+    print(
+        style(f"Watching {len(paths)} path(s)...", bold=True) + " Press Ctrl+C to stop"
+    )
 
     try:
         while True:

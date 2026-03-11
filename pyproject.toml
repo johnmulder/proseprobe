@@ -18,7 +18,6 @@ keywords = [
     "markdown",
     "python",
     "documentation",
-    "writing",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",

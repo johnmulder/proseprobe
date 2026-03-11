@@ -303,8 +303,6 @@ class TestMinConfidenceConfig:
 
     def test_load_min_confidence_from_toml(self, tmp_path: Path) -> None:
         config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text(
-            '[tool.slop-lint]\nmin_confidence = "medium"\n'
-        )
+        config_file.write_text('[tool.slop-lint]\nmin_confidence = "medium"\n')
         config = load_config(config_file)
         assert config.min_confidence == "medium"

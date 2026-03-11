@@ -623,6 +623,9 @@ def is_example_line(content: str, filename: str, line_num: int) -> bool:
 
     # Walk headings in reverse to find the nearest heading *before* line_num.
     for section in reversed(headings):
-        if section.start_line <= line_num <= section.end_line and _EXAMPLE_HEADING_RE.search(section.title):
+        if (
+            section.start_line <= line_num <= section.end_line
+            and _EXAMPLE_HEADING_RE.search(section.title)
+        ):
             return True
     return False

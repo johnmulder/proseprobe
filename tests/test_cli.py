@@ -241,7 +241,11 @@ class TestShowConfigFlag:
         test_file.write_text("Clean content.")
 
         result = run_cli(
-            "check", str(test_file), "--show-config", "--config", str(config_file),
+            "check",
+            str(test_file),
+            "--show-config",
+            "--config",
+            str(config_file),
         )
 
         assert result.exit_code == 0
@@ -285,7 +289,10 @@ class TestBaselineMode:
 
         # Now check with baseline - should show no new issues
         result = run_cli(
-            "check", str(test_file), "--baseline", str(baseline_file),
+            "check",
+            str(test_file),
+            "--baseline",
+            str(baseline_file),
         )
 
         assert result.exit_code == 0
@@ -297,7 +304,10 @@ class TestBaselineMode:
         test_file.write_text("This delves into topics.")
 
         result = run_cli(
-            "check", str(test_file), "--baseline", str(tmp_path / "missing.json"),
+            "check",
+            str(test_file),
+            "--baseline",
+            str(tmp_path / "missing.json"),
         )
 
         assert "Warning" in result.stdout or "not found" in result.stdout

@@ -71,7 +71,9 @@ HEDGING_PATTERNS = [
 DRAMATIC_COUNTDOWN_PATTERN = r"(?:^|(?<=\n))\s*Not\s+[^.!?\n]+\.\s*Not\s+[^.!?\n]+\.\s*(?:Just|But|Only|Simply)\s+[^.!?\n]+\."
 
 # Rhetorical self-answer patterns (S009)
-RHETORICAL_SELF_ANSWER_PATTERN = r"(?:^|(?<=\n))([^\n?]*\?\s*)\n\s*([A-Z][^.!?\n]{0,50}[.!])"
+RHETORICAL_SELF_ANSWER_PATTERN = (
+    r"(?:^|(?<=\n))([^\n?]*\?\s*)\n\s*([A-Z][^.!?\n]{0,50}[.!])"
+)
 
 # Listicle in prose patterns (S012)
 LISTICLE_PROSE_PATTERNS = [
@@ -136,10 +138,32 @@ STRUCTURAL_PATTERNS = {
 
 # Slide-deck buzzwords for fragment detection (S021)
 SLIDE_DECK_BUZZWORDS: set[str] = {
-    "alignment", "synergy", "strategic", "scalable", "impact",
-    "leverage", "operational", "excellence", "innovation", "enablement",
-    "transformation", "agile", "disruptive", "holistic", "ecosystem",
-    "stakeholder", "optimization", "empowerment", "roadmap", "initiative",
-    "cross-functional", "best-in-class", "value-add", "thought leadership",
-    "bandwidth", "paradigm", "accelerate", "streamline",
+    "alignment",
+    "synergy",
+    "strategic",
+    "scalable",
+    "impact",
+    "leverage",
+    "operational",
+    "excellence",
+    "innovation",
+    "enablement",
+    "transformation",
+    "agile",
+    "disruptive",
+    "holistic",
+    "ecosystem",
+    "stakeholder",
+    "optimization",
+    "empowerment",
+    "roadmap",
+    "initiative",
+    "cross-functional",
+    "best-in-class",
+    "value-add",
+    "thought leadership",
+    "bandwidth",
+    "paradigm",
+    "accelerate",
+    "streamline",
 }

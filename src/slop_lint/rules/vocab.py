@@ -284,7 +284,9 @@ class GrandioseStakesRule(Rule):
 
     id = "V006"
     name = "Grandiose Stakes"
-    description = "Detects inflated stakes ('fundamentally reshape', 'define the next era')"
+    description = (
+        "Detects inflated stakes ('fundamentally reshape', 'define the next era')"
+    )
     severity = Severity.WARNING
     applies_to = {"markdown"}
     content_scope = "prose"
@@ -318,16 +320,22 @@ class InventedConceptLabelsRule(Rule):
     content_scope = "prose"
 
     _suffixes = [
-        "paradox", "trap", "creep", "divide", "vacuum",
-        "inversion", "deficit", "gap", "spiral", "dilemma",
+        "paradox",
+        "trap",
+        "creep",
+        "divide",
+        "vacuum",
+        "inversion",
+        "deficit",
+        "gap",
+        "spiral",
+        "dilemma",
     ]
 
     def __init__(self, threshold: int = 2) -> None:
         self._threshold = threshold
         suffix_group = "|".join(self._suffixes)
-        self._pattern = re.compile(
-            rf"\b(\w+)\s+({suffix_group})\b", re.IGNORECASE
-        )
+        self._pattern = re.compile(rf"\b(\w+)\s+({suffix_group})\b", re.IGNORECASE)
 
     def check(self, content: str, filename: str) -> list[Issue]:
         issues: list[Issue] = []

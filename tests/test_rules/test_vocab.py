@@ -368,8 +368,14 @@ class TestAcademicVocabularyExpansions:
         from slop_lint.data.vocabulary import VOCABULARY_SUGGESTIONS
 
         new_words = [
-            "problematize", "destabilize", "facilitate", "demonstrate",
-            "regarding", "implement", "positionality", "praxis",
+            "problematize",
+            "destabilize",
+            "facilitate",
+            "demonstrate",
+            "regarding",
+            "implement",
+            "positionality",
+            "praxis",
         ]
         for word in new_words:
             assert word in VOCABULARY_SUGGESTIONS, f"Missing suggestion for '{word}'"
@@ -416,7 +422,9 @@ class TestBusinessJargonVocabulary:
     def test_detects_socialize_business_context(self) -> None:
         """Detect 'socialize' in business context."""
         rule = AIVocabularyRule()
-        issues = rule.check("We need to socialize the plan with stakeholders.", "test.md")
+        issues = rule.check(
+            "We need to socialize the plan with stakeholders.", "test.md"
+        )
         soc_issues = [i for i in issues if "socializ" in i.message.lower()]
         assert len(soc_issues) >= 1
 
@@ -432,8 +440,12 @@ class TestBusinessJargonVocabulary:
         from slop_lint.data.vocabulary import VOCABULARY_SUGGESTIONS
 
         new_words = [
-            "synergy", "value-add", "bandwidth",
-            "incentivize", "ideate", "socialize",
+            "synergy",
+            "value-add",
+            "bandwidth",
+            "incentivize",
+            "ideate",
+            "socialize",
         ]
         for word in new_words:
             assert word in VOCABULARY_SUGGESTIONS, f"Missing suggestion for '{word}'"

@@ -98,8 +98,7 @@ def table(
     # Data rows
     for row in rows:
         cells = [
-            (row[i] if i < len(row) else "").ljust(widths[i])
-            for i in range(n_cols)
+            (row[i] if i < len(row) else "").ljust(widths[i]) for i in range(n_cols)
         ]
         lines.append("  ".join(cells))
 

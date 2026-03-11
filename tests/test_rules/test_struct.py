@@ -263,9 +263,7 @@ class TestAnaphoraAbuse:
         from slop_lint.rules.struct import AnaphoraAbuseRule
 
         text = (
-            "They built the platform. "
-            "They hired the team. "
-            "They launched the product."
+            "They built the platform. They hired the team. They launched the product."
         )
         rule = AnaphoraAbuseRule()
         issues = rule.check(text, "test.md")
@@ -303,9 +301,7 @@ class TestAnaphoraAbuse:
         """Respect configurable threshold."""
         from slop_lint.rules.struct import AnaphoraAbuseRule
 
-        text = (
-            "We built X. We built Y. We built Z."
-        )
+        text = "We built X. We built Y. We built Z."
         rule_low = AnaphoraAbuseRule(threshold=2)
         rule_high = AnaphoraAbuseRule(threshold=5)
         issues_low = rule_low.check(text, "test.md")
@@ -673,11 +669,7 @@ class TestCitationNameDropping:
         """Respect configurable threshold."""
         from slop_lint.rules.struct import CitationNameDroppingRule
 
-        text = (
-            "Smith (2012) argues X. "
-            "Jones (2014) claims Y. "
-            "Patel (2018) suggests Z."
-        )
+        text = "Smith (2012) argues X. Jones (2014) claims Y. Patel (2018) suggests Z."
         rule_low = CitationNameDroppingRule(threshold=2)
         rule_high = CitationNameDroppingRule(threshold=5)
         issues_low = rule_low.check(text, "test.md")
@@ -819,7 +811,9 @@ class TestSlideDeckFragment:
         """Detect 'operational excellence' fragment."""
         from slop_lint.rules.struct import SlideDeckFragmentRule
 
-        text = "Operational excellence through cross-functional synergy and optimization."
+        text = (
+            "Operational excellence through cross-functional synergy and optimization."
+        )
         rule = SlideDeckFragmentRule()
         issues = rule.check(text, "test.md")
         assert len(issues) >= 1

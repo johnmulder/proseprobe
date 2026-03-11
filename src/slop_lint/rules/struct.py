@@ -407,8 +407,14 @@ class AnaphoraAbuseRule(Rule):
         # Check for consecutive sentences starting with the same word
         run_start = 0
         for i in range(1, len(sentences)):
-            prev_word = sentences[i - 1][1].split()[0].lower() if sentences[i - 1][1].split() else ""
-            curr_word = sentences[i][1].split()[0].lower() if sentences[i][1].split() else ""
+            prev_word = (
+                sentences[i - 1][1].split()[0].lower()
+                if sentences[i - 1][1].split()
+                else ""
+            )
+            curr_word = (
+                sentences[i][1].split()[0].lower() if sentences[i][1].split() else ""
+            )
             if curr_word != prev_word:
                 run_len = i - run_start
                 if run_len >= self._threshold:
@@ -449,9 +455,7 @@ class GerundFragmentLitanyRule(Rule):
     applies_to = {"markdown"}
     content_scope = "prose"
 
-    _gerund_fragment = re.compile(
-        r"^[A-Z][a-z]*ing\b[^.!?]{0,60}[.!?]$"
-    )
+    _gerund_fragment = re.compile(r"^[A-Z][a-z]*ing\b[^.!?]{0,60}[.!?]$")
 
     def __init__(self, threshold: int = 3) -> None:
         self._threshold = threshold
@@ -571,11 +575,35 @@ class HistoricalAnalogyStackingRule(Rule):
     content_scope = "prose"
 
     _tech_companies = {
-        "apple", "google", "microsoft", "amazon", "meta", "facebook",
-        "netflix", "uber", "airbnb", "spotify", "stripe", "shopify",
-        "twitter", "tesla", "openai", "anthropic", "discord", "slack",
-        "dropbox", "github", "aws", "ibm", "oracle", "salesforce",
-        "snapchat", "tiktok", "linkedin", "pinterest", "zoom",
+        "apple",
+        "google",
+        "microsoft",
+        "amazon",
+        "meta",
+        "facebook",
+        "netflix",
+        "uber",
+        "airbnb",
+        "spotify",
+        "stripe",
+        "shopify",
+        "twitter",
+        "tesla",
+        "openai",
+        "anthropic",
+        "discord",
+        "slack",
+        "dropbox",
+        "github",
+        "aws",
+        "ibm",
+        "oracle",
+        "salesforce",
+        "snapchat",
+        "tiktok",
+        "linkedin",
+        "pinterest",
+        "zoom",
     }
 
     def __init__(self, threshold: int = 3) -> None:
@@ -599,9 +627,7 @@ class HistoricalAnalogyStackingRule(Rule):
         self._check_window(window, issues)
         return issues
 
-    def _check_window(
-        self, window: list[tuple[int, str]], issues: list[Issue]
-    ) -> None:
+    def _check_window(self, window: list[tuple[int, str]], issues: list[Issue]) -> None:
         if not window:
             return
         all_text = " ".join(line for _, line in window)
@@ -740,7 +766,9 @@ class AnecdoteAsEvidenceRule(Rule):
 
     id = "S017"
     name = "Anecdote As Evidence"
-    description = "Detects 'For [Name] of [Location]', 'Take [Name]', 'Meet [Name]' patterns"
+    description = (
+        "Detects 'For [Name] of [Location]', 'Take [Name]', 'Meet [Name]' patterns"
+    )
     severity = Severity.INFO
     applies_to = {"markdown"}
     content_scope = "prose"
@@ -904,8 +932,7 @@ class SlideDeckFragmentRule(Rule):
             if self._HAS_VERB.search(stripped):
                 continue
             # Count buzzwords
-            words_lower = {w.lower().rstrip(".,;:!?'\"")
-                           for w in stripped.split()}
+            words_lower = {w.lower().rstrip(".,;:!?'\"") for w in stripped.split()}
             buzzword_count = len(words_lower & SLIDE_DECK_BUZZWORDS)
             if buzzword_count >= self._MIN_BUZZWORDS:
                 issues.append(

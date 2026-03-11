@@ -16,7 +16,6 @@ __all__ = [
 ]
 
 
-
 class Severity(Enum):
     """Issue severity levels."""
 

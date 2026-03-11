@@ -43,7 +43,11 @@ class Reporter:
         for path, issues in sorted(results.items()):
             for issue in issues:
                 severity_char = issue.severity.value[0].upper()
-                conf_tag = f" [{issue.confidence.value}]" if issue.confidence != Confidence.MEDIUM else ""
+                conf_tag = (
+                    f" [{issue.confidence.value}]"
+                    if issue.confidence != Confidence.MEDIUM
+                    else ""
+                )
                 lines.append(
                     f"{path}:{issue.line}:{issue.column}: "
                     f"{severity_char}{issue.rule_id[1:]} {issue.message}{conf_tag}"
