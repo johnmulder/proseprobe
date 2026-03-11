@@ -1,6 +1,7 @@
 """Style detection rules (T001-T008)."""
 
 import re
+from typing import ClassVar
 
 from slop_lint.data.style_patterns import (
     ELEGANT_VARIATION_PAIRS,
@@ -17,7 +18,7 @@ class TitleCaseHeadingsRule(Rule):
     name = "Title Case Headings"
     description = "Detects improper capitalization in headings"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for title case headings."""
@@ -58,7 +59,7 @@ class BoldOveruseRule(Rule):
     name = "Bold Overuse"
     description = "Detects excessive **bold** usage per paragraph"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
 
     def __init__(self, threshold: int = 3) -> None:
         """Initialize rule with configurable threshold.
@@ -117,7 +118,7 @@ class EmDashOveruseRule(Rule):
     name = "Em Dash Overuse"
     description = "Detects excessive — for dramatic effect"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def __init__(self, threshold: int = 5) -> None:
@@ -162,7 +163,7 @@ class QuoteInconsistencyRule(Rule):
     name = "Quote Inconsistency"
     description = "Detects mixed curly and straight quotes"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -201,7 +202,7 @@ class EmojiInProseRule(Rule):
     name = "Emoji in Prose"
     description = "Detects 🚀, ✨, etc. in headings or body text"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     # Common promotional/decorative emoji
@@ -232,7 +233,7 @@ class ElegantVariationRule(Rule):
     name = "Elegant Variation"
     description = "Detects awkward synonyms to avoid repetition"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -276,7 +277,7 @@ class ShortPunchyFragmentsRule(Rule):
     name = "Short Punchy Fragments"
     description = "Detects consecutive very short paragraphs for manufactured emphasis"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     _MAX_WORDS = 5
@@ -350,7 +351,7 @@ class SentenceLengthRule(Rule):
     name = "Sentence Length"
     description = "Detects sentences exceeding a word count threshold"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def __init__(self, threshold: int = 40) -> None:

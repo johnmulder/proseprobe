@@ -3,16 +3,17 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum, StrEnum
+from typing import ClassVar
 
 from slop_lint.parsers.markdown import iter_non_code_lines, iter_prose_lines
 
 __all__ = [
     "Confidence",
-    "Severity",
     "Issue",
     "Rule",
-    "severity_rank",
+    "Severity",
     "severity_from_str",
+    "severity_rank",
 ]
 
 
@@ -87,7 +88,7 @@ class Rule(ABC):
     name: str
     description: str
     severity: Severity = Severity.WARNING
-    applies_to: set[str] = {"any"}  # "markdown", "python", "any"
+    applies_to: ClassVar[set[str]] = {"any"}  # "markdown", "python", "any"
     content_scope: str = "raw"  # "raw", "prose", "non_code"
 
     @abstractmethod

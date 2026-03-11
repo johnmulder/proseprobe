@@ -1,6 +1,7 @@
 """Vocabulary detection rules (V001-V007)."""
 
 import re
+from typing import ClassVar
 
 from slop_lint.data.phrases import (
     COLLABORATIVE_PHRASES,
@@ -30,11 +31,11 @@ class AIVocabularyRule(Rule):
     description = "Detects overused and clichéd words"
     severity = Severity.WARNING
 
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     # Patterns for words that need suffix matching (verbs, etc.)
-    _WORD_PATTERNS: dict[str, str] = {
+    _WORD_PATTERNS: ClassVar[dict[str, str]] = {
         "delve": r"delv(?:e|es|ed|ing)",
         "embark": r"embark(?:s|ed|ing)?",
         "foster": r"foster(?:s|ed|ing)?",
@@ -144,7 +145,7 @@ class CollaborativePhrasesRule(Rule):
     name = "Collaborative Phrases"
     description = "Detects chat-like communication patterns"
     severity = Severity.WARNING
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -176,7 +177,7 @@ class KnowledgeCutoffRule(Rule):
     name = "Knowledge Cutoff"
     description = "Detects temporal/knowledge cutoff disclaimers"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -207,7 +208,7 @@ class PromotionalLanguageRule(Rule):
     name = "Promotional Language"
     description = "Detects puffery and marketing speak"
     severity = Severity.WARNING
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -252,7 +253,7 @@ class WeaselWordsRule(Rule):
     name = "Weasel Words"
     description = "Detects vague attributions and weasel phrases"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -288,7 +289,7 @@ class GrandioseStakesRule(Rule):
         "Detects inflated stakes ('fundamentally reshape', 'define the next era')"
     )
     severity = Severity.WARNING
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -316,10 +317,10 @@ class InventedConceptLabelsRule(Rule):
     name = "Invented Concept Labels"
     description = "Detects '[noun] paradox/trap/creep' pseudo-analytical labels"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
-    _suffixes = [
+    _suffixes: ClassVar[list[str]] = [
         "paradox",
         "trap",
         "creep",
@@ -370,7 +371,7 @@ class TrendOverclaimRule(Rule):
     name = "Trend Overclaim"
     description = "Detects 'more and more people', 'a growing number of' trend claims"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:

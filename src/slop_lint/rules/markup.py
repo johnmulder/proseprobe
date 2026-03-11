@@ -15,7 +15,7 @@ class WrongMarkupRule(Rule):
     name = "Wrong Markup"
     description = "Detects **bold** in Python comments"
     severity = Severity.WARNING
-    applies_to = {"python"}
+    applies_to: ClassVar[set[str]] = {"python"}
 
     # Markdown patterns that don't belong in code
     _md_patterns: ClassVar[list[tuple[str, str]]] = [
@@ -73,10 +73,10 @@ class ChatGPTMarkersRule(Rule):
     name = "ChatGPT Markers"
     description = "Detects turn0search0, oai_citation, contentReference"
     severity = Severity.ERROR
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
-    _patterns = [
+    _patterns: ClassVar[list[str]] = [
         r"turn\d+search\d+",
         r"oai_citation",
         r"contentReference\[.*?\]",
@@ -109,7 +109,7 @@ class UTMParametersRule(Rule):
     name = "UTM Parameters"
     description = "Detects utm_source=chatgpt.com or openai"
     severity = Severity.WARNING
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
 
     _pattern = r"[?&]utm_source=(chatgpt\.com|openai)[^&\s]*"
 
@@ -163,10 +163,10 @@ class BrokenReferencesRule(Rule):
     name = "Broken References"
     description = "Detects [attached_file:1], grok_card tags"
     severity = Severity.ERROR
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
-    _patterns = [
+    _patterns: ClassVar[list[str]] = [
         r"\[attached_file:\d+\]",
         r"grok_card",
         r"\[file_\d+\]",

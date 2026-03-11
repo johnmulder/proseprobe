@@ -7,7 +7,7 @@ whether stdout is a TTY.
 import os
 import sys
 
-__all__ = ["style", "table", "clear_screen"]
+__all__ = ["clear_screen", "style", "table"]
 
 # ANSI SGR codes
 _CODES: dict[str, str] = {

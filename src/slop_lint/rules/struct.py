@@ -1,6 +1,7 @@
 """Structural detection rules (S001-S018)."""
 
 import re
+from typing import ClassVar
 
 from slop_lint.data.patterns import (
     ANECDOTE_EVIDENCE_PATTERNS,
@@ -30,7 +31,7 @@ class RuleOfThreeRule(Rule):
     name = "Rule of Three"
     description = "Detects excessive 'X, Y, and Z' patterns"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def __init__(self, threshold: int = 3) -> None:
@@ -74,7 +75,7 @@ class NegativeParallelismRule(Rule):
     name = "Negative Parallelism"
     description = "Detects 'Not only... but also...' patterns"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -105,7 +106,7 @@ class ChallengeConclusionsRule(Rule):
     name = "Challenge Conclusions"
     description = "Detects 'Despite its... faces challenges...' patterns"
     severity = Severity.WARNING
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -136,7 +137,7 @@ class InlineHeaderListsRule(Rule):
     name = "Inline-Header Lists"
     description = "Detects '- **Header:** Description' pattern"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def __init__(self, threshold: int = 3) -> None:
@@ -197,7 +198,7 @@ class SignificanceEmphasisRule(Rule):
     name = "Significance Emphasis"
     description = "Detects 'pivotal moment', 'key turning point' patterns"
     severity = Severity.WARNING
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -227,7 +228,7 @@ class SuperficialAnalysisRule(Rule):
     name = "Superficial Analysis"
     description = "Detects 'highlighting...underscoring...' chains"
     severity = Severity.WARNING
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -258,17 +259,17 @@ class FalseRangesRule(Rule):
     name = "False Ranges"
     description = "Detects 'from X to Y' with incoherent extremes"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     # Common false range patterns
-    _patterns = [
+    _patterns: ClassVar[list[str]] = [
         r"from\s+(\w+)\s+to\s+(\w+)",
         r"ranging from\s+(\w+)\s+to\s+(\w+)",
     ]
 
     # Known incoherent pairs (both should be flagged)
-    _incoherent_pairs = {
+    _incoherent_pairs: ClassVar[set[tuple[str, str]]] = {
         ("small", "large"),
         ("simple", "complex"),
         ("basic", "advanced"),
@@ -315,7 +316,7 @@ class DramaticCountdownRule(Rule):
     name = "Dramatic Countdown"
     description = "Detects 'Not X. Not Y. Just Z.' dramatic countdown"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     _pattern = re.compile(
@@ -348,7 +349,7 @@ class RhetoricalSelfAnswerRule(Rule):
     name = "Rhetorical Self-Answer"
     description = "Detects 'The X? Y.' self-posed rhetorical question"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     # Short question (<60 chars) followed by short answer (<60 chars)
@@ -382,7 +383,7 @@ class AnaphoraAbuseRule(Rule):
     name = "Anaphora Abuse"
     description = "Detects repeated sentence openings (anaphora)"
     severity = Severity.WARNING
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def __init__(self, threshold: int = 3) -> None:
@@ -452,7 +453,7 @@ class GerundFragmentLitanyRule(Rule):
     name = "Gerund Fragment Litany"
     description = "Detects consecutive gerund fragments ('Fixing X. Writing Y.')"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     _gerund_fragment = re.compile(r"^[A-Z][a-z]*ing\b[^.!?]{0,60}[.!?]$")
@@ -513,10 +514,10 @@ class ListicleInProseRule(Rule):
     name = "Listicle in Prose"
     description = "Detects ordinal-based listicle disguised as prose"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
-    _ordinals = ["first", "second", "third", "fourth", "fifth"]
+    _ordinals: ClassVar[list[str]] = ["first", "second", "third", "fourth", "fifth"]
 
     def check(self, content: str, filename: str) -> list[Issue]:
         issues: list[Issue] = []
@@ -571,10 +572,10 @@ class HistoricalAnalogyStackingRule(Rule):
     name = "Historical Analogy Stacking"
     description = "Detects rapid-fire historical company analogies"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
-    _tech_companies = {
+    _tech_companies: ClassVar[set[str]] = {
         "apple",
         "google",
         "microsoft",
@@ -652,7 +653,7 @@ class SignpostedConclusionRule(Rule):
     name = "Signposted Conclusion"
     description = "Detects explicitly signposted conclusions"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -681,7 +682,7 @@ class FractalSummaryRule(Rule):
     name = "Fractal Summary"
     description = "Detects section intro/outro summary framing"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -709,7 +710,7 @@ class ContentDuplicationRule(Rule):
     name = "Content Duplication"
     description = "Detects duplicate paragraphs in the same document"
     severity = Severity.WARNING
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "raw"
 
     _MIN_WORDS = 8  # Don't flag very short paragraphs
@@ -770,7 +771,7 @@ class AnecdoteAsEvidenceRule(Rule):
         "Detects 'For [Name] of [Location]', 'Take [Name]', 'Meet [Name]' patterns"
     )
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -799,7 +800,7 @@ class CitationNameDroppingRule(Rule):
     name = "Citation Name-Dropping"
     description = "Detects 3+ consecutive 'Author (Year) verb' sentences"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def __init__(self, threshold: int = 3) -> None:
@@ -847,7 +848,7 @@ class CorporateEuphemismRule(Rule):
     name = "Corporate Euphemism"
     description = "Detects euphemistic reframing of negative events"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -877,7 +878,7 @@ class AlignmentRitualRule(Rule):
     name = "Alignment Ritual"
     description = "Detects statements that signal agreement without conveying substance"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -906,7 +907,7 @@ class SlideDeckFragmentRule(Rule):
     name = "Slide Deck Fragment"
     description = "Detects verbless noun-phrase fragments with stacked buzzwords"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     _MIN_BUZZWORDS = 2

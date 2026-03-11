@@ -1,6 +1,7 @@
 """Code-specific detection rules (C001-C004)."""
 
 import re
+from typing import ClassVar
 
 from slop_lint.data.code_patterns import (
     AI_PLACEHOLDER_CODE_PATTERNS,
@@ -21,7 +22,7 @@ class DocstringVocabularyRule(Rule):
     name = "Docstring Vocabulary"
     description = "Detects overused words in Python docstrings"
     severity = Severity.WARNING
-    applies_to = {"python"}
+    applies_to: ClassVar[set[str]] = {"python"}
 
     def __init__(
         self,
@@ -76,7 +77,7 @@ class VerboseCommentsRule(Rule):
     name = "Verbose Comments"
     description = "Detects comments with excessive verbosity patterns"
     severity = Severity.INFO
-    applies_to = {"python"}
+    applies_to: ClassVar[set[str]] = {"python"}
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for verbose comments."""
@@ -111,7 +112,7 @@ class CollaborativeCommentsRule(Rule):
     name = "Collaborative Comments"
     description = "Detects 'I hope this helps' in # comments"
     severity = Severity.WARNING
-    applies_to = {"python"}
+    applies_to: ClassVar[set[str]] = {"python"}
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for collaborative comments."""
@@ -145,7 +146,7 @@ class AIPlaceholdersRule(Rule):
     name = "Formulaic Placeholders"
     description = "Detects generic TODO patterns and boilerplate"
     severity = Severity.INFO
-    applies_to = {"python"}
+    applies_to: ClassVar[set[str]] = {"python"}
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for formulaic placeholders."""

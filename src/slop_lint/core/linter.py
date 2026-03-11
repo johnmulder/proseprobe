@@ -84,7 +84,7 @@ class Linter:
             if pattern.endswith("/"):
                 pattern = pattern + "**"
 
-            candidates = rel_candidates if anchored else rel_candidates + [file]
+            candidates = rel_candidates if anchored else [*rel_candidates, file]
             if self._match_pattern_any(candidates, pattern):
                 return True
 

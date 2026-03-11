@@ -1,6 +1,7 @@
 """Grammar pattern detection rules (G001-G013)."""
 
 import re
+from typing import ClassVar
 
 from slop_lint.data.patterns import (
     COPULA_AVOIDANCE_PATTERNS,
@@ -29,7 +30,7 @@ class CopulaAvoidanceRule(Rule):
     name = "Copula Avoidance"
     description = "Detects 'serves as' instead of 'is'"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -59,7 +60,7 @@ class ExcessiveHedgingRule(Rule):
     name = "Excessive Hedging"
     description = "Detects 'It is important to note that...' patterns"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     # Individual hedge words for per-sentence stacking detection
@@ -114,7 +115,7 @@ class ParticipleChainsRule(Rule):
     name = "Participle Chains"
     description = "Detects 'highlighting..., emphasizing..., fostering...' chains"
     severity = Severity.WARNING
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     # Pattern for multiple -ing words in a row (3+)
@@ -152,7 +153,7 @@ class FalseSuspenseTransitionRule(Rule):
     name = "False Suspense Transition"
     description = "Detects 'here's the kicker/thing' false suspense"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -181,7 +182,7 @@ class PatronizingAnalogyRule(Rule):
     name = "Patronizing Analogy"
     description = "Detects 'think of it as/like' patronizing analogies"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -210,7 +211,7 @@ class FuturistInvitationRule(Rule):
     name = "Futurist Invitation"
     description = "Detects 'imagine a world where' futurist framing"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -239,7 +240,7 @@ class FalseVulnerabilityRule(Rule):
     name = "False Vulnerability"
     description = "Detects performative self-awareness phrases"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -267,7 +268,7 @@ class AssertedSimplicityRule(Rule):
     name = "Asserted Simplicity"
     description = "Detects 'the truth is/reality is simpler' assertions"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -295,7 +296,7 @@ class PedagogicalVoiceRule(Rule):
     name = "Pedagogical Voice"
     description = "Detects 'let's break this down/unpack/explore' teaching tone"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -327,7 +328,7 @@ class FalseBalanceRule(Rule):
     name = "False Balance"
     description = "Detects 'supporters say X, critics say Y' false balance"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -356,7 +357,7 @@ class NominalizationOverloadRule(Rule):
     name = "Nominalization Overload"
     description = "Detects 'the [noun] of' nominalization patterns"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def __init__(self, threshold: int = 3) -> None:
@@ -392,7 +393,7 @@ class PassiveVoiceOveruseRule(Rule):
     name = "Passive Voice Overuse"
     description = "Detects formulaic academic passive constructions"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def __init__(self, threshold: int = 5) -> None:
@@ -428,7 +429,7 @@ class GapRitualRule(Rule):
     name = "Gap Ritual"
     description = "Detects formulaic 'gap in the literature' phrases"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -459,7 +460,7 @@ class ImpersonalCorporatePassiveRule(Rule):
     name = "Impersonal Corporate Passive"
     description = "Detects 'it has been determined' constructions that hide who acted"
     severity = Severity.INFO
-    applies_to = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:

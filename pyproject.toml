@@ -42,6 +42,8 @@ dev = [
     "mypy>=1.0",
     "ruff>=0.1.0",
     "hypothesis>=6.0",
+    "pre-commit>=3.0",
+    "interrogate>=1.5",
 ]
 
 [project.scripts]
@@ -80,12 +82,28 @@ select = [
     "UP",     # pyupgrade
     "ARG",    # flake8-unused-arguments
     "SIM",    # flake8-simplify
+    "D",      # pydocstyle
+    "PT",     # flake8-pytest-style
+    "RUF",    # ruff-specific rules
+    "S",      # flake8-bandit (security)
 ]
 ignore = [
     "E501",   # line too long (handled by formatter)
     "ARG001", # unused function argument (TODO stubs)
     "ARG002", # unused method argument (TODO stubs)
+    "D102",   # missing docstring in public method (gradual adoption)
+    "D107",   # missing docstring in __init__ (gradual adoption)
+    "S101",   # assert used (expected in tests)
 ]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["D", "S"]
+"tests/fixtures/**/*.py" = ["D", "S"]
+"tests/test_property.py" = ["RUF001"]
+"benchmarks/**/*.py" = ["D"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["slop_lint"]
@@ -104,3 +122,16 @@ exclude_lines = [
     "if TYPE_CHECKING:",
     "raise NotImplementedError",
 ]
+
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = true
+ignore-magic = true
+ignore-semiprivate = true
+ignore-private = true
+ignore-property-decorators = true
+ignore-module = false
+ignore-nested-functions = true
+fail-under = 75
+exclude = ["tests", "benchmarks"]
+verbose = 0
