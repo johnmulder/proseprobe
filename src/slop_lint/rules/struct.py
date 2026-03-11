@@ -12,12 +12,15 @@ from slop_lint.data.patterns import (
     PARTICIPLE_CHAIN_PATTERNS,
     RULE_OF_THREE_PATTERNS,
     SIGNIFICANCE_PATTERNS,
+    SLIDE_DECK_BUZZWORDS,
 )
 from slop_lint.data.phrases import (
+    ALIGNMENT_RITUAL_PHRASES,
+    CORPORATE_EUPHEMISM_PHRASES,
     FRACTAL_SUMMARY_PHRASES,
     SIGNPOSTED_CONCLUSION_PHRASES,
 )
-from slop_lint.rules.base import Issue, Rule, Severity
+from slop_lint.rules.base import Confidence, Issue, Rule, Severity
 
 
 class RuleOfThreeRule(Rule):
@@ -803,4 +806,116 @@ class CitationNameDroppingRule(Rule):
                     severity=self.severity,
                 )
             )
+        return issues
+
+
+# ---------- Business Writing Tropes: S019-S021 ----------
+
+
+class CorporateEuphemismRule(Rule):
+    """S019: Detect corporate euphemisms that obscure meaning."""
+
+    id = "S019"
+    name = "Corporate Euphemism"
+    description = "Detects euphemistic reframing of negative events"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            line_lower = line.lower()
+            for phrase in CORPORATE_EUPHEMISM_PHRASES:
+                if phrase in line_lower:
+                    col = line_lower.find(phrase)
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Corporate euphemism: '{phrase}' \u2014 consider stating the action directly",
+                            line=line_num,
+                            column=col + 1,
+                            end_column=col + len(phrase) + 1,
+                            severity=self.severity,
+                        )
+                    )
+        return issues
+
+
+class AlignmentRitualRule(Rule):
+    """S020: Detect alignment-signaling without substance."""
+
+    id = "S020"
+    name = "Alignment Ritual"
+    description = "Detects statements that signal agreement without conveying substance"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            for pattern in ALIGNMENT_RITUAL_PHRASES:
+                match = re.search(pattern, line, re.IGNORECASE)
+                if match:
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Alignment ritual: '{match.group()}' \u2014 consider specifying what was agreed and what happens next",
+                            line=line_num,
+                            column=match.start() + 1,
+                            end_column=match.end() + 1,
+                            severity=self.severity,
+                        )
+                    )
+        return issues
+
+
+class SlideDeckFragmentRule(Rule):
+    """S021: Detect verbless buzzword-heavy fragments from slide-deck writing."""
+
+    id = "S021"
+    name = "Slide Deck Fragment"
+    description = "Detects verbless noun-phrase fragments with stacked buzzwords"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    _MIN_BUZZWORDS = 2
+
+    # Simple heuristic for a conjugated main verb (not gerund/participle-only)
+    _HAS_VERB = re.compile(
+        r"\b(?:is|are|was|were|has|have|had|do|does|did|will|shall|can|could"
+        r"|would|should|may|might|must)\b",
+        re.IGNORECASE,
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            stripped = line.strip()
+            # Skip very short or very long lines
+            if len(stripped.split()) < 4 or len(stripped.split()) > 20:
+                continue
+            # Must end with a period (sentence-like fragment)
+            if not stripped.endswith("."):
+                continue
+            # Skip if it has a conjugated main verb
+            if self._HAS_VERB.search(stripped):
+                continue
+            # Count buzzwords
+            words_lower = {w.lower().rstrip(".,;:!?'\"")
+                           for w in stripped.split()}
+            buzzword_count = len(words_lower & SLIDE_DECK_BUZZWORDS)
+            if buzzword_count >= self._MIN_BUZZWORDS:
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Slide deck fragment: '{stripped}' \u2014 consider adding a subject and verb",
+                        line=line_num,
+                        column=1,
+                        severity=self.severity,
+                        confidence=Confidence.LOW,
+                    )
+                )
         return issues

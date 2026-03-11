@@ -1289,3 +1289,106 @@ Smith (2012) argues that technology reshapes communities. Jones (2014) claims th
 ```markdown
 Several scholars have examined the impact of technology on communities. Smith (2012) and Jones (2014) both argue that digital tools reshape and empower communities, while Patel (2018) emphasizes the mediating role of platforms.
 ```
+
+---
+
+### S019: Corporate Euphemism
+
+Detects corporate euphemisms that obscure plain meaning — language designed
+to soften layoffs, budget cuts, or organisational failure.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "restructuring", "right-sizing", "resource optimization"
+- "headcount reduction", "workforce adjustment"
+- "sunsetting", "deprioritizing"
+- "strategic pivot", "rationalization"
+
+**Example (bad):**
+```markdown
+The company is undergoing a strategic restructuring and right-sizing initiative.
+```
+
+**Example (good):**
+```markdown
+The company is laying off 300 employees and closing two offices.
+```
+
+---
+
+### S020: Alignment Ritual
+
+Detects phrases that signal performative consensus-seeking rather than
+substantive agreement.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "fully aligned on", "on the same page"
+- "cross-functional alignment", "align on next steps"
+- "ensure alignment", "get buy-in"
+
+**Example (bad):**
+```markdown
+We need to ensure cross-functional alignment and get buy-in from all stakeholders before we can move forward.
+```
+
+**Example (good):**
+```markdown
+We need the marketing and engineering teams to agree on the launch date before we proceed.
+```
+
+---
+
+### S021: Slide Deck Fragment
+
+Detects verbless, buzzword-heavy fragments that read like bullet points
+from a slide deck rather than prose.
+
+**Severity:** Info  
+**Fixable:** No  
+**Confidence:** Low
+
+**Detected patterns:**
+Lines that contain 2+ buzzwords (alignment, synergy, strategic, impact,
+scalable, etc.) plus lack a conjugated main verb.
+
+**Example (bad):**
+```markdown
+Driving alignment across strategic initiatives for scalable impact.
+```
+
+**Example (good):**
+```markdown
+The team will coordinate across three initiatives to improve scalability.
+```
+
+---
+
+### G014: Impersonal Corporate Passive
+
+Detects impersonal passive constructions that erase the actor, creating a
+sense of corporate inevitability where no one is responsible.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "It has been determined that…"
+- "A decision has been made…"
+- "Steps will be taken…"
+- "Changes will be implemented…"
+- "Adjustments will be made…"
+
+**Example (bad):**
+```markdown
+It has been determined that adjustments will be made to the compensation structure.
+```
+
+**Example (good):**
+```markdown
+The finance team decided to reduce bonuses by 10% starting in Q3.
+```

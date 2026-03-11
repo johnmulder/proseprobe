@@ -691,3 +691,160 @@ class TestCitationNameDropping:
         rule = CitationNameDroppingRule()
         assert rule.id == "S018"
         assert rule.name == "Citation Name-Dropping"
+
+
+# ---------- Business Writing Tropes: S019-S021 ----------
+
+
+class TestCorporateEuphemism:
+    """Tests for S019: Corporate Euphemism."""
+
+    def test_detects_restructuring(self) -> None:
+        """Detect 'restructuring' corporate euphemism."""
+        from slop_lint.rules.struct import CorporateEuphemismRule
+
+        text = "The company announced a major restructuring initiative."
+        rule = CorporateEuphemismRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S019"
+        assert "restructuring" in issues[0].message
+
+    def test_detects_right_sizing(self) -> None:
+        """Detect 'right-sizing' euphemism."""
+        from slop_lint.rules.struct import CorporateEuphemismRule
+
+        text = "We are right-sizing the organization to align with market conditions."
+        rule = CorporateEuphemismRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_sunsetting(self) -> None:
+        """Detect 'sunsetting' euphemism."""
+        from slop_lint.rules.struct import CorporateEuphemismRule
+
+        text = "We will be sunsetting the legacy platform next quarter."
+        rule = CorporateEuphemismRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_headcount_reduction(self) -> None:
+        """Detect 'headcount reduction' euphemism."""
+        from slop_lint.rules.struct import CorporateEuphemismRule
+
+        text = "The headcount reduction will affect 200 employees."
+        rule = CorporateEuphemismRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_normal_prose(self) -> None:
+        """Don't flag normal prose."""
+        from slop_lint.rules.struct import CorporateEuphemismRule
+
+        text = "The team completed the migration to the new database."
+        rule = CorporateEuphemismRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import CorporateEuphemismRule
+
+        rule = CorporateEuphemismRule()
+        assert rule.id == "S019"
+        assert rule.name == "Corporate Euphemism"
+
+
+class TestAlignmentRitual:
+    """Tests for S020: Alignment Ritual."""
+
+    def test_detects_fully_aligned(self) -> None:
+        """Detect 'fully aligned on' alignment ritual."""
+        from slop_lint.rules.struct import AlignmentRitualRule
+
+        text = "We are fully aligned on the strategic direction moving forward."
+        rule = AlignmentRitualRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S020"
+
+    def test_detects_on_the_same_page(self) -> None:
+        """Detect 'on the same page' alignment ritual."""
+        from slop_lint.rules.struct import AlignmentRitualRule
+
+        text = "Let's make sure everyone is on the same page before we proceed."
+        rule = AlignmentRitualRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_cross_functional_alignment(self) -> None:
+        """Detect 'cross-functional alignment' ritual."""
+        from slop_lint.rules.struct import AlignmentRitualRule
+
+        text = "We need cross-functional alignment before launching."
+        rule = AlignmentRitualRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_normal_prose(self) -> None:
+        """Don't flag normal prose."""
+        from slop_lint.rules.struct import AlignmentRitualRule
+
+        text = "The text is aligned to the left margin."
+        rule = AlignmentRitualRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import AlignmentRitualRule
+
+        rule = AlignmentRitualRule()
+        assert rule.id == "S020"
+        assert rule.name == "Alignment Ritual"
+
+
+class TestSlideDeckFragment:
+    """Tests for S021: Slide Deck Fragment."""
+
+    def test_detects_buzzword_fragment(self) -> None:
+        """Detect verbless buzzword-heavy fragment."""
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        text = "Driving alignment across strategic initiatives for scalable impact."
+        rule = SlideDeckFragmentRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S021"
+
+    def test_detects_operational_excellence(self) -> None:
+        """Detect 'operational excellence' fragment."""
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        text = "Operational excellence through cross-functional synergy and optimization."
+        rule = SlideDeckFragmentRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_normal_sentences(self) -> None:
+        """Don't flag normal sentences with verbs."""
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        text = "The team will coordinate projects to improve scalability."
+        rule = SlideDeckFragmentRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_ignores_short_lines(self) -> None:
+        """Don't flag lines with fewer than 4 words."""
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        text = "Strategic alignment."
+        rule = SlideDeckFragmentRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        rule = SlideDeckFragmentRule()
+        assert rule.id == "S021"
+        assert rule.name == "Slide Deck Fragment"

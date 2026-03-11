@@ -52,6 +52,8 @@ COPULA_AVOIDANCE_PATTERNS = [
     r"\bfunctions as\b",
     r"\boperates as\b",
     r"\bacts as\b",
+    # Slide-deck verb (business writing tropes)
+    r"\bdriving (?:alignment|impact|value|results|outcomes)\b",
 ]
 
 # Excessive hedging (G002)
@@ -130,4 +132,14 @@ STRUCTURAL_PATTERNS = {
     "rhetorical_self_answer": RHETORICAL_SELF_ANSWER_PATTERN,
     "listicle_prose": LISTICLE_PROSE_PATTERNS,
     "anecdote_evidence": ANECDOTE_EVIDENCE_PATTERNS,
+}
+
+# Slide-deck buzzwords for fragment detection (S021)
+SLIDE_DECK_BUZZWORDS: set[str] = {
+    "alignment", "synergy", "strategic", "scalable", "impact",
+    "leverage", "operational", "excellence", "innovation", "enablement",
+    "transformation", "agile", "disruptive", "holistic", "ecosystem",
+    "stakeholder", "optimization", "empowerment", "roadmap", "initiative",
+    "cross-functional", "best-in-class", "value-add", "thought leadership",
+    "bandwidth", "paradigm", "accelerate", "streamline",
 }

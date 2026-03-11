@@ -87,6 +87,15 @@ AI_VOCABULARY_TIER2 = {
     "implement",
     # Narrow academic usage (matched by special pattern in vocab.py)
     "interrogate",
+    # Business jargon (business writing tropes)
+    "synergy",
+    "value-add",
+    "bandwidth",
+    "incentivize",
+    "ideate",
+    "socialize",
+    "best-in-class",
+    "architect",
 }
 
 # Tier 3: Low confidence (common but frequently overused)
@@ -187,6 +196,15 @@ VOCABULARY_SUGGESTIONS: dict[str, str] = {
     "regarding": "about",
     "implement": "carry out",
     "interrogate": "examine, question",
+    # Business jargon (business writing tropes)
+    "synergy": "cooperation, collaboration",
+    "value-add": "benefit, advantage",
+    "bandwidth": "capacity, time",
+    "incentivize": "encourage, motivate",
+    "ideate": "brainstorm, come up with ideas",
+    "socialize": "share, circulate",
+    "best-in-class": "leading, top",
+    "architect": "design, plan",
 }
 
 # Vocabulary specific to code/docstrings (used by C001)

@@ -60,6 +60,12 @@ class AIVocabularyRule(Rule):
         "implement": r"implement(?:s|ed|ing)?",
         # Narrow: only academic usage ("interrogate the assumptions"), not police/legal
         "interrogate": r"interrogat(?:e|es|ed|ing)\s+(?:the\s+)?(?:dominant|underlying|prevailing|assumed|notion|concept|assumption|premise|idea)s?",
+        # Business jargon (business writing tropes)
+        "incentivize": r"incentivi[zs](?:e|es|ed|ing)",
+        "ideate": r"ideat(?:e|es|ed|ing)",
+        "socialize": r"sociali[zs](?:e|es|ed|ing)\s+(?:the\s+)?(?:plan|idea|proposal|concept|strategy|approach|document|initiative|change|update|roadmap)",
+        "best-in-class": r"best[- ]in[- ]class",
+        "architect": r"architect(?:s|ed|ing)\s+(?:a|an|the|our|this|that|new|scalable|robust|modern|flexible)\s+\w+",
     }
 
     def __init__(

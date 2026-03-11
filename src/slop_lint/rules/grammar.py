@@ -15,6 +15,7 @@ from slop_lint.data.phrases import (
     FALSE_VULNERABILITY_PHRASES,
     FUTURIST_INVITATION_PHRASES,
     GAP_RITUAL_PHRASES,
+    IMPERSONAL_CORPORATE_PASSIVE_PHRASES,
     PATRONIZING_ANALOGY_PHRASES,
     PEDAGOGICAL_VOICE_PHRASES,
 )
@@ -439,6 +440,37 @@ class GapRitualRule(Rule):
                         Issue(
                             rule_id=self.id,
                             message=f"Gap ritual phrase: '{match.group()}'",
+                            line=line_num,
+                            column=match.start() + 1,
+                            end_column=match.end() + 1,
+                            severity=self.severity,
+                        )
+                    )
+        return issues
+
+
+# ---------- Business Writing Tropes: G014 ----------
+
+
+class ImpersonalCorporatePassiveRule(Rule):
+    """G014: Detect impersonal passive constructions that hide responsibility."""
+
+    id = "G014"
+    name = "Impersonal Corporate Passive"
+    description = "Detects 'it has been determined' constructions that hide who acted"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            for pattern in IMPERSONAL_CORPORATE_PASSIVE_PHRASES:
+                for match in re.finditer(pattern, line):
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Impersonal corporate passive: '{match.group()}' \u2014 consider naming who decided or acted",
                             line=line_num,
                             column=match.start() + 1,
                             end_column=match.end() + 1,

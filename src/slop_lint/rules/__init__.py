@@ -17,6 +17,7 @@ from slop_lint.rules.grammar import (
     FalseVulnerabilityRule,
     FuturistInvitationRule,
     GapRitualRule,
+    ImpersonalCorporatePassiveRule,
     NominalizationOverloadRule,
     ParticipleChainsRule,
     PassiveVoiceOveruseRule,
@@ -30,11 +31,13 @@ from slop_lint.rules.markup import (
     WrongMarkupRule,
 )
 from slop_lint.rules.struct import (
+    AlignmentRitualRule,
     AnaphoraAbuseRule,
     AnecdoteAsEvidenceRule,
     ChallengeConclusionsRule,
     CitationNameDroppingRule,
     ContentDuplicationRule,
+    CorporateEuphemismRule,
     DramaticCountdownRule,
     FalseRangesRule,
     FractalSummaryRule,
@@ -47,6 +50,7 @@ from slop_lint.rules.struct import (
     RuleOfThreeRule,
     SignificanceEmphasisRule,
     SignpostedConclusionRule,
+    SlideDeckFragmentRule,
     SuperficialAnalysisRule,
 )
 from slop_lint.rules.style import (
@@ -104,6 +108,9 @@ __all__ = [
     "ContentDuplicationRule",
     "AnecdoteAsEvidenceRule",
     "CitationNameDroppingRule",
+    "CorporateEuphemismRule",
+    "AlignmentRitualRule",
+    "SlideDeckFragmentRule",
     # Style rules (T)
     "TitleCaseHeadingsRule",
     "BoldOveruseRule",
@@ -127,6 +134,7 @@ __all__ = [
     "NominalizationOverloadRule",
     "PassiveVoiceOveruseRule",
     "GapRitualRule",
+    "ImpersonalCorporatePassiveRule",
     # Code rules (C)
     "DocstringVocabularyRule",
     "VerboseCommentsRule",
@@ -199,6 +207,9 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         ContentDuplicationRule(),
         AnecdoteAsEvidenceRule(),
         CitationNameDroppingRule(threshold=thresholds.citation_name_drop),
+        CorporateEuphemismRule(),
+        AlignmentRitualRule(),
+        SlideDeckFragmentRule(),
         # Style (T001-T008)
         TitleCaseHeadingsRule(),
         BoldOveruseRule(threshold=thresholds.bold_overuse),
@@ -222,6 +233,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         NominalizationOverloadRule(threshold=thresholds.nominalization_overload),
         PassiveVoiceOveruseRule(threshold=thresholds.passive_voice_overuse),
         GapRitualRule(),
+        ImpersonalCorporatePassiveRule(),
         # Code (C001-C004)
         DocstringVocabularyRule(allowed=allowed, additional=additional),
         VerboseCommentsRule(),

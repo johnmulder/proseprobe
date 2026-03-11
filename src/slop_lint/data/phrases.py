@@ -31,6 +31,17 @@ COLLABORATIVE_PHRASES = [
     "Let's explore this",
     "Let's dive in",
     "Let's dive into",
+    # Business politeness fog (business writing tropes)
+    "just circling back",
+    "circling back on",
+    "wanted to touch base",
+    "just wanted to check in",
+    "per our last conversation",
+    "as per our discussion",
+    "in case you had any thoughts",
+    "just following up",
+    "just a gentle reminder",
+    "just a friendly reminder",
 ]
 
 # Knowledge cutoff patterns (V003)
@@ -101,6 +112,12 @@ WEASEL_PHRASES = [
     r"a person familiar with the matter",
     r"officials speaking on condition of anonymity",
     r"people briefed on the matter",
+    # Strategic vagueness (business writing tropes)
+    r"explore opportunities to",
+    r"enhance (?:operational |)efficiency",
+    r"at the end of the day",
+    r"\bgoing forward\b",
+    r"\bmoving forward\b",
 ]
 
 # Patronizing analogy phrases (G005/G006)
@@ -227,4 +244,42 @@ FALSE_BALANCE_PHRASES = [
     r"the truth (likely )?lies somewhere in the middle",
     r"both sides of the debate",
     r"on the other hand, opponents argue",
+]
+
+# Corporate euphemism phrases (S019)
+CORPORATE_EUPHEMISM_PHRASES = [
+    "restructuring",
+    "right-sizing",
+    "rightsizing",
+    "resource optimization",
+    "streamlining operations",
+    "workforce reduction",
+    "headcount reduction",
+    "exploring strategic alternatives",
+    "transitioning out",
+    "realignment",
+    "sunsetting",
+    "sunset the",
+    "sunsetted",
+]
+
+# Alignment ritual phrases (S020)
+ALIGNMENT_RITUAL_PHRASES = [
+    r"fully aligned on",
+    r"aligned on the (?:strategic |)direction",
+    r"on the same page",
+    r"in lockstep",
+    r"moving in the same direction",
+    r"aligned around",
+    r"shared understanding",
+    r"cross-functional alignment",
+]
+
+# Impersonal corporate passive patterns (G014)
+IMPERSONAL_CORPORATE_PASSIVE_PHRASES = [
+    r"\b[Ii]t has been (?:determined|decided|agreed|established|noted)\b",
+    r"\b[Aa]djustments (?:will be|are being|have been) made\b",
+    r"\b[Cc]hanges (?:will be|are being|have been) (?:implemented|made|introduced)\b",
+    r"\b[Aa] decision (?:has been|was) (?:made|reached|taken)\b",
+    r"\b[Ss]teps (?:will be|are being|have been) taken\b",
 ]

@@ -373,3 +373,103 @@ class TestAcademicVocabularyExpansions:
         ]
         for word in new_words:
             assert word in VOCABULARY_SUGGESTIONS, f"Missing suggestion for '{word}'"
+
+
+class TestBusinessJargonVocabulary:
+    """Tests for business jargon additions to V001."""
+
+    def test_detects_synergy(self) -> None:
+        """Detect TIER2 business jargon 'synergy'."""
+        rule = AIVocabularyRule()
+        issues = rule.check("We will leverage cross-functional synergy.", "test.md")
+        synergy_issues = [i for i in issues if "synerg" in i.message.lower()]
+        assert len(synergy_issues) >= 1
+
+    def test_detects_value_add(self) -> None:
+        """Detect 'value-add' business jargon."""
+        rule = AIVocabularyRule()
+        issues = rule.check("This provides real value-add for our clients.", "test.md")
+        value_issues = [i for i in issues if "value-add" in i.message.lower()]
+        assert len(value_issues) >= 1
+
+    def test_detects_bandwidth(self) -> None:
+        """Detect figurative 'bandwidth' business jargon."""
+        rule = AIVocabularyRule()
+        issues = rule.check("I don't have the bandwidth for that right now.", "test.md")
+        bw_issues = [i for i in issues if "bandwidth" in i.message.lower()]
+        assert len(bw_issues) >= 1
+
+    def test_detects_incentivize(self) -> None:
+        """Detect 'incentivize' inflated verb."""
+        rule = AIVocabularyRule()
+        issues = rule.check("We need to incentivize early adoption.", "test.md")
+        inc_issues = [i for i in issues if "incentiviz" in i.message.lower()]
+        assert len(inc_issues) >= 1
+
+    def test_detects_ideate(self) -> None:
+        """Detect 'ideate' inflated verb."""
+        rule = AIVocabularyRule()
+        issues = rule.check("The team will ideate on new product concepts.", "test.md")
+        id_issues = [i for i in issues if "ideat" in i.message.lower()]
+        assert len(id_issues) >= 1
+
+    def test_detects_socialize_business_context(self) -> None:
+        """Detect 'socialize' in business context."""
+        rule = AIVocabularyRule()
+        issues = rule.check("We need to socialize the plan with stakeholders.", "test.md")
+        soc_issues = [i for i in issues if "socializ" in i.message.lower()]
+        assert len(soc_issues) >= 1
+
+    def test_ignores_socialize_normal_context(self) -> None:
+        """Don't flag 'socialize' in non-business context."""
+        rule = AIVocabularyRule()
+        issues = rule.check("Puppies need to socialize with other dogs.", "test.md")
+        soc_issues = [i for i in issues if "socializ" in i.message.lower()]
+        assert len(soc_issues) == 0
+
+    def test_suggestions_for_business_words(self) -> None:
+        """Business jargon words should have suggestions."""
+        from slop_lint.data.vocabulary import VOCABULARY_SUGGESTIONS
+
+        new_words = [
+            "synergy", "value-add", "bandwidth",
+            "incentivize", "ideate", "socialize",
+        ]
+        for word in new_words:
+            assert word in VOCABULARY_SUGGESTIONS, f"Missing suggestion for '{word}'"
+
+
+class TestPolitenessFogPhrases:
+    """Tests for business politeness fog additions to V002."""
+
+    def test_detects_just_circling_back(self) -> None:
+        """Detect 'just circling back' politeness fog."""
+        from slop_lint.rules.vocab import CollaborativePhrasesRule
+
+        rule = CollaborativePhrasesRule()
+        issues = rule.check("Just circling back on the previous thread.", "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_just_following_up(self) -> None:
+        """Detect 'just following up' politeness fog."""
+        from slop_lint.rules.vocab import CollaborativePhrasesRule
+
+        rule = CollaborativePhrasesRule()
+        issues = rule.check("Just following up on the proposal.", "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_gentle_reminder(self) -> None:
+        """Detect 'just a gentle reminder' politeness fog."""
+        from slop_lint.rules.vocab import CollaborativePhrasesRule
+
+        rule = CollaborativePhrasesRule()
+        issues = rule.check("Just a gentle reminder about the deadline.", "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_per_our_last_conversation(self) -> None:
+        """Detect 'per our last conversation' politeness fog."""
+        from slop_lint.rules.vocab import CollaborativePhrasesRule
+
+        rule = CollaborativePhrasesRule()
+        issues = rule.check("Per our last conversation, here is the update.", "test.md")
+        assert len(issues) >= 1

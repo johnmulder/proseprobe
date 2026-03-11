@@ -606,3 +606,63 @@ class TestGapRitual:
         rule = GapRitualRule()
         assert rule.id == "G013"
         assert rule.name == "Gap Ritual"
+
+
+# ---------- Business Writing Tropes: G014 ----------
+
+
+class TestImpersonalCorporatePassive:
+    """Tests for G014: Impersonal Corporate Passive."""
+
+    def test_detects_it_has_been_determined(self) -> None:
+        """Detect 'It has been determined' impersonal passive."""
+        from slop_lint.rules.grammar import ImpersonalCorporatePassiveRule
+
+        text = "It has been determined that adjustments will be made."
+        rule = ImpersonalCorporatePassiveRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "G014"
+
+    def test_detects_a_decision_has_been_made(self) -> None:
+        """Detect 'A decision has been made' impersonal passive."""
+        from slop_lint.rules.grammar import ImpersonalCorporatePassiveRule
+
+        text = "A decision has been made to proceed with Option B."
+        rule = ImpersonalCorporatePassiveRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_steps_will_be_taken(self) -> None:
+        """Detect 'Steps will be taken' impersonal passive."""
+        from slop_lint.rules.grammar import ImpersonalCorporatePassiveRule
+
+        text = "Steps will be taken to address the issue."
+        rule = ImpersonalCorporatePassiveRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_changes_will_be_implemented(self) -> None:
+        """Detect 'Changes will be implemented' impersonal passive."""
+        from slop_lint.rules.grammar import ImpersonalCorporatePassiveRule
+
+        text = "Changes will be implemented across all departments."
+        rule = ImpersonalCorporatePassiveRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_active_voice(self) -> None:
+        """Don't flag active voice sentences."""
+        from slop_lint.rules.grammar import ImpersonalCorporatePassiveRule
+
+        text = "The leadership team decided to change the plan."
+        rule = ImpersonalCorporatePassiveRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.grammar import ImpersonalCorporatePassiveRule
+
+        rule = ImpersonalCorporatePassiveRule()
+        assert rule.id == "G014"
+        assert rule.name == "Impersonal Corporate Passive"
