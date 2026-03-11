@@ -69,7 +69,8 @@ def _cmd_check(args: argparse.Namespace) -> int:
     # Create linter and register rules
     linter = Linter(config)
     min_severity = severity_from_str(args.severity or config.severity, Severity.WARNING)
-    assert min_severity is not None  # default ensures this
+    if min_severity is None:  # pragma: no cover
+        min_severity = Severity.WARNING
 
     for rule in get_all_rules(config):
         # Filter by severity
