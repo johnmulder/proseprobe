@@ -1,6 +1,7 @@
 """Output formatting for lint results."""
 
 import json
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -53,57 +54,31 @@ class Reporter:
                     f"{severity_char}{issue.rule_id[1:]} {issue.message}{conf_tag}"
                 )
 
-        # Summary
+        # Summary — single pass over all issues
         total = sum(len(issues) for issues in results.values())
         file_count = len(results)
 
         if total > 0:
-            errors = sum(
-                1
-                for issues in results.values()
-                for issue in issues
-                if issue.severity == Severity.ERROR
-            )
-            warnings = sum(
-                1
-                for issues in results.values()
-                for issue in issues
-                if issue.severity == Severity.WARNING
-            )
-            info = sum(
-                1
-                for issues in results.values()
-                for issue in issues
-                if issue.severity == Severity.INFO
-            )
-            high_conf = sum(
-                1
-                for issues in results.values()
-                for issue in issues
-                if issue.confidence == Confidence.HIGH
-            )
-            medium_conf = sum(
-                1
-                for issues in results.values()
-                for issue in issues
-                if issue.confidence == Confidence.MEDIUM
-            )
-            low_conf = sum(
-                1
-                for issues in results.values()
-                for issue in issues
-                if issue.confidence == Confidence.LOW
-            )
+            sev_counts: Counter[Severity] = Counter()
+            conf_counts: Counter[Confidence] = Counter()
+            for issues in results.values():
+                for issue in issues:
+                    sev_counts[issue.severity] += 1
+                    conf_counts[issue.confidence] += 1
+
             lines.append("")
             lines.append(
                 f"Found {total} issue(s) "
-                f"({errors} error, {warnings} warning, {info} info) "
+                f"({sev_counts[Severity.ERROR]} error, "
+                f"{sev_counts[Severity.WARNING]} warning, "
+                f"{sev_counts[Severity.INFO]} info) "
                 f"in {file_count} file(s)"
             )
-            if high_conf or low_conf:
+            if conf_counts[Confidence.HIGH] or conf_counts[Confidence.LOW]:
                 lines.append(
-                    f"Confidence: {high_conf} high, "
-                    f"{medium_conf} medium, {low_conf} low"
+                    f"Confidence: {conf_counts[Confidence.HIGH]} high, "
+                    f"{conf_counts[Confidence.MEDIUM]} medium, "
+                    f"{conf_counts[Confidence.LOW]} low"
                 )
 
         return "\n".join(lines)

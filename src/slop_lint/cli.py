@@ -6,12 +6,22 @@ import argparse
 import sys
 import time
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from slop_lint._ansi import clear_screen, style, table
 from slop_lint.config import load_config
 from slop_lint.core.linter import Linter
 from slop_lint.rules import get_all_rules
-from slop_lint.rules.base import Confidence, Severity, severity_from_str, severity_rank
+from slop_lint.rules.base import (
+    Confidence,
+    Issue,
+    Severity,
+    severity_from_str,
+    severity_rank,
+)
+
+if TYPE_CHECKING:
+    from slop_lint.config import Config
 
 _CONFIDENCE_RANK = {Confidence.LOW: 0, Confidence.MEDIUM: 1, Confidence.HIGH: 2}
 
@@ -34,6 +44,146 @@ def _parse_confidence(value: str) -> Confidence | None:
 # ---------------------------------------------------------------------------
 # Subcommand handlers
 # ---------------------------------------------------------------------------
+
+
+def _filter_by_confidence(
+    results: dict[Path, list[Issue]],
+    args: argparse.Namespace,
+    config: Config,
+) -> dict[Path, list[Issue]]:
+    """Remove issues below the effective confidence threshold."""
+    effective_confidence = args.min_confidence or (
+        "medium" if args.hide_low else config.min_confidence
+    )
+    confidence_threshold = _parse_confidence(effective_confidence)
+    if not confidence_threshold or confidence_threshold == Confidence.LOW:
+        return results
+    filtered = {
+        path: [
+            issue
+            for issue in issues
+            if _confidence_rank(issue.confidence)
+            >= _confidence_rank(confidence_threshold)
+        ]
+        for path, issues in results.items()
+    }
+    return {path: issues for path, issues in filtered.items() if issues}
+
+
+def _apply_baseline(
+    results: dict[Path, list[Issue]],
+    args: argparse.Namespace,
+    paths: list[Path],
+) -> dict[Path, list[Issue]] | None:
+    """Handle --generate-baseline or --baseline filtering.
+
+    Returns:
+        Filtered results, or *None* when a baseline was generated (caller
+        should return 0 immediately).
+    """
+    if args.generate_baseline:
+        from slop_lint.core.baseline import Baseline
+
+        baseline_path = Path(args.baseline) if args.baseline else None
+        baseline_obj = Baseline(baseline_path)
+        workspace = paths[0].parent if paths else Path.cwd()
+
+        for file_path, issues in results.items():
+            try:
+                content = file_path.read_text()
+                for issue in issues:
+                    baseline_obj.add_issue(issue, file_path, content, workspace)
+            except OSError:
+                continue
+
+        baseline_obj.save()
+        print(
+            style(
+                f"Generated baseline with {baseline_obj.count} issue(s)",
+                color="green",
+            )
+            + f" at {baseline_obj.baseline_path}"
+        )
+        return None
+
+    if args.baseline:
+        from slop_lint.core.baseline import Baseline, filter_new_issues
+
+        baseline_path = Path(args.baseline)
+        baseline_obj = Baseline(baseline_path)
+        if baseline_obj.load():
+            workspace = paths[0].parent if paths else Path.cwd()
+            original_count = sum(len(issues) for issues in results.values())
+            results = filter_new_issues(results, baseline_obj, workspace)
+            new_count = sum(len(issues) for issues in results.values())
+            if not args.quiet and args.verbose:
+                print(
+                    style(
+                        f"Baseline: {original_count} total, {new_count} new issue(s)",
+                        dim=True,
+                    )
+                )
+        else:
+            print(
+                style(
+                    f"Warning: Baseline file not found: {baseline_path}",
+                    color="yellow",
+                )
+            )
+
+    return results
+
+
+_SEVERITY_COLOR = {
+    Severity.ERROR: "red",
+    Severity.WARNING: "yellow",
+    Severity.INFO: "blue",
+}
+
+
+def _output_results(
+    results: dict[Path, list[Issue]],
+    args: argparse.Namespace,
+) -> int:
+    """Format and print results; return exit code."""
+    total_issues = sum(len(issues) for issues in results.values())
+
+    if args.format in ("json", "sarif"):
+        from slop_lint.core.reporter import Reporter
+
+        reporter = Reporter(format=args.format)
+        print(reporter.report(results))
+    elif not results:
+        if not args.quiet:
+            print(style("\u2713", color="green") + " No issues found!")
+    else:
+        for file_path, issues in results.items():
+            for issue in issues:
+                sev_color = _SEVERITY_COLOR[issue.severity]
+                conf_tag = ""
+                is_bold = False
+                is_dim = False
+                if issue.confidence == Confidence.LOW:
+                    conf_tag = " [low]"
+                    is_dim = True
+                elif issue.confidence == Confidence.HIGH:
+                    conf_tag = " [high]"
+                    is_bold = True
+                rule_part = style(f"{issue.rule_id}{conf_tag}", color=sev_color)
+                line_text = (
+                    f"{style(str(file_path), bold=True)}"
+                    f":{issue.line}:{issue.column}: "
+                    f"{rule_part} {issue.message}"
+                )
+                if is_dim:
+                    line_text = style(line_text, dim=True)
+                elif is_bold:
+                    line_text = style(line_text, bold=True)
+                print(line_text)
+        if not args.quiet:
+            print(style(f"\nFound {total_issues} issue(s)", bold=True))
+
+    return 1 if total_issues > 0 else 0
 
 
 def _cmd_check(args: argparse.Namespace) -> int:
@@ -73,7 +223,6 @@ def _cmd_check(args: argparse.Namespace) -> int:
         min_severity = Severity.WARNING
 
     for rule in get_all_rules(config):
-        # Filter by severity
         if severity_rank(rule.severity) >= severity_rank(min_severity):
             linter.register_rule(rule)
 
@@ -81,136 +230,15 @@ def _cmd_check(args: argparse.Namespace) -> int:
     results = linter.check(paths)
 
     # Filter by confidence level
-    effective_confidence = args.min_confidence or (
-        "medium" if args.hide_low else config.min_confidence
-    )
-    confidence_threshold = _parse_confidence(effective_confidence)
-    if confidence_threshold and confidence_threshold != Confidence.LOW:
-        results = {
-            path: [
-                issue
-                for issue in issues
-                if _confidence_rank(issue.confidence)
-                >= _confidence_rank(confidence_threshold)
-            ]
-            for path, issues in results.items()
-        }
-        results = {path: issues for path, issues in results.items() if issues}
+    results = _filter_by_confidence(results, args, config)
 
     # Handle baseline mode
-    if args.generate_baseline:
-        from slop_lint.core.baseline import Baseline
-
-        baseline_path = Path(args.baseline) if args.baseline else None
-        baseline_obj = Baseline(baseline_path)
-        workspace = paths[0].parent if paths else Path.cwd()
-
-        for file_path, issues in results.items():
-            try:
-                content = file_path.read_text()
-                for issue in issues:
-                    baseline_obj.add_issue(issue, file_path, content, workspace)
-            except OSError:
-                continue
-
-        baseline_obj.save()
-        print(
-            style(
-                f"Generated baseline with {baseline_obj.count} issue(s)",
-                color="green",
-            )
-            + f" at {baseline_obj.baseline_path}"
-        )
+    baseline_result = _apply_baseline(results, args, paths)
+    if baseline_result is None:
         return 0
+    results = baseline_result
 
-    if args.baseline:
-        from slop_lint.core.baseline import Baseline, filter_new_issues
-
-        baseline_path = Path(args.baseline)
-        baseline_obj = Baseline(baseline_path)
-        if baseline_obj.load():
-            workspace = paths[0].parent if paths else Path.cwd()
-            original_count = sum(len(issues) for issues in results.values())
-            results = filter_new_issues(results, baseline_obj, workspace)
-            new_count = sum(len(issues) for issues in results.values())
-            if not args.quiet and args.verbose:
-                print(
-                    style(
-                        f"Baseline: {original_count} total, {new_count} new issue(s)",
-                        dim=True,
-                    )
-                )
-        else:
-            print(
-                style(
-                    f"Warning: Baseline file not found: {baseline_path}",
-                    color="yellow",
-                )
-            )
-
-    if not results:
-        if args.format == "json":
-            from slop_lint.core.reporter import Reporter
-
-            reporter = Reporter(format="json")
-            print(reporter.report({}))
-        elif args.format == "sarif":
-            from slop_lint.core.reporter import Reporter
-
-            reporter = Reporter(format="sarif")
-            print(reporter.report({}))
-        elif not args.quiet:
-            print(style("\u2713", color="green") + " No issues found!")
-        return 0
-
-    # Output results
-    total_issues = sum(len(issues) for issues in results.values())
-
-    if args.format == "json":
-        from slop_lint.core.reporter import Reporter
-
-        reporter = Reporter(format="json")
-        print(reporter.report(results))
-    elif args.format == "sarif":
-        from slop_lint.core.reporter import Reporter
-
-        reporter = Reporter(format="sarif")
-        print(reporter.report(results))
-    else:
-        # Text format (default)
-        _SEVERITY_COLOR = {
-            Severity.ERROR: "red",
-            Severity.WARNING: "yellow",
-            Severity.INFO: "blue",
-        }
-        for file_path, issues in results.items():
-            for issue in issues:
-                sev_color = _SEVERITY_COLOR[issue.severity]
-                conf_tag = ""
-                is_bold = False
-                is_dim = False
-                if issue.confidence == Confidence.LOW:
-                    conf_tag = " [low]"
-                    is_dim = True
-                elif issue.confidence == Confidence.HIGH:
-                    conf_tag = " [high]"
-                    is_bold = True
-                rule_part = style(f"{issue.rule_id}{conf_tag}", color=sev_color)
-                line_text = (
-                    f"{style(str(file_path), bold=True)}"
-                    f":{issue.line}:{issue.column}: "
-                    f"{rule_part} {issue.message}"
-                )
-                if is_dim:
-                    line_text = style(line_text, dim=True)
-                elif is_bold:
-                    line_text = style(line_text, bold=True)
-                print(line_text)
-        if not args.quiet:
-            print(style(f"\nFound {total_issues} issue(s)", bold=True))
-
-    # Exit with error code if issues found
-    return 1 if total_issues > 0 else 0
+    return _output_results(results, args)
 
 
 def _cmd_rules(_args: argparse.Namespace) -> int:
@@ -367,8 +395,6 @@ def _cmd_watch(args: argparse.Namespace) -> int:
     except KeyboardInterrupt:
         print(style("\nStopped watching.", color="yellow"))
         return 0
-
-    return 0  # pragma: no cover
 
 
 # ---------------------------------------------------------------------------
