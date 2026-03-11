@@ -7,30 +7,26 @@ from slop_lint.config import Config
 from slop_lint.parsers.markdown import is_markdown_file
 from slop_lint.rules.base import Issue, Rule
 
-__all__ = ["Linter"]
+__all__ = ["FileDiscovery", "Linter"]
 
 
-class Linter:
-    """Orchestrates file discovery and rule execution."""
+# ---------------------------------------------------------------------------
+# File discovery (single responsibility: find files matching config patterns)
+# ---------------------------------------------------------------------------
+
+
+class FileDiscovery:
+    """Resolve paths into files matching include/exclude patterns."""
 
     def __init__(self, config: Config) -> None:
-        """Initialize linter with configuration.
+        """Initialize with configuration.
 
         Args:
-            config: Linter configuration.
+            config: Linter configuration with include/exclude patterns.
         """
         self.config = config
-        self._rules: list[Rule] = []
 
-    def register_rule(self, rule: Rule) -> None:
-        """Register a rule for linting.
-
-        Args:
-            rule: Rule instance to register.
-        """
-        self._rules.append(rule)
-
-    def discover_files(self, paths: list[Path]) -> list[Path]:
+    def discover(self, paths: list[Path]) -> list[Path]:
         """Discover files to lint from paths.
 
         Args:
@@ -90,7 +86,8 @@ class Linter:
 
         return False
 
-    def _match_pattern_any(self, candidates: list[Path], pattern: str) -> bool:
+    @staticmethod
+    def _match_pattern_any(candidates: list[Path], pattern: str) -> bool:
         """Match a glob pattern against multiple candidates."""
         for candidate in candidates:
             if candidate.match(pattern):
@@ -98,6 +95,44 @@ class Linter:
             if not pattern.startswith("**/") and candidate.match(f"**/{pattern}"):
                 return True
         return False
+
+
+# ---------------------------------------------------------------------------
+# Linter (single responsibility: register rules and run them on files)
+# ---------------------------------------------------------------------------
+
+
+class Linter:
+    """Orchestrates rule execution across discovered files."""
+
+    def __init__(self, config: Config) -> None:
+        """Initialize linter with configuration.
+
+        Args:
+            config: Linter configuration.
+        """
+        self.config = config
+        self._rules: list[Rule] = []
+        self._discovery = FileDiscovery(config)
+
+    def register_rule(self, rule: Rule) -> None:
+        """Register a rule for linting.
+
+        Args:
+            rule: Rule instance to register.
+        """
+        self._rules.append(rule)
+
+    def discover_files(self, paths: list[Path]) -> list[Path]:
+        """Discover files to lint from paths.
+
+        Args:
+            paths: List of files or directories.
+
+        Returns:
+            List of files matching include/exclude patterns.
+        """
+        return self._discovery.discover(paths)
 
     def check_file(self, path: Path) -> list[Issue]:
         """Check a single file for issues.
