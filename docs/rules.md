@@ -1081,3 +1081,85 @@ No exceptions.
 ```markdown
 It worked every single time without exception.
 ```
+
+---
+
+## Phase 1: Low-Quality Journalism Tropes Rules
+
+The following rules detect common low-quality journalism patterns.
+
+---
+
+### V008: Trend Overclaim
+
+Detects unsubstantiated trend claims without evidence.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "more and more people", "a growing number of"
+- "the latest trend sweeping", "increasingly popular"
+- "everyone is talking about"
+
+**Example (bad):**
+```markdown
+More and more people are switching to this framework.
+```
+
+**Example (good):**
+```markdown
+According to the 2025 Stack Overflow survey, 34% of respondents use this framework, up from 21% in 2024.
+```
+
+---
+
+### G010: False Balance
+
+Detects false-balance framing that presents opposing views as equally
+valid without evidence.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "Supporters say X. Critics say Y."
+- "the truth lies somewhere in the middle"
+- "both sides of the debate"
+- "on the other hand, opponents argue"
+
+**Example (bad):**
+```markdown
+Supporters say it will create jobs, but critics say it will destroy them.
+The truth likely lies somewhere in the middle.
+```
+
+**Example (good):**
+```markdown
+The Bureau of Labor Statistics projects a net gain of 12,000 jobs in the sector by 2028, though some roles will be displaced.
+```
+
+---
+
+### S017: Anecdote As Evidence
+
+Detects single-anecdote openings used as evidence for broad claims.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "For [Name] of [Location], the…"
+- "Take [Name], a [descriptor]…"
+- "Meet [Name]"
+
+**Example (bad):**
+```markdown
+For Sarah of Ohio, the new policy meant losing her healthcare.
+Meet David, a software engineer who quit his job to start a company.
+```
+
+**Example (good):**
+```markdown
+A 2024 Kaiser Family Foundation survey found that 12% of respondents in Ohio lost coverage after the policy change.
+```

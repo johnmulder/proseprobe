@@ -78,6 +78,13 @@ LISTICLE_PROSE_PATTERNS = [
     r"\bthe (first|1st) (takeaway|point|lesson|wall|reason)",
 ]
 
+# Anecdote-as-evidence patterns (S017)
+ANECDOTE_EVIDENCE_PATTERNS = [
+    r"(?i)^For [A-Z][a-z]+ of [A-Z][a-z]+",
+    r"(?i)^Take [A-Z][a-z]+, a \w+",
+    r"(?i)^Meet [A-Z][a-z]+",
+]
+
 # All structural patterns for easy access
 STRUCTURAL_PATTERNS = {
     "rule_of_three": RULE_OF_THREE_PATTERNS,
@@ -91,4 +98,5 @@ STRUCTURAL_PATTERNS = {
     "dramatic_countdown": DRAMATIC_COUNTDOWN_PATTERN,
     "rhetorical_self_answer": RHETORICAL_SELF_ANSWER_PATTERN,
     "listicle_prose": LISTICLE_PROSE_PATTERNS,
+    "anecdote_evidence": ANECDOTE_EVIDENCE_PATTERNS,
 }

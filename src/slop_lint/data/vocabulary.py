@@ -53,6 +53,19 @@ AI_VOCABULARY_TIER2 = {
     "deeply",
     "fundamentally",
     "arguably",
+    # Journalism impact words
+    "bombshell",
+    "shocking",
+    "devastating",
+    "explosive",
+    "stunning",
+    "firestorm",
+    "backlash",
+    "uproar",
+    # Pseudo-tech jargon
+    "ecosystem",
+    "stakeholders",
+    "narrative",
 }
 
 # Tier 3: Low confidence (common but frequently overused)
@@ -121,6 +134,19 @@ VOCABULARY_SUGGESTIONS: dict[str, str] = {
     "deeply": "very",
     "fundamentally": "basically",
     "arguably": "perhaps",
+    # Journalism impact words
+    "bombshell": "surprise",
+    "shocking": "surprising",
+    "devastating": "serious",
+    "explosive": "significant",
+    "stunning": "surprising",
+    "firestorm": "controversy",
+    "backlash": "criticism",
+    "uproar": "outcry",
+    # Pseudo-tech jargon
+    "ecosystem": "system",
+    "stakeholders": "participants",
+    "narrative": "story",
 }
 
 # Vocabulary specific to code/docstrings (used by C001)

@@ -11,7 +11,7 @@ Overused vocabulary, structural clichés, promotional language, and sloppy marku
 
 ## Features
 
-- 🔍 **47 detection rules** across 6 categories
+- 🔍 **50 detection rules** across 6 categories
 - 📝 Scans Markdown (`.md`, `.mdx`) and Python (`.py`) files
 - 🎯 **Confidence levels** (high/medium/low) to reduce noise
 - ⚙️ Configurable via `.slop-lint.toml`

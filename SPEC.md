@@ -40,13 +40,13 @@
 
 | Prefix | Category | Count | Description |
 |--------|----------|-------|-------------|
-| `V` | Vocabulary | 7 | Overused and clichéd word patterns |
-| `S` | Structure | 16 | Structural and organizational patterns |
+| `V` | Vocabulary | 8 | Overused and clichéd word patterns |
+| `S` | Structure | 17 | Structural and organizational patterns |
 | `T` | Style | 7 | Typographic and formatting issues |
-| `G` | Grammar | 9 | Grammatical anti-patterns |
+| `G` | Grammar | 10 | Grammatical anti-patterns |
 | `C` | Code | 4 | Python-specific documentation issues |
 | `M` | Markup | 4 | Markdown artifacts and markup errors |
-| **Total** | | **47** | |
+| **Total** | | **50** | |
 
 ### 3.2 Rule Severity Levels
 

@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Phase 1: Low-Quality Journalism Tropes** — 3 new rules and data expansions:
+  - V008 (trend overclaim: "more and more people", "a growing number of")
+  - G010 (false balance: "supporters say X, critics say Y", "the truth lies in the middle")
+  - S017 (anecdote as evidence: "For Sarah of Ohio…", "Take Marcus, a…", "Meet Lisa")
+  - Expanded V001 Tier 2 with journalism impact words (bombshell, shocking, devastating,
+    explosive, stunning, firestorm, backlash, uproar) and pseudo-tech jargon
+    (ecosystem, stakeholders, narrative)
+  - Expanded V005 with anonymous source patterns (sources close to, a person familiar
+    with the matter, officials speaking on condition of anonymity)
+  - Added inflammatory cliché detection to V004 (sparked a firestorm, triggered
+    widespread outrage, storm of criticism, sparked backlash)
 - **Confidence levels**: Each issue now carries a `confidence` field (high, medium, low)
   - V001 assigns confidence by vocabulary tier (tier 1 → high, tier 2 → medium, tier 3 → low)
   - M001 issues in Python files default to low confidence
@@ -33,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - T007 (short punchy fragments)
   - G004-G009 (false suspense, patronizing analogy, futurist invitation,
     false vulnerability, asserted simplicity, pedagogical voice)
-- Complete documentation for all 47 rules with examples
+- Complete documentation for all 50 rules with examples
 - Full CLI options reference in configuration docs
 - Property-based tests using Hypothesis (265 additional tests)
 - Benchmark suite (`make benchmark`) for performance tracking

@@ -340,3 +340,63 @@ class TestPedagogicalVoice:
         rule = PedagogicalVoiceRule()
         assert rule.id == "G009"
         assert rule.name == "Pedagogical Voice"
+
+
+# ---------- Phase 1 (Journalism Tropes) TDD: G010 ----------
+
+
+class TestFalseBalance:
+    """Tests for G010: False Balance."""
+
+    def test_detects_supporters_critics(self) -> None:
+        """Detect 'Supporters say X. Critics say Y.' false balance."""
+        from slop_lint.rules.grammar import FalseBalanceRule
+
+        text = "Supporters say it will create jobs, but critics say it will destroy them."
+        rule = FalseBalanceRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "G010"
+
+    def test_detects_truth_in_the_middle(self) -> None:
+        """Detect 'the truth lies somewhere in the middle' false balance."""
+        from slop_lint.rules.grammar import FalseBalanceRule
+
+        text = "The truth lies somewhere in the middle of these views."
+        rule = FalseBalanceRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_both_sides_of_debate(self) -> None:
+        """Detect 'both sides of the debate' false balance."""
+        from slop_lint.rules.grammar import FalseBalanceRule
+
+        text = "We must consider both sides of the debate before deciding."
+        rule = FalseBalanceRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_opponents_argue(self) -> None:
+        """Detect 'on the other hand, opponents argue' false balance."""
+        from slop_lint.rules.grammar import FalseBalanceRule
+
+        text = "On the other hand, opponents argue this will cause harm."
+        rule = FalseBalanceRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_normal_prose(self) -> None:
+        """Don't flag normal prose without false balance."""
+        from slop_lint.rules.grammar import FalseBalanceRule
+
+        text = "The algorithm runs in O(n log n) time complexity."
+        rule = FalseBalanceRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.grammar import FalseBalanceRule
+
+        rule = FalseBalanceRule()
+        assert rule.id == "G010"
+        assert rule.name == "False Balance"

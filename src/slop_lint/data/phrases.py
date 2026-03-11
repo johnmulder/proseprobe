@@ -96,6 +96,11 @@ WEASEL_PHRASES = [
     r"(some|many) would argue",
     r"it('s| is) (often|generally|commonly|widely) (said|believed|thought)",
     r"there is (growing|increasing|mounting) (evidence|concern|interest)",
+    # Anonymous source patterns
+    r"sources close to",
+    r"a person familiar with the matter",
+    r"officials speaking on condition of anonymity",
+    r"people briefed on the matter",
 ]
 
 # Patronizing analogy phrases (G005/G006)
@@ -184,4 +189,29 @@ GRANDIOSE_STAKES_PHRASES = [
     r"will reshape how we",
     r"the most important.{1,30}(ever|in history|of our time)",
     r"will change everything",
+]
+
+# Inflammatory cliché phrases (V004 sub-category)
+INFLAMMATORY_CLICHE_PHRASES = [
+    "sparked a firestorm",
+    "triggered widespread outrage",
+    "storm of criticism",
+    "sparked backlash",
+]
+
+# Trend overclaim phrases (V008)
+TREND_OVERCLAIM_PHRASES = [
+    r"more and more people",
+    r"a growing number of",
+    r"the latest trend sweeping",
+    r"increasingly popular",
+    r"everyone is talking about",
+]
+
+# False balance phrases (G010)
+FALSE_BALANCE_PHRASES = [
+    r"supporters say .* critics say",
+    r"the truth (likely )?lies somewhere in the middle",
+    r"both sides of the debate",
+    r"on the other hand, opponents argue",
 ]

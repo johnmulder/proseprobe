@@ -5,8 +5,10 @@ import re
 from slop_lint.data.phrases import (
     COLLABORATIVE_PHRASES,
     GRANDIOSE_STAKES_PHRASES,
+    INFLAMMATORY_CLICHE_PHRASES,
     KNOWLEDGE_CUTOFF_PATTERNS,
     PROMOTIONAL_PHRASES,
+    TREND_OVERCLAIM_PHRASES,
     WEASEL_PHRASES,
 )
 from slop_lint.data.vocabulary import (
@@ -207,6 +209,19 @@ class PromotionalLanguageRule(Rule):
                             severity=self.severity,
                         )
                     )
+            for phrase in INFLAMMATORY_CLICHE_PHRASES:
+                if phrase.lower() in line_lower:
+                    col = line_lower.find(phrase.lower())
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Inflammatory cliché: '{phrase}'",
+                            line=line_num,
+                            column=col + 1,
+                            end_column=col + len(phrase) + 1,
+                            severity=self.severity,
+                        )
+                    )
 
         return issues
 
@@ -315,4 +330,36 @@ class InventedConceptLabelsRule(Rule):
                     )
                 )
 
+        return issues
+
+
+# ---------- Phase 1 (Journalism Tropes): V008 ----------
+
+
+class TrendOverclaimRule(Rule):
+    """V008: Detect unsubstantiated trend claims."""
+
+    id = "V008"
+    name = "Trend Overclaim"
+    description = "Detects 'more and more people', 'a growing number of' trend claims"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            for pattern in TREND_OVERCLAIM_PHRASES:
+                match = re.search(pattern, line, re.IGNORECASE)
+                if match:
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Trend overclaim: '{match.group()}'",
+                            line=line_num,
+                            column=match.start() + 1,
+                            end_column=match.end() + 1,
+                            severity=self.severity,
+                        )
+                    )
         return issues

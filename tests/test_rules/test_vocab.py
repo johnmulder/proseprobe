@@ -262,3 +262,58 @@ class TestInventedConceptLabels:
         rule = InventedConceptLabelsRule()
         assert rule.id == "V007"
         assert rule.name == "Invented Concept Labels"
+
+
+# ---------- Phase 1 (Journalism Tropes) TDD: V008 ----------
+
+
+class TestTrendOverclaim:
+    """Tests for V008: Trend Overclaim."""
+
+    def test_detects_more_and_more_people(self) -> None:
+        """Detect 'more and more people' trend overclaim."""
+        from slop_lint.rules.vocab import TrendOverclaimRule
+
+        content = "More and more people are adopting this framework."
+        issues = TrendOverclaimRule().check(content, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "V008"
+
+    def test_detects_growing_number(self) -> None:
+        """Detect 'a growing number of' trend overclaim."""
+        from slop_lint.rules.vocab import TrendOverclaimRule
+
+        content = "A growing number of developers prefer TypeScript."
+        issues = TrendOverclaimRule().check(content, "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_everyone_is_talking(self) -> None:
+        """Detect 'everyone is talking about' trend overclaim."""
+        from slop_lint.rules.vocab import TrendOverclaimRule
+
+        content = "Everyone is talking about this new approach."
+        issues = TrendOverclaimRule().check(content, "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_increasingly_popular(self) -> None:
+        """Detect 'increasingly popular' trend overclaim."""
+        from slop_lint.rules.vocab import TrendOverclaimRule
+
+        content = "Rust is increasingly popular among systems programmers."
+        issues = TrendOverclaimRule().check(content, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_normal_prose(self) -> None:
+        """Don't flag normal technical prose."""
+        from slop_lint.rules.vocab import TrendOverclaimRule
+
+        content = "The library provides a simple API for HTTP requests."
+        issues = TrendOverclaimRule().check(content, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.vocab import TrendOverclaimRule
+
+        rule = TrendOverclaimRule()
+        assert rule.id == "V008"
+        assert rule.name == "Trend Overclaim"

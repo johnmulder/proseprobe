@@ -562,3 +562,63 @@ class TestContentDuplication:
         rule = ContentDuplicationRule()
         assert rule.id == "S016"
         assert rule.name == "Content Duplication"
+
+
+# ---------- Phase 1 (Journalism Tropes) TDD: S017 ----------
+
+
+class TestAnecdoteAsEvidence:
+    """Tests for S017: Anecdote As Evidence."""
+
+    def test_detects_for_name_of_location(self) -> None:
+        """Detect 'For Sarah of Ohio...' anecdote pattern."""
+        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+
+        text = "For Sarah of Ohio, the policy change meant losing her healthcare."
+        rule = AnecdoteAsEvidenceRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S017"
+
+    def test_detects_take_name_a_descriptor(self) -> None:
+        """Detect 'Take Marcus, a software engineer...' anecdote pattern."""
+        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+
+        text = "Take Marcus, a software engineer from Portland."
+        rule = AnecdoteAsEvidenceRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_meet_name(self) -> None:
+        """Detect 'Meet Lisa' anecdote pattern."""
+        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+
+        text = "Meet Lisa, who transformed her career through coding bootcamps."
+        rule = AnecdoteAsEvidenceRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_normal_prose(self) -> None:
+        """Don't flag normal prose without anecdotes."""
+        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+
+        text = "The system handles errors gracefully and logs all events."
+        rule = AnecdoteAsEvidenceRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_ignores_non_anecdote_for(self) -> None:
+        """Don't flag normal use of 'for' in prose."""
+        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+
+        text = "For best results, use a virtual environment."
+        rule = AnecdoteAsEvidenceRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+
+        rule = AnecdoteAsEvidenceRule()
+        assert rule.id == "S017"
+        assert rule.name == "Anecdote As Evidence"

@@ -1,8 +1,9 @@
-"""Structural detection rules (S001-S016)."""
+"""Structural detection rules (S001-S017)."""
 
 import re
 
 from slop_lint.data.patterns import (
+    ANECDOTE_EVIDENCE_PATTERNS,
     CHALLENGE_CONCLUSION_PATTERNS,
     INLINE_HEADER_LIST_PATTERN,
     LISTICLE_PROSE_PATTERNS,
@@ -724,4 +725,36 @@ class ContentDuplicationRule(Rule):
             else:
                 seen[key] = line_num
 
+        return issues
+
+
+# ---------- Phase 1 (Journalism Tropes): S017 ----------
+
+
+class AnecdoteAsEvidenceRule(Rule):
+    """S017: Detect single-anecdote generalizations."""
+
+    id = "S017"
+    name = "Anecdote As Evidence"
+    description = "Detects 'For [Name] of [Location]', 'Take [Name]', 'Meet [Name]' patterns"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            for pattern in ANECDOTE_EVIDENCE_PATTERNS:
+                match = re.search(pattern, line)
+                if match:
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Anecdote as evidence: '{match.group()}'",
+                            line=line_num,
+                            column=match.start() + 1,
+                            end_column=match.end() + 1,
+                            severity=self.severity,
+                        )
+                    )
         return issues

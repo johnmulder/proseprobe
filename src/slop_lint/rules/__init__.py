@@ -12,6 +12,7 @@ from slop_lint.rules.grammar import (
     AssertedSimplicityRule,
     CopulaAvoidanceRule,
     ExcessiveHedgingRule,
+    FalseBalanceRule,
     FalseSuspenseTransitionRule,
     FalseVulnerabilityRule,
     FuturistInvitationRule,
@@ -27,6 +28,7 @@ from slop_lint.rules.markup import (
 )
 from slop_lint.rules.struct import (
     AnaphoraAbuseRule,
+    AnecdoteAsEvidenceRule,
     ChallengeConclusionsRule,
     ContentDuplicationRule,
     DramaticCountdownRule,
@@ -59,6 +61,7 @@ from slop_lint.rules.vocab import (
     InventedConceptLabelsRule,
     KnowledgeCutoffRule,
     PromotionalLanguageRule,
+    TrendOverclaimRule,
     WeaselWordsRule,
 )
 
@@ -76,6 +79,7 @@ __all__ = [
     "WeaselWordsRule",
     "GrandioseStakesRule",
     "InventedConceptLabelsRule",
+    "TrendOverclaimRule",
     # Structural rules (S)
     "RuleOfThreeRule",
     "NegativeParallelismRule",
@@ -93,6 +97,7 @@ __all__ = [
     "SignpostedConclusionRule",
     "FractalSummaryRule",
     "ContentDuplicationRule",
+    "AnecdoteAsEvidenceRule",
     # Style rules (T)
     "TitleCaseHeadingsRule",
     "BoldOveruseRule",
@@ -111,6 +116,7 @@ __all__ = [
     "FalseVulnerabilityRule",
     "AssertedSimplicityRule",
     "PedagogicalVoiceRule",
+    "FalseBalanceRule",
     # Code rules (C)
     "DocstringVocabularyRule",
     "VerboseCommentsRule",
@@ -155,7 +161,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         thresholds = config.thresholds
 
     rules = [
-        # Vocabulary (V001-V007)
+        # Vocabulary (V001-V008)
         AIVocabularyRule(allowed=allowed, additional=additional, allowed_phrases=allowed_phrases),
         CollaborativePhrasesRule(),
         KnowledgeCutoffRule(),
@@ -163,7 +169,8 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         WeaselWordsRule(),
         GrandioseStakesRule(),
         InventedConceptLabelsRule(),
-        # Structural (S001-S016)
+        TrendOverclaimRule(),
+        # Structural (S001-S017)
         RuleOfThreeRule(threshold=thresholds.rule_of_three),
         NegativeParallelismRule(),
         ChallengeConclusionsRule(),
@@ -180,6 +187,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         SignpostedConclusionRule(),
         FractalSummaryRule(),
         ContentDuplicationRule(),
+        AnecdoteAsEvidenceRule(),
         # Style (T001-T007)
         TitleCaseHeadingsRule(),
         BoldOveruseRule(threshold=thresholds.bold_overuse),
@@ -188,7 +196,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         EmojiInProseRule(),
         ElegantVariationRule(),
         ShortPunchyFragmentsRule(),
-        # Grammar (G001-G009)
+        # Grammar (G001-G010)
         CopulaAvoidanceRule(),
         ExcessiveHedgingRule(),
         ParticipleChainsRule(),
@@ -198,6 +206,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         FalseVulnerabilityRule(),
         AssertedSimplicityRule(),
         PedagogicalVoiceRule(),
+        FalseBalanceRule(),
         # Code (C001-C004)
         DocstringVocabularyRule(allowed=allowed, additional=additional),
         VerboseCommentsRule(),

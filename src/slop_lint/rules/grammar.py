@@ -1,10 +1,11 @@
-"""Grammar pattern detection rules (G001-G009)."""
+"""Grammar pattern detection rules (G001-G010)."""
 
 import re
 
 from slop_lint.data.patterns import COPULA_AVOIDANCE_PATTERNS, HEDGING_PATTERNS
 from slop_lint.data.phrases import (
     ASSERTED_SIMPLICITY_PHRASES,
+    FALSE_BALANCE_PHRASES,
     FALSE_SUSPENSE_PHRASES,
     FALSE_VULNERABILITY_PHRASES,
     FUTURIST_INVITATION_PHRASES,
@@ -278,6 +279,38 @@ class PedagogicalVoiceRule(Rule):
                             message=f"Pedagogical voice: '{phrase}'",
                             line=line_num,
                             column=col + 1,
+                            severity=self.severity,
+                        )
+                    )
+        return issues
+
+
+# ---------- Phase 1 (Journalism Tropes): G010 ----------
+
+
+class FalseBalanceRule(Rule):
+    """G010: Detect false-balance framing."""
+
+    id = "G010"
+    name = "False Balance"
+    description = "Detects 'supporters say X, critics say Y' false balance"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            for pattern in FALSE_BALANCE_PHRASES:
+                match = re.search(pattern, line, re.IGNORECASE)
+                if match:
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"False balance: '{match.group()}'",
+                            line=line_num,
+                            column=match.start() + 1,
+                            end_column=match.end() + 1,
                             severity=self.severity,
                         )
                     )
