@@ -64,7 +64,12 @@ python_version = "3.11"
 strict = true
 warn_return_any = true
 warn_unused_configs = true
+mypy_path = "src"
 exclude = ["venv", ".venv", "build", "dist"]
+
+[[tool.mypy.overrides]]
+module = "tests.fixtures.*"
+ignore_errors = true
 
 [tool.ruff]
 target-version = "py311"

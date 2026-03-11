@@ -10,7 +10,7 @@ import pytest
 from hypothesis import HealthCheck, assume, given, settings
 from hypothesis import strategies as st
 
-from slop_lint.rules.base import Issue, Severity
+from slop_lint.rules.base import Issue, Rule, Severity
 from slop_lint.rules.code import (
     AIPlaceholdersRule,
     CollaborativeCommentsRule,
@@ -58,7 +58,7 @@ text_content = st.text(
     min_size=0,
     max_size=2000,
     alphabet=st.characters(
-        blacklist_categories=("Cs",),  # Exclude surrogates
+        blacklist_categories=("Cs",),  # type: ignore[arg-type]  # Exclude surrogates
         blacklist_characters="\x00",  # Exclude null bytes
     ),
 )
@@ -129,7 +129,7 @@ class TestRuleRobustness:
     @pytest.mark.parametrize("rule", ALL_RULES, ids=lambda r: r.id)
     @given(content=text_content, filename=filenames)
     @settings(max_examples=50, suppress_health_check=[HealthCheck.too_slow])
-    def test_rule_never_crashes(self, rule, content: str, filename: str) -> None:
+    def test_rule_never_crashes(self, rule: Rule, content: str, filename: str) -> None:
         """All rules should handle any input without crashing."""
         try:
             issues = rule.check(content, filename)
@@ -142,7 +142,9 @@ class TestRuleRobustness:
     @pytest.mark.parametrize("rule", ALL_RULES, ids=lambda r: r.id)
     @given(content=text_content, filename=filenames)
     @settings(max_examples=50, suppress_health_check=[HealthCheck.too_slow])
-    def test_issue_positions_valid(self, rule, content: str, filename: str) -> None:
+    def test_issue_positions_valid(
+        self, rule: Rule, content: str, filename: str
+    ) -> None:
         """Issue positions should be within content bounds."""
         issues = rule.check(content, filename)
         lines = content.split("\n")
@@ -159,7 +161,9 @@ class TestRuleRobustness:
     @pytest.mark.parametrize("rule", ALL_RULES, ids=lambda r: r.id)
     @given(content=text_content, filename=filenames)
     @settings(max_examples=30, suppress_health_check=[HealthCheck.too_slow])
-    def test_rules_are_deterministic(self, rule, content: str, filename: str) -> None:
+    def test_rules_are_deterministic(
+        self, rule: Rule, content: str, filename: str
+    ) -> None:
         """Running a rule twice should give the same results."""
         issues1 = rule.check(content, filename)
         issues2 = rule.check(content, filename)
@@ -176,40 +180,40 @@ class TestEmptyAndEdgeCases:
     """Test edge cases that should be handled gracefully."""
 
     @pytest.mark.parametrize("rule", ALL_RULES, ids=lambda r: r.id)
-    def test_empty_content(self, rule) -> None:
+    def test_empty_content(self, rule: Rule) -> None:
         """Rules should handle empty content."""
         issues = rule.check("", "test.md")
         assert isinstance(issues, list)
         assert len(issues) == 0
 
     @pytest.mark.parametrize("rule", ALL_RULES, ids=lambda r: r.id)
-    def test_whitespace_only(self, rule) -> None:
+    def test_whitespace_only(self, rule: Rule) -> None:
         """Rules should handle whitespace-only content."""
         issues = rule.check("   \n\t\n   ", "test.md")
         assert isinstance(issues, list)
 
     @pytest.mark.parametrize("rule", ALL_RULES, ids=lambda r: r.id)
-    def test_single_character(self, rule) -> None:
+    def test_single_character(self, rule: Rule) -> None:
         """Rules should handle single character content."""
         issues = rule.check("x", "test.md")
         assert isinstance(issues, list)
 
     @pytest.mark.parametrize("rule", ALL_RULES, ids=lambda r: r.id)
-    def test_very_long_line(self, rule) -> None:
+    def test_very_long_line(self, rule: Rule) -> None:
         """Rules should handle very long lines."""
         content = "a" * 10000
         issues = rule.check(content, "test.md")
         assert isinstance(issues, list)
 
     @pytest.mark.parametrize("rule", ALL_RULES, ids=lambda r: r.id)
-    def test_many_short_lines(self, rule) -> None:
+    def test_many_short_lines(self, rule: Rule) -> None:
         """Rules should handle many short lines."""
         content = "\n".join(["x"] * 1000)
         issues = rule.check(content, "test.md")
         assert isinstance(issues, list)
 
     @pytest.mark.parametrize("rule", ALL_RULES, ids=lambda r: r.id)
-    def test_unicode_content(self, rule) -> None:
+    def test_unicode_content(self, rule: Rule) -> None:
         """Rules should handle unicode content."""
         content = "Hello 世界! Γεια σου κόσμε! 🌍🎉"
         issues = rule.check(content, "test.md")
@@ -258,4 +262,69 @@ class TestIssueInvariants:
             end_line=end_line,
         )
 
+        assert issue.end_line is not None
         assert issue.end_line >= issue.line
+
+
+class TestParserInvariants:
+    """Property tests for parser pure functions."""
+
+    @given(content=text_content, filename=filenames)
+    @settings(max_examples=50, suppress_health_check=[HealthCheck.too_slow])
+    def test_iter_prose_lines_in_bounds(self, content: str, filename: str) -> None:
+        """Prose line numbers must reference valid lines in the original content."""
+        from slop_lint.parsers.markdown import iter_prose_lines
+
+        result = iter_prose_lines(content, filename)
+        total_lines = len(content.split("\n"))
+
+        for line_num, line_text in result:
+            assert 1 <= line_num <= total_lines, (
+                f"Line {line_num} out of bounds (1-{total_lines})"
+            )
+            assert isinstance(line_text, str)
+
+    @given(content=text_content, filename=filenames)
+    @settings(max_examples=50, suppress_health_check=[HealthCheck.too_slow])
+    def test_iter_non_code_lines_subset(self, content: str, filename: str) -> None:
+        """Non-code lines must be a subset of all lines."""
+        from slop_lint.parsers.markdown import iter_non_code_lines
+
+        result = iter_non_code_lines(content, filename)
+        all_lines = content.split("\n")
+        total = len(all_lines)
+
+        line_nums = [n for n, _ in result]
+        # No duplicates
+        assert len(line_nums) == len(set(line_nums))
+        # All in bounds
+        for n in line_nums:
+            assert 1 <= n <= total
+
+
+class TestBaselineFingerprint:
+    """Property tests for baseline fingerprint stability."""
+
+    @given(
+        rule_id=st.text(min_size=1, max_size=10, alphabet="A-Z0-9"),
+        message=st.text(min_size=1, max_size=100),
+        line=st.integers(min_value=1, max_value=100),
+        content=st.text(min_size=1, max_size=500),
+    )
+    @settings(max_examples=50, suppress_health_check=[HealthCheck.too_slow])
+    def test_fingerprint_is_deterministic(
+        self, rule_id: str, message: str, line: int, content: str
+    ) -> None:
+        """Same inputs must always produce the same fingerprint."""
+        from pathlib import Path as P
+
+        from slop_lint.core.baseline import Baseline
+
+        lines = content.split("\n")
+        line = min(line, len(lines))
+
+        issue = Issue(rule_id=rule_id, message=message, line=line, column=1)
+        bl = Baseline(P("/dev/null"))
+        fp1 = bl._compute_fingerprint(issue, P("test.md"), content)
+        fp2 = bl._compute_fingerprint(issue, P("test.md"), content)
+        assert fp1 == fp2

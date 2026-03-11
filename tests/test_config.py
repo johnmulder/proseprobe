@@ -83,7 +83,9 @@ class TestFindConfigFile:
 class TestLoadConfig:
     """Tests for load_config function."""
 
-    def test_load_slop_lint_toml(self, tmp_path: Path, monkeypatch) -> None:
+    def test_load_slop_lint_toml(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test loading .slop-lint.toml."""
         monkeypatch.chdir(tmp_path)
         config_file = tmp_path / ".slop-lint.toml"
@@ -115,7 +117,9 @@ select = ["G001"]
         assert isinstance(config, Config)
         assert config.select == ["G001"]
 
-    def test_load_no_config(self, tmp_path: Path, monkeypatch) -> None:
+    def test_load_no_config(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test loading with no config returns defaults."""
         monkeypatch.chdir(tmp_path)
         # Create .git to stop search
