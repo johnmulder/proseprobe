@@ -47,6 +47,19 @@ class AIVocabularyRule(Rule):
         "streamline": r"streamlin(?:e|es|ed|ing)",
         "underscore": r"underscor(?:e|es|ed|ing)",
         "unravel": r"unravel(?:s|ed|ing)?",
+        # Academic jargon (academic tropes)
+        "problematize": r"problemati[zs](?:e|es|ed|ing)",
+        "destabilize": r"destabili[zs](?:e|es|ed|ing)",
+        "foreground": r"foreground(?:s|ed|ing)?",
+        "situate": r"situate[sd]?|situating",
+        "operationalize": r"operationali[zs](?:e|es|ed|ing)",
+        "instantiate": r"instantiat(?:e|es|ed|ing)",
+        "reconceptualize": r"reconceptuali[zs](?:e|es|ed|ing)",
+        "facilitate": r"facilitat(?:e|es|ed|ing)",
+        "demonstrate": r"demonstrat(?:e|es|ed|ing)",
+        "implement": r"implement(?:s|ed|ing)?",
+        # Narrow: only academic usage ("interrogate the assumptions"), not police/legal
+        "interrogate": r"interrogat(?:e|es|ed|ing)\s+(?:the\s+)?(?:dominant|underlying|prevailing|assumed|notion|concept|assumption|premise|idea)s?",
     }
 
     def __init__(

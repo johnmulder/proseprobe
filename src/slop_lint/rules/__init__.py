@@ -16,7 +16,10 @@ from slop_lint.rules.grammar import (
     FalseSuspenseTransitionRule,
     FalseVulnerabilityRule,
     FuturistInvitationRule,
+    GapRitualRule,
+    NominalizationOverloadRule,
     ParticipleChainsRule,
+    PassiveVoiceOveruseRule,
     PatronizingAnalogyRule,
     PedagogicalVoiceRule,
 )
@@ -30,6 +33,7 @@ from slop_lint.rules.struct import (
     AnaphoraAbuseRule,
     AnecdoteAsEvidenceRule,
     ChallengeConclusionsRule,
+    CitationNameDroppingRule,
     ContentDuplicationRule,
     DramaticCountdownRule,
     FalseRangesRule,
@@ -51,6 +55,7 @@ from slop_lint.rules.style import (
     EmDashOveruseRule,
     EmojiInProseRule,
     QuoteInconsistencyRule,
+    SentenceLengthRule,
     ShortPunchyFragmentsRule,
     TitleCaseHeadingsRule,
 )
@@ -98,6 +103,7 @@ __all__ = [
     "FractalSummaryRule",
     "ContentDuplicationRule",
     "AnecdoteAsEvidenceRule",
+    "CitationNameDroppingRule",
     # Style rules (T)
     "TitleCaseHeadingsRule",
     "BoldOveruseRule",
@@ -106,6 +112,7 @@ __all__ = [
     "EmojiInProseRule",
     "ElegantVariationRule",
     "ShortPunchyFragmentsRule",
+    "SentenceLengthRule",
     # Grammar rules (G)
     "CopulaAvoidanceRule",
     "ExcessiveHedgingRule",
@@ -117,6 +124,9 @@ __all__ = [
     "AssertedSimplicityRule",
     "PedagogicalVoiceRule",
     "FalseBalanceRule",
+    "NominalizationOverloadRule",
+    "PassiveVoiceOveruseRule",
+    "GapRitualRule",
     # Code rules (C)
     "DocstringVocabularyRule",
     "VerboseCommentsRule",
@@ -170,7 +180,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         GrandioseStakesRule(),
         InventedConceptLabelsRule(),
         TrendOverclaimRule(),
-        # Structural (S001-S017)
+        # Structural (S001-S018)
         RuleOfThreeRule(threshold=thresholds.rule_of_three),
         NegativeParallelismRule(),
         ChallengeConclusionsRule(),
@@ -188,7 +198,8 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         FractalSummaryRule(),
         ContentDuplicationRule(),
         AnecdoteAsEvidenceRule(),
-        # Style (T001-T007)
+        CitationNameDroppingRule(threshold=thresholds.citation_name_drop),
+        # Style (T001-T008)
         TitleCaseHeadingsRule(),
         BoldOveruseRule(threshold=thresholds.bold_overuse),
         EmDashOveruseRule(threshold=thresholds.em_dash_overuse),
@@ -196,7 +207,8 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         EmojiInProseRule(),
         ElegantVariationRule(),
         ShortPunchyFragmentsRule(),
-        # Grammar (G001-G010)
+        SentenceLengthRule(threshold=thresholds.sentence_length_max),
+        # Grammar (G001-G013)
         CopulaAvoidanceRule(),
         ExcessiveHedgingRule(),
         ParticipleChainsRule(),
@@ -207,6 +219,9 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         AssertedSimplicityRule(),
         PedagogicalVoiceRule(),
         FalseBalanceRule(),
+        NominalizationOverloadRule(threshold=thresholds.nominalization_overload),
+        PassiveVoiceOveruseRule(threshold=thresholds.passive_voice_overuse),
+        GapRitualRule(),
         # Code (C001-C004)
         DocstringVocabularyRule(allowed=allowed, additional=additional),
         VerboseCommentsRule(),

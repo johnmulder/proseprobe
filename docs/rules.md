@@ -435,7 +435,7 @@ This module is the main entry point.
 
 ### G002: Excessive Hedging
 
-Detects over-qualification phrases.
+Detects over-qualification phrases and hedge stacking (multiple hedges in one sentence).
 
 **Severity:** Info  
 **Fixable:** No
@@ -444,6 +444,7 @@ Detects over-qualification phrases.
 - "It is important to note that..."
 - "It's worth mentioning that..."
 - "It should be noted that..."
+- Hedge stacking: 2+ hedges (may, might, potentially, arguably, possibly, perhaps, appears to, suggests that, could be) in one sentence
 
 **Example (bad):**
 ```markdown
@@ -1084,6 +1085,26 @@ It worked every single time without exception.
 
 ---
 
+### T008: Sentence Length
+
+Detects excessively long sentences that exceed a word count threshold.
+
+**Severity:** Info  
+**Fixable:** No  
+**Configurable:** `sentence_length_max` (default: 40)
+
+**Example (bad):**
+```markdown
+In considering the implications of the findings which themselves arise from a complex interaction of factors that are not easily reducible to simple causal explanations we must also consider the broader context in which these results were obtained and the various methodological limitations that constrain our interpretations.
+```
+
+**Example (good):**
+```markdown
+The findings arise from a complex interaction of factors. We must also consider the broader context and the methodological limitations that constrain our interpretations.
+```
+
+---
+
 ## Phase 1: Low-Quality Journalism Tropes Rules
 
 The following rules detect common low-quality journalism patterns.
@@ -1141,6 +1162,85 @@ The Bureau of Labor Statistics projects a net gain of 12,000 jobs in the sector 
 
 ---
 
+### G011: Nominalization Overload
+
+Detects overuse of "the [nominalization] of" constructions that make prose
+unnecessarily abstract.
+
+**Severity:** Info  
+**Fixable:** No  
+**Configurable:** `nominalization_overload` (default: 3)
+
+**Detected patterns:**
+- "the implementation of", "the utilization of"
+- "the identification of", "the examination of"
+- "the establishment of", "the facilitation of"
+- "the conceptualization of", "the operationalization of"
+
+**Example (bad):**
+```markdown
+The implementation of the analysis led to the identification of patterns. The examination of the data confirmed the establishment of a baseline.
+```
+
+**Example (good):**
+```markdown
+We analyzed the data, identified patterns, and confirmed a baseline.
+```
+
+---
+
+### G012: Passive Voice Overuse
+
+Detects overuse of formulaic academic passive constructions.
+
+**Severity:** Info  
+**Fixable:** No  
+**Configurable:** `passive_voice_overuse` (default: 5)
+
+**Detected patterns:**
+- "It is/was/has been suggested/argued/noted that..."
+- "It can/could/may be argued/suggested that..."
+- "is/are/was/were considered/regarded/viewed/seen as/to be"
+
+**Example (bad):**
+```markdown
+It is suggested that the results indicate a trend. It was found that the method performs well. It has been shown that this approach works. It could be argued that alternatives exist. It should be noted that limitations apply.
+```
+
+**Example (good):**
+```markdown
+The results indicate a trend. The method performs well, and this approach works. However, alternatives exist and limitations apply.
+```
+
+---
+
+### G013: Gap Ritual
+
+Detects formulaic "gap in the literature" phrases common in academic writing.
+
+**Severity:** Info  
+**Fixable:** No
+
+**Detected patterns:**
+- "the literature has overlooked"
+- "few scholars have examined/explored/addressed"
+- "this study fills that/the gap"
+- "has received little attention"
+- "remains under-explored/understudied"
+- "a gap in the literature/research"
+
+**Example (bad):**
+```markdown
+Few scholars have examined this intersection. This study fills that gap by exploring the overlooked variables.
+```
+
+**Example (good):**
+```markdown
+Prior work by Smith (2020) and Jones (2021) examined related aspects, but did not address variable X. We extend their analysis to include X.
+```
+
+---
+
 ### S017: Anecdote As Evidence
 
 Detects single-anecdote openings used as evidence for broad claims.
@@ -1162,4 +1262,30 @@ Meet David, a software engineer who quit his job to start a company.
 **Example (good):**
 ```markdown
 A 2024 Kaiser Family Foundation survey found that 12% of respondents in Ohio lost coverage after the policy change.
+```
+
+---
+
+### S018: Citation Name-Dropping
+
+Detects 3+ consecutive "Author (Year) verb" sentences that list citations
+without synthesizing them.
+
+**Severity:** Info  
+**Fixable:** No  
+**Configurable:** `citation_name_drop` (default: 3)
+
+**Detected patterns:**
+- "Smith (2012) argues that..."
+- "Jones (2014) claims that..."
+- "Patel (2018) suggests that..."
+
+**Example (bad):**
+```markdown
+Smith (2012) argues that technology reshapes communities. Jones (2014) claims that digital tools empower users. Patel (2018) suggests that platforms mediate interactions. Lee (2020) finds that algorithms reinforce bias.
+```
+
+**Example (good):**
+```markdown
+Several scholars have examined the impact of technology on communities. Smith (2012) and Jones (2014) both argue that digital tools reshape and empower communities, while Patel (2018) emphasizes the mediating role of platforms.
 ```

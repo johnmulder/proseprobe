@@ -400,3 +400,209 @@ class TestFalseBalance:
         rule = FalseBalanceRule()
         assert rule.id == "G010"
         assert rule.name == "False Balance"
+
+
+# ---------- Phase 2 (Academic Writing Tropes) TDD: G011-G013, G002 enhancement ----------
+
+
+class TestNominalizationOverload:
+    """Tests for G011: Nominalization Overload."""
+
+    def test_detects_nominalization(self) -> None:
+        """Detect multiple nominalizations above threshold."""
+        from slop_lint.rules.grammar import NominalizationOverloadRule
+
+        text = (
+            "The implementation of the analysis led to the identification of patterns.\n"
+            "The examination of the data confirmed the establishment of the baseline.\n"
+        )
+        rule = NominalizationOverloadRule(threshold=3)
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "G011"
+
+    def test_ignores_single_nominalization(self) -> None:
+        """Don't flag when below threshold."""
+        from slop_lint.rules.grammar import NominalizationOverloadRule
+
+        text = "The implementation of the feature was smooth."
+        rule = NominalizationOverloadRule(threshold=3)
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_custom_threshold(self) -> None:
+        """Respect configurable threshold."""
+        from slop_lint.rules.grammar import NominalizationOverloadRule
+
+        text = "The implementation of the analysis led to the identification of patterns."
+        rule_low = NominalizationOverloadRule(threshold=1)
+        rule_high = NominalizationOverloadRule(threshold=5)
+        issues_low = rule_low.check(text, "test.md")
+        issues_high = rule_high.check(text, "test.md")
+        assert len(issues_low) >= 1
+        assert len(issues_high) == 0
+
+    def test_ignores_normal_prose(self) -> None:
+        """Don't flag normal prose with verb forms."""
+        from slop_lint.rules.grammar import NominalizationOverloadRule
+
+        text = "The team implemented the analysis and identified patterns."
+        rule = NominalizationOverloadRule(threshold=3)
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.grammar import NominalizationOverloadRule
+
+        rule = NominalizationOverloadRule()
+        assert rule.id == "G011"
+        assert rule.name == "Nominalization Overload"
+
+
+class TestPassiveVoiceOveruse:
+    """Tests for G012: Passive Voice Overuse."""
+
+    def test_detects_academic_passive(self) -> None:
+        """Detect formulaic academic passive constructions above threshold."""
+        from slop_lint.rules.grammar import PassiveVoiceOveruseRule
+
+        text = (
+            "It is suggested that the results indicate a trend.\n"
+            "It was found that the method performs well.\n"
+            "It has been shown that this approach works.\n"
+            "It could be argued that alternatives exist.\n"
+            "It should be noted that limitations apply.\n"
+            "It can be seen that the pattern holds.\n"
+        )
+        rule = PassiveVoiceOveruseRule(threshold=5)
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "G012"
+
+    def test_ignores_below_threshold(self) -> None:
+        """Don't flag when below threshold."""
+        from slop_lint.rules.grammar import PassiveVoiceOveruseRule
+
+        text = (
+            "It is suggested that the results indicate a trend.\n"
+            "It was found that the method performs well.\n"
+        )
+        rule = PassiveVoiceOveruseRule(threshold=5)
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_ignores_technical_passive(self) -> None:
+        """Don't flag normal technical passive voice."""
+        from slop_lint.rules.grammar import PassiveVoiceOveruseRule
+
+        text = "The file was created. Errors are logged. The server was restarted."
+        rule = PassiveVoiceOveruseRule(threshold=1)
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_custom_threshold(self) -> None:
+        """Respect configurable threshold."""
+        from slop_lint.rules.grammar import PassiveVoiceOveruseRule
+
+        text = (
+            "It is suggested that the results indicate a trend.\n"
+            "It was found that the method performs well.\n"
+        )
+        rule_low = PassiveVoiceOveruseRule(threshold=1)
+        rule_high = PassiveVoiceOveruseRule(threshold=5)
+        issues_low = rule_low.check(text, "test.md")
+        issues_high = rule_high.check(text, "test.md")
+        assert len(issues_low) >= 1
+        assert len(issues_high) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.grammar import PassiveVoiceOveruseRule
+
+        rule = PassiveVoiceOveruseRule()
+        assert rule.id == "G012"
+        assert rule.name == "Passive Voice Overuse"
+
+
+class TestHedgeStacking:
+    """Tests for G002 enhancement: hedge stacking detection."""
+
+    def test_detects_hedge_stacking(self) -> None:
+        """Detect multiple hedges in a single sentence."""
+        rule = ExcessiveHedgingRule()
+        text = "These results may potentially suggest that the findings could be interpreted as supportive."
+        issues = rule.check(text, "test.md")
+        hedge_stack_issues = [i for i in issues if "hedge stacking" in i.message.lower() or "Hedge stacking" in i.message]
+        assert len(hedge_stack_issues) >= 1
+
+    def test_ignores_single_hedge(self) -> None:
+        """Don't flag a single hedge as stacking."""
+        rule = ExcessiveHedgingRule()
+        text = "These results may suggest a trend."
+        issues = rule.check(text, "test.md")
+        hedge_stack_issues = [i for i in issues if "hedge stacking" in i.message.lower() or "Hedge stacking" in i.message]
+        assert len(hedge_stack_issues) == 0
+
+    def test_stacking_counts_correctly(self) -> None:
+        """Two hedges in one sentence should trigger stacking."""
+        rule = ExcessiveHedgingRule()
+        text = "This arguably might indicate something."
+        issues = rule.check(text, "test.md")
+        hedge_stack_issues = [i for i in issues if "hedge stacking" in i.message.lower() or "Hedge stacking" in i.message]
+        assert len(hedge_stack_issues) >= 1
+
+
+class TestGapRitual:
+    """Tests for G013: Gap Ritual."""
+
+    def test_detects_gap_ritual(self) -> None:
+        """Detect 'the literature has overlooked' gap phrase."""
+        from slop_lint.rules.grammar import GapRitualRule
+
+        text = "The literature has overlooked the role of community in this process."
+        rule = GapRitualRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "G013"
+
+    def test_detects_fills_gap(self) -> None:
+        """Detect 'fills that gap' phrase."""
+        from slop_lint.rules.grammar import GapRitualRule
+
+        text = "This study fills that gap by examining the overlooked variables."
+        rule = GapRitualRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_underexplored(self) -> None:
+        """Detect 'remains underexplored' phrase."""
+        from slop_lint.rules.grammar import GapRitualRule
+
+        text = "This topic remains underexplored in the existing literature."
+        rule = GapRitualRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_few_scholars(self) -> None:
+        """Detect 'few scholars have examined' phrase."""
+        from slop_lint.rules.grammar import GapRitualRule
+
+        text = "Few scholars have examined the intersection of these two fields."
+        rule = GapRitualRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+
+    def test_ignores_normal_prose(self) -> None:
+        """Don't flag normal academic prose."""
+        from slop_lint.rules.grammar import GapRitualRule
+
+        text = "The researchers examined the data carefully and reported their findings."
+        rule = GapRitualRule()
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.grammar import GapRitualRule
+
+        rule = GapRitualRule()
+        assert rule.id == "G013"
+        assert rule.name == "Gap Ritual"

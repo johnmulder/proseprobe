@@ -81,7 +81,7 @@ benchmark:
 
 # Run only trope-related tests (fast TDD loop)
 test-tropes:
-	$(PYTEST) tests/test_rules/ -v -k "S008 or S009 or S010 or S011 or S012 or S013 or S014 or S015 or S016 or S017 or G004 or G005 or G006 or G007 or G008 or G009 or G010 or T007 or V006 or V007 or V008 or magic_adverb or grandiose or invented_concept or patronizing or futurist or false_suspense or pedagogical or asserted_simplicity or false_vulnerability or punchy or gerund_litany or anaphora or rhetorical_self or dramatic_countdown or listicle_prose or analogy_stack or signposted or fractal_summary or content_duplication or trend_overclaim or false_balance or anecdote_evidence or bombshell or firestorm or anonymous_source"
+	$(PYTEST) tests/test_rules/ -v -k "S008 or S009 or S010 or S011 or S012 or S013 or S014 or S015 or S016 or S017 or S018 or G004 or G005 or G006 or G007 or G008 or G009 or G010 or G011 or G012 or G013 or T007 or T008 or V006 or V007 or V008 or magic_adverb or grandiose or invented_concept or patronizing or futurist or false_suspense or pedagogical or asserted_simplicity or false_vulnerability or punchy or gerund_litany or anaphora or rhetorical_self or dramatic_countdown or listicle_prose or analogy_stack or signposted or fractal_summary or content_duplication or trend_overclaim or false_balance or anecdote_evidence or bombshell or firestorm or anonymous_source or nominalization or passive_voice or hedge_stacking or gap_ritual or sentence_length or citation_name"
 
 # Integration: lint the tropes doc with new rules
 test-tropes-integration:

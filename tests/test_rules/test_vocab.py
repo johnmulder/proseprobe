@@ -317,3 +317,59 @@ class TestTrendOverclaim:
         rule = TrendOverclaimRule()
         assert rule.id == "V008"
         assert rule.name == "Trend Overclaim"
+
+
+class TestAcademicVocabularyExpansions:
+    """Tests for academic writing vocabulary additions to V001."""
+
+    def test_detects_problematize(self) -> None:
+        """Detect TIER1 academic jargon 'problematize'."""
+        rule = AIVocabularyRule()
+        issues = rule.check("We must problematize these assumptions.", "test.md")
+        assert len(issues) >= 1
+        assert issues[0].confidence == Confidence.HIGH
+
+    def test_detects_facilitate(self) -> None:
+        """Detect TIER2 Latinate vocabulary 'facilitate'."""
+        rule = AIVocabularyRule()
+        issues = rule.check("This will facilitate better outcomes.", "test.md")
+        assert len(issues) >= 1
+        assert issues[0].confidence == Confidence.MEDIUM
+
+    def test_detects_positionality(self) -> None:
+        """Detect TIER2 concept inflation 'positionality'."""
+        rule = AIVocabularyRule()
+        issues = rule.check("The researcher's positionality matters.", "test.md")
+        assert len(issues) >= 1
+        assert issues[0].confidence == Confidence.MEDIUM
+
+    def test_detects_assemblage(self) -> None:
+        """Detect TIER2 concept inflation 'assemblage'."""
+        rule = AIVocabularyRule()
+        issues = rule.check("This assemblage of factors is complex.", "test.md")
+        assert len(issues) >= 1
+
+    def test_detects_interrogate_academic_usage(self) -> None:
+        """Detect 'interrogate' in academic context."""
+        rule = AIVocabularyRule()
+        issues = rule.check("We must interrogate the dominant assumptions.", "test.md")
+        interrogate_issues = [i for i in issues if "interrogat" in i.message.lower()]
+        assert len(interrogate_issues) >= 1
+
+    def test_ignores_interrogate_non_academic(self) -> None:
+        """Don't flag 'interrogate' in non-academic context."""
+        rule = AIVocabularyRule()
+        issues = rule.check("The detective will interrogate the suspect.", "test.md")
+        interrogate_issues = [i for i in issues if "interrogat" in i.message.lower()]
+        assert len(interrogate_issues) == 0
+
+    def test_suggestions_for_new_words(self) -> None:
+        """New words should have suggestions."""
+        from slop_lint.data.vocabulary import VOCABULARY_SUGGESTIONS
+
+        new_words = [
+            "problematize", "destabilize", "facilitate", "demonstrate",
+            "regarding", "implement", "positionality", "praxis",
+        ]
+        for word in new_words:
+            assert word in VOCABULARY_SUGGESTIONS, f"Missing suggestion for '{word}'"

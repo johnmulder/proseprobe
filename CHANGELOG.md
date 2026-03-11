@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Phase 2: Low-Quality Academic Writing Tropes** — 5 new rules, 1 enhancement, vocabulary expansions:
+  - G011 (nominalization overload: "the implementation of the analysis")
+  - G012 (passive voice overuse: "it is suggested that", "it has been shown that")
+  - G013 (gap ritual: "the literature has overlooked", "fills that gap")
+  - T008 (sentence length: flags sentences exceeding 40 words)
+  - S018 (citation name-dropping: 3+ consecutive "Author (Year) verb" sentences)
+  - G002 enhanced with hedge stacking detection (2+ hedges per sentence)
+  - Expanded Tier 1 vocabulary with academic jargon: problematize, destabilize
+  - Expanded Tier 2 vocabulary with academic words: foreground, situate,
+    operationalize, instantiate, reconceptualize, positionality, relationality,
+    assemblage, praxis, facilitate, demonstrate, regarding, implement
+  - New configurable thresholds: nominalization_overload, passive_voice_overuse,
+    sentence_length_max, citation_name_drop
 - **Phase 1: Low-Quality Journalism Tropes** — 3 new rules and data expansions:
   - V008 (trend overclaim: "more and more people", "a growing number of")
   - G010 (false balance: "supporters say X, critics say Y", "the truth lies in the middle")
@@ -44,7 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - T007 (short punchy fragments)
   - G004-G009 (false suspense, patronizing analogy, futurist invitation,
     false vulnerability, asserted simplicity, pedagogical voice)
-- Complete documentation for all 50 rules with examples
+- Complete documentation for all 55 rules with examples
 - Full CLI options reference in configuration docs
 - Property-based tests using Hypothesis (265 additional tests)
 - Benchmark suite (`make benchmark`) for performance tracking

@@ -83,6 +83,28 @@ pattern = "tests/**"
 ignore = ["C001", "C002"]
 ```
 
+### Thresholds
+
+```toml
+[tool.slop-lint.thresholds]
+# S001: Rule of three - max triads per document
+rule_of_three = 3
+# S004: Inline header lists - max consecutive inline headers
+inline_header_lists = 3
+# T002: Bold overuse - max bold phrases per paragraph
+bold_overuse = 3
+# T003: Em dash overuse - max em dashes per document
+em_dash_overuse = 5
+# G011: Nominalization overload - min nominalizations to flag
+nominalization_overload = 3
+# G012: Passive voice overuse - min formulaic passives to flag
+passive_voice_overuse = 5
+# T008: Sentence length - max words per sentence
+sentence_length_max = 40
+# S018: Citation name-dropping - min consecutive citations to flag
+citation_name_drop = 3
+```
+
 ## Example Configuration
 
 ```toml

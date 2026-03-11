@@ -622,3 +622,72 @@ class TestAnecdoteAsEvidence:
         rule = AnecdoteAsEvidenceRule()
         assert rule.id == "S017"
         assert rule.name == "Anecdote As Evidence"
+
+
+# ---------- Phase 2 (Academic Writing Tropes) TDD: S018 ----------
+
+
+class TestCitationNameDropping:
+    """Tests for S018: Citation Name-Dropping."""
+
+    def test_detects_name_dropping(self) -> None:
+        """Detect 3+ consecutive 'Author (Year) verb' sentences."""
+        from slop_lint.rules.struct import CitationNameDroppingRule
+
+        text = (
+            "Smith (2012) argues that technology reshapes communities. "
+            "Jones (2014) claims that digital tools empower users. "
+            "Patel (2018) suggests that platforms mediate interactions. "
+            "Lee (2020) finds that algorithms reinforce bias."
+        )
+        rule = CitationNameDroppingRule(threshold=3)
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "S018"
+
+    def test_ignores_synthesized_discussion(self) -> None:
+        """Don't flag synthesized literature discussion."""
+        from slop_lint.rules.struct import CitationNameDroppingRule
+
+        text = (
+            "Smith (2012) and Jones (2014) both argue that technology reshapes communities. "
+            "Building on this, Patel (2018) proposes a new framework."
+        )
+        rule = CitationNameDroppingRule(threshold=3)
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_ignores_below_threshold(self) -> None:
+        """Don't flag when below threshold."""
+        from slop_lint.rules.struct import CitationNameDroppingRule
+
+        text = (
+            "Smith (2012) argues that technology matters. "
+            "Jones (2014) claims that tools help."
+        )
+        rule = CitationNameDroppingRule(threshold=3)
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_custom_threshold(self) -> None:
+        """Respect configurable threshold."""
+        from slop_lint.rules.struct import CitationNameDroppingRule
+
+        text = (
+            "Smith (2012) argues X. "
+            "Jones (2014) claims Y. "
+            "Patel (2018) suggests Z."
+        )
+        rule_low = CitationNameDroppingRule(threshold=2)
+        rule_high = CitationNameDroppingRule(threshold=5)
+        issues_low = rule_low.check(text, "test.md")
+        issues_high = rule_high.check(text, "test.md")
+        assert len(issues_low) >= 1
+        assert len(issues_high) == 0
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.struct import CitationNameDroppingRule
+
+        rule = CitationNameDroppingRule()
+        assert rule.id == "S018"
+        assert rule.name == "Citation Name-Dropping"

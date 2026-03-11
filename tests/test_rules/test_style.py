@@ -203,3 +203,81 @@ class TestShortPunchyFragments:
         rule = ShortPunchyFragmentsRule()
         assert rule.id == "T007"
         assert rule.name == "Short Punchy Fragments"
+
+
+# ---------- Phase 2 (Academic Writing Tropes) TDD: T008 ----------
+
+
+class TestSentenceLength:
+    """Tests for T008: Sentence Length."""
+
+    def test_detects_long_sentence(self) -> None:
+        """Detect sentence exceeding threshold."""
+        from slop_lint.rules.style import SentenceLengthRule
+
+        # 45-word sentence
+        text = (
+            "In considering the implications of the findings which themselves "
+            "arise from a complex interaction of factors that are not easily "
+            "reducible to simple causal explanations we must also consider the "
+            "broader context in which these results were obtained and the "
+            "various methodological limitations that constrain our interpretations."
+        )
+        rule = SentenceLengthRule(threshold=40)
+        issues = rule.check(text, "test.md")
+        assert len(issues) >= 1
+        assert issues[0].rule_id == "T008"
+
+    def test_ignores_short_sentence(self) -> None:
+        """Don't flag short sentences."""
+        from slop_lint.rules.style import SentenceLengthRule
+
+        text = "This is a simple sentence. Another one follows."
+        rule = SentenceLengthRule(threshold=40)
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_ignores_code_blocks(self) -> None:
+        """Don't flag long lines inside code blocks."""
+        from slop_lint.rules.style import SentenceLengthRule
+
+        text = (
+            "Short intro sentence.\n\n"
+            "```python\n"
+            "# This is a very long comment line that would normally exceed the threshold "
+            "if it were counted as prose but it should not be because it is inside a code "
+            "block and code blocks should be excluded from sentence length checking.\n"
+            "```\n\n"
+            "Short conclusion."
+        )
+        rule = SentenceLengthRule(threshold=20)
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 0
+
+    def test_custom_threshold(self) -> None:
+        """Respect configurable threshold."""
+        from slop_lint.rules.style import SentenceLengthRule
+
+        text = "This sentence has exactly ten words in it right here now."
+        rule_low = SentenceLengthRule(threshold=5)
+        rule_high = SentenceLengthRule(threshold=20)
+        issues_low = rule_low.check(text, "test.md")
+        issues_high = rule_high.check(text, "test.md")
+        assert len(issues_low) >= 1
+        assert len(issues_high) == 0
+
+    def test_multiple_sentences_only_long_flagged(self) -> None:
+        """Only flag long sentences, not short ones on same line."""
+        from slop_lint.rules.style import SentenceLengthRule
+
+        text = "Short. " + "word " * 45 + "end of very long sentence."
+        rule = SentenceLengthRule(threshold=40)
+        issues = rule.check(text, "test.md")
+        assert len(issues) == 1
+
+    def test_rule_metadata(self) -> None:
+        from slop_lint.rules.style import SentenceLengthRule
+
+        rule = SentenceLengthRule()
+        assert rule.id == "T008"
+        assert rule.name == "Sentence Length"

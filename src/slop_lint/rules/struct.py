@@ -1,10 +1,11 @@
-"""Structural detection rules (S001-S017)."""
+"""Structural detection rules (S001-S018)."""
 
 import re
 
 from slop_lint.data.patterns import (
     ANECDOTE_EVIDENCE_PATTERNS,
     CHALLENGE_CONCLUSION_PATTERNS,
+    CITATION_NAME_DROP_PATTERN,
     INLINE_HEADER_LIST_PATTERN,
     LISTICLE_PROSE_PATTERNS,
     NEGATIVE_PARALLELISM_PATTERNS,
@@ -757,4 +758,49 @@ class AnecdoteAsEvidenceRule(Rule):
                             severity=self.severity,
                         )
                     )
+        return issues
+
+
+class CitationNameDroppingRule(Rule):
+    """S018: Detect consecutive 'Author (Year) verb' citation patterns."""
+
+    id = "S018"
+    name = "Citation Name-Dropping"
+    description = "Detects 3+ consecutive 'Author (Year) verb' sentences"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    def __init__(self, threshold: int = 3) -> None:
+        super().__init__()
+        self.threshold = threshold
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        # Collect all sentences that start with Author (Year) verb
+        citation_sentences: list[tuple[int, str]] = []
+        for line_num, line in self.iter_lines(content, filename):
+            # Split line into sentences
+            sentences = re.split(r"(?<=[.!?])\s+", line)
+            for sentence in sentences:
+                stripped = sentence.strip()
+                if re.match(CITATION_NAME_DROP_PATTERN, stripped):
+                    citation_sentences.append((line_num, stripped))
+
+        # Find runs of consecutive citation sentences
+        if len(citation_sentences) >= self.threshold:
+            # Report if total count meets threshold
+            first_line = citation_sentences[0][0]
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=(
+                        f"Citation name-dropping: {len(citation_sentences)} "
+                        f"consecutive 'Author (Year) verb' sentences"
+                    ),
+                    line=first_line,
+                    column=1,
+                    severity=self.severity,
+                )
+            )
         return issues

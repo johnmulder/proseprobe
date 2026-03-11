@@ -38,6 +38,14 @@ class ThresholdsConfig:
     bold_overuse: int = 3
     # T003: EmDashOveruseRule - max em dashes per document
     em_dash_overuse: int = 5
+    # G011: NominalizationOverloadRule - flag if >= N nominalizations
+    nominalization_overload: int = 3
+    # G012: PassiveVoiceOveruseRule - flag if >= N formulaic passives
+    passive_voice_overuse: int = 5
+    # T008: SentenceLengthRule - max words per sentence
+    sentence_length_max: int = 40
+    # S018: CitationNameDroppingRule - flag if >= N consecutive citations
+    citation_name_drop: int = 3
 
 
 @dataclass
@@ -172,6 +180,10 @@ def _parse_config(data: dict[str, Any]) -> Config:
         inline_header_lists=thresholds_data.get("inline_header_lists", 3),
         bold_overuse=thresholds_data.get("bold_overuse", 3),
         em_dash_overuse=thresholds_data.get("em_dash_overuse", 5),
+        nominalization_overload=thresholds_data.get("nominalization_overload", 3),
+        passive_voice_overuse=thresholds_data.get("passive_voice_overuse", 5),
+        sentence_length_max=thresholds_data.get("sentence_length_max", 40),
+        citation_name_drop=thresholds_data.get("citation_name_drop", 3),
     )
 
     per_file_raw = effective.get("per-file-ignores", [])

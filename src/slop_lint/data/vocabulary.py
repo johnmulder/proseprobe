@@ -24,6 +24,9 @@ AI_VOCABULARY_TIER1: Final[set[str]] = {
     "navigating",
     "spearheading",
     "fostering",
+    # Academic jargon (academic tropes)
+    "problematize",
+    "destabilize",
 }
 
 # Tier 2: Medium confidence (context-dependent)
@@ -66,6 +69,24 @@ AI_VOCABULARY_TIER2 = {
     "ecosystem",
     "stakeholders",
     "narrative",
+    # Academic jargon (academic tropes)
+    "foreground",
+    "situate",
+    "operationalize",
+    "instantiate",
+    "reconceptualize",
+    # Concept inflation (academic tropes)
+    "positionality",
+    "relationality",
+    "assemblage",
+    "praxis",
+    # Latinate vocabulary (academic tropes)
+    "facilitate",
+    "demonstrate",
+    "regarding",
+    "implement",
+    # Narrow academic usage (matched by special pattern in vocab.py)
+    "interrogate",
 }
 
 # Tier 3: Low confidence (common but frequently overused)
@@ -147,6 +168,25 @@ VOCABULARY_SUGGESTIONS: dict[str, str] = {
     "ecosystem": "system",
     "stakeholders": "participants",
     "narrative": "story",
+    # Academic jargon (academic tropes)
+    "problematize": "question",
+    "destabilize": "challenge",
+    "foreground": "emphasize",
+    "situate": "place",
+    "operationalize": "apply",
+    "instantiate": "create",
+    "reconceptualize": "rethink",
+    # Concept inflation (academic tropes)
+    "positionality": "perspective",
+    "relationality": "relationship",
+    "assemblage": "collection",
+    "praxis": "practice",
+    # Latinate vocabulary (academic tropes)
+    "facilitate": "help",
+    "demonstrate": "show",
+    "regarding": "about",
+    "implement": "carry out",
+    "interrogate": "examine, question",
 }
 
 # Vocabulary specific to code/docstrings (used by C001)

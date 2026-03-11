@@ -199,6 +199,19 @@ INFLAMMATORY_CLICHE_PHRASES = [
     "sparked backlash",
 ]
 
+# Gap ritual phrases (G013)
+GAP_RITUAL_PHRASES = [
+    r"the literature has overlooked",
+    r"few scholars have (?:examined|explored|addressed|investigated)",
+    r"this (?:study|paper|research|article) fills (?:that|the|a) gap",
+    r"has received little (?:attention|scrutiny|scholarly attention)",
+    r"remains (?:under-explored|underexplored|understudied|under-researched)",
+    r"a gap in the (?:literature|research|scholarship|existing research)",
+    r"no study has (?:yet )?(?:examined|explored|addressed|investigated)",
+    r"(?:an|the) (?:under-explored|underexplored|understudied) (?:area|topic|field)",
+    r"this gap in (?:the|our) (?:understanding|knowledge|literature)",
+]
+
 # Trend overclaim phrases (V008)
 TREND_OVERCLAIM_PHRASES = [
     r"more and more people",

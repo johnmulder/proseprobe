@@ -85,6 +85,37 @@ ANECDOTE_EVIDENCE_PATTERNS = [
     r"(?i)^Meet [A-Z][a-z]+",
 ]
 
+# Nominalization overload (G011)
+NOMINALIZATION_PATTERNS = [
+    r"\bthe\s+(?:implementation|utilization|identification|examination|"
+    r"establishment|facilitation|determination|conceptualization|"
+    r"operationalization|problematization|articulation|"
+    r"contextualization|theorization|characterization)\s+of\b",
+    r"\bthe\s+(?:development|achievement|improvement|enhancement|"
+    r"transformation|integration|application|evaluation|"
+    r"consideration|investigation|exploration)\s+of\b",
+]
+
+# Passive voice overuse (G012)
+PASSIVE_VOICE_PATTERNS = [
+    r"\bit\s+(?:is|was|has been)\s+(?:suggested|argued|noted|"
+    r"observed|shown|found|demonstrated|established|"
+    r"recognized|acknowledged|proposed|hypothesized)\s+that\b",
+    r"\bit\s+(?:can|could|may|might|should)\s+be\s+(?:argued|"
+    r"suggested|noted|seen|observed|said|shown|stated)\s+that\b",
+    r"\b(?:is|are|was|were)\s+(?:considered|regarded|viewed|seen)"
+    r"\s+(?:as|to be)\b",
+]
+
+# Citation name-dropping (S018)
+CITATION_NAME_DROP_PATTERN: str = (
+    r"[A-Z][a-z]+(?:\s+(?:and|&)\s+[A-Z][a-z]+)?"
+    r"\s*\(\d{4}[a-z]?\)"
+    r"\s+(?:argue[sd]?|state[sd]?|claim[sd]?|contend[sd]?"
+    r"|suggest[sd]?|note[sd]?|observe[sd]?|find[sd]?"
+    r"|show[sd]?|propose[sd]?|assert[sd]?|maintain[sd]?)"
+)
+
 # All structural patterns for easy access
 STRUCTURAL_PATTERNS = {
     "rule_of_three": RULE_OF_THREE_PATTERNS,

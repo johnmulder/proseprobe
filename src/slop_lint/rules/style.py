@@ -1,4 +1,4 @@
-"""Style detection rules (T001-T006)."""
+"""Style detection rules (T001-T008)."""
 
 import re
 
@@ -340,4 +340,39 @@ class ShortPunchyFragmentsRule(Rule):
                 )
             )
 
+        return issues
+
+
+class SentenceLengthRule(Rule):
+    """T008: Detect excessively long sentences."""
+
+    id = "T008"
+    name = "Sentence Length"
+    description = "Detects sentences exceeding a word count threshold"
+    severity = Severity.INFO
+    applies_to = {"markdown"}
+    content_scope = "prose"
+
+    def __init__(self, threshold: int = 40) -> None:
+        super().__init__()
+        self.threshold = threshold
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            # Split line into sentences
+            sentences = re.split(r"(?<=[.!?])\s+", line)
+            for sentence in sentences:
+                words = sentence.split()
+                if len(words) > self.threshold:
+                    col = line.find(sentence)
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Long sentence: {len(words)} words (threshold {self.threshold})",
+                            line=line_num,
+                            column=max(1, col + 1),
+                            severity=self.severity,
+                        )
+                    )
         return issues
