@@ -63,27 +63,6 @@ text_content = st.text(
     ),
 )
 
-markdown_content = st.text(
-    min_size=0,
-    max_size=2000,
-    alphabet=st.characters(
-        whitelist_categories=("L", "N", "P", "Z", "S"),
-        blacklist_characters="\x00",
-    ),
-)
-
-# Realistic Markdown with structure
-structured_markdown = st.from_regex(
-    r"(#+ [a-zA-Z ]+\n\n)?([a-zA-Z., ]+ *\n)*",
-    fullmatch=True,
-)
-
-# Python-like content
-python_content = st.from_regex(
-    r'(def [a-z_]+\([a-z_: ,]*\):\n    """[a-zA-Z ]+"""\n    pass\n)*',
-    fullmatch=True,
-)
-
 filenames = st.sampled_from(
     ["test.md", "readme.md", "doc.py", "main.py", "CHANGELOG.md"]
 )

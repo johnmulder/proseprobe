@@ -103,6 +103,16 @@ passive_voice_overuse = 5
 sentence_length_max = 40
 # S018: Citation name-dropping - min consecutive citations to flag
 citation_name_drop = 3
+# S010: Anaphora abuse - min repeated sentence openings to flag
+anaphora_abuse = 3
+# S011: Gerund fragment litany - min consecutive gerund fragments to flag
+gerund_fragment_litany = 3
+# S013: Historical analogy stacking - min company name-drops to flag
+historical_analogy_stacking = 3
+# T007: Short punchy fragments - min consecutive short paragraphs to flag
+short_punchy_fragments = 3
+# V007: Invented concept labels - min pseudo-analytical labels to flag
+invented_concept_labels = 2
 ```
 
 ## Example Configuration
@@ -168,6 +178,9 @@ slop-lint check --select T001 .
 | `--config` | `-c` | Path to configuration file |
 | `--severity` | | Minimum severity: error, warning, info |
 | `--min-confidence` | | Minimum confidence: high, medium, low |
+| `--hide-low` | | Shorthand for `--min-confidence medium` |
+| `--baseline` | `-b` | Path to baseline file for incremental adoption |
+| `--generate-baseline` | | Generate baseline file from current issues |
 | `--hide-low` | | Hide low-confidence issues |
 | `--quiet` | `-q` | Only output errors |
 | `--verbose` | `-v` | Show additional diagnostic info |

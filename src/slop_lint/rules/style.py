@@ -289,6 +289,8 @@ class ShortPunchyFragmentsRule(Rule):
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 3+ consecutive short-sentence paragraphs."""
+        """Check content for detect 3+ consecutive short-sentence paragraphs."""
         issues: list[Issue] = []
 
         # Group prose lines into paragraphs.
@@ -367,6 +369,7 @@ class SentenceLengthRule(Rule):
         self.threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect excessively long sentences."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             # Split line into sentences

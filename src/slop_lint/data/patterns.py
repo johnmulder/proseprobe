@@ -120,22 +120,6 @@ CITATION_NAME_DROP_PATTERN: str = (
     r"|show[sd]?|propose[sd]?|assert[sd]?|maintain[sd]?)"
 )
 
-# All structural patterns for easy access
-STRUCTURAL_PATTERNS = {
-    "rule_of_three": RULE_OF_THREE_PATTERNS,
-    "negative_parallelism": NEGATIVE_PARALLELISM_PATTERNS,
-    "challenge_conclusions": CHALLENGE_CONCLUSION_PATTERNS,
-    "inline_header_list": INLINE_HEADER_LIST_PATTERN,
-    "significance": SIGNIFICANCE_PATTERNS,
-    "participle_chains": PARTICIPLE_CHAIN_PATTERNS,
-    "copula_avoidance": COPULA_AVOIDANCE_PATTERNS,
-    "hedging": HEDGING_PATTERNS,
-    "dramatic_countdown": DRAMATIC_COUNTDOWN_PATTERN,
-    "rhetorical_self_answer": RHETORICAL_SELF_ANSWER_PATTERN,
-    "listicle_prose": LISTICLE_PROSE_PATTERNS,
-    "anecdote_evidence": ANECDOTE_EVIDENCE_PATTERNS,
-}
-
 # Slide-deck buzzwords for fragment detection (S021)
 SLIDE_DECK_BUZZWORDS: set[str] = {
     "alignment",

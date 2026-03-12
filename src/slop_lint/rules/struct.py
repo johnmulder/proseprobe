@@ -328,6 +328,8 @@ class DramaticCountdownRule(Rule):
     )
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 'Not X. Not Y. Just Z.' countdown pattern."""
+        """Check content for detect 'Not X. Not Y. Just Z.' countdown pattern."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             match = self._pattern.search(line)
@@ -360,6 +362,7 @@ class RhetoricalSelfAnswerRule(Rule):
     )
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 'The X? A Y.' rhetorical self-answer."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for match in self._pattern.finditer(line):
@@ -393,6 +396,7 @@ class AnaphoraAbuseRule(Rule):
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 3+ consecutive sentences with the same opening."""
         issues: list[Issue] = []
         lines = self.iter_lines(content, filename)
         # Split content into sentences (either by line or by period)
@@ -466,6 +470,7 @@ class GerundFragmentLitanyRule(Rule):
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 3+ consecutive gerund-phrase fragments."""
         issues: list[Issue] = []
         # Split into sentence fragments
         sentences: list[tuple[int, str]] = []
@@ -524,6 +529,7 @@ class ListicleInProseRule(Rule):
     _ordinals: ClassVar[list[str]] = ["first", "second", "third", "fourth", "fifth"]
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 'The first... The second... The third...' in prose."""
         issues: list[Issue] = []
         lines = self.iter_lines(content, filename)
         full_text = " ".join(line for _, line in lines).lower()
@@ -616,6 +622,7 @@ class HistoricalAnalogyStackingRule(Rule):
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for rule violations."""
         issues: list[Issue] = []
         lines = self.iter_lines(content, filename)
 
@@ -662,6 +669,7 @@ class SignpostedConclusionRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 'In conclusion', 'To sum up' signposted conclusions."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             line_lower = line.lower().strip()
@@ -691,6 +699,7 @@ class FractalSummaryRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 'In this section, we'll explore...' framing."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for pattern in FRACTAL_SUMMARY_PHRASES:
@@ -721,6 +730,7 @@ class ContentDuplicationRule(Rule):
     _MIN_WORDS = 8  # Don't flag very short paragraphs
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect repeated paragraphs within the same document."""
         issues: list[Issue] = []
         # Split into paragraphs (separated by blank lines)
         paragraphs: list[tuple[int, str]] = []
@@ -780,6 +790,7 @@ class AnecdoteAsEvidenceRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect single-anecdote generalizations."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for pattern in ANECDOTE_EVIDENCE_PATTERNS:
@@ -813,6 +824,7 @@ class CitationNameDroppingRule(Rule):
         self.threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect consecutive 'Author (Year) verb' citation patterns."""
         issues: list[Issue] = []
         # Collect all sentences that start with Author (Year) verb
         citation_sentences: list[tuple[int, str]] = []
@@ -857,6 +869,7 @@ class CorporateEuphemismRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect corporate euphemisms that obscure meaning."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             line_lower = line.lower()
@@ -887,6 +900,7 @@ class AlignmentRitualRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect alignment-signaling without substance."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for pattern in ALIGNMENT_RITUAL_PHRASES:
@@ -925,6 +939,7 @@ class SlideDeckFragmentRule(Rule):
     )
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect verbless buzzword-heavy fragments from slide-deck writing."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             stripped = line.strip()

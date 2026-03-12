@@ -294,6 +294,8 @@ class GrandioseStakesRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect inflated importance claims."""
+        """Check content for detect inflated importance claims."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for pattern in GRANDIOSE_STAKES_PHRASES:
@@ -341,6 +343,7 @@ class InventedConceptLabelsRule(Rule):
         self._pattern = re.compile(rf"\b(\w+)\s+({suffix_group})\b", re.IGNORECASE)
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for rule violations."""
         issues: list[Issue] = []
         matches: list[tuple[int, int, str]] = []
 
@@ -377,6 +380,7 @@ class TrendOverclaimRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect unsubstantiated trend claims."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for pattern in TREND_OVERCLAIM_PHRASES:

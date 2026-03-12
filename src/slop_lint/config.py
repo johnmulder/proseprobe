@@ -194,6 +194,13 @@ def _parse_config(data: dict[str, Any]) -> Config:
         passive_voice_overuse=thresholds_data.get("passive_voice_overuse", 5),
         sentence_length_max=thresholds_data.get("sentence_length_max", 40),
         citation_name_drop=thresholds_data.get("citation_name_drop", 3),
+        anaphora_abuse=thresholds_data.get("anaphora_abuse", 3),
+        gerund_fragment_litany=thresholds_data.get("gerund_fragment_litany", 3),
+        historical_analogy_stacking=thresholds_data.get(
+            "historical_analogy_stacking", 3
+        ),
+        short_punchy_fragments=thresholds_data.get("short_punchy_fragments", 3),
+        invented_concept_labels=thresholds_data.get("invented_concept_labels", 2),
     )
 
     per_file_raw = effective.get("per-file-ignores", [])

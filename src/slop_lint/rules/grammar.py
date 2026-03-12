@@ -157,6 +157,8 @@ class FalseSuspenseTransitionRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 'here's the kicker' false suspense transitions."""
+        """Check content for detect 'here's the kicker' false suspense transitions."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             line_lower = line.lower()
@@ -186,6 +188,7 @@ class PatronizingAnalogyRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 'Think of it as...' patronizing analogies."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             line_lower = line.lower()
@@ -215,6 +218,7 @@ class FuturistInvitationRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 'Imagine a world where...' futurist invitations."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             line_lower = line.lower()
@@ -244,6 +248,7 @@ class FalseVulnerabilityRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 'I'll be honest' false vulnerability."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for pattern in FALSE_VULNERABILITY_PHRASES:
@@ -272,6 +277,7 @@ class AssertedSimplicityRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 'The reality is simpler' asserted simplicity."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for pattern in ASSERTED_SIMPLICITY_PHRASES:
@@ -300,6 +306,7 @@ class PedagogicalVoiceRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 'Let's break this down' pedagogical voice."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             line_lower = line.lower()
@@ -332,6 +339,7 @@ class FalseBalanceRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect false-balance framing."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for pattern in FALSE_BALANCE_PHRASES:
@@ -365,6 +373,7 @@ class NominalizationOverloadRule(Rule):
         self.threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect overuse of nominalization constructions."""
         issues: list[Issue] = []
         matches: list[tuple[int, re.Match[str]]] = []
         for line_num, line in self.iter_lines(content, filename):
@@ -401,6 +410,7 @@ class PassiveVoiceOveruseRule(Rule):
         self.threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect overuse of formulaic academic passive voice."""
         issues: list[Issue] = []
         matches: list[tuple[int, re.Match[str]]] = []
         for line_num, line in self.iter_lines(content, filename):
@@ -433,6 +443,7 @@ class GapRitualRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect 'gap in the literature' ritual phrases."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for pattern in GAP_RITUAL_PHRASES:
@@ -464,6 +475,7 @@ class ImpersonalCorporatePassiveRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
+        """Check content for detect impersonal passive constructions that hide responsibility."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for pattern in IMPERSONAL_CORPORATE_PASSIVE_PHRASES:
