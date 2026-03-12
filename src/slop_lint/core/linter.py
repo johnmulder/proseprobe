@@ -8,7 +8,7 @@ from slop_lint.config import Config
 from slop_lint.parsers.markdown import is_markdown_file
 from slop_lint.rules.base import Issue, Rule
 
-__all__ = ["FileDiscovery", "Linter"]
+__all__ = ["Linter"]
 
 # Registry mapping rule ``applies_to`` tags to file-type predicates.
 # To support a new file type, append a (tag, checker) tuple here.
@@ -26,13 +26,13 @@ _FILE_TYPE_CHECKERS: list[tuple[str, Callable[[Path], bool]]] = [
 class FileDiscovery:
     """Resolve paths into files matching include/exclude patterns."""
 
-    def __init__(self, config: Config) -> None:
-        """Initialize with configuration.
-
-        Args:
-            config: Linter configuration with include/exclude patterns.
-        """
-        self.config = config
+    def __init__(
+        self,
+        include: list[str],
+        exclude: list[str],
+    ) -> None:
+        self._include = include
+        self._exclude = exclude
 
     def discover(self, paths: list[Path]) -> list[Path]:
         """Discover files to lint from paths.
@@ -51,7 +51,7 @@ class FileDiscovery:
                 roots.append(path.parent)
             elif path.is_dir():
                 roots.append(path)
-                for pattern in self.config.include:
+                for pattern in self._include:
                     files.extend(path.rglob(pattern))
 
         # De-duplicate while preserving order
@@ -75,7 +75,7 @@ class FileDiscovery:
             except ValueError:
                 continue
 
-        for raw_pattern in self.config.exclude:
+        for raw_pattern in self._exclude:
             pattern = raw_pattern.strip()
             if not pattern:
                 continue
@@ -121,7 +121,7 @@ class Linter:
         """
         self.config = config
         self._rules: list[Rule] = []
-        self._discovery = FileDiscovery(config)
+        self._discovery = FileDiscovery(config.include, config.exclude)
 
     def register_rule(self, rule: Rule) -> None:
         """Register a rule for linting.
