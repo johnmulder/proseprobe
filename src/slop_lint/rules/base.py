@@ -6,8 +6,6 @@ from dataclasses import dataclass
 from enum import Enum, StrEnum
 from typing import ClassVar
 
-from slop_lint.parsers.markdown import iter_non_code_lines, iter_prose_lines
-
 __all__ = [
     "Confidence",
     "Issue",
@@ -118,16 +116,26 @@ class Rule(ABC):
         ...
 
     # Registry mapping content_scope values to line-extraction functions.
-    # To add a new scope, append an entry here.
+    # Populated lazily on first access to avoid coupling the ABC to concrete
+    # parser modules at import time (Dependency Inversion Principle).
     _SCOPE_EXTRACTORS: ClassVar[
         dict[str, Callable[[str, str], list[tuple[int, str]]]]
-    ] = {
-        "prose": iter_prose_lines,
-        "non_code": iter_non_code_lines,
-    }
+    ] = {}
 
     def iter_lines(self, content: str, filename: str) -> list[tuple[int, str]]:
         """Return line-numbered content based on the rule's scope."""
+        if not Rule._SCOPE_EXTRACTORS:
+            from slop_lint.parsers.markdown import (
+                iter_non_code_lines,
+                iter_prose_lines,
+            )
+
+            Rule._SCOPE_EXTRACTORS.update(
+                {
+                    "prose": iter_prose_lines,
+                    "non_code": iter_non_code_lines,
+                }
+            )
         extractor = self._SCOPE_EXTRACTORS.get(self.content_scope)
         if extractor is not None:
             return extractor(content, filename)

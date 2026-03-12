@@ -2,6 +2,7 @@
 
 import json
 from collections import Counter
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -125,10 +126,14 @@ _SARIF_RANK = {
 }
 
 
-def _format_sarif(results: _Results) -> str:
+def _format_sarif(results: _Results, rules: list[Any] | None = None) -> str:
     """Format results as SARIF 2.1.0."""
     from slop_lint import __version__
-    from slop_lint.rules import get_all_rules
+
+    if rules is None:
+        from slop_lint.rules import get_all_rules
+
+        rules = list(get_all_rules())
 
     rule_definitions = [
         {
@@ -142,7 +147,7 @@ def _format_sarif(results: _Results) -> str:
                 "category": rule.category,
             },
         }
-        for rule in get_all_rules()
+        for rule in rules
     ]
 
     sarif: dict[str, Any] = {
@@ -196,7 +201,9 @@ def _format_sarif(results: _Results) -> str:
 # Public facade (preserves existing API)
 # ---------------------------------------------------------------------------
 
-_FORMATTERS = {
+_Formatter = Callable[[_Results], str]
+
+_FORMATTERS: dict[str, _Formatter] = {
     "text": _format_text,
     "json": _format_json,
     "sarif": _format_sarif,
@@ -206,13 +213,20 @@ _FORMATTERS = {
 class Reporter:
     """Formats and outputs lint results."""
 
-    def __init__(self, format: str = "text") -> None:
+    def __init__(
+        self,
+        format: str = "text",
+        rules: list[Any] | None = None,
+    ) -> None:
         """Initialize reporter.
 
         Args:
             format: Output format (text, json, sarif).
+            rules: Optional list of Rule instances for SARIF metadata.
+                   When *None*, SARIF will discover rules lazily.
         """
         self.format = format
+        self._rules = rules
 
     def report(self, results: dict[Path, list[Issue]]) -> str:
         """Format results for output.
@@ -223,5 +237,7 @@ class Reporter:
         Returns:
             Formatted output string.
         """
+        if self.format == "sarif":
+            return _format_sarif(results, rules=self._rules)
         formatter = _FORMATTERS.get(self.format, _format_text)
         return formatter(results)

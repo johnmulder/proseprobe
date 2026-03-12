@@ -15,6 +15,7 @@ from slop_lint.rules import get_all_rules
 from slop_lint.rules.base import (
     Confidence,
     Issue,
+    Rule,
     Severity,
     severity_from_str,
     severity_rank,
@@ -144,6 +145,7 @@ _SEVERITY_COLOR = {
 def _output_results(
     results: dict[Path, list[Issue]],
     args: argparse.Namespace,
+    rules: list[Rule] | None = None,
 ) -> int:
     """Format and print results; return exit code."""
     total_issues = sum(len(issues) for issues in results.values())
@@ -151,7 +153,7 @@ def _output_results(
     if args.format in ("json", "sarif"):
         from slop_lint.core.reporter import Reporter
 
-        reporter = Reporter(format=args.format)
+        reporter = Reporter(format=args.format, rules=rules)
         print(reporter.report(results))
     elif not results:
         if not args.quiet:
@@ -222,9 +224,11 @@ def _cmd_check(args: argparse.Namespace) -> int:
     if min_severity is None:  # pragma: no cover
         min_severity = Severity.WARNING
 
+    active_rules: list[Rule] = []
     for rule in get_all_rules(config):
         if severity_rank(rule.severity) >= severity_rank(min_severity):
             linter.register_rule(rule)
+            active_rules.append(rule)
 
     # Run checks
     results = linter.check(paths)
@@ -238,7 +242,7 @@ def _cmd_check(args: argparse.Namespace) -> int:
         return 0
     results = baseline_result
 
-    return _output_results(results, args)
+    return _output_results(results, args, rules=active_rules)
 
 
 def _cmd_rules(_args: argparse.Namespace) -> int:
