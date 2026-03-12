@@ -1,6 +1,7 @@
 """Main linting orchestrator."""
 
 import fnmatch
+from collections.abc import Callable
 from pathlib import Path
 
 from slop_lint.config import Config
@@ -8,6 +9,13 @@ from slop_lint.parsers.markdown import is_markdown_file
 from slop_lint.rules.base import Issue, Rule
 
 __all__ = ["FileDiscovery", "Linter"]
+
+# Registry mapping rule ``applies_to`` tags to file-type predicates.
+# To support a new file type, append a (tag, checker) tuple here.
+_FILE_TYPE_CHECKERS: list[tuple[str, Callable[[Path], bool]]] = [
+    ("markdown", lambda p: is_markdown_file(p.name)),
+    ("python", lambda p: p.suffix == ".py"),
+]
 
 
 # ---------------------------------------------------------------------------
@@ -206,6 +214,6 @@ class Linter:
         applies = rule.applies_to
         if "any" in applies:
             return True
-        if "markdown" in applies and is_markdown_file(path.name):
-            return True
-        return bool("python" in applies and path.suffix == ".py")
+        return any(
+            checker(path) for tag, checker in _FILE_TYPE_CHECKERS if tag in applies
+        )

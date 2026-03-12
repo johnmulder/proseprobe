@@ -1,151 +1,89 @@
-"""Detection rules for bad writing practices."""
+"""Detection rules for bad writing practices.
+
+Rule classes are auto-discovered from the modules listed in ``_RULE_MODULES``.
+To add a new rule, create a ``Rule`` subclass in one of those modules — no
+edits to this file are needed unless the rule's threshold must be wired to
+:class:`~slop_lint.config.ThresholdsConfig` (one line in ``_THRESHOLD_KEYS``).
+"""
+
+from __future__ import annotations
+
+import importlib
+import inspect
+from typing import Any
 
 from slop_lint.config import Config, ThresholdsConfig
 from slop_lint.rules.base import Confidence, Issue, Rule, Severity, severity_from_str
-from slop_lint.rules.code import (
-    AIPlaceholdersRule,
-    CollaborativeCommentsRule,
-    DocstringVocabularyRule,
-    VerboseCommentsRule,
-)
-from slop_lint.rules.grammar import (
-    AssertedSimplicityRule,
-    CopulaAvoidanceRule,
-    ExcessiveHedgingRule,
-    FalseBalanceRule,
-    FalseSuspenseTransitionRule,
-    FalseVulnerabilityRule,
-    FuturistInvitationRule,
-    GapRitualRule,
-    ImpersonalCorporatePassiveRule,
-    NominalizationOverloadRule,
-    ParticipleChainsRule,
-    PassiveVoiceOveruseRule,
-    PatronizingAnalogyRule,
-    PedagogicalVoiceRule,
-)
-from slop_lint.rules.markup import (
-    BrokenReferencesRule,
-    ChatGPTMarkersRule,
-    UTMParametersRule,
-    WrongMarkupRule,
-)
-from slop_lint.rules.struct import (
-    AlignmentRitualRule,
-    AnaphoraAbuseRule,
-    AnecdoteAsEvidenceRule,
-    ChallengeConclusionsRule,
-    CitationNameDroppingRule,
-    ContentDuplicationRule,
-    CorporateEuphemismRule,
-    DramaticCountdownRule,
-    FalseRangesRule,
-    FractalSummaryRule,
-    GerundFragmentLitanyRule,
-    HistoricalAnalogyStackingRule,
-    InlineHeaderListsRule,
-    ListicleInProseRule,
-    NegativeParallelismRule,
-    RhetoricalSelfAnswerRule,
-    RuleOfThreeRule,
-    SignificanceEmphasisRule,
-    SignpostedConclusionRule,
-    SlideDeckFragmentRule,
-    SuperficialAnalysisRule,
-)
-from slop_lint.rules.style import (
-    BoldOveruseRule,
-    ElegantVariationRule,
-    EmDashOveruseRule,
-    EmojiInProseRule,
-    QuoteInconsistencyRule,
-    SentenceLengthRule,
-    ShortPunchyFragmentsRule,
-    TitleCaseHeadingsRule,
-)
-from slop_lint.rules.vocab import (
-    AIVocabularyRule,
-    CollaborativePhrasesRule,
-    GrandioseStakesRule,
-    InventedConceptLabelsRule,
-    KnowledgeCutoffRule,
-    PromotionalLanguageRule,
-    TrendOverclaimRule,
-    WeaselWordsRule,
-)
 
 __all__ = [
-    "AIPlaceholdersRule",
-    # Vocabulary rules (V)
-    "AIVocabularyRule",
-    "AlignmentRitualRule",
-    "AnaphoraAbuseRule",
-    "AnecdoteAsEvidenceRule",
-    "AssertedSimplicityRule",
-    "BoldOveruseRule",
-    "BrokenReferencesRule",
-    "ChallengeConclusionsRule",
-    "ChatGPTMarkersRule",
-    "CitationNameDroppingRule",
-    "CollaborativeCommentsRule",
-    "CollaborativePhrasesRule",
-    # Base classes
     "Confidence",
-    "ContentDuplicationRule",
-    # Grammar rules (G)
-    "CopulaAvoidanceRule",
-    "CorporateEuphemismRule",
-    # Code rules (C)
-    "DocstringVocabularyRule",
-    "DramaticCountdownRule",
-    "ElegantVariationRule",
-    "EmDashOveruseRule",
-    "EmojiInProseRule",
-    "ExcessiveHedgingRule",
-    "FalseBalanceRule",
-    "FalseRangesRule",
-    "FalseSuspenseTransitionRule",
-    "FalseVulnerabilityRule",
-    "FractalSummaryRule",
-    "FuturistInvitationRule",
-    "GapRitualRule",
-    "GerundFragmentLitanyRule",
-    "GrandioseStakesRule",
-    "HistoricalAnalogyStackingRule",
-    "ImpersonalCorporatePassiveRule",
-    "InlineHeaderListsRule",
-    "InventedConceptLabelsRule",
     "Issue",
-    "KnowledgeCutoffRule",
-    "ListicleInProseRule",
-    "NegativeParallelismRule",
-    "NominalizationOverloadRule",
-    "ParticipleChainsRule",
-    "PassiveVoiceOveruseRule",
-    "PatronizingAnalogyRule",
-    "PedagogicalVoiceRule",
-    "PromotionalLanguageRule",
-    "QuoteInconsistencyRule",
-    "RhetoricalSelfAnswerRule",
     "Rule",
-    # Structural rules (S)
-    "RuleOfThreeRule",
-    "SentenceLengthRule",
     "Severity",
-    "ShortPunchyFragmentsRule",
-    "SignificanceEmphasisRule",
-    "SignpostedConclusionRule",
-    "SlideDeckFragmentRule",
-    "SuperficialAnalysisRule",
-    # Style rules (T)
-    "TitleCaseHeadingsRule",
-    "TrendOverclaimRule",
-    "UTMParametersRule",
-    "VerboseCommentsRule",
-    "WeaselWordsRule",
-    # Markup rules (M)
-    "WrongMarkupRule",
+    "get_all_rules",
+    "severity_from_str",
 ]
+
+# Modules containing Rule subclasses.
+# To register rules from a new module, append its dotted path here.
+_RULE_MODULES: tuple[str, ...] = (
+    "slop_lint.rules.vocab",
+    "slop_lint.rules.style",
+    "slop_lint.rules.struct",
+    "slop_lint.rules.grammar",
+    "slop_lint.rules.code",
+    "slop_lint.rules.markup",
+)
+
+# Maps rule ID → ThresholdsConfig field name for rules wired to config.
+# Rules with a ``threshold`` parameter not listed here use their class default.
+_THRESHOLD_KEYS: dict[str, str] = {
+    "S001": "rule_of_three",
+    "S004": "inline_header_lists",
+    "S018": "citation_name_drop",
+    "T002": "bold_overuse",
+    "T003": "em_dash_overuse",
+    "T008": "sentence_length_max",
+    "G011": "nominalization_overload",
+    "G012": "passive_voice_overuse",
+}
+
+
+def _discover_rule_classes() -> list[type[Rule]]:
+    """Auto-discover all Rule subclasses from registered modules."""
+    classes: list[type[Rule]] = []
+    for module_path in _RULE_MODULES:
+        module = importlib.import_module(module_path)
+        for _name, obj in inspect.getmembers(module, inspect.isclass):
+            if (
+                issubclass(obj, Rule)
+                and obj is not Rule
+                and obj.__module__ == module_path
+            ):
+                classes.append(obj)
+    return sorted(classes, key=lambda c: c.id)
+
+
+def _instantiate_rule(
+    cls: type[Rule],
+    thresholds: ThresholdsConfig,
+    vocab_kwargs: dict[str, Any],
+) -> Rule:
+    """Instantiate a rule, injecting config values for recognized parameters."""
+    sig = inspect.signature(cls.__init__)
+    params = sig.parameters
+    kwargs: dict[str, Any] = {}
+
+    if "threshold" in params:
+        key = _THRESHOLD_KEYS.get(cls.id)
+        if key is not None:
+            kwargs["threshold"] = getattr(thresholds, key)
+
+    for name in ("allowed", "additional", "allowed_phrases"):
+        if name in params and name in vocab_kwargs:
+            kwargs[name] = vocab_kwargs[name]
+
+    return cls(**kwargs)
 
 
 def _apply_severity_overrides(
@@ -161,92 +99,22 @@ def _apply_severity_overrides(
 
 
 def get_all_rules(config: Config | None = None) -> list[Rule]:
-    """Get instances of all available rules.
-
-    Returns:
-        List of all rule instances.
-    """
-    allowed: set[str] = set()
-    additional: set[str] = set()
-    allowed_phrases: set[str] = set()
+    """Get instances of all available rules."""
     severity_overrides: dict[str, str] = {}
     thresholds = ThresholdsConfig()
+    vocab_kwargs: dict[str, Any] = {}
+
     if config is not None:
-        allowed = {w.lower() for w in config.vocabulary.allowed}
-        additional = {w.lower() for w in config.vocabulary.additional}
-        allowed_phrases = set(config.vocabulary.allowed_phrases)
+        vocab_kwargs = {
+            "allowed": {w.lower() for w in config.vocabulary.allowed},
+            "additional": {w.lower() for w in config.vocabulary.additional},
+            "allowed_phrases": set(config.vocabulary.allowed_phrases),
+        }
         severity_overrides = config.severity_overrides
         thresholds = config.thresholds
 
-    rules = [
-        # Vocabulary (V001-V008)
-        AIVocabularyRule(
-            allowed=allowed, additional=additional, allowed_phrases=allowed_phrases
-        ),
-        CollaborativePhrasesRule(),
-        KnowledgeCutoffRule(),
-        PromotionalLanguageRule(),
-        WeaselWordsRule(),
-        GrandioseStakesRule(),
-        InventedConceptLabelsRule(),
-        TrendOverclaimRule(),
-        # Structural (S001-S018)
-        RuleOfThreeRule(threshold=thresholds.rule_of_three),
-        NegativeParallelismRule(),
-        ChallengeConclusionsRule(),
-        InlineHeaderListsRule(threshold=thresholds.inline_header_lists),
-        SignificanceEmphasisRule(),
-        SuperficialAnalysisRule(),
-        FalseRangesRule(),
-        DramaticCountdownRule(),
-        RhetoricalSelfAnswerRule(),
-        AnaphoraAbuseRule(),
-        GerundFragmentLitanyRule(),
-        ListicleInProseRule(),
-        HistoricalAnalogyStackingRule(),
-        SignpostedConclusionRule(),
-        FractalSummaryRule(),
-        ContentDuplicationRule(),
-        AnecdoteAsEvidenceRule(),
-        CitationNameDroppingRule(threshold=thresholds.citation_name_drop),
-        CorporateEuphemismRule(),
-        AlignmentRitualRule(),
-        SlideDeckFragmentRule(),
-        # Style (T001-T008)
-        TitleCaseHeadingsRule(),
-        BoldOveruseRule(threshold=thresholds.bold_overuse),
-        EmDashOveruseRule(threshold=thresholds.em_dash_overuse),
-        QuoteInconsistencyRule(),
-        EmojiInProseRule(),
-        ElegantVariationRule(),
-        ShortPunchyFragmentsRule(),
-        SentenceLengthRule(threshold=thresholds.sentence_length_max),
-        # Grammar (G001-G013)
-        CopulaAvoidanceRule(),
-        ExcessiveHedgingRule(),
-        ParticipleChainsRule(),
-        FalseSuspenseTransitionRule(),
-        PatronizingAnalogyRule(),
-        FuturistInvitationRule(),
-        FalseVulnerabilityRule(),
-        AssertedSimplicityRule(),
-        PedagogicalVoiceRule(),
-        FalseBalanceRule(),
-        NominalizationOverloadRule(threshold=thresholds.nominalization_overload),
-        PassiveVoiceOveruseRule(threshold=thresholds.passive_voice_overuse),
-        GapRitualRule(),
-        ImpersonalCorporatePassiveRule(),
-        # Code (C001-C004)
-        DocstringVocabularyRule(allowed=allowed, additional=additional),
-        VerboseCommentsRule(),
-        CollaborativeCommentsRule(),
-        AIPlaceholdersRule(),
-        # Markup (M001-M004)
-        WrongMarkupRule(),
-        ChatGPTMarkersRule(),
-        UTMParametersRule(),
-        BrokenReferencesRule(),
-    ]
+    rule_classes = _discover_rule_classes()
+    rules = [_instantiate_rule(cls, thresholds, vocab_kwargs) for cls in rule_classes]
 
     if severity_overrides:
         rules = _apply_severity_overrides(rules, severity_overrides)

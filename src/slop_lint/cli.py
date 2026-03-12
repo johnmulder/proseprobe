@@ -363,11 +363,6 @@ def _cmd_watch(args: argparse.Namespace) -> int:
                     + f" Checking {len(changed_files)} changed file(s)..."
                 )
 
-                _SEVERITY_COLOR = {
-                    Severity.ERROR: "red",
-                    Severity.WARNING: "yellow",
-                    Severity.INFO: "blue",
-                }
                 total_issues = 0
                 for file in changed_files:
                     try:

@@ -124,15 +124,6 @@ _SARIF_RANK = {
     Confidence.LOW: 10.0,
 }
 
-_RULE_CATEGORY = {
-    "V": "Vocabulary",
-    "S": "Structure",
-    "T": "Style",
-    "G": "Grammar",
-    "C": "Code",
-    "M": "Markup",
-}
-
 
 def _format_sarif(results: _Results) -> str:
     """Format results as SARIF 2.1.0."""
@@ -148,7 +139,7 @@ def _format_sarif(results: _Results) -> str:
                 "level": _SARIF_LEVEL.get(rule.severity, "warning"),
             },
             "properties": {
-                "category": _RULE_CATEGORY.get(rule.id[0], "Other"),
+                "category": rule.category,
             },
         }
         for rule in get_all_rules()

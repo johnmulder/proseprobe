@@ -1,6 +1,7 @@
 """Abstract base rule and common types."""
 
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum, StrEnum
 from typing import ClassVar
@@ -91,6 +92,18 @@ class Rule(ABC):
     applies_to: ClassVar[set[str]] = {"any"}  # "markdown", "python", "any"
     content_scope: str = "raw"  # "raw", "prose", "non_code"
 
+    # Maps the last segment of a rule module path to a human-readable category.
+    _MODULE_CATEGORIES: ClassVar[dict[str, str]] = {
+        "vocab": "Vocabulary",
+        "struct": "Structure",
+    }
+
+    @property
+    def category(self) -> str:
+        """Derive category name from the owning module."""
+        mod_name = type(self).__module__.rsplit(".", 1)[-1]
+        return self._MODULE_CATEGORIES.get(mod_name, mod_name.title())
+
     @abstractmethod
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content and return issues.
@@ -104,10 +117,18 @@ class Rule(ABC):
         """
         ...
 
+    # Registry mapping content_scope values to line-extraction functions.
+    # To add a new scope, append an entry here.
+    _SCOPE_EXTRACTORS: ClassVar[
+        dict[str, Callable[[str, str], list[tuple[int, str]]]]
+    ] = {
+        "prose": iter_prose_lines,
+        "non_code": iter_non_code_lines,
+    }
+
     def iter_lines(self, content: str, filename: str) -> list[tuple[int, str]]:
         """Return line-numbered content based on the rule's scope."""
-        if self.content_scope == "prose":
-            return iter_prose_lines(content, filename)
-        if self.content_scope == "non_code":
-            return iter_non_code_lines(content, filename)
+        extractor = self._SCOPE_EXTRACTORS.get(self.content_scope)
+        if extractor is not None:
+            return extractor(content, filename)
         return list(enumerate(content.split("\n"), start=1))
