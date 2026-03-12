@@ -40,6 +40,7 @@ class RuleOfThreeRule(Rule):
         Args:
             threshold: Flag if more than N triads in content.
         """
+        super().__init__()
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -146,6 +147,7 @@ class InlineHeaderListsRule(Rule):
         Args:
             threshold: Flag if >= N consecutive inline headers.
         """
+        super().__init__()
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -387,6 +389,7 @@ class AnaphoraAbuseRule(Rule):
     content_scope = "prose"
 
     def __init__(self, threshold: int = 3) -> None:
+        super().__init__()
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -459,6 +462,7 @@ class GerundFragmentLitanyRule(Rule):
     _gerund_fragment = re.compile(r"^[A-Z][a-z]*ing\b[^.!?]{0,60}[.!?]$")
 
     def __init__(self, threshold: int = 3) -> None:
+        super().__init__()
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -608,6 +612,7 @@ class HistoricalAnalogyStackingRule(Rule):
     }
 
     def __init__(self, threshold: int = 3) -> None:
+        super().__init__()
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:

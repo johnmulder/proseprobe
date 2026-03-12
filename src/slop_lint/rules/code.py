@@ -29,6 +29,7 @@ class DocstringVocabularyRule(Rule):
         allowed: set[str] | None = None,
         additional: set[str] | None = None,
     ) -> None:
+        super().__init__()
         self._allowed = {w.lower() for w in (allowed or set())}
         extra_words = {w.lower() for w in (additional or set()) if isinstance(w, str)}
 

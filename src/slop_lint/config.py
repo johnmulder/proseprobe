@@ -46,6 +46,16 @@ class ThresholdsConfig:
     sentence_length_max: int = 40
     # S018: CitationNameDroppingRule - flag if >= N consecutive citations
     citation_name_drop: int = 3
+    # S010: AnaphoraAbuseRule - flag if >= N repeated sentence openings
+    anaphora_abuse: int = 3
+    # S011: GerundFragmentLitanyRule - flag if >= N consecutive gerund fragments
+    gerund_fragment_litany: int = 3
+    # S013: HistoricalAnalogyStackingRule - flag if >= N company name-drops
+    historical_analogy_stacking: int = 3
+    # T007: ShortPunchyFragmentsRule - flag if >= N consecutive short paragraphs
+    short_punchy_fragments: int = 3
+    # V007: InventedConceptLabelsRule - flag if >= N pseudo-analytical labels
+    invented_concept_labels: int = 2
 
 
 @dataclass

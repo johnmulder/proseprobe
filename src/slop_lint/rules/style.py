@@ -67,6 +67,7 @@ class BoldOveruseRule(Rule):
         Args:
             threshold: Max bold phrases per paragraph.
         """
+        super().__init__()
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -127,6 +128,7 @@ class EmDashOveruseRule(Rule):
         Args:
             threshold: Max em dashes per document.
         """
+        super().__init__()
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -283,27 +285,33 @@ class ShortPunchyFragmentsRule(Rule):
     _MAX_WORDS = 5
 
     def __init__(self, threshold: int = 3) -> None:
+        super().__init__()
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
         issues: list[Issue] = []
 
-        # Group lines into paragraphs (separated by blank lines)
+        # Group prose lines into paragraphs.
+        # iter_lines() respects content_scope="prose", so code blocks and
+        # headings are already stripped.  A gap in line numbers (or a blank
+        # returned line) signals a paragraph break.
         paragraphs: list[tuple[int, str]] = []
         current_lines: list[str] = []
         start_line = 0
+        prev_line_num = 0
 
-        all_lines = content.split("\n")
-        for i, raw_line in enumerate(all_lines, start=1):
-            if not raw_line.strip():
-                if current_lines:
-                    paragraphs.append((start_line, " ".join(current_lines)))
-                    current_lines = []
+        for line_num, line_text in self.iter_lines(content, filename):
+            stripped = line_text.strip()
+            gap = line_num - prev_line_num > 1 and prev_line_num > 0
+            if (not stripped or gap) and current_lines:
+                paragraphs.append((start_line, " ".join(current_lines)))
+                current_lines = []
                 start_line = 0
-            else:
+            if stripped:
                 if not current_lines:
-                    start_line = i
-                current_lines.append(raw_line.strip())
+                    start_line = line_num
+                current_lines.append(stripped)
+            prev_line_num = line_num
 
         if current_lines:
             paragraphs.append((start_line, " ".join(current_lines)))

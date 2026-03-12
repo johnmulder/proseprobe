@@ -75,6 +75,7 @@ class AIVocabularyRule(Rule):
         additional: set[str] | None = None,
         allowed_phrases: set[str] | None = None,
     ) -> None:
+        super().__init__()
         self._allowed = {w.lower() for w in (allowed or set())}
         self._additional = {w.lower() for w in (additional or set())} - self._allowed
         self._vocabulary = AI_VOCABULARY | self._additional
@@ -334,6 +335,7 @@ class InventedConceptLabelsRule(Rule):
     ]
 
     def __init__(self, threshold: int = 2) -> None:
+        super().__init__()
         self._threshold = threshold
         suffix_group = "|".join(self._suffixes)
         self._pattern = re.compile(rf"\b(\w+)\s+({suffix_group})\b", re.IGNORECASE)

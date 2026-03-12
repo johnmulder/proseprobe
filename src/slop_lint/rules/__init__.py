@@ -40,12 +40,17 @@ _RULE_MODULES: tuple[str, ...] = (
 _THRESHOLD_KEYS: dict[str, str] = {
     "S001": "rule_of_three",
     "S004": "inline_header_lists",
+    "S010": "anaphora_abuse",
+    "S011": "gerund_fragment_litany",
+    "S013": "historical_analogy_stacking",
     "S018": "citation_name_drop",
     "T002": "bold_overuse",
     "T003": "em_dash_overuse",
+    "T007": "short_punchy_fragments",
     "T008": "sentence_length_max",
     "G011": "nominalization_overload",
     "G012": "passive_voice_overuse",
+    "V007": "invented_concept_labels",
 }
 
 
