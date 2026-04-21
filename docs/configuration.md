@@ -8,9 +8,14 @@ Config files are discovered in this order:
 
 1. `--config` CLI argument
 2. `.slop-lint.toml` in current directory
-3. `pyproject.toml` with `[tool.slop-lint]` section
+3. `pyproject.toml` in current directory with `[tool.slop-lint]` section
 4. `.slop-lint.toml` in parent directories (up to git root)
 5. `~/.config/slop-lint/config.toml`
+
+Directory scanning also respects `.gitignore` patterns, including nested
+`.gitignore` files in subdirectories. Patterns are applied in parent-to-child
+order, and negation (`!pattern`) can re-include files that were ignored by
+earlier matches.
 
 ## Configuration Options
 
@@ -19,7 +24,7 @@ Config files are discovered in this order:
 ```toml
 [tool.slop-lint]
 # Glob patterns for files to include
-include = ["*.md", "*.py"]
+include = ["*.md", "*.mdx", "*.markdown", "*.py"]
 
 # Glob patterns for files to exclude
 exclude = ["venv/**", "node_modules/**", ".git/**"]
@@ -190,8 +195,8 @@ slop-lint check --select T001 .
 ### Text (default)
 
 ```
-docs/guide.md:15:5: V001 Overused word: 'delve'
-docs/guide.md:23:1: S001 Rule of three pattern detected
+docs/guide.md:15:5: V001 [warning] Overused word: 'delve'
+docs/guide.md:23:1: S001 [warning] Rule of three pattern detected
 Found 2 issue(s)
 ```
 

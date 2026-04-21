@@ -1,4 +1,4 @@
-.PHONY: install dev test lint typecheck format clean build all doc-audit spec-verify coverage-analyze test-tropes test-tropes-integration
+.PHONY: install dev test lint typecheck format clean build all doc-audit spec-verify coverage-analyze test-tropes test-tropes-integration test-tdd test-spec startup-check perf-check memory-check nfr-check
 
 VENV ?= .venv
 VENV_BIN = $(VENV)/bin
@@ -8,6 +8,9 @@ PIP = $(VENV_BIN)/pip
 PYTEST = $(VENV_BIN)/pytest
 RUFF = $(VENV_BIN)/ruff
 MYPY = $(VENV_BIN)/mypy
+TIME = /usr/bin/time
+
+PYTEST_ARGS ?= tests/
 
 ifeq ($(wildcard $(PYTHON)),)
 PYTHON = python
@@ -27,7 +30,15 @@ dev:
 
 # Run tests
 test:
-	$(PYTEST) tests/ -v
+	$(PYTEST) $(PYTEST_ARGS) -v
+
+# Fast TDD loop: stop on first failure with concise output
+test-tdd:
+	$(PYTEST) $(PYTEST_ARGS) -x -q
+
+# SPEC-alignment regression tests
+test-spec:
+	$(PYTEST) tests/test_cli.py tests/test_config.py tests/test_linter.py -q
 
 # Run tests with coverage
 test-cov:
@@ -126,3 +137,19 @@ coverage-analyze:
 	@$(PYTEST) tests/ --cov=src/slop_lint --cov-report=term-missing --cov-fail-under=90 -q || \
 		(echo "WARNING: Coverage below 90% threshold. Run 'make test-cov' for details." && exit 1)
 	@echo "✓ Coverage meets 90% threshold"
+
+# NFR probes (best-effort checks; hardware-dependent)
+startup-check:
+	@echo "Measuring startup latency (single run, hardware-dependent)..."
+	@$(TIME) -p $(PYTHON) -m slop_lint version >/dev/null
+
+perf-check:
+	@echo "Running throughput benchmark..."
+	@$(PYTHON) -m benchmarks.bench_rules
+
+memory-check:
+	@echo "Running memory probe via benchmark harness..."
+	@$(PYTHON) -m benchmarks.bench_rules --memory 2>/dev/null || \
+		echo "Memory probe flag not supported by benchmark harness yet"
+
+nfr-check: coverage-analyze startup-check perf-check memory-check

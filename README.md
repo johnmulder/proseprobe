@@ -12,11 +12,12 @@ Overused vocabulary, structural clichés, promotional language, and sloppy marku
 ## Features
 
 - 🔍 **59 detection rules** across 6 categories
-- 📝 Scans Markdown (`.md`, `.mdx`) and Python (`.py`) files
+- 📝 Scans Markdown (`.md`, `.mdx`, `.markdown`) and Python (`.py`) files
 - 🎯 **Confidence levels** (high/medium/low) to reduce noise
 - ⚙️ Configurable via `.slop-lint.toml`
 - 📊 Multiple output formats (text, JSON, SARIF)
 - 🚀 Fast, parallel file processing
+- 🧭 Directory discovery respects `.gitignore` patterns
 
 ## Installation
 
@@ -76,9 +77,9 @@ slop-lint explain V001
 ### Example Detections
 
 ```
-docs/guide.md:15:10: V001 Overused word: 'delve' → consider 'explore'
-docs/guide.md:23:1: S001 Rule of three pattern detected
-src/main.py:45:5: C001 Overused word in docstring: 'crucial'
+docs/guide.md:15:10: V001 [warning] Overused word: 'delve' → consider 'explore'
+docs/guide.md:23:1: S001 [warning] Rule of three pattern detected
+src/main.py:45:5: C001 [warning] Overused word in docstring: 'crucial'
 ```
 
 ## Configuration
@@ -87,7 +88,7 @@ Create a `.slop-lint.toml` in your project root:
 
 ```toml
 [tool.slop-lint]
-include = ["*.md", "*.py"]
+include = ["*.md", "*.mdx", "*.markdown", "*.py"]
 exclude = ["venv/**", "node_modules/**"]
 
 # Disable specific rules
