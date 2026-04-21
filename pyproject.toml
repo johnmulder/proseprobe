@@ -50,13 +50,6 @@ dev = [
 [project.scripts]
 slop-lint = "slop_lint.cli:main"
 
-[project.urls]
-Homepage = "https://github.com/slop-lint/slop-lint"
-Documentation = "https://github.com/slop-lint/slop-lint#readme"
-Repository = "https://github.com/slop-lint/slop-lint"
-Issues = "https://github.com/slop-lint/slop-lint/issues"
-Changelog = "https://github.com/slop-lint/slop-lint/blob/main/CHANGELOG.md"
-
 [tool.hatch.build.targets.wheel]
 packages = ["src/slop_lint"]
 
