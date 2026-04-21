@@ -55,6 +55,16 @@ class TestCheckCommand:
         assert "V001" in result.stdout
         assert "delves" in result.stdout
 
+    def test_check_output_includes_explicit_severity(self, tmp_path: Path) -> None:
+        """Test default text output includes severity labels."""
+        test_file = tmp_path / "test.md"
+        test_file.write_text("This article delves into the topic.")
+
+        result = run_cli("check", str(test_file))
+
+        assert result.exit_code == 1
+        assert "warning" in result.stdout.lower()
+
     def test_check_multiple_files(self, tmp_path: Path) -> None:
         """Test checking multiple files."""
         file1 = tmp_path / "file1.md"

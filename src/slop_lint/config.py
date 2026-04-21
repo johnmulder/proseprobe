@@ -76,7 +76,9 @@ class VocabularyConfig:
 class Config:
     """Humanize configuration."""
 
-    include: list[str] = field(default_factory=lambda: ["*.md", "*.py"])
+    include: list[str] = field(
+        default_factory=lambda: ["*.md", "*.mdx", "*.markdown", "*.py"]
+    )
     exclude: list[str] = field(
         default_factory=lambda: [
             "venv/**",
@@ -107,25 +109,32 @@ def find_config_file(start_dir: Path | None = None) -> Path | None:
     if start_dir is None:
         start_dir = Path.cwd()
 
-    # Check current and parent directories
     current = start_dir.resolve()
-    while current != current.parent:
-        slop_lint_config = current / ".slop-lint.toml"
-        if slop_lint_config.exists():
-            return slop_lint_config
 
-        pyproject = current / "pyproject.toml"
-        if pyproject.exists():
-            with open(pyproject, "rb") as f:
-                data = tomllib.load(f)
-                if "tool" in data and "slop-lint" in data["tool"]:
-                    return pyproject
+    # 1) Current directory .slop-lint.toml
+    slop_lint_config = current / ".slop-lint.toml"
+    if slop_lint_config.exists():
+        return slop_lint_config
 
-        # Stop at git root
-        if (current / ".git").exists():
+    # 2) Current directory pyproject.toml [tool.slop-lint]
+    pyproject = current / "pyproject.toml"
+    if pyproject.exists():
+        with open(pyproject, "rb") as f:
+            data = tomllib.load(f)
+            if "tool" in data and "slop-lint" in data["tool"]:
+                return pyproject
+
+    # 3) Parent directories .slop-lint.toml (up to git root)
+    parent = current.parent
+    while parent != parent.parent:
+        parent_config = parent / ".slop-lint.toml"
+        if parent_config.exists():
+            return parent_config
+
+        if (parent / ".git").exists():
             break
 
-        current = current.parent
+        parent = parent.parent
 
     # Check user config
     user_config = Path.home() / ".config" / "slop-lint" / "config.toml"
@@ -236,7 +245,7 @@ def _parse_config(data: dict[str, Any]) -> Config:
         severity_overrides = {}
 
     return Config(
-        include=effective.get("include", ["*.md", "*.py"]),
+        include=effective.get("include", ["*.md", "*.mdx", "*.markdown", "*.py"]),
         exclude=effective.get(
             "exclude", ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
         ),

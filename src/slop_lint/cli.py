@@ -165,6 +165,7 @@ def _output_results(
                 conf_tag = ""
                 is_bold = False
                 is_dim = False
+                severity_text = issue.severity.value
                 if issue.confidence == Confidence.LOW:
                     conf_tag = " [low]"
                     is_dim = True
@@ -175,7 +176,7 @@ def _output_results(
                 line_text = (
                     f"{style(str(file_path), bold=True)}"
                     f":{issue.line}:{issue.column}: "
-                    f"{rule_part} {issue.message}"
+                    f"{rule_part} [{severity_text}] {issue.message}"
                 )
                 if is_dim:
                     line_text = style(line_text, dim=True)
@@ -267,7 +268,7 @@ def _cmd_init(_args: argparse.Namespace) -> int:
 # See: https://github.com/slop-lint/slop-lint
 
 [tool.slop-lint]
-# include = ["*.md", "*.py"]
+# include = ["*.md", "*.mdx", "*.markdown", "*.py"]
 # exclude = ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
 # select = ["V", "S", "T", "G", "C", "M"]
 # ignore = ["T003"]

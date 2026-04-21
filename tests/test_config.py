@@ -79,6 +79,26 @@ class TestFindConfigFile:
 
         assert result == config_file
 
+    def test_does_not_use_parent_pyproject(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Test that parent pyproject.toml is not used for auto-discovery."""
+        # Avoid accidentally picking up a real user-level config file.
+        home = tmp_path / "home"
+        home.mkdir()
+        monkeypatch.setenv("HOME", str(home))
+
+        pyproject = tmp_path / "pyproject.toml"
+        pyproject.write_text("[tool.slop-lint]\nselect = ['V001']\n")
+        (tmp_path / ".git").mkdir()
+
+        subdir = tmp_path / "subdir"
+        subdir.mkdir()
+
+        result = find_config_file(subdir)
+
+        assert result is None
+
 
 class TestLoadConfig:
     """Tests for load_config function."""
@@ -202,6 +222,9 @@ class TestConfig:
         assert config.ignore == []
         assert config.severity == "warning"
         assert ".venv/**" in config.exclude
+        assert "*.md" in config.include
+        assert "*.mdx" in config.include
+        assert "*.markdown" in config.include
 
     def test_custom_values(self) -> None:
         """Test custom configuration values."""
