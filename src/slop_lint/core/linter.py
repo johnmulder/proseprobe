@@ -1,7 +1,10 @@
 """Main linting orchestrator."""
 
 import fnmatch
+import os
 from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
 from pathlib import Path
 
 from slop_lint.config import Config
@@ -32,6 +35,7 @@ class FileDiscovery:
     ) -> None:
         self._include = include
         self._exclude = exclude
+        self._gitignore_patterns: dict[Path, list[_GitignorePattern]] = {}
 
     def discover(self, paths: list[Path]) -> list[Path]:
         """Discover files to lint from paths.
@@ -43,10 +47,12 @@ class FileDiscovery:
             List of files matching include/exclude patterns.
         """
         files: list[Path] = []
+        explicit_files: set[Path] = set()
         roots: list[Path] = []
         for path in paths:
             if path.is_file():
                 files.append(path)
+                explicit_files.add(path)
                 roots.append(path.parent)
             elif path.is_dir():
                 roots.append(path)
@@ -60,6 +66,8 @@ class FileDiscovery:
         filtered: list[Path] = []
         for file in files:
             if self._is_excluded(file, roots):
+                continue
+            if file not in explicit_files and self._is_gitignored(file, roots):
                 continue
             filtered.append(file)
 
@@ -102,6 +110,152 @@ class FileDiscovery:
             if not pattern.startswith("**/") and candidate.match(f"**/{pattern}"):
                 return True
         return False
+
+    def _load_gitignore_patterns(self, directory: Path) -> list["_GitignorePattern"]:
+        """Load parsed .gitignore patterns from a directory."""
+        if directory in self._gitignore_patterns:
+            return self._gitignore_patterns[directory]
+
+        ignore_file = directory / ".gitignore"
+        if not ignore_file.exists():
+            self._gitignore_patterns[directory] = []
+            return []
+
+        parsed: list[_GitignorePattern] = []
+        for raw_line in ignore_file.read_text(
+            encoding="utf-8", errors="ignore"
+        ).splitlines():
+            pattern = raw_line.strip()
+            if not pattern:
+                continue
+
+            if pattern.startswith("\\#"):
+                pattern = pattern[1:]
+            elif pattern.startswith("#"):
+                continue
+
+            negated = False
+            if pattern.startswith("\\!"):
+                pattern = pattern[1:]
+            elif pattern.startswith("!"):
+                negated = True
+                pattern = pattern[1:]
+
+            anchored = pattern.startswith("/")
+            if anchored:
+                pattern = pattern.lstrip("/")
+
+            directory_only = pattern.endswith("/")
+            if directory_only:
+                pattern = pattern.rstrip("/")
+
+            if not pattern:
+                continue
+
+            parsed.append(
+                _GitignorePattern(
+                    pattern=pattern,
+                    negated=negated,
+                    anchored=anchored,
+                    directory_only=directory_only,
+                    has_slash="/" in pattern,
+                )
+            )
+
+        self._gitignore_patterns[directory] = parsed
+        return parsed
+
+    @staticmethod
+    def _gitignore_pattern_matches(
+        rel_path: Path,
+        entry: "_GitignorePattern",
+    ) -> bool:
+        """Check whether a parsed .gitignore pattern matches a relative path."""
+        path_str = rel_path.as_posix()
+
+        if entry.directory_only:
+            if entry.anchored:
+                return path_str == entry.pattern or path_str.startswith(
+                    f"{entry.pattern}/"
+                )
+
+            if entry.has_slash:
+                return (
+                    path_str == entry.pattern
+                    or path_str.startswith(f"{entry.pattern}/")
+                    or fnmatch.fnmatch(path_str, f"**/{entry.pattern}")
+                    or fnmatch.fnmatch(path_str, f"**/{entry.pattern}/**")
+                )
+
+            return entry.pattern in rel_path.parts
+
+        if entry.anchored:
+            return fnmatch.fnmatch(path_str, entry.pattern)
+
+        if entry.has_slash:
+            return fnmatch.fnmatch(path_str, entry.pattern) or fnmatch.fnmatch(
+                path_str, f"**/{entry.pattern}"
+            )
+
+        return (
+            fnmatch.fnmatch(rel_path.name, entry.pattern)
+            or fnmatch.fnmatch(path_str, entry.pattern)
+            or fnmatch.fnmatch(path_str, f"**/{entry.pattern}")
+        )
+
+    @staticmethod
+    def _iter_scope_directories(root: Path, file: Path) -> list[Path]:
+        """Return root-to-leaf directories whose .gitignore can affect the file."""
+        directories: list[Path] = []
+        current = file.parent
+        while True:
+            directories.append(current)
+            if current == root:
+                break
+            if root not in current.parents:
+                return []
+            current = current.parent
+        directories.reverse()
+        return directories
+
+    def _is_gitignored(self, file: Path, roots: list[Path]) -> bool:
+        """Check if a file is ignored by a root .gitignore."""
+        for root in roots:
+            try:
+                file.relative_to(root)
+            except ValueError:
+                continue
+
+            scope_dirs = self._iter_scope_directories(root, file)
+            if not scope_dirs:
+                continue
+
+            ignored = False
+            for scope_dir in scope_dirs:
+                patterns = self._load_gitignore_patterns(scope_dir)
+                if not patterns:
+                    continue
+
+                rel_path = file.relative_to(scope_dir)
+                for entry in patterns:
+                    if self._gitignore_pattern_matches(rel_path, entry):
+                        ignored = not entry.negated
+
+            if ignored:
+                return True
+
+        return False
+
+
+@dataclass(frozen=True)
+class _GitignorePattern:
+    """Parsed .gitignore pattern metadata for matching behavior."""
+
+    pattern: str
+    negated: bool
+    anchored: bool
+    directory_only: bool
+    has_slash: bool
 
 
 # ---------------------------------------------------------------------------
@@ -169,14 +323,24 @@ class Linter:
             Mapping of file paths to issues.
         """
         files = self.discover_files(paths)
-        results: dict[Path, list[Issue]] = {}
+        if not files:
+            return {}
 
-        for file in files:
-            issues = self.check_file(file)
-            if issues:
-                results[file] = issues
+        worker_count = min(32, (os.cpu_count() or 1) + 4)
 
-        return results
+        file_results: list[tuple[Path, list[Issue]]]
+        if len(files) > 1 and worker_count > 1:
+            with ThreadPoolExecutor(max_workers=min(worker_count, len(files))) as pool:
+                file_results = list(pool.map(self._check_file_with_path, files))
+        else:
+            file_results = [self._check_file_with_path(file) for file in files]
+
+        file_results.sort(key=lambda item: str(item[0]))
+        return {path: issues for path, issues in file_results if issues}
+
+    def _check_file_with_path(self, path: Path) -> tuple[Path, list[Issue]]:
+        """Return a file path paired with lint issues for executor mapping."""
+        return (path, self.check_file(path))
 
     def _rule_enabled(self, rule: Rule, path: Path) -> bool:
         """Check if a rule is enabled for a file.

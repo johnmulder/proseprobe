@@ -51,6 +51,23 @@ class TestDiscoverFiles:
 
         assert len(files) >= 2
 
+    def test_discover_directory_includes_mdx_and_markdown(self, tmp_path: Path) -> None:
+        """Test discovering .mdx and .markdown files with default config."""
+        md_file = tmp_path / "doc.md"
+        mdx_file = tmp_path / "page.mdx"
+        markdown_file = tmp_path / "notes.markdown"
+        md_file.write_text("content")
+        mdx_file.write_text("content")
+        markdown_file.write_text("content")
+
+        config = Config()
+        linter = Linter(config)
+        files = set(linter.discover_files([tmp_path]))
+
+        assert md_file in files
+        assert mdx_file in files
+        assert markdown_file in files
+
     def test_discover_nested_directory(self, tmp_path: Path) -> None:
         """Test discovering files in nested directories."""
         subdir = tmp_path / "subdir"
@@ -107,6 +124,87 @@ class TestDiscoverFiles:
 
         assert len(files) == 1
         assert all("node_modules" not in str(f) for f in files)
+
+    def test_discover_respects_gitignore(self, tmp_path: Path) -> None:
+        """Test that discovery excludes files matched by .gitignore."""
+        (tmp_path / ".gitignore").write_text("ignored.md\n")
+        ignored = tmp_path / "ignored.md"
+        kept = tmp_path / "kept.md"
+        ignored.write_text("content")
+        kept.write_text("content")
+
+        config = Config()
+        linter = Linter(config)
+        files = set(linter.discover_files([tmp_path]))
+
+        assert kept in files
+        assert ignored not in files
+
+    def test_discover_explicit_file_overrides_gitignore(self, tmp_path: Path) -> None:
+        """Test explicit file paths are linted even when gitignored."""
+        (tmp_path / ".gitignore").write_text("ignored.md\n")
+        ignored = tmp_path / "ignored.md"
+        ignored.write_text("content")
+
+        config = Config()
+        linter = Linter(config)
+        files = linter.discover_files([ignored])
+
+        assert files == [ignored]
+
+    def test_discover_respects_nested_gitignore(self, tmp_path: Path) -> None:
+        """Test nested .gitignore files are applied for subdirectories."""
+        docs = tmp_path / "docs"
+        docs.mkdir()
+        (docs / ".gitignore").write_text("*.md\n")
+
+        ignored = docs / "ignored.md"
+        kept = tmp_path / "root.md"
+        ignored.write_text("content")
+        kept.write_text("content")
+
+        config = Config()
+        linter = Linter(config)
+        files = set(linter.discover_files([tmp_path]))
+
+        assert kept in files
+        assert ignored not in files
+
+    def test_discover_gitignore_negation_reincludes_file(self, tmp_path: Path) -> None:
+        """Test gitignore negation patterns re-include matching files."""
+        (tmp_path / ".gitignore").write_text("*.md\n!keep.md\n")
+        ignored = tmp_path / "ignored.md"
+        kept = tmp_path / "keep.md"
+        ignored.write_text("content")
+        kept.write_text("content")
+
+        config = Config()
+        linter = Linter(config)
+        files = set(linter.discover_files([tmp_path]))
+
+        assert kept in files
+        assert ignored not in files
+
+    def test_discover_nested_negation_overrides_parent_ignore(
+        self, tmp_path: Path
+    ) -> None:
+        """Test child .gitignore can re-include a file ignored by parent patterns."""
+        (tmp_path / ".gitignore").write_text("*.md\n")
+        docs = tmp_path / "docs"
+        docs.mkdir()
+        (docs / ".gitignore").write_text("!keep.md\n")
+
+        keep = docs / "keep.md"
+        drop = docs / "drop.md"
+        keep.write_text("content")
+        drop.write_text("content")
+
+        config = Config()
+        linter = Linter(config)
+        files = set(linter.discover_files([tmp_path]))
+
+        assert keep in files
+        assert drop not in files
 
 
 class TestPerFileIgnores:
@@ -222,3 +320,54 @@ class TestCheck:
 
         assert isinstance(results, dict)
         assert len(results) >= 1
+
+    def test_check_returns_deterministic_key_order(self, tmp_path: Path) -> None:
+        """Test that check results are ordered deterministically by path."""
+        file_a = tmp_path / "a.md"
+        file_b = tmp_path / "b.md"
+        file_c = tmp_path / "c.md"
+        for f in (file_a, file_b, file_c):
+            f.write_text("This delves into topics.")
+
+        config = Config()
+        linter = Linter(config)
+        linter.register_rule(AIVocabularyRule())
+
+        linter.discover_files = lambda _paths: [file_b, file_c, file_a]  # type: ignore[method-assign]
+        results = linter.check([tmp_path])
+
+        assert list(results.keys()) == [file_a, file_b, file_c]
+
+    def test_check_uses_parallel_executor_for_multiple_files(
+        self,
+        tmp_path: Path,
+        monkeypatch: object,
+    ) -> None:
+        """Test check uses ThreadPoolExecutor path for multiple files."""
+        for idx in range(3):
+            (tmp_path / f"f{idx}.md").write_text("This delves into topics.")
+
+        config = Config()
+        linter = Linter(config)
+        linter.register_rule(AIVocabularyRule())
+
+        called = {"value": False}
+
+        class FakeExecutor:
+            def __init__(self, max_workers: int) -> None:
+                self.max_workers = max_workers
+
+            def __enter__(self) -> "FakeExecutor":
+                called["value"] = True
+                return self
+
+            def __exit__(self, *_args: object) -> None:
+                return None
+
+            def map(self, fn: object, iterable: list[Path]) -> list[object]:
+                return [fn(item) for item in iterable]  # type: ignore[misc,operator]
+
+        monkeypatch.setattr("slop_lint.core.linter.ThreadPoolExecutor", FakeExecutor)
+        linter.check([tmp_path])
+
+        assert called["value"]
