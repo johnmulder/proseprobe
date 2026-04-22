@@ -8,6 +8,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- SPEC-alignment delivery plan (`PLAN.md`) with phased implementation and validation checklist.
+- New Makefile targets for TDD and validation workflows:
+  - `test-tdd` (fast red/green loop)
+  - `test-spec` (spec-focused regression subset)
+  - `startup-check`, `perf-check`, `memory-check`, `nfr-check` (NFR probes)
+
+### Changed
+- Closed key SPEC gaps across discovery, output, and execution behavior:
+  - FR-01: default discovery now includes `.mdx` and `.markdown`.
+  - FR-03: default text output now includes explicit severity labels.
+  - FR-07: directory discovery now respects `.gitignore`, including nested files
+    and negation precedence (`!pattern`).
+  - FR-08: file checking now uses parallel execution with deterministic
+    result ordering.
+- Config auto-discovery order now aligns with documented behavior:
+  1. current `.slop-lint.toml`
+  2. current `pyproject.toml` `[tool.slop-lint]`
+  3. parent `.slop-lint.toml` (up to git root)
+  4. user config
+- NFR validation workflow now includes reproducible coverage/startup/throughput
+  probes via `make nfr-check`.
+- Documentation updated for new defaults and behavior:
+  - Markdown extension coverage defaults
+  - Severity tags in text output
+  - `.gitignore` semantics and precedence
+
+### Added
 - **Phase 2: Low-Quality Academic Writing Tropes** — 5 new rules, 1 enhancement, vocabulary expansions:
   - G011 (nominalization overload: "the implementation of the analysis")
   - G012 (passive voice overuse: "it is suggested that", "it has been shown that")
