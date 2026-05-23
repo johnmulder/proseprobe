@@ -510,3 +510,39 @@ class TestCliValidation:
         assert "Could not read file" in result.stderr
         assert str(test_file) in result.stderr
         assert "Traceback" not in result.stderr
+
+
+class TestCliExitSemantics:
+    """Tests for exit-code and quiet-output behavior."""
+
+    def test_info_only_issues_do_not_fail(self, tmp_path: Path) -> None:
+        """Info-only findings should be displayed without failing the process."""
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("This not only improves speed but also reliability.")
+
+        result = run_cli(
+            "check", "--select", "S002", "--severity", "info", str(test_file)
+        )
+
+        assert result.exit_code == 0
+        assert "S002" in result.stdout
+
+    def test_warning_issues_fail(self, tmp_path: Path) -> None:
+        """Warnings should still make the process fail."""
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("Let us delve into this topic.")
+
+        result = run_cli("check", "--select", "V001", str(test_file))
+
+        assert result.exit_code == 1
+        assert "V001" in result.stdout
+
+    def test_quiet_suppresses_text_output(self, tmp_path: Path) -> None:
+        """Quiet mode should leave exit status intact but suppress text output."""
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("Let us delve into this topic.")
+
+        result = run_cli("check", "--quiet", str(test_file))
+
+        assert result.exit_code == 1
+        assert result.stdout == ""

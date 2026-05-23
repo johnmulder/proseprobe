@@ -153,6 +153,15 @@ _SEVERITY_COLOR = {
 }
 
 
+def _has_failing_issue(results: dict[Path, list[Issue]]) -> bool:
+    """Return True when any issue should make the process fail."""
+    return any(
+        issue.severity in {Severity.ERROR, Severity.WARNING}
+        for issues in results.values()
+        for issue in issues
+    )
+
+
 def _output_results(
     results: dict[Path, list[Issue]],
     args: argparse.Namespace,
@@ -169,6 +178,8 @@ def _output_results(
     elif not results:
         if not args.quiet:
             print(style("\u2713", color="green") + " No issues found!")
+    elif args.quiet:
+        pass
     else:
         for file_path, issues in results.items():
             for issue in issues:
@@ -197,7 +208,7 @@ def _output_results(
         if not args.quiet:
             print(style(f"\nFound {total_issues} issue(s)", bold=True))
 
-    return 1 if total_issues > 0 else 0
+    return 1 if _has_failing_issue(results) else 0
 
 
 def _cmd_check(args: argparse.Namespace) -> int:
