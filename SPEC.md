@@ -67,6 +67,7 @@ slop-lint rules                        List all available rules
 slop-lint explain RULE_ID              Show detailed rule documentation
 slop-lint init                         Create .slop-lint.toml config file
 slop-lint version                      Show version information
+slop-lint watch [OPTIONS] [PATHS]...   Watch files and re-check changes
 ```
 
 ### 4.2 Check Command Options
@@ -235,9 +236,9 @@ indicating how certain the rule is that the match is a real problem.
 | Category | Purpose | Location |
 |----------|---------|----------|
 | Unit tests | Individual rule behavior | `tests/test_rules/` |
-| Integration tests | CLI and full pipeline | `tests/test_integration.py` |
-| Fixture tests | Known bad/clean samples | `tests/fixtures/` |
-| Property tests | Edge cases via hypothesis | `tests/test_properties.py` |
+| CLI and pipeline tests | Command-line and linter behavior | `tests/test_cli.py`, `tests/test_linter.py` |
+| Fixture tests | Known bad/clean samples | `tests/fixtures/`, `tests/test_fixtures.py` |
+| Property tests | Edge cases via hypothesis | `tests/test_property.py` |
 
 ### 8.2 Fixtures
 
@@ -248,13 +249,9 @@ indicating how certain the rule is that the match is a real problem.
 
 ### 9.1 Runtime Dependencies
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| typer | ^0.9.0 | CLI framework |
-| rich | ^13.0 | Terminal formatting |
-| tomli | ^2.0 | TOML parsing (Python <3.11 only) |
-| mistune | ^3.0 | Markdown parsing |
-| regex | ^2023.0 | Advanced regex (Unicode categories) |
+No third-party runtime dependencies are required. `slop-lint` uses the Python
+standard library for CLI parsing, TOML parsing on Python 3.11+, Markdown-oriented
+scanning, ANSI formatting, file discovery, and concurrency.
 
 ### 9.2 Development Dependencies
 
