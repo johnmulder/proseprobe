@@ -436,3 +436,51 @@ class TestMinConfidenceFlag:
         # With --hide-low, V001 low-confidence hit is suppressed
         result_filtered = run_cli("check", str(test_file), "--hide-low")
         assert "V001" not in result_filtered.stdout
+
+
+class TestCliValidation:
+    """Tests for argument validation before linting starts."""
+
+    def test_invalid_format_returns_usage_error(self, tmp_path: Path) -> None:
+        """Unsupported output formats should be rejected by argparse."""
+        test_file = tmp_path / "clean.md"
+        test_file.write_text("Clean content.")
+
+        result = run_cli("check", "--format", "xml", str(test_file))
+
+        assert result.exit_code == 2
+        assert "invalid choice" in result.stderr
+
+    def test_invalid_severity_returns_usage_error(self, tmp_path: Path) -> None:
+        """Unsupported severity thresholds should be rejected by argparse."""
+        test_file = tmp_path / "clean.md"
+        test_file.write_text("Clean content.")
+
+        result = run_cli("check", "--severity", "banana", str(test_file))
+
+        assert result.exit_code == 2
+        assert "invalid choice" in result.stderr
+
+    def test_invalid_min_confidence_returns_usage_error(self, tmp_path: Path) -> None:
+        """Unsupported confidence thresholds should be rejected by argparse."""
+        test_file = tmp_path / "clean.md"
+        test_file.write_text("Clean content.")
+
+        result = run_cli("check", "--min-confidence", "certain", str(test_file))
+
+        assert result.exit_code == 2
+        assert "invalid choice" in result.stderr
+
+    def test_missing_check_path_returns_usage_error(self) -> None:
+        """Missing check paths should not be treated as clean scans."""
+        result = run_cli("check", "/private/tmp/slop-lint-path-that-does-not-exist.md")
+
+        assert result.exit_code == 2
+        assert "Path does not exist" in result.stderr
+
+    def test_missing_watch_path_returns_usage_error(self) -> None:
+        """Missing watch paths should fail before entering the watch loop."""
+        result = run_cli("watch", "/private/tmp/slop-lint-path-that-does-not-exist.md")
+
+        assert result.exit_code == 2
+        assert "Path does not exist" in result.stderr

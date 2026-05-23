@@ -42,6 +42,17 @@ def _parse_confidence(value: str) -> Confidence | None:
     return mapping.get(value.lower())
 
 
+def _validate_existing_paths(paths: list[Path]) -> int | None:
+    """Return a usage exit code after reporting missing paths, if any."""
+    missing_paths = [path for path in paths if not path.exists()]
+    if not missing_paths:
+        return None
+
+    for path in missing_paths:
+        print(f"Path does not exist: {path}", file=sys.stderr)
+    return 2
+
+
 # ---------------------------------------------------------------------------
 # Subcommand handlers
 # ---------------------------------------------------------------------------
@@ -192,6 +203,10 @@ def _output_results(
 def _cmd_check(args: argparse.Namespace) -> int:
     """Check files for bad writing practices."""
     paths = [Path(p) for p in args.paths]
+    path_error = _validate_existing_paths(paths)
+    if path_error is not None:
+        return path_error
+
     config_path = Path(args.config) if args.config else None
 
     # Load config
@@ -319,6 +334,10 @@ def _cmd_version(_args: argparse.Namespace) -> int:
 def _cmd_watch(args: argparse.Namespace) -> int:
     """Watch files for changes and report issues continuously."""
     paths = [Path(p) for p in args.paths]
+    path_error = _validate_existing_paths(paths)
+    if path_error is not None:
+        return path_error
+
     config_path = Path(args.config) if args.config else None
 
     # Load config
@@ -428,7 +447,11 @@ def _build_parser() -> argparse.ArgumentParser:
         "--show-config", action="store_true", help="Display configuration and exit"
     )
     p_check.add_argument(
-        "--format", "-f", default="text", help="Output format: text, json, sarif"
+        "--format",
+        "-f",
+        choices=("text", "json", "sarif"),
+        default="text",
+        help="Output format: text, json, sarif",
     )
     p_check.add_argument(
         "--select", "-s", default=None, help="Rules to enable (comma-separated)"
@@ -440,7 +463,10 @@ def _build_parser() -> argparse.ArgumentParser:
         "--config", "-c", default=None, help="Path to configuration file"
     )
     p_check.add_argument(
-        "--severity", default=None, help="Minimum severity: error, warning, info"
+        "--severity",
+        choices=("error", "warning", "info"),
+        default=None,
+        help="Minimum severity: error, warning, info",
     )
     p_check.add_argument(
         "--quiet", "-q", action="store_true", help="Only output errors"
@@ -457,7 +483,10 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Generate baseline file from current issues",
     )
     p_check.add_argument(
-        "--min-confidence", default=None, help="Minimum confidence: high, medium, low"
+        "--min-confidence",
+        choices=("high", "medium", "low"),
+        default=None,
+        help="Minimum confidence: high, medium, low",
     )
     p_check.add_argument(
         "--hide-low",
