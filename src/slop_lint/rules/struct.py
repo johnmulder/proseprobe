@@ -139,7 +139,7 @@ class InlineHeaderListsRule(Rule):
     description = "Detects '- **Header:** Description' pattern"
     severity = Severity.INFO
     applies_to: ClassVar[set[str]] = {"markdown"}
-    content_scope = "prose"
+    content_scope = "non_code"
 
     def __init__(self, threshold: int = 3) -> None:
         """Initialize rule with configurable threshold.

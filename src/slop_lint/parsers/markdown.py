@@ -516,12 +516,31 @@ class MarkdownParser:
         ]
 
     def get_prose_lines(self) -> list[tuple[int, str]]:
-        """Return non-code lines with inline code and link URLs masked."""
-        lines = self.get_lines()
-        return [
-            (line_num, self._mask_inline_code_and_links(line))
-            for line_num, line in lines
-        ]
+        """Return prose lines with Markdown-only syntax removed."""
+        prose_lines: list[tuple[int, str]] = []
+        for line_num, line in self.get_lines():
+            stripped_line, _ = self._strip_blockquote_prefix(line)
+            if self._is_table_row(stripped_line):
+                continue
+
+            prose = self._strip_list_marker(stripped_line)
+            prose = self._mask_inline_code_and_links(prose).strip()
+            if prose:
+                prose_lines.append((line_num, prose))
+        return prose_lines
+
+    @staticmethod
+    def _is_table_row(line: str) -> bool:
+        """Return True when a line looks like a Markdown table row."""
+        stripped = line.strip()
+        if not stripped.startswith("|") or not stripped.endswith("|"):
+            return False
+        return stripped.count("|") >= 2
+
+    @staticmethod
+    def _strip_list_marker(line: str) -> str:
+        """Remove a Markdown list marker while preserving item text."""
+        return re.sub(r"^\s*(?:[-*+]|\d+[.)])\s+", "", line)
 
     def _find_inline_code_spans(self, line: str) -> list[tuple[int, int]]:
         spans: list[tuple[int, int]] = []

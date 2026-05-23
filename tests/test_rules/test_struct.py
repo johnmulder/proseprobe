@@ -297,6 +297,36 @@ class TestAnaphoraAbuse:
         issues = rule.check(text, "test.md")
         assert len(issues) == 0
 
+    def test_ignores_markdown_table_rows(self) -> None:
+        """Markdown table pipes should not count as repeated sentence openings."""
+        from slop_lint.rules.struct import AnaphoraAbuseRule
+
+        text = """\
+| Prefix | Category |
+|--------|----------|
+| `V` | Vocabulary |
+| `S` | Structure |
+| `T` | Style |
+"""
+        rule = AnaphoraAbuseRule(threshold=3)
+        issues = rule.check(text, "README.md")
+
+        assert issues == []
+
+    def test_does_not_count_list_marker_as_opening(self) -> None:
+        """Markdown bullet markers should not become the repeated opening."""
+        from slop_lint.rules.struct import AnaphoraAbuseRule
+
+        text = """\
+- First item explains setup.
+- Second item explains usage.
+- Third item explains cleanup.
+"""
+        rule = AnaphoraAbuseRule(threshold=3)
+        issues = rule.check(text, "README.md")
+
+        assert issues == []
+
     def test_custom_threshold(self) -> None:
         """Respect configurable threshold."""
         from slop_lint.rules.struct import AnaphoraAbuseRule

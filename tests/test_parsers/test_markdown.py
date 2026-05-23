@@ -92,6 +92,39 @@ class TestMarkdownParser:
         links = parser.get_links()
         assert links == []
 
+    def test_prose_lines_exclude_table_rows(self) -> None:
+        """Table markup should not be treated as prose sentences."""
+        content = """\
+| Prefix | Category |
+|--------|----------|
+| `V` | Vocabulary |
+
+This is prose.
+"""
+        parser = MarkdownParser(content)
+
+        lines = parser.get_prose_lines()
+
+        assert lines == [(5, "This is prose.")]
+
+    def test_prose_lines_strip_list_markers_but_keep_item_text(self) -> None:
+        """List item text is prose, but the bullet marker is not."""
+        content = """\
+- First item explains the behavior.
+- Second item explains the tradeoff.
+
+This is prose.
+"""
+        parser = MarkdownParser(content)
+
+        lines = parser.get_prose_lines()
+
+        assert lines == [
+            (1, "First item explains the behavior."),
+            (2, "Second item explains the tradeoff."),
+            (4, "This is prose."),
+        ]
+
     def test_get_links(self) -> None:
         """Test extracting markdown links."""
         content = "See [Example](https://example.com) for details."
@@ -396,12 +429,12 @@ class TestMarkdownParser:
         masked = lines[0][1]
         assert "delve" not in masked
 
-    def test_iter_prose_lines_includes_table_text(self) -> None:
-        """Test table text is included in prose lines."""
+    def test_iter_prose_lines_skips_table_text(self) -> None:
+        """Test table text is excluded from prose lines."""
         content = "| Word |\n| --- |\n| delve |"
         lines = iter_prose_lines(content, "test.md")
 
-        assert any("delve" in line for _, line in lines)
+        assert all("delve" not in line for _, line in lines)
 
     def test_iter_prose_lines_skips_html_block(self) -> None:
         """Test HTML block lines are excluded from prose."""
