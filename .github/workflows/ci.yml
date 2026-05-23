@@ -27,13 +27,13 @@ jobs:
           pip install -e ".[dev]"
 
       - name: Lint with ruff
-        run: ruff check src/ tests/
+        run: make lint
 
       - name: Type check with mypy
-        run: mypy src/
+        run: make typecheck
 
       - name: Run tests with coverage
-        run: pytest tests/ -v --cov=src/slop_lint --cov-report=xml
+        run: make test-cov
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -57,7 +57,7 @@ jobs:
           pip install -e .
 
       - name: Dogfood - check own docs
-        run: slop-lint check README.md docs/ --baseline .slop-lint-baseline.json
+        run: make dogfood
         continue-on-error: true
 
   build:
@@ -75,7 +75,7 @@ jobs:
         run: python -m pip install --upgrade pip build
 
       - name: Build package
-        run: python -m build
+        run: make build
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

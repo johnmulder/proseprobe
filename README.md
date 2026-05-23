@@ -153,19 +153,22 @@ repos:
 ## Development
 
 ```bash
-# Clone and install
+# Clone and install development dependencies
 git clone https://github.com/yourusername/slop-lint.git
 cd slop-lint
-pip install -e ".[dev]"
+make dev
 
 # Run tests
-pytest
+make test
 
 # Type checking
-mypy src/
+make typecheck
 
 # Lint
-ruff check src/
+make lint
+
+# Full local check
+make check
 ```
 
 ## Documentation

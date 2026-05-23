@@ -1,4 +1,6 @@
-.PHONY: install dev test lint typecheck format clean build all doc-audit spec-verify coverage-analyze test-tropes test-tropes-integration test-tdd test-spec startup-check perf-check memory-check nfr-check
+.DEFAULT_GOAL := help
+
+.PHONY: help install dev test test-tdd test-spec test-cov lint typecheck format check all clean build dogfood quick benchmark test-tropes test-tropes-integration doc-audit spec-verify coverage-analyze startup-check perf-check memory-check nfr-check
 
 VENV ?= .venv
 VENV_BIN = $(VENV)/bin
@@ -20,89 +22,124 @@ RUFF = ruff
 MYPY = mypy
 endif
 
+help: ## Show available development commands
+	@echo "Usage: make <target>"
+	@echo ""
+	@echo "Setup:"
+	@echo "  install              Install package in editable mode"
+	@echo "  dev                  Install package with development dependencies"
+	@echo ""
+	@echo "Core checks:"
+	@echo "  test                 Run the test suite"
+	@echo "  test-tdd             Run the fast TDD test loop"
+	@echo "  lint                 Run ruff"
+	@echo "  typecheck            Run mypy"
+	@echo "  check                Run lint, typecheck, and tests"
+	@echo "  all                  Alias for check"
+	@echo ""
+	@echo "Maintenance:"
+	@echo "  format               Format code and apply ruff fixes"
+	@echo "  clean                Remove generated build, test, and cache artifacts"
+	@echo "  build                Build source and wheel distributions"
+	@echo "  dogfood              Run slop-lint on its own docs"
+	@echo ""
+	@echo "Analysis:"
+	@echo "  test-cov             Run tests with coverage reports"
+	@echo "  coverage-analyze     Enforce the coverage threshold"
+	@echo "  benchmark            Run throughput benchmarks"
+	@echo "  nfr-check            Run coverage, startup, performance, and memory probes"
+
 # Install production dependencies
-install:
+install: ## Install package in editable mode
 	$(PIP) install -e .
 
 # Install development dependencies
-dev:
+dev: ## Install package with development dependencies
 	$(PIP) install -e ".[dev]"
 
 # Run tests
-test:
+test: ## Run tests
 	$(PYTEST) $(PYTEST_ARGS) -v
 
 # Fast TDD loop: stop on first failure with concise output
-test-tdd:
+test-tdd: ## Run fast TDD loop
 	$(PYTEST) $(PYTEST_ARGS) -x -q
 
 # SPEC-alignment regression tests
-test-spec:
+test-spec: ## Run SPEC-alignment regression tests
 	$(PYTEST) tests/test_cli.py tests/test_config.py tests/test_linter.py -q
 
 # Run tests with coverage
-test-cov:
-	$(PYTEST) tests/ -v --cov=src/slop_lint --cov-report=term-missing --cov-report=html
+test-cov: ## Run tests with coverage reports
+	$(PYTEST) tests/ -v --cov=src/slop_lint --cov-report=term-missing --cov-report=html --cov-report=xml
 
 # Run linter
-lint:
+lint: ## Run ruff
 	$(RUFF) check src/ tests/
 
 # Run type checker
-typecheck:
+typecheck: ## Run mypy
 	$(MYPY) src/
 
 # Format code
-format:
+format: ## Format code
 	$(RUFF) format src/ tests/
 	$(RUFF) check --fix src/ tests/
 
 # Run all checks
-check: lint typecheck test
+check: lint typecheck test ## Run lint, typecheck, and tests
 
 # Clean build artifacts
-clean:
+clean: ## Remove generated artifacts
 	rm -rf build/
 	rm -rf dist/
-	rm -rf *.egg-info/
-	rm -rf src/*.egg-info/
+	rm -rf htmlcov/
 	rm -rf .pytest_cache/
 	rm -rf .mypy_cache/
 	rm -rf .ruff_cache/
-	rm -rf htmlcov/
-	rm -rf .coverage
-	find . -type d -name __pycache__ -exec rm -rf {} +
+	rm -rf .hypothesis/
+	rm -rf .tox/
+	rm -rf .nox/
+	rm -rf .cache/
+	rm -f .coverage
+	rm -f .coverage.*
+	rm -f coverage.xml
+	rm -f junit.xml
+	find . -type d -name __pycache__ -prune -exec rm -rf {} +
+	find . -type d -name "*.egg-info" -prune -exec rm -rf {} +
+	find . -type f \( -name "*.pyc" -o -name "*.pyo" \) -delete
 
 # Build package
-build: clean
+build: clean ## Build package
 	$(PYTHON) -m build
 
 # Run slop-lint on itself (dogfooding)
-dogfood:
+dogfood: ## Run slop-lint on its own docs
 	$(PYTHON) -m slop_lint check README.md docs/ --baseline .slop-lint-baseline.json
 
 # Quick check for development
-quick:
+quick: ## Run quick local fix-and-test loop
 	$(RUFF) check src/ --fix
 	$(PYTEST) tests/ -x -q
 
 # Run benchmarks
-benchmark:
+benchmark: ## Run benchmarks
 	$(PYTHON) -m benchmarks.bench_rules
 
 # Run only trope-related tests (fast TDD loop)
-test-tropes:
+test-tropes: ## Run trope-related rule tests
 	$(PYTEST) tests/test_rules/ -v -k "S008 or S009 or S010 or S011 or S012 or S013 or S014 or S015 or S016 or S017 or S018 or G004 or G005 or G006 or G007 or G008 or G009 or G010 or G011 or G012 or G013 or T007 or T008 or V006 or V007 or V008 or magic_adverb or grandiose or invented_concept or patronizing or futurist or false_suspense or pedagogical or asserted_simplicity or false_vulnerability or punchy or gerund_litany or anaphora or rhetorical_self or dramatic_countdown or listicle_prose or analogy_stack or signposted or fractal_summary or content_duplication or trend_overclaim or false_balance or anecdote_evidence or bombshell or firestorm or anonymous_source or nominalization or passive_voice or hedge_stacking or gap_ritual or sentence_length or citation_name"
 
-# Integration: lint the tropes doc with new rules
-test-tropes-integration:
-	$(PYTHON) -m slop_lint check low_quality_journalism_tropes.md --format text
+# Integration: verify all-rules fixture still reports issues
+test-tropes-integration: ## Verify the all-rules Markdown fixture still reports issues
+	@$(PYTHON) -m slop_lint check tests/fixtures/all_markdown_rules_fire.md --format json --severity info >/tmp/slop-lint-tropes.json || test $$? -eq 1
+	@$(PYTHON) -c "import json; data=json.load(open('/tmp/slop-lint-tropes.json')); assert data['summary']['total_issues'] > 0"
 
 # Full validation (lint + type-check + test)
-all: lint typecheck test
+all: check ## Alias for check
 
 # Verify README/SPEC structure matches expected sections
-doc-audit:
+doc-audit: ## Verify README and SPEC structure
 	@echo "Checking README.md structure..."
 	@grep -q "## Overview" README.md || (echo "ERROR: README missing ## Overview" && exit 1)
 	@grep -q "## Installation" README.md || (echo "ERROR: README missing ## Installation" && exit 1)
@@ -116,7 +153,7 @@ doc-audit:
 	@echo "✓ Documentation structure verified"
 
 # Verify CLI matches documented commands
-spec-verify:
+spec-verify: ## Verify documented CLI commands
 	@echo "Verifying CLI commands match SPEC.md..."
 	@$(PYTHON) -m slop_lint --help | grep -q "check" || (echo "ERROR: 'check' command missing" && exit 1)
 	@$(PYTHON) -m slop_lint --help | grep -q "rules" || (echo "ERROR: 'rules' command missing" && exit 1)
@@ -132,22 +169,22 @@ spec-verify:
 	@echo "✓ CLI matches specification"
 
 # Check test coverage meets threshold (90%)
-coverage-analyze:
+coverage-analyze: ## Enforce coverage threshold
 	@echo "Running coverage analysis..."
 	@$(PYTEST) tests/ --cov=src/slop_lint --cov-report=term-missing --cov-fail-under=90 -q || \
 		(echo "WARNING: Coverage below 90% threshold. Run 'make test-cov' for details." && exit 1)
 	@echo "✓ Coverage meets 90% threshold"
 
 # NFR probes (best-effort checks; hardware-dependent)
-startup-check:
+startup-check: ## Measure startup latency
 	@echo "Measuring startup latency (single run, hardware-dependent)..."
 	@$(TIME) -p $(PYTHON) -m slop_lint version >/dev/null
 
-perf-check:
+perf-check: ## Run throughput benchmark
 	@echo "Running throughput benchmark..."
 	@$(PYTHON) -m benchmarks.bench_rules
 
-memory-check:
+memory-check: ## Report memory probe status
 	@echo "Memory probe is not implemented yet; skipping."
 
-nfr-check: coverage-analyze startup-check perf-check memory-check
+nfr-check: coverage-analyze startup-check perf-check memory-check ## Run NFR probes

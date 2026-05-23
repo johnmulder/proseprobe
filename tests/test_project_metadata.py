@@ -8,10 +8,16 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_ci_workflow_uses_slop_lint_names() -> None:
     """CI should exercise this package, not stale predecessor names."""
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text()
-    assert "--cov=src/slop_lint" in workflow
-    assert "slop-lint check README.md docs/" in workflow
+    makefile = (ROOT / "Makefile").read_text()
+
+    assert "make test-cov" in workflow
+    assert "make dogfood" in workflow
+    assert "--cov=src/slop_lint" in makefile
+    assert "slop_lint check README.md docs/" in makefile
     assert "humanize" not in workflow
     assert "src/humanize" not in workflow
+    assert "humanize" not in makefile
+    assert "src/humanize" not in makefile
 
 
 def test_pre_commit_hook_uses_existing_cli() -> None:
