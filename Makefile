@@ -148,8 +148,6 @@ perf-check:
 	@$(PYTHON) -m benchmarks.bench_rules
 
 memory-check:
-	@echo "Running memory probe via benchmark harness..."
-	@$(PYTHON) -m benchmarks.bench_rules --memory 2>/dev/null || \
-		echo "Memory probe flag not supported by benchmark harness yet"
+	@echo "Memory probe is not implemented yet; skipping."
 
 nfr-check: coverage-analyze startup-check perf-check memory-check

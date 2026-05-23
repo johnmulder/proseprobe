@@ -31,7 +31,7 @@
 | NFR-02 | Type checking | Strict mypy compliance |
 | NFR-03 | Test coverage | ≥90% |
 | NFR-04 | Startup time | <100ms |
-| NFR-05 | Processing speed | >1000 files/second for typical docs |
+| NFR-05 | Processing speed | Track KB/s and files/sec estimate in `make benchmark`; no hard release gate until the benchmark corpus reflects real projects |
 | NFR-06 | Memory usage | <100MB for 10,000 file workspace |
 
 ## 3. Detection Rules

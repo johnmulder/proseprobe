@@ -153,7 +153,7 @@ def run_benchmark(
 def print_results(results: list[BenchmarkResult]) -> None:
     """Print benchmark results in a table."""
     print("\n" + "=" * 80)
-    print("HUMANIZE BENCHMARK RESULTS")
+    print("SLOP-LINT BENCHMARK RESULTS")
     print("=" * 80)
     print(
         f"{'Benchmark':<30} {'Size':>10} {'Time':>12} {'Issues':>8} {'Throughput':>15}"
@@ -173,8 +173,11 @@ def print_results(results: list[BenchmarkResult]) -> None:
     # Summary statistics
     total_time = sum(r.duration_ms for r in results)
     avg_throughput = sum(r.throughput_kb_per_sec for r in results) / len(results)
+    avg_file_size_kb = sum(r.content_size for r in results) / len(results) / 1024
+    files_per_sec = avg_throughput / avg_file_size_kb if avg_file_size_kb > 0 else 0
     print(f"\nTotal benchmark time: {total_time:.2f} ms")
     print(f"Average throughput: {avg_throughput:.1f} KB/s")
+    print(f"Files/sec estimate: {files_per_sec:.1f}")
     print(f"Rules tested: {results[0].num_rules}")
 
 
