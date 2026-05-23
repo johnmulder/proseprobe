@@ -9,8 +9,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from slop_lint._ansi import clear_screen, style, table
-from slop_lint.config import load_config
-from slop_lint.core.linter import Linter
+from slop_lint.config import ConfigError, load_config
+from slop_lint.core.linter import Linter, LintReadError
 from slop_lint.rules import get_all_rules
 from slop_lint.rules.base import (
     Confidence,
@@ -210,7 +210,11 @@ def _cmd_check(args: argparse.Namespace) -> int:
     config_path = Path(args.config) if args.config else None
 
     # Load config
-    config = load_config(config_path)
+    try:
+        config = load_config(config_path)
+    except ConfigError as exc:
+        print(f"Configuration error: {exc}", file=sys.stderr)
+        return 2
 
     # Apply CLI overrides
     if args.select:
@@ -247,7 +251,11 @@ def _cmd_check(args: argparse.Namespace) -> int:
             active_rules.append(rule)
 
     # Run checks
-    results = linter.check(paths)
+    try:
+        results = linter.check(paths)
+    except LintReadError as exc:
+        print(f"Could not read file: {exc}", file=sys.stderr)
+        return 3
 
     # Filter by confidence level
     results = _filter_by_confidence(results, args, config)
@@ -341,7 +349,11 @@ def _cmd_watch(args: argparse.Namespace) -> int:
     config_path = Path(args.config) if args.config else None
 
     # Load config
-    config = load_config(config_path)
+    try:
+        config = load_config(config_path)
+    except ConfigError as exc:
+        print(f"Configuration error: {exc}", file=sys.stderr)
+        return 2
 
     # Apply CLI overrides
     if args.select:

@@ -484,3 +484,29 @@ class TestCliValidation:
 
         assert result.exit_code == 2
         assert "Path does not exist" in result.stderr
+
+    def test_invalid_config_returns_config_error(self, tmp_path: Path) -> None:
+        """Malformed config files should not print Python tracebacks."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text("invalid [ toml ][\n")
+        test_file = tmp_path / "clean.md"
+        test_file.write_text("Clean content.")
+
+        result = run_cli("check", "--config", str(config_file), str(test_file))
+
+        assert result.exit_code == 2
+        assert "Configuration error" in result.stderr
+        assert str(config_file) in result.stderr
+        assert "Traceback" not in result.stderr
+
+    def test_invalid_utf8_file_returns_internal_error(self, tmp_path: Path) -> None:
+        """Undecodable files should be reported without tracebacks."""
+        test_file = tmp_path / "invalid.md"
+        test_file.write_bytes(b"\xff")
+
+        result = run_cli("check", str(test_file))
+
+        assert result.exit_code == 3
+        assert "Could not read file" in result.stderr
+        assert str(test_file) in result.stderr
+        assert "Traceback" not in result.stderr

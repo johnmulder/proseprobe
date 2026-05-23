@@ -1,12 +1,12 @@
 """Tests for configuration loading."""
 
-import tomllib
 from pathlib import Path
 
 import pytest
 
 from slop_lint.config import (
     Config,
+    ConfigError,
     ThresholdsConfig,
     VocabularyConfig,
     find_config_file,
@@ -207,7 +207,7 @@ V001 = "error"
         config_file = tmp_path / ".slop-lint.toml"
         config_file.write_text("invalid [ toml ][")
 
-        with pytest.raises(tomllib.TOMLDecodeError):
+        with pytest.raises(ConfigError):
             load_config(config_file)
 
 

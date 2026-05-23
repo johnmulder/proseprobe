@@ -7,6 +7,7 @@ from typing import Any
 
 __all__ = [
     "Config",
+    "ConfigError",
     "PerFileIgnore",
     "ThresholdsConfig",
     "VocabularyConfig",
@@ -97,6 +98,15 @@ class Config:
     per_file_ignores: list[PerFileIgnore] = field(default_factory=list)
 
 
+class ConfigError(ValueError):
+    """Raised when configuration cannot be loaded or parsed."""
+
+    def __init__(self, path: Path, message: str) -> None:
+        super().__init__(f"{path}: {message}")
+        self.path = path
+        self.message = message
+
+
 def find_config_file(start_dir: Path | None = None) -> Path | None:
     """Find configuration file.
 
@@ -159,8 +169,13 @@ def load_config(config_path: Path | None = None) -> Config:
     if config_path is None:
         return Config()
 
-    with open(config_path, "rb") as f:
-        data = tomllib.load(f)
+    try:
+        with open(config_path, "rb") as f:
+            data = tomllib.load(f)
+    except OSError as exc:
+        raise ConfigError(config_path, str(exc)) from exc
+    except tomllib.TOMLDecodeError as exc:
+        raise ConfigError(config_path, str(exc)) from exc
 
     # Handle pyproject.toml structure
     if config_path.name == "pyproject.toml":

@@ -10,7 +10,7 @@ from pathlib import Path
 from slop_lint.config import Config
 from slop_lint.rules.base import Issue, Rule
 
-__all__ = ["Linter"]
+__all__ = ["LintReadError", "Linter"]
 
 # Registry mapping rule ``applies_to`` tags to file-type predicates.
 # To support a new file type, append a (tag, checker) tuple here.
@@ -23,6 +23,15 @@ _FILE_TYPE_CHECKERS: list[tuple[str, Callable[[Path], bool]]] = [
 # ---------------------------------------------------------------------------
 # File discovery (single responsibility: find files matching config patterns)
 # ---------------------------------------------------------------------------
+
+
+class LintReadError(OSError):
+    """Raised when a file cannot be read for linting."""
+
+    def __init__(self, path: Path, message: str) -> None:
+        super().__init__(f"{path}: {message}")
+        self.path = path
+        self.message = message
 
 
 class FileDiscovery:
@@ -304,7 +313,10 @@ class Linter:
         Returns:
             List of issues found.
         """
-        content = path.read_text(encoding="utf-8")
+        try:
+            content = path.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError) as exc:
+            raise LintReadError(path, str(exc)) from exc
         issues: list[Issue] = []
 
         for rule in self._rules:
