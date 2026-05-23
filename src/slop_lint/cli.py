@@ -166,6 +166,7 @@ def _output_results(
     results: dict[Path, list[Issue]],
     args: argparse.Namespace,
     rules: list[Rule] | None = None,
+    files_checked: int | None = None,
 ) -> int:
     """Format and print results; return exit code."""
     total_issues = sum(len(issues) for issues in results.values())
@@ -173,7 +174,11 @@ def _output_results(
     if args.format in ("json", "sarif"):
         from slop_lint.core.reporter import Reporter
 
-        reporter = Reporter(format=args.format, rules=rules)
+        reporter = Reporter(
+            format=args.format,
+            rules=rules,
+            files_checked=files_checked,
+        )
         print(reporter.report(results))
     elif not results:
         if not args.quiet:
@@ -263,10 +268,12 @@ def _cmd_check(args: argparse.Namespace) -> int:
 
     # Run checks
     try:
-        results = linter.check(paths)
+        lint_results = linter.check(paths)
     except LintReadError as exc:
         print(f"Could not read file: {exc}", file=sys.stderr)
         return 3
+    files_checked = lint_results.files_checked
+    results = lint_results.issues_by_file
 
     # Filter by confidence level
     results = _filter_by_confidence(results, args, config)
@@ -277,7 +284,12 @@ def _cmd_check(args: argparse.Namespace) -> int:
         return 0
     results = baseline_result
 
-    return _output_results(results, args, rules=active_rules)
+    return _output_results(
+        results,
+        args,
+        rules=active_rules,
+        files_checked=files_checked,
+    )
 
 
 def _cmd_rules(_args: argparse.Namespace) -> int:

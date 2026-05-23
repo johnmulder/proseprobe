@@ -402,6 +402,7 @@ class TestOutputFormats:
         assert result.exit_code == 0
         data = json.loads(result.stdout)
         assert data["summary"]["total_issues"] == 0
+        assert data["summary"]["files_checked"] == 1
 
 
 class TestMinConfidenceFlag:

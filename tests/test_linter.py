@@ -3,7 +3,7 @@
 from pathlib import Path
 
 from slop_lint.config import Config, PerFileIgnore
-from slop_lint.core.linter import Linter
+from slop_lint.core.linter import Linter, LintResults
 from slop_lint.rules import get_all_rules
 from slop_lint.rules.vocab import AIVocabularyRule
 
@@ -302,6 +302,8 @@ class TestCheck:
         results = linter.check([file1, file2])
 
         assert isinstance(results, dict)
+        assert isinstance(results, LintResults)
+        assert results.files_checked == 2
         # file1 should have issues
         assert file1 in results
         assert len(results[file1]) > 0

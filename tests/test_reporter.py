@@ -95,6 +95,15 @@ class TestJsonFormat:
         data = json.loads(output)
         assert isinstance(data, dict)
 
+    def test_json_reports_files_checked_from_metadata(self) -> None:
+        """JSON summary should distinguish checked files from files with issues."""
+        reporter = Reporter(format="json", files_checked=3)
+
+        output = reporter.report({})
+
+        data = json.loads(output)
+        assert data["summary"]["files_checked"] == 3
+
     def test_json_single_issue(self) -> None:
         """Test JSON format with single issue."""
         reporter = Reporter(format="json")

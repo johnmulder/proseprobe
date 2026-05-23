@@ -64,7 +64,7 @@ def _format_text(results: _Results) -> str:
     return "\n".join(lines)
 
 
-def _format_json(results: _Results) -> str:
+def _format_json(results: _Results, files_checked: int | None = None) -> str:
     """Format results as JSON."""
     from slop_lint import __version__
 
@@ -73,7 +73,9 @@ def _format_json(results: _Results) -> str:
         "files": [],
         "summary": {
             "total_issues": 0,
-            "files_checked": len(results),
+            "files_checked": files_checked
+            if files_checked is not None
+            else len(results),
             "errors": 0,
             "warnings": 0,
             "info": 0,
@@ -217,6 +219,7 @@ class Reporter:
         self,
         format: str = "text",
         rules: list[Any] | None = None,
+        files_checked: int | None = None,
     ) -> None:
         """Initialize reporter.
 
@@ -224,9 +227,11 @@ class Reporter:
             format: Output format (text, json, sarif).
             rules: Optional list of Rule instances for SARIF metadata.
                    When *None*, SARIF will discover rules lazily.
+            files_checked: Optional total number of files scanned.
         """
         self.format = format
         self._rules = rules
+        self._files_checked = files_checked
 
     def report(self, results: dict[Path, list[Issue]]) -> str:
         """Format results for output.
@@ -239,5 +244,7 @@ class Reporter:
         """
         if self.format == "sarif":
             return _format_sarif(results, rules=self._rules)
+        if self.format == "json":
+            return _format_json(results, files_checked=self._files_checked)
         formatter = _FORMATTERS.get(self.format, _format_text)
         return formatter(results)

@@ -10,7 +10,7 @@ from pathlib import Path
 from slop_lint.config import Config
 from slop_lint.rules.base import Issue, Rule
 
-__all__ = ["LintReadError", "Linter"]
+__all__ = ["LintReadError", "LintResults", "Linter"]
 
 # Registry mapping rule ``applies_to`` tags to file-type predicates.
 # To support a new file type, append a (tag, checker) tuple here.
@@ -32,6 +32,24 @@ class LintReadError(OSError):
         super().__init__(f"{path}: {message}")
         self.path = path
         self.message = message
+
+
+class LintResults(dict[Path, list[Issue]]):
+    """Lint issues plus scan metadata, while preserving dict behavior."""
+
+    def __init__(
+        self,
+        issues_by_file: dict[Path, list[Issue]] | None = None,
+        *,
+        files_checked: int = 0,
+    ) -> None:
+        super().__init__(issues_by_file or {})
+        self.files_checked = files_checked
+
+    @property
+    def issues_by_file(self) -> dict[Path, list[Issue]]:
+        """Return issues keyed by file path."""
+        return dict(self)
 
 
 class FileDiscovery:
@@ -325,7 +343,7 @@ class Linter:
 
         return issues
 
-    def check(self, paths: list[Path]) -> dict[Path, list[Issue]]:
+    def check(self, paths: list[Path]) -> LintResults:
         """Check multiple paths for issues.
 
         Args:
@@ -336,7 +354,7 @@ class Linter:
         """
         files = self.discover_files(paths)
         if not files:
-            return {}
+            return LintResults(files_checked=0)
 
         worker_count = min(32, (os.cpu_count() or 1) + 4)
 
@@ -348,7 +366,8 @@ class Linter:
             file_results = [self._check_file_with_path(file) for file in files]
 
         file_results.sort(key=lambda item: str(item[0]))
-        return {path: issues for path, issues in file_results if issues}
+        issues_by_file = {path: issues for path, issues in file_results if issues}
+        return LintResults(issues_by_file, files_checked=len(files))
 
     def _check_file_with_path(self, path: Path) -> tuple[Path, list[Issue]]:
         """Return a file path paired with lint issues for executor mapping."""
