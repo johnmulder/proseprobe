@@ -102,7 +102,7 @@ convention = "google"
 "tests/**/*.py" = ["D", "S"]
 "tests/fixtures/**/*.py" = ["D", "S"]
 "tests/test_property.py" = ["RUF001"]
-"benchmarks/**/*.py" = ["D"]
+"benchmarks/**/*.py" = ["D", "S603"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["slop_lint"]

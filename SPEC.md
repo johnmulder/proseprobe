@@ -34,6 +34,9 @@
 | NFR-05 | Processing speed | Track KB/s and files/sec estimate in `make benchmark`; no hard release gate until the benchmark corpus reflects real projects |
 | NFR-06 | Memory usage | <100MB for 10,000 file workspace |
 
+`make nfr-check` enforces the coverage, startup, and memory targets. Processing
+speed remains a tracked metric until the benchmark corpus reflects real projects.
+
 ## 3. Detection Rules
 
 ### 3.1 Rule Categories

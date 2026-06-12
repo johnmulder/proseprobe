@@ -177,14 +177,15 @@ coverage-analyze: ## Enforce coverage threshold
 
 # NFR probes (best-effort checks; hardware-dependent)
 startup-check: ## Measure startup latency
-	@echo "Measuring startup latency (single run, hardware-dependent)..."
-	@$(TIME) -p $(PYTHON) -m slop_lint version >/dev/null
+	@echo "Measuring startup latency..."
+	@$(PYTHON) -m benchmarks.startup_probe --limit-ms 100
 
 perf-check: ## Run throughput benchmark
 	@echo "Running throughput benchmark..."
 	@$(PYTHON) -m benchmarks.bench_rules
 
-memory-check: ## Report memory probe status
-	@echo "Memory probe is not implemented yet; skipping."
+memory-check: ## Measure peak memory on a synthetic workspace
+	@echo "Running memory probe..."
+	@$(PYTHON) -m benchmarks.memory_probe --files 10000 --limit-mb 100
 
 nfr-check: coverage-analyze startup-check perf-check memory-check ## Run NFR probes

@@ -127,3 +127,22 @@ def test_ci_uses_make_targets_for_local_parity() -> None:
         "make build",
     ]:
         assert command in workflow
+
+
+def test_memory_check_runs_probe_instead_of_skipping() -> None:
+    """The memory NFR target should execute a real probe."""
+    makefile = _makefile_text()
+
+    assert "benchmarks.memory_probe" in makefile
+    assert "Memory probe is not implemented yet" not in makefile
+
+
+def test_nfr_targets_show_gate_policy() -> None:
+    """NFR targets should make release gates explicit."""
+    makefile = _makefile_text()
+
+    assert "benchmarks.startup_probe" in makefile
+    assert "benchmarks.memory_probe" in makefile
+    assert "--limit-ms 100" in makefile
+    assert "--limit-mb 100" in makefile
+    assert "coverage-analyze" in makefile
