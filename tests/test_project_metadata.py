@@ -12,7 +12,7 @@ def test_ci_workflow_uses_slop_lint_names() -> None:
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text()
     makefile = (ROOT / "Makefile").read_text()
 
-    assert "make test-cov" in workflow
+    assert "make coverage-analyze" in workflow
     assert "make dogfood" in workflow
     assert "--cov=src/slop_lint" in makefile
     assert "slop_lint check README.md docs/" in makefile
@@ -95,3 +95,18 @@ def test_documented_toml_examples_parse() -> None:
     for path in docs:
         for block in _toml_blocks(path):
             tomllib.loads(block)
+
+
+def test_dogfood_ci_is_enforced() -> None:
+    """Dogfood docs linting should fail CI on new issues."""
+    workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text()
+
+    assert "make dogfood" in workflow
+    assert "continue-on-error: true" not in workflow
+
+
+def test_ci_enforces_coverage_threshold() -> None:
+    """CI should use the same coverage threshold as local NFR checks."""
+    workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text()
+
+    assert "make coverage-analyze" in workflow

@@ -32,8 +32,8 @@ jobs:
       - name: Type check with mypy
         run: make typecheck
 
-      - name: Run tests with coverage
-        run: make test-cov
+      - name: Run tests with coverage threshold
+        run: make coverage-analyze
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -58,7 +58,6 @@ jobs:
 
       - name: Dogfood - check own docs
         run: make dogfood
-        continue-on-error: true
 
   build:
     runs-on: ubuntu-latest

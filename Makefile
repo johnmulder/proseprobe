@@ -171,7 +171,7 @@ spec-verify: ## Verify documented CLI commands
 # Check test coverage meets threshold (90%)
 coverage-analyze: ## Enforce coverage threshold
 	@echo "Running coverage analysis..."
-	@$(PYTEST) tests/ --cov=src/slop_lint --cov-report=term-missing --cov-fail-under=90 -q || \
+	@$(PYTEST) tests/ --cov=src/slop_lint --cov-report=term-missing --cov-report=xml --cov-fail-under=90 -q || \
 		(echo "WARNING: Coverage below 90% threshold. Run 'make test-cov' for details." && exit 1)
 	@echo "✓ Coverage meets 90% threshold"
 

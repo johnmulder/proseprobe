@@ -122,7 +122,7 @@ def test_ci_uses_make_targets_for_local_parity() -> None:
     for command in [
         "make lint",
         "make typecheck",
-        "make test-cov",
+        "make coverage-analyze",
         "make dogfood",
         "make build",
     ]:
@@ -146,3 +146,14 @@ def test_nfr_targets_show_gate_policy() -> None:
     assert "--limit-ms 100" in makefile
     assert "--limit-mb 100" in makefile
     assert "coverage-analyze" in makefile
+
+
+def test_coverage_analyze_emits_xml_for_ci_upload() -> None:
+    """Coverage threshold target should still produce Codecov XML."""
+    makefile = _makefile_text()
+    match = re.search(r"^coverage-analyze:.*?(?=^\S|\Z)", makefile, re.S | re.M)
+
+    assert match is not None
+    coverage_target = match.group(0)
+    assert "--cov-fail-under=90" in coverage_target
+    assert "--cov-report=xml" in coverage_target
