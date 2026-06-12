@@ -2,7 +2,7 @@
 # Add to your .pre-commit-config.yaml:
 #
 # repos:
-#   - repo: https://github.com/yourusername/slop-lint
+#   - repo: https://github.com/slop-lint/slop-lint
 #     rev: v0.1.0
 #     hooks:
 #       - id: slop-lint

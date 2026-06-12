@@ -127,7 +127,11 @@ severity = "warning"
 
 # Minimum confidence to report
 min_confidence = "low"  # low, medium, high
+```
 
+Severity overrides use a nested table:
+
+```toml
 # Severity overrides per rule
 [tool.slop-lint.severity]
 V001 = "error"

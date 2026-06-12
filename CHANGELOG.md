@@ -88,14 +88,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - G004-G009 (false suspense, patronizing analogy, futurist invitation,
     false vulnerability, asserted simplicity, pedagogical voice)
   - G014 (impersonal corporate passive)
-- Complete documentation for all 55 rules with examples
+- Complete documentation for all 59 rules with examples
 - Full CLI options reference in configuration docs
 - Property-based tests using Hypothesis (265 additional tests)
 - Benchmark suite (`make benchmark`) for performance tracking
 - `py.typed` marker for PEP 561 type checking support
 
 ### Changed
-- Total test count: 596 tests passing
+- Expanded regression coverage for CLI semantics, NFR probes, documentation,
+  CI policy, and configuration validation.
 - Improved package metadata and URLs
 
 ### Removed

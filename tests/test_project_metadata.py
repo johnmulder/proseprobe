@@ -1,5 +1,7 @@
 """Project metadata regression tests."""
 
+import re
+import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -53,3 +55,43 @@ def test_spec_documents_watch_command() -> None:
     """SPEC should include the implemented watch command."""
     spec = (ROOT / "SPEC.md").read_text()
     assert "slop-lint watch [OPTIONS] [PATHS]..." in spec
+
+
+def test_public_docs_do_not_contain_placeholder_repository_names() -> None:
+    """Public docs should not ship template repository placeholders."""
+    paths = [
+        ROOT / "README.md",
+        ROOT / "docs" / "configuration.md",
+        ROOT / ".pre-commit-hooks.yaml",
+    ]
+
+    for path in paths:
+        text = path.read_text()
+        assert "yourusername" not in text
+
+
+def test_changelog_unreleased_counts_match_current_project() -> None:
+    """Changelog should not advertise stale rule or test counts."""
+    changelog = (ROOT / "CHANGELOG.md").read_text()
+
+    assert "Complete documentation for all 59 rules" in changelog
+    assert "all 55 rules" not in changelog
+    assert "596 tests passing" not in changelog
+
+
+def _toml_blocks(path: Path) -> list[str]:
+    text = path.read_text()
+    return re.findall(r"```toml\n(.*?)\n```", text, flags=re.DOTALL)
+
+
+def test_documented_toml_examples_parse() -> None:
+    """TOML examples in public docs should be valid TOML."""
+    docs = [
+        ROOT / "README.md",
+        ROOT / "docs" / "configuration.md",
+        ROOT / "SPEC.md",
+    ]
+
+    for path in docs:
+        for block in _toml_blocks(path):
+            tomllib.loads(block)

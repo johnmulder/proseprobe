@@ -47,7 +47,11 @@ ignore = ["T001", "T005"]
 [tool.slop-lint]
 # Minimum severity to report
 severity = "warning"  # error, warning, info
+```
 
+Per-rule severity overrides use a nested table:
+
+```toml
 # Per-rule severity overrides
 [tool.slop-lint.severity]
 V001 = "error"      # Upgrade to error
@@ -135,7 +139,6 @@ exclude = [
 
 select = ["V", "S", "T", "G", "C", "M"]
 ignore = ["T001", "T005"]
-severity = "warning"
 
 [tool.slop-lint.severity]
 V001 = "error"
@@ -254,8 +257,8 @@ slop-lint check --format sarif . > results.sarif
 ```yaml
 # .pre-commit-config.yaml
 repos:
-  - repo: https://github.com/yourusername/slop-lint
-    rev: v1.0.0
+  - repo: https://github.com/slop-lint/slop-lint
+    rev: v0.1.0
     hooks:
       - id: slop-lint
         args: [--select, "V001,V002,M002,M003"]

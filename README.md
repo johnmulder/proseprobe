@@ -135,7 +135,7 @@ ignore = ["T001"]
     slop-lint check --format sarif . > results.sarif
 
 - name: Upload SARIF
-  uses: github/codeql-action/upload-sarif@v2
+  uses: github/codeql-action/upload-sarif@v3
   with:
     sarif_file: results.sarif
 ```
@@ -144,7 +144,7 @@ ignore = ["T001"]
 
 ```yaml
 repos:
-  - repo: https://github.com/yourusername/slop-lint
+  - repo: https://github.com/slop-lint/slop-lint
     rev: v0.1.0
     hooks:
       - id: slop-lint
@@ -154,7 +154,7 @@ repos:
 
 ```bash
 # Clone and install development dependencies
-git clone https://github.com/yourusername/slop-lint.git
+git clone https://github.com/slop-lint/slop-lint.git
 cd slop-lint
 make dev
 
