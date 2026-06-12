@@ -75,7 +75,7 @@ class VocabularyConfig:
 
 @dataclass
 class Config:
-    """Humanize configuration."""
+    """slop-lint configuration."""
 
     include: list[str] = field(
         default_factory=lambda: ["*.md", "*.mdx", "*.markdown", "*.py"]
@@ -183,7 +183,104 @@ def load_config(config_path: Path | None = None) -> Config:
     else:
         data = data.get("tool", {}).get("slop-lint", data)
 
-    return _parse_config(data)
+    try:
+        return _parse_config(data)
+    except ValueError as exc:
+        raise ConfigError(config_path, str(exc)) from exc
+
+
+def _require_list(value: Any, key: str) -> list[str]:
+    """Require a value to be a list of strings."""
+    if not isinstance(value, list):
+        raise ValueError(f"{key} must be a list of strings")
+
+    items: list[str] = []
+    for item in value:
+        if not isinstance(item, str):
+            raise ValueError(f"{key} must be a list of strings")
+        items.append(item)
+    return items
+
+
+def _require_mapping(value: Any, key: str) -> dict[str, Any]:
+    """Require a value to be a mapping with string keys."""
+    if not isinstance(value, dict):
+        raise ValueError(f"{key} must be a table")
+
+    items: dict[str, Any] = {}
+    for item_key, item_value in value.items():
+        if not isinstance(item_key, str):
+            raise ValueError(f"{key} must use string keys")
+        items[item_key] = item_value
+    return items
+
+
+def _require_choice(value: Any, key: str, choices: set[str]) -> str:
+    """Require a string value to be one of a fixed set of choices."""
+    if not isinstance(value, str):
+        allowed = ", ".join(sorted(choices))
+        raise ValueError(f"{key} must be one of: {allowed}")
+
+    normalized = value.lower()
+    if normalized not in choices:
+        allowed = ", ".join(sorted(choices))
+        raise ValueError(f"{key} must be one of: {allowed}")
+    return normalized
+
+
+def _require_int(value: Any, key: str) -> int:
+    """Require a value to be an integer."""
+    if not isinstance(value, int) or isinstance(value, bool):
+        raise ValueError(f"{key} must be an integer")
+    return value
+
+
+def _require_choice_mapping(
+    value: Any,
+    key: str,
+    choices: set[str],
+) -> dict[str, str]:
+    """Require a string-to-choice mapping."""
+    raw_mapping = _require_mapping(value, key)
+    return {
+        item_key: _require_choice(item_value, f"{key}.{item_key}", choices)
+        for item_key, item_value in raw_mapping.items()
+    }
+
+
+def _parse_per_file_ignores(value: Any) -> list[PerFileIgnore]:
+    """Parse modern and legacy per-file ignore configuration."""
+    per_file_ignores: list[PerFileIgnore] = []
+
+    if isinstance(value, dict):
+        for pattern, ignore_list in value.items():
+            if not isinstance(pattern, str):
+                raise ValueError("per-file-ignores must use string patterns")
+            per_file_ignores.append(
+                PerFileIgnore(
+                    pattern=pattern,
+                    ignore=_require_list(ignore_list, f"per-file-ignores.{pattern}"),
+                )
+            )
+        return per_file_ignores
+
+    if not isinstance(value, list):
+        raise ValueError("per-file-ignores must be a list of tables")
+
+    for index, item in enumerate(value):
+        item_data = _require_mapping(item, f"per-file-ignores[{index}]")
+        pattern = item_data.get("pattern", "")
+        if not isinstance(pattern, str):
+            raise ValueError("per-file-ignores.pattern must be a string")
+        per_file_ignores.append(
+            PerFileIgnore(
+                pattern=pattern,
+                ignore=_require_list(
+                    item_data.get("ignore", []), f"per-file-ignores[{index}].ignore"
+                ),
+            )
+        )
+    return per_file_ignores
 
 
 def _parse_config(data: dict[str, Any]) -> Config:
@@ -198,76 +295,108 @@ def _parse_config(data: dict[str, Any]) -> Config:
             continue
         effective[key] = value
 
-    vocabulary_data = effective.get("vocabulary", {})
+    vocabulary_data = _require_mapping(effective.get("vocabulary", {}), "vocabulary")
     vocabulary = VocabularyConfig(
-        additional=vocabulary_data.get("additional", []),
-        allowed=vocabulary_data.get("allowed", []),
-        allowed_phrases=vocabulary_data.get(
+        additional=_require_list(vocabulary_data.get("additional", []), "additional"),
+        allowed=_require_list(vocabulary_data.get("allowed", []), "allowed"),
+        allowed_phrases=_require_list(
+            vocabulary_data.get(
+                "allowed_phrases",
+                ["All notable changes", "Critical issue"],
+            ),
             "allowed_phrases",
-            ["All notable changes", "Critical issue"],
         ),
     )
 
-    thresholds_data = effective.get("thresholds", {})
+    thresholds_data = _require_mapping(effective.get("thresholds", {}), "thresholds")
     thresholds = ThresholdsConfig(
-        rule_of_three=thresholds_data.get("rule_of_three", 3),
-        inline_header_lists=thresholds_data.get("inline_header_lists", 3),
-        bold_overuse=thresholds_data.get("bold_overuse", 3),
-        em_dash_overuse=thresholds_data.get("em_dash_overuse", 5),
-        nominalization_overload=thresholds_data.get("nominalization_overload", 3),
-        passive_voice_overuse=thresholds_data.get("passive_voice_overuse", 5),
-        sentence_length_max=thresholds_data.get("sentence_length_max", 40),
-        citation_name_drop=thresholds_data.get("citation_name_drop", 3),
-        anaphora_abuse=thresholds_data.get("anaphora_abuse", 3),
-        gerund_fragment_litany=thresholds_data.get("gerund_fragment_litany", 3),
-        historical_analogy_stacking=thresholds_data.get(
-            "historical_analogy_stacking", 3
+        rule_of_three=_require_int(
+            thresholds_data.get("rule_of_three", 3), "thresholds.rule_of_three"
         ),
-        short_punchy_fragments=thresholds_data.get("short_punchy_fragments", 3),
-        invented_concept_labels=thresholds_data.get("invented_concept_labels", 2),
+        inline_header_lists=_require_int(
+            thresholds_data.get("inline_header_lists", 3),
+            "thresholds.inline_header_lists",
+        ),
+        bold_overuse=_require_int(
+            thresholds_data.get("bold_overuse", 3), "thresholds.bold_overuse"
+        ),
+        em_dash_overuse=_require_int(
+            thresholds_data.get("em_dash_overuse", 5), "thresholds.em_dash_overuse"
+        ),
+        nominalization_overload=_require_int(
+            thresholds_data.get("nominalization_overload", 3),
+            "thresholds.nominalization_overload",
+        ),
+        passive_voice_overuse=_require_int(
+            thresholds_data.get("passive_voice_overuse", 5),
+            "thresholds.passive_voice_overuse",
+        ),
+        sentence_length_max=_require_int(
+            thresholds_data.get("sentence_length_max", 40),
+            "thresholds.sentence_length_max",
+        ),
+        citation_name_drop=_require_int(
+            thresholds_data.get("citation_name_drop", 3),
+            "thresholds.citation_name_drop",
+        ),
+        anaphora_abuse=_require_int(
+            thresholds_data.get("anaphora_abuse", 3), "thresholds.anaphora_abuse"
+        ),
+        gerund_fragment_litany=_require_int(
+            thresholds_data.get("gerund_fragment_litany", 3),
+            "thresholds.gerund_fragment_litany",
+        ),
+        historical_analogy_stacking=_require_int(
+            thresholds_data.get("historical_analogy_stacking", 3),
+            "thresholds.historical_analogy_stacking",
+        ),
+        short_punchy_fragments=_require_int(
+            thresholds_data.get("short_punchy_fragments", 3),
+            "thresholds.short_punchy_fragments",
+        ),
+        invented_concept_labels=_require_int(
+            thresholds_data.get("invented_concept_labels", 2),
+            "thresholds.invented_concept_labels",
+        ),
     )
 
-    per_file_raw = effective.get("per-file-ignores", [])
-    per_file_ignores: list[PerFileIgnore] = []
-    if isinstance(per_file_raw, dict):
-        # Legacy [lint.per-file-ignores] mapping
-        for pattern, ignore_list in per_file_raw.items():
-            per_file_ignores.append(
-                PerFileIgnore(
-                    pattern=pattern,
-                    ignore=list(ignore_list) if isinstance(ignore_list, list) else [],
-                )
-            )
-    else:
-        per_file_ignores = [
-            PerFileIgnore(
-                pattern=item.get("pattern", ""),
-                ignore=item.get("ignore", []),
-            )
-            for item in per_file_raw
-            if isinstance(item, dict)
-        ]
+    per_file_ignores = _parse_per_file_ignores(effective.get("per-file-ignores", []))
 
     raw_severity = effective.get("severity", "warning")
     if isinstance(raw_severity, str):
-        min_severity = raw_severity
+        min_severity = _require_choice(
+            raw_severity, "severity", {"error", "info", "warning"}
+        )
         severity_overrides: dict[str, str] = {}
     elif isinstance(raw_severity, dict):
         min_severity = "warning"
-        severity_overrides = raw_severity
+        severity_overrides = _require_choice_mapping(
+            raw_severity, "severity", {"error", "info", "off", "warning"}
+        )
     else:
-        min_severity = "warning"
-        severity_overrides = {}
+        raise ValueError("severity must be a string or table")
 
     return Config(
-        include=effective.get("include", ["*.md", "*.mdx", "*.markdown", "*.py"]),
-        exclude=effective.get(
-            "exclude", ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
+        include=_require_list(
+            effective.get("include", ["*.md", "*.mdx", "*.markdown", "*.py"]),
+            "include",
         ),
-        select=effective.get("select", ["V", "S", "T", "G", "C", "M"]),
-        ignore=effective.get("ignore", []),
+        exclude=_require_list(
+            effective.get(
+                "exclude", ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
+            ),
+            "exclude",
+        ),
+        select=_require_list(
+            effective.get("select", ["V", "S", "T", "G", "C", "M"]), "select"
+        ),
+        ignore=_require_list(effective.get("ignore", []), "ignore"),
         severity=min_severity,
-        min_confidence=effective.get("min_confidence", "low"),
+        min_confidence=_require_choice(
+            effective.get("min_confidence", "low"),
+            "min_confidence",
+            {"high", "low", "medium"},
+        ),
         severity_overrides=severity_overrides,
         vocabulary=vocabulary,
         thresholds=thresholds,

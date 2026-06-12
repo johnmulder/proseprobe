@@ -210,6 +210,40 @@ V001 = "error"
         with pytest.raises(ConfigError):
             load_config(config_file)
 
+    def test_invalid_min_confidence_raises_config_error(self, tmp_path: Path) -> None:
+        """Invalid confidence values should fail fast."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('[tool.slop-lint]\nmin_confidence = "certain"\n')
+
+        with pytest.raises(ConfigError):
+            load_config(config_file)
+
+    def test_invalid_threshold_type_raises_config_error(self, tmp_path: Path) -> None:
+        """Threshold values should be integers."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('[tool.slop-lint.thresholds]\nrule_of_three = "many"\n')
+
+        with pytest.raises(ConfigError):
+            load_config(config_file)
+
+    def test_invalid_include_type_raises_config_error(self, tmp_path: Path) -> None:
+        """Include patterns should be a list of strings."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('[tool.slop-lint]\ninclude = "*.md"\n')
+
+        with pytest.raises(ConfigError):
+            load_config(config_file)
+
+    def test_invalid_severity_override_raises_config_error(
+        self, tmp_path: Path
+    ) -> None:
+        """Severity override values should be known severity names."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('[tool.slop-lint.severity]\nV001 = "critical"\n')
+
+        with pytest.raises(ConfigError):
+            load_config(config_file)
+
 
 class TestConfig:
     """Tests for Config class."""
