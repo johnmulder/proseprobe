@@ -53,6 +53,41 @@ def _validate_existing_paths(paths: list[Path]) -> int | None:
     return 2
 
 
+def _split_rule_tokens(value: str) -> list[str]:
+    """Split a comma-separated rule list into normalized tokens."""
+    return [token.strip().upper() for token in value.split(",") if token.strip()]
+
+
+def _selection_overrides_ignore(ignored: str, selected: list[str]) -> bool:
+    """Return True when a selected rule or prefix should re-enable an ignore."""
+    ignored = ignored.upper()
+    return any(
+        ignored == token
+        or (len(ignored) == 1 and token.startswith(ignored))
+        or (len(token) == 1 and ignored.startswith(token))
+        for token in selected
+    )
+
+
+def _apply_rule_cli_overrides(config: Config, args: argparse.Namespace) -> None:
+    """Apply CLI rule selection flags on top of loaded config."""
+    if args.select:
+        selected = _split_rule_tokens(args.select)
+        config.select = selected
+        config.ignore = [
+            ignored
+            for ignored in config.ignore
+            if not _selection_overrides_ignore(ignored, selected)
+        ]
+
+    if args.ignore:
+        existing = {ignored.upper() for ignored in config.ignore}
+        for ignored in _split_rule_tokens(args.ignore):
+            if ignored not in existing:
+                config.ignore.append(ignored)
+                existing.add(ignored)
+
+
 # ---------------------------------------------------------------------------
 # Subcommand handlers
 # ---------------------------------------------------------------------------
@@ -184,7 +219,14 @@ def _output_results(
         if not args.quiet:
             print(style("\u2713", color="green") + " No issues found!")
     elif args.quiet:
-        pass
+        for file_path, issues in results.items():
+            for issue in issues:
+                if issue.severity != Severity.ERROR:
+                    continue
+                print(
+                    f"{file_path}:{issue.line}:{issue.column}: "
+                    f"{issue.rule_id} [error] {issue.message}"
+                )
     else:
         for file_path, issues in results.items():
             for issue in issues:
@@ -233,11 +275,7 @@ def _cmd_check(args: argparse.Namespace) -> int:
         return 2
 
     # Apply CLI overrides
-    if args.select:
-        config.select = args.select.split(",")
-    if args.ignore:
-        ignore_list = args.ignore.split(",")
-        config.ignore = list(set(config.ignore) | set(ignore_list))
+    _apply_rule_cli_overrides(config, args)
 
     # Handle --show-config
     if args.show_config:
@@ -379,11 +417,7 @@ def _cmd_watch(args: argparse.Namespace) -> int:
         return 2
 
     # Apply CLI overrides
-    if args.select:
-        config.select = args.select.split(",")
-    if args.ignore:
-        ignore_list = args.ignore.split(",")
-        config.ignore = list(set(config.ignore) | set(ignore_list))
+    _apply_rule_cli_overrides(config, args)
 
     # Create linter and register rules
     linter = Linter(config)

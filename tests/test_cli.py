@@ -117,12 +117,40 @@ class TestCheckCommand:
         assert "V001" in result.stdout
         assert "V002" not in result.stdout
 
+    def test_cli_select_overrides_config_ignore(self, tmp_path: Path) -> None:
+        """CLI --select should re-enable a rule ignored by config."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('[tool.slop-lint]\nignore = ["V001"]\n')
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("This delves into the topic.\n")
+
+        result = run_cli(
+            "check",
+            "--config",
+            str(config_file),
+            "--select",
+            "V001",
+            str(test_file),
+        )
+
+        assert result.exit_code == 1
+        assert "V001" in result.stdout
+
     def test_check_with_ignore(self, tmp_path: Path) -> None:
         """Test ignoring specific rules."""
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
 
         result = run_cli("check", str(test_file), "--ignore", "V001")
+
+        assert result.exit_code == 0
+
+    def test_check_with_ignore_prefix(self, tmp_path: Path) -> None:
+        """Test ignoring a category prefix."""
+        test_file = tmp_path / "test.md"
+        test_file.write_text("This delves into topics. I hope this helps!")
+
+        result = run_cli("check", str(test_file), "--ignore", "V")
 
         assert result.exit_code == 0
 
@@ -538,8 +566,23 @@ class TestCliExitSemantics:
         assert result.exit_code == 1
         assert "V001" in result.stdout
 
-    def test_quiet_suppresses_text_output(self, tmp_path: Path) -> None:
-        """Quiet mode should leave exit status intact but suppress text output."""
+    def test_quiet_outputs_error_issues(self, tmp_path: Path) -> None:
+        """Quiet mode should print error findings and suppress non-errors."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('[tool.slop-lint.severity]\nV001 = "error"\n')
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("Let us delve into this topic.\n")
+
+        result = run_cli(
+            "check", "--config", str(config_file), "--quiet", str(test_file)
+        )
+
+        assert result.exit_code == 1
+        assert "V001" in result.stdout
+        assert "[error]" in result.stdout
+
+    def test_quiet_suppresses_warning_issues(self, tmp_path: Path) -> None:
+        """Quiet mode should leave exit status intact but hide warning findings."""
         test_file = tmp_path / "doc.md"
         test_file.write_text("Let us delve into this topic.")
 

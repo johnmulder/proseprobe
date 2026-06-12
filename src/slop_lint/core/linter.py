@@ -385,11 +385,10 @@ class Linter:
         """
         if not self._rule_applies_to_file(rule, path):
             return False
-        # Check global select/ignore
-        if rule.id in self.config.ignore:
-            return False
 
         prefix = rule.id[0]  # V, S, T, etc.
+        if prefix not in self.config.select and rule.id not in self.config.select:
+            return False
 
         # Check per-file ignores
         for per_file in self.config.per_file_ignores:
@@ -401,7 +400,8 @@ class Linter:
             ):
                 return False
 
-        return prefix in self.config.select or rule.id in self.config.select
+        # Check global ignore
+        return rule.id not in self.config.ignore and prefix not in self.config.ignore
 
     def _rule_applies_to_file(self, rule: Rule, path: Path) -> bool:
         """Check if a rule applies to the file type."""
