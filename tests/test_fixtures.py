@@ -30,9 +30,9 @@ class TestAIGeneratedFixtures:
         """sample1.md should trigger multiple rules."""
         results = linter.check([AI_GENERATED / "sample1.md"])
 
-        assert len(results) > 0
+        assert len(results.issues_by_file) > 0
         all_issues = []
-        for issues in results.values():
+        for issues in results.issues_by_file.values():
             all_issues.extend(issues)
 
         # Should find overused vocabulary
@@ -44,7 +44,7 @@ class TestAIGeneratedFixtures:
         results = linter.check([AI_GENERATED / "sample2.md"])
 
         all_issues = []
-        for issues in results.values():
+        for issues in results.issues_by_file.values():
             all_issues.extend(issues)
 
         rule_ids = {issue.rule_id for issue in all_issues}
@@ -59,7 +59,7 @@ class TestAIGeneratedFixtures:
         results = linter.check([AI_GENERATED / "sample1.py"])
 
         all_issues = []
-        for issues in results.values():
+        for issues in results.issues_by_file.values():
             all_issues.extend(issues)
 
         # Should find issues in docstrings
@@ -72,7 +72,7 @@ class TestAIGeneratedFixtures:
         results = linter.check([AI_GENERATED / "sample2.py"])
 
         all_issues = []
-        for issues in results.values():
+        for issues in results.issues_by_file.values():
             all_issues.extend(issues)
 
         # Should have code-specific issues
@@ -88,7 +88,7 @@ class TestHumanWrittenFixtures:
         """Human-written sample1.md should have few/no issues."""
         results = linter.check([HUMAN_WRITTEN / "sample1.md"])
 
-        total_issues = sum(len(issues) for issues in results.values())
+        total_issues = sum(len(issues) for issues in results.issues_by_file.values())
         # May have some style issues but should be minimal
         assert total_issues < 5, f"Expected few issues, got {total_issues}"
 
@@ -96,21 +96,21 @@ class TestHumanWrittenFixtures:
         """Human-written sample2.md should have few/no issues."""
         results = linter.check([HUMAN_WRITTEN / "sample2.md"])
 
-        total_issues = sum(len(issues) for issues in results.values())
+        total_issues = sum(len(issues) for issues in results.issues_by_file.values())
         assert total_issues < 3, f"Expected minimal issues, got {total_issues}"
 
     def test_human_python_sample1_is_clean(self, linter: Linter) -> None:
         """Human-written sample1.py should have minimal issues."""
         results = linter.check([HUMAN_WRITTEN / "sample1.py"])
 
-        total_issues = sum(len(issues) for issues in results.values())
+        total_issues = sum(len(issues) for issues in results.issues_by_file.values())
         assert total_issues < 3, f"Expected minimal issues, got {total_issues}"
 
     def test_human_python_sample2_is_clean(self, linter: Linter) -> None:
         """Human-written sample2.py should have minimal issues."""
         results = linter.check([HUMAN_WRITTEN / "sample2.py"])
 
-        total_issues = sum(len(issues) for issues in results.values())
+        total_issues = sum(len(issues) for issues in results.issues_by_file.values())
         assert total_issues < 2, f"Expected minimal issues, got {total_issues}"
 
 
@@ -122,8 +122,10 @@ class TestComparativeAnalysis:
         ai_results = linter.check([AI_GENERATED])
         human_results = linter.check([HUMAN_WRITTEN])
 
-        ai_total = sum(len(issues) for issues in ai_results.values())
-        human_total = sum(len(issues) for issues in human_results.values())
+        ai_total = sum(len(issues) for issues in ai_results.issues_by_file.values())
+        human_total = sum(
+            len(issues) for issues in human_results.issues_by_file.values()
+        )
 
         assert ai_total > human_total, (
             f"Bad-practice samples ({ai_total}) should have more issues than "
@@ -135,7 +137,7 @@ class TestComparativeAnalysis:
         ai_results = linter.check([AI_GENERATED])
 
         all_issues = []
-        for issues in ai_results.values():
+        for issues in ai_results.issues_by_file.values():
             all_issues.extend(issues)
 
         # Get unique category prefixes
