@@ -2,13 +2,12 @@
 
 import json
 from collections import Counter
-from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
 from slop_lint.rules.base import Confidence, Issue, Severity
 
-__all__ = ["Reporter"]
+__all__ = ["format_results"]
 
 # ---------------------------------------------------------------------------
 # Format-specific helpers (each has a single reason to change)
@@ -199,52 +198,15 @@ def _format_sarif(results: _Results, rules: list[Any] | None = None) -> str:
     return json.dumps(sarif, indent=2)
 
 
-# ---------------------------------------------------------------------------
-# Public facade (preserves existing API)
-# ---------------------------------------------------------------------------
-
-_Formatter = Callable[[_Results], str]
-
-_FORMATTERS: dict[str, _Formatter] = {
-    "text": _format_text,
-    "json": _format_json,
-    "sarif": _format_sarif,
-}
-
-
-class Reporter:
-    """Formats and outputs lint results."""
-
-    def __init__(
-        self,
-        format: str = "text",
-        rules: list[Any] | None = None,
-        files_checked: int | None = None,
-    ) -> None:
-        """Initialize reporter.
-
-        Args:
-            format: Output format (text, json, sarif).
-            rules: Optional list of Rule instances for SARIF metadata.
-                   When *None*, SARIF will discover rules lazily.
-            files_checked: Optional total number of files scanned.
-        """
-        self.format = format
-        self._rules = rules
-        self._files_checked = files_checked
-
-    def report(self, results: dict[Path, list[Issue]]) -> str:
-        """Format results for output.
-
-        Args:
-            results: Mapping of file paths to issues.
-
-        Returns:
-            Formatted output string.
-        """
-        if self.format == "sarif":
-            return _format_sarif(results, rules=self._rules)
-        if self.format == "json":
-            return _format_json(results, files_checked=self._files_checked)
-        formatter = _FORMATTERS.get(self.format, _format_text)
-        return formatter(results)
+def format_results(
+    results: _Results,
+    format: str = "text",
+    rules: list[Any] | None = None,
+    files_checked: int | None = None,
+) -> str:
+    """Format lint results as text, JSON, or SARIF."""
+    if format == "sarif":
+        return _format_sarif(results, rules)
+    if format == "json":
+        return _format_json(results, files_checked)
+    return _format_text(results)

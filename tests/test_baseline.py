@@ -2,34 +2,8 @@
 
 from pathlib import Path
 
-from slop_lint.core.baseline import Baseline, IssueFingerprint, filter_new_issues
+from slop_lint.core.baseline import Baseline, filter_new_issues
 from slop_lint.rules.base import Issue, Severity
-
-
-class TestIssueFingerprint:
-    """Tests for IssueFingerprint."""
-
-    def test_to_dict(self) -> None:
-        fp = IssueFingerprint(
-            rule_id="V001",
-            message_hash="abc123",
-            relative_path="test.md",
-            context_hash="def456",
-        )
-        result = fp.to_dict()
-        assert result["rule_id"] == "V001"
-        assert result["message_hash"] == "abc123"
-
-    def test_from_dict(self) -> None:
-        data = {
-            "rule_id": "V001",
-            "message_hash": "abc123",
-            "relative_path": "test.md",
-            "context_hash": "def456",
-        }
-        fp = IssueFingerprint.from_dict(data)
-        assert fp.rule_id == "V001"
-        assert fp.message_hash == "abc123"
 
 
 class TestBaseline:

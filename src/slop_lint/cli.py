@@ -207,14 +207,9 @@ def _output_results(
     total_issues = sum(len(issues) for issues in results.values())
 
     if args.format in ("json", "sarif"):
-        from slop_lint.core.reporter import Reporter
+        from slop_lint.core.reporter import format_results
 
-        reporter = Reporter(
-            format=args.format,
-            rules=rules,
-            files_checked=files_checked,
-        )
-        print(reporter.report(results))
+        print(format_results(results, args.format, rules, files_checked))
     elif not results:
         if not args.quiet:
             print(style("\u2713", color="green") + " No issues found!")

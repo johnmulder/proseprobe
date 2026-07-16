@@ -6,34 +6,9 @@ enabling gradual adoption in large codebases.
 
 import hashlib
 import json
-from dataclasses import asdict, dataclass
 from pathlib import Path
 
 from slop_lint.rules.base import Issue
-
-
-@dataclass
-class IssueFingerprint:
-    """Unique identifier for an issue independent of line numbers."""
-
-    rule_id: str
-    message_hash: str  # Hash of message to handle message changes
-    relative_path: str  # Path relative to baseline file
-    context_hash: str  # Hash of surrounding content for stability
-
-    def to_dict(self) -> dict[str, str]:
-        """Convert to dictionary for serialization."""
-        return asdict(self)
-
-    @classmethod
-    def from_dict(cls, data: dict[str, str]) -> "IssueFingerprint":
-        """Create from dictionary."""
-        return cls(
-            rule_id=data["rule_id"],
-            message_hash=data["message_hash"],
-            relative_path=data["relative_path"],
-            context_hash=data["context_hash"],
-        )
 
 
 class Baseline:
@@ -134,15 +109,15 @@ class Baseline:
         context_hash = hashlib.sha256(context.encode()).hexdigest()[:16]
 
         # Create fingerprint string
-        fp = IssueFingerprint(
-            rule_id=issue.rule_id,
-            message_hash=message_hash,
-            relative_path=str(rel_path),
-            context_hash=context_hash,
-        )
+        fingerprint = {
+            "rule_id": issue.rule_id,
+            "message_hash": message_hash,
+            "relative_path": str(rel_path),
+            "context_hash": context_hash,
+        }
 
         # Return a hash of the full fingerprint for compact storage
-        return hashlib.sha256(json.dumps(fp.to_dict()).encode()).hexdigest()[:32]
+        return hashlib.sha256(json.dumps(fingerprint).encode()).hexdigest()[:32]
 
     @property
     def count(self) -> int:
