@@ -165,27 +165,6 @@ allowed = ["delve"]
         assert config.vocabulary.additional == ["synergy", "leverage"]
         assert config.vocabulary.allowed == ["delve"]
 
-    def test_load_legacy_lint_section(self, tmp_path: Path) -> None:
-        """Test loading legacy [lint] config shape."""
-        config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text("""
-[lint]
-select = ["V001"]
-ignore = ["S001"]
-severity = "error"
-
-[lint.per-file-ignores]
-"CHANGELOG.md" = ["V001"]
-""")
-
-        config = load_config(config_file)
-
-        assert config.select == ["V001"]
-        assert config.ignore == ["S001"]
-        assert config.severity == "error"
-        assert len(config.per_file_ignores) == 1
-        assert config.per_file_ignores[0].pattern == "CHANGELOG.md"
-
     def test_load_severity_overrides_table(self, tmp_path: Path) -> None:
         """Test parsing severity overrides table."""
         config_file = tmp_path / ".slop-lint.toml"

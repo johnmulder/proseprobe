@@ -12,7 +12,7 @@ Config files are discovered in this order:
 4. `.slop-lint.toml` in parent directories (up to git root)
 5. `~/.config/slop-lint/config.toml`
 
-Directory scanning also respects `.gitignore` patterns, including nested
+Directory scanning in Git worktrees also respects `.gitignore` patterns, including nested
 `.gitignore` files in subdirectories. Patterns are applied in parent-to-child
 order, and negation (`!pattern`) can re-include files that were ignored by
 earlier matches.

@@ -249,21 +249,8 @@ def _require_choice_mapping(
 
 
 def _parse_per_file_ignores(value: Any) -> list[PerFileIgnore]:
-    """Parse modern and legacy per-file ignore configuration."""
+    """Parse per-file ignore configuration."""
     per_file_ignores: list[PerFileIgnore] = []
-
-    if isinstance(value, dict):
-        for pattern, ignore_list in value.items():
-            if not isinstance(pattern, str):
-                raise ValueError("per-file-ignores must use string patterns")
-            per_file_ignores.append(
-                PerFileIgnore(
-                    pattern=pattern,
-                    ignore=_require_list(ignore_list, f"per-file-ignores.{pattern}"),
-                )
-            )
-        return per_file_ignores
-
     if not isinstance(value, list):
         raise ValueError("per-file-ignores must be a list of tables")
 
@@ -285,17 +272,7 @@ def _parse_per_file_ignores(value: Any) -> list[PerFileIgnore]:
 
 def _parse_config(data: dict[str, Any]) -> Config:
     """Parse configuration dictionary into Config object."""
-    lint_data = data.get("lint", {}) if isinstance(data.get("lint"), dict) else {}
-    effective: dict[str, Any] = {}
-
-    # Support legacy [lint] configuration by overlaying with top-level keys
-    effective.update(lint_data)
-    for key, value in data.items():
-        if key in {"lint", "format"}:
-            continue
-        effective[key] = value
-
-    vocabulary_data = _require_mapping(effective.get("vocabulary", {}), "vocabulary")
+    vocabulary_data = _require_mapping(data.get("vocabulary", {}), "vocabulary")
     vocabulary = VocabularyConfig(
         additional=_require_list(vocabulary_data.get("additional", []), "additional"),
         allowed=_require_list(vocabulary_data.get("allowed", []), "allowed"),
@@ -308,7 +285,7 @@ def _parse_config(data: dict[str, Any]) -> Config:
         ),
     )
 
-    thresholds_data = _require_mapping(effective.get("thresholds", {}), "thresholds")
+    thresholds_data = _require_mapping(data.get("thresholds", {}), "thresholds")
     thresholds = ThresholdsConfig(
         rule_of_three=_require_int(
             thresholds_data.get("rule_of_three", 3), "thresholds.rule_of_three"
@@ -360,9 +337,9 @@ def _parse_config(data: dict[str, Any]) -> Config:
         ),
     )
 
-    per_file_ignores = _parse_per_file_ignores(effective.get("per-file-ignores", []))
+    per_file_ignores = _parse_per_file_ignores(data.get("per-file-ignores", []))
 
-    raw_severity = effective.get("severity", "warning")
+    raw_severity = data.get("severity", "warning")
     if isinstance(raw_severity, str):
         min_severity = _require_choice(
             raw_severity, "severity", {"error", "info", "warning"}
@@ -378,22 +355,20 @@ def _parse_config(data: dict[str, Any]) -> Config:
 
     return Config(
         include=_require_list(
-            effective.get("include", ["*.md", "*.mdx", "*.markdown", "*.py"]),
+            data.get("include", ["*.md", "*.mdx", "*.markdown", "*.py"]),
             "include",
         ),
         exclude=_require_list(
-            effective.get(
-                "exclude", ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
-            ),
+            data.get("exclude", ["venv/**", ".venv/**", "node_modules/**", ".git/**"]),
             "exclude",
         ),
         select=_require_list(
-            effective.get("select", ["V", "S", "T", "G", "C", "M"]), "select"
+            data.get("select", ["V", "S", "T", "G", "C", "M"]), "select"
         ),
-        ignore=_require_list(effective.get("ignore", []), "ignore"),
+        ignore=_require_list(data.get("ignore", []), "ignore"),
         severity=min_severity,
         min_confidence=_require_choice(
-            effective.get("min_confidence", "low"),
+            data.get("min_confidence", "low"),
             "min_confidence",
             {"high", "low", "medium"},
         ),
