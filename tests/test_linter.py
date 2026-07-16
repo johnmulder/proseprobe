@@ -1,5 +1,6 @@
 """Tests for the core linter module."""
 
+import subprocess
 from pathlib import Path
 
 from slop_lint.config import Config, PerFileIgnore
@@ -26,6 +27,10 @@ class TestLinter:
 
 class TestDiscoverFiles:
     """Tests for file discovery."""
+
+    @staticmethod
+    def _init_git(path: Path) -> None:
+        subprocess.run(["git", "init", "-q", str(path)], check=True)
 
     def test_discover_single_file(self, tmp_path: Path) -> None:
         """Test discovering a single file."""
@@ -127,6 +132,7 @@ class TestDiscoverFiles:
 
     def test_discover_respects_gitignore(self, tmp_path: Path) -> None:
         """Test that discovery excludes files matched by .gitignore."""
+        self._init_git(tmp_path)
         (tmp_path / ".gitignore").write_text("ignored.md\n")
         ignored = tmp_path / "ignored.md"
         kept = tmp_path / "kept.md"
@@ -142,6 +148,7 @@ class TestDiscoverFiles:
 
     def test_discover_explicit_file_overrides_gitignore(self, tmp_path: Path) -> None:
         """Test explicit file paths are linted even when gitignored."""
+        self._init_git(tmp_path)
         (tmp_path / ".gitignore").write_text("ignored.md\n")
         ignored = tmp_path / "ignored.md"
         ignored.write_text("content")
@@ -154,6 +161,7 @@ class TestDiscoverFiles:
 
     def test_discover_respects_nested_gitignore(self, tmp_path: Path) -> None:
         """Test nested .gitignore files are applied for subdirectories."""
+        self._init_git(tmp_path)
         docs = tmp_path / "docs"
         docs.mkdir()
         (docs / ".gitignore").write_text("*.md\n")
@@ -172,6 +180,7 @@ class TestDiscoverFiles:
 
     def test_discover_gitignore_negation_reincludes_file(self, tmp_path: Path) -> None:
         """Test gitignore negation patterns re-include matching files."""
+        self._init_git(tmp_path)
         (tmp_path / ".gitignore").write_text("*.md\n!keep.md\n")
         ignored = tmp_path / "ignored.md"
         kept = tmp_path / "keep.md"
@@ -189,6 +198,7 @@ class TestDiscoverFiles:
         self, tmp_path: Path
     ) -> None:
         """Test child .gitignore can re-include a file ignored by parent patterns."""
+        self._init_git(tmp_path)
         (tmp_path / ".gitignore").write_text("*.md\n")
         docs = tmp_path / "docs"
         docs.mkdir()
@@ -301,12 +311,11 @@ class TestCheck:
 
         results = linter.check([file1, file2])
 
-        assert isinstance(results, dict)
         assert isinstance(results, LintResults)
         assert results.files_checked == 2
         # file1 should have issues
-        assert file1 in results
-        assert len(results[file1]) > 0
+        assert file1 in results.issues_by_file
+        assert len(results.issues_by_file[file1]) > 0
 
     def test_check_directory(self, tmp_path: Path) -> None:
         """Test checking a directory."""
@@ -320,8 +329,7 @@ class TestCheck:
 
         results = linter.check([tmp_path])
 
-        assert isinstance(results, dict)
-        assert len(results) >= 1
+        assert len(results.issues_by_file) >= 1
 
     def test_check_returns_deterministic_key_order(self, tmp_path: Path) -> None:
         """Test that check results are ordered deterministically by path."""
@@ -338,7 +346,7 @@ class TestCheck:
         linter.discover_files = lambda _paths: [file_b, file_c, file_a]  # type: ignore[method-assign]
         results = linter.check([tmp_path])
 
-        assert list(results.keys()) == [file_a, file_b, file_c]
+        assert list(results.issues_by_file) == [file_a, file_b, file_c]
 
     def test_check_uses_parallel_executor_for_multiple_files(
         self,

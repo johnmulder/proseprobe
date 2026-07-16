@@ -2,6 +2,7 @@
 
 import fnmatch
 import os
+import subprocess
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
@@ -34,22 +35,12 @@ class LintReadError(OSError):
         self.message = message
 
 
-class LintResults(dict[Path, list[Issue]]):
-    """Lint issues plus scan metadata, while preserving dict behavior."""
+@dataclass
+class LintResults:
+    """Lint issues plus scan metadata."""
 
-    def __init__(
-        self,
-        issues_by_file: dict[Path, list[Issue]] | None = None,
-        *,
-        files_checked: int = 0,
-    ) -> None:
-        super().__init__(issues_by_file or {})
-        self.files_checked = files_checked
-
-    @property
-    def issues_by_file(self) -> dict[Path, list[Issue]]:
-        """Return issues keyed by file path."""
-        return dict(self)
+    issues_by_file: dict[Path, list[Issue]]
+    files_checked: int = 0
 
 
 class FileDiscovery:
@@ -62,7 +53,6 @@ class FileDiscovery:
     ) -> None:
         self._include = include
         self._exclude = exclude
-        self._gitignore_patterns: dict[Path, list[_GitignorePattern]] = {}
 
     def discover(self, paths: list[Path]) -> list[Path]:
         """Discover files to lint from paths.
@@ -89,16 +79,11 @@ class FileDiscovery:
         # De-duplicate while preserving order
         files = list(dict.fromkeys(files))
 
-        # Apply exclude patterns
-        filtered: list[Path] = []
-        for file in files:
-            if self._is_excluded(file, roots):
-                continue
-            if file not in explicit_files and self._is_gitignored(file, roots):
-                continue
-            filtered.append(file)
-
-        return filtered
+        files = [file for file in files if not self._is_excluded(file, roots)]
+        ignored = self._gitignored(
+            [file for file in files if file not in explicit_files], roots
+        )
+        return [file for file in files if file not in ignored]
 
     def _is_excluded(self, file: Path, roots: list[Path]) -> bool:
         """Check if a file should be excluded."""
@@ -138,151 +123,36 @@ class FileDiscovery:
                 return True
         return False
 
-    def _load_gitignore_patterns(self, directory: Path) -> list["_GitignorePattern"]:
-        """Load parsed .gitignore patterns from a directory."""
-        if directory in self._gitignore_patterns:
-            return self._gitignore_patterns[directory]
-
-        ignore_file = directory / ".gitignore"
-        if not ignore_file.exists():
-            self._gitignore_patterns[directory] = []
-            return []
-
-        parsed: list[_GitignorePattern] = []
-        for raw_line in ignore_file.read_text(
-            encoding="utf-8", errors="ignore"
-        ).splitlines():
-            pattern = raw_line.strip()
-            if not pattern:
-                continue
-
-            if pattern.startswith("\\#"):
-                pattern = pattern[1:]
-            elif pattern.startswith("#"):
-                continue
-
-            negated = False
-            if pattern.startswith("\\!"):
-                pattern = pattern[1:]
-            elif pattern.startswith("!"):
-                negated = True
-                pattern = pattern[1:]
-
-            anchored = pattern.startswith("/")
-            if anchored:
-                pattern = pattern.lstrip("/")
-
-            directory_only = pattern.endswith("/")
-            if directory_only:
-                pattern = pattern.rstrip("/")
-
-            if not pattern:
-                continue
-
-            parsed.append(
-                _GitignorePattern(
-                    pattern=pattern,
-                    negated=negated,
-                    anchored=anchored,
-                    directory_only=directory_only,
-                    has_slash="/" in pattern,
-                )
-            )
-
-        self._gitignore_patterns[directory] = parsed
-        return parsed
-
     @staticmethod
-    def _gitignore_pattern_matches(
-        rel_path: Path,
-        entry: "_GitignorePattern",
-    ) -> bool:
-        """Check whether a parsed .gitignore pattern matches a relative path."""
-        path_str = rel_path.as_posix()
-
-        if entry.directory_only:
-            if entry.anchored:
-                return path_str == entry.pattern or path_str.startswith(
-                    f"{entry.pattern}/"
-                )
-
-            if entry.has_slash:
-                return (
-                    path_str == entry.pattern
-                    or path_str.startswith(f"{entry.pattern}/")
-                    or fnmatch.fnmatch(path_str, f"**/{entry.pattern}")
-                    or fnmatch.fnmatch(path_str, f"**/{entry.pattern}/**")
-                )
-
-            return entry.pattern in rel_path.parts
-
-        if entry.anchored:
-            return fnmatch.fnmatch(path_str, entry.pattern)
-
-        if entry.has_slash:
-            return fnmatch.fnmatch(path_str, entry.pattern) or fnmatch.fnmatch(
-                path_str, f"**/{entry.pattern}"
-            )
-
-        return (
-            fnmatch.fnmatch(rel_path.name, entry.pattern)
-            or fnmatch.fnmatch(path_str, entry.pattern)
-            or fnmatch.fnmatch(path_str, f"**/{entry.pattern}")
-        )
-
-    @staticmethod
-    def _iter_scope_directories(root: Path, file: Path) -> list[Path]:
-        """Return root-to-leaf directories whose .gitignore can affect the file."""
-        directories: list[Path] = []
-        current = file.parent
-        while True:
-            directories.append(current)
-            if current == root:
-                break
-            if root not in current.parents:
-                return []
-            current = current.parent
-        directories.reverse()
-        return directories
-
-    def _is_gitignored(self, file: Path, roots: list[Path]) -> bool:
-        """Check if a file is ignored by a root .gitignore."""
+    def _gitignored(files: list[Path], roots: list[Path]) -> set[Path]:
+        """Ask Git which discovered files are ignored."""
+        ignored: set[Path] = set()
         for root in roots:
+            candidates = [
+                file for file in files if file == root or root in file.parents
+            ]
+            if not candidates:
+                continue
             try:
-                file.relative_to(root)
-            except ValueError:
+                result = subprocess.run(  # noqa: S603 - invoke installed Git
+                    [  # noqa: S607 - resolve Git through PATH
+                        "git",
+                        "-C",
+                        str(root),
+                        "check-ignore",
+                        "--stdin",
+                        "-z",
+                        "--no-index",
+                    ],
+                    input="\0".join(str(file) for file in candidates) + "\0",
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+            except OSError:
                 continue
-
-            scope_dirs = self._iter_scope_directories(root, file)
-            if not scope_dirs:
-                continue
-
-            ignored = False
-            for scope_dir in scope_dirs:
-                patterns = self._load_gitignore_patterns(scope_dir)
-                if not patterns:
-                    continue
-
-                rel_path = file.relative_to(scope_dir)
-                for entry in patterns:
-                    if self._gitignore_pattern_matches(rel_path, entry):
-                        ignored = not entry.negated
-
-            if ignored:
-                return True
-
-        return False
-
-
-@dataclass(frozen=True)
-class _GitignorePattern:
-    """Parsed .gitignore pattern metadata for matching behavior."""
-
-    pattern: str
-    negated: bool
-    anchored: bool
-    directory_only: bool
-    has_slash: bool
+            ignored.update(Path(path) for path in result.stdout.split("\0") if path)
+        return ignored
 
 
 # ---------------------------------------------------------------------------
@@ -354,7 +224,7 @@ class Linter:
         """
         files = self.discover_files(paths)
         if not files:
-            return LintResults(files_checked=0)
+            return LintResults({}, files_checked=0)
 
         worker_count = min(32, (os.cpu_count() or 1) + 4)
 
