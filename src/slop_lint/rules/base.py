@@ -1,7 +1,6 @@
 """Abstract base rule and common types."""
 
 from abc import ABC, abstractmethod
-from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum, StrEnum
 from typing import ClassVar
@@ -115,28 +114,12 @@ class Rule(ABC):
         """
         ...
 
-    # Registry mapping content_scope values to line-extraction functions.
-    # Populated lazily on first access to avoid coupling the ABC to concrete
-    # parser modules at import time (Dependency Inversion Principle).
-    _SCOPE_EXTRACTORS: ClassVar[
-        dict[str, Callable[[str, str], list[tuple[int, str]]]]
-    ] = {}
-
     def iter_lines(self, content: str, filename: str) -> list[tuple[int, str]]:
         """Return line-numbered content based on the rule's scope."""
-        if not Rule._SCOPE_EXTRACTORS:
-            from slop_lint.parsers.markdown import (
-                iter_non_code_lines,
-                iter_prose_lines,
-            )
+        from slop_lint.parsers.markdown import iter_non_code_lines, iter_prose_lines
 
-            Rule._SCOPE_EXTRACTORS.update(
-                {
-                    "prose": iter_prose_lines,
-                    "non_code": iter_non_code_lines,
-                }
-            )
-        extractor = self._SCOPE_EXTRACTORS.get(self.content_scope)
-        if extractor is not None:
-            return extractor(content, filename)
+        if self.content_scope == "prose":
+            return iter_prose_lines(content, filename)
+        if self.content_scope == "non_code":
+            return iter_non_code_lines(content, filename)
         return list(enumerate(content.split("\n"), start=1))
