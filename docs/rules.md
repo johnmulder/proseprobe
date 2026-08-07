@@ -77,6 +77,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `M004` | Broken References | Markup | error | medium | markdown / prose | — |
 | `M005` | Unresolved Markdown References | Markup | error | high | markdown / non_code | — |
 | `M006` | Template Residue | Markup | warning | high | markdown / prose | — |
+| `M007` | Unclosed Code Fence | Markup | error | high | markdown / raw | — |
 
 <!-- rule-docs:inventory:end -->
 
@@ -714,6 +715,37 @@ The introduction explains how retries use exponential backoff.
 Fenced code, inline code, HTML blocks, and content under example-style headings
 such as `Example`, `Template`, and `Before` are ignored. Findings suggest
 replacing the marker with final content but never rewrite the source.
+
+---
+
+### M007: Unclosed Code Fence
+
+Detects fenced Markdown code blocks that reach end of file without a valid
+closing delimiter. Findings are high-confidence errors reported across the
+opening delimiter and suggest adding the matching fence.
+
+**Detected patterns:**
+- Opening fences of three or more backticks or tildes, indented by zero to
+  three spaces, without a closer
+- Closers that use the wrong fence character
+- Closers that are shorter than the opening delimiter
+
+**Example (bad):**
+`````markdown
+```python
+print("This block never closes")
+`````
+
+**Example (good):**
+``````markdown
+````text
+This block uses a longer valid closer.
+`````
+``````
+
+Only the same fence character repeated at least as many times closes a block.
+The swallowed body remains classified as code, preventing cascaded prose
+findings after the syntax error.
 
 ---
 

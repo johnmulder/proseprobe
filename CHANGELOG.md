@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- M007 reports unclosed Markdown code fences at their opening delimiters.
 - M006 detects explicit Markdown template residue at high confidence and
   standalone TODO/TBD placeholders at low confidence.
 - M005 detects undefined Markdown reference labels at high confidence and

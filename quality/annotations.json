@@ -1230,6 +1230,22 @@
           "note": "An inline TBD status is explanatory prose, not template residue."
         }
       ]
+    },
+    "quality/corpus/unclosed-fences.md": {
+      "expected": [
+        {
+          "rule_id": "M007",
+          "line": 7,
+          "column": 3
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "M007",
+          "line": 3,
+          "note": "A tilde fence closed by a longer tilde delimiter is valid."
+        }
+      ]
     }
   }
 }

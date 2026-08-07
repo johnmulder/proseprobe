@@ -39,6 +39,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         markup.BrokenReferencesRule(),
         markup.UnresolvedMarkdownReferencesRule(),
         markup.TemplateResidueRule(),
+        markup.UnclosedCodeFenceRule(),
         struct.RuleOfThreeRule(thresholds.rule_of_three),
         struct.NegativeParallelismRule(),
         struct.ChallengeConclusionsRule(),
