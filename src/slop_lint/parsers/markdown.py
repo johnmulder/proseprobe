@@ -83,6 +83,19 @@ class MarkdownReference:
     destination_end: int = 0
 
 
+@dataclass(frozen=True)
+class MarkdownCodeBlock:
+    """A fenced Markdown code block with its opening source span."""
+
+    start_line: int
+    end_line: int
+    language: str
+    content: str
+    fence: str
+    column: int
+    closed: bool
+
+
 MarkdownProseBlock = ProseBlock
 
 
@@ -100,7 +113,7 @@ class MarkdownParser:
         """
         self.content = content
         self._lines = content.split("\n")
-        self._code_blocks: list[tuple[int, int, str, str]] | None = None
+        self._code_blocks: list[MarkdownCodeBlock] | None = None
         self._code_block_lines: set[int] | None = None
         self._setext_heading_lines: set[int] | None = None
         self._setext_underline_lines: set[int] | None = None
@@ -135,12 +148,14 @@ class MarkdownParser:
         if self._code_blocks is not None and self._code_block_lines is not None:
             return
 
-        blocks: list[tuple[int, int, str, str]] = []
+        blocks: list[MarkdownCodeBlock] = []
         code_lines: set[int] = set()
 
         in_block = False
         fence_char = ""
         fence_len = 0
+        opening_fence = ""
+        opening_column = 0
         language = ""
         start_line = 0
         content_lines: list[str] = []
@@ -151,9 +166,10 @@ class MarkdownParser:
             if not in_block:
                 match = fence_re.match(line)
                 if match:
-                    fence = match.group(2)
-                    fence_char = fence[0]
-                    fence_len = len(fence)
+                    opening_fence = match.group(2)
+                    fence_char = opening_fence[0]
+                    fence_len = len(opening_fence)
+                    opening_column = match.start(2) + 1
                     language = match.group(3) or ""
                     start_line = line_num
                     content_lines = []
@@ -167,19 +183,31 @@ class MarkdownParser:
             )
             if close_re.match(line):
                 blocks.append(
-                    (start_line, line_num, language, "\n".join(content_lines))
+                    MarkdownCodeBlock(
+                        start_line=start_line,
+                        end_line=line_num,
+                        language=language,
+                        content="\n".join(content_lines),
+                        fence=opening_fence,
+                        column=opening_column,
+                        closed=True,
+                    )
                 )
                 in_block = False
-                fence_char = ""
-                fence_len = 0
-                language = ""
-                content_lines = []
             else:
                 content_lines.append(line)
 
         if in_block:
             blocks.append(
-                (start_line, len(self._lines), language, "\n".join(content_lines))
+                MarkdownCodeBlock(
+                    start_line=start_line,
+                    end_line=len(self._lines),
+                    language=language,
+                    content="\n".join(content_lines),
+                    fence=opening_fence,
+                    column=opening_column,
+                    closed=False,
+                )
             )
 
         self._code_blocks = blocks
@@ -654,14 +682,17 @@ class MarkdownParser:
 
         return links
 
-    def get_code_blocks(self) -> list[tuple[int, int, str, str]]:
-        """Extract fenced code blocks.
-
-        Returns:
-            List of (start_line, end_line, language, content) tuples.
-        """
+    def get_code_block_records(self) -> list[MarkdownCodeBlock]:
+        """Return fenced code blocks with source and closure metadata."""
         self._ensure_code_blocks()
-        return self._code_blocks or []
+        return list(self._code_blocks or [])
+
+    def get_code_blocks(self) -> list[tuple[int, int, str, str]]:
+        """Extract fenced code blocks as backward-compatible tuples."""
+        return [
+            (block.start_line, block.end_line, block.language, block.content)
+            for block in self.get_code_block_records()
+        ]
 
     def get_bullet_lists(self) -> list[tuple[int, int, list[str]]]:
         """Extract bullet lists.

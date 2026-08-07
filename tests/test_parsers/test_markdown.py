@@ -3,6 +3,7 @@
 import pytest
 
 from slop_lint.parsers.markdown import (
+    MarkdownCodeBlock,
     MarkdownLink,
     MarkdownParser,
     MarkdownProseBlock,
@@ -545,6 +546,45 @@ Visible prose.
         assert start_line == 2
         assert end_line == 3
         assert "code line" in code
+
+    @pytest.mark.parametrize(
+        ("content", "expected"),
+        [
+            (
+                "```python\npass\n```",
+                (1, 3, "python", "pass", "```", 1, True),
+            ),
+            (
+                "  ~~~~\nbody\n~~~~~",
+                (1, 3, "", "body", "~~~~", 3, True),
+            ),
+            (
+                "````\n~~~\n```\nbody",
+                (1, 4, "", "~~~\n```\nbody", "````", 1, False),
+            ),
+        ],
+    )
+    def test_get_code_block_records_preserve_fence_state(
+        self,
+        content: str,
+        expected: tuple[int, int, str, str, str, int, bool],
+    ) -> None:
+        """Fence records should retain their opener, span, and closure state."""
+        parser = MarkdownParser(content)
+
+        [block] = parser.get_code_block_records()
+
+        assert isinstance(block, MarkdownCodeBlock)
+        assert (
+            block.start_line,
+            block.end_line,
+            block.language,
+            block.content,
+            block.fence,
+            block.column,
+            block.closed,
+        ) == expected
+        assert parser.get_code_blocks() == [expected[:4]]
 
     def test_get_bullet_lists_empty(self) -> None:
         """Test getting bullet lists from empty document."""
