@@ -23,6 +23,7 @@ from slop_lint.data.phrases import (
     SIGNPOSTED_CONCLUSION_PHRASES,
 )
 from slop_lint.parsers.prose import (
+    ProseSentence,
     iter_prose_blocks,
     iter_prose_scopes,
     iter_prose_sentences,
@@ -824,27 +825,34 @@ class CitationNameDroppingRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect consecutive 'Author (Year) verb' citation patterns."""
         issues: list[Issue] = []
-        for block in iter_prose_scopes(content, filename):
-            citation_sentences: list[tuple[int, str]] = []
-            for line_num, line in block.lines:
-                for sentence in re.split(r"(?<=[.!?])\s+", line):
-                    stripped = sentence.strip()
-                    if re.match(CITATION_NAME_DROP_PATTERN, stripped):
-                        citation_sentences.append((line_num, stripped))
+        records = iter_prose_sentences(content, filename)
 
-            if len(citation_sentences) >= self.threshold:
-                issues.append(
-                    Issue(
-                        rule_id=self.id,
-                        message=(
-                            f"Citation name-dropping: {len(citation_sentences)} "
-                            f"consecutive 'Author (Year) verb' sentences"
-                        ),
-                        line=citation_sentences[0][0],
-                        column=1,
-                        severity=self.severity,
-                    )
+        def flush(run: list[ProseSentence]) -> None:
+            if len(run) < self.threshold:
+                return
+            first = run[0]
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=(
+                        f"Citation name-dropping: {len(run)} consecutive "
+                        "'Author (Year) verb' sentences"
+                    ),
+                    line=first.start_line,
+                    column=first.start_column,
+                    severity=self.severity,
                 )
+            )
+
+        for _scope, group in groupby(records, key=lambda sentence: sentence.scope_id):
+            run: list[ProseSentence] = []
+            for sentence in group:
+                if re.match(CITATION_NAME_DROP_PATTERN, sentence.text):
+                    run.append(sentence)
+                    continue
+                flush(run)
+                run = []
+            flush(run)
         return issues
 
 

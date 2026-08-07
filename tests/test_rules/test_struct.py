@@ -751,6 +751,24 @@ class TestCitationNameDropping:
         issues = rule.check(text, "test.md")
         assert len(issues) == 0
 
+    def test_citation_runs_use_wrapped_sentences_and_reset_on_prose(self) -> None:
+        from slop_lint.rules.struct import CitationNameDroppingRule
+
+        wrapped = (
+            "Smith (2012) argues that communities change. "
+            "Jones (2014) claims that tools\nempower users. "
+            "Patel (2018) suggests that platforms mediate interactions."
+        )
+        interrupted = (
+            "Smith (2012) argues that communities change. "
+            "The evidence is synthesized here. "
+            "Jones (2014) claims that tools empower users. "
+            "Patel (2018) suggests that platforms mediate interactions."
+        )
+
+        assert len(CitationNameDroppingRule().check(wrapped, "test.md")) == 1
+        assert CitationNameDroppingRule().check(interrupted, "test.md") == []
+
     def test_ignores_below_threshold(self) -> None:
         """Don't flag when below threshold."""
         from slop_lint.rules.struct import CitationNameDroppingRule
