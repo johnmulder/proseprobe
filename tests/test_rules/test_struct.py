@@ -321,6 +321,19 @@ class TestAnaphoraAbuse:
 
         assert AnaphoraAbuseRule().check(text, "test.md") == []
 
+    def test_anaphora_spans_wrapped_sentences_but_not_paragraphs(self) -> None:
+        from slop_lint.rules.struct import AnaphoraAbuseRule
+
+        wrapped = "They built the platform. They hired\ncarefully. They launched it."
+        separated = (
+            "They built the platform.\n\nThey hired carefully.\n\nThey launched it."
+        )
+
+        [issue] = AnaphoraAbuseRule().check(wrapped, "test.md")
+
+        assert (issue.line, issue.column) == (1, 1)
+        assert AnaphoraAbuseRule().check(separated, "test.md") == []
+
     def test_headings_do_not_form_repeated_openings(self) -> None:
         """Heading text is not a run of prose sentences."""
         from slop_lint.rules.struct import AnaphoraAbuseRule

@@ -1,6 +1,7 @@
 """Structural detection rules (S001-S018)."""
 
 import re
+from itertools import groupby
 from typing import ClassVar
 
 from slop_lint.data.patterns import (
@@ -21,7 +22,11 @@ from slop_lint.data.phrases import (
     FRACTAL_SUMMARY_PHRASES,
     SIGNPOSTED_CONCLUSION_PHRASES,
 )
-from slop_lint.parsers.prose import iter_prose_blocks, iter_prose_scopes
+from slop_lint.parsers.prose import (
+    iter_prose_blocks,
+    iter_prose_scopes,
+    iter_prose_sentences,
+)
 from slop_lint.rules.base import Confidence, Issue, Rule, Severity
 
 
@@ -403,31 +408,35 @@ class AnaphoraAbuseRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect 3+ consecutive sentences with the same opening."""
         issues: list[Issue] = []
-        for block in iter_prose_blocks(content, filename):
-            if block.context not in {"body", "blockquote"}:
-                continue
+        records = iter_prose_sentences(content, filename)
+        for _scope, group in groupby(records, key=lambda sentence: sentence.scope_id):
             sentences = [
-                (line_num, sentence.strip())
-                for line_num, line in block.lines
-                for sentence in re.split(r"(?<=[.!?])\s+", line.strip())
-                if sentence.strip()
+                sentence
+                for sentence in group
+                if sentence.context in {"body", "blockquote"}
             ]
+            if not sentences:
+                continue
             run_start = 0
             for index in range(1, len(sentences) + 1):
                 same_opening = index < len(sentences) and (
-                    sentences[index][1].split()[0].lower()
-                    == sentences[index - 1][1].split()[0].lower()
+                    sentences[index].text.split()[0].casefold()
+                    == sentences[index - 1].text.split()[0].casefold()
                 )
                 if same_opening:
                     continue
                 run_len = index - run_start
                 if run_len >= self._threshold:
+                    first = sentences[run_start]
                     issues.append(
                         Issue(
                             rule_id=self.id,
-                            message=f"Anaphora: {run_len} consecutive sentences starting with '{sentences[run_start][1].split()[0]}'",
-                            line=sentences[run_start][0],
-                            column=1,
+                            message=(
+                                f"Anaphora: {run_len} consecutive sentences "
+                                f"starting with '{first.text.split()[0]}'"
+                            ),
+                            line=first.start_line,
+                            column=first.start_column,
                             severity=self.severity,
                         )
                     )
