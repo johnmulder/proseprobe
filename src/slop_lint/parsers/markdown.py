@@ -68,6 +68,21 @@ class MarkdownLink:
     url_end: int = 0
 
 
+@dataclass(frozen=True)
+class MarkdownReference:
+    """A Markdown reference definition or use with source positions."""
+
+    label: str
+    text: str
+    destination: str | None
+    line: int
+    column: int
+    end_column: int
+    is_definition: bool
+    destination_start: int = 0
+    destination_end: int = 0
+
+
 MarkdownProseBlock = ProseBlock
 
 
@@ -92,6 +107,7 @@ class MarkdownParser:
         self._html_block_lines: set[int] | None = None
         self._prose_blocks: list[MarkdownProseBlock] | None = None
         self._inline_suppressions: list[InlineSuppression] | None = None
+        self._references: list[MarkdownReference] | None = None
         self._blockquote_re = re.compile(r"^(?:\s{0,3}>\s?)+")
         self._html_block_tags = {
             "div",
@@ -379,6 +395,185 @@ class MarkdownParser:
         flush(len(self._lines))
         return paragraphs
 
+    @staticmethod
+    def _normalize_reference_label(label: str) -> str:
+        """Normalize a reference label for CommonMark-style matching."""
+        unescaped: list[str] = []
+        index = 0
+        while index < len(label):
+            if (
+                label[index] == "\\"
+                and index + 1 < len(label)
+                and label[index + 1] in "[]"
+            ):
+                unescaped.append(label[index + 1])
+                index += 2
+                continue
+            unescaped.append(label[index])
+            index += 1
+        return " ".join("".join(unescaped).split()).casefold()
+
+    @classmethod
+    def _parse_reference_label(
+        cls,
+        line: str,
+        start: int,
+        *,
+        allow_empty: bool = False,
+    ) -> tuple[str, int] | None:
+        """Return raw label text and its closing-bracket index."""
+        if start >= len(line) or line[start] != "[":
+            return None
+        index = start + 1
+        chars: list[str] = []
+        while index < len(line):
+            char = line[index]
+            if char == "\\" and index + 1 < len(line):
+                chars.extend((char, line[index + 1]))
+                index += 2
+                continue
+            if char == "[":
+                return None
+            if char == "]":
+                raw = "".join(chars)
+                if allow_empty or cls._normalize_reference_label(raw):
+                    return raw, index
+                return None
+            chars.append(char)
+            index += 1
+        return None
+
+    @classmethod
+    def _reference_definition(
+        cls,
+        line: str,
+        line_num: int,
+        prefix_len: int,
+    ) -> MarkdownReference | None:
+        """Parse one single-line reference definition."""
+        start = len(line) - len(line.lstrip())
+        parsed = cls._parse_reference_label(line, start)
+        if parsed is None:
+            return None
+        text, closing = parsed
+        after_label = closing + 1
+        if after_label >= len(line) or line[after_label] != ":":
+            return None
+        destination_match = re.match(r"\s*(\S+)", line[after_label + 1 :])
+        if destination_match is None:
+            return None
+        label = cls._normalize_reference_label(text)
+        if label.startswith("^"):
+            return None
+        destination = destination_match.group(1)
+        destination_start = (
+            after_label + 1 + destination_match.start(1) + 1 + prefix_len
+        )
+        destination_end = after_label + 1 + destination_match.end(1) + 1 + prefix_len
+        return MarkdownReference(
+            label=label,
+            text=text,
+            destination=destination,
+            line=line_num,
+            column=start + 1 + prefix_len,
+            end_column=closing + 2 + prefix_len,
+            is_definition=True,
+            destination_start=destination_start,
+            destination_end=destination_end,
+        )
+
+    def get_references(self) -> list[MarkdownReference]:
+        """Extract reference definitions and unambiguous reference uses."""
+        if self._references is not None:
+            return self._references
+
+        self._ensure_code_blocks()
+        code_lines = self._code_lines()
+        html_lines = self._html_lines()
+        definitions: list[MarkdownReference] = []
+        definition_lines: set[int] = set()
+
+        for line_num, line in enumerate(self._lines, start=1):
+            if line_num in code_lines or line_num in html_lines:
+                continue
+            stripped_line, prefix_len = self._strip_blockquote_prefix(line)
+            definition = self._reference_definition(
+                stripped_line,
+                line_num,
+                prefix_len,
+            )
+            if definition is not None:
+                definitions.append(definition)
+                definition_lines.add(line_num)
+
+        defined_labels = {definition.label for definition in definitions}
+        uses: list[MarkdownReference] = []
+
+        for line_num, line in enumerate(self._lines, start=1):
+            if (
+                line_num in code_lines
+                or line_num in html_lines
+                or line_num in definition_lines
+            ):
+                continue
+            stripped_line, prefix_len = self._strip_blockquote_prefix(line)
+            masked = self._mask_inline_code(stripped_line)
+            index = 0
+            while index < len(masked):
+                if masked[index] != "[" or (index > 0 and masked[index - 1] == "\\"):
+                    index += 1
+                    continue
+                first = self._parse_reference_label(masked, index)
+                if first is None:
+                    index += 1
+                    continue
+                text, first_closing = first
+                after_first = first_closing + 1
+                if after_first < len(masked) and masked[after_first] == "(":
+                    inline_end = masked.find(")", after_first + 1)
+                    index = inline_end + 1 if inline_end >= 0 else after_first + 1
+                    continue
+
+                source_start = (
+                    index - 1 if index > 0 and masked[index - 1] == "!" else index
+                )
+                label = self._normalize_reference_label(text)
+                end = first_closing
+                if after_first < len(masked) and masked[after_first] == "[":
+                    second = self._parse_reference_label(
+                        masked,
+                        after_first,
+                        allow_empty=True,
+                    )
+                    if second is None:
+                        index = after_first + 1
+                        continue
+                    explicit_label, end = second
+                    label = self._normalize_reference_label(explicit_label or text)
+                elif label not in defined_labels:
+                    index = first_closing + 1
+                    continue
+
+                if label and not label.startswith("^"):
+                    uses.append(
+                        MarkdownReference(
+                            label=label,
+                            text=text,
+                            destination=None,
+                            line=line_num,
+                            column=source_start + 1 + prefix_len,
+                            end_column=end + 2 + prefix_len,
+                            is_definition=False,
+                        )
+                    )
+                index = end + 1
+
+        self._references = sorted(
+            [*definitions, *uses],
+            key=lambda reference: (reference.line, reference.column),
+        )
+        return self._references
+
     def get_links(self) -> list[MarkdownLink]:
         """Extract all links from the document.
 
@@ -390,24 +585,17 @@ class MarkdownParser:
         html_lines = self._html_lines()
         links: list[MarkdownLink] = []
         link_re = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
-        ref_def_re = re.compile(r"^\s*\[([^\]]+)\]:\s*(\S+)")
-        ref_use_re = re.compile(r"\[([^\]]+)\]\[([^\]]*)\]")
         autolink_re = re.compile(r"<(https?://[^>\s]+)>")
-
-        reference_defs: dict[str, tuple[str, int, int, int]] = {}
+        references = self.get_references()
+        reference_defs: dict[str, MarkdownReference] = {}
+        uses_by_line: dict[int, list[MarkdownReference]] = {}
         used_refs: set[str] = set()
 
-        for line_num, line in enumerate(self._lines, start=1):
-            if line_num in code_lines or line_num in html_lines:
-                continue
-            stripped_line, prefix_len = self._strip_blockquote_prefix(line)
-            match = ref_def_re.match(stripped_line)
-            if match:
-                ref_id = match.group(1).strip().lower()
-                url = match.group(2)
-                url_start = match.start(2) + 1 + prefix_len
-                url_end = match.end(2) + 1 + prefix_len
-                reference_defs[ref_id] = (url, line_num, url_start, url_end)
+        for reference in references:
+            if reference.is_definition:
+                reference_defs.setdefault(reference.label, reference)
+            else:
+                uses_by_line.setdefault(reference.line, []).append(reference)
 
         for line_num, line in enumerate(self._lines, start=1):
             if line_num in code_lines or line_num in html_lines:
@@ -425,20 +613,19 @@ class MarkdownParser:
                         url_end=match.end(2) + 1 + prefix_len,
                     )
                 )
-            for match in ref_use_re.finditer(masked):
-                ref_text = match.group(1).strip()
-                ref_id = match.group(2).strip().lower() or ref_text.lower()
-                if ref_id in reference_defs:
-                    url, _, _, _ = reference_defs[ref_id]
-                    used_refs.add(ref_id)
-                    links.append(
-                        MarkdownLink(
-                            text=ref_text,
-                            url=url,
-                            line=line_num,
-                            column=match.start() + 1 + prefix_len,
-                        )
+            for reference in uses_by_line.get(line_num, []):
+                definition = reference_defs.get(reference.label)
+                if definition is None or definition.destination is None:
+                    continue
+                used_refs.add(reference.label)
+                links.append(
+                    MarkdownLink(
+                        text=reference.text,
+                        url=definition.destination,
+                        line=line_num,
+                        column=reference.column,
                     )
+                )
             for match in autolink_re.finditer(masked):
                 links.append(
                     MarkdownLink(
@@ -451,17 +638,17 @@ class MarkdownParser:
                     )
                 )
 
-        for ref_id, (url, line_num, url_start, url_end) in reference_defs.items():
-            if ref_id in used_refs:
+        for label, definition in reference_defs.items():
+            if label in used_refs or definition.destination is None:
                 continue
             links.append(
                 MarkdownLink(
-                    text=ref_id,
-                    url=url,
-                    line=line_num,
-                    column=url_start,
-                    url_start=url_start,
-                    url_end=url_end,
+                    text=definition.text,
+                    url=definition.destination,
+                    line=definition.line,
+                    column=definition.destination_start,
+                    url_start=definition.destination_start,
+                    url_end=definition.destination_end,
                 )
             )
 

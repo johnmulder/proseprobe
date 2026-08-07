@@ -6,6 +6,7 @@ from slop_lint.parsers.markdown import (
     MarkdownLink,
     MarkdownParser,
     MarkdownProseBlock,
+    MarkdownReference,
     MarkdownSection,
     _get_cached_parser,
     _parser_cache,
@@ -315,6 +316,112 @@ Visible prose.
         assert any(
             link.url == "https://example.com" and link.line == 3 for link in links
         )
+
+    def test_get_references_returns_ordered_records_with_source_spans(self) -> None:
+        """Definitions and uses should retain exact source locations."""
+        content = "[ref]: /one\n\nSee [text][ref]."
+
+        references = MarkdownParser(content).get_references()
+
+        assert all(isinstance(reference, MarkdownReference) for reference in references)
+        assert [reference.is_definition for reference in references] == [True, False]
+        definition, use = references
+        assert (
+            definition.label,
+            definition.text,
+            definition.destination,
+            definition.line,
+            definition.column,
+            definition.end_column,
+            definition.destination_start,
+            definition.destination_end,
+        ) == ("ref", "ref", "/one", 1, 1, 6, 8, 12)
+        assert (
+            use.label,
+            use.text,
+            use.destination,
+            use.line,
+            use.column,
+            use.end_column,
+        ) == ("ref", "text", None, 3, 5, 16)
+
+    def test_get_references_keeps_undefined_full_collapsed_and_image_uses(
+        self,
+    ) -> None:
+        """Unambiguous reference syntax should be exposed without definitions."""
+        content = "[text][missing]\n[missing][]\n![diagram][image]"
+
+        references = MarkdownParser(content).get_references()
+
+        assert [
+            (reference.label, reference.text, reference.line, reference.column)
+            for reference in references
+        ] == [
+            ("missing", "text", 1, 1),
+            ("missing", "missing", 2, 1),
+            ("image", "diagram", 3, 1),
+        ]
+
+    def test_get_references_normalizes_case_whitespace_and_escaped_brackets(
+        self,
+    ) -> None:
+        """Reference labels should use CommonMark-style normalized matching."""
+        content = "[A  Ref\\[\\]]: /one\n\nSee [text][a\tref\\[\\]]."
+
+        references = MarkdownParser(content).get_references()
+
+        assert [reference.label for reference in references] == ["a ref[]", "a ref[]"]
+        assert MarkdownParser(content).get_links()[-1].url == "/one"
+
+    def test_get_references_retains_duplicates_and_first_definition_wins(
+        self,
+    ) -> None:
+        """All definitions should remain visible while the first resolves links."""
+        content = "[ref]: /first\n[REF]: /second\n\nUse [text][ref]."
+        parser = MarkdownParser(content)
+
+        definitions = [
+            reference
+            for reference in parser.get_references()
+            if reference.is_definition
+        ]
+        usage = next(link for link in parser.get_links() if link.line == 4)
+
+        assert [reference.destination for reference in definitions] == [
+            "/first",
+            "/second",
+        ]
+        assert usage.url == "/first"
+
+    def test_get_references_recognizes_only_resolved_shortcuts(self) -> None:
+        """Bare brackets are references only when a definition exists."""
+        content = "[known]: /url\n\n[known] and [unknown]"
+
+        uses = [
+            reference
+            for reference in MarkdownParser(content).get_references()
+            if not reference.is_definition
+        ]
+
+        assert [(reference.label, reference.text) for reference in uses] == [
+            ("known", "known")
+        ]
+
+    def test_get_references_ignores_non_reference_contexts(self) -> None:
+        """Footnotes, inline links, code, and HTML blocks are out of scope."""
+        content = """\
+[^note]: Footnote text
+[inline](/url)
+`[code][missing]`
+```markdown
+[fenced][missing]
+```
+<div>
+[html][missing]
+</div>
+"""
+
+        assert MarkdownParser(content).get_references() == []
 
     def test_get_links_in_table(self) -> None:
         """Test extracting links inside markdown tables."""
