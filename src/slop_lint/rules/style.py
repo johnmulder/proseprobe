@@ -11,7 +11,7 @@ from slop_lint.parsers.markdown import (
     MarkdownParser,
     is_markdown_file,
 )
-from slop_lint.parsers.prose import iter_prose_blocks
+from slop_lint.parsers.prose import iter_prose_blocks, iter_prose_sentences
 from slop_lint.rules.base import Issue, Rule, Severity
 
 
@@ -347,25 +347,22 @@ class SentenceLengthRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect excessively long sentences."""
         issues: list[Issue] = []
-        for block in iter_prose_blocks(content, filename):
-            if block.context not in {"body", "list_item", "blockquote"}:
+        for sentence in iter_prose_sentences(content, filename):
+            if sentence.context not in {"body", "list_item", "blockquote"}:
                 continue
-            for line_num, line in block.lines:
-                sentences = re.split(r"(?<=[.!?])\s+", line)
-                for raw_sentence in sentences:
-                    sentence = raw_sentence.strip()
-                    if not sentence:
-                        continue
-                    words = sentence.split()
-                    if len(words) > self.threshold:
-                        col = line.find(sentence)
-                        issues.append(
-                            Issue(
-                                rule_id=self.id,
-                                message=f"Long sentence: {len(words)} words (threshold {self.threshold})",
-                                line=line_num,
-                                column=max(1, col + 1),
-                                severity=self.severity,
-                            )
-                        )
+            words = sentence.text.split()
+            if len(words) <= self.threshold:
+                continue
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=(
+                        f"Long sentence: {len(words)} words "
+                        f"(threshold {self.threshold})"
+                    ),
+                    line=sentence.start_line,
+                    column=sentence.start_column,
+                    severity=self.severity,
+                )
+            )
         return issues

@@ -253,6 +253,16 @@ class TestSentenceLength:
         issues = rule.check(text, "test.md")
         assert len(issues) == 0
 
+    def test_long_sentence_counts_words_across_source_lines(self) -> None:
+        from slop_lint.rules.style import SentenceLengthRule
+
+        text = "One two three four five\nsix seven eight nine ten."
+
+        [issue] = SentenceLengthRule(threshold=8).check(text, "test.md")
+
+        assert issue.message == "Long sentence: 10 words (threshold 8)"
+        assert (issue.line, issue.column) == (1, 1)
+
     def test_ignores_code_blocks(self) -> None:
         """Don't flag long lines inside code blocks."""
         from slop_lint.rules.style import SentenceLengthRule
