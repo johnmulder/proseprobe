@@ -917,6 +917,37 @@
         }
       ]
     },
+    "quality/corpus/placeholder-links.md": {
+      "expected": [
+        {
+          "rule_id": "M004",
+          "line": 3,
+          "column": 23
+        },
+        {
+          "rule_id": "M004",
+          "line": 5,
+          "column": 13
+        },
+        {
+          "rule_id": "M004",
+          "line": 7,
+          "column": 27
+        },
+        {
+          "rule_id": "M004",
+          "line": 8,
+          "column": 25
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "M004",
+          "line": 10,
+          "note": "Relative, named-fragment, mailto, and reserved example destinations are valid."
+        }
+      ]
+    },
     "quality/corpus/python-docs.py": {
       "expected": [
         {
