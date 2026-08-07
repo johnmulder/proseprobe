@@ -1,5 +1,6 @@
 """Tests for grammar rules (G001-G003)."""
 
+from slop_lint.rules.base import Confidence
 from slop_lint.rules.grammar import (
     CopulaAvoidanceRule,
     ExcessiveHedgingRule,
@@ -565,6 +566,31 @@ class TestHedgeStacking:
             if "hedge stacking" in i.message.lower() or "Hedge stacking" in i.message
         ]
         assert len(hedge_stack_issues) >= 1
+
+    def test_stacking_replaces_phrase_at_the_same_start(self) -> None:
+        """The stronger stack issue should own a shared source start."""
+        rule = ExcessiveHedgingRule()
+        issues = rule.check(
+            "It is important to note that this may potentially fail.",
+            "test.md",
+        )
+
+        same_start = [issue for issue in issues if issue.column == 1]
+        assert len(same_start) == 1
+        assert same_start[0].message.startswith("Hedge stacking:")
+        assert same_start[0].confidence is Confidence.HIGH
+        assert any(issue.column > 1 for issue in issues)
+
+    def test_single_phrase_keeps_its_finding(self) -> None:
+        """A phrase without stacking should still be reported."""
+        rule = ExcessiveHedgingRule()
+        issues = rule.check(
+            "It is important to note that results vary.",
+            "test.md",
+        )
+
+        assert len(issues) == 1
+        assert issues[0].message.startswith("Hedging phrase:")
 
 
 class TestGapRitual:

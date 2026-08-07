@@ -28,6 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `test-spec` (spec-focused regression subset)
   - `startup-check`, `perf-check`, `memory-check`, `nfr-check` (NFR probes)
 
+### Fixed
+- Duplicate same-rule findings from overlapping G002, S012, and V001 patterns.
+
 ### Changed
 - `rules` and `explain` now show canonical confidence, context, profile, and
   configuration metadata, while `--show-config` reports the effective profile

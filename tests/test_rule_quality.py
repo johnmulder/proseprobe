@@ -11,6 +11,7 @@ from benchmarks.rule_quality import (
     AnnotationError,
     ExpectedFinding,
     NegativeCase,
+    collect_findings,
     format_report,
     load_annotations,
     score_findings,
@@ -201,3 +202,14 @@ def test_reviewed_corpus_covers_every_registered_rule() -> None:
 
     assert {item.rule_id for item in annotations.expected} == rule_ids
     assert {item.rule_id for item in annotations.negative_cases} == rule_ids
+
+
+def test_reviewed_findings_have_unique_rule_source_starts() -> None:
+    """One rule should not emit two findings at one reviewed source start."""
+    rule_ids = {rule.id for rule in get_all_rules(Config())}
+    annotations = load_annotations(DEFAULT_MANIFEST, REPO_ROOT, rule_ids)
+
+    findings = collect_findings(annotations, REPO_ROOT)
+    locations = [(item.path, item.rule_id, item.line, item.column) for item in findings]
+
+    assert len(locations) == len(set(locations))

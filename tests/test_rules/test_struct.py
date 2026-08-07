@@ -424,8 +424,19 @@ class TestListicleInProse:
         )
         rule = ListicleInProseRule()
         issues = rule.check(text, "test.md")
-        assert len(issues) >= 1
+        assert len(issues) == 1
         assert issues[0].rule_id == "S012"
+
+    def test_detects_fallback_only_listicle_pattern_once(self) -> None:
+        """A single named ordinal should retain fallback coverage."""
+        from slop_lint.rules.struct import ListicleInProseRule
+
+        text = "The first takeaway is to reduce scope."
+
+        issues = ListicleInProseRule().check(text, "test.md")
+
+        assert len(issues) == 1
+        assert issues[0].message == "Listicle in prose pattern"
 
     def test_ignores_single_ordinal(self) -> None:
         """Don't flag a single ordinal reference."""

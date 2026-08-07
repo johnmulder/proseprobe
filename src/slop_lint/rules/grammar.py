@@ -106,7 +106,7 @@ class ExcessiveHedgingRule(Rule):
                         )
                     )
 
-        return issues
+        return list({(issue.line, issue.column): issue for issue in issues}.values())
 
 
 class ParticipleChainsRule(Rule):

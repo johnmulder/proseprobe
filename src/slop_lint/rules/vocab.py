@@ -41,7 +41,7 @@ class AIVocabularyRule(Rule):
         "foster": r"foster(?:s|ed|ing)?",
         "garner": r"garner(?:s|ed|ing)?",
         "harness": r"harness(?:es|ed|ing)?",
-        "leverage": r"leverag(?:e|es|ed|ing)",
+        "leverage": r"leverag(?:e|es|ed)",
         "navigate": r"navigat(?:e|es|ed|ing)",
         "showcase": r"showcas(?:e|es|ed|ing)",
         "spearhead": r"spearhead(?:s|ed|ing)?",

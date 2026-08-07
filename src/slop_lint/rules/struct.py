@@ -537,6 +537,7 @@ class ListicleInProseRule(Rule):
                             )
                         )
                         break
+                continue
 
             for line_num, line in lines:
                 for pattern in LISTICLE_PROSE_PATTERNS:

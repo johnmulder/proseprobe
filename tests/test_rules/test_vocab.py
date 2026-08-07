@@ -86,6 +86,29 @@ class TestAIVocabularyRule:
         assert len(issues) >= 1
         assert issues[0].confidence == Confidence.HIGH
 
+    @pytest.mark.parametrize(
+        ("text", "confidence", "suggestion"),
+        [
+            ("leveraging", Confidence.HIGH, "using"),
+            ("leverage", Confidence.MEDIUM, "use"),
+            ("leverages", Confidence.MEDIUM, "use"),
+            ("leveraged", Confidence.MEDIUM, "use"),
+        ],
+    )
+    def test_leverage_forms_have_one_canonical_finding(
+        self,
+        rule: AIVocabularyRule,
+        text: str,
+        confidence: Confidence,
+        suggestion: str,
+    ) -> None:
+        """Each leverage form should have one confidence and suggestion owner."""
+        issues = rule.check(text, "test.md")
+
+        assert len(issues) == 1
+        assert issues[0].confidence is confidence
+        assert issues[0].suggestion == suggestion
+
     def test_tier2_word_has_medium_confidence(self, rule: AIVocabularyRule) -> None:
         content = "This is a crucial decision."
         issues = rule.check(content, "test.md")
