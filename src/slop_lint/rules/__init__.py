@@ -1,7 +1,5 @@
 """Detection rule registration."""
 
-from functools import cache
-
 from slop_lint.config import Config
 from slop_lint.profiles import profile_names_for_rule
 from slop_lint.rules import code, grammar, markup, struct, style, vocab
@@ -88,7 +86,6 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
     return sorted(rules, key=lambda rule: rule.id)
 
 
-@cache
 def get_rule_metadata() -> tuple[RuleMetadata, ...]:
     """Return immutable metadata for every registered rule."""
     return tuple(

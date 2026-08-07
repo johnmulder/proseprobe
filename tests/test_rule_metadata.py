@@ -16,11 +16,11 @@ from slop_lint.rules.base import Confidence, Severity
 
 def test_metadata_covers_registry_in_rule_id_order() -> None:
     metadata = get_rule_metadata()
+    metadata_ids = tuple(item.id for item in metadata)
 
-    assert tuple(item.id for item in metadata) == tuple(
-        rule.id for rule in get_all_rules()
-    )
+    assert metadata_ids == tuple(rule.id for rule in get_all_rules())
     assert len(metadata) == 59
+    assert len(set(metadata_ids)) == len(metadata_ids)
 
 
 def test_metadata_is_immutable_and_complete() -> None:

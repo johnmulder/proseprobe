@@ -1,5 +1,7 @@
 """Tests for generated rule documentation."""
 
+import re
+from collections import Counter
 from pathlib import Path
 
 import pytest
@@ -11,6 +13,9 @@ from slop_lint._rule_docs import (
     render_rule_inventory,
     synchronize_rule_docs,
 )
+from slop_lint.rules import get_rule_metadata
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def _seed_documents(root: Path) -> None:
@@ -53,6 +58,15 @@ def test_rule_inventory_contains_canonical_metadata() -> None:
         for row in rule_rows
     )
     assert any("`M001`" in row and "low" in row for row in rule_rows)
+
+
+def test_handwritten_rule_sections_match_registry_exactly() -> None:
+    reference = (ROOT / "docs" / "rules.md").read_text()
+    headings = re.findall(r"^### ([A-Z]\d{3}): (.+)$", reference, re.M)
+    expected = [(item.id, item.name) for item in get_rule_metadata()]
+
+    assert Counter(headings) == Counter(expected)
+    assert len(headings) == len(expected)
 
 
 def test_write_is_deterministic_and_check_detects_no_changes(tmp_path: Path) -> None:
