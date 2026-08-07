@@ -348,7 +348,55 @@ class TestBaselineMode:
             str(tmp_path / "missing.json"),
         )
 
-        assert "Warning" in result.stdout or "not found" in result.stdout
+        assert "Warning" in result.stderr
+        assert "not found" in result.stderr
+
+    def test_missing_baseline_does_not_corrupt_json(self, tmp_path: Path) -> None:
+        """Baseline diagnostics belong on stderr, not structured stdout."""
+        import json
+
+        test_file = tmp_path / "test.md"
+        test_file.write_text("This delves into topics.")
+
+        result = run_cli(
+            "check",
+            str(test_file),
+            "--format",
+            "json",
+            "--baseline",
+            str(tmp_path / "missing.json"),
+        )
+
+        assert json.loads(result.stdout)["summary"]["total_issues"] >= 1
+        assert "Baseline file not found" in result.stderr
+
+    def test_verbose_baseline_counts_do_not_corrupt_json(self, tmp_path: Path) -> None:
+        """Verbose scan diagnostics leave structured stdout parseable."""
+        import json
+
+        test_file = tmp_path / "test.md"
+        test_file.write_text("This delves into topics.")
+        baseline_file = tmp_path / "baseline.json"
+        run_cli(
+            "check",
+            str(test_file),
+            "--generate-baseline",
+            "--baseline",
+            str(baseline_file),
+        )
+
+        result = run_cli(
+            "check",
+            str(test_file),
+            "--format",
+            "json",
+            "--verbose",
+            "--baseline",
+            str(baseline_file),
+        )
+
+        assert json.loads(result.stdout)["summary"]["total_issues"] == 0
+        assert "Baseline:" in result.stderr
 
 
 class TestWatchCommand:

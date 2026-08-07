@@ -16,13 +16,14 @@ __all__ = ["format_results"]
 _Results = dict[Path, list[Issue]]
 
 
-def _format_text(results: _Results) -> str:
+def _format_text(results: _Results, *, quiet: bool = False) -> str:
     """Format results as human-readable text."""
     lines: list[str] = []
 
     for path, issues in sorted(results.items()):
         for issue in issues:
-            severity_char = issue.severity.value[0].upper()
+            if quiet and issue.severity != Severity.ERROR:
+                continue
             conf_tag = (
                 f" [{issue.confidence.value}]"
                 if issue.confidence != Confidence.MEDIUM
@@ -30,35 +31,38 @@ def _format_text(results: _Results) -> str:
             )
             lines.append(
                 f"{path}:{issue.line}:{issue.column}: "
-                f"{severity_char}{issue.rule_id[1:]} {issue.message}{conf_tag}"
+                f"{issue.rule_id}{conf_tag} [{issue.severity.value}] {issue.message}"
             )
 
-    # Summary — single pass over all issues
+    if quiet:
+        return "\n".join(lines)
+
     total = sum(len(issues) for issues in results.values())
+    if total == 0:
+        return "No issues found!"
+
     file_count = len(results)
+    sev_counts: Counter[Severity] = Counter()
+    conf_counts: Counter[Confidence] = Counter()
+    for issues in results.values():
+        for issue in issues:
+            sev_counts[issue.severity] += 1
+            conf_counts[issue.confidence] += 1
 
-    if total > 0:
-        sev_counts: Counter[Severity] = Counter()
-        conf_counts: Counter[Confidence] = Counter()
-        for issues in results.values():
-            for issue in issues:
-                sev_counts[issue.severity] += 1
-                conf_counts[issue.confidence] += 1
-
-        lines.append("")
+    lines.append("")
+    lines.append(
+        f"Found {total} issue(s) "
+        f"({sev_counts[Severity.ERROR]} error, "
+        f"{sev_counts[Severity.WARNING]} warning, "
+        f"{sev_counts[Severity.INFO]} info) "
+        f"in {file_count} file(s)"
+    )
+    if conf_counts[Confidence.HIGH] or conf_counts[Confidence.LOW]:
         lines.append(
-            f"Found {total} issue(s) "
-            f"({sev_counts[Severity.ERROR]} error, "
-            f"{sev_counts[Severity.WARNING]} warning, "
-            f"{sev_counts[Severity.INFO]} info) "
-            f"in {file_count} file(s)"
+            f"Confidence: {conf_counts[Confidence.HIGH]} high, "
+            f"{conf_counts[Confidence.MEDIUM]} medium, "
+            f"{conf_counts[Confidence.LOW]} low"
         )
-        if conf_counts[Confidence.HIGH] or conf_counts[Confidence.LOW]:
-            lines.append(
-                f"Confidence: {conf_counts[Confidence.HIGH]} high, "
-                f"{conf_counts[Confidence.MEDIUM]} medium, "
-                f"{conf_counts[Confidence.LOW]} low"
-            )
 
     return "\n".join(lines)
 
@@ -203,10 +207,12 @@ def format_results(
     format: str = "text",
     rules: list[Any] | None = None,
     files_checked: int | None = None,
+    *,
+    quiet: bool = False,
 ) -> str:
     """Format lint results as text, JSON, or SARIF."""
     if format == "sarif":
         return _format_sarif(results, rules)
     if format == "json":
         return _format_json(results, files_checked)
-    return _format_text(results)
+    return _format_text(results, quiet=quiet)

@@ -14,8 +14,7 @@ class TestTextFormat:
         """Test formatting with no issues."""
         output = format_results({})
 
-        # No issues means empty or minimal output
-        assert isinstance(output, str)
+        assert output == "No issues found!"
 
     def test_format_single_issue(self) -> None:
         """Test formatting a single issue."""
@@ -33,9 +32,9 @@ class TestTextFormat:
 
         output = format_results(results)
 
-        assert "V001" in output or "001" in output
-        assert "doc.md" in output
-        assert "10" in output
+        assert output.splitlines()[0] == (
+            "doc.md:10:5: V001 [warning] Overused word: 'delve'"
+        )
 
     def test_format_multiple_issues(self) -> None:
         """Test formatting multiple issues."""
@@ -156,7 +155,9 @@ class TestConfidenceOutput:
             ]
         }
         output = format_results(results)
-        assert "[high]" in output
+        assert output.splitlines()[0] == (
+            "doc.md:1:1: V001 [high] [warning] Overused word: 'delve'"
+        )
 
     def test_text_no_tag_for_medium(self) -> None:
         results = {
@@ -235,3 +236,31 @@ class TestConfidenceOutput:
         assert "Confidence:" in output
         assert "1 high" in output
         assert "1 low" in output
+
+
+class TestQuietText:
+    """Tests for reporter-owned quiet output."""
+
+    def test_quiet_formats_only_errors_without_summary(self) -> None:
+        results = {
+            Path("doc.md"): [
+                Issue(
+                    rule_id="V001",
+                    message="Warning",
+                    line=1,
+                    column=1,
+                    severity=Severity.WARNING,
+                ),
+                Issue(
+                    rule_id="V002",
+                    message="Error",
+                    line=2,
+                    column=1,
+                    severity=Severity.ERROR,
+                ),
+            ]
+        }
+
+        output = format_results(results, quiet=True)
+
+        assert output == "doc.md:2:1: V002 [error] Error"

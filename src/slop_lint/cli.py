@@ -168,14 +168,16 @@ def _apply_baseline(
                     style(
                         f"Baseline: {original_count} total, {new_count} new issue(s)",
                         dim=True,
-                    )
+                    ),
+                    file=sys.stderr,
                 )
         else:
             print(
                 style(
                     f"Warning: Baseline file not found: {baseline_path}",
                     color="yellow",
-                )
+                ),
+                file=sys.stderr,
             )
 
     return results
@@ -204,51 +206,17 @@ def _output_results(
     files_checked: int | None = None,
 ) -> int:
     """Format and print results; return exit code."""
-    total_issues = sum(len(issues) for issues in results.values())
+    from slop_lint.core.reporter import format_results
 
-    if args.format in ("json", "sarif"):
-        from slop_lint.core.reporter import format_results
-
-        print(format_results(results, args.format, rules, files_checked))
-    elif not results:
-        if not args.quiet:
-            print(style("\u2713", color="green") + " No issues found!")
-    elif args.quiet:
-        for file_path, issues in results.items():
-            for issue in issues:
-                if issue.severity != Severity.ERROR:
-                    continue
-                print(
-                    f"{file_path}:{issue.line}:{issue.column}: "
-                    f"{issue.rule_id} [error] {issue.message}"
-                )
-    else:
-        for file_path, issues in results.items():
-            for issue in issues:
-                sev_color = _SEVERITY_COLOR[issue.severity]
-                conf_tag = ""
-                is_bold = False
-                is_dim = False
-                severity_text = issue.severity.value
-                if issue.confidence == Confidence.LOW:
-                    conf_tag = " [low]"
-                    is_dim = True
-                elif issue.confidence == Confidence.HIGH:
-                    conf_tag = " [high]"
-                    is_bold = True
-                rule_part = style(f"{issue.rule_id}{conf_tag}", color=sev_color)
-                line_text = (
-                    f"{style(str(file_path), bold=True)}"
-                    f":{issue.line}:{issue.column}: "
-                    f"{rule_part} [{severity_text}] {issue.message}"
-                )
-                if is_dim:
-                    line_text = style(line_text, dim=True)
-                elif is_bold:
-                    line_text = style(line_text, bold=True)
-                print(line_text)
-        if not args.quiet:
-            print(style(f"\nFound {total_issues} issue(s)", bold=True))
+    output = format_results(
+        results,
+        args.format,
+        rules,
+        files_checked,
+        quiet=args.quiet,
+    )
+    if output:
+        print(output)
 
     return 1 if _has_failing_issue(results) else 0
 
