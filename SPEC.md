@@ -22,6 +22,7 @@
 | FR-07 | Respect `.gitignore` patterns for file discovery | Should |
 | FR-08 | Process files in parallel for performance | Could |
 | FR-09 | Provide `explain` command for rule documentation | Should |
+| FR-10 | Support line-scoped Markdown and Python suppressions | Must |
 
 ### 2.2 Non-Functional Requirements
 
@@ -108,8 +109,9 @@ options from `check`. It also accepts `--interval` (seconds, default `2.0`) and
 
 Both commands load configuration and CLI rule overrides, construct rules with
 severity overrides, apply the minimum severity, scan with file and per-file
-ignore policy, filter by confidence, apply the baseline, and finally report the
-ordered findings. A watch iteration uses the same batch pipeline as `check`.
+ignore policy, apply inline suppressions, filter by confidence, apply the
+baseline, and finally report the ordered findings. A watch iteration uses the
+same batch pipeline as `check`.
 
 ### 4.5 Exit Codes
 
@@ -169,6 +171,28 @@ allowed_phrases = ["All notable changes"]  # Exact phrases to skip
 pattern = "CHANGELOG.md"
 ignore = ["S004"]
 ```
+
+### 5.3 Inline Suppressions
+
+A standalone Markdown directive suppresses matching findings reported on the
+immediately following physical line:
+
+```markdown
+<!-- slop-lint-ignore-next-line V001,S010 -->
+This documentation delves into three related concerns.
+```
+
+A Python directive must be a real comment token and suppresses matching
+findings reported on the same physical line:
+
+```python
+"""This documentation delves into the API."""  # slop-lint: ignore=V001,S010
+```
+
+Tokens are case-insensitive rule IDs or one-letter category prefixes. Empty,
+malformed, and unknown tokens are configuration errors. Fenced Markdown
+examples and Python string contents do not act as directives. Suppressions run
+before confidence and baseline filtering.
 
 ## 6. Output Formats
 

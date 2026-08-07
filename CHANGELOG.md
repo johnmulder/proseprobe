@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Line-scoped Markdown and Python suppression directives with rule-ID and
+  category-prefix validation.
 - Reviewed rule-quality corpus and `make rule-quality` precision/recall report.
 - New Makefile targets for TDD and validation workflows:
   - `test-tdd` (fast red/green loop)

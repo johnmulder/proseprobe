@@ -67,10 +67,10 @@ slop-lint rules
 slop-lint explain V001
 ```
 
-`check` and `watch` apply rule selection, severity, confidence, and baseline
-filters in the same order. Watch output is text-only; JSON and SARIF are
-complete `check` reports, with diagnostics kept on stderr so redirected stdout
-remains valid structured data.
+`check` and `watch` apply rule selection, severity, inline suppressions,
+confidence, and baseline filters in the same order. Watch output is text-only;
+JSON and SARIF are complete `check` reports, with diagnostics kept on stderr so
+redirected stdout remains valid structured data.
 
 ## Detection Categories
 
@@ -127,6 +127,27 @@ Or add to `pyproject.toml`:
 [tool.slop-lint]
 ignore = ["T001"]
 ```
+
+## Inline Suppressions
+
+Use an existing rule ID or one-letter category prefix when one intentional
+finding should not require a wider ignore. Markdown targets the immediately
+following physical line:
+
+```markdown
+<!-- slop-lint-ignore-next-line V001,S010 -->
+This documentation delves into three related concerns.
+```
+
+Python targets the same physical line as a real comment token:
+
+```python
+"""This documentation delves into the API."""  # slop-lint: ignore=V001,S010
+```
+
+Directives are applied before confidence and baseline filtering. Empty,
+malformed, or unknown tokens are configuration errors; markers in Markdown
+code fences and Python strings are inert examples.
 
 ## Exit Codes
 

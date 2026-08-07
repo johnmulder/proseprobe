@@ -92,6 +92,27 @@ pattern = "tests/**"
 ignore = ["C001", "C002"]
 ```
 
+### Inline Suppressions
+
+Use a line-scoped directive when a single intentional finding should remain in
+the source. Markdown targets the immediately following physical line:
+
+```markdown
+<!-- slop-lint-ignore-next-line V001,S010 -->
+This documentation delves into three related concerns.
+```
+
+Python targets the same physical line as a real comment token:
+
+```python
+"""This documentation delves into the API."""  # slop-lint: ignore=V001,S010
+```
+
+Each token must be an existing rule ID or one-letter category prefix. Tokens
+are case-insensitive. Empty, malformed, or unknown tokens are configuration
+errors. Directives inside Markdown code fences or Python strings have no
+effect. Wider regions should continue to use per-file ignores.
+
 ### Thresholds
 
 ```toml
@@ -180,8 +201,9 @@ Both `check` and `watch` use the resulting policy in this order:
 1. Load configuration, then apply CLI `--select` and `--ignore` overrides.
 2. Apply per-rule severity overrides and the effective minimum severity.
 3. Scan files using include, exclude, `.gitignore`, and per-file ignore rules.
-4. Remove findings below the effective confidence threshold.
-5. Remove findings already present in an optional baseline.
+4. Remove findings covered by valid inline suppressions.
+5. Remove findings below the effective confidence threshold.
+6. Remove findings already present in an optional baseline.
 
 This order makes one watch iteration report the same ordered findings as
 `check` when given the same paths and shared options.

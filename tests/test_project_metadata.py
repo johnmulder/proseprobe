@@ -73,6 +73,18 @@ def test_docs_explain_python_prose_rule_scope() -> None:
     assert "not covered by `V001`" in rules
 
 
+def test_docs_explain_inline_suppression_contract() -> None:
+    """Public docs should preserve both line-scoped directive forms."""
+    paths = [ROOT / "README.md", ROOT / "SPEC.md", ROOT / "docs/configuration.md"]
+
+    for path in paths:
+        text = path.read_text()
+        assert "<!-- slop-lint-ignore-next-line V001,S010 -->" in text
+        assert "# slop-lint: ignore=V001,S010" in text
+        assert "following physical line" in text
+        assert "same physical line" in text
+
+
 def test_public_docs_do_not_contain_placeholder_repository_names() -> None:
     """Public docs should not ship template repository placeholders."""
     paths = [
