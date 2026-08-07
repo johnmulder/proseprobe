@@ -196,10 +196,11 @@ def _prepare_scan(args: argparse.Namespace) -> tuple[Config, Linter, list[Rule]]
     if min_severity is None:  # pragma: no cover
         min_severity = Severity.WARNING
 
-    linter = Linter(config)
+    all_rules = get_all_rules(config)
+    linter = Linter(config, valid_rule_ids={rule.id for rule in all_rules})
     active_rules = [
         rule
-        for rule in get_all_rules(config)
+        for rule in all_rules
         if severity_rank(rule.severity) >= severity_rank(min_severity)
     ]
     for rule in active_rules:
@@ -282,6 +283,9 @@ def _cmd_check(args: argparse.Namespace) -> int:
 
     try:
         lint_results = _scan_paths(linter, paths, args, config)
+    except ConfigError as exc:
+        print(f"Configuration error: {exc}", file=sys.stderr)
+        return 2
     except LintReadError as exc:
         print(f"Could not read file: {exc}", file=sys.stderr)
         return 3
@@ -411,6 +415,8 @@ def _cmd_watch(args: argparse.Namespace) -> int:
                     )
                 try:
                     lint_results = _scan_paths(linter, changed_files, args, config)
+                except ConfigError as exc:
+                    print(f"Configuration error: {exc}", file=sys.stderr)
                 except LintReadError as exc:
                     print(f"Could not read file: {exc}", file=sys.stderr)
                 else:

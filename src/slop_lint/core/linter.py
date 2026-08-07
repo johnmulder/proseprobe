@@ -8,7 +8,8 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 
-from slop_lint.config import Config
+from slop_lint.config import Config, ConfigError
+from slop_lint.parsers.prose import iter_inline_suppressions
 from slop_lint.rules.base import Issue, Rule
 
 __all__ = ["LintReadError", "LintResults", "Linter"]
@@ -163,14 +164,18 @@ class FileDiscovery:
 class Linter:
     """Orchestrates rule execution across discovered files."""
 
-    def __init__(self, config: Config) -> None:
+    def __init__(self, config: Config, valid_rule_ids: set[str] | None = None) -> None:
         """Initialize linter with configuration.
 
         Args:
             config: Linter configuration.
+            valid_rule_ids: Complete rule registry for directive validation.
         """
         self.config = config
         self._rules: list[Rule] = []
+        self._valid_rule_ids = {
+            rule_id.upper() for rule_id in (valid_rule_ids or set())
+        }
         self._discovery = FileDiscovery(config.include, config.exclude)
 
     def register_rule(self, rule: Rule) -> None:
@@ -180,6 +185,7 @@ class Linter:
             rule: Rule instance to register.
         """
         self._rules.append(rule)
+        self._valid_rule_ids.add(rule.id.upper())
 
     def discover_files(self, paths: list[Path]) -> list[Path]:
         """Discover files to lint from paths.
@@ -211,7 +217,40 @@ class Linter:
             if self._rule_enabled(rule, path):
                 issues.extend(rule.check(content, str(path)))
 
-        return issues
+        return self._apply_inline_suppressions(issues, content, path)
+
+    def _apply_inline_suppressions(
+        self, issues: list[Issue], content: str, path: Path
+    ) -> list[Issue]:
+        """Validate line directives and remove their matching issues."""
+        try:
+            directives = iter_inline_suppressions(content, str(path))
+        except ValueError as exc:
+            raise ConfigError(path, str(exc)) from exc
+        if not directives:
+            return issues
+
+        valid_tokens = self._valid_rule_ids | {
+            rule_id[0] for rule_id in self._valid_rule_ids
+        }
+        ignored_by_line: dict[int, set[str]] = {}
+        for directive_line, target_line, raw_tokens in directives:
+            tokens = {token.strip().upper() for token in raw_tokens.split(",")}
+            unknown = sorted(tokens - valid_tokens)
+            if unknown:
+                joined = ", ".join(unknown)
+                raise ConfigError(
+                    path,
+                    f"line {directive_line}: unknown inline suppression token: {joined}",
+                )
+            ignored_by_line.setdefault(target_line, set()).update(tokens)
+
+        return [
+            issue
+            for issue in issues
+            if issue.rule_id not in ignored_by_line.get(issue.line, set())
+            and issue.rule_id[0] not in ignored_by_line.get(issue.line, set())
+        ]
 
     def check(self, paths: list[Path]) -> LintResults:
         """Check multiple paths for issues.

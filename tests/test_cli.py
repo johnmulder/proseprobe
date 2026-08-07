@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 import io
+import json
 from contextlib import redirect_stderr, redirect_stdout
 from dataclasses import dataclass
 from pathlib import Path
+
+import pytest
 
 from slop_lint.cli import main
 
@@ -219,6 +222,47 @@ class TestCheckCommand:
         # Quiet mode should have minimal output
         assert result.exit_code == 1
 
+    @pytest.mark.parametrize("output_format", ["text", "json", "sarif"])
+    def test_check_omits_suppressed_findings_from_all_formats(
+        self, tmp_path: Path, output_format: str
+    ) -> None:
+        """Suppressed issues never reach a reporter."""
+        test_file = tmp_path / "suppressed.md"
+        test_file.write_text(
+            "<!-- slop-lint-ignore-next-line V001 -->\nThis delves into topics.\n"
+        )
+
+        result = run_cli(
+            "check",
+            str(test_file),
+            "--select",
+            "V001",
+            "--format",
+            output_format,
+        )
+
+        assert result.exit_code == 0
+        if output_format == "text":
+            assert "No issues found" in result.stdout
+        elif output_format == "json":
+            assert json.loads(result.stdout)["summary"]["total_issues"] == 0
+        else:
+            assert json.loads(result.stdout)["runs"][0]["results"] == []
+
+    def test_inactive_rule_id_is_valid_in_suppression(self, tmp_path: Path) -> None:
+        """Validation uses the full registry rather than only active rules."""
+        test_file = tmp_path / "suppressed.md"
+        test_file.write_text(
+            "<!-- slop-lint-ignore-next-line V003 -->\nClean content.\n"
+        )
+
+        result = run_cli(
+            "check", str(test_file), "--select", "V001", "--severity", "warning"
+        )
+
+        assert result.exit_code == 0
+        assert "Configuration error" not in result.stderr
+
 
 class TestRulesCommand:
     """Tests for the rules command."""
@@ -344,6 +388,30 @@ class TestBaselineMode:
         assert result.exit_code == 0
         assert baseline_file.exists()
         assert "Generated baseline" in result.stdout
+
+    def test_generate_baseline_excludes_suppressed_findings(
+        self, tmp_path: Path
+    ) -> None:
+        """Inline suppression runs before baseline generation."""
+        test_file = tmp_path / "suppressed.md"
+        test_file.write_text(
+            "<!-- slop-lint-ignore-next-line V001 -->\nThis delves into topics.\n"
+        )
+        baseline_file = tmp_path / "baseline.json"
+
+        result = run_cli(
+            "check",
+            str(test_file),
+            "--select",
+            "V001",
+            "--generate-baseline",
+            "--baseline",
+            str(baseline_file),
+        )
+
+        assert result.exit_code == 0
+        assert "0 issue(s)" in result.stdout
+        assert json.loads(baseline_file.read_text())["fingerprints"] == []
 
     def test_baseline_filters_known_issues(self, tmp_path: Path) -> None:
         """Test that baseline mode filters known issues."""
@@ -492,6 +560,42 @@ class TestWatchCommand:
         assert self._finding_lines(watched.stdout, test_file) == self._finding_lines(
             checked.stdout, test_file
         )
+
+    def test_watch_and_check_share_inline_suppressions(
+        self, tmp_path: Path, monkeypatch: object
+    ) -> None:
+        """One watch batch applies the same line suppression as check."""
+        test_file = tmp_path / "doc.md"
+        test_file.write_text(
+            "<!-- slop-lint-ignore-next-line V001 -->\n"
+            "This delves into a topic.\n"
+            "This delves into another topic.\n"
+        )
+        self._stop_after_first_iteration(monkeypatch)
+
+        checked = run_cli("check", str(test_file), "--select", "V001")
+        watched = run_cli("watch", str(test_file), "--no-clear", "--select", "V001")
+
+        assert self._finding_lines(watched.stdout, test_file) == self._finding_lines(
+            checked.stdout, test_file
+        )
+
+    def test_watch_reports_malformed_inline_suppression(
+        self, tmp_path: Path, monkeypatch: object
+    ) -> None:
+        """Watch reports a configuration error and remains controllable."""
+        test_file = tmp_path / "doc.md"
+        test_file.write_text(
+            "<!-- slop-lint-ignore-next-line V001, -->\nThis delves.\n"
+        )
+        self._stop_after_first_iteration(monkeypatch)
+
+        watched = run_cli("watch", str(test_file), "--no-clear")
+
+        assert watched.exit_code == 0
+        assert "Configuration error" in watched.stderr
+        assert f"{test_file}: line 1: malformed" in watched.stderr
+        assert "Traceback" not in watched.stderr
 
     def test_watch_respects_baseline(self, tmp_path: Path, monkeypatch: object) -> None:
         """Known baseline findings are filtered from a watch batch."""
@@ -745,6 +849,30 @@ class TestCliValidation:
         assert result.exit_code == 2
         assert "Configuration error" in result.stderr
         assert str(config_file) in result.stderr
+        assert "Traceback" not in result.stderr
+
+    @pytest.mark.parametrize(
+        ("directive", "detail"),
+        [
+            ("<!-- slop-lint-ignore-next-line V999 -->", "unknown"),
+            ("<!-- slop-lint-ignore-next-line V001, -->", "malformed"),
+        ],
+    )
+    def test_invalid_inline_suppression_returns_config_error(
+        self, tmp_path: Path, directive: str, detail: str
+    ) -> None:
+        """Directive errors use configuration exit semantics and stderr."""
+        test_file = tmp_path / "invalid.md"
+        test_file.write_text(f"Intro\n{directive}\nThis delves.\n")
+
+        result = run_cli(
+            "check", str(test_file), "--format", "json", "--select", "V001"
+        )
+
+        assert result.exit_code == 2
+        assert result.stdout == ""
+        assert "Configuration error" in result.stderr
+        assert f"{test_file}: line 2: {detail}" in result.stderr
         assert "Traceback" not in result.stderr
 
     def test_invalid_utf8_file_returns_internal_error(self, tmp_path: Path) -> None:

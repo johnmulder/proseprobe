@@ -3,7 +3,9 @@
 import subprocess
 from pathlib import Path
 
-from slop_lint.config import Config, PerFileIgnore, VocabularyConfig
+import pytest
+
+from slop_lint.config import Config, ConfigError, PerFileIgnore, VocabularyConfig
 from slop_lint.core.linter import Linter, LintResults
 from slop_lint.rules import get_all_rules
 from slop_lint.rules.vocab import AIVocabularyRule
@@ -426,6 +428,81 @@ class TestCheckFile:
             linter.register_rule(rule)
 
         assert [issue.rule_id for issue in linter.check_file(test_file)] == ["V001"]
+
+    def test_inline_suppression_filters_only_matching_rule_and_line(
+        self, tmp_path: Path
+    ) -> None:
+        """Rule IDs and prefixes apply only to the reported target line."""
+        test_file = tmp_path / "suppressed.md"
+        test_file.write_text(
+            "<!-- slop-lint-ignore-next-line v001, v001 -->\n"
+            "This delves into a topic. I hope this helps.\n"
+            "This delves into another topic.\n"
+            "<!-- slop-lint-ignore-next-line V -->\n"
+            "This delves into a final topic. I hope this helps.\n"
+        )
+        linter = Linter(Config(select=["V001", "V002"]))
+        for rule in get_all_rules():
+            linter.register_rule(rule)
+
+        issues = linter.check_file(test_file)
+
+        assert [(issue.rule_id, issue.line) for issue in issues] == [
+            ("V001", 3),
+            ("V002", 2),
+        ]
+
+    def test_python_inline_suppression_targets_same_source_line(
+        self, tmp_path: Path
+    ) -> None:
+        """Python directives suppress docstring and comment findings in place."""
+        test_file = tmp_path / "suppressed.py"
+        test_file.write_text(
+            '"""This delves into the API."""  # slop-lint: ignore=V001\n'
+            "# This delves into setup.  # slop-lint: ignore=V001\n"
+            "# This delves into teardown.\n"
+        )
+        linter = Linter(Config(select=["V001"]))
+        for rule in get_all_rules():
+            linter.register_rule(rule)
+
+        assert [
+            (issue.rule_id, issue.line) for issue in linter.check_file(test_file)
+        ] == [("V001", 3)]
+
+    @pytest.mark.parametrize(
+        ("directive", "detail"),
+        [
+            ("<!-- slop-lint-ignore-next-line V999 -->", "unknown"),
+            ("<!-- slop-lint-ignore-next-line V001, -->", "malformed"),
+        ],
+    )
+    def test_invalid_inline_suppression_is_a_config_error(
+        self, tmp_path: Path, directive: str, detail: str
+    ) -> None:
+        """Invalid directives fail with the source path and directive line."""
+        test_file = tmp_path / "invalid.md"
+        test_file.write_text(f"Intro\n{directive}\nThis delves.\n")
+        linter = Linter(Config())
+        for rule in get_all_rules():
+            linter.register_rule(rule)
+
+        with pytest.raises(ConfigError, match=rf"invalid\.md: line 2: {detail}"):
+            linter.check_file(test_file)
+
+    def test_invalid_suppression_propagates_from_parallel_scan(
+        self, tmp_path: Path
+    ) -> None:
+        """Threaded scans surface directive errors without swallowing them."""
+        (tmp_path / "clean.md").write_text("Clean content.\n")
+        invalid = tmp_path / "invalid.md"
+        invalid.write_text("<!-- slop-lint-ignore-next-line X -->\nClean content.\n")
+        linter = Linter(Config())
+        for rule in get_all_rules():
+            linter.register_rule(rule)
+
+        with pytest.raises(ConfigError, match=r"invalid\.md: line 1: unknown"):
+            linter.check([tmp_path])
 
 
 class TestCheck:
