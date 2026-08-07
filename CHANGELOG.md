@@ -9,7 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Reviewed rule-quality corpus and `make rule-quality` precision/recall report.
-- SPEC-alignment delivery plan (`PLAN.md`) with phased implementation and validation checklist.
 - New Makefile targets for TDD and validation workflows:
   - `test-tdd` (fast red/green loop)
   - `test-spec` (spec-focused regression subset)
