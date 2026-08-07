@@ -172,6 +172,10 @@ spec-verify: ## Verify documented CLI commands
 	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-ignore" || (echo "ERROR: --ignore option missing" && exit 1)
 	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-config" || (echo "ERROR: --config option missing" && exit 1)
 	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-severity" || (echo "ERROR: --severity option missing" && exit 1)
+	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-profile" || (echo "ERROR: --profile option missing" && exit 1)
+	@for profile in academic business general journalism technical-docs; do \
+		$(PYTHON) -m slop_lint check --help | grep -q "$$profile" || (echo "ERROR: profile $$profile missing" && exit 1); \
+	done
 	@echo "Verifying baseline actions..."
 	@$(PYTHON) -m slop_lint baseline --help | grep -q "create" || (echo "ERROR: baseline create missing" && exit 1)
 	@$(PYTHON) -m slop_lint baseline --help | grep -q "update" || (echo "ERROR: baseline update missing" && exit 1)

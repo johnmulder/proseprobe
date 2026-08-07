@@ -19,6 +19,36 @@ earlier matches.
 
 ## Configuration Options
 
+### Built-in Profiles
+
+Profiles are fixed presets for rule selection, minimum severity, and minimum
+confidence:
+
+```toml
+[tool.slop-lint]
+profile = "technical-docs"
+```
+
+| Profile | Selected rules | Minimum severity | Minimum confidence |
+|---------|----------------|------------------|--------------------|
+| `general` | General prose rules | `info` | `medium` |
+| `technical-docs` | General plus technical-documentation rules | `info` | `low` |
+| `academic` | General plus academic rules | `info` | `medium` |
+| `journalism` | General plus journalism rules | `info` | `medium` |
+| `business` | General plus business rules | `info` | `low` |
+
+The exact classification is:
+
+- general: `G001`-`G009`, `S001`-`S016`, `T001`-`T007`, and `V001`-`V007`;
+- technical documentation: `C001`-`C004` and `M001`-`M004`;
+- academic: `G011`-`G013`, `S018`, and `T008`;
+- journalism: `G010`, `S017`, and `V008`;
+- business: `G014` and `S019`-`S021`.
+
+Each specialized profile includes the general set plus its listed rules.
+Running without a profile preserves the all-category selection, warning
+minimum severity, and low minimum confidence.
+
 ### File Patterns
 
 ```toml
@@ -161,7 +191,7 @@ and unknown threshold keys are configuration errors.
 Only documented keys are accepted in the slop-lint configuration table and its
 nested vocabulary, threshold, and per-file-ignore tables. Rule IDs and category
 prefixes are normalized to uppercase; repeated references are collapsed.
-Unknown keys or rule references stop `check` and `watch` with exit code 2.
+Unknown profiles, keys, or rule references stop scan commands with exit code 2.
 `--show-config` prints the effective normalized policy and the explicit or
 auto-discovered source path, or `default` when no file was loaded.
 
@@ -178,7 +208,7 @@ exclude = [
     "docs/_build/**",
 ]
 
-select = ["V", "S", "T", "G", "C", "M"]
+profile = "technical-docs"
 ignore = ["T001", "T005"]
 minimum_severity = "warning"
 
@@ -217,14 +247,20 @@ CLI arguments override config file settings:
 slop-lint check --select T001 .
 ```
 
-Both `check` and `watch` use the resulting policy in this order:
+All scan commands use the resulting policy in this order:
 
-1. Load configuration, then apply CLI `--select` and `--ignore` overrides.
-2. Apply per-rule severity overrides and the effective minimum severity.
-3. Scan files using include, exclude, `.gitignore`, and per-file ignore rules.
-4. Remove findings covered by valid inline suppressions.
-5. Remove findings below the effective confidence threshold.
-6. Remove findings already present in an optional baseline.
+1. Start with legacy defaults, then apply a configured profile.
+2. Apply explicit config `select`, `minimum_severity`, and `min_confidence` keys.
+3. Apply a CLI `--profile`, then direct CLI selection, ignore, severity, and
+   confidence flags.
+4. Apply per-rule severity overrides and the effective minimum severity.
+5. Scan files using include, exclude, `.gitignore`, and per-file ignore rules.
+6. Remove findings covered by valid inline suppressions.
+7. Remove findings below the effective confidence threshold.
+8. Remove findings already present in an optional baseline.
+
+Independent config overlays—global and per-file ignores, per-rule severity,
+file patterns, vocabulary, and thresholds—remain active under a CLI profile.
 
 This order makes one watch iteration report the same ordered findings as
 `check` when given the same paths and shared options.
@@ -276,6 +312,7 @@ version 2 file and retains its existing overwrite behavior.
 
 | Option | Short | Commands | Description |
 |--------|-------|----------|-------------|
+| `--profile` | | all scans | Built-in profile: general, technical-docs, academic, journalism, business |
 | `--select` | `-s` | all scans | Rules to enable (comma-separated) |
 | `--ignore` | `-i` | all scans | Rules to disable (comma-separated) |
 | `--config` | `-c` | all scans | Path to configuration file |

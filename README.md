@@ -14,6 +14,7 @@ Overused vocabulary, structural clichés, promotional language, and sloppy marku
 - 🔍 **59 detection rules** across 6 categories
 - 📝 Scans Markdown prose and source-mapped Python docstrings and comments
 - 🎯 **Confidence levels** (high/medium/low) to reduce noise
+- 🗂️ Built-in profiles for general, technical, academic, journalism, and business prose
 - ⚙️ Configurable via `.slop-lint.toml`
 - 📊 Multiple output formats (text, JSON, SARIF)
 - 🚀 Fast, parallel file processing
@@ -46,6 +47,9 @@ slop-lint check --format json .
 # Filter by confidence level
 slop-lint check --min-confidence high .
 slop-lint check --hide-low .
+
+# Apply a built-in rule profile
+slop-lint check --profile technical-docs .
 
 # Watch mode (continuous checking)
 slop-lint watch .
@@ -113,6 +117,7 @@ Create a `.slop-lint.toml` in your project root:
 [tool.slop-lint]
 include = ["*.md", "*.mdx", "*.markdown", "*.py"]
 exclude = ["venv/**", "node_modules/**"]
+profile = "technical-docs"
 minimum_severity = "warning"
 
 # Disable specific rules
@@ -135,6 +140,11 @@ ignore = ["S004"]
 Rule IDs and one-letter category prefixes are case-insensitive. Unknown keys,
 unknown rule references, and non-positive thresholds are configuration errors;
 `slop-lint check --show-config` prints the normalized policy and its source.
+
+The built-in profiles are `general`, `technical-docs`, `academic`,
+`journalism`, and `business`. A profile supplies rule, severity, and confidence
+defaults. Explicit configuration keys override a configured profile; a CLI
+`--profile` overrides that lower policy, and direct CLI filter flags win last.
 
 Or add to `pyproject.toml`:
 

@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Built-in `general`, `technical-docs`, `academic`, `journalism`, and `business`
+  rule profiles for config files and all scan commands.
 - Structured version 2 baselines and `baseline create`, `update`, `prune`, and
   `summary` maintenance actions.
 - `minimum_severity` configuration key, which can coexist with the per-rule
@@ -21,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `startup-check`, `perf-check`, `memory-check`, `nfr-check` (NFR probes)
 
 ### Changed
+- `rules` now shows profile tags, while `--show-config` reports the effective
+  profile and confidence policy; no-profile behavior remains unchanged.
 - Baseline identity now uses repository-relative paths and normalized source
   context instead of diagnostic messages, line numbers, and adjacent lines.
 - Explicit missing, malformed, unreadable, and unsupported baseline files now

@@ -23,6 +23,7 @@
 | FR-08 | Process files in parallel for performance | Could |
 | FR-09 | Provide `explain` command for rule documentation | Should |
 | FR-10 | Support line-scoped Markdown and Python suppressions | Must |
+| FR-11 | Provide built-in rule profiles for common document genres | Should |
 
 ### 2.2 Non-Functional Requirements
 
@@ -67,6 +68,20 @@ Markdown-only.
 | `info` | Possible issue, review recommended | Does not affect exit code |
 | `off` | Rule disabled | — |
 
+### 3.3 Built-in Profiles
+
+| Profile | Selected rules | Minimum severity | Minimum confidence |
+|---------|----------------|------------------|--------------------|
+| `general` | General prose rules | info | medium |
+| `technical-docs` | General plus C001-C004 and M001-M004 | info | low |
+| `academic` | General plus G011-G013, S018, and T008 | info | medium |
+| `journalism` | General plus G010, S017, and V008 | info | medium |
+| `business` | General plus G014 and S019-S021 | info | low |
+
+General prose rules are G001-G009, S001-S016, T001-T007, and V001-V007.
+Running without a profile retains the legacy all-category selection, warning
+minimum severity, and low minimum confidence.
+
 ## 4. Command-Line Interface
 
 ### 4.1 Commands
@@ -87,6 +102,7 @@ slop-lint baseline ACTION [OPTIONS] [PATHS]...
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `--format` | choice | text | Output format: text, json, sarif |
+| `--profile` | choice | none | Built-in rule profile |
 | `--select` | string | all | Comma-separated rules/prefixes to enable |
 | `--ignore` | string | none | Comma-separated rules/prefixes to disable |
 | `--config` | path | auto | Path to configuration file |
@@ -101,11 +117,11 @@ slop-lint baseline ACTION [OPTIONS] [PATHS]...
 
 ### 4.3 Watch Command Options
 
-`watch` supports the shared `--select`, `--ignore`, `--config`, `--severity`,
-`--min-confidence`, `--hide-low`, `--baseline`, `--quiet`, and `--verbose`
-options from `check`. It also accepts `--interval` (seconds, default `2.0`) and
-`--no-clear`. Watch is text-only; `--format`, `--generate-baseline`, and
-`--show-config` remain check-only.
+`watch` supports the shared `--profile`, `--select`, `--ignore`, `--config`,
+`--severity`, `--min-confidence`, `--hide-low`, `--baseline`, `--quiet`, and
+`--verbose` options from `check`. It also accepts `--interval` (seconds, default
+`2.0`) and `--no-clear`. Watch is text-only; `--format`,
+`--generate-baseline`, and `--show-config` remain check-only.
 
 ### 4.4 Baseline Command
 
@@ -135,11 +151,12 @@ are configuration errors before scanning begins.
 
 ### 4.5 Scan Policy
 
-Both commands load configuration and CLI rule overrides, construct rules with
-severity overrides, apply the minimum severity, scan with file and per-file
-ignore policy, apply inline suppressions, filter by confidence, apply the
-baseline, and finally report the ordered findings. A watch iteration uses the
-same batch pipeline as `check`.
+All scan commands load configuration, apply its profile defaults and explicit
+policy, then apply a CLI profile and direct CLI rule overrides. They construct
+rules with severity overrides, apply the minimum severity, scan with file and
+per-file ignore policy, apply inline suppressions, filter by confidence, apply
+the baseline, and finally report the ordered findings. A watch iteration uses
+the same batch pipeline as `check`.
 
 ### 4.6 Exit Codes
 
@@ -170,7 +187,8 @@ include = ["*.md", "*.py"]
 exclude = ["venv/**", "node_modules/**", ".git/**"]
 
 # Rule selection
-select = ["V", "S", "T", "G", "C", "M"]
+profile = "technical-docs"
+# select = ["V", "S", "T", "G", "C", "M"]  # replaces profile selection
 ignore = []
 
 # Minimum severity to report
@@ -207,6 +225,13 @@ prefixes; severity override keys accept full rule IDs only. References are
 normalized to uppercase and checked against the complete built-in registry.
 Unknown keys and references are configuration errors, with a close-match hint
 when available.
+
+Profiles are fixed built-in presets. For a configured profile, explicit
+`select`, `minimum_severity`, and `min_confidence` keys override preset values.
+A CLI `--profile` replaces the configured profile and its three policy values;
+direct CLI `--select`, `--ignore`, `--severity`, `--min-confidence`, and
+`--hide-low` options apply last. Independent file, vocabulary, threshold,
+per-file-ignore, and per-rule severity settings remain active.
 
 The legacy scalar `severity = "warning"` remains valid for one deprecation
 cycle. It cannot be combined with `minimum_severity`; the latter can coexist

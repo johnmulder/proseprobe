@@ -4,6 +4,8 @@ import re
 import tomllib
 from pathlib import Path
 
+from slop_lint.profiles import PROFILES
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -67,6 +69,23 @@ def test_spec_documents_baseline_lifecycle() -> None:
     for action in ("create", "update", "prune", "summary"):
         assert f"`{action}`" in spec
         assert f'grep -q "{action}"' in makefile
+
+
+def test_public_docs_match_profile_catalog() -> None:
+    """Public docs and release checks should name every built-in profile."""
+    documents = [
+        (ROOT / "README.md").read_text(),
+        (ROOT / "SPEC.md").read_text(),
+        (ROOT / "docs" / "configuration.md").read_text(),
+    ]
+    makefile = (ROOT / "Makefile").read_text()
+    cli = (ROOT / "src" / "slop_lint" / "cli.py").read_text()
+
+    for profile in PROFILES:
+        assert all(profile in document for document in documents)
+        assert profile in makefile
+    assert "choices=tuple(PROFILES)" in cli
+    assert '# profile = "technical-docs"' in cli
 
 
 def test_docs_explain_python_prose_rule_scope() -> None:
