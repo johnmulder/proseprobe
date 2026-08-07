@@ -280,6 +280,15 @@ class TestRulesCommand:
         assert "C001" in result.stdout
         assert "M001" in result.stdout
 
+    def test_rules_lists_profile_tags(self) -> None:
+        """Rule inventory should derive profile tags from the catalog."""
+        result = run_cli("rules")
+
+        assert result.exit_code == 0
+        assert "Profiles" in result.stdout
+        assert "academic" in result.stdout
+        assert "technical-docs" in result.stdout
+
 
 class TestExplainCommand:
     """Tests for the explain command."""
@@ -316,6 +325,7 @@ class TestInitCommand:
         assert result.exit_code == 0
         config_file = tmp_path / ".slop-lint.toml"
         assert config_file.exists()
+        assert '# profile = "technical-docs"' in config_file.read_text()
         assert 'minimum_severity = "warning"' in config_file.read_text()
         assert load_config(config_file).severity == "warning"
 
@@ -359,7 +369,9 @@ class TestShowConfigFlag:
 
         assert result.exit_code == 0
         assert "Config file: default" in result.stdout
+        assert "Profile: default" in result.stdout
         assert "Minimum severity: warning" in result.stdout
+        assert "Minimum confidence: low" in result.stdout
 
     def test_show_config_with_custom_config(self, tmp_path: Path) -> None:
         """Show-config should identify an explicit config file."""
@@ -395,6 +407,171 @@ class TestShowConfigFlag:
         assert result.exit_code == 0
         assert f"Config file: {config_file}" in result.stdout
         assert "Select: ['V001']" in result.stdout
+
+
+class TestProfiles:
+    """Tests for profile CLI selection and precedence."""
+
+    @pytest.mark.parametrize("command", ["check", "watch", "baseline"])
+    def test_scan_help_lists_profile_option(self, command: str) -> None:
+        result = run_cli(command, "--help")
+
+        assert result.exit_code == 0
+        assert "--profile" in result.stdout
+        for profile in (
+            "academic",
+            "business",
+            "general",
+            "journalism",
+            "technical-docs",
+        ):
+            assert profile in result.stdout
+
+    @pytest.mark.parametrize(
+        ("profile", "included", "excluded", "confidence"),
+        [
+            ("academic", "G011", "V008", "medium"),
+            ("business", "S021", "G011", "low"),
+            ("general", "V001", "M004", "medium"),
+            ("journalism", "V008", "S021", "medium"),
+            ("technical-docs", "M004", "V008", "low"),
+        ],
+    )
+    def test_cli_profile_resolves_policy(
+        self,
+        tmp_path: Path,
+        profile: str,
+        included: str,
+        excluded: str,
+        confidence: str,
+    ) -> None:
+        config_file = tmp_path / "config.toml"
+        config_file.write_text("")
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("Clean content.")
+
+        result = run_cli(
+            "check",
+            str(test_file),
+            "--config",
+            str(config_file),
+            "--profile",
+            profile,
+            "--show-config",
+        )
+
+        assert result.exit_code == 0
+        assert f"Profile: {profile}" in result.stdout
+        assert included in result.stdout
+        assert excluded not in result.stdout
+        assert "Minimum severity: info" in result.stdout
+        assert f"Minimum confidence: {confidence}" in result.stdout
+
+    def test_cli_profile_replaces_config_profile_and_preserves_overlays(
+        self, tmp_path: Path
+    ) -> None:
+        config_file = tmp_path / "config.toml"
+        config_file.write_text(
+            'profile = "business"\nignore = ["V001"]\n\n[severity]\nG011 = "error"\n'
+        )
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("Clean content.")
+
+        result = run_cli(
+            "check",
+            str(test_file),
+            "--config",
+            str(config_file),
+            "--profile",
+            "academic",
+            "--show-config",
+        )
+
+        assert result.exit_code == 0
+        assert "Profile: academic" in result.stdout
+        assert "G011" in result.stdout
+        assert "S021" not in result.stdout
+        assert "Ignore: ['V001']" in result.stdout
+        assert "Severity overrides: {'G011': 'error'}" in result.stdout
+
+    def test_direct_cli_policy_overrides_profile(self, tmp_path: Path) -> None:
+        config_file = tmp_path / "config.toml"
+        config_file.write_text('profile = "business"\nignore = ["V001"]\n')
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("Clean content.")
+
+        result = run_cli(
+            "check",
+            str(test_file),
+            "--config",
+            str(config_file),
+            "--profile",
+            "academic",
+            "--select",
+            "V001",
+            "--ignore",
+            "V002",
+            "--severity",
+            "error",
+            "--min-confidence",
+            "high",
+            "--show-config",
+        )
+
+        assert result.exit_code == 0
+        assert "Select: ['V001']" in result.stdout
+        assert "Ignore: ['V002']" in result.stdout
+        assert "Minimum severity: error" in result.stdout
+        assert "Minimum confidence: high" in result.stdout
+
+    def test_genre_profiles_filter_actual_findings(self, tmp_path: Path) -> None:
+        test_file = tmp_path / "doc.md"
+        test_file.write_text(
+            "Few scholars have examined this intersection.\n"
+            "A growing number of people use the framework.\n"
+        )
+
+        academic = run_cli("check", str(test_file), "--profile", "academic")
+        journalism = run_cli("check", str(test_file), "--profile", "journalism")
+
+        assert "G013" in academic.stdout
+        assert "V008" not in academic.stdout
+        assert "V008" in journalism.stdout
+        assert "G013" not in journalism.stdout
+
+    def test_baseline_create_uses_profile_policy(self, tmp_path: Path) -> None:
+        test_file = tmp_path / "doc.md"
+        test_file.write_text(
+            "Few scholars have examined this intersection.\n"
+            "A growing number of people use the framework.\n"
+        )
+        baseline = tmp_path / "baseline.json"
+
+        result = run_cli(
+            "baseline",
+            "create",
+            str(test_file),
+            "--profile",
+            "journalism",
+            "--baseline",
+            str(baseline),
+        )
+
+        rule_ids = {
+            entry["rule_id"] for entry in json.loads(baseline.read_text())["entries"]
+        }
+        assert result.exit_code == 0
+        assert "V008" in rule_ids
+        assert "G013" not in rule_ids
+
+    def test_invalid_cli_profile_is_usage_error(self, tmp_path: Path) -> None:
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("Clean content.")
+
+        result = run_cli("check", str(test_file), "--profile", "missing")
+
+        assert result.exit_code == 2
+        assert "invalid choice" in result.stderr
 
 
 class TestBaselineMode:
@@ -1012,6 +1189,26 @@ class TestWatchCommand:
 
         checked = run_cli("check", str(test_file), *options)
         watched = run_cli("watch", str(test_file), "--no-clear", *options)
+
+        assert self._finding_lines(watched.stdout, test_file) == self._finding_lines(
+            checked.stdout, test_file
+        )
+
+    def test_watch_and_check_share_profile_policy(
+        self, tmp_path: Path, monkeypatch: object
+    ) -> None:
+        """One watch batch should use the same selected profile as check."""
+        test_file = tmp_path / "doc.md"
+        test_file.write_text(
+            "Few scholars have examined this intersection.\n"
+            "A growing number of people use the framework.\n"
+        )
+        self._stop_after_first_iteration(monkeypatch)
+
+        checked = run_cli("check", str(test_file), "--profile", "academic")
+        watched = run_cli(
+            "watch", str(test_file), "--no-clear", "--profile", "academic"
+        )
 
         assert self._finding_lines(watched.stdout, test_file) == self._finding_lines(
             checked.stdout, test_file

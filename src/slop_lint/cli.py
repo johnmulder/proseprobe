@@ -12,6 +12,7 @@ from slop_lint._ansi import clear_screen, style, table
 from slop_lint.config import ConfigError, load_config, validate_rule_references
 from slop_lint.core.baseline import Baseline, filter_new_issues, resolve_workspace
 from slop_lint.core.linter import Linter, LintReadError, LintResults
+from slop_lint.profiles import PROFILES, profile_names_for_rule
 from slop_lint.rules import get_all_rules
 from slop_lint.rules.base import (
     Confidence,
@@ -87,6 +88,17 @@ def _apply_rule_cli_overrides(config: Config, args: argparse.Namespace) -> None:
             if ignored not in existing:
                 config.ignore.append(ignored)
                 existing.add(ignored)
+
+
+def _apply_cli_profile(config: Config, profile_name: str | None) -> None:
+    """Replace lower-layer profile policy with a CLI profile."""
+    if profile_name is None:
+        return
+    profile = PROFILES[profile_name]
+    config.profile = profile_name
+    config.select = sorted(profile.rules)
+    config.severity = profile.minimum_severity
+    config.min_confidence = profile.min_confidence
 
 
 # ---------------------------------------------------------------------------
@@ -175,9 +187,18 @@ def _prepare_scan(args: argparse.Namespace) -> tuple[Config, Linter, list[Rule]]
     config = load_config(config_path)
     registry_rules = get_all_rules()
     valid_rule_ids = {rule.id for rule in registry_rules}
+    profiled_rule_ids = set().union(*(profile.rules for profile in PROFILES.values()))
+    if profiled_rule_ids != valid_rule_ids:
+        unknown = sorted(profiled_rule_ids - valid_rule_ids)
+        missing = sorted(valid_rule_ids - profiled_rule_ids)
+        raise ConfigError(
+            Path("<profiles>"),
+            f"profile catalog mismatch (unknown={unknown}, untagged={missing})",
+        )
     validate_rule_references(config, valid_rule_ids)
+    _apply_cli_profile(config, args.profile)
     _apply_rule_cli_overrides(config, args)
-    if args.select or args.ignore:
+    if args.profile or args.select or args.ignore:
         validate_rule_references(config, valid_rule_ids, Path("<command line>"))
 
     min_severity = severity_from_str(
@@ -259,12 +280,17 @@ def _cmd_check(args: argparse.Namespace) -> int:
     if args.show_config:
         print(style("Configuration:", bold=True))
         print(f"  Config file: {config.source_path or 'default'}")
+        print(f"  Profile: {config.profile or 'default'}")
         print(f"  Select: {config.select}")
         print(f"  Ignore: {config.ignore}")
         print(f"  Include patterns: {config.include}")
         print(f"  Exclude patterns: {config.exclude}")
         config_severity = args.severity or config.severity
         print(f"  Minimum severity: {config_severity}")
+        config_confidence = args.min_confidence or (
+            "medium" if args.hide_low else config.min_confidence
+        )
+        print(f"  Minimum confidence: {config_confidence}")
         if config.severity_overrides:
             print(f"  Severity overrides: {config.severity_overrides}")
         if config.per_file_ignores:
@@ -343,8 +369,17 @@ def _cmd_rules(_args: argparse.Namespace) -> int:
     """List all available rules."""
     all_rules = get_all_rules()
 
-    headers = ["ID", "Name", "Severity", "Description"]
-    rows = [[r.id, r.name, r.severity.name, r.description] for r in all_rules]
+    headers = ["ID", "Name", "Severity", "Profiles", "Description"]
+    rows = [
+        [
+            rule.id,
+            rule.name,
+            rule.severity.name,
+            ", ".join(profile_names_for_rule(rule.id)),
+            rule.description,
+        ]
+        for rule in all_rules
+    ]
     print(table(headers, rows, title="Available Rules"))
     return 0
 
@@ -363,6 +398,7 @@ def _cmd_init(_args: argparse.Namespace) -> int:
 [tool.slop-lint]
 # include = ["*.md", "*.mdx", "*.markdown", "*.py"]
 # exclude = ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
+# profile = "technical-docs"
 # select = ["V", "S", "T", "G", "C", "M"]
 # ignore = ["T003"]
 minimum_severity = "warning"  # error, warning, info
@@ -488,6 +524,12 @@ def _add_scan_options(parser: argparse.ArgumentParser) -> None:
     """Add options shared by check and watch scans."""
     parser.add_argument(
         "--select", "-s", default=None, help="Rules to enable (comma-separated)"
+    )
+    parser.add_argument(
+        "--profile",
+        choices=tuple(PROFILES),
+        default=None,
+        help="Built-in rule profile",
     )
     parser.add_argument(
         "--ignore", "-i", default=None, help="Rules to disable (comma-separated)"
