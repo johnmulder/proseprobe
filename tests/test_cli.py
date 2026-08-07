@@ -166,6 +166,41 @@ class TestCheckCommand:
         result = run_cli("check", str(test_file), "--severity", "info")
         assert "V003" in result.stdout
 
+    def test_python_prose_uses_severity_and_confidence_filters(
+        self, tmp_path: Path
+    ) -> None:
+        """Shared CLI filters apply to findings in Python documentation."""
+        test_file = tmp_path / "documented.py"
+        test_file.write_text(
+            '"""As of my last update, this notable result is accurate."""'
+        )
+
+        filtered = run_cli(
+            "check",
+            str(test_file),
+            "--select",
+            "V001,V003",
+            "--severity",
+            "warning",
+            "--min-confidence",
+            "high",
+        )
+        included = run_cli(
+            "check",
+            str(test_file),
+            "--select",
+            "V001,V003",
+            "--severity",
+            "info",
+            "--min-confidence",
+            "low",
+        )
+
+        assert "V001" not in filtered.stdout
+        assert "V003" not in filtered.stdout
+        assert "V001" in included.stdout
+        assert "V003" in included.stdout
+
     def test_check_nonexistent_file(self) -> None:
         """Test checking a nonexistent file."""
         result = run_cli("check", "/nonexistent/file.md")

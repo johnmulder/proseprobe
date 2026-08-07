@@ -1,4 +1,4 @@
-"""A robust module used to exercise documentation checks."""
+"""A robust module that can utilize adapters and exercise documentation checks."""
 
 
 def total(values: list[int]) -> int:
@@ -16,3 +16,13 @@ def retry() -> None:
     # Callers can request a longer delay through configuration.
     # TODO: Retry on HTTP 503 after issue #42 defines the limit.
     pass
+
+
+def describe() -> str:
+    """I hope this helps.
+
+    It may perhaps work.
+    This tool will change everything.
+    word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word.
+    """
+    return "I hope this helps and may perhaps change everything while word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word repeats."

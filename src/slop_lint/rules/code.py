@@ -10,17 +10,17 @@ from slop_lint.data.code_patterns import (
     COLLABORATIVE_COMMENT_PATTERNS,
     VERBOSE_COMMENT_PATTERNS,
 )
-from slop_lint.data.vocabulary import DOCSTRING_AI_VOCABULARY
-from slop_lint.parsers.python import PythonParser
+from slop_lint.data.vocabulary import AI_VOCABULARY, DOCSTRING_AI_VOCABULARY
+from slop_lint.parsers.python import _get_cached_parser
 from slop_lint.rules.base import Issue, Rule, Severity
 
 
 class DocstringVocabularyRule(Rule):
-    """C001: Detect overused vocabulary in docstrings."""
+    """C001: Detect Python-specific vocabulary in docstrings."""
 
     id = "C001"
-    name = "Docstring Vocabulary"
-    description = "Detects overused words in Python docstrings"
+    name = "Docstring-Only Vocabulary"
+    description = "Detects Python docstring terms not covered by V001"
     severity = Severity.WARNING
     applies_to: ClassVar[set[str]] = {"python"}
 
@@ -31,23 +31,20 @@ class DocstringVocabularyRule(Rule):
     ) -> None:
         super().__init__()
         self._allowed = {w.lower() for w in (allowed or set())}
-        extra_words = {w.lower() for w in (additional or set()) if isinstance(w, str)}
-
-        base_words = {word.lower() for _, word, _ in DOCSTRING_AI_VOCABULARY}
-        extra_words = extra_words - self._allowed - base_words
-
-        self._ai_words: list[tuple[str, str, str | None]] = list(
-            DOCSTRING_AI_VOCABULARY
-        )
-        for word in sorted(extra_words):
-            pattern = rf"\b{re.escape(word)}\b"
-            self._ai_words.append((pattern, word, None))
+        general_words = AI_VOCABULARY | {
+            word.lower() for word in (additional or set()) if isinstance(word, str)
+        }
+        self._ai_words = [
+            item
+            for item in DOCSTRING_AI_VOCABULARY
+            if item[1].lower() not in general_words
+        ]
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for overused vocabulary in docstrings."""
         issues: list[Issue] = []
 
-        parser = PythonParser(content)
+        parser = _get_cached_parser(content)
         if not parser.parse():
             return issues
 
@@ -84,7 +81,7 @@ class VerboseCommentsRule(Rule):
         """Check for verbose comments."""
         issues: list[Issue] = []
 
-        parser = PythonParser(content)
+        parser = _get_cached_parser(content)
         comments = parser.get_comments()
 
         for comment in comments:
@@ -118,7 +115,7 @@ class CollaborativeCommentsRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for collaborative comments."""
         issues: list[Issue] = []
-        parser = PythonParser(content)
+        parser = _get_cached_parser(content)
         comments = parser.get_comments()
 
         for comment in comments:
@@ -154,7 +151,7 @@ class AIPlaceholdersRule(Rule):
         issues: list[Issue] = []
 
         lines = content.split("\n")
-        parser = PythonParser(content)
+        parser = _get_cached_parser(content)
         comments = parser.get_comments()
 
         # Comment-only placeholders

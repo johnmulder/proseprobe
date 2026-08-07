@@ -3,7 +3,7 @@
 import subprocess
 from pathlib import Path
 
-from slop_lint.config import Config, PerFileIgnore
+from slop_lint.config import Config, PerFileIgnore, VocabularyConfig
 from slop_lint.core.linter import Linter, LintResults
 from slop_lint.rules import get_all_rules
 from slop_lint.rules.vocab import AIVocabularyRule
@@ -23,6 +23,12 @@ class TestLinter:
         config = Config(ignore=["V001"])
         linter = Linter(config)
         assert linter.config.ignore == ["V001"]
+
+    def test_general_prose_rule_metadata_includes_python(self) -> None:
+        """Every general prose rule declares Python documentation support."""
+        for rule in get_all_rules():
+            if rule.id[0] in {"V", "G", "S", "T"} and rule.content_scope == "prose":
+                assert {"markdown", "python"} <= rule.applies_to, rule.id
 
 
 class TestDiscoverFiles:
@@ -292,6 +298,134 @@ class TestCheckFile:
         issues = linter.check_file(test_file)
 
         assert len(issues) > 0
+
+    def test_general_prose_rules_scan_python_documentation(
+        self, tmp_path: Path
+    ) -> None:
+        """Shared prose rules report docstrings and comments at source columns."""
+        test_file = tmp_path / "documented.py"
+        long_sentence = " ".join(["word"] * 41) + "."
+        test_file.write_text(
+            '"""This delves into systems.\n'
+            "I hope this helps.\n"
+            "It may perhaps work.\n"
+            "This tool will change everything.\n"
+            f"{long_sentence}\n"
+            '"""\n'
+            'message = "I hope this helps while it delves."\n'
+            "# Let me know if you need help.\n"
+            "value = 1  # As of my last update, this is accurate.\n"
+        )
+        linter = Linter(Config())
+        for rule in get_all_rules():
+            linter.register_rule(rule)
+
+        issues = linter.check_file(test_file)
+
+        locations = {(issue.rule_id, issue.line, issue.column) for issue in issues}
+        assert ("V001", 1, 9) in locations
+        assert ("V002", 2, 1) in locations
+        assert ("G002", 3, 8) in locations
+        assert ("V006", 4, 11) in locations
+        assert ("T008", 5, 1) in locations
+        assert ("V002", 8, 3) in locations
+        assert ("V003", 9, 14) in locations
+        assert not any(issue.line == 7 for issue in issues)
+
+    def test_python_prose_rules_respect_selection_and_ignores(
+        self, tmp_path: Path
+    ) -> None:
+        """Existing selectors control shared rules on Python files."""
+        test_file = tmp_path / "documented.py"
+        test_file.write_text('"""I hope this helps."""')
+
+        selected = Linter(Config(select=["V002"]))
+        ignored = Linter(Config(select=["V002"], ignore=["V002"]))
+        for rule in get_all_rules():
+            selected.register_rule(rule)
+            ignored.register_rule(rule)
+
+        assert [issue.rule_id for issue in selected.check_file(test_file)] == ["V002"]
+        assert ignored.check_file(test_file) == []
+
+    def test_python_prose_rules_respect_per_file_ignores(self, tmp_path: Path) -> None:
+        """Per-file policy applies to shared rules on Python files."""
+        test_file = tmp_path / "documented.py"
+        test_file.write_text('"""I hope this helps."""')
+        config = Config(
+            select=["V002"],
+            per_file_ignores=[PerFileIgnore(pattern="*.py", ignore=["V002"])],
+        )
+        linter = Linter(config)
+        for rule in get_all_rules():
+            linter.register_rule(rule)
+
+        assert linter.check_file(test_file) == []
+
+    def test_structural_rules_do_not_cross_python_docstrings(
+        self, tmp_path: Path
+    ) -> None:
+        """Independent docstrings cannot form one repeated-opening sequence."""
+        test_file = tmp_path / "separate.py"
+        test_file.write_text(
+            'def one():\n    """They build."""\n\n'
+            'def two():\n    """They test."""\n\n'
+            'def three():\n    """They ship."""\n'
+        )
+        linter = Linter(Config(select=["S010"]))
+        for rule in get_all_rules():
+            linter.register_rule(rule)
+
+        assert linter.check_file(test_file) == []
+
+    def test_threshold_rules_do_not_combine_python_docstrings(
+        self, tmp_path: Path
+    ) -> None:
+        """Document-level thresholds restart for each Python prose block."""
+        test_file = tmp_path / "separate.py"
+        test_file.write_text(
+            'def one():\n    """Compare speed, scale, and safety. Smith (2020) argues this."""\n\n'
+            'def two():\n    """Compare cost, scope, and time. Jones (2021) reports this."""\n\n'
+            'def three():\n    """Compare red, green, and blue. Brown (2022) finds this."""\n\n'
+            'def four():\n    """Compare one, two, and three. White (2023) observes this."""\n'
+        )
+        linter = Linter(Config(select=["S001", "S018"]))
+        for rule in get_all_rules():
+            linter.register_rule(rule)
+
+        assert linter.check_file(test_file) == []
+
+    def test_v001_and_c001_own_distinct_python_vocabulary(self, tmp_path: Path) -> None:
+        """General and docstring-only vocabulary rules do not duplicate matches."""
+        test_file = tmp_path / "vocabulary.py"
+        test_file.write_text('"""A robust API can utilize a bespoke adapter."""')
+        linter = Linter(Config(select=["V001", "C001"]))
+        for rule in get_all_rules():
+            linter.register_rule(rule)
+
+        issues = linter.check_file(test_file)
+
+        assert [(issue.rule_id, issue.line) for issue in issues] == [
+            ("C001", 1),
+            ("C001", 1),
+            ("V001", 1),
+        ]
+
+    def test_additional_vocabulary_promotes_c001_term_to_v001(
+        self, tmp_path: Path
+    ) -> None:
+        """Configured general vocabulary remains owned by V001 alone."""
+        test_file = tmp_path / "vocabulary.py"
+        test_file.write_text('"""Use a bespoke adapter."""')
+        config = Config(
+            select=["V001", "C001"],
+            vocabulary=VocabularyConfig(additional=["bespoke"]),
+        )
+        linter = Linter(config)
+        for rule in get_all_rules(config):
+            linter.register_rule(rule)
+
+        assert [issue.rule_id for issue in linter.check_file(test_file)] == ["V001"]
 
 
 class TestCheck:

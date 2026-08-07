@@ -55,3 +55,14 @@ def iter_prose_blocks(content: str, filename: str) -> list[ProseBlock]:
     if current:
         blocks.append(ProseBlock("body", current[0][0], current[-1][0], tuple(current)))
     return blocks
+
+
+def iter_prose_scopes(content: str, filename: str) -> list[ProseBlock]:
+    """Return independent scopes for document-level prose thresholds."""
+    if filename.lower().endswith(".py"):
+        return iter_prose_blocks(content, filename)
+
+    lines = iter_prose_lines(content, filename)
+    if not lines:
+        return []
+    return [ProseBlock("body", lines[0][0], lines[-1][0], tuple(lines))]

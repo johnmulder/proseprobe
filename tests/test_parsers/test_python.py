@@ -229,6 +229,7 @@ def broken(
         second = _get_cached_parser(content)
 
         assert first is second
+        assert first.get_prose_lines() is second.get_prose_lines()
         assert _get_cached_parser.cache_info().maxsize == 32
         clear_parser_cache()
         assert _get_cached_parser(content) is not first

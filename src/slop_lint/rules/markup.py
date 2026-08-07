@@ -4,7 +4,7 @@ import re
 from typing import ClassVar
 
 from slop_lint.parsers.markdown import is_markdown_file
-from slop_lint.parsers.python import PythonParser
+from slop_lint.parsers.python import _get_cached_parser
 from slop_lint.rules.base import Confidence, Issue, Rule, Severity
 
 
@@ -33,7 +33,7 @@ class WrongMarkupRule(Rule):
         # Build a set of line numbers inside string literals so we can
         # skip #-prefixed lines that are really part of a string.
         string_lines: set[int] = set()
-        parser = PythonParser(content)
+        parser = _get_cached_parser(content)
         if parser.parse():
             for start_line, _col, value in parser.get_string_literals():
                 line_count = value.count("\n")

@@ -116,7 +116,8 @@ class Rule(ABC):
 
     def iter_lines(self, content: str, filename: str) -> list[tuple[int, str]]:
         """Return line-numbered content based on the rule's scope."""
-        from slop_lint.parsers.markdown import iter_non_code_lines, iter_prose_lines
+        from slop_lint.parsers.markdown import iter_non_code_lines
+        from slop_lint.parsers.prose import iter_prose_lines
 
         if self.content_scope == "prose":
             return iter_prose_lines(content, filename)

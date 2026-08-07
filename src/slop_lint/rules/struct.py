@@ -21,7 +21,7 @@ from slop_lint.data.phrases import (
     FRACTAL_SUMMARY_PHRASES,
     SIGNPOSTED_CONCLUSION_PHRASES,
 )
-from slop_lint.parsers.markdown import iter_prose_blocks
+from slop_lint.parsers.prose import iter_prose_blocks, iter_prose_scopes
 from slop_lint.rules.base import Confidence, Issue, Rule, Severity
 
 
@@ -32,7 +32,7 @@ class RuleOfThreeRule(Rule):
     name = "Rule of Three"
     description = "Detects excessive 'X, Y, and Z' patterns"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     def __init__(self, threshold: int = 3) -> None:
@@ -47,25 +47,26 @@ class RuleOfThreeRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for rule of three patterns."""
         issues: list[Issue] = []
-        triads_found: list[tuple[int, int, str]] = []
+        for block in iter_prose_scopes(content, filename):
+            triads_found: list[tuple[int, int, str]] = []
+            for line_num, line in block.lines:
+                for pattern in RULE_OF_THREE_PATTERNS:
+                    for match in re.finditer(pattern, line, re.IGNORECASE):
+                        triads_found.append(
+                            (line_num, match.start() + 1, match.group())
+                        )
 
-        for line_num, line in self.iter_lines(content, filename):
-            for pattern in RULE_OF_THREE_PATTERNS:
-                for match in re.finditer(pattern, line, re.IGNORECASE):
-                    triads_found.append((line_num, match.start() + 1, match.group()))
-
-        # Only flag if excessive triads (more than threshold)
-        if len(triads_found) > self._threshold:
-            for line_num, col, text in triads_found:
-                issues.append(
-                    Issue(
-                        rule_id=self.id,
-                        message=f"Triadic pattern (rule of three): '{text}'",
-                        line=line_num,
-                        column=col,
-                        severity=self.severity,
+            if len(triads_found) > self._threshold:
+                for line_num, col, text in triads_found:
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Triadic pattern (rule of three): '{text}'",
+                            line=line_num,
+                            column=col,
+                            severity=self.severity,
+                        )
                     )
-                )
 
         return issues
 
@@ -77,7 +78,7 @@ class NegativeParallelismRule(Rule):
     name = "Negative Parallelism"
     description = "Detects 'Not only... but also...' patterns"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -108,7 +109,7 @@ class ChallengeConclusionsRule(Rule):
     name = "Challenge Conclusions"
     description = "Detects 'Despite its... faces challenges...' patterns"
     severity = Severity.WARNING
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -201,7 +202,7 @@ class SignificanceEmphasisRule(Rule):
     name = "Significance Emphasis"
     description = "Detects 'pivotal moment', 'key turning point' patterns"
     severity = Severity.WARNING
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -231,7 +232,7 @@ class SuperficialAnalysisRule(Rule):
     name = "Superficial Analysis"
     description = "Detects 'highlighting...underscoring...' chains"
     severity = Severity.WARNING
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -262,7 +263,7 @@ class FalseRangesRule(Rule):
     name = "False Ranges"
     description = "Detects 'from X to Y' with incoherent extremes"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     # Common false range patterns
@@ -319,7 +320,7 @@ class DramaticCountdownRule(Rule):
     name = "Dramatic Countdown"
     description = "Detects 'Not X. Not Y. Just Z.' dramatic countdown"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     _pattern = re.compile(
@@ -354,7 +355,7 @@ class RhetoricalSelfAnswerRule(Rule):
     name = "Rhetorical Self-Answer"
     description = "Detects 'The X? Y.' self-posed rhetorical question"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     # Short question (<60 chars) followed by short answer (<60 chars)
@@ -389,7 +390,7 @@ class AnaphoraAbuseRule(Rule):
     name = "Anaphora Abuse"
     description = "Detects repeated sentence openings (anaphora)"
     severity = Severity.WARNING
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     def __init__(self, threshold: int = 3) -> None:
@@ -439,7 +440,7 @@ class GerundFragmentLitanyRule(Rule):
     name = "Gerund Fragment Litany"
     description = "Detects consecutive gerund fragments ('Fixing X. Writing Y.')"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     _gerund_fragment = re.compile(r"^[A-Z][a-z]*ing\b[^.!?]{0,60}[.!?]$")
@@ -500,7 +501,7 @@ class ListicleInProseRule(Rule):
     name = "Listicle in Prose"
     description = "Detects ordinal-based listicle disguised as prose"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     _ordinals: ClassVar[list[str]] = ["first", "second", "third", "fourth", "fifth"]
@@ -557,7 +558,7 @@ class HistoricalAnalogyStackingRule(Rule):
     name = "Historical Analogy Stacking"
     description = "Detects rapid-fire historical company analogies"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     _tech_companies: ClassVar[set[str]] = {
@@ -640,7 +641,7 @@ class SignpostedConclusionRule(Rule):
     name = "Signposted Conclusion"
     description = "Detects explicitly signposted conclusions"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -670,7 +671,7 @@ class FractalSummaryRule(Rule):
     name = "Fractal Summary"
     description = "Detects section intro/outro summary framing"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -761,7 +762,7 @@ class AnecdoteAsEvidenceRule(Rule):
         "Detects 'For [Name] of [Location]', 'Take [Name]', 'Meet [Name]' patterns"
     )
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -791,7 +792,7 @@ class CitationNameDroppingRule(Rule):
     name = "Citation Name-Dropping"
     description = "Detects 3+ consecutive 'Author (Year) verb' sentences"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     def __init__(self, threshold: int = 3) -> None:
@@ -801,32 +802,27 @@ class CitationNameDroppingRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect consecutive 'Author (Year) verb' citation patterns."""
         issues: list[Issue] = []
-        # Collect all sentences that start with Author (Year) verb
-        citation_sentences: list[tuple[int, str]] = []
-        for line_num, line in self.iter_lines(content, filename):
-            # Split line into sentences
-            sentences = re.split(r"(?<=[.!?])\s+", line)
-            for sentence in sentences:
-                stripped = sentence.strip()
-                if re.match(CITATION_NAME_DROP_PATTERN, stripped):
-                    citation_sentences.append((line_num, stripped))
+        for block in iter_prose_scopes(content, filename):
+            citation_sentences: list[tuple[int, str]] = []
+            for line_num, line in block.lines:
+                for sentence in re.split(r"(?<=[.!?])\s+", line):
+                    stripped = sentence.strip()
+                    if re.match(CITATION_NAME_DROP_PATTERN, stripped):
+                        citation_sentences.append((line_num, stripped))
 
-        # Find runs of consecutive citation sentences
-        if len(citation_sentences) >= self.threshold:
-            # Report if total count meets threshold
-            first_line = citation_sentences[0][0]
-            issues.append(
-                Issue(
-                    rule_id=self.id,
-                    message=(
-                        f"Citation name-dropping: {len(citation_sentences)} "
-                        f"consecutive 'Author (Year) verb' sentences"
-                    ),
-                    line=first_line,
-                    column=1,
-                    severity=self.severity,
+            if len(citation_sentences) >= self.threshold:
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=(
+                            f"Citation name-dropping: {len(citation_sentences)} "
+                            f"consecutive 'Author (Year) verb' sentences"
+                        ),
+                        line=citation_sentences[0][0],
+                        column=1,
+                        severity=self.severity,
+                    )
                 )
-            )
         return issues
 
 
@@ -840,7 +836,7 @@ class CorporateEuphemismRule(Rule):
     name = "Corporate Euphemism"
     description = "Detects euphemistic reframing of negative events"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -871,7 +867,7 @@ class AlignmentRitualRule(Rule):
     name = "Alignment Ritual"
     description = "Detects statements that signal agreement without conveying substance"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -901,7 +897,7 @@ class SlideDeckFragmentRule(Rule):
     name = "Slide Deck Fragment"
     description = "Detects verbless noun-phrase fragments with stacked buzzwords"
     severity = Severity.INFO
-    applies_to: ClassVar[set[str]] = {"markdown"}
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
     _MIN_BUZZWORDS = 2

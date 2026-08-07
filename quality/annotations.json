@@ -930,9 +930,54 @@
           "column": 5
         },
         {
+          "rule_id": "G002",
+          "line": 24,
+          "column": 1
+        },
+        {
+          "rule_id": "G002",
+          "line": 24,
+          "column": 12
+        },
+        {
           "rule_id": "M001",
           "line": 9,
           "column": 5
+        },
+        {
+          "rule_id": "T008",
+          "line": 26,
+          "column": 5
+        },
+        {
+          "rule_id": "V001",
+          "line": 1,
+          "column": 6
+        },
+        {
+          "rule_id": "V001",
+          "line": 8,
+          "column": 13
+        },
+        {
+          "rule_id": "V001",
+          "line": 9,
+          "column": 9
+        },
+        {
+          "rule_id": "V002",
+          "line": 7,
+          "column": 7
+        },
+        {
+          "rule_id": "V002",
+          "line": 22,
+          "column": 8
+        },
+        {
+          "rule_id": "V006",
+          "line": 25,
+          "column": 15
         }
       ],
       "negative_cases": [
@@ -960,6 +1005,31 @@
           "rule_id": "M001",
           "line": 15,
           "note": "A plain Python comment contains no Markdown decoration."
+        },
+        {
+          "rule_id": "V001",
+          "line": 14,
+          "note": "The docstring uses plain general vocabulary."
+        },
+        {
+          "rule_id": "V002",
+          "line": 28,
+          "note": "Collaborative wording inside an ordinary string is not documentation."
+        },
+        {
+          "rule_id": "G002",
+          "line": 28,
+          "note": "Hedging inside an ordinary string is not documentation."
+        },
+        {
+          "rule_id": "V006",
+          "line": 28,
+          "note": "Grandiose wording inside an ordinary string is not documentation."
+        },
+        {
+          "rule_id": "T008",
+          "line": 28,
+          "note": "A long ordinary string is not Python documentation."
         }
       ]
     },

@@ -50,6 +50,7 @@ class PythonParser:
         self._docstrings: list[Docstring] | None = None
         self._comments: list[Comment] | None = None
         self._prose_blocks: list[ProseBlock] | None = None
+        self._prose_lines: list[tuple[int, str]] | None = None
 
     def parse(self) -> bool:
         """Parse the Python source.
@@ -173,15 +174,18 @@ class PythonParser:
 
     def get_prose_lines(self) -> list[tuple[int, str]]:
         """Return Python prose while masking code and block boundaries."""
+        if self._prose_lines is not None:
+            return self._prose_lines
         masked = [list(" " * len(line)) for line in self._lines]
         for block in self.get_prose_blocks():
             for line_num, line in block.lines:
                 for index, char in enumerate(line):
                     if char != " ":
                         masked[line_num - 1][index] = char
-        return [
+        self._prose_lines = [
             (line_num, "".join(chars)) for line_num, chars in enumerate(masked, start=1)
         ]
+        return self._prose_lines
 
     def _docstring_nodes(
         self,

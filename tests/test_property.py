@@ -252,7 +252,7 @@ class TestParserInvariants:
     @settings(max_examples=50, suppress_health_check=[HealthCheck.too_slow])
     def test_iter_prose_lines_in_bounds(self, content: str, filename: str) -> None:
         """Prose line numbers must reference valid lines in the original content."""
-        from slop_lint.parsers.markdown import iter_prose_lines
+        from slop_lint.parsers.prose import iter_prose_lines
 
         result = iter_prose_lines(content, filename)
         total_lines = len(content.split("\n"))

@@ -12,18 +12,17 @@ class TestDocstringVocabulary:
     """Tests for C001: Docstring Vocabulary."""
 
     def test_detects_ai_vocabulary(self) -> None:
-        """Test detecting overused vocabulary in docstrings."""
+        """Test detecting docstring-only vocabulary."""
         text = '''
 def process():
     """
-    This function delves into the data.
-    It leverages the API to facilitate seamless processing.
+    This function can utilize a bespoke adapter.
     """
     pass
 '''
         rule = DocstringVocabularyRule()
         issues = rule.check(text, "test.py")
-        assert len(issues) > 0
+        assert len(issues) == 2
 
     def test_ignores_normal_docstrings(self) -> None:
         """Test ignoring normal docstrings."""
@@ -40,15 +39,15 @@ def process():
         """Test allowed words are not flagged."""
         text = '''
 def process():
-    """We facilitate the workflow."""
+    """We utilize the workflow."""
     pass
 '''
-        rule = DocstringVocabularyRule(allowed={"facilitate"})
+        rule = DocstringVocabularyRule(allowed={"utilize"})
         issues = rule.check(text, "test.py")
         assert len(issues) == 0
 
-    def test_flags_additional_vocabulary(self) -> None:
-        """Test additional words are flagged without suggestions."""
+    def test_leaves_additional_vocabulary_to_v001(self) -> None:
+        """Configured general vocabulary is not duplicated by C001."""
         text = '''
 def process():
     """Foobar is used here."""
@@ -56,7 +55,13 @@ def process():
 '''
         rule = DocstringVocabularyRule(additional={"foobar"})
         issues = rule.check(text, "test.py")
-        assert len(issues) == 1
+        assert issues == []
+
+    def test_leaves_shared_vocabulary_to_v001(self) -> None:
+        """Built-in general vocabulary is not duplicated by C001."""
+        text = '"""A robust module that delves into data."""'
+
+        assert DocstringVocabularyRule().check(text, "test.py") == []
 
     def test_rule_metadata(self) -> None:
         """Test rule has correct metadata."""
