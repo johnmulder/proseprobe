@@ -229,19 +229,62 @@ Both `check` and `watch` use the resulting policy in this order:
 This order makes one watch iteration report the same ordered findings as
 `check` when given the same paths and shared options.
 
+## Baseline Lifecycle
+
+Create a version 2 baseline and use it to report only new findings:
+
+```bash
+slop-lint baseline create --baseline .slop-lint-baseline.json .
+slop-lint check --baseline .slop-lint-baseline.json .
+```
+
+Maintain it with one of three explicit actions:
+
+```bash
+# Report active, stale, and new counts without writing
+slop-lint baseline summary --baseline .slop-lint-baseline.json .
+
+# Accept new findings and retain stale entries
+slop-lint baseline update --baseline .slop-lint-baseline.json .
+
+# Remove stale entries without accepting new findings
+slop-lint baseline prune --baseline .slop-lint-baseline.json .
+```
+
+The baseline command applies the normal configuration, rule selection,
+severity, inline suppression, and confidence filters before comparing entries.
+All successful maintenance actions return 0 and print active, stale, new, and
+final entry counts.
+
+Version 2 stores deterministic entries containing a repository-relative path,
+rule ID, normalized matched source, and a hash of limited same-line context. It
+does not depend on line numbers, diagnostic messages, severity, confidence, or
+neighboring lines. A shared Git root is preferred as the workspace; non-Git
+inputs use their common scan root, independent of argument order.
+
+Version 1 fingerprint files remain readable for one compatibility cycle.
+`update` or `prune` migrates observable active findings to version 2 and reports
+unmatched opaque hashes as stale. Baseline writes use atomic replacement and
+deterministic ordering. An explicitly requested missing, malformed, unreadable,
+or unsupported file is a configuration error (exit code 2); it is never treated
+as an optional warning.
+
+`check --generate-baseline` remains a compatibility alias for creating a
+version 2 file and retains its existing overwrite behavior.
+
 ## CLI Options Reference
 
 | Option | Short | Commands | Description |
 |--------|-------|----------|-------------|
-| `--select` | `-s` | both | Rules to enable (comma-separated) |
-| `--ignore` | `-i` | both | Rules to disable (comma-separated) |
-| `--config` | `-c` | both | Path to configuration file |
-| `--severity` | | both | Minimum severity: error, warning, info |
-| `--min-confidence` | | both | Minimum confidence: high, medium, low |
-| `--hide-low` | | both | Shorthand for `--min-confidence medium` |
-| `--baseline` | `-b` | both | Path to baseline file for incremental adoption |
-| `--quiet` | `-q` | both | Only output errors |
-| `--verbose` | `-v` | both | Show additional diagnostic info |
+| `--select` | `-s` | all scans | Rules to enable (comma-separated) |
+| `--ignore` | `-i` | all scans | Rules to disable (comma-separated) |
+| `--config` | `-c` | all scans | Path to configuration file |
+| `--severity` | | all scans | Minimum severity: error, warning, info |
+| `--min-confidence` | | all scans | Minimum confidence: high, medium, low |
+| `--hide-low` | | all scans | Shorthand for `--min-confidence medium` |
+| `--baseline` | `-b` | all scans | Path to baseline file for incremental adoption |
+| `--quiet` | `-q` | all scans | Only output errors |
+| `--verbose` | `-v` | all scans | Show additional diagnostic info |
 | `--show-config` | | check | Display configuration and exit |
 | `--format` | `-f` | check | Output format: text, json, sarif |
 | `--generate-baseline` | | check | Generate baseline file from current issues |

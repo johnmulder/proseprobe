@@ -78,6 +78,8 @@ slop-lint explain RULE_ID              Show detailed rule documentation
 slop-lint init                         Create .slop-lint.toml config file
 slop-lint version                      Show version information
 slop-lint watch [OPTIONS] [PATHS]...   Watch files and re-check changes
+slop-lint baseline ACTION [OPTIONS] [PATHS]...
+                                       Create and maintain a baseline
 ```
 
 ### 4.2 Check Command Options
@@ -105,7 +107,33 @@ options from `check`. It also accepts `--interval` (seconds, default `2.0`) and
 `--no-clear`. Watch is text-only; `--format`, `--generate-baseline`, and
 `--show-config` remain check-only.
 
-### 4.4 Scan Policy
+### 4.4 Baseline Command
+
+`ACTION` is one of `create`, `update`, `prune`, or `summary`. The command uses
+the normal scan configuration and options but compares unbaselined findings:
+
+- `create` replaces the target with all current findings.
+- `summary` reports active, stale, and new counts without writing.
+- `update` accepts new findings and retains stale version 2 entries.
+- `prune` removes stale entries without accepting new findings.
+
+Successful maintenance actions return 0. `--baseline` defaults to
+`.slop-lint-baseline.json`. `check --generate-baseline` remains a compatibility
+form for creating a version 2 file.
+
+Version 2 entries contain a workspace-relative path, rule ID, normalized
+matched source, and limited same-line context hash. Identity excludes line
+numbers, diagnostic messages, severity, confidence, suggestions, and adjacent
+lines. Input order does not affect workspace selection: a shared Git root wins,
+otherwise the common scan root is used. Writes are atomic and deterministically
+ordered.
+
+Version 1 files remain readable for one compatibility cycle. A write migrates
+currently matched hashes to version 2 and reports unmatched opaque hashes as
+stale. Explicit missing, malformed, unreadable, and unsupported baseline files
+are configuration errors before scanning begins.
+
+### 4.5 Scan Policy
 
 Both commands load configuration and CLI rule overrides, construct rules with
 severity overrides, apply the minimum severity, scan with file and per-file
@@ -113,7 +141,7 @@ ignore policy, apply inline suppressions, filter by confidence, apply the
 baseline, and finally report the ordered findings. A watch iteration uses the
 same batch pipeline as `check`.
 
-### 4.5 Exit Codes
+### 4.6 Exit Codes
 
 | Code | Meaning |
 |------|---------|

@@ -54,11 +54,16 @@ slop-lint watch .
 slop-lint watch --severity error --min-confidence high \
   --baseline .slop-lint-baseline.json .
 
-# Generate baseline for gradual adoption
-slop-lint check --generate-baseline .
+# Create a baseline for gradual adoption
+slop-lint baseline create --baseline .slop-lint-baseline.json .
 
 # Check only new issues (not in baseline)
 slop-lint check --baseline .slop-lint-baseline.json .
+
+# Inspect, accept, or remove baseline entries
+slop-lint baseline summary --baseline .slop-lint-baseline.json .
+slop-lint baseline update --baseline .slop-lint-baseline.json .
+slop-lint baseline prune --baseline .slop-lint-baseline.json .
 
 # List all rules
 slop-lint rules
@@ -71,6 +76,11 @@ slop-lint explain V001
 confidence, and baseline filters in the same order. Watch output is text-only;
 JSON and SARIF are complete `check` reports, with diagnostics kept on stderr so
 redirected stdout remains valid structured data.
+
+Baselines use repository-relative source identity rather than line numbers or
+diagnostic wording. `update` explicitly accepts new findings, while `prune`
+removes stale entries without accepting new ones. The older
+`check --generate-baseline` form remains supported.
 
 ## Detection Categories
 

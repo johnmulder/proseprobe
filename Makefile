@@ -165,12 +165,18 @@ spec-verify: ## Verify documented CLI commands
 	@$(PYTHON) -m slop_lint --help | grep -q "explain" || (echo "ERROR: 'explain' command missing" && exit 1)
 	@$(PYTHON) -m slop_lint --help | grep -q "init" || (echo "ERROR: 'init' command missing" && exit 1)
 	@$(PYTHON) -m slop_lint --help | grep -q "version" || (echo "ERROR: 'version' command missing" && exit 1)
+	@$(PYTHON) -m slop_lint --help | grep -q "baseline" || (echo "ERROR: 'baseline' command missing" && exit 1)
 	@echo "Verifying check command options..."
 	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-format" || (echo "ERROR: --format option missing" && exit 1)
 	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-select" || (echo "ERROR: --select option missing" && exit 1)
 	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-ignore" || (echo "ERROR: --ignore option missing" && exit 1)
 	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-config" || (echo "ERROR: --config option missing" && exit 1)
 	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-severity" || (echo "ERROR: --severity option missing" && exit 1)
+	@echo "Verifying baseline actions..."
+	@$(PYTHON) -m slop_lint baseline --help | grep -q "create" || (echo "ERROR: baseline create missing" && exit 1)
+	@$(PYTHON) -m slop_lint baseline --help | grep -q "update" || (echo "ERROR: baseline update missing" && exit 1)
+	@$(PYTHON) -m slop_lint baseline --help | grep -q "prune" || (echo "ERROR: baseline prune missing" && exit 1)
+	@$(PYTHON) -m slop_lint baseline --help | grep -q "summary" || (echo "ERROR: baseline summary missing" && exit 1)
 	@echo "✓ CLI matches specification"
 
 # Check test coverage meets threshold (90%)

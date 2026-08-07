@@ -1,68 +1,329 @@
 {
-  "version": "1.0",
-  "fingerprints": [
-    "002af2f192a48180da609ab4aaa0d880",
-    "07f4bd1a3caf3b380915104e0d283b66",
-    "0819db9b6b16ee25fb2649e3204bc55b",
-    "09d8c7cc4c1a54e406099141c8b52186",
-    "0e0e0c9036800f53635dab6b172bf7c6",
-    "108fd4359cd51fe87702eb2bee4e8415",
-    "117a5112073f044aecbb9417b404326b",
-    "11fcbee1502ff6e915eb89799f657660",
-    "140fd6cd2de5e5c5853f60541c863748",
-    "2089c3c6f4711edac82f2a55d494a8b7",
-    "25d8127e2b068c5381aed5f4f7c0e20e",
-    "2a91b73afd47cfbc43d0d49e0f3aafdd",
-    "2c7b3e985c33590a9ab761c05d6f7dba",
-    "2fa0bfb662e6de619ebebdbf7fd28828",
-    "365728af6e3beb4ceae47e4f1bdd76ca",
-    "3cfa422754a8f640869090cec31aa3f0",
-    "405e1f75fa0d13bd7b221e5b17a1bcbb",
-    "4364085f4a0ca7c53890285400def5ac",
-    "45d3dda7328b22e2ef4cb197b8cccaaf",
-    "47d4bde857583b9ae8c4c0d5b02be508",
-    "4a9c6e613844f8a60125fd1f4a693dab",
-    "4b4f7631c465bba6e47e06da0a6f983a",
-    "5091eb9dd8ccda245db9769d0d748fbe",
-    "604ec51457ea9e304bd14eeda3e4c78a",
-    "639239c25b7395c4ae7ca03991978f37",
-    "66e4954cc708ccc57c58b079e6b0fe9f",
-    "672857f93d1ddbe16a09e170f943326a",
-    "6b23fc2f1549a790506c509420223579",
-    "6cc2983f5f0da52ff47774f77254c557",
-    "733a112ffba6d7e061eb450ca59b85b1",
-    "748f4c791bc9a84ff2a2b75829544533",
-    "766b19a8e6be067889a64fa931a81513",
-    "77156f79ebef42e3c4cd362d3bb1e214",
-    "77b38ff156ec7588f72572d86d8acb0a",
-    "7b831d65f85f3cdcee14347ff18fe1ad",
-    "7bdd516b9f501719078534af35a591b1",
-    "7e144914c48bc72e356840c73dfae19c",
-    "891f9b1693b6e0d6fea61bbe133078cb",
-    "89625a366eaebb739563146511f25c93",
-    "8b7bdfdfd525b98b21e83ea9114b21ef",
-    "8e7968a8ff78a8eacd2c686adea68da1",
-    "902a3c1704be37e9f6c8de6e41b0ef3c",
-    "9599efdb91d12fd4dfa5e5bbc3590b21",
-    "a8f78a01ed9331e965d7d486d75ac580",
-    "b46752b7ccad0d41b1cdbe47fdcb1a5f",
-    "b6097b8b1d22aa768678e26b2b0751c5",
-    "bcca41a0e8557baf1585218adcaf10ba",
-    "bed94770556e4f5e0cbeda2f851ce734",
-    "c1eb7bfcf1bc04e64af99d507b874055",
-    "c47a0af0ad2c18f80e9f9ca94ecb0070",
-    "cb45dc01c30891e6d23888451be88c3f",
-    "d23e91a16eb288c30141a9a43ac56df0",
-    "d4418503c140829b0d5ae4632d918ed2",
-    "d5c0d5193b43dc6f33b791ebc21bfdfb",
-    "d6314bbf65fdd4bc98a9fe18cdfe9239",
-    "dc68578c6dca6819494511223a0c6e77",
-    "e8b07b625bb1be04a3254198815d32d6",
-    "e8e0babd13091e5ea17e66087937b97a",
-    "ebf9133d427424dc5bfafea42f58cd08",
-    "edb5cc47437b7d1498c34d9022f64aa5",
-    "f0a79e14186bd2c161934259b9845ccc",
-    "f2b0efa3366174390d2b0f9982bc85b0",
-    "f6d132e5dc67d535ad07411cca0de7e0"
+  "version": 2,
+  "entries": [
+    {
+      "path": "docs/rules.md",
+      "rule_id": "S005",
+      "match": "key turning point",
+      "context_hash": "b98887c9e0e6412b"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "S005",
+      "match": "marks a significant",
+      "context_hash": "54044b6244ee4cdd"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "S005",
+      "match": "pivotal moment",
+      "context_hash": "b98887c9e0e6412b"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "S005",
+      "match": "reflects broader",
+      "context_hash": "54044b6244ee4cdd"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "arguably",
+      "context_hash": "5a76e65d2d88aa8f"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "cutting-edge",
+      "context_hash": "d61ddbde23157574"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "delve",
+      "context_hash": "3123bb8187405f93"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "embark",
+      "context_hash": "b6642bc98dc22935"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "fostering",
+      "context_hash": "9de0d9d8e327439a"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "fundamentally",
+      "context_hash": "7566eb9a4dea5f38"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "groundbreaking",
+      "context_hash": "adeb45f429b2f6c4"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "implemented",
+      "context_hash": "1a1974ed2d027a2d"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "important",
+      "context_hash": "918a969aee5d238b"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "interplay",
+      "context_hash": "779a1213455742b3"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "key",
+      "context_hash": "b98887c9e0e6412b"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "landscape",
+      "context_hash": "76c029cbd63f3f5b"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "leverage",
+      "context_hash": "167cfb38b8be1c29"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "multifaceted",
+      "context_hash": "f0204c4182d17c33"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "nuanced",
+      "context_hash": "b6642bc98dc22935"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "pivotal",
+      "context_hash": "40e6ea7dab92e935"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "pivotal",
+      "context_hash": "b98887c9e0e6412b"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "significant",
+      "context_hash": "54044b6244ee4cdd"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "streamline",
+      "context_hash": "76c029cbd63f3f5b"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "synergy",
+      "context_hash": "2f0ef9cc7f0ec1e9"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "synergy",
+      "context_hash": "ba824e2076d9a7f3"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "tapestry",
+      "context_hash": "ed51ebd2c87ad239"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "testament",
+      "context_hash": "8642fe65e05f2467"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "underscoring",
+      "context_hash": "1b8ea92b5fcde48d"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V001",
+      "match": "vibrant",
+      "context_hash": "b6642bc98dc22935"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V002",
+      "match": "absolutely!",
+      "context_hash": "8ed0e524b0551381"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V002",
+      "match": "certainly!",
+      "context_hash": "9a3a838c0612c834"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V002",
+      "match": "feel free to",
+      "context_hash": "e8c75dd09cd9438f"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V002",
+      "match": "great question",
+      "context_hash": "393610ab4c0c1323"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V002",
+      "match": "i hope this helps",
+      "context_hash": "d08b64c16f94aa4b"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V002",
+      "match": "let me know if",
+      "context_hash": "3faa4ef1d4c74c74"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V002",
+      "match": "let's break this down",
+      "context_hash": "96181b95812f5945"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V002",
+      "match": "let's dive in",
+      "context_hash": "d9ca5c08f0ab8196"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V002",
+      "match": "let's explore this",
+      "context_hash": "d9ca5c08f0ab8196"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V002",
+      "match": "let's unpack this",
+      "context_hash": "96181b95812f5945"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "boasts",
+      "context_hash": "d4720a4d2aef6e6c"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "define the next era",
+      "context_hash": "7566eb9a4dea5f38"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "entirely new paradigm",
+      "context_hash": "5012683057bfb06c"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "fundamentally reshape",
+      "context_hash": "7566eb9a4dea5f38"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "groundbreaking",
+      "context_hash": "adeb45f429b2f6c4"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "in the heart of",
+      "context_hash": "6404e41f28bb2fb0"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "nestled",
+      "context_hash": "6404e41f28bb2fb0"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "renowned",
+      "context_hash": "cfa11fbe75c0b019"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "synergy",
+      "context_hash": "2f0ef9cc7f0ec1e9"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "synergy",
+      "context_hash": "ba824e2076d9a7f3"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "unparalleled",
+      "context_hash": "cfa11fbe75c0b019"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "unprecedented",
+      "context_hash": "ef04dbf39f7b07ce"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "world-class",
+      "context_hash": "0427bde649d37ef1"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V006",
+      "match": "entirely",
+      "context_hash": "202ce4da066e349e"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V006",
+      "match": "fundamentally",
+      "context_hash": "7566eb9a4dea5f38"
+    }
   ]
 }

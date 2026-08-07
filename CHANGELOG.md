@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Structured version 2 baselines and `baseline create`, `update`, `prune`, and
+  `summary` maintenance actions.
 - `minimum_severity` configuration key, which can coexist with the per-rule
   `[tool.slop-lint.severity]` override table.
 - Line-scoped Markdown and Python suppression directives with rule-ID and
@@ -19,6 +21,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `startup-check`, `perf-check`, `memory-check`, `nfr-check` (NFR probes)
 
 ### Changed
+- Baseline identity now uses repository-relative paths and normalized source
+  context instead of diagnostic messages, line numbers, and adjacent lines.
+- Explicit missing, malformed, unreadable, and unsupported baseline files now
+  fail as configuration errors; version 1 files remain readable and migrate on
+  maintenance writes.
 - Configuration now rejects unknown keys and rule references, non-positive
   thresholds, blank per-file patterns, and ambiguous severity settings.
 - Rule references are normalized to uppercase, and `--show-config` now reports

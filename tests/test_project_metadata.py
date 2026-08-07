@@ -58,6 +58,17 @@ def test_spec_documents_watch_command() -> None:
     assert "slop-lint watch [OPTIONS] [PATHS]..." in spec
 
 
+def test_spec_documents_baseline_lifecycle() -> None:
+    """The specification should cover every implemented baseline action."""
+    spec = (ROOT / "SPEC.md").read_text()
+    makefile = (ROOT / "Makefile").read_text()
+
+    assert "slop-lint baseline ACTION [OPTIONS] [PATHS]..." in spec
+    for action in ("create", "update", "prune", "summary"):
+        assert f"`{action}`" in spec
+        assert f'grep -q "{action}"' in makefile
+
+
 def test_docs_explain_python_prose_rule_scope() -> None:
     """Public docs should describe shared rules and C001's narrow ownership."""
     readme = (ROOT / "README.md").read_text()
