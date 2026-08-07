@@ -832,6 +832,46 @@
         }
       ]
     },
+    "quality/corpus/markdown-context.md": {
+      "expected": [],
+      "negative_cases": [
+        {
+          "rule_id": "S010",
+          "line": 19,
+          "note": "Blank paragraphs break repeated sentence openings."
+        },
+        {
+          "rule_id": "S011",
+          "line": 25,
+          "note": "Blank paragraphs break a gerund-fragment run."
+        },
+        {
+          "rule_id": "S012",
+          "line": 19,
+          "note": "Ordinals in separate paragraphs are not one prose listicle."
+        },
+        {
+          "rule_id": "S012",
+          "line": 31,
+          "note": "Explicit Markdown list items are not a listicle disguised as prose."
+        },
+        {
+          "rule_id": "T007",
+          "line": 7,
+          "note": "Platform headings are not short prose paragraphs."
+        },
+        {
+          "rule_id": "T007",
+          "line": 35,
+          "note": "A fenced code block resets a short-paragraph run."
+        },
+        {
+          "rule_id": "T008",
+          "line": 45,
+          "note": "Sentence-length checks do not apply to headings."
+        }
+      ]
+    },
     "quality/corpus/news-article.md": {
       "expected": [],
       "negative_cases": [

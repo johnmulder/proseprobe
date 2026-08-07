@@ -731,6 +731,9 @@ Detects 3+ consecutive sentences starting with the same word.
 **Severity:** Warning
 **Configurable:** `threshold` (default: 3)
 
+Runs stay within one body or block-quote paragraph; headings, lists, blank
+paragraphs, and skipped Markdown constructs reset them.
+
 **Example (bad):**
 ```markdown
 Every team needs this. Every manager should know this. Every company benefits.
@@ -750,6 +753,9 @@ Detects 3+ consecutive gerund-phrase fragments used for rhythmic effect.
 **Severity:** Info
 **Configurable:** `threshold` (default: 3)
 
+Runs stay within one body or block-quote paragraph; headings, lists, blank
+paragraphs, and skipped Markdown constructs reset them.
+
 **Example (bad):**
 ```markdown
 Building faster. Shipping sooner. Iterating constantly.
@@ -768,6 +774,9 @@ Detects ordinal progressions ("The first… The second… The third…")
 disguised as continuous prose.
 
 **Severity:** Info
+
+Ordinal sequences are evaluated within one body or block-quote paragraph, not
+across headings, lists, blank paragraphs, or skipped Markdown constructs.
 
 **Example (bad):**
 ```markdown
@@ -1020,6 +1029,9 @@ manufactured dramatic emphasis.
 **Severity:** Info
 **Configurable:** `threshold` (default: 3)
 
+Only body paragraphs count. Headings, lists, block quotes, code, HTML, tables,
+front matter, and MDX/JSX barriers reset a run.
+
 **Example (bad):**
 ```markdown
 It worked.
@@ -1044,6 +1056,9 @@ Detects excessively long sentences that exceed a word count threshold.
 
 **Severity:** Info
 **Configurable:** `sentence_length_max` (default: 40)
+
+Checks apply to body text, list items, and block quotes. Headings and skipped
+Markdown constructs are excluded.
 
 **Example (bad):**
 ```markdown

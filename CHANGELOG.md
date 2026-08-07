@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `startup-check`, `perf-check`, `memory-check`, `nfr-check` (NFR probes)
 
 ### Changed
+- Markdown prose rules now preserve source columns and respect paragraph,
+  heading, list, block-quote, code, HTML, table, front-matter, and MDX/JSX
+  boundaries instead of joining unrelated text.
 - Closed key SPEC gaps across discovery, output, and execution behavior:
   - FR-01: default discovery now includes `.mdx` and `.markdown`.
   - FR-03: default text output now includes explicit severity labels.
