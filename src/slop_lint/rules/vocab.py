@@ -20,7 +20,39 @@ from slop_lint.data.vocabulary import (
     VOCABULARY_SUGGESTIONS,
 )
 from slop_lint.parsers.markdown import is_example_line
+from slop_lint.parsers.prose import ProseSentence, iter_prose_sentences
 from slop_lint.rules.base import Confidence, Issue, Rule, Severity
+
+_MONTH = re.compile(
+    r"\b(?:January|February|March|April|May|June|July|August|September|"
+    r"October|November|December)\b",
+    re.IGNORECASE,
+)
+_NAMED_SOURCE = re.compile(r"\b[A-Z][a-z]+ [A-Z][a-z]+\b")
+_NUMBER = re.compile(r"\b\d+(?:\.\d+)?%?\b")
+_LINK = re.compile(r"https?://|\[[^\]]+\]\([^)]+\)")
+
+
+def _has_sentence_evidence(
+    content: str,
+    sentences: list[ProseSentence],
+    index: int,
+) -> bool:
+    sentence = sentences[index]
+    window = [
+        candidate
+        for candidate in sentences[max(0, index - 1) : index + 2]
+        if candidate.scope_id == sentence.scope_id
+    ]
+    source = " ".join(candidate.source_text(content) for candidate in window)
+    numbers = _NUMBER.findall(source)
+    return bool(
+        _LINK.search(source)
+        or _MONTH.search(source)
+        or _NAMED_SOURCE.search(source)
+        or "%" in source
+        or len(numbers) >= 2
+    )
 
 
 class AIVocabularyRule(Rule):
@@ -260,18 +292,27 @@ class WeaselWordsRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for weasel words."""
         issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
+        sentences = iter_prose_sentences(content, filename)
+        for index, sentence in enumerate(sentences):
             for pattern in WEASEL_PHRASES:
-                match = re.search(pattern, line, re.IGNORECASE)
+                match = re.search(pattern, sentence.text, re.IGNORECASE)
                 if match:
+                    line, column = sentence.source_position(match.start())
+                    end_line, end_column = sentence.source_position(match.end())
+                    assert line == end_line
                     issues.append(
                         Issue(
                             rule_id=self.id,
                             message=f"Weasel phrase: '{match.group()}'",
-                            line=line_num,
-                            column=match.start() + 1,
-                            end_column=match.end() + 1,
+                            line=line,
+                            column=column,
+                            end_column=end_column,
                             severity=self.severity,
+                            confidence=(
+                                Confidence.LOW
+                                if _has_sentence_evidence(content, sentences, index)
+                                else self.default_confidence
+                            ),
                         )
                     )
 
@@ -383,18 +424,27 @@ class TrendOverclaimRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect unsubstantiated trend claims."""
         issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
+        sentences = iter_prose_sentences(content, filename)
+        for index, sentence in enumerate(sentences):
             for pattern in TREND_OVERCLAIM_PHRASES:
-                match = re.search(pattern, line, re.IGNORECASE)
+                match = re.search(pattern, sentence.text, re.IGNORECASE)
                 if match:
+                    line, column = sentence.source_position(match.start())
+                    end_line, end_column = sentence.source_position(match.end())
+                    assert line == end_line
                     issues.append(
                         Issue(
                             rule_id=self.id,
                             message=f"Trend overclaim: '{match.group()}'",
-                            line=line_num,
-                            column=match.start() + 1,
-                            end_column=match.end() + 1,
+                            line=line,
+                            column=column,
+                            end_column=end_column,
                             severity=self.severity,
+                            confidence=(
+                                Confidence.LOW
+                                if _has_sentence_evidence(content, sentences, index)
+                                else self.default_confidence
+                            ),
                         )
                     )
         return issues

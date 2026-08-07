@@ -4,14 +4,48 @@ import pytest
 
 from slop_lint.config import Config
 from slop_lint.rules import get_all_rules
-from slop_lint.rules.base import Confidence, Severity
+from slop_lint.rules.base import Confidence, Rule, Severity
 from slop_lint.rules.vocab import (
     AIVocabularyRule,
     CollaborativePhrasesRule,
     KnowledgeCutoffRule,
     PromotionalLanguageRule,
+    TrendOverclaimRule,
     WeaselWordsRule,
 )
+
+
+@pytest.mark.parametrize(
+    ("rule", "supported", "unsupported"),
+    [
+        (
+            WeaselWordsRule(),
+            (
+                "Experts say repairs are needed. Engineers Mina Ortiz and "
+                "Paul Chen signed the report on July 18."
+            ),
+            "Experts say repairs are needed.",
+        ),
+        (
+            TrendOverclaimRule(),
+            (
+                "A growing number of trips use the line: the share rose "
+                "from 31.2% to 34.8%."
+            ),
+            "A growing number of trips use the line.",
+        ),
+    ],
+)
+def test_claim_evidence_downgrades_confidence(
+    rule: Rule,
+    supported: str,
+    unsupported: str,
+) -> None:
+    [supported_issue] = rule.check(supported, "report.md")
+    [unsupported_issue] = rule.check(unsupported, "report.md")
+
+    assert supported_issue.confidence is Confidence.LOW
+    assert unsupported_issue.confidence is Confidence.MEDIUM
 
 
 class TestAIVocabularyRule:
