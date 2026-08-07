@@ -3,6 +3,8 @@
 import re
 from dataclasses import dataclass
 
+from slop_lint.parsers.prose import ProseBlock
+
 MARKDOWN_EXTENSIONS = (".md", ".mdx", ".markdown")
 
 # Cache for MarkdownParser instances (keyed by content hash)
@@ -62,15 +64,7 @@ class MarkdownLink:
     url_end: int = 0
 
 
-@dataclass(frozen=True)
-class MarkdownProseBlock:
-    """A source-mapped block of Markdown prose."""
-
-    context: str
-    start_line: int
-    end_line: int
-    lines: tuple[tuple[int, str], ...]
-    break_before: bool = False
+MarkdownProseBlock = ProseBlock
 
 
 class MarkdownParser:

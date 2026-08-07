@@ -1,6 +1,13 @@
 """Tests for Python parser."""
 
-from slop_lint.parsers.python import Comment, Docstring, PythonParser
+from slop_lint.parsers.prose import ProseBlock, iter_prose_blocks, iter_prose_lines
+from slop_lint.parsers.python import (
+    Comment,
+    Docstring,
+    PythonParser,
+    _get_cached_parser,
+    clear_parser_cache,
+)
 
 
 class TestPythonParser:
@@ -138,6 +145,93 @@ c = 3  # third
 
         inline = [c for c in comments if c.is_inline]
         assert len(inline) == 3
+
+    def test_prose_blocks_preserve_docstring_source_positions(self) -> None:
+        """Docstring delimiters are masked without shifting prose columns."""
+        content = '''r"""Module prose starts here.
+Second module line.
+"""
+
+def work():
+    u\'\'\'Function prose starts here.
+    Function prose ends here.\'\'\'
+'''
+
+        blocks = iter_prose_blocks(content, "example.py")
+
+        assert len(blocks) == 2
+        assert all(isinstance(block, ProseBlock) for block in blocks)
+        assert blocks[0].lines == (
+            (1, "    Module prose starts here."),
+            (2, "Second module line."),
+            (3, "   "),
+        )
+        assert blocks[1].lines == (
+            (6, "        Function prose starts here."),
+            (7, "    Function prose ends here.   "),
+        )
+        assert blocks[1].break_before is True
+
+    def test_prose_blocks_group_full_comments_and_isolate_inline_comments(
+        self,
+    ) -> None:
+        """Only consecutive full-line comments share a prose block."""
+        content = """# First comment
+# Second comment
+x = 1  # Inline comment
+# Third comment
+"""
+
+        blocks = iter_prose_blocks(content, "example.py")
+
+        assert [block.lines for block in blocks] == [
+            ((1, "  First comment"), (2, "  Second comment")),
+            ((3, "         Inline comment"),),
+            ((4, "  Third comment"),),
+        ]
+        assert [block.break_before for block in blocks] == [False, True, True]
+
+    def test_prose_lines_mask_code_literals_and_metadata_comments(self) -> None:
+        """Only real docstrings and documentation comments remain visible."""
+        content = '''#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""This delves into module documentation."""
+message = "This delves into executable data."
+x = 1  # This delves into an inline explanation.
+'''
+
+        lines = dict(iter_prose_lines(content, "example.py"))
+
+        assert lines[1].strip() == ""
+        assert lines[2].strip() == ""
+        assert "This delves into module documentation." in lines[3]
+        assert lines[4].strip() == ""
+        assert "This delves into an inline explanation." in lines[5]
+
+    def test_invalid_python_returns_comments_but_not_guessed_docstrings(self) -> None:
+        """Invalid syntax does not turn string literals into documentation."""
+        content = '''"""This delves into a string."""
+def broken(
+# This delves into a comment.
+'''
+
+        text = "\n".join(line for _, line in iter_prose_lines(content, "bad.py"))
+
+        assert "a string" not in text
+        assert "a comment" in text
+
+    def test_python_prose_parser_is_cached_and_clearable(self) -> None:
+        """Repeated rules reuse one bounded parser per source value."""
+        clear_parser_cache()
+        content = '"""Documentation."""'
+
+        first = _get_cached_parser(content)
+        second = _get_cached_parser(content)
+
+        assert first is second
+        assert _get_cached_parser.cache_info().maxsize == 32
+        clear_parser_cache()
+        assert _get_cached_parser(content) is not first
 
 
 class TestDocstringDataclass:
