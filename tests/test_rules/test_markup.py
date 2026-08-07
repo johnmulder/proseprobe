@@ -1,4 +1,4 @@
-"""Tests for markup rules (M001-M006)."""
+"""Tests for markup rules (M001-M007)."""
 
 import pytest
 
@@ -7,6 +7,7 @@ from slop_lint.rules.markup import (
     BrokenReferencesRule,
     ChatGPTMarkersRule,
     TemplateResidueRule,
+    UnclosedCodeFenceRule,
     UnresolvedMarkdownReferencesRule,
     UTMParametersRule,
     WrongMarkupRule,
@@ -425,3 +426,48 @@ Visible <replace-me> marker.
     def test_ignores_non_markdown_input(self) -> None:
         """Python placeholders remain the responsibility of C004."""
         assert TemplateResidueRule().check("YOUR CONTENT HERE", "guide.py") == []
+
+
+class TestUnclosedCodeFence:
+    """Tests for M007: Unclosed Code Fence."""
+
+    def test_reports_exact_opening_fence_fields(self) -> None:
+        """An unclosed fence should be a high-confidence opening-span error."""
+        text = "Intro.\n  ````python\nprint('hidden')"
+
+        [issue] = UnclosedCodeFenceRule().check(text, "guide.md")
+
+        assert issue.rule_id == "M007"
+        assert issue.message == "Unclosed code fence: '````'"
+        assert issue.line == 2
+        assert issue.column == 3
+        assert issue.end_column == 7
+        assert issue.severity is Severity.ERROR
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == "Add a matching '````' closing fence"
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "~~~text\nhidden\n```",
+            "````\nhidden\n```",
+        ],
+    )
+    def test_rejects_mismatched_or_shorter_closers(self, text: str) -> None:
+        """Only the same character repeated at least as long closes a block."""
+        assert len(UnclosedCodeFenceRule().check(text, "guide.md")) == 1
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "```text\nbody\n```",
+            "~~~~\nbody\n~~~~~",
+        ],
+    )
+    def test_accepts_matching_and_longer_closers(self, text: str) -> None:
+        """A same-character closer may equal or exceed the opener length."""
+        assert UnclosedCodeFenceRule().check(text, "guide.md") == []
+
+    def test_applies_only_to_markdown(self) -> None:
+        """Fence-like Python strings are outside M007's scope."""
+        assert UnclosedCodeFenceRule().check("```\nbody", "guide.py") == []

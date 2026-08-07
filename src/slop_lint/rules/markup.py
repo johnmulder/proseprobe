@@ -1,4 +1,4 @@
-"""Markup detection rules (M001-M006)."""
+"""Markup detection rules (M001-M007)."""
 
 import re
 from typing import ClassVar
@@ -388,3 +388,35 @@ class TemplateResidueRule(Rule):
                 issues.extend(line_issues)
 
         return sorted(issues, key=lambda issue: (issue.line, issue.column))
+
+
+class UnclosedCodeFenceRule(Rule):
+    """M007: Detect fenced code blocks without a closing delimiter."""
+
+    id = "M007"
+    name = "Unclosed Code Fence"
+    description = "Detects fenced code blocks without a matching closing delimiter"
+    severity = Severity.ERROR
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown"}
+    content_scope = "raw"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check Markdown for code fences that reach end of file."""
+        if not is_markdown_file(filename):
+            return []
+
+        return [
+            Issue(
+                rule_id=self.id,
+                message=f"Unclosed code fence: '{block.fence}'",
+                line=block.start_line,
+                column=block.column,
+                end_column=block.column + len(block.fence),
+                severity=self.severity,
+                confidence=self.default_confidence,
+                suggestion=f"Add a matching '{block.fence}' closing fence",
+            )
+            for block in _get_cached_markdown_parser(content).get_code_block_records()
+            if not block.closed
+        ]
