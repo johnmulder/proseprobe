@@ -402,6 +402,18 @@ class TestBaselineMode:
 class TestWatchCommand:
     """Tests for the watch command."""
 
+    @staticmethod
+    def _stop_after_first_iteration(monkeypatch: object) -> None:
+        def stop(_interval: float) -> None:
+            raise KeyboardInterrupt
+
+        monkeypatch.setattr("slop_lint.cli.time.sleep", stop)  # type: ignore[attr-defined]
+
+    @staticmethod
+    def _finding_lines(output: str, path: Path) -> list[str]:
+        prefix = f"{path}:"
+        return [line for line in output.splitlines() if line.startswith(prefix)]
+
     def test_watch_help(self) -> None:
         """Test that watch command help is available."""
         result = run_cli("watch", "--help")
@@ -409,6 +421,130 @@ class TestWatchCommand:
         assert result.exit_code == 0
         assert "Watch files" in result.stdout or "watch" in result.stdout.lower()
         assert "--interval" in result.stdout
+        for option in (
+            "--severity",
+            "--min-confidence",
+            "--hide-low",
+            "--baseline",
+            "--quiet",
+            "--verbose",
+        ):
+            assert option in result.stdout
+        assert "--format" not in result.stdout
+        assert "--generate-baseline" not in result.stdout
+
+    def test_watch_and_check_share_scan_filters(
+        self, tmp_path: Path, monkeypatch: object
+    ) -> None:
+        """One watch batch returns the same findings as check."""
+        test_file = tmp_path / "doc.md"
+        test_file.write_text(
+            "This delves into a notable topic. As of my last update, it was accurate."
+        )
+        options = (
+            "--select",
+            "V001,V003",
+            "--severity",
+            "warning",
+            "--min-confidence",
+            "high",
+        )
+        self._stop_after_first_iteration(monkeypatch)
+
+        checked = run_cli("check", str(test_file), *options)
+        watched = run_cli("watch", str(test_file), "--no-clear", *options)
+
+        assert self._finding_lines(watched.stdout, test_file) == self._finding_lines(
+            checked.stdout, test_file
+        )
+
+    def test_watch_respects_baseline(self, tmp_path: Path, monkeypatch: object) -> None:
+        """Known baseline findings are filtered from a watch batch."""
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("This delves into a topic.")
+        baseline_file = tmp_path / "baseline.json"
+        run_cli(
+            "check",
+            str(test_file),
+            "--generate-baseline",
+            "--baseline",
+            str(baseline_file),
+        )
+        self._stop_after_first_iteration(monkeypatch)
+
+        watched = run_cli(
+            "watch",
+            str(test_file),
+            "--no-clear",
+            "--baseline",
+            str(baseline_file),
+        )
+
+        assert "V001" not in watched.stdout
+        assert "No issues found!" in watched.stdout
+
+    def test_watch_applies_severity_override_before_threshold(
+        self, tmp_path: Path, monkeypatch: object
+    ) -> None:
+        """Configured rule severity is considered before minimum severity."""
+        config_file = tmp_path / "config.toml"
+        config_file.write_text('[tool.slop-lint.severity]\nV003 = "warning"\n')
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("As of my last update, this was accurate.")
+        self._stop_after_first_iteration(monkeypatch)
+
+        watched = run_cli(
+            "watch",
+            str(test_file),
+            "--no-clear",
+            "--config",
+            str(config_file),
+            "--select",
+            "V003",
+            "--severity",
+            "warning",
+        )
+
+        assert "V003" in watched.stdout
+        assert "[warning]" in watched.stdout
+
+    def test_quiet_watch_prints_only_error_findings(
+        self, tmp_path: Path, monkeypatch: object
+    ) -> None:
+        """Quiet watch suppresses loop status, summaries, and warnings."""
+        config_file = tmp_path / "config.toml"
+        config_file.write_text('[tool.slop-lint.severity]\nV001 = "error"\n')
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("This delves into a topic.")
+        self._stop_after_first_iteration(monkeypatch)
+
+        watched = run_cli(
+            "watch",
+            str(test_file),
+            "--config",
+            str(config_file),
+            "--quiet",
+        )
+
+        finding_lines = self._finding_lines(watched.stdout, test_file)
+        assert len(finding_lines) == 1
+        assert "V001 [high] [error] Overused word: 'delves'" in finding_lines[0]
+        assert "Watching" not in watched.stdout
+        assert "Found" not in watched.stdout
+        assert "Stopped" not in watched.stdout
+
+    def test_watch_reports_read_errors_on_stderr(
+        self, tmp_path: Path, monkeypatch: object
+    ) -> None:
+        """Watch reports unreadable input without hiding it or tracing back."""
+        test_file = tmp_path / "invalid.md"
+        test_file.write_bytes(b"\xff")
+        self._stop_after_first_iteration(monkeypatch)
+
+        watched = run_cli("watch", str(test_file), "--no-clear")
+
+        assert "Could not read file" in watched.stderr
+        assert "Traceback" not in watched.stderr
 
 
 class TestHelpFlags:

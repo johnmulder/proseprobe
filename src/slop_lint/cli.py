@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 
 from slop_lint._ansi import clear_screen, style, table
 from slop_lint.config import ConfigError, load_config
-from slop_lint.core.linter import Linter, LintReadError
+from slop_lint.core.linter import Linter, LintReadError, LintResults
 from slop_lint.rules import get_all_rules
 from slop_lint.rules.base import (
     Confidence,
@@ -183,11 +183,43 @@ def _apply_baseline(
     return results
 
 
-_SEVERITY_COLOR = {
-    Severity.ERROR: "red",
-    Severity.WARNING: "yellow",
-    Severity.INFO: "blue",
-}
+def _prepare_scan(args: argparse.Namespace) -> tuple[Config, Linter, list[Rule]]:
+    """Load config and build a linter with the effective active rules."""
+    config_path = Path(args.config) if args.config else None
+    config = load_config(config_path)
+    _apply_rule_cli_overrides(config, args)
+
+    min_severity = severity_from_str(
+        args.severity or config.severity,
+        Severity.WARNING,
+    )
+    if min_severity is None:  # pragma: no cover
+        min_severity = Severity.WARNING
+
+    linter = Linter(config)
+    active_rules = [
+        rule
+        for rule in get_all_rules(config)
+        if severity_rank(rule.severity) >= severity_rank(min_severity)
+    ]
+    for rule in active_rules:
+        linter.register_rule(rule)
+    return config, linter, active_rules
+
+
+def _scan_paths(
+    linter: Linter,
+    paths: list[Path],
+    args: argparse.Namespace,
+    config: Config,
+) -> LintResults | None:
+    """Scan and filter one path batch with the effective CLI policy."""
+    lint_results = linter.check(paths)
+    results = _filter_by_confidence(lint_results.issues_by_file, args, config)
+    baseline_results = _apply_baseline(results, args, paths)
+    if baseline_results is None:
+        return None
+    return LintResults(baseline_results, files_checked=lint_results.files_checked)
 
 
 def _has_failing_issue(results: dict[Path, list[Issue]]) -> bool:
@@ -200,25 +232,24 @@ def _has_failing_issue(results: dict[Path, list[Issue]]) -> bool:
 
 
 def _output_results(
-    results: dict[Path, list[Issue]],
+    lint_results: LintResults,
     args: argparse.Namespace,
     rules: list[Rule] | None = None,
-    files_checked: int | None = None,
 ) -> int:
     """Format and print results; return exit code."""
     from slop_lint.core.reporter import format_results
 
     output = format_results(
-        results,
+        lint_results.issues_by_file,
         args.format,
         rules,
-        files_checked,
+        lint_results.files_checked,
         quiet=args.quiet,
     )
     if output:
         print(output)
 
-    return 1 if _has_failing_issue(results) else 0
+    return 1 if _has_failing_issue(lint_results.issues_by_file) else 0
 
 
 def _cmd_check(args: argparse.Namespace) -> int:
@@ -229,18 +260,12 @@ def _cmd_check(args: argparse.Namespace) -> int:
         return path_error
 
     config_path = Path(args.config) if args.config else None
-
-    # Load config
     try:
-        config = load_config(config_path)
+        config, linter, active_rules = _prepare_scan(args)
     except ConfigError as exc:
         print(f"Configuration error: {exc}", file=sys.stderr)
         return 2
 
-    # Apply CLI overrides
-    _apply_rule_cli_overrides(config, args)
-
-    # Handle --show-config
     if args.show_config:
         print(style("Configuration:", bold=True))
         print(f"  Config file: {config_path or 'default'}")
@@ -255,42 +280,14 @@ def _cmd_check(args: argparse.Namespace) -> int:
         print(f"  Output format: {args.format}")
         return 0
 
-    # Create linter and register rules
-    linter = Linter(config)
-    min_severity = severity_from_str(args.severity or config.severity, Severity.WARNING)
-    if min_severity is None:  # pragma: no cover
-        min_severity = Severity.WARNING
-
-    active_rules: list[Rule] = []
-    for rule in get_all_rules(config):
-        if severity_rank(rule.severity) >= severity_rank(min_severity):
-            linter.register_rule(rule)
-            active_rules.append(rule)
-
-    # Run checks
     try:
-        lint_results = linter.check(paths)
+        lint_results = _scan_paths(linter, paths, args, config)
     except LintReadError as exc:
         print(f"Could not read file: {exc}", file=sys.stderr)
         return 3
-    files_checked = lint_results.files_checked
-    results = lint_results.issues_by_file
-
-    # Filter by confidence level
-    results = _filter_by_confidence(results, args, config)
-
-    # Handle baseline mode
-    baseline_result = _apply_baseline(results, args, paths)
-    if baseline_result is None:
+    if lint_results is None:
         return 0
-    results = baseline_result
-
-    return _output_results(
-        results,
-        args,
-        rules=active_rules,
-        files_checked=files_checked,
-    )
+    return _output_results(lint_results, args, rules=active_rules)
 
 
 def _cmd_rules(_args: argparse.Namespace) -> int:
@@ -363,6 +360,24 @@ def _cmd_version(_args: argparse.Namespace) -> int:
     return 0
 
 
+def _changed_files(
+    linter: Linter,
+    paths: list[Path],
+    file_mtimes: dict[Path, float],
+) -> list[Path]:
+    """Return discovered files changed since the previous watch iteration."""
+    changed: list[Path] = []
+    for file in linter.discover_files(paths):
+        try:
+            mtime = file.stat().st_mtime
+        except OSError:
+            continue
+        if file not in file_mtimes or file_mtimes[file] < mtime:
+            file_mtimes[file] = mtime
+            changed.append(file)
+    return changed
+
+
 def _cmd_watch(args: argparse.Namespace) -> int:
     """Watch files for changes and report issues continuously."""
     paths = [Path(p) for p in args.paths]
@@ -370,87 +385,87 @@ def _cmd_watch(args: argparse.Namespace) -> int:
     if path_error is not None:
         return path_error
 
-    config_path = Path(args.config) if args.config else None
-
-    # Load config
     try:
-        config = load_config(config_path)
+        config, linter, active_rules = _prepare_scan(args)
     except ConfigError as exc:
         print(f"Configuration error: {exc}", file=sys.stderr)
         return 2
 
-    # Apply CLI overrides
-    _apply_rule_cli_overrides(config, args)
-
-    # Create linter and register rules
-    linter = Linter(config)
-    for rule in get_all_rules(config):
-        linter.register_rule(rule)
-
-    # Track file modification times
     file_mtimes: dict[Path, float] = {}
-
-    print(
-        style(f"Watching {len(paths)} path(s)...", bold=True) + " Press Ctrl+C to stop"
-    )
+    if not args.quiet:
+        print(
+            style(f"Watching {len(paths)} path(s)...", bold=True)
+            + " Press Ctrl+C to stop"
+        )
 
     try:
         while True:
-            # Discover all files
-            files = linter.discover_files(paths)
-            changed_files: list[Path] = []
-
-            # Check for modified files
-            for file in files:
-                try:
-                    mtime = file.stat().st_mtime
-                    if file not in file_mtimes or file_mtimes[file] < mtime:
-                        file_mtimes[file] = mtime
-                        changed_files.append(file)
-                except OSError:
-                    continue  # File may have been deleted
-
+            changed_files = _changed_files(linter, paths, file_mtimes)
             if changed_files:
-                if not args.no_clear:
+                if not args.quiet and not args.no_clear:
                     clear_screen()
-
-                print(
-                    style(time.strftime("%H:%M:%S"), dim=True)
-                    + f" Checking {len(changed_files)} changed file(s)..."
-                )
-
-                total_issues = 0
-                for file in changed_files:
-                    try:
-                        issues = linter.check_file(file)
-                        total_issues += len(issues)
-
-                        for issue in issues:
-                            sev_color = _SEVERITY_COLOR[issue.severity]
-                            print(
-                                f"{style(str(file), bold=True)}"
-                                f":{issue.line}:{issue.column}: "
-                                f"{style(issue.rule_id, color=sev_color)} "
-                                f"{issue.message}"
-                            )
-                    except Exception as e:
-                        print(style(f"Error checking {file}: {e}", color="red"))
-
-                if total_issues == 0:
-                    print(style("\u2713", color="green") + " No issues found!")
+                if not args.quiet:
+                    print(
+                        style(time.strftime("%H:%M:%S"), dim=True)
+                        + f" Checking {len(changed_files)} changed file(s)..."
+                    )
+                try:
+                    lint_results = _scan_paths(linter, changed_files, args, config)
+                except LintReadError as exc:
+                    print(f"Could not read file: {exc}", file=sys.stderr)
                 else:
-                    print(style(f"\nFound {total_issues} issue(s)", bold=True))
+                    if lint_results is not None:
+                        _output_results(lint_results, args, rules=active_rules)
 
             time.sleep(args.interval)
 
     except KeyboardInterrupt:
-        print(style("\nStopped watching.", color="yellow"))
+        if not args.quiet:
+            print(style("\nStopped watching.", color="yellow"))
         return 0
 
 
 # ---------------------------------------------------------------------------
 # Argument parser construction
 # ---------------------------------------------------------------------------
+
+
+def _add_scan_options(parser: argparse.ArgumentParser) -> None:
+    """Add options shared by check and watch scans."""
+    parser.add_argument(
+        "--select", "-s", default=None, help="Rules to enable (comma-separated)"
+    )
+    parser.add_argument(
+        "--ignore", "-i", default=None, help="Rules to disable (comma-separated)"
+    )
+    parser.add_argument(
+        "--config", "-c", default=None, help="Path to configuration file"
+    )
+    parser.add_argument(
+        "--severity",
+        choices=("error", "warning", "info"),
+        default=None,
+        help="Minimum severity: error, warning, info",
+    )
+    parser.add_argument(
+        "--min-confidence",
+        choices=("high", "medium", "low"),
+        default=None,
+        help="Minimum confidence: high, medium, low",
+    )
+    parser.add_argument(
+        "--hide-low",
+        action="store_true",
+        help="Hide low-confidence issues (shorthand for --min-confidence medium)",
+    )
+    parser.add_argument(
+        "--baseline", "-b", default=None, help="Baseline file for only-new-issues mode"
+    )
+    parser.add_argument("--quiet", "-q", action="store_true", help="Only output errors")
+    parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Show additional diagnostic info"
+    )
+    parser.set_defaults(format="text", generate_baseline=False)
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -475,6 +490,7 @@ def _build_parser() -> argparse.ArgumentParser:
         "-h", "--help", action="help", help="Show this help message and exit"
     )
     p_check.add_argument("paths", nargs="+", help="Files or directories to check")
+    _add_scan_options(p_check)
     p_check.add_argument(
         "--show-config", action="store_true", help="Display configuration and exit"
     )
@@ -486,44 +502,9 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Output format: text, json, sarif",
     )
     p_check.add_argument(
-        "--select", "-s", default=None, help="Rules to enable (comma-separated)"
-    )
-    p_check.add_argument(
-        "--ignore", "-i", default=None, help="Rules to disable (comma-separated)"
-    )
-    p_check.add_argument(
-        "--config", "-c", default=None, help="Path to configuration file"
-    )
-    p_check.add_argument(
-        "--severity",
-        choices=("error", "warning", "info"),
-        default=None,
-        help="Minimum severity: error, warning, info",
-    )
-    p_check.add_argument(
-        "--quiet", "-q", action="store_true", help="Only output errors"
-    )
-    p_check.add_argument(
-        "--verbose", "-v", action="store_true", help="Show additional diagnostic info"
-    )
-    p_check.add_argument(
-        "--baseline", "-b", default=None, help="Baseline file for only-new-issues mode"
-    )
-    p_check.add_argument(
         "--generate-baseline",
         action="store_true",
         help="Generate baseline file from current issues",
-    )
-    p_check.add_argument(
-        "--min-confidence",
-        choices=("high", "medium", "low"),
-        default=None,
-        help="Minimum confidence: high, medium, low",
-    )
-    p_check.add_argument(
-        "--hide-low",
-        action="store_true",
-        help="Hide low-confidence issues (shorthand for --min-confidence medium)",
     )
     p_check.set_defaults(func=_cmd_check)
 
@@ -574,15 +555,7 @@ def _build_parser() -> argparse.ArgumentParser:
         "-h", "--help", action="help", help="Show this help message and exit"
     )
     p_watch.add_argument("paths", nargs="+", help="Files or directories to watch")
-    p_watch.add_argument(
-        "--select", "-s", default=None, help="Rules to enable (comma-separated)"
-    )
-    p_watch.add_argument(
-        "--ignore", "-i", default=None, help="Rules to disable (comma-separated)"
-    )
-    p_watch.add_argument(
-        "--config", "-c", default=None, help="Path to configuration file"
-    )
+    _add_scan_options(p_watch)
     p_watch.add_argument(
         "--interval", "-n", type=float, default=2.0, help="Check interval in seconds"
     )
