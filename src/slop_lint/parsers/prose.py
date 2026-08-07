@@ -228,7 +228,17 @@ def iter_prose_blocks(content: str, filename: str) -> list[ProseBlock]:
 
 
 def iter_prose_sentences(content: str, filename: str) -> list[ProseSentence]:
-    """Return source-mapped prose sentences for the input file type."""
+    """Return cached source-mapped prose sentences for supported file types."""
+    if filename.lower().endswith((".md", ".mdx", ".markdown")):
+        from slop_lint.parsers.markdown import (
+            _get_cached_parser as get_markdown_parser,
+        )
+
+        return get_markdown_parser(content).get_prose_sentences()
+    if filename.lower().endswith(".py"):
+        from slop_lint.parsers.python import _get_cached_parser as get_python_parser
+
+        return get_python_parser(content).get_prose_sentences()
     return _sentences_from_blocks(iter_prose_blocks(content, filename))
 
 

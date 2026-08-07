@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from slop_lint.parsers.prose import (
     InlineSuppression,
     ProseBlock,
+    ProseSentence,
+    _sentences_from_blocks,
     _validate_suppression_tokens,
 )
 
@@ -119,6 +121,7 @@ class MarkdownParser:
         self._setext_underline_lines: set[int] | None = None
         self._html_block_lines: set[int] | None = None
         self._prose_blocks: list[MarkdownProseBlock] | None = None
+        self._prose_sentences: list[ProseSentence] | None = None
         self._inline_suppressions: list[InlineSuppression] | None = None
         self._references: list[MarkdownReference] | None = None
         self._blockquote_re = re.compile(r"^(?:\s{0,3}>\s?)+")
@@ -880,6 +883,12 @@ class MarkdownParser:
     def get_prose_lines(self) -> list[tuple[int, str]]:
         """Return source-width-preserving Markdown prose lines."""
         return [line for block in self.get_prose_blocks() for line in block.lines]
+
+    def get_prose_sentences(self) -> list[ProseSentence]:
+        """Return cached source-mapped prose sentences."""
+        if self._prose_sentences is None:
+            self._prose_sentences = _sentences_from_blocks(self.get_prose_blocks())
+        return self._prose_sentences
 
     @staticmethod
     def _is_table_row(line: str) -> bool:

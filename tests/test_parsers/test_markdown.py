@@ -898,3 +898,12 @@ class TestParserCache:
         lines2 = iter_non_code_lines(content, "test.md")
         assert len(_parser_cache) == cache_size
         assert lines1 == lines2
+
+
+def test_prose_sentences_are_cached_on_markdown_parser() -> None:
+    parser = MarkdownParser("A wrapped\nsentence.")
+
+    first = parser.get_prose_sentences()
+
+    assert first is parser.get_prose_sentences()
+    assert first[0].source_position(first[0].text.index("sentence")) == (2, 1)

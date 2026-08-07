@@ -10,6 +10,8 @@ from functools import lru_cache
 from slop_lint.parsers.prose import (
     InlineSuppression,
     ProseBlock,
+    ProseSentence,
+    _sentences_from_blocks,
     _validate_suppression_tokens,
 )
 
@@ -54,6 +56,7 @@ class PythonParser:
         self._docstrings: list[Docstring] | None = None
         self._comments: list[Comment] | None = None
         self._prose_blocks: list[ProseBlock] | None = None
+        self._prose_sentences: list[ProseSentence] | None = None
         self._prose_lines: list[tuple[int, str]] | None = None
         self._inline_suppressions: list[InlineSuppression] | None = None
 
@@ -215,6 +218,12 @@ class PythonParser:
             (line_num, "".join(chars)) for line_num, chars in enumerate(masked, start=1)
         ]
         return self._prose_lines
+
+    def get_prose_sentences(self) -> list[ProseSentence]:
+        """Return cached source-mapped prose sentences."""
+        if self._prose_sentences is None:
+            self._prose_sentences = _sentences_from_blocks(self.get_prose_blocks())
+        return self._prose_sentences
 
     def _docstring_nodes(
         self,

@@ -309,3 +309,13 @@ class TestCommentDataclass:
         assert comment.line == 5
         assert comment.column == 10
         assert comment.is_inline is True
+
+
+def test_prose_sentences_are_cached_on_python_parser() -> None:
+    parser = PythonParser('"""A wrapped\nsentence."""')
+    assert parser.parse()
+
+    first = parser.get_prose_sentences()
+
+    assert first is parser.get_prose_sentences()
+    assert first[0].source_position(first[0].text.index("sentence")) == (2, 1)
