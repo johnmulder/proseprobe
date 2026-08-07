@@ -90,7 +90,22 @@ slop-lint watch [OPTIONS] [PATHS]...   Watch files and re-check changes
 | `--quiet` | flag | false | Only output errors |
 | `--verbose` | flag | false | Show additional diagnostic info |
 
-### 4.3 Exit Codes
+### 4.3 Watch Command Options
+
+`watch` supports the shared `--select`, `--ignore`, `--config`, `--severity`,
+`--min-confidence`, `--hide-low`, `--baseline`, `--quiet`, and `--verbose`
+options from `check`. It also accepts `--interval` (seconds, default `2.0`) and
+`--no-clear`. Watch is text-only; `--format`, `--generate-baseline`, and
+`--show-config` remain check-only.
+
+### 4.4 Scan Policy
+
+Both commands load configuration and CLI rule overrides, construct rules with
+severity overrides, apply the minimum severity, scan with file and per-file
+ignore policy, filter by confidence, apply the baseline, and finally report the
+ordered findings. A watch iteration uses the same batch pipeline as `check`.
+
+### 4.5 Exit Codes
 
 | Code | Meaning |
 |------|---------|
@@ -154,11 +169,11 @@ ignore = ["S004"]
 ### 6.1 Text (Default)
 
 ```
-docs/api.md:15:10: V001 [high] Overused word: 'delve' → consider 'explore'
-docs/api.md:23:1: S001 Rule of three pattern detected
-src/main.py:45:5: C001 Overused word in docstring: 'crucial'
+docs/api.md:15:10: V001 [high] [warning] Overused word: 'delve' → consider 'explore'
+docs/api.md:23:1: S001 [warning] Rule of three pattern detected
+src/main.py:45:5: C001 [warning] Overused word in docstring: 'crucial'
 
-Found 3 issues (2 warnings, 1 info) in 2 files
+Found 3 issue(s) (0 error, 2 warning, 1 info) in 2 file(s)
 Confidence: 1 high, 2 medium, 0 low
 ```
 
@@ -195,6 +210,8 @@ Confidence: 1 high, 2 medium, 0 low
 ### 6.3 SARIF
 
 Standard SARIF 2.1.0 format for GitHub Code Scanning integration.
+JSON and SARIF are complete `check` documents written to stdout. Operational
+diagnostics are written to stderr so structured stdout remains parseable.
 
 ## 7. Architecture
 

@@ -175,32 +175,50 @@ CLI arguments override config file settings:
 slop-lint check --select T001 .
 ```
 
+Both `check` and `watch` use the resulting policy in this order:
+
+1. Load configuration, then apply CLI `--select` and `--ignore` overrides.
+2. Apply per-rule severity overrides and the effective minimum severity.
+3. Scan files using include, exclude, `.gitignore`, and per-file ignore rules.
+4. Remove findings below the effective confidence threshold.
+5. Remove findings already present in an optional baseline.
+
+This order makes one watch iteration report the same ordered findings as
+`check` when given the same paths and shared options.
+
 ## CLI Options Reference
 
-| Option | Short | Description |
-|--------|-------|-------------|
-| `--show-config` | | Display configuration and exit |
-| `--format` | `-f` | Output format: text, json, sarif |
-| `--select` | `-s` | Rules to enable (comma-separated) |
-| `--ignore` | `-i` | Rules to disable (comma-separated) |
-| `--config` | `-c` | Path to configuration file |
-| `--severity` | | Minimum severity: error, warning, info |
-| `--min-confidence` | | Minimum confidence: high, medium, low |
-| `--hide-low` | | Shorthand for `--min-confidence medium` |
-| `--baseline` | `-b` | Path to baseline file for incremental adoption |
-| `--generate-baseline` | | Generate baseline file from current issues |
-| `--hide-low` | | Hide low-confidence issues |
-| `--quiet` | `-q` | Only output errors |
-| `--verbose` | `-v` | Show additional diagnostic info |
+| Option | Short | Commands | Description |
+|--------|-------|----------|-------------|
+| `--select` | `-s` | both | Rules to enable (comma-separated) |
+| `--ignore` | `-i` | both | Rules to disable (comma-separated) |
+| `--config` | `-c` | both | Path to configuration file |
+| `--severity` | | both | Minimum severity: error, warning, info |
+| `--min-confidence` | | both | Minimum confidence: high, medium, low |
+| `--hide-low` | | both | Shorthand for `--min-confidence medium` |
+| `--baseline` | `-b` | both | Path to baseline file for incremental adoption |
+| `--quiet` | `-q` | both | Only output errors |
+| `--verbose` | `-v` | both | Show additional diagnostic info |
+| `--show-config` | | check | Display configuration and exit |
+| `--format` | `-f` | check | Output format: text, json, sarif |
+| `--generate-baseline` | | check | Generate baseline file from current issues |
+| `--interval` | `-n` | watch | Check interval in seconds |
+| `--no-clear` | | watch | Do not clear the screen between checks |
+
+Watch is text-only because its output is a continuous stream. For `check`,
+JSON and SARIF findings are written to stdout while baseline warnings and
+verbose diagnostics are written to stderr.
 
 ## Output Formats
 
 ### Text (default)
 
 ```
-docs/guide.md:15:5: V001 [warning] Overused word: 'delve'
+docs/guide.md:15:5: V001 [high] [warning] Overused word: 'delve'
 docs/guide.md:23:1: S001 [warning] Rule of three pattern detected
-Found 2 issue(s)
+
+Found 2 issue(s) (0 error, 2 warning, 0 info) in 1 file(s)
+Confidence: 1 high, 1 medium, 0 low
 ```
 
 ### JSON

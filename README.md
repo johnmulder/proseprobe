@@ -50,6 +50,10 @@ slop-lint check --hide-low .
 # Watch mode (continuous checking)
 slop-lint watch .
 
+# Watch with the same filters used by check
+slop-lint watch --severity error --min-confidence high \
+  --baseline .slop-lint-baseline.json .
+
 # Generate baseline for gradual adoption
 slop-lint check --generate-baseline .
 
@@ -62,6 +66,11 @@ slop-lint rules
 # Explain a specific rule
 slop-lint explain V001
 ```
+
+`check` and `watch` apply rule selection, severity, confidence, and baseline
+filters in the same order. Watch output is text-only; JSON and SARIF are
+complete `check` reports, with diagnostics kept on stderr so redirected stdout
+remains valid structured data.
 
 ## Detection Categories
 

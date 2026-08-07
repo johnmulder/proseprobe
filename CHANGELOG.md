@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `startup-check`, `perf-check`, `memory-check`, `nfr-check` (NFR probes)
 
 ### Changed
+- `check` and `watch` now share rule selection, severity, confidence, baseline,
+  and text-reporting behavior; structured output diagnostics are kept on stderr.
 - Markdown prose rules now preserve source columns and respect paragraph,
   heading, list, block-quote, code, HTML, table, front-matter, and MDX/JSX
   boundaries instead of joining unrelated text.
