@@ -12,7 +12,7 @@ Overused vocabulary, structural clichés, promotional language, and sloppy marku
 ## Features
 
 - 🔍 **59 detection rules** across 6 categories
-- 📝 Scans Markdown (`.md`, `.mdx`, `.markdown`) and Python (`.py`) files
+- 📝 Scans Markdown prose and source-mapped Python docstrings and comments
 - 🎯 **Confidence levels** (high/medium/low) to reduce noise
 - ⚙️ Configurable via `.slop-lint.toml`
 - 📊 Multiple output formats (text, JSON, SARIF)
@@ -83,12 +83,16 @@ remains valid structured data.
 | `C` | Code | 4 | Python docstring/comment issues |
 | `M` | Markup | 4 | Markdown artifacts |
 
+Prose-scoped `V`, `S`, `T`, and `G` rules run on Markdown prose and
+source-mapped Python docstrings and comments. `C` rules cover Python-specific
+documentation issues, while Markdown syntax rules remain Markdown-only.
+
 ### Example Detections
 
 ```
 docs/guide.md:15:10: V001 [warning] Overused word: 'delve' → consider 'explore'
 docs/guide.md:23:1: S001 [warning] Rule of three pattern detected
-src/main.py:45:5: C001 [warning] Overused word in docstring: 'crucial'
+src/main.py:45:8: V002 [warning] Collaborative phrase: 'I hope this helps'
 ```
 
 ## Configuration

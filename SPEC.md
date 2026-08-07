@@ -1,7 +1,7 @@
 # slop-lint - Technical Specification
 
 > Version: 0.1.0
-> Last Updated: 2026-03-10
+> Last Updated: 2026-08-06
 
 ## 1. Purpose
 
@@ -50,6 +50,12 @@ speed remains a tracked metric until the benchmark corpus reflects real projects
 | `C` | Code | 4 | Python-specific documentation issues |
 | `M` | Markup | 4 | Markdown artifacts and markup errors |
 | **Total** | | **59** | |
+
+Prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
+source-mapped Python docstrings and comments. Python blocks are evaluated
+independently so thresholds do not combine unrelated documentation. `C` rules
+cover Python-specific documentation issues; Markdown syntax rules remain
+Markdown-only.
 
 ### 3.2 Rule Severity Levels
 
@@ -171,7 +177,7 @@ ignore = ["S004"]
 ```
 docs/api.md:15:10: V001 [high] [warning] Overused word: 'delve' → consider 'explore'
 docs/api.md:23:1: S001 [warning] Rule of three pattern detected
-src/main.py:45:5: C001 [warning] Overused word in docstring: 'crucial'
+src/main.py:45:8: V002 [warning] Collaborative phrase: 'I hope this helps'
 
 Found 3 issue(s) (0 error, 2 warning, 1 info) in 2 file(s)
 Confidence: 1 high, 2 medium, 0 low

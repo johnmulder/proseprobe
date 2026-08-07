@@ -58,6 +58,21 @@ def test_spec_documents_watch_command() -> None:
     assert "slop-lint watch [OPTIONS] [PATHS]..." in spec
 
 
+def test_docs_explain_python_prose_rule_scope() -> None:
+    """Public docs should describe shared rules and C001's narrow ownership."""
+    readme = (ROOT / "README.md").read_text()
+    spec = (ROOT / "SPEC.md").read_text()
+    rules = (ROOT / "docs" / "rules.md").read_text()
+
+    for text in (readme, spec, rules):
+        assert "source-mapped Python docstrings and comments" in text
+
+    assert "src/main.py:45:8: V002" in readme
+    assert "src/main.py:45:8: V002" in spec
+    assert "C001: Docstring-Only Vocabulary" in rules
+    assert "not covered by `V001`" in rules
+
+
 def test_public_docs_do_not_contain_placeholder_repository_names() -> None:
     """Public docs should not ship template repository placeholders."""
     paths = [

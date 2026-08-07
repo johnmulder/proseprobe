@@ -2,6 +2,10 @@
 
 This document describes all detection rules available in slop-lint.
 
+Prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
+source-mapped Python docstrings and comments. `C` rules handle Python-specific
+documentation issues, and `M` rules remain Markdown-only.
+
 ---
 
 ## Vocabulary Rules (V)
@@ -458,16 +462,18 @@ The system uses modern techniques to deliver fast results.
 
 ## Code Rules (C)
 
-### C001: Docstring Vocabulary
+### C001: Docstring-Only Vocabulary
 
-Detects overused vocabulary in Python docstrings.
+Detects Python docstring terms not covered by `V001`. Its built-in terms are
+`utilize`, `bespoke`, `holistic`, and `paradigm`; configured vocabulary
+additions belong to `V001` so the two rules do not report the same match.
 
 **Severity:** Warning
 
 **Example (bad):**
 ```python
 def process(data):
-    """Delve into the data and leverage its intricate structure."""
+    """Utilize a bespoke parser for the data."""
     pass
 ```
 
@@ -753,8 +759,8 @@ Detects 3+ consecutive gerund-phrase fragments used for rhythmic effect.
 **Severity:** Info
 **Configurable:** `threshold` (default: 3)
 
-Runs stay within one body or block-quote paragraph; headings, lists, blank
-paragraphs, and skipped Markdown constructs reset them.
+A run cannot cross a paragraph, heading, list, block quote, or skipped Markdown
+construct.
 
 **Example (bad):**
 ```markdown
