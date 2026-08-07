@@ -787,20 +787,44 @@ class AnecdoteAsEvidenceRule(Rule):
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
+    _example_context = re.compile(
+        r"\b(?:example|dateline|format|quoted sentence)\b",
+        re.IGNORECASE,
+    )
+    _generalization = re.compile(
+        r"\b(?:shows?|proves?|demonstrates?|illustrates?|every|all|broader|"
+        r"nationwide|generally)\b",
+        re.IGNORECASE,
+    )
+
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect single-anecdote generalizations."""
         issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
+        sentences = iter_prose_sentences(content, filename)
+        for index, sentence in enumerate(sentences):
+            if self._example_context.search(sentence.text):
+                continue
+            window = sentence.text
+            if (
+                index + 1 < len(sentences)
+                and sentences[index + 1].scope_id == sentence.scope_id
+            ):
+                window = f"{window} {sentences[index + 1].text}"
+            if not self._generalization.search(window):
+                continue
             for pattern in ANECDOTE_EVIDENCE_PATTERNS:
-                match = re.search(pattern, line)
+                match = re.search(pattern, sentence.text)
                 if match:
+                    line, column = sentence.source_position(match.start())
+                    end_line, end_column = sentence.source_position(match.end())
+                    assert line == end_line
                     issues.append(
                         Issue(
                             rule_id=self.id,
                             message=f"Anecdote as evidence: '{match.group()}'",
-                            line=line_num,
-                            column=match.start() + 1,
-                            end_column=match.end() + 1,
+                            line=line,
+                            column=column,
+                            end_column=end_column,
                             severity=self.severity,
                         )
                     )

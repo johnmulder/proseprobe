@@ -56,7 +56,7 @@ Another paragraph separates the duplicate paragraph from its twin.
 
 The system processes data in real time for immediate insights.
 
-For Sarah of Ohio, the new policy meant losing her healthcare.
+For Sarah of Ohio, the new policy meant losing her healthcare. Her case shows that the policy harms families nationwide.
 
 Smith (2012) argues that technology reshapes communities. Jones (2014) claims that digital tools empower users. Patel (2018) suggests that platforms mediate interactions.
 

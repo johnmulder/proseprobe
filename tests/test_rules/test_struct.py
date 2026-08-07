@@ -668,7 +668,10 @@ class TestAnecdoteAsEvidence:
         """Detect 'For Sarah of Ohio...' anecdote pattern."""
         from slop_lint.rules.struct import AnecdoteAsEvidenceRule
 
-        text = "For Sarah of Ohio, the policy change meant losing her healthcare."
+        text = (
+            "For Sarah of Ohio, the policy change meant losing her healthcare. "
+            "Her case shows that the policy affects every family."
+        )
         rule = AnecdoteAsEvidenceRule()
         issues = rule.check(text, "test.md")
         assert len(issues) >= 1
@@ -678,7 +681,10 @@ class TestAnecdoteAsEvidence:
         """Detect 'Take Marcus, a software engineer...' anecdote pattern."""
         from slop_lint.rules.struct import AnecdoteAsEvidenceRule
 
-        text = "Take Marcus, a software engineer from Portland."
+        text = (
+            "Take Marcus, a software engineer from Portland. "
+            "His experience demonstrates that bootcamps help every career changer."
+        )
         rule = AnecdoteAsEvidenceRule()
         issues = rule.check(text, "test.md")
         assert len(issues) >= 1
@@ -687,7 +693,10 @@ class TestAnecdoteAsEvidence:
         """Detect 'Meet Lisa' anecdote pattern."""
         from slop_lint.rules.struct import AnecdoteAsEvidenceRule
 
-        text = "Meet Lisa, who transformed her career through coding bootcamps."
+        text = (
+            "Meet Lisa, who transformed her career through coding bootcamps. "
+            "Her story illustrates a broader path for workers."
+        )
         rule = AnecdoteAsEvidenceRule()
         issues = rule.check(text, "test.md")
         assert len(issues) >= 1
@@ -709,6 +718,23 @@ class TestAnecdoteAsEvidence:
         rule = AnecdoteAsEvidenceRule()
         issues = rule.check(text, "test.md")
         assert len(issues) == 0
+
+    def test_anecdote_requires_generalization_and_ignores_examples(self) -> None:
+        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+
+        unsupported = "For Sarah of Ohio, the policy changed her commute."
+        example = (
+            "For Sarah of Ohio, this quoted sentence is an example of a dateline "
+            "format, not evidence for a national claim."
+        )
+        supported = (
+            "For Sarah of Ohio, the policy changed her commute. "
+            "Her case shows that the policy affects every rider."
+        )
+
+        assert AnecdoteAsEvidenceRule().check(unsupported, "report.md") == []
+        assert AnecdoteAsEvidenceRule().check(example, "report.md") == []
+        assert len(AnecdoteAsEvidenceRule().check(supported, "report.md")) == 1
 
     def test_rule_metadata(self) -> None:
         from slop_lint.rules.struct import AnecdoteAsEvidenceRule
