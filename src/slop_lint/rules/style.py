@@ -1,6 +1,7 @@
 """Style detection rules (T001-T008)."""
 
 import re
+from itertools import groupby
 from typing import ClassVar
 
 from slop_lint.data.style_patterns import (
@@ -247,33 +248,36 @@ class ElegantVariationRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for elegant variation."""
         issues: list[Issue] = []
-        lines = self.iter_lines(content, filename)
-        content_lower = "\n".join(line for _, line in lines).lower()
-
-        for simple, formal in ELEGANT_VARIATION_PAIRS:
-            has_simple = re.search(simple, content_lower)
-            has_formal = re.search(formal, content_lower)
-
-            if has_simple and has_formal:
-                # Find first formal occurrence to flag
-                for line_num, line in lines:
-                    match = re.search(formal, line, re.IGNORECASE)
-                    if match:
-                        simple_word = simple.replace(r"\b", "")
-                        formal_word = match.group()
-                        issues.append(
-                            Issue(
-                                rule_id=self.id,
-                                message=(
-                                    f"Elegant variation: '{formal_word}' "
-                                    f"(also uses '{simple_word}')"
-                                ),
-                                line=line_num,
-                                column=match.start() + 1,
-                                severity=self.severity,
-                            )
+        for _scope, group in groupby(
+            iter_prose_sentences(content, filename),
+            key=lambda sentence: sentence.scope_id,
+        ):
+            sentences = list(group)
+            scope_text = "\n".join(sentence.text for sentence in sentences).lower()
+            for simple, formal in ELEGANT_VARIATION_PAIRS:
+                if not re.search(simple, scope_text) or not re.search(
+                    formal, scope_text
+                ):
+                    continue
+                simple_word = simple.replace(r"\b", "")
+                for sentence in sentences:
+                    match = re.search(formal, sentence.text, re.IGNORECASE)
+                    if match is None:
+                        continue
+                    line, column = sentence.source_position(match.start())
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=(
+                                f"Elegant variation: '{match.group()}' "
+                                f"(also uses '{simple_word}')"
+                            ),
+                            line=line,
+                            column=column,
+                            severity=self.severity,
                         )
-                        break
+                    )
+                    break
 
         return issues
 

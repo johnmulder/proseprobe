@@ -141,6 +141,19 @@ class TestElegantVariation:
         issues = rule.check(text, "test.md")
         assert isinstance(issues, list)
 
+    def test_elegant_variation_stays_within_one_prose_scope(self) -> None:
+        local = (
+            "The first status message said the retry failed. "
+            "The second stated that it did not succeed."
+        )
+        unrelated = (
+            "The release notes said the retry changed.\n\n"
+            "A later academic paragraph noted a limitation."
+        )
+
+        assert len(ElegantVariationRule().check(local, "test.md")) == 1
+        assert ElegantVariationRule().check(unrelated, "test.md") == []
+
     def test_rule_metadata(self) -> None:
         """Test rule has correct metadata."""
         rule = ElegantVariationRule()
