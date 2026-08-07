@@ -246,6 +246,13 @@ indicating how certain the rule is that the match is a real problem.
 | CLI and pipeline tests | Command-line and linter behavior | `tests/test_cli.py`, `tests/test_linter.py` |
 | Fixture tests | Known bad/clean samples | `tests/fixtures/`, `tests/test_fixtures.py` |
 | Property tests | Edge cases via hypothesis | `tests/test_property.py` |
+| Rule-quality benchmark | Reviewed per-rule precision and recall | `quality/`, `make rule-quality` |
+
+The rule-quality benchmark reports true positives, false positives, false
+negatives, precision, recall, and explicit negative-case coverage for every
+registered rule. Its first version validates corpus integrity and reports
+metrics without enforcing a numeric threshold; thresholds will be added only
+after the corpus contains enough reviewed examples to represent real usage.
 
 ### 8.2 Fixtures
 

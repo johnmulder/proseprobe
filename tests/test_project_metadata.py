@@ -47,6 +47,7 @@ def test_spec_mentions_existing_test_files() -> None:
     assert "tests/test_cli.py" in spec
     assert "tests/test_linter.py" in spec
     assert "tests/test_property.py" in spec
+    assert "make rule-quality" in spec
     assert "tests/test_integration.py" not in spec
     assert "tests/test_properties.py" not in spec
 

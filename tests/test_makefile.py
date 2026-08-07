@@ -62,7 +62,16 @@ def test_help_target_lists_common_workflows() -> None:
 
     assert result.returncode == 0
     assert "Usage: make <target>" in result.stdout
-    for target in ["dev", "test", "check", "clean", "build", "dogfood", "benchmark"]:
+    for target in [
+        "dev",
+        "test",
+        "check",
+        "clean",
+        "build",
+        "dogfood",
+        "benchmark",
+        "rule-quality",
+    ]:
         assert target in result.stdout
 
 
@@ -124,6 +133,7 @@ def test_ci_uses_make_targets_for_local_parity() -> None:
         "make typecheck",
         "make coverage-analyze",
         "make dogfood",
+        "make rule-quality",
         "make build",
     ]:
         assert command in workflow

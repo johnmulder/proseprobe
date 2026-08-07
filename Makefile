@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help install dev test test-tdd test-spec test-cov lint typecheck format check all clean build dogfood quick benchmark test-tropes test-tropes-integration doc-audit spec-verify coverage-analyze startup-check perf-check memory-check nfr-check
+.PHONY: help install dev test test-tdd test-spec test-cov lint typecheck format check all clean build dogfood quick benchmark rule-quality test-tropes test-tropes-integration doc-audit spec-verify coverage-analyze startup-check perf-check memory-check nfr-check
 
 VENV ?= .venv
 VENV_BIN = $(VENV)/bin
@@ -47,6 +47,7 @@ help: ## Show available development commands
 	@echo "  test-cov             Run tests with coverage reports"
 	@echo "  coverage-analyze     Enforce the coverage threshold"
 	@echo "  benchmark            Run throughput benchmarks"
+	@echo "  rule-quality         Measure rule precision and recall"
 	@echo "  nfr-check            Run coverage, startup, performance, and memory probes"
 
 # Install production dependencies
@@ -125,6 +126,10 @@ quick: ## Run quick local fix-and-test loop
 # Run benchmarks
 benchmark: ## Run benchmarks
 	$(PYTHON) -m benchmarks.bench_rules
+
+# Measure rule precision and recall on the reviewed corpus
+rule-quality: ## Measure rule precision and recall
+	$(PYTHON) -m benchmarks.rule_quality
 
 # Run only trope-related tests (fast TDD loop)
 test-tropes: ## Run trope-related rule tests
