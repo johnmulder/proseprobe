@@ -126,12 +126,70 @@ class TestBrokenReferences:
         issues = rule.check(text, "test.md")
         assert isinstance(issues, list)
 
-    def test_detects_placeholder_link(self) -> None:
-        """Test detecting placeholder links."""
-        text = "[example](URL_HERE)"
-        rule = BrokenReferencesRule()
-        issues = rule.check(text, "test.md")
-        assert isinstance(issues, list)
+    def test_reports_explicit_inline_placeholder_at_destination(self) -> None:
+        """Explicit replacement tokens should be high-confidence errors."""
+        issues = BrokenReferencesRule().check("[example](URL_HERE)", "test.md")
+
+        assert len(issues) == 1
+        issue = issues[0]
+        assert issue.rule_id == "M004"
+        assert issue.message == "Placeholder link destination: 'URL_HERE'"
+        assert issue.line == 1
+        assert issue.column == 11
+        assert issue.end_column == 19
+        assert issue.severity is Severity.ERROR
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == "Replace the placeholder with a real destination"
+
+    @pytest.mark.parametrize("destination", ["INSERT_URL", "TODO", "TBD"])
+    def test_reports_explicit_reference_destination_once(
+        self,
+        destination: str,
+    ) -> None:
+        """A referenced definition should be reported once at its destination."""
+        text = f"[guide]: {destination}\n\nUse [guide][guide]."
+
+        issues = BrokenReferencesRule().check(text, "test.md")
+
+        assert len(issues) == 1
+        assert issues[0].line == 1
+        assert issues[0].column == 10
+        assert issues[0].end_column == 10 + len(destination)
+        assert issues[0].confidence is Confidence.HIGH
+
+    @pytest.mark.parametrize(
+        ("text", "column", "end_column"),
+        [("[empty]()", 9, 9), ("[top](#)", 7, 8)],
+    )
+    def test_reports_ambiguous_destinations_at_low_confidence(
+        self,
+        text: str,
+        column: int,
+        end_column: int,
+    ) -> None:
+        """Empty and bare-fragment destinations should be low confidence."""
+        [issue] = BrokenReferencesRule().check(text, "test.md")
+
+        assert (issue.column, issue.end_column) == (column, end_column)
+        assert issue.confidence is Confidence.LOW
+
+    def test_accepts_real_destinations_and_ignored_contexts(self) -> None:
+        """Valid links and Markdown examples should remain quiet."""
+        valid = """\
+[relative](/guide)
+[fragment](#install)
+[email](mailto:ops@example.com)
+[example](https://example.com/docs)
+<https://example.com/docs>
+`[inline](URL_HERE)`
+<div>
+[html](URL_HERE)
+</div>
+"""
+        example = "# Example links\n\n[placeholder](URL_HERE)"
+
+        assert BrokenReferencesRule().check(valid, "test.md") == []
+        assert BrokenReferencesRule().check(example, "test.md") == []
 
     def test_rule_metadata(self) -> None:
         """Test rule has correct metadata."""
@@ -145,6 +203,7 @@ class TestBrokenReferences:
         issues = rule.check(text, "test.md")
         assert len(issues) == 1
         assert "attached_file" in issues[0].message
+        assert issues[0].confidence is Confidence.MEDIUM
 
 
 class TestUnresolvedMarkdownReferences:

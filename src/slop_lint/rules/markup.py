@@ -169,10 +169,14 @@ class BrokenReferencesRule(Rule):
 
     id = "M004"
     name = "Broken References"
-    description = "Detects [attached_file:1], grok_card tags"
+    description = "Detects broken markers and placeholder link destinations"
     severity = Severity.ERROR
     applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "prose"
+
+    _PLACEHOLDER_DESTINATIONS: ClassVar[frozenset[str]] = frozenset(
+        {"url_here", "insert_url", "todo", "tbd"}
+    )
 
     _patterns: ClassVar[list[str]] = [
         r"\[attached_file:\d+\]",
@@ -197,7 +201,51 @@ class BrokenReferencesRule(Rule):
                         )
                     )
 
-        return issues
+        if is_markdown_file(filename):
+            parser = _get_cached_markdown_parser(content)
+            destinations = {
+                (link.line, link.url_start, link.url_end): link.url
+                for link in parser.get_links()
+                if link.url_start
+            }
+            for reference in parser.get_references():
+                if not reference.is_definition or reference.destination is None:
+                    continue
+                destinations[
+                    (
+                        reference.line,
+                        reference.destination_start,
+                        reference.destination_end,
+                    )
+                ] = reference.destination
+
+            for (line_num, column, end_column), destination in sorted(
+                destinations.items()
+            ):
+                normalized = destination.strip()
+                if normalized.casefold() in self._PLACEHOLDER_DESTINATIONS:
+                    confidence = Confidence.HIGH
+                elif normalized in {"", "#"}:
+                    confidence = Confidence.LOW
+                else:
+                    continue
+                if is_example_line(content, filename, line_num):
+                    continue
+                display = normalized or "(empty)"
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Placeholder link destination: '{display}'",
+                        line=line_num,
+                        column=column,
+                        end_column=end_column,
+                        severity=self.severity,
+                        confidence=confidence,
+                        suggestion="Replace the placeholder with a real destination",
+                    )
+                )
+
+        return sorted(issues, key=lambda issue: (issue.line, issue.column))
 
 
 class UnresolvedMarkdownReferencesRule(Rule):
