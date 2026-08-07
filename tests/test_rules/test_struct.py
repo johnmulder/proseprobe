@@ -398,6 +398,18 @@ class TestGerundFragmentLitany:
         issues = rule.check(text, "test.md")
         assert len(issues) >= 1
 
+    def test_gerund_litany_spans_wrapped_sentences(self) -> None:
+        from slop_lint.rules.struct import GerundFragmentLitanyRule
+
+        text = (
+            "Fixing small bugs. Writing straightforward\nfeatures. Shipping releases."
+        )
+
+        [issue] = GerundFragmentLitanyRule().check(text, "test.md")
+
+        assert (issue.line, issue.column) == (1, 1)
+        assert "3 consecutive" in issue.message
+
     def test_ignores_normal_gerunds(self) -> None:
         """Don't flag gerunds in normal sentences."""
         from slop_lint.rules.struct import GerundFragmentLitanyRule

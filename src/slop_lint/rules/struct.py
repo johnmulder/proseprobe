@@ -465,41 +465,47 @@ class GerundFragmentLitanyRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect 3+ consecutive gerund-phrase fragments."""
         issues: list[Issue] = []
-        for block in iter_prose_blocks(content, filename):
-            if block.context not in {"body", "blockquote"}:
-                continue
+        records = iter_prose_sentences(content, filename)
+        for _scope, group in groupby(records, key=lambda sentence: sentence.scope_id):
             sentences = [
-                (line_num, sentence.strip())
-                for line_num, line in block.lines
-                for sentence in re.split(r"(?<=[.!?])\s+", line.strip())
-                if sentence.strip()
+                sentence
+                for sentence in group
+                if sentence.context in {"body", "blockquote"}
             ]
             run_start = 0
             run_count = 0
-            for index, (_line_num, sentence) in enumerate(sentences):
-                if self._gerund_fragment.match(sentence):
+            for index, sentence in enumerate(sentences):
+                if self._gerund_fragment.fullmatch(sentence.text):
                     if run_count == 0:
                         run_start = index
                     run_count += 1
-                else:
-                    if run_count >= self._threshold:
-                        issues.append(
-                            Issue(
-                                rule_id=self.id,
-                                message=f"Gerund fragment litany: {run_count} consecutive gerund fragments",
-                                line=sentences[run_start][0],
-                                column=1,
-                                severity=self.severity,
-                            )
+                    continue
+                if run_count >= self._threshold:
+                    first = sentences[run_start]
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=(
+                                f"Gerund fragment litany: {run_count} consecutive "
+                                "gerund fragments"
+                            ),
+                            line=first.start_line,
+                            column=first.start_column,
+                            severity=self.severity,
                         )
-                    run_count = 0
+                    )
+                run_count = 0
             if run_count >= self._threshold:
+                first = sentences[run_start]
                 issues.append(
                     Issue(
                         rule_id=self.id,
-                        message=f"Gerund fragment litany: {run_count} consecutive gerund fragments",
-                        line=sentences[run_start][0],
-                        column=1,
+                        message=(
+                            f"Gerund fragment litany: {run_count} consecutive "
+                            "gerund fragments"
+                        ),
+                        line=first.start_line,
+                        column=first.start_column,
                         severity=self.severity,
                     )
                 )
