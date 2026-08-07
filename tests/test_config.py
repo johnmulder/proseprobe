@@ -150,8 +150,71 @@ select = ["G001"]
         config = load_config(None)
 
         assert isinstance(config, Config)
+        assert config.profile is None
         assert config.severity == "warning"
         assert config.source_path is None
+
+    def test_profile_supplies_policy_defaults(self, tmp_path: Path) -> None:
+        """A profile should fill policy keys omitted from configuration."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('profile = "academic"\n')
+
+        config = load_config(config_file)
+
+        assert config.profile == "academic"
+        assert "G011" in config.select
+        assert "V008" not in config.select
+        assert config.severity == "info"
+        assert config.min_confidence == "medium"
+
+    def test_explicit_policy_overrides_profile_defaults(self, tmp_path: Path) -> None:
+        """Explicit config policy should take precedence over its profile."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text(
+            'profile = "business"\n'
+            'select = ["V001"]\n'
+            'ignore = ["V002"]\n'
+            'minimum_severity = "error"\n'
+            'min_confidence = "high"\n\n'
+            '[severity]\nV001 = "warning"\n'
+        )
+
+        config = load_config(config_file)
+
+        assert config.profile == "business"
+        assert config.select == ["V001"]
+        assert config.ignore == ["V002"]
+        assert config.severity == "error"
+        assert config.min_confidence == "high"
+        assert config.severity_overrides == {"V001": "warning"}
+
+    def test_loads_profile_from_pyproject(self, tmp_path: Path) -> None:
+        """Profiles should work in the pyproject configuration form."""
+        config_file = tmp_path / "pyproject.toml"
+        config_file.write_text('[tool.slop-lint]\nprofile = "technical-docs"\n')
+
+        config = load_config(config_file)
+
+        assert config.profile == "technical-docs"
+        assert "C001" in config.select
+        assert config.min_confidence == "low"
+
+    @pytest.mark.parametrize("value", ["missing", 1, ["general"]])
+    def test_rejects_invalid_profile(self, tmp_path: Path, value: object) -> None:
+        """Profile values should be known names encoded as strings."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text(f"profile = {value!r}\n")
+
+        with pytest.raises(ConfigError, match="profile"):
+            load_config(config_file)
+
+    def test_unknown_profile_suggests_close_match(self, tmp_path: Path) -> None:
+        """A near-miss profile should suggest the supported spelling."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('profile = "technical-doc"\n')
+
+        with pytest.raises(ConfigError, match="did you mean 'technical-docs'"):
+            load_config(config_file)
 
     def test_records_explicit_config_path(self, tmp_path: Path) -> None:
         """Loaded configuration should retain its source path."""
@@ -367,6 +430,7 @@ class TestConfig:
         """Test default configuration values."""
         config = Config()
 
+        assert config.profile is None
         assert config.select == ["V", "S", "T", "G", "C", "M"]
         assert config.ignore == []
         assert config.severity == "warning"

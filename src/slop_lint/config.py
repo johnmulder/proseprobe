@@ -6,6 +6,8 @@ from difflib import get_close_matches
 from pathlib import Path
 from typing import Any
 
+from slop_lint.profiles import PROFILES, Profile
+
 __all__ = [
     "Config",
     "ConfigError",
@@ -90,6 +92,7 @@ class Config:
             ".git/**",
         ]
     )
+    profile: str | None = None
     select: list[str] = field(default_factory=lambda: ["V", "S", "T", "G", "C", "M"])
     ignore: list[str] = field(default_factory=list)
     severity: str = "warning"
@@ -109,6 +112,7 @@ _CONFIG_KEYS = frozenset(
         "min_confidence",
         "minimum_severity",
         "per-file-ignores",
+        "profile",
         "select",
         "severity",
         "thresholds",
@@ -335,6 +339,23 @@ def _require_choice(value: Any, key: str, choices: set[str]) -> str:
     return normalized
 
 
+def _parse_profile(value: Any) -> tuple[str | None, Profile | None]:
+    """Validate and resolve an optional profile name."""
+    if value is None:
+        return None, None
+    if not isinstance(value, str):
+        allowed = ", ".join(PROFILES)
+        raise ValueError(f"profile must be one of: {allowed}")
+
+    normalized = value.lower()
+    profile = PROFILES.get(normalized)
+    if profile is None:
+        suggestion = get_close_matches(normalized, list(PROFILES), n=1)
+        hint = f"; did you mean '{suggestion[0]}'?" if suggestion else ""
+        raise ValueError(f"unknown profile '{value}'{hint}")
+    return normalized, profile
+
+
 def _require_positive_int(value: Any, key: str) -> int:
     """Require a value to be a positive integer."""
     if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
@@ -382,6 +403,12 @@ def _parse_per_file_ignores(value: Any) -> list[PerFileIgnore]:
 def _parse_config(data: dict[str, Any]) -> Config:
     """Parse configuration dictionary into Config object."""
     _reject_unknown_keys(data, _CONFIG_KEYS)
+    profile_name, profile = _parse_profile(data.get("profile"))
+    profile_select = (
+        sorted(profile.rules) if profile else ["V", "S", "T", "G", "C", "M"]
+    )
+    profile_severity = profile.minimum_severity if profile else "warning"
+    profile_confidence = profile.min_confidence if profile else "low"
 
     vocabulary_data = _require_mapping(data.get("vocabulary", {}), "vocabulary")
     _reject_unknown_keys(vocabulary_data, _VOCABULARY_KEYS, "vocabulary")
@@ -464,7 +491,7 @@ def _parse_config(data: dict[str, Any]) -> Config:
         severity_overrides: dict[str, str] = {}
     elif isinstance(raw_severity, dict):
         min_severity = _require_choice(
-            data.get("minimum_severity", "warning"),
+            data.get("minimum_severity", profile_severity),
             "minimum_severity",
             {"error", "info", "warning"},
         )
@@ -473,7 +500,7 @@ def _parse_config(data: dict[str, Any]) -> Config:
         )
     elif raw_severity is None:
         min_severity = _require_choice(
-            data.get("minimum_severity", "warning"),
+            data.get("minimum_severity", profile_severity),
             "minimum_severity",
             {"error", "info", "warning"},
         )
@@ -490,13 +517,12 @@ def _parse_config(data: dict[str, Any]) -> Config:
             data.get("exclude", ["venv/**", ".venv/**", "node_modules/**", ".git/**"]),
             "exclude",
         ),
-        select=_require_list(
-            data.get("select", ["V", "S", "T", "G", "C", "M"]), "select"
-        ),
+        profile=profile_name,
+        select=_require_list(data.get("select", profile_select), "select"),
         ignore=_require_list(data.get("ignore", []), "ignore"),
         severity=min_severity,
         min_confidence=_require_choice(
-            data.get("min_confidence", "low"),
+            data.get("min_confidence", profile_confidence),
             "min_confidence",
             {"high", "low", "medium"},
         ),
