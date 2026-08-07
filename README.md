@@ -88,6 +88,8 @@ removes stale entries without accepting new ones. The older
 
 ## Detection Categories
 
+<!-- rule-docs:categories:start -->
+
 | Prefix | Category | Rules | Description |
 |--------|----------|-------|-------------|
 | `V` | Vocabulary | 8 | Overused and clichéd words and phrases |
@@ -96,6 +98,9 @@ removes stale entries without accepting new ones. The older
 | `G` | Grammar | 14 | Grammatical patterns |
 | `C` | Code | 4 | Python docstring/comment issues |
 | `M` | Markup | 4 | Markdown artifacts |
+| **Total** | | **59** | |
+
+<!-- rule-docs:categories:end -->
 
 Prose-scoped `V`, `S`, `T`, and `G` rules run on Markdown prose and
 source-mapped Python docstrings and comments. `C` rules cover Python-specific

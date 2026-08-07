@@ -43,15 +43,19 @@ speed remains a tracked metric until the benchmark corpus reflects real projects
 
 ### 3.1 Rule Categories
 
-| Prefix | Category | Count | Description |
+<!-- rule-docs:categories:start -->
+
+| Prefix | Category | Rules | Description |
 |--------|----------|-------|-------------|
-| `V` | Vocabulary | 8 | Overused and clichéd word patterns |
-| `S` | Structure | 21 | Structural and organizational patterns |
-| `T` | Style | 8 | Typographic and formatting issues |
-| `G` | Grammar | 14 | Grammatical anti-patterns |
-| `C` | Code | 4 | Python-specific documentation issues |
-| `M` | Markup | 4 | Markdown artifacts and markup errors |
+| `V` | Vocabulary | 8 | Overused and clichéd words and phrases |
+| `S` | Structure | 21 | Organizational patterns |
+| `T` | Style | 8 | Typographic issues |
+| `G` | Grammar | 14 | Grammatical patterns |
+| `C` | Code | 4 | Python docstring/comment issues |
+| `M` | Markup | 4 | Markdown artifacts |
 | **Total** | | **59** | |
+
+<!-- rule-docs:categories:end -->
 
 Prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
 source-mapped Python docstrings and comments. Python blocks are evaluated

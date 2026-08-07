@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help install dev test test-tdd test-spec test-cov lint typecheck format check all clean build dogfood quick benchmark rule-quality test-tropes test-tropes-integration doc-audit spec-verify coverage-analyze startup-check perf-check memory-check nfr-check
+.PHONY: help install dev test test-tdd test-spec test-cov lint typecheck format check all clean build dogfood quick benchmark rule-quality rule-docs rule-docs-check test-tropes test-tropes-integration doc-audit spec-verify coverage-analyze startup-check perf-check memory-check nfr-check
 
 VENV ?= .venv
 VENV_BIN = $(VENV)/bin
@@ -42,6 +42,8 @@ help: ## Show available development commands
 	@echo "  clean                Remove generated build, test, and cache artifacts"
 	@echo "  build                Build source and wheel distributions"
 	@echo "  dogfood              Run slop-lint on its own docs"
+	@echo "  rule-docs            Update generated rule documentation"
+	@echo "  rule-docs-check      Verify generated rule documentation"
 	@echo ""
 	@echo "Analysis:"
 	@echo "  test-cov             Run tests with coverage reports"
@@ -130,6 +132,13 @@ benchmark: ## Run benchmarks
 # Measure rule precision and recall on the reviewed corpus
 rule-quality: ## Measure rule precision and recall
 	$(PYTHON) -m benchmarks.rule_quality
+
+# Generate repetitive rule reference content from canonical metadata
+rule-docs: ## Update generated rule documentation
+	$(PYTHON) -m slop_lint._rule_docs --write
+
+rule-docs-check: ## Verify generated rule documentation
+	$(PYTHON) -m slop_lint._rule_docs --check
 
 # Run only trope-related tests (fast TDD loop)
 test-tropes: ## Run trope-related rule tests

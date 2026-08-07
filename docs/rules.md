@@ -6,6 +6,74 @@ Prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
 source-mapped Python docstrings and comments. `C` rules handle Python-specific
 documentation issues, and `M` rules remain Markdown-only.
 
+## Rule Inventory
+
+<!-- rule-docs:inventory:start -->
+
+| ID | Name | Category | Severity | Confidence | Context | Configuration |
+|----|------|----------|----------|------------|---------|---------------|
+| `V001` | Overused Vocabulary | Vocabulary | warning | medium | markdown, python / prose | — |
+| `V002` | Collaborative Phrases | Vocabulary | warning | medium | markdown, python / prose | — |
+| `V003` | Knowledge Cutoff | Vocabulary | info | medium | markdown, python / prose | — |
+| `V004` | Promotional Language | Vocabulary | warning | medium | markdown, python / prose | — |
+| `V005` | Weasel Words | Vocabulary | info | medium | markdown, python / prose | — |
+| `V006` | Grandiose Stakes | Vocabulary | warning | medium | markdown, python / prose | — |
+| `V007` | Invented Concept Labels | Vocabulary | info | medium | markdown, python / prose | `thresholds.invented_concept_labels` |
+| `V008` | Trend Overclaim | Vocabulary | info | medium | markdown, python / prose | — |
+| `S001` | Rule of Three | Structure | info | medium | markdown, python / prose | `thresholds.rule_of_three` |
+| `S002` | Negative Parallelism | Structure | info | medium | markdown, python / prose | — |
+| `S003` | Challenge Conclusions | Structure | warning | medium | markdown, python / prose | — |
+| `S004` | Inline-Header Lists | Structure | info | medium | markdown / non_code | `thresholds.inline_header_lists` |
+| `S005` | Significance Emphasis | Structure | warning | medium | markdown, python / prose | — |
+| `S006` | Superficial Analysis | Structure | warning | medium | markdown, python / prose | — |
+| `S007` | False Ranges | Structure | info | medium | markdown, python / prose | — |
+| `S008` | Dramatic Countdown | Structure | info | medium | markdown, python / prose | — |
+| `S009` | Rhetorical Self-Answer | Structure | info | medium | markdown, python / prose | — |
+| `S010` | Anaphora Abuse | Structure | warning | medium | markdown, python / prose | `thresholds.anaphora_abuse` |
+| `S011` | Gerund Fragment Litany | Structure | info | medium | markdown, python / prose | `thresholds.gerund_fragment_litany` |
+| `S012` | Listicle in Prose | Structure | info | medium | markdown, python / prose | — |
+| `S013` | Historical Analogy Stacking | Structure | info | medium | markdown, python / prose | `thresholds.historical_analogy_stacking` |
+| `S014` | Signposted Conclusion | Structure | info | medium | markdown, python / prose | — |
+| `S015` | Fractal Summary | Structure | info | medium | markdown, python / prose | — |
+| `S016` | Content Duplication | Structure | warning | medium | markdown / raw | — |
+| `S017` | Anecdote As Evidence | Structure | info | medium | markdown, python / prose | — |
+| `S018` | Citation Name-Dropping | Structure | info | medium | markdown, python / prose | `thresholds.citation_name_drop` |
+| `S019` | Corporate Euphemism | Structure | info | medium | markdown, python / prose | — |
+| `S020` | Alignment Ritual | Structure | info | medium | markdown, python / prose | — |
+| `S021` | Slide Deck Fragment | Structure | info | low | markdown, python / prose | — |
+| `T001` | Title Case Headings | Style | info | medium | markdown / raw | — |
+| `T002` | Bold Overuse | Style | info | medium | markdown / raw | `thresholds.bold_overuse` |
+| `T003` | Em Dash Overuse | Style | info | medium | markdown, python / prose | `thresholds.em_dash_overuse` |
+| `T004` | Quote Inconsistency | Style | info | medium | markdown, python / prose | — |
+| `T005` | Emoji in Prose | Style | info | medium | markdown, python / prose | — |
+| `T006` | Elegant Variation | Style | info | medium | markdown, python / prose | — |
+| `T007` | Short Punchy Fragments | Style | info | medium | markdown, python / prose | `thresholds.short_punchy_fragments` |
+| `T008` | Sentence Length | Style | info | medium | markdown, python / prose | `thresholds.sentence_length_max` |
+| `G001` | Copula Avoidance | Grammar | info | medium | markdown, python / prose | — |
+| `G002` | Excessive Hedging | Grammar | info | medium | markdown, python / prose | — |
+| `G003` | Participle Chains | Grammar | warning | medium | markdown, python / prose | — |
+| `G004` | False Suspense Transition | Grammar | info | medium | markdown, python / prose | — |
+| `G005` | Patronizing Analogy | Grammar | info | medium | markdown, python / prose | — |
+| `G006` | Futurist Invitation | Grammar | info | medium | markdown, python / prose | — |
+| `G007` | False Vulnerability | Grammar | info | medium | markdown, python / prose | — |
+| `G008` | Asserted Simplicity | Grammar | info | medium | markdown, python / prose | — |
+| `G009` | Pedagogical Voice | Grammar | info | medium | markdown, python / prose | — |
+| `G010` | False Balance | Grammar | info | medium | markdown, python / prose | — |
+| `G011` | Nominalization Overload | Grammar | info | medium | markdown, python / prose | `thresholds.nominalization_overload` |
+| `G012` | Passive Voice Overuse | Grammar | info | medium | markdown, python / prose | `thresholds.passive_voice_overuse` |
+| `G013` | Gap Ritual | Grammar | info | medium | markdown, python / prose | — |
+| `G014` | Impersonal Corporate Passive | Grammar | info | medium | markdown, python / prose | — |
+| `C001` | Docstring-Only Vocabulary | Code | warning | medium | python / raw | — |
+| `C002` | Verbose Comments | Code | info | medium | python / raw | — |
+| `C003` | Collaborative Comments | Code | warning | medium | python / raw | — |
+| `C004` | Formulaic Placeholders | Code | info | medium | python / raw | — |
+| `M001` | Wrong Markup | Markup | warning | low | python / raw | — |
+| `M002` | ChatGPT Markers | Markup | error | medium | markdown / prose | — |
+| `M003` | UTM Parameters | Markup | warning | medium | markdown / raw | — |
+| `M004` | Broken References | Markup | error | medium | markdown / prose | — |
+
+<!-- rule-docs:inventory:end -->
+
 ---
 
 ## Vocabulary Rules (V)
@@ -13,8 +81,6 @@ documentation issues, and `M` rules remain Markdown-only.
 ### V001: Overused Vocabulary
 
 Detects overused and clichéd words that weaken writing.
-
-**Severity:** Warning
 
 **Detected words:**
 - delve, tapestry, multifaceted, intricate, underscore
@@ -38,8 +104,6 @@ This article explores the complex structure of modern software architecture.
 ### V002: Collaborative Phrases
 
 Detects chat-like communication patterns that don't belong in documentation.
-
-**Severity:** Warning
 
 **Detected patterns:**
 - "I hope this helps!"
@@ -65,8 +129,6 @@ Here's the code for the requested feature.
 
 Detects temporal disclaimers about training data.
 
-**Severity:** Info
-
 **Detected patterns:**
 - "As of my last update..."
 - "Based on available information..."
@@ -89,8 +151,6 @@ Python 3.12 is the latest version (as of January 2024).
 
 Detects puffery and marketing speak.
 
-**Severity:** Warning
-
 **Detected patterns:**
 - "world-class", "cutting-edge", "groundbreaking"
 - "boasts a", "nestled in", "in the heart of"
@@ -111,8 +171,6 @@ Our solution provides high performance for typical workloads.
 ### V005: Weasel Words
 
 Detects vague attributions without sources.
-
-**Severity:** Info
 
 **Detected patterns:**
 - "Experts say...", "Studies show..."
@@ -137,8 +195,6 @@ Martin Fowler recommends this approach in "Refactoring" (2018).
 
 Detects excessive triadic patterns ("X, Y, and Z").
 
-**Severity:** Info
-
 **Example (bad):**
 ```markdown
 This provides speed, efficiency, and reliability.
@@ -158,8 +214,6 @@ The system is designed for security and horizontal scaling.
 
 Detects "Not only... but also..." constructions.
 
-**Severity:** Info
-
 **Example (bad):**
 ```markdown
 It's not just about the code, it's about the people.
@@ -178,8 +232,6 @@ It improves both speed and reliability.
 
 Detects formulaic "despite X, faces challenges" patterns.
 
-**Severity:** Warning
-
 **Example (bad):**
 ```markdown
 Despite its popularity, the framework faces several challenges.
@@ -195,8 +247,6 @@ The framework has some known limitations: performance degrades with large datase
 ### S004: Inline-Header Lists
 
 Detects "- **Header:** Description" bullet patterns.
-
-**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -220,8 +270,6 @@ Handles millions of requests per second.
 
 Detects undue importance claims.
 
-**Severity:** Warning
-
 **Detected patterns:**
 - "pivotal moment", "key turning point"
 - "marks a significant", "reflects broader trends"
@@ -241,8 +289,6 @@ This release adds async support and improves memory usage by 40%.
 ### S006: Superficial Analysis
 
 Detects present participle chains suggesting filler text.
-
-**Severity:** Warning
 
 **Detected patterns:**
 - "highlighting its importance"
@@ -265,8 +311,6 @@ The update reduces API latency by 30%.
 
 Detects "from X to Y" with incoherent extremes.
 
-**Severity:** Info
-
 **Example (bad):**
 ```markdown
 Used by everyone from beginners to seasoned professionals.
@@ -285,8 +329,6 @@ Suitable for both new and experienced developers.
 
 Detects improper capitalization in Markdown headings.
 
-**Severity:** Info
-
 **Example (bad):**
 ```markdown
 ## Getting Started With The Project
@@ -302,8 +344,6 @@ Detects improper capitalization in Markdown headings.
 ### T002: Bold Overuse
 
 Detects excessive **bold** usage per paragraph.
-
-**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -321,8 +361,6 @@ The quick brown fox jumps over the lazy dog.
 
 Detects excessive em dashes (—) for dramatic effect.
 
-**Severity:** Info
-
 **Example (bad):**
 ```markdown
 The solution—which took months to develop—was finally ready—and it worked.
@@ -339,8 +377,6 @@ The solution, which took months to develop, was finally ready and worked.
 
 Detects mixed curly and straight quote styles.
 
-**Severity:** Info
-
 **Example (bad):**
 ```markdown
 He said "hello" and she replied "goodbye".
@@ -356,8 +392,6 @@ He said "hello" and she replied "goodbye".
 ### T005: Emoji in Prose
 
 Detects non-technical emoji in documentation.
-
-**Severity:** Info
 
 **Example (bad):**
 ```markdown
@@ -379,8 +413,6 @@ This guide covers installation and basic usage.
 
 Detects unnatural synonyms to avoid repetition.
 
-**Severity:** Info
-
 **Example (bad):**
 ```markdown
 The function returns a value. The method yields a result.
@@ -399,8 +431,6 @@ The function returns a value. See the function reference for details.
 ### G001: Copula Avoidance
 
 Detects "serves as" instead of simpler "is".
-
-**Severity:** Info
 
 **Detected patterns:**
 - "serves as", "stands as", "acts as"
@@ -421,8 +451,6 @@ This module is the main entry point.
 ### G002: Excessive Hedging
 
 Detects over-qualification phrases and hedge stacking (multiple hedges in one sentence).
-
-**Severity:** Info
 
 **Detected patterns:**
 - "It is important to note that..."
@@ -446,8 +474,6 @@ The function may throw an exception.
 
 Detects dangling modifier chains.
 
-**Severity:** Info
-
 **Example (bad):**
 ```markdown
 Leveraging modern techniques, enhancing performance, the system delivers results.
@@ -468,8 +494,6 @@ Detects Python docstring terms not covered by `V001`. Its built-in terms are
 `utilize`, `bespoke`, `holistic`, and `paradigm`; configured vocabulary
 additions belong to `V001` so the two rules do not report the same match.
 
-**Severity:** Warning
-
 **Example (bad):**
 ```python
 def process(data):
@@ -489,8 +513,6 @@ def process(data):
 ### C002: Verbose Comments
 
 Detects over-explained code comments.
-
-**Severity:** Info
 
 **Example (bad):**
 ```python
@@ -514,8 +536,6 @@ def add(a, b):
 
 Detects chat phrases in code comments.
 
-**Severity:** Warning
-
 **Example (bad):**
 ```python
 # I hope this helps! Let me know if you need anything else.
@@ -536,8 +556,6 @@ def helper():
 
 Detects formulaic TODO patterns.
 
-**Severity:** Info
-
 **Example (bad):**
 ```python
 # TODO: Implement this function as per the requirements
@@ -557,8 +575,6 @@ Detects formulaic TODO patterns.
 
 Detects Markdown syntax in wrong context.
 
-**Severity:** Warning
-
 **Example (bad):**
 ```python
 # **Important**: This is not how to use Markdown in Python
@@ -574,8 +590,6 @@ Detects Markdown syntax in wrong context.
 ### M002: ChatGPT Markers
 
 Detects ChatGPT reference artifacts.
-
-**Severity:** Error
 
 **Detected patterns:**
 - `turn0search0`, `turn1search2`
@@ -598,8 +612,6 @@ According to Smith et al. (2023), the approach works.
 
 Detects tracking parameters in URLs that should be stripped.
 
-**Severity:** Warning
-
 **Detected patterns:**
 - `utm_source=chatgpt.com`
 - `utm_source=openai`
@@ -620,12 +632,10 @@ See [documentation](https://example.com)
 
 Detects invalid or broken citation formats.
 
-**Severity:** Error
-
 **Detected patterns:**
 - `[attached_file:1]`
 - `grok_card`
-- `[source: ...]`
+- `[file_1]`
 
 **Example (bad):**
 ```markdown
@@ -650,8 +660,6 @@ The following rules were added based on the
 
 Detects inflated importance claims that overstate significance.
 
-**Severity:** Warning
-
 **Detected patterns:**
 - "fundamentally reshape", "define the next era"
 - "entirely new paradigm", "change everything"
@@ -674,8 +682,6 @@ AI is changing several industries, particularly customer service and logistics.
 Detects compound pseudo-analytical labels ("the X paradox", "the Y trap")
 when 2+ appear in the same document.
 
-**Severity:** Info
-
 **Detected suffixes:** paradox, trap, creep, divide, vacuum, inversion,
 deficit, gap, spiral, dilemma
 
@@ -697,8 +703,6 @@ intervene manually.
 
 Detects "Not X. Not Y. Just/But Z." dramatic negation patterns.
 
-**Severity:** Info
-
 **Example (bad):**
 ```markdown
 Not faster hardware. Not better algorithms. Just cleaner data.
@@ -716,8 +720,6 @@ The improvement came from cleaning the data, not from hardware or algorithms.
 Detects "The X? A Y." patterns where a question is immediately answered
 with a short fragment.
 
-**Severity:** Info
-
 **Example (bad):**
 ```markdown
 The result? A complete transformation of the industry.
@@ -733,9 +735,6 @@ The result was a measurable improvement in delivery times.
 ### S010: Anaphora Abuse
 
 Detects 3+ consecutive sentences starting with the same word.
-
-**Severity:** Warning
-**Configurable:** `threshold` (default: 3)
 
 Runs stay within one body or block-quote paragraph; headings, lists, blank
 paragraphs, and skipped Markdown constructs reset them.
@@ -755,9 +754,6 @@ Teams, managers, and companies all benefit from this approach.
 ### S011: Gerund Fragment Litany
 
 Detects 3+ consecutive gerund-phrase fragments used for rhythmic effect.
-
-**Severity:** Info
-**Configurable:** `threshold` (default: 3)
 
 A run cannot cross a paragraph, heading, list, block quote, or skipped Markdown
 construct.
@@ -779,8 +775,6 @@ The team focused on faster builds, shorter ship cycles, and constant iteration.
 Detects ordinal progressions ("The first… The second… The third…")
 disguised as continuous prose.
 
-**Severity:** Info
-
 Ordinal sequences are evaluated within one body or block-quote paragraph, not
 across headings, lists, blank paragraphs, or skipped Markdown constructs.
 
@@ -801,9 +795,6 @@ The main reasons are cost, speed, and reliability.
 
 Detects 3+ tech company/product name-drops in rapid succession.
 
-**Severity:** Info
-**Configurable:** `threshold` (default: 3)
-
 **Example (bad):**
 ```markdown
 Like Google, Amazon, and Netflix before them, these companies
@@ -820,8 +811,6 @@ Several large tech companies have adopted this pattern.
 ### S014: Signposted Conclusion
 
 Detects formulaic conclusion markers.
-
-**Severity:** Info
 
 **Detected patterns:**
 - "In conclusion", "To sum up", "As we've seen"
@@ -843,8 +832,6 @@ The framework reduces build times by 40% and eliminates flaky tests.
 
 Detects "In this section, we'll explore" / "As we've seen in this
 section" intro/outro framing.
-
-**Severity:** Info
 
 **Detected patterns:**
 - "in this section, we'll explore"
@@ -869,8 +856,6 @@ Caching improves performance by reducing database round-trips.
 Detects repeated paragraphs within the same document using hash-based
 comparison.
 
-**Severity:** Warning
-
 **Example (bad):**
 ```markdown
 The system processes data in real time for immediate insights.
@@ -890,8 +875,6 @@ State each idea once. Refer back with cross-references if needed.
 ### G004: False Suspense Transition
 
 Detects manufactured dramatic tension in transitions.
-
-**Severity:** Info
 
 **Detected patterns:**
 - "Here's the thing", "Here's the kicker"
@@ -915,8 +898,6 @@ Most teams don't need microservices.
 
 Detects condescending "think of it as" explanatory patterns.
 
-**Severity:** Info
-
 **Detected patterns:**
 - "Think of it as", "Think of it like"
 - "Imagine a world where", "Imagine a future where"
@@ -937,8 +918,6 @@ The service indexes and organizes data automatically.
 ### G006: Futurist Invitation
 
 Detects speculative "imagine a world" framing.
-
-**Severity:** Info
 
 **Detected patterns:**
 - "Imagine a world where"
@@ -962,8 +941,6 @@ Zero-downtime deployments are achievable with blue-green strategies.
 
 Detects performative honesty or faux-candid phrasing.
 
-**Severity:** Info
-
 **Detected patterns:**
 - "I'll be honest", "if I'm being honest"
 - "since we're being honest", "this is not a rant"
@@ -984,8 +961,6 @@ Most startups fail because of bad hiring.
 ### G008: Asserted Simplicity
 
 Detects claims of simplicity that mask complexity or assert authority.
-
-**Severity:** Info
 
 **Detected patterns:**
 - "The reality is simpler", "The truth is"
@@ -1008,8 +983,6 @@ The main factor is cache hit rate, which accounts for 80% of latency reduction.
 
 Detects overly instructional "let's explore" tone.
 
-**Severity:** Info
-
 **Detected patterns:**
 - "Let's break this down", "Let's unpack this"
 - "Let's explore this", "Let's dive in"
@@ -1031,9 +1004,6 @@ The system has three components: ingestion, processing, and storage.
 
 Detects 3+ consecutive very short paragraphs (≤ 5 words each) used for
 manufactured dramatic emphasis.
-
-**Severity:** Info
-**Configurable:** `threshold` (default: 3)
 
 Only body paragraphs count. Headings, lists, block quotes, code, HTML, tables,
 front matter, and MDX/JSX barriers reset a run.
@@ -1060,9 +1030,6 @@ It worked every single time without exception.
 
 Detects excessively long sentences that exceed a word count threshold.
 
-**Severity:** Info
-**Configurable:** `sentence_length_max` (default: 40)
-
 Checks apply to body text, list items, and block quotes. Headings and skipped
 Markdown constructs are excluded.
 
@@ -1088,8 +1055,6 @@ The following rules detect common low-quality journalism patterns.
 
 Detects unsubstantiated trend claims without evidence.
 
-**Severity:** Info
-
 **Detected patterns:**
 - "more and more people", "a growing number of"
 - "the latest trend sweeping", "increasingly popular"
@@ -1111,8 +1076,6 @@ According to the 2025 Stack Overflow survey, 34% of respondents use this framewo
 
 Detects false-balance framing that presents opposing views as equally
 valid without evidence.
-
-**Severity:** Info
 
 **Detected patterns:**
 - "Supporters say X. Critics say Y."
@@ -1138,9 +1101,6 @@ The Bureau of Labor Statistics projects a net gain of 12,000 jobs in the sector 
 Detects overuse of "the [nominalization] of" constructions that make prose
 unnecessarily abstract.
 
-**Severity:** Info
-**Configurable:** `nominalization_overload` (default: 3)
-
 **Detected patterns:**
 - "the implementation of", "the utilization of"
 - "the identification of", "the examination of"
@@ -1163,9 +1123,6 @@ We analyzed the data, identified patterns, and confirmed a baseline.
 
 Detects overuse of formulaic academic passive constructions.
 
-**Severity:** Info
-**Configurable:** `passive_voice_overuse` (default: 5)
-
 **Detected patterns:**
 - "It is/was/has been suggested/argued/noted that..."
 - "It can/could/may be argued/suggested that..."
@@ -1186,8 +1143,6 @@ The results indicate a trend. The method performs well, and this approach works.
 ### G013: Gap Ritual
 
 Detects formulaic "gap in the literature" phrases common in academic writing.
-
-**Severity:** Info
 
 **Detected patterns:**
 - "the literature has overlooked"
@@ -1213,8 +1168,6 @@ Prior work by Smith (2020) and Jones (2021) examined related aspects, but did no
 
 Detects single-anecdote openings used as evidence for broad claims.
 
-**Severity:** Info
-
 **Detected patterns:**
 - "For [Name] of [Location], the…"
 - "Take [Name], a [descriptor]…"
@@ -1238,9 +1191,6 @@ A 2024 Kaiser Family Foundation survey found that 12% of respondents in Ohio los
 Detects 3+ consecutive "Author (Year) verb" sentences that list citations
 without synthesizing them.
 
-**Severity:** Info
-**Configurable:** `citation_name_drop` (default: 3)
-
 **Detected patterns:**
 - "Smith (2012) argues that..."
 - "Jones (2014) claims that..."
@@ -1262,8 +1212,6 @@ Several scholars have examined the impact of technology on communities. Smith (2
 
 Detects corporate euphemisms that obscure plain meaning — language designed
 to soften layoffs, budget cuts, or organisational failure.
-
-**Severity:** Info
 
 **Detected patterns:**
 - "restructuring", "right-sizing", "resource optimization"
@@ -1288,8 +1236,6 @@ The company is laying off 300 employees and closing two offices.
 Detects phrases that signal performative consensus-seeking rather than
 substantive agreement.
 
-**Severity:** Info
-
 **Detected patterns:**
 - "fully aligned on", "on the same page"
 - "cross-functional alignment", "align on next steps"
@@ -1312,9 +1258,6 @@ We need the marketing and engineering teams to agree on the launch date before w
 Detects verbless, buzzword-heavy fragments that read like bullet points
 from a slide deck rather than prose.
 
-**Severity:** Info
-**Confidence:** Low
-
 **Detected patterns:**
 Lines that contain 2+ buzzwords (alignment, synergy, strategic, impact,
 scalable, etc.) plus lack a conjugated main verb.
@@ -1335,8 +1278,6 @@ The team will coordinate across three initiatives to improve scalability.
 
 Detects impersonal passive constructions that erase the actor, creating a
 sense of corporate inevitability where no one is responsible.
-
-**Severity:** Info
 
 **Detected patterns:**
 - "It has been determined that…"
