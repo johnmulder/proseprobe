@@ -313,6 +313,22 @@ class TestAnaphoraAbuse:
 
         assert issues == []
 
+    def test_blank_paragraphs_break_repeated_openings(self) -> None:
+        """Repeated openings in separate paragraphs are not consecutive."""
+        from slop_lint.rules.struct import AnaphoraAbuseRule
+
+        text = "The first statement.\n\nThe second statement.\n\nThe third statement."
+
+        assert AnaphoraAbuseRule().check(text, "test.md") == []
+
+    def test_headings_do_not_form_repeated_openings(self) -> None:
+        """Heading text is not a run of prose sentences."""
+        from slop_lint.rules.struct import AnaphoraAbuseRule
+
+        text = "## The first section\n\n## The second section\n\n## The third section"
+
+        assert AnaphoraAbuseRule().check(text, "test.md") == []
+
     def test_does_not_count_list_marker_as_opening(self) -> None:
         """Markdown bullet markers should not become the repeated opening."""
         from slop_lint.rules.struct import AnaphoraAbuseRule
@@ -378,6 +394,14 @@ class TestGerundFragmentLitany:
         issues = rule.check(text, "test.md")
         assert len(issues) == 0
 
+    def test_blank_paragraphs_break_gerund_run(self) -> None:
+        """Gerund fragments in separate paragraphs do not form a litany."""
+        from slop_lint.rules.struct import GerundFragmentLitanyRule
+
+        text = "Building quickly.\n\nShipping safely.\n\nLearning constantly."
+
+        assert GerundFragmentLitanyRule().check(text, "test.md") == []
+
     def test_rule_metadata(self) -> None:
         from slop_lint.rules.struct import GerundFragmentLitanyRule
 
@@ -411,6 +435,14 @@ class TestListicleInProse:
         rule = ListicleInProseRule()
         issues = rule.check(text, "test.md")
         assert len(issues) == 0
+
+    def test_does_not_join_ordinals_across_paragraphs(self) -> None:
+        """Separate paragraphs do not become one disguised listicle."""
+        from slop_lint.rules.struct import ListicleInProseRule
+
+        text = "The first result is stable.\n\nThe second is faster.\n\nThe third is safer."
+
+        assert ListicleInProseRule().check(text, "test.md") == []
 
     def test_rule_metadata(self) -> None:
         from slop_lint.rules.struct import ListicleInProseRule

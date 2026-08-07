@@ -21,6 +21,7 @@ from slop_lint.data.phrases import (
     FRACTAL_SUMMARY_PHRASES,
     SIGNPOSTED_CONCLUSION_PHRASES,
 )
+from slop_lint.parsers.markdown import iter_prose_blocks
 from slop_lint.rules.base import Confidence, Issue, Rule, Severity
 
 
@@ -398,33 +399,24 @@ class AnaphoraAbuseRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect 3+ consecutive sentences with the same opening."""
         issues: list[Issue] = []
-        lines = self.iter_lines(content, filename)
-        # Split content into sentences (either by line or by period)
-        sentences: list[tuple[int, str]] = []
-        for line_num, line in lines:
-            # Split line into sentences on sentence-ending punctuation
-            parts = re.split(r"(?<=[.!?])\s+", line.strip())
-            for part in parts:
-                part = part.strip()
-                if part:
-                    sentences.append((line_num, part))
-
-        if len(sentences) < self._threshold:
-            return issues
-
-        # Check for consecutive sentences starting with the same word
-        run_start = 0
-        for i in range(1, len(sentences)):
-            prev_word = (
-                sentences[i - 1][1].split()[0].lower()
-                if sentences[i - 1][1].split()
-                else ""
-            )
-            curr_word = (
-                sentences[i][1].split()[0].lower() if sentences[i][1].split() else ""
-            )
-            if curr_word != prev_word:
-                run_len = i - run_start
+        for block in iter_prose_blocks(content, filename):
+            if block.context not in {"body", "blockquote"}:
+                continue
+            sentences = [
+                (line_num, sentence.strip())
+                for line_num, line in block.lines
+                for sentence in re.split(r"(?<=[.!?])\s+", line.strip())
+                if sentence.strip()
+            ]
+            run_start = 0
+            for index in range(1, len(sentences) + 1):
+                same_opening = index < len(sentences) and (
+                    sentences[index][1].split()[0].lower()
+                    == sentences[index - 1][1].split()[0].lower()
+                )
+                if same_opening:
+                    continue
+                run_len = index - run_start
                 if run_len >= self._threshold:
                     issues.append(
                         Issue(
@@ -435,20 +427,7 @@ class AnaphoraAbuseRule(Rule):
                             severity=self.severity,
                         )
                     )
-                run_start = i
-
-        # Check final run
-        run_len = len(sentences) - run_start
-        if run_len >= self._threshold:
-            issues.append(
-                Issue(
-                    rule_id=self.id,
-                    message=f"Anaphora: {run_len} consecutive sentences starting with '{sentences[run_start][1].split()[0]}'",
-                    line=sentences[run_start][0],
-                    column=1,
-                    severity=self.severity,
-                )
-            )
+                run_start = index
 
         return issues
 
@@ -472,46 +451,44 @@ class GerundFragmentLitanyRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect 3+ consecutive gerund-phrase fragments."""
         issues: list[Issue] = []
-        # Split into sentence fragments
-        sentences: list[tuple[int, str]] = []
-        for line_num, line in self.iter_lines(content, filename):
-            parts = re.split(r"(?<=[.!?])\s+", line.strip())
-            for part in parts:
-                part = part.strip()
-                if part:
-                    sentences.append((line_num, part))
-
-        run_start = 0
-        run_count = 0
-        for i, (_line_num, sent) in enumerate(sentences):
-            if self._gerund_fragment.match(sent):
-                if run_count == 0:
-                    run_start = i
-                run_count += 1
-            else:
-                if run_count >= self._threshold:
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Gerund fragment litany: {run_count} consecutive gerund fragments",
-                            line=sentences[run_start][0],
-                            column=1,
-                            severity=self.severity,
+        for block in iter_prose_blocks(content, filename):
+            if block.context not in {"body", "blockquote"}:
+                continue
+            sentences = [
+                (line_num, sentence.strip())
+                for line_num, line in block.lines
+                for sentence in re.split(r"(?<=[.!?])\s+", line.strip())
+                if sentence.strip()
+            ]
+            run_start = 0
+            run_count = 0
+            for index, (_line_num, sentence) in enumerate(sentences):
+                if self._gerund_fragment.match(sentence):
+                    if run_count == 0:
+                        run_start = index
+                    run_count += 1
+                else:
+                    if run_count >= self._threshold:
+                        issues.append(
+                            Issue(
+                                rule_id=self.id,
+                                message=f"Gerund fragment litany: {run_count} consecutive gerund fragments",
+                                line=sentences[run_start][0],
+                                column=1,
+                                severity=self.severity,
+                            )
                         )
+                    run_count = 0
+            if run_count >= self._threshold:
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Gerund fragment litany: {run_count} consecutive gerund fragments",
+                        line=sentences[run_start][0],
+                        column=1,
+                        severity=self.severity,
                     )
-                run_count = 0
-
-        # Check final run
-        if run_count >= self._threshold:
-            issues.append(
-                Issue(
-                    rule_id=self.id,
-                    message=f"Gerund fragment litany: {run_count} consecutive gerund fragments",
-                    line=sentences[run_start][0],
-                    column=1,
-                    severity=self.severity,
                 )
-            )
 
         return issues
 
@@ -531,46 +508,44 @@ class ListicleInProseRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect 'The first... The second... The third...' in prose."""
         issues: list[Issue] = []
-        lines = self.iter_lines(content, filename)
-        full_text = " ".join(line for _, line in lines).lower()
+        for block in iter_prose_blocks(content, filename):
+            if block.context not in {"body", "blockquote"}:
+                continue
+            lines = block.lines
+            full_text = " ".join(line for _, line in lines).lower()
+            found_ordinals: list[str] = []
+            for ordinal in self._ordinals:
+                if re.search(rf"\bthe {ordinal}\b", full_text):
+                    found_ordinals.append(ordinal)
+                else:
+                    break
+            if len(found_ordinals) >= 3:
+                for line_num, line in lines:
+                    if re.search(rf"\bthe {found_ordinals[0]}\b", line, re.IGNORECASE):
+                        issues.append(
+                            Issue(
+                                rule_id=self.id,
+                                message=f"Listicle in prose: 'the {found_ordinals[0]}... the {found_ordinals[1]}... the {found_ordinals[2]}...'",
+                                line=line_num,
+                                column=1,
+                                severity=self.severity,
+                            )
+                        )
+                        break
 
-        # Check for sequential ordinals
-        found_ordinals: list[str] = []
-        for ordinal in self._ordinals:
-            if re.search(rf"\bthe {ordinal}\b", full_text):
-                found_ordinals.append(ordinal)
-            else:
-                break  # Must be sequential
-
-        if len(found_ordinals) >= 3:
-            # Find first occurrence line
             for line_num, line in lines:
-                if re.search(rf"\bthe {found_ordinals[0]}\b", line, re.IGNORECASE):
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Listicle in prose: 'the {found_ordinals[0]}... the {found_ordinals[1]}... the {found_ordinals[2]}...'",
-                            line=line_num,
-                            column=1,
-                            severity=self.severity,
+                for pattern in LISTICLE_PROSE_PATTERNS:
+                    if re.search(pattern, line, re.IGNORECASE):
+                        issues.append(
+                            Issue(
+                                rule_id=self.id,
+                                message="Listicle in prose pattern",
+                                line=line_num,
+                                column=1,
+                                severity=self.severity,
+                            )
                         )
-                    )
-                    break
-
-        # Also check for "The first/1st takeaway/point/lesson" pattern
-        for line_num, line in lines:
-            for pattern in LISTICLE_PROSE_PATTERNS:
-                if re.search(pattern, line, re.IGNORECASE):
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message="Listicle in prose pattern",
-                            line=line_num,
-                            column=1,
-                            severity=self.severity,
-                        )
-                    )
-                    break
+                        break
 
         return issues
 

@@ -7,7 +7,11 @@ from slop_lint.data.style_patterns import (
     ELEGANT_VARIATION_PAIRS,
     TITLE_CASE_SMALL_WORDS,
 )
-from slop_lint.parsers.markdown import MarkdownParser, is_markdown_file
+from slop_lint.parsers.markdown import (
+    MarkdownParser,
+    is_markdown_file,
+    iter_prose_blocks,
+)
 from slop_lint.rules.base import Issue, Rule, Severity
 
 
@@ -290,66 +294,34 @@ class ShortPunchyFragmentsRule(Rule):
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect 3+ consecutive short-sentence paragraphs."""
-        """Check content for detect 3+ consecutive short-sentence paragraphs."""
         issues: list[Issue] = []
+        run: list[int] = []
 
-        # Group prose lines into paragraphs.
-        # iter_lines() respects content_scope="prose", so code blocks and
-        # headings are already stripped.  A gap in line numbers (or a blank
-        # returned line) signals a paragraph break.
-        paragraphs: list[tuple[int, str]] = []
-        current_lines: list[str] = []
-        start_line = 0
-        prev_line_num = 0
-
-        for line_num, line_text in self.iter_lines(content, filename):
-            stripped = line_text.strip()
-            gap = line_num - prev_line_num > 1 and prev_line_num > 0
-            if (not stripped or gap) and current_lines:
-                paragraphs.append((start_line, " ".join(current_lines)))
-                current_lines = []
-                start_line = 0
-            if stripped:
-                if not current_lines:
-                    start_line = line_num
-                current_lines.append(stripped)
-            prev_line_num = line_num
-
-        if current_lines:
-            paragraphs.append((start_line, " ".join(current_lines)))
-
-        # Find consecutive short paragraphs
-        run_start = 0
-        run_count = 0
-        for i, (_line_num, text) in enumerate(paragraphs):
-            word_count = len(text.split())
-            if word_count <= self._MAX_WORDS:
-                if run_count == 0:
-                    run_start = i
-                run_count += 1
-            else:
-                if run_count >= self._threshold:
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Short punchy fragments: {run_count} consecutive short paragraphs",
-                            line=paragraphs[run_start][0],
-                            column=1,
-                            severity=self.severity,
-                        )
+        def flush() -> None:
+            nonlocal run
+            if len(run) >= self._threshold:
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Short punchy fragments: {len(run)} consecutive short paragraphs",
+                        line=run[0],
+                        column=1,
+                        severity=self.severity,
                     )
-                run_count = 0
-
-        if run_count >= self._threshold:
-            issues.append(
-                Issue(
-                    rule_id=self.id,
-                    message=f"Short punchy fragments: {run_count} consecutive short paragraphs",
-                    line=paragraphs[run_start][0],
-                    column=1,
-                    severity=self.severity,
                 )
-            )
+            run = []
+
+        for block in iter_prose_blocks(content, filename):
+            if block.break_before or block.context != "body":
+                flush()
+            if block.context != "body":
+                continue
+            text = " ".join(line.strip() for _, line in block.lines)
+            if len(text.split()) <= self._MAX_WORDS:
+                run.append(block.start_line)
+            else:
+                flush()
+        flush()
 
         return issues
 
@@ -371,20 +343,25 @@ class SentenceLengthRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect excessively long sentences."""
         issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
-            # Split line into sentences
-            sentences = re.split(r"(?<=[.!?])\s+", line)
-            for sentence in sentences:
-                words = sentence.split()
-                if len(words) > self.threshold:
-                    col = line.find(sentence)
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Long sentence: {len(words)} words (threshold {self.threshold})",
-                            line=line_num,
-                            column=max(1, col + 1),
-                            severity=self.severity,
+        for block in iter_prose_blocks(content, filename):
+            if block.context not in {"body", "list_item", "blockquote"}:
+                continue
+            for line_num, line in block.lines:
+                sentences = re.split(r"(?<=[.!?])\s+", line)
+                for raw_sentence in sentences:
+                    sentence = raw_sentence.strip()
+                    if not sentence:
+                        continue
+                    words = sentence.split()
+                    if len(words) > self.threshold:
+                        col = line.find(sentence)
+                        issues.append(
+                            Issue(
+                                rule_id=self.id,
+                                message=f"Long sentence: {len(words)} words (threshold {self.threshold})",
+                                line=line_num,
+                                column=max(1, col + 1),
+                                severity=self.severity,
+                            )
                         )
-                    )
         return issues

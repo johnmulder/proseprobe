@@ -185,6 +185,22 @@ class TestShortPunchyFragments:
         issues = rule.check(text, "test.md")
         assert len(issues) == 0
 
+    def test_ignores_short_headings(self) -> None:
+        """Consecutive short headings are not punchy prose paragraphs."""
+        from slop_lint.rules.style import ShortPunchyFragmentsRule
+
+        text = "# Linux\n\n## macOS\n\n## Windows"
+
+        assert ShortPunchyFragmentsRule().check(text, "test.md") == []
+
+    def test_code_block_breaks_short_paragraph_run(self) -> None:
+        """Skipped structural content resets a short-paragraph run."""
+        from slop_lint.rules.style import ShortPunchyFragmentsRule
+
+        text = "First.\n\nSecond.\n\n```text\nexample\n```\n\nThird."
+
+        assert ShortPunchyFragmentsRule().check(text, "test.md") == []
+
     def test_custom_threshold(self) -> None:
         """Respect configurable threshold."""
         from slop_lint.rules.style import ShortPunchyFragmentsRule
@@ -253,6 +269,25 @@ class TestSentenceLength:
         rule = SentenceLengthRule(threshold=20)
         issues = rule.check(text, "test.md")
         assert len(issues) == 0
+
+    def test_ignores_long_heading(self) -> None:
+        """Sentence length applies to prose contexts, not headings."""
+        from slop_lint.rules.style import SentenceLengthRule
+
+        text = "# " + "word " * 45
+
+        assert SentenceLengthRule(threshold=40).check(text, "test.md") == []
+
+    def test_checks_long_list_items(self) -> None:
+        """List-item prose remains eligible for sentence-length checks."""
+        from slop_lint.rules.style import SentenceLengthRule
+
+        text = "- " + "word " * 45
+
+        issues = SentenceLengthRule(threshold=40).check(text, "test.md")
+
+        assert len(issues) == 1
+        assert issues[0].column == 3
 
     def test_custom_threshold(self) -> None:
         """Respect configurable threshold."""
