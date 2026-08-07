@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- M006 detects explicit Markdown template residue at high confidence and
+  standalone TODO/TBD placeholders at low confidence.
 - M005 detects undefined Markdown reference labels at high confidence and
   conflicting duplicate definitions at low confidence.
 - Canonical immutable rule metadata and deterministic generated rule-reference

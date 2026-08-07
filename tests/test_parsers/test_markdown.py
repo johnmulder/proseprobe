@@ -11,6 +11,7 @@ from slop_lint.parsers.markdown import (
     _get_cached_parser,
     _parser_cache,
     clear_parser_cache,
+    is_example_line,
     is_markdown_file,
     iter_non_code_lines,
     iter_prose_blocks,
@@ -85,6 +86,13 @@ class TestMarkdownParser:
 
         assert len(headings) == 1
         assert headings[0].title == "Plan: Launch! 🚀"
+
+    def test_template_heading_is_example_context(self) -> None:
+        """Template sections should be recognized as example content."""
+        content = "## Template\n\nYOUR CONTENT HERE\n\n## Result\n\nPublished."
+
+        assert is_example_line(content, "guide.md", 3)
+        assert not is_example_line(content, "guide.md", 7)
 
     def test_get_paragraphs_empty(self) -> None:
         """Test getting paragraphs from empty document."""

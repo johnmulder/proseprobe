@@ -1,4 +1,4 @@
-"""Tests for markup rules (M001-M005)."""
+"""Tests for markup rules (M001-M006)."""
 
 import pytest
 
@@ -6,6 +6,7 @@ from slop_lint.rules.base import Confidence, Severity
 from slop_lint.rules.markup import (
     BrokenReferencesRule,
     ChatGPTMarkersRule,
+    TemplateResidueRule,
     UnresolvedMarkdownReferencesRule,
     UTMParametersRule,
     WrongMarkupRule,
@@ -251,3 +252,117 @@ class TestUnresolvedMarkdownReferences:
         text = "[ref]: /same\n[REF]: /same"
 
         assert UnresolvedMarkdownReferencesRule().check(text, "guide.md") == []
+
+
+class TestTemplateResidue:
+    """Tests for M006: Template Residue."""
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "Lorem ipsum dolor sit amet.",
+            "[insert example here]",
+            "[replace this section]",
+            "<replace-me>",
+            "YOUR CONTENT HERE",
+        ],
+    )
+    def test_reports_explicit_markers_at_high_confidence(self, text: str) -> None:
+        """Explicit template markers should be high-confidence findings."""
+        issues = TemplateResidueRule().check(text, "guide.md")
+
+        assert len(issues) == 1
+        assert issues[0].confidence is Confidence.HIGH
+
+    def test_reports_exact_issue_fields(self) -> None:
+        """Template findings should include source spans and replacement advice."""
+        issues = TemplateResidueRule().check("YOUR CONTENT HERE", "guide.md")
+
+        assert len(issues) == 1
+        issue = issues[0]
+        assert issue.rule_id == "M006"
+        assert issue.message == "Template residue (content marker): 'YOUR CONTENT HERE'"
+        assert issue.line == 1
+        assert issue.column == 1
+        assert issue.end_column == 18
+        assert issue.severity is Severity.WARNING
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == "Replace this placeholder with final content"
+
+    @pytest.mark.parametrize("text", ["TODO", "TBD: add details"])
+    def test_reports_bounded_planning_markers_at_low_confidence(
+        self,
+        text: str,
+    ) -> None:
+        """Standalone TODO and TBD markers should remain filterable."""
+        issues = TemplateResidueRule().check(text, "guide.md")
+
+        assert len(issues) == 1
+        assert issues[0].confidence is Confidence.LOW
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "The placeholder attribute identifies an empty value.",
+            "The release date remains TBD pending review.",
+            "[Add authentication]",
+            "Your content here should explain the result.",
+        ],
+    )
+    def test_ignores_legitimate_prose(self, text: str) -> None:
+        """Explanatory prose and near misses should stay quiet."""
+        assert TemplateResidueRule().check(text, "guide.md") == []
+
+    def test_ignores_example_template_and_before_sections(self) -> None:
+        """Example-style sections may document every supported marker."""
+        text = """\
+## Example
+Lorem ipsum dolor sit amet.
+
+## Template
+[insert example here]
+
+## Before
+YOUR CONTENT HERE
+
+## Result
+Use <replace-me> now.
+"""
+
+        issues = TemplateResidueRule().check(text, "guide.md")
+
+        assert len(issues) == 1
+        assert issues[0].line == 11
+
+    def test_ignores_code_and_html_blocks(self) -> None:
+        """Code samples and HTML blocks are not publishable prose."""
+        text = """\
+`YOUR CONTENT HERE`
+
+```text
+[insert example here]
+```
+
+<div>
+Lorem ipsum
+</div>
+
+Visible <replace-me> marker.
+"""
+
+        issues = TemplateResidueRule().check(text, "guide.md")
+
+        assert len(issues) == 1
+        assert issues[0].line == 11
+
+    def test_prefers_explicit_marker_over_overlapping_todo(self) -> None:
+        """An explicit marker should not receive a duplicate low-confidence issue."""
+        issues = TemplateResidueRule().check("TODO: YOUR CONTENT HERE", "guide.md")
+
+        assert len(issues) == 1
+        assert issues[0].confidence is Confidence.HIGH
+        assert issues[0].column == 7
+
+    def test_ignores_non_markdown_input(self) -> None:
+        """Python placeholders remain the responsibility of C004."""
+        assert TemplateResidueRule().check("YOUR CONTENT HERE", "guide.py") == []

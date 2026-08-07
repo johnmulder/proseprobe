@@ -1006,15 +1006,15 @@ def iter_non_code_lines(content: str, filename: str) -> list[tuple[int, str]]:
 
 # Pattern for headings that indicate example/demo content
 _EXAMPLE_HEADING_RE = re.compile(
-    r"\b(example|bad|detected|demo|before)\b", re.IGNORECASE
+    r"\b(example|template|bad|detected|demo|before)\b", re.IGNORECASE
 )
 
 
 def is_example_line(content: str, filename: str, line_num: int) -> bool:
     """Return True if *line_num* falls under an example-style heading.
 
-    Example-style headings contain words like "example", "bad", "detected",
-    "demo", or "before".  Content under such headings is expected to
+    Example-style headings contain words like "example", "template", "bad",
+    "detected", "demo", or "before".  Content under such headings is expected to
     demonstrate the very patterns a rule flags, so matches should be
     downgraded to LOW confidence.
     """

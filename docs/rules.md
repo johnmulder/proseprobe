@@ -76,6 +76,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `M003` | UTM Parameters | Markup | warning | medium | markdown / raw | — |
 | `M004` | Broken References | Markup | error | medium | markdown / prose | — |
 | `M005` | Unresolved Markdown References | Markup | error | high | markdown / non_code | — |
+| `M006` | Template Residue | Markup | warning | high | markdown / prose | — |
 
 <!-- rule-docs:inventory:end -->
 
@@ -679,6 +680,34 @@ See [the installation guide][install].
 Bare bracketed text is not considered an unresolved shortcut because shortcut
 references exist only when a matching definition is present. Footnotes and
 references inside code examples are ignored.
+
+---
+
+### M006: Template Residue
+
+Detects unfinished template content in Markdown. Explicit sample text and
+replacement markers are high confidence; standalone TODO/TBD lines are low
+confidence so planning documents can filter them out.
+
+**Detected patterns:**
+- `Lorem ipsum`
+- `[insert example here]` and `[replace this section]`
+- `<replace-me>` and `YOUR CONTENT HERE`
+- Standalone `TODO` or `TBD: add details`
+
+**Example (bad):**
+```markdown
+The introduction is [insert final copy here].
+```
+
+**Example (good):**
+```markdown
+The introduction explains how retries use exponential backoff.
+```
+
+Fenced code, inline code, HTML blocks, and content under example-style headings
+such as `Example`, `Template`, and `Before` are ignored. Findings suggest
+replacing the marker with final content but never rewrite the source.
 
 ---
 

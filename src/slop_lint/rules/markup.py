@@ -1,10 +1,11 @@
-"""Markup detection rules (M001-M005)."""
+"""Markup detection rules (M001-M006)."""
 
 import re
 from typing import ClassVar
 
 from slop_lint.parsers.markdown import (
     MarkdownReference,
+    is_example_line,
     is_markdown_file,
 )
 from slop_lint.parsers.markdown import (
@@ -255,5 +256,87 @@ class UnresolvedMarkdownReferencesRule(Rule):
                 )
                 for reference in label_definitions
             )
+
+        return sorted(issues, key=lambda issue: (issue.line, issue.column))
+
+
+class TemplateResidueRule(Rule):
+    """M006: Detect unfinished template markers in Markdown."""
+
+    id = "M006"
+    name = "Template Residue"
+    description = "Detects unfinished placeholder content in Markdown"
+    severity = Severity.WARNING
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown"}
+    content_scope = "prose"
+
+    _patterns: ClassVar[tuple[tuple[re.Pattern[str], str, Confidence], ...]] = (
+        (
+            re.compile(r"\bLorem[ \t]+ipsum\b", re.IGNORECASE),
+            "sample text",
+            Confidence.HIGH,
+        ),
+        (
+            re.compile(
+                r"\[(?:(?:insert|add)\b[^\]\n]{0,64}\bhere"
+                r"|replace\s+(?:this|me|with)\b[^\]\n]{0,64})\]",
+                re.IGNORECASE,
+            ),
+            "replacement instruction",
+            Confidence.HIGH,
+        ),
+        (
+            re.compile(r"<replace-me>", re.IGNORECASE),
+            "replacement marker",
+            Confidence.HIGH,
+        ),
+        (
+            re.compile(r"\bYOUR[ \t]+CONTENT[ \t]+HERE\b"),
+            "content marker",
+            Confidence.HIGH,
+        ),
+        (
+            re.compile(
+                r"^[ \t]*(?:TODO|TBD)(?:[ \t]*:[ \t]*[^\n]{0,100})?[.!]?[ \t]*$"
+            ),
+            "planning marker",
+            Confidence.LOW,
+        ),
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check Markdown prose for unfinished template markers."""
+        if not is_markdown_file(filename):
+            return []
+
+        issues: list[Issue] = []
+        for line_num, line in self.iter_lines(content, filename):
+            spans: list[tuple[int, int]] = []
+            line_issues: list[Issue] = []
+            for pattern, kind, confidence in self._patterns:
+                for match in pattern.finditer(line):
+                    start, end = match.span()
+                    if any(
+                        start < seen_end and seen_start < end
+                        for seen_start, seen_end in spans
+                    ):
+                        continue
+                    spans.append((start, end))
+                    line_issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Template residue ({kind}): '{match.group()}'",
+                            line=line_num,
+                            column=start + 1,
+                            end_column=end + 1,
+                            severity=self.severity,
+                            confidence=confidence,
+                            suggestion="Replace this placeholder with final content",
+                        )
+                    )
+
+            if line_issues and not is_example_line(content, filename, line_num):
+                issues.extend(line_issues)
 
         return sorted(issues, key=lambda issue: (issue.line, issue.column))
