@@ -636,12 +636,17 @@ See [documentation](https://example.com)
 
 ### M004: Broken References
 
-Detects invalid or broken citation formats.
+Detects invalid model-specific references and unfinished Markdown link
+destinations. Explicit replacement tokens (`URL_HERE`, `INSERT_URL`, `TODO`,
+and `TBD`) are high confidence; empty and `#` destinations are low confidence.
 
 **Detected patterns:**
 - `[attached_file:1]`
 - `grok_card`
 - `[file_1]`
+- `[example](URL_HERE)`
+- `[reference]: INSERT_URL`
+- `[empty]()` and `[top](#)`
 
 **Example (bad):**
 ```markdown
@@ -650,7 +655,8 @@ See the attached document [attached_file:1] for details.
 
 **Example (good):**
 ```markdown
-See `docs/architecture.md` for details.
+See [the guide](/guide), [the section](#install), or [email](mailto:ops@example.com).
+See [documentation](https://example.com/docs).
 ```
 
 ---
