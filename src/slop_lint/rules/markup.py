@@ -15,6 +15,7 @@ class WrongMarkupRule(Rule):
     name = "Wrong Markup"
     description = "Detects **bold** in Python comments"
     severity = Severity.WARNING
+    default_confidence = Confidence.LOW
     applies_to: ClassVar[set[str]] = {"python"}
 
     # Markdown patterns that don't belong in code
@@ -58,7 +59,7 @@ class WrongMarkupRule(Rule):
                                 line=line_num,
                                 column=match.start() + 1,
                                 severity=self.severity,
-                                confidence=Confidence.LOW,
+                                confidence=self.default_confidence,
                             )
                         )
                         break

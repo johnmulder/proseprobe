@@ -1,0 +1,68 @@
+"""Tests for canonical rule metadata."""
+
+from dataclasses import FrozenInstanceError, fields
+
+import pytest
+
+from slop_lint.config import Config, ThresholdsConfig
+from slop_lint.profiles import profile_names_for_rule
+from slop_lint.rules import (
+    get_all_rules,
+    get_rule_metadata,
+    get_rule_metadata_by_id,
+)
+from slop_lint.rules.base import Confidence, Severity
+
+
+def test_metadata_covers_registry_in_rule_id_order() -> None:
+    metadata = get_rule_metadata()
+
+    assert tuple(item.id for item in metadata) == tuple(
+        rule.id for rule in get_all_rules()
+    )
+    assert len(metadata) == 59
+
+
+def test_metadata_is_immutable_and_complete() -> None:
+    metadata = get_rule_metadata_by_id("s001")
+
+    assert metadata is not None
+    assert metadata.name == "Rule of Three"
+    assert metadata.category == "Structure"
+    assert metadata.default_severity is Severity.INFO
+    assert metadata.default_confidence is Confidence.MEDIUM
+    assert metadata.applies_to == ("markdown", "python")
+    assert metadata.content_scope == "prose"
+    assert metadata.profiles == profile_names_for_rule("S001")
+    assert metadata.config_key == "thresholds.rule_of_three"
+    with pytest.raises(FrozenInstanceError):
+        metadata.name = "changed"  # type: ignore[misc]
+
+
+def test_metadata_reports_low_confidence_rule_defaults() -> None:
+    assert get_rule_metadata_by_id("M001").default_confidence is Confidence.LOW  # type: ignore[union-attr]
+    assert get_rule_metadata_by_id("S021").default_confidence is Confidence.LOW  # type: ignore[union-attr]
+    assert get_rule_metadata_by_id("V001").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
+
+
+def test_metadata_config_keys_match_threshold_fields() -> None:
+    threshold_fields = {field.name for field in fields(ThresholdsConfig)}
+    configured = {
+        item.config_key.removeprefix("thresholds.")
+        for item in get_rule_metadata()
+        if item.config_key is not None
+    }
+
+    assert configured == threshold_fields
+
+
+def test_metadata_keeps_default_severity_when_runtime_config_overrides_it() -> None:
+    configured = get_all_rules(Config(severity_overrides={"V001": "error"}))
+    configured_v001 = next(rule for rule in configured if rule.id == "V001")
+
+    assert configured_v001.severity is Severity.ERROR
+    assert get_rule_metadata_by_id("V001").default_severity is Severity.WARNING  # type: ignore[union-attr]
+
+
+def test_metadata_lookup_rejects_unknown_rule() -> None:
+    assert get_rule_metadata_by_id("X999") is None

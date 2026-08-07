@@ -9,6 +9,7 @@ __all__ = [
     "Confidence",
     "Issue",
     "Rule",
+    "RuleMetadata",
     "Severity",
     "severity_from_str",
     "severity_rank",
@@ -79,6 +80,22 @@ class Issue:
     suggestion: str | None = None
 
 
+@dataclass(frozen=True)
+class RuleMetadata:
+    """Stable metadata describing a rule's default behavior."""
+
+    id: str
+    name: str
+    description: str
+    category: str
+    default_severity: Severity
+    default_confidence: Confidence
+    applies_to: tuple[str, ...]
+    content_scope: str
+    profiles: tuple[str, ...]
+    config_key: str | None
+
+
 class Rule(ABC):
     """Abstract base class for detection rules."""
 
@@ -86,6 +103,8 @@ class Rule(ABC):
     name: str
     description: str
     severity: Severity = Severity.WARNING
+    default_confidence: ClassVar[Confidence] = Confidence.MEDIUM
+    config_key: ClassVar[str | None] = None
     applies_to: ClassVar[set[str]] = {"any"}  # "markdown", "python", "any"
     content_scope: str = "raw"  # "raw", "prose", "non_code"
 

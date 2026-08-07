@@ -366,6 +366,7 @@ class NominalizationOverloadRule(Rule):
     name = "Nominalization Overload"
     description = "Detects 'the [noun] of' nominalization patterns"
     severity = Severity.INFO
+    config_key = "thresholds.nominalization_overload"
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
@@ -404,6 +405,7 @@ class PassiveVoiceOveruseRule(Rule):
     name = "Passive Voice Overuse"
     description = "Detects formulaic academic passive constructions"
     severity = Severity.INFO
+    config_key = "thresholds.passive_voice_overuse"
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 

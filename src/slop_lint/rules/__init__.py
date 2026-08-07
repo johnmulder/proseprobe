@@ -1,10 +1,13 @@
 """Detection rule registration."""
 
-from slop_lint.config import Config
-from slop_lint.rules import code, grammar, markup, struct, style, vocab
-from slop_lint.rules.base import Rule, severity_from_str
+from functools import cache
 
-__all__ = ["get_all_rules"]
+from slop_lint.config import Config
+from slop_lint.profiles import profile_names_for_rule
+from slop_lint.rules import code, grammar, markup, struct, style, vocab
+from slop_lint.rules.base import Rule, RuleMetadata, severity_from_str
+
+__all__ = ["get_all_rules", "get_rule_metadata", "get_rule_metadata_by_id"]
 
 
 def get_all_rules(config: Config | None = None) -> list[Rule]:
@@ -83,3 +86,29 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         if override:
             rule.severity = severity_from_str(override, rule.severity) or rule.severity
     return sorted(rules, key=lambda rule: rule.id)
+
+
+@cache
+def get_rule_metadata() -> tuple[RuleMetadata, ...]:
+    """Return immutable metadata for every registered rule."""
+    return tuple(
+        RuleMetadata(
+            id=rule.id,
+            name=rule.name,
+            description=rule.description,
+            category=rule.category,
+            default_severity=type(rule).severity,
+            default_confidence=rule.default_confidence,
+            applies_to=tuple(sorted(rule.applies_to)),
+            content_scope=rule.content_scope,
+            profiles=profile_names_for_rule(rule.id),
+            config_key=rule.config_key,
+        )
+        for rule in get_all_rules()
+    )
+
+
+def get_rule_metadata_by_id(rule_id: str) -> RuleMetadata | None:
+    """Return metadata for a rule ID, or None when the ID is unknown."""
+    normalized = rule_id.upper()
+    return next((item for item in get_rule_metadata() if item.id == normalized), None)

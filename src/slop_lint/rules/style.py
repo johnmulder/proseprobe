@@ -63,6 +63,7 @@ class BoldOveruseRule(Rule):
     name = "Bold Overuse"
     description = "Detects excessive **bold** usage per paragraph"
     severity = Severity.INFO
+    config_key = "thresholds.bold_overuse"
     applies_to: ClassVar[set[str]] = {"markdown"}
 
     def __init__(self, threshold: int = 3) -> None:
@@ -123,6 +124,7 @@ class EmDashOveruseRule(Rule):
     name = "Em Dash Overuse"
     description = "Detects excessive — for dramatic effect"
     severity = Severity.INFO
+    config_key = "thresholds.em_dash_overuse"
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
@@ -283,6 +285,7 @@ class ShortPunchyFragmentsRule(Rule):
     name = "Short Punchy Fragments"
     description = "Detects consecutive very short paragraphs for manufactured emphasis"
     severity = Severity.INFO
+    config_key = "thresholds.short_punchy_fragments"
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
@@ -333,6 +336,7 @@ class SentenceLengthRule(Rule):
     name = "Sentence Length"
     description = "Detects sentences exceeding a word count threshold"
     severity = Severity.INFO
+    config_key = "thresholds.sentence_length_max"
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 

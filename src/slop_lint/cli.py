@@ -12,8 +12,12 @@ from slop_lint._ansi import clear_screen, style, table
 from slop_lint.config import ConfigError, load_config, validate_rule_references
 from slop_lint.core.baseline import Baseline, filter_new_issues, resolve_workspace
 from slop_lint.core.linter import Linter, LintReadError, LintResults
-from slop_lint.profiles import PROFILES, profile_names_for_rule
-from slop_lint.rules import get_all_rules
+from slop_lint.profiles import PROFILES
+from slop_lint.rules import (
+    get_all_rules,
+    get_rule_metadata,
+    get_rule_metadata_by_id,
+)
 from slop_lint.rules.base import (
     Confidence,
     Issue,
@@ -367,18 +371,30 @@ def _cmd_baseline(args: argparse.Namespace) -> int:
 
 def _cmd_rules(_args: argparse.Namespace) -> int:
     """List all available rules."""
-    all_rules = get_all_rules()
-
-    headers = ["ID", "Name", "Severity", "Profiles", "Description"]
+    headers = [
+        "ID",
+        "Name",
+        "Severity",
+        "Confidence",
+        "Applies To",
+        "Scope",
+        "Profiles",
+        "Config",
+        "Description",
+    ]
     rows = [
         [
-            rule.id,
-            rule.name,
-            rule.severity.name,
-            ", ".join(profile_names_for_rule(rule.id)),
-            rule.description,
+            metadata.id,
+            metadata.name,
+            metadata.default_severity.name,
+            metadata.default_confidence.name,
+            ", ".join(metadata.applies_to),
+            metadata.content_scope,
+            ", ".join(metadata.profiles),
+            metadata.config_key or "-",
+            metadata.description,
         ]
-        for rule in all_rules
+        for metadata in get_rule_metadata()
     ]
     print(table(headers, rows, title="Available Rules"))
     return 0
@@ -422,16 +438,22 @@ minimum_severity = "warning"  # error, warning, info
 
 def _cmd_explain(args: argparse.Namespace) -> int:
     """Explain a specific rule with examples."""
-    all_rules = get_all_rules()
-    rule = next((r for r in all_rules if r.id == args.rule_id.upper()), None)
+    metadata = get_rule_metadata_by_id(args.rule_id)
 
-    if rule is None:
+    if metadata is None:
         print(f"Unknown rule: {args.rule_id}", file=sys.stderr)
         return 1
 
-    print(f"{style(rule.id, bold=True, color='cyan')}: {rule.name}")
-    print(f"\n{style('Description:', bold=True)}\n{rule.description}")
-    print(f"\n{style('Severity:', bold=True)} {rule.severity.name}")
+    print(f"{style(metadata.id, bold=True, color='cyan')}: {metadata.name}")
+    print(f"\n{style('Description:', bold=True)}\n{metadata.description}")
+    print(
+        f"\n{style('Severity:', bold=True)} {metadata.default_severity.name}"
+        f"\n{style('Confidence:', bold=True)} {metadata.default_confidence.name}"
+        f"\n{style('Applies to:', bold=True)} {', '.join(metadata.applies_to)}"
+        f"\n{style('Scope:', bold=True)} {metadata.content_scope}"
+        f"\n{style('Profiles:', bold=True)} {', '.join(metadata.profiles)}"
+        f"\n{style('Configuration:', bold=True)} {metadata.config_key or '-'}"
+    )
     return 0
 
 

@@ -32,6 +32,7 @@ class RuleOfThreeRule(Rule):
     name = "Rule of Three"
     description = "Detects excessive 'X, Y, and Z' patterns"
     severity = Severity.INFO
+    config_key = "thresholds.rule_of_three"
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
@@ -140,6 +141,7 @@ class InlineHeaderListsRule(Rule):
     name = "Inline-Header Lists"
     description = "Detects '- **Header:** Description' pattern"
     severity = Severity.INFO
+    config_key = "thresholds.inline_header_lists"
     applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "non_code"
 
@@ -390,6 +392,7 @@ class AnaphoraAbuseRule(Rule):
     name = "Anaphora Abuse"
     description = "Detects repeated sentence openings (anaphora)"
     severity = Severity.WARNING
+    config_key = "thresholds.anaphora_abuse"
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
@@ -440,6 +443,7 @@ class GerundFragmentLitanyRule(Rule):
     name = "Gerund Fragment Litany"
     description = "Detects consecutive gerund fragments ('Fixing X. Writing Y.')"
     severity = Severity.INFO
+    config_key = "thresholds.gerund_fragment_litany"
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
@@ -558,6 +562,7 @@ class HistoricalAnalogyStackingRule(Rule):
     name = "Historical Analogy Stacking"
     description = "Detects rapid-fire historical company analogies"
     severity = Severity.INFO
+    config_key = "thresholds.historical_analogy_stacking"
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
@@ -792,6 +797,7 @@ class CitationNameDroppingRule(Rule):
     name = "Citation Name-Dropping"
     description = "Detects 3+ consecutive 'Author (Year) verb' sentences"
     severity = Severity.INFO
+    config_key = "thresholds.citation_name_drop"
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
@@ -897,6 +903,7 @@ class SlideDeckFragmentRule(Rule):
     name = "Slide Deck Fragment"
     description = "Detects verbless noun-phrase fragments with stacked buzzwords"
     severity = Severity.INFO
+    default_confidence = Confidence.LOW
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
@@ -934,7 +941,7 @@ class SlideDeckFragmentRule(Rule):
                         line=line_num,
                         column=1,
                         severity=self.severity,
-                        confidence=Confidence.LOW,
+                        confidence=self.default_confidence,
                     )
                 )
         return issues

@@ -320,6 +320,7 @@ class InventedConceptLabelsRule(Rule):
     name = "Invented Concept Labels"
     description = "Detects '[noun] paradox/trap/creep' pseudo-analytical labels"
     severity = Severity.INFO
+    config_key = "thresholds.invented_concept_labels"
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 

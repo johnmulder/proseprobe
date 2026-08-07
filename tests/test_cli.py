@@ -289,6 +289,17 @@ class TestRulesCommand:
         assert "academic" in result.stdout
         assert "technical-docs" in result.stdout
 
+    def test_rules_lists_canonical_metadata(self) -> None:
+        """Rule inventory should expose documented rule metadata."""
+        result = run_cli("rules")
+
+        assert result.exit_code == 0
+        assert "Confidence" in result.stdout
+        assert "Applies To" in result.stdout
+        assert "Scope" in result.stdout
+        assert "Config" in result.stdout
+        assert "thresholds.rule_of_three" in result.stdout
+
 
 class TestExplainCommand:
     """Tests for the explain command."""
@@ -299,6 +310,11 @@ class TestExplainCommand:
 
         assert result.exit_code == 0
         assert "V001" in result.stdout
+        assert "Confidence:" in result.stdout
+        assert "Applies to:" in result.stdout
+        assert "Scope:" in result.stdout
+        assert "Profiles:" in result.stdout
+        assert "Configuration:" in result.stdout
 
     def test_explain_invalid_rule(self) -> None:
         """Test explaining an invalid rule."""
