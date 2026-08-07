@@ -330,11 +330,9 @@ def _cmd_init(_args: argparse.Namespace) -> int:
 # exclude = ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
 # select = ["V", "S", "T", "G", "C", "M"]
 # ignore = ["T003"]
-severity = "warning"  # Minimum severity: error, warning, info
+minimum_severity = "warning"  # error, warning, info
 
 # Per-rule severity overrides
-# NOTE: TOML does not allow both `severity = "warning"` and the table below.
-# If you use overrides, remove the `severity` line above.
 # [tool.slop-lint.severity]
 # V001 = "error"
 
@@ -342,7 +340,7 @@ severity = "warning"  # Minimum severity: error, warning, info
 # additional = ["synergy", "leverage"]
 # allowed = ["crucial"]
 
-[[tool.slop-lint.per-file-ignores]]
+# [[tool.slop-lint.per-file-ignores]]
 # pattern = "tests/*"
 # ignore = ["V001", "V002"]
 """

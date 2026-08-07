@@ -41,12 +41,16 @@ select = ["V", "S", "T", "G", "C", "M"]
 ignore = ["T001", "T005"]
 ```
 
+Selectors are case-insensitive and must be an existing full rule ID or
+one-letter category prefix. Unknown selectors are configuration errors and
+likely typos include a close-match suggestion.
+
 ### Severity Configuration
 
 ```toml
 [tool.slop-lint]
 # Minimum severity to report
-severity = "warning"  # error, warning, info
+minimum_severity = "warning"  # error, warning, info
 ```
 
 Per-rule severity overrides use a nested table:
@@ -57,6 +61,10 @@ Per-rule severity overrides use a nested table:
 V001 = "error"      # Upgrade to error
 S002 = "info"       # Downgrade to info
 ```
+
+Override keys must be full rule IDs. The legacy scalar form
+`severity = "warning"` remains accepted for one deprecation cycle, but cannot
+be combined with `minimum_severity`; use the form above for new configuration.
 
 ### Custom Vocabulary
 
@@ -145,6 +153,18 @@ short_punchy_fragments = 3
 invented_concept_labels = 2
 ```
 
+Every threshold must be a positive integer. Zero, negative values, booleans,
+and unknown threshold keys are configuration errors.
+
+### Validation
+
+Only documented keys are accepted in the slop-lint configuration table and its
+nested vocabulary, threshold, and per-file-ignore tables. Rule IDs and category
+prefixes are normalized to uppercase; repeated references are collapsed.
+Unknown keys or rule references stop `check` and `watch` with exit code 2.
+`--show-config` prints the effective normalized policy and the explicit or
+auto-discovered source path, or `default` when no file was loaded.
+
 ## Example Configuration
 
 ```toml
@@ -160,6 +180,7 @@ exclude = [
 
 select = ["V", "S", "T", "G", "C", "M"]
 ignore = ["T001", "T005"]
+minimum_severity = "warning"
 
 [tool.slop-lint.severity]
 V001 = "error"

@@ -146,7 +146,7 @@ select = ["V", "S", "T", "G", "C", "M"]
 ignore = []
 
 # Minimum severity to report
-severity = "warning"
+minimum_severity = "warning"
 
 # Minimum confidence to report
 min_confidence = "low"  # low, medium, high
@@ -171,6 +171,20 @@ allowed_phrases = ["All notable changes"]  # Exact phrases to skip
 pattern = "CHANGELOG.md"
 ignore = ["S004"]
 ```
+
+Only documented keys are valid in the slop-lint table and its nested tables.
+All numeric thresholds are positive integers. `select`, `ignore`, and per-file
+ignore entries accept case-insensitive full rule IDs or one-letter category
+prefixes; severity override keys accept full rule IDs only. References are
+normalized to uppercase and checked against the complete built-in registry.
+Unknown keys and references are configuration errors, with a close-match hint
+when available.
+
+The legacy scalar `severity = "warning"` remains valid for one deprecation
+cycle. It cannot be combined with `minimum_severity`; the latter can coexist
+with the `[tool.slop-lint.severity]` override table. `--show-config` displays
+the normalized effective policy and the explicit or discovered source file,
+or `default` when no file was loaded.
 
 ### 5.3 Inline Suppressions
 

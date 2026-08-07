@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `minimum_severity` configuration key, which can coexist with the per-rule
+  `[tool.slop-lint.severity]` override table.
 - Line-scoped Markdown and Python suppression directives with rule-ID and
   category-prefix validation.
 - Reviewed rule-quality corpus and `make rule-quality` precision/recall report.
@@ -17,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `startup-check`, `perf-check`, `memory-check`, `nfr-check` (NFR probes)
 
 ### Changed
+- Configuration now rejects unknown keys and rule references, non-positive
+  thresholds, blank per-file patterns, and ambiguous severity settings.
+- Rule references are normalized to uppercase, and `--show-config` now reports
+  the explicit or auto-discovered configuration source.
 - Prose-scoped vocabulary, grammar, structure, and style rules now inspect
   source-mapped Python docstrings and comments as independent blocks.
 - Python parsing is shared and boundedly cached across prose and code rules;

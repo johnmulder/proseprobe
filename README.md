@@ -103,6 +103,7 @@ Create a `.slop-lint.toml` in your project root:
 [tool.slop-lint]
 include = ["*.md", "*.mdx", "*.markdown", "*.py"]
 exclude = ["venv/**", "node_modules/**"]
+minimum_severity = "warning"
 
 # Disable specific rules
 ignore = ["T001", "T005"]
@@ -120,6 +121,10 @@ allowed = ["crucial", "comprehensive"]
 pattern = "CHANGELOG.md"
 ignore = ["S004"]
 ```
+
+Rule IDs and one-letter category prefixes are case-insensitive. Unknown keys,
+unknown rule references, and non-positive thresholds are configuration errors;
+`slop-lint check --show-config` prints the normalized policy and its source.
 
 Or add to `pyproject.toml`:
 

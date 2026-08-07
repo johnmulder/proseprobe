@@ -11,6 +11,7 @@ from pathlib import Path
 import pytest
 
 from slop_lint.cli import main
+from slop_lint.config import load_config
 
 
 @dataclass
@@ -313,7 +314,10 @@ class TestInitCommand:
         result = run_cli("init")
 
         assert result.exit_code == 0
-        assert (tmp_path / ".slop-lint.toml").exists()
+        config_file = tmp_path / ".slop-lint.toml"
+        assert config_file.exists()
+        assert 'minimum_severity = "warning"' in config_file.read_text()
+        assert load_config(config_file).severity == "warning"
 
     def test_init_fails_if_exists(self, tmp_path: Path, monkeypatch: object) -> None:
         """Test that init fails if config already exists."""
