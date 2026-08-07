@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from slop_lint._ansi import clear_screen, style, table
-from slop_lint.config import ConfigError, load_config
+from slop_lint.config import ConfigError, load_config, validate_rule_references
 from slop_lint.core.linter import Linter, LintReadError, LintResults
 from slop_lint.rules import get_all_rules
 from slop_lint.rules.base import (
@@ -187,7 +187,12 @@ def _prepare_scan(args: argparse.Namespace) -> tuple[Config, Linter, list[Rule]]
     """Load config and build a linter with the effective active rules."""
     config_path = Path(args.config) if args.config else None
     config = load_config(config_path)
+    registry_rules = get_all_rules()
+    valid_rule_ids = {rule.id for rule in registry_rules}
+    validate_rule_references(config, valid_rule_ids)
     _apply_rule_cli_overrides(config, args)
+    if args.select or args.ignore:
+        validate_rule_references(config, valid_rule_ids, Path("<command line>"))
 
     min_severity = severity_from_str(
         args.severity or config.severity,
@@ -197,7 +202,7 @@ def _prepare_scan(args: argparse.Namespace) -> tuple[Config, Linter, list[Rule]]
         min_severity = Severity.WARNING
 
     all_rules = get_all_rules(config)
-    linter = Linter(config, valid_rule_ids={rule.id for rule in all_rules})
+    linter = Linter(config, valid_rule_ids=valid_rule_ids)
     active_rules = [
         rule
         for rule in all_rules
@@ -260,7 +265,6 @@ def _cmd_check(args: argparse.Namespace) -> int:
     if path_error is not None:
         return path_error
 
-    config_path = Path(args.config) if args.config else None
     try:
         config, linter, active_rules = _prepare_scan(args)
     except ConfigError as exc:
@@ -269,15 +273,21 @@ def _cmd_check(args: argparse.Namespace) -> int:
 
     if args.show_config:
         print(style("Configuration:", bold=True))
-        print(f"  Config file: {config_path or 'default'}")
+        print(f"  Config file: {config.source_path or 'default'}")
         print(f"  Select: {config.select}")
         print(f"  Ignore: {config.ignore}")
         print(f"  Include patterns: {config.include}")
         print(f"  Exclude patterns: {config.exclude}")
         config_severity = args.severity or config.severity
-        print(f"  Severity threshold: {config_severity}")
+        print(f"  Minimum severity: {config_severity}")
         if config.severity_overrides:
             print(f"  Severity overrides: {config.severity_overrides}")
+        if config.per_file_ignores:
+            per_file = [
+                {"pattern": item.pattern, "ignore": item.ignore}
+                for item in config.per_file_ignores
+            ]
+            print(f"  Per-file ignores: {per_file}")
         print(f"  Output format: {args.format}")
         return 0
 

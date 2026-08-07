@@ -7,10 +7,12 @@ import pytest
 from slop_lint.config import (
     Config,
     ConfigError,
+    PerFileIgnore,
     ThresholdsConfig,
     VocabularyConfig,
     find_config_file,
     load_config,
+    validate_rule_references,
 )
 
 
@@ -426,6 +428,79 @@ rule_of_three = 10
         assert config.thresholds.inline_header_lists == 3  # default
         assert config.thresholds.bold_overuse == 3  # default
         assert config.thresholds.em_dash_overuse == 5  # default
+
+
+class TestRuleReferenceValidation:
+    """Tests for registry-aware configuration validation."""
+
+    def test_normalizes_and_deduplicates_rule_references(self) -> None:
+        """Accepted IDs and categories should have one canonical form."""
+        config = Config(
+            select=["v", "v001", "V001"],
+            ignore=["s001", "S001"],
+            severity_overrides={"v001": "error"},
+            per_file_ignores=[PerFileIgnore("docs/**", ["s", "S001", "s"])],
+        )
+
+        validate_rule_references(config, {"V001", "S001"})
+
+        assert config.select == ["V", "V001"]
+        assert config.ignore == ["S001"]
+        assert config.severity_overrides == {"V001": "error"}
+        assert config.per_file_ignores[0].ignore == ["S", "S001"]
+
+    @pytest.mark.parametrize(
+        ("config", "field"),
+        [
+            (Config(select=["V01"]), "select"),
+            (Config(select=["V"], ignore=["X999"]), "ignore"),
+            (
+                Config(
+                    select=["V"],
+                    per_file_ignores=[PerFileIgnore("docs/**", ["X"])],
+                ),
+                "per-file-ignores[0].ignore",
+            ),
+        ],
+    )
+    def test_rejects_unknown_rule_references(self, config: Config, field: str) -> None:
+        """Every rule selector should resolve against the complete registry."""
+        with pytest.raises(ConfigError) as exc_info:
+            validate_rule_references(config, {"V001", "S001"})
+
+        assert field in str(exc_info.value)
+
+    def test_unknown_rule_reference_suggests_close_match(self) -> None:
+        """Likely rule ID typos should suggest a registered ID."""
+        config = Config(select=["V01"])
+
+        with pytest.raises(ConfigError, match="did you mean 'V001'"):
+            validate_rule_references(config, {"V001", "S001"})
+
+    def test_severity_override_requires_full_rule_id(self) -> None:
+        """Category severity overrides should not imply unsupported behavior."""
+        config = Config(select=["V"], severity_overrides={"v": "error"})
+
+        with pytest.raises(ConfigError, match=r"severity\.V"):
+            validate_rule_references(config, {"V001", "S001"})
+
+    def test_severity_override_rejects_case_collision(self) -> None:
+        """Case variants should not silently compete for one rule."""
+        config = Config(
+            select=["V"],
+            severity_overrides={"V001": "error", "v001": "warning"},
+        )
+
+        with pytest.raises(ConfigError, match="duplicate severity override"):
+            validate_rule_references(config, {"V001", "S001"})
+
+    def test_inactive_registered_rule_is_valid(self) -> None:
+        """Validation should use the registry rather than active selection."""
+        config = Config(select=["V001"], ignore=["s001"])
+
+        validate_rule_references(config, {"V001", "S001"})
+
+        assert config.ignore == ["S001"]
 
 
 class TestThresholdsConfig:

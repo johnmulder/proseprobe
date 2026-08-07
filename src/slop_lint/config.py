@@ -14,6 +14,7 @@ __all__ = [
     "VocabularyConfig",
     "find_config_file",
     "load_config",
+    "validate_rule_references",
 ]
 
 
@@ -234,9 +235,65 @@ def _reject_unknown_keys(
     """Reject keys outside a mapping's supported vocabulary."""
     for key in sorted(mapping.keys() - allowed):
         qualified_key = f"{prefix}.{key}" if prefix else key
-        suggestion = get_close_matches(key, allowed, n=1)
+        suggestion = get_close_matches(key, sorted(allowed), n=1)
         hint = f"; did you mean '{suggestion[0]}'?" if suggestion else ""
         raise ValueError(f"unknown configuration key '{qualified_key}'{hint}")
+
+
+def _normalize_rule_tokens(
+    tokens: list[str],
+    valid_tokens: set[str],
+    field_name: str,
+) -> list[str]:
+    """Validate, normalize, and deduplicate rule selection tokens."""
+    normalized_tokens: list[str] = []
+    seen: set[str] = set()
+    for token in tokens:
+        normalized = token.strip().upper()
+        if normalized not in valid_tokens:
+            suggestion = get_close_matches(normalized, sorted(valid_tokens), n=1)
+            hint = f"; did you mean '{suggestion[0]}'?" if suggestion else ""
+            raise ValueError(
+                f"unknown rule reference '{normalized}' in {field_name}{hint}"
+            )
+        if normalized not in seen:
+            normalized_tokens.append(normalized)
+            seen.add(normalized)
+    return normalized_tokens
+
+
+def validate_rule_references(
+    config: Config,
+    valid_rule_ids: set[str],
+    source_path: Path | None = None,
+) -> None:
+    """Validate and normalize rule references against the complete registry."""
+    rule_ids = {rule_id.upper() for rule_id in valid_rule_ids}
+    selectors = rule_ids | {rule_id[0] for rule_id in rule_ids}
+    source = source_path or config.source_path or Path("<configuration>")
+
+    try:
+        config.select = _normalize_rule_tokens(config.select, selectors, "select")
+        config.ignore = _normalize_rule_tokens(config.ignore, selectors, "ignore")
+        for index, per_file in enumerate(config.per_file_ignores):
+            per_file.ignore = _normalize_rule_tokens(
+                per_file.ignore,
+                selectors,
+                f"per-file-ignores[{index}].ignore",
+            )
+
+        normalized_overrides: dict[str, str] = {}
+        for rule_id, severity in config.severity_overrides.items():
+            normalized = rule_id.strip().upper()
+            if normalized in normalized_overrides:
+                raise ValueError(f"duplicate severity override for '{normalized}'")
+            normalized_id = _normalize_rule_tokens(
+                [rule_id], rule_ids, f"severity.{normalized}"
+            )[0]
+            normalized_overrides[normalized_id] = severity
+        config.severity_overrides = normalized_overrides
+    except ValueError as exc:
+        raise ConfigError(source, str(exc)) from exc
 
 
 def _require_list(value: Any, key: str) -> list[str]:

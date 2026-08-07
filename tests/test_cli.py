@@ -339,21 +339,28 @@ class TestVersionCommand:
 class TestShowConfigFlag:
     """Tests for the --show-config flag."""
 
-    def test_show_config_displays_settings(self, tmp_path: Path) -> None:
-        """Test that --show-config displays configuration."""
+    def test_show_config_displays_defaults(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Show-config should identify an all-default policy."""
+        home = tmp_path / "home"
+        home.mkdir()
+        monkeypatch.setenv("HOME", str(home))
+        monkeypatch.chdir(tmp_path)
+        (tmp_path / ".git").mkdir()
         test_file = tmp_path / "test.md"
         test_file.write_text("Clean content.")
 
         result = run_cli("check", str(test_file), "--show-config")
 
         assert result.exit_code == 0
-        # Should show config info
-        assert "select" in result.stdout.lower() or "config" in result.stdout.lower()
+        assert "Config file: default" in result.stdout
+        assert "Minimum severity: warning" in result.stdout
 
     def test_show_config_with_custom_config(self, tmp_path: Path) -> None:
-        """Test --show-config with custom config file."""
+        """Show-config should identify an explicit config file."""
         config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text('[lint]\nignore = ["V001"]')
+        config_file.write_text('[tool.slop-lint]\nignore = ["v001"]')
         test_file = tmp_path / "test.md"
         test_file.write_text("Clean content.")
 
@@ -366,6 +373,24 @@ class TestShowConfigFlag:
         )
 
         assert result.exit_code == 0
+        assert f"Config file: {config_file}" in result.stdout
+        assert "Ignore: ['V001']" in result.stdout
+
+    def test_show_config_with_discovered_config(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Show-config should identify an auto-discovered config file."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('[tool.slop-lint]\nselect = ["v001"]\n')
+        test_file = tmp_path / "test.md"
+        test_file.write_text("Clean content.")
+        monkeypatch.chdir(tmp_path)
+
+        result = run_cli("check", str(test_file), "--show-config")
+
+        assert result.exit_code == 0
+        assert f"Config file: {config_file}" in result.stdout
+        assert "Select: ['V001']" in result.stdout
 
 
 class TestBaselineMode:
@@ -850,6 +875,94 @@ class TestCliValidation:
         assert "Configuration error" in result.stderr
         assert str(config_file) in result.stderr
         assert "Traceback" not in result.stderr
+
+    @pytest.mark.parametrize("option", ["--select", "--ignore"])
+    def test_invalid_cli_rule_reference_returns_config_error(
+        self, tmp_path: Path, option: str
+    ) -> None:
+        """CLI selectors should use the same registry validation as files."""
+        test_file = tmp_path / "clean.md"
+        test_file.write_text("Clean content.")
+
+        result = run_cli("check", option, "V01", str(test_file))
+
+        assert result.exit_code == 2
+        assert result.stdout == ""
+        assert "<command line>" in result.stderr
+        assert "did you mean 'V001'" in result.stderr
+
+    @pytest.mark.parametrize("output_format", ["json", "sarif"])
+    def test_invalid_config_rule_keeps_structured_stdout_empty(
+        self, tmp_path: Path, output_format: str
+    ) -> None:
+        """Configuration diagnostics should not corrupt structured output."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('[tool.slop-lint]\nselect = ["X999"]\n')
+        test_file = tmp_path / "clean.md"
+        test_file.write_text("Clean content.")
+
+        result = run_cli(
+            "check",
+            "--config",
+            str(config_file),
+            "--format",
+            output_format,
+            str(test_file),
+        )
+
+        assert result.exit_code == 2
+        assert result.stdout == ""
+        assert str(config_file) in result.stderr
+        assert "unknown rule reference" in result.stderr
+
+    def test_watch_rejects_invalid_config_before_loop(self, tmp_path: Path) -> None:
+        """Watch should share check's configuration failure semantics."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('[tool.slop-lint]\nignore = ["X999"]\n')
+        test_file = tmp_path / "clean.md"
+        test_file.write_text("Clean content.")
+
+        result = run_cli(
+            "watch", "--config", str(config_file), str(test_file), "--no-clear"
+        )
+
+        assert result.exit_code == 2
+        assert result.stdout == ""
+        assert "Configuration error" in result.stderr
+
+    def test_lowercase_severity_override_changes_effective_rule(
+        self, tmp_path: Path
+    ) -> None:
+        """Normalized override IDs should be applied during rule construction."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text(
+            '[tool.slop-lint]\nminimum_severity = "warning"\nselect = ["v003"]\n\n'
+            '[tool.slop-lint.severity]\nv003 = "warning"\n'
+        )
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("As of my last update, this was accurate.")
+
+        result = run_cli("check", "--config", str(config_file), str(test_file))
+
+        assert result.exit_code == 1
+        assert "V003" in result.stdout
+        assert "[warning]" in result.stdout
+
+    def test_lowercase_per_file_ignore_suppresses_rule(self, tmp_path: Path) -> None:
+        """Normalized per-file IDs should affect rule selection."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text(
+            '[tool.slop-lint]\nselect = ["v001"]\n\n'
+            "[[tool.slop-lint.per-file-ignores]]\n"
+            'pattern = "doc.md"\nignore = ["v001"]\n'
+        )
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("This delves into the topic.")
+
+        result = run_cli("check", "--config", str(config_file), str(test_file))
+
+        assert result.exit_code == 0
+        assert "V001" not in result.stdout
 
     @pytest.mark.parametrize(
         ("directive", "detail"),
