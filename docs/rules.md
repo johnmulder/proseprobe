@@ -8,6 +8,10 @@ documentation issues, and `M` rules remain Markdown-only.
 
 ## Rule Inventory
 
+This inventory is generated from rule classes and the registry. Update the
+implementation metadata, then run `make rule-docs`; do not edit the marked
+block by hand. The examples and guidance below remain hand-maintained.
+
 <!-- rule-docs:inventory:start -->
 
 | ID | Name | Category | Severity | Confidence | Context | Configuration |

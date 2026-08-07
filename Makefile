@@ -90,7 +90,7 @@ format: ## Format code
 	$(RUFF) check --fix src/ tests/
 
 # Run all checks
-check: lint typecheck test ## Run lint, typecheck, and tests
+check: rule-docs-check lint typecheck test ## Run generated-doc, lint, type, and test checks
 
 # Clean build artifacts
 clean: ## Remove generated artifacts
@@ -153,7 +153,7 @@ test-tropes-integration: ## Verify the all-rules Markdown fixture still reports 
 all: check ## Alias for check
 
 # Verify README/SPEC structure matches expected sections
-doc-audit: ## Verify README and SPEC structure
+doc-audit: rule-docs-check ## Verify generated docs and README/SPEC structure
 	@echo "Checking README.md structure..."
 	@grep -q "## Overview" README.md || (echo "ERROR: README missing ## Overview" && exit 1)
 	@grep -q "## Installation" README.md || (echo "ERROR: README missing ## Installation" && exit 1)

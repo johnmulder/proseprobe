@@ -71,8 +71,18 @@ def test_help_target_lists_common_workflows() -> None:
         "dogfood",
         "benchmark",
         "rule-quality",
+        "rule-docs",
+        "rule-docs-check",
     ]:
         assert target in result.stdout
+
+
+def test_standard_checks_reject_stale_rule_documentation() -> None:
+    """Routine quality gates should enforce generated documentation."""
+    makefile = _makefile_text()
+
+    assert re.search(r"^check:.*\brule-docs-check\b", makefile, re.M)
+    assert re.search(r"^doc-audit:.*\brule-docs-check\b", makefile, re.M)
 
 
 def test_clean_dry_run_removes_known_generated_artifacts() -> None:

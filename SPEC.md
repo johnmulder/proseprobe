@@ -325,9 +325,11 @@ diagnostics are written to stderr so structured stdout remains parseable.
 | `core/linter` | File discovery, rule orchestration |
 | `core/reporter` | Output formatting (text/JSON/SARIF) |
 | `rules/base` | Abstract rule interface |
+| `rules/__init__` | Rule registry and immutable metadata projection |
 | `rules/*` | Rule implementations by category |
 | `parsers/*` | Markdown and Python AST parsing |
 | `data/*` | Vocabulary lists and patterns |
+| `_rule_docs` | Deterministic generated-document synchronization |
 
 ### 7.2 Rule Protocol
 
@@ -339,9 +341,19 @@ class Rule(Protocol):
     name: str         # e.g., "Overused Vocabulary"
     description: str  # Full description
     severity: Severity
+    default_confidence: Confidence
+    applies_to: set[str]
+    content_scope: str
+    config_key: str | None
 
     def check(self, content: str, filename: str) -> list[Issue]: ...
 ```
+
+Rule classes and `get_all_rules()` are the canonical source for rule metadata.
+`get_rule_metadata()` exposes an immutable projection used by the CLI and the
+documentation generator. Generated blocks are bounded by `rule-docs` markers;
+`make rule-docs` updates them and `make rule-docs-check` verifies them without
+writing.
 
 ### 7.3 Confidence Levels
 
@@ -365,6 +377,7 @@ indicating how certain the rule is that the match is a real problem.
 | Fixture tests | Known bad/clean samples | `tests/fixtures/`, `tests/test_fixtures.py` |
 | Property tests | Edge cases via hypothesis | `tests/test_property.py` |
 | Rule-quality benchmark | Reviewed per-rule precision and recall | `quality/`, `make rule-quality` |
+| Documentation synchronization | Metadata projection, markers, and deterministic output | `tests/test_rule_docs.py` |
 
 The rule-quality benchmark reports true positives, false positives, false
 negatives, precision, recall, and explicit negative-case coverage for every

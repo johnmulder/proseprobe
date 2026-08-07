@@ -235,6 +235,12 @@ make lint
 make check
 ```
 
+Rule classes are the source of truth for IDs, names, descriptions, default
+severity and confidence, file contexts, and optional configuration keys. After
+adding or changing a rule, register it in `get_all_rules()`, update its profile
+membership, and run `make rule-docs`. Do not edit content between
+`rule-docs` markers by hand; `make check` rejects stale generated content.
+
 ## Documentation
 
 - [SPEC.md](SPEC.md) — Technical specification
