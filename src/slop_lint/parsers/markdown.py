@@ -3,7 +3,11 @@
 import re
 from dataclasses import dataclass
 
-from slop_lint.parsers.prose import ProseBlock
+from slop_lint.parsers.prose import (
+    InlineSuppression,
+    ProseBlock,
+    _validate_suppression_tokens,
+)
 
 MARKDOWN_EXTENSIONS = (".md", ".mdx", ".markdown")
 
@@ -87,6 +91,7 @@ class MarkdownParser:
         self._setext_underline_lines: set[int] | None = None
         self._html_block_lines: set[int] | None = None
         self._prose_blocks: list[MarkdownProseBlock] | None = None
+        self._inline_suppressions: list[InlineSuppression] | None = None
         self._blockquote_re = re.compile(r"^(?:\s{0,3}>\s?)+")
         self._html_block_tags = {
             "div",
@@ -520,6 +525,34 @@ class MarkdownParser:
             for line_num, line in enumerate(self._lines, start=1)
             if line_num not in code_lines and line_num not in html_lines
         ]
+
+    def get_inline_suppressions(self) -> list[InlineSuppression]:
+        """Return standalone directives and their next-line targets."""
+        if self._inline_suppressions is not None:
+            return self._inline_suppressions
+
+        directive_re = re.compile(
+            r"^\s*<!--\s*slop-lint-ignore-next-line(?:\s+(.*?))?\s*-->\s*$",
+            re.IGNORECASE,
+        )
+        suppressions: list[InlineSuppression] = []
+        code_lines = self._code_lines()
+        for line_num, line in enumerate(self._lines, start=1):
+            if line_num in code_lines:
+                continue
+            stripped = line.strip()
+            if not stripped.lower().startswith("<!--") or (
+                "slop-lint-ignore-next-line" not in stripped.lower()
+            ):
+                continue
+            match = directive_re.fullmatch(line)
+            if match is None:
+                raise ValueError(f"line {line_num}: malformed inline suppression")
+            raw = _validate_suppression_tokens(match.group(1) or "", line_num)
+            suppressions.append((line_num, line_num + 1, raw))
+
+        self._inline_suppressions = suppressions
+        return suppressions
 
     def get_prose_blocks(self) -> list[MarkdownProseBlock]:
         """Return source-mapped prose blocks grouped by Markdown context."""

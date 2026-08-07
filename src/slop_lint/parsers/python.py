@@ -7,7 +7,11 @@ import tokenize
 from dataclasses import dataclass
 from functools import lru_cache
 
-from slop_lint.parsers.prose import ProseBlock
+from slop_lint.parsers.prose import (
+    InlineSuppression,
+    ProseBlock,
+    _validate_suppression_tokens,
+)
 
 
 @dataclass
@@ -51,6 +55,7 @@ class PythonParser:
         self._comments: list[Comment] | None = None
         self._prose_blocks: list[ProseBlock] | None = None
         self._prose_lines: list[tuple[int, str]] | None = None
+        self._inline_suppressions: list[InlineSuppression] | None = None
 
     def parse(self) -> bool:
         """Parse the Python source.
@@ -149,6 +154,30 @@ class PythonParser:
                 strings.append((node.lineno, node.col_offset + 1, node.value))
 
         return strings
+
+    def get_inline_suppressions(self) -> list[InlineSuppression]:
+        """Return directives found in real Python comment tokens."""
+        if self._inline_suppressions is not None:
+            return self._inline_suppressions
+
+        directive_re = re.compile(
+            r"#\s*slop-lint:\s*ignore\s*=\s*(.*?)\s*$", re.IGNORECASE
+        )
+        suppressions: list[InlineSuppression] = []
+        for token in self._get_tokens():
+            if (
+                token.type != tokenize.COMMENT
+                or "slop-lint:" not in token.string.lower()
+            ):
+                continue
+            match = directive_re.search(token.string)
+            if match is None:
+                raise ValueError(f"line {token.start[0]}: malformed inline suppression")
+            raw = _validate_suppression_tokens(match.group(1), token.start[0])
+            suppressions.append((token.start[0], token.start[0], raw))
+
+        self._inline_suppressions = suppressions
+        return suppressions
 
     def get_prose_blocks(self) -> list[ProseBlock]:
         """Return source-mapped blocks for real docstrings and comments."""

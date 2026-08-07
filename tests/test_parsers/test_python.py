@@ -1,6 +1,13 @@
 """Tests for Python parser."""
 
-from slop_lint.parsers.prose import ProseBlock, iter_prose_blocks, iter_prose_lines
+import pytest
+
+from slop_lint.parsers.prose import (
+    ProseBlock,
+    iter_inline_suppressions,
+    iter_prose_blocks,
+    iter_prose_lines,
+)
 from slop_lint.parsers.python import (
     Comment,
     Docstring,
@@ -233,6 +240,39 @@ def broken(
         assert _get_cached_parser.cache_info().maxsize == 32
         clear_parser_cache()
         assert _get_cached_parser(content) is not first
+
+    def test_extract_python_inline_suppressions_from_comment_tokens(self) -> None:
+        """Python directives target the physical line containing the comment."""
+        content = (
+            '"""Delve here."""  # slop-lint: ignore=v001, S010\n'
+            "# Delve here.  # slop-lint: ignore=V001\n"
+        )
+
+        assert iter_inline_suppressions(content, "test.py") == [
+            (1, 1, "v001, S010"),
+            (2, 2, "V001"),
+        ]
+
+    def test_python_suppression_markers_in_strings_are_ignored(self) -> None:
+        """Only tokenize.COMMENT tokens can become Python directives."""
+        content = (
+            'message = "# slop-lint: ignore=V001"\n"""# slop-lint: ignore=S010"""\n'
+        )
+
+        assert iter_inline_suppressions(content, "test.py") == []
+
+    def test_invalid_python_can_still_expose_comment_suppression(self) -> None:
+        """Partial tokenization keeps real comment directives available."""
+        content = "def broken(\n# Delve.  # slop-lint: ignore=V001\n"
+
+        assert iter_inline_suppressions(content, "test.py") == [(2, 2, "V001")]
+
+    def test_malformed_python_suppression_reports_source_line(self) -> None:
+        """Marker-bearing Python comments reject malformed assignments."""
+        parser = PythonParser("x = 1  # slop-lint: ignored=V001\n")
+
+        with pytest.raises(ValueError, match=r"line 1"):
+            parser.get_inline_suppressions()
 
 
 class TestDocstringDataclass:

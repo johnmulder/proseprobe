@@ -1,5 +1,7 @@
 """Tests for Markdown parser."""
 
+import pytest
+
 from slop_lint.parsers.markdown import (
     MarkdownLink,
     MarkdownParser,
@@ -13,6 +15,7 @@ from slop_lint.parsers.markdown import (
     iter_prose_blocks,
     iter_prose_lines,
 )
+from slop_lint.parsers.prose import iter_inline_suppressions
 
 
 class TestMarkdownParser:
@@ -581,6 +584,43 @@ Visible prose.
 
         assert len(lines) == 1
         assert lines[0][1] == content
+
+    def test_extract_inline_suppression_for_next_physical_line(self) -> None:
+        """A standalone Markdown directive targets exactly the next line."""
+        content = (
+            "Intro\n"
+            "  <!-- slop-lint-ignore-next-line v001, S010 -->\n"
+            "Target\n"
+            "<!-- slop-lint-ignore-next-line V002 -->\n"
+            "\n"
+            "Not targeted\n"
+        )
+
+        assert iter_inline_suppressions(content, "test.md") == [
+            (2, 3, "v001, S010"),
+            (4, 5, "V002"),
+        ]
+
+    def test_inline_suppression_examples_are_ignored(self) -> None:
+        """Fenced and inline-code examples are not active directives."""
+        content = (
+            "```markdown\n"
+            "<!-- slop-lint-ignore-next-line V001 -->\n"
+            "Target\n"
+            "```\n"
+            "`<!-- slop-lint-ignore-next-line V002 -->`\n"
+        )
+
+        assert iter_inline_suppressions(content, "test.md") == []
+
+    def test_malformed_markdown_suppression_reports_source_line(self) -> None:
+        """Marker-bearing standalone comments reject malformed token lists."""
+        parser = MarkdownParser(
+            "Intro\n<!-- slop-lint-ignore-next-line V001, -->\nTarget"
+        )
+
+        with pytest.raises(ValueError, match=r"line 2"):
+            parser.get_inline_suppressions()
 
     def test_is_markdown_file_variants(self) -> None:
         """Test markdown file extension detection."""
