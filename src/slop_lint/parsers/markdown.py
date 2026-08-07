@@ -62,6 +62,17 @@ class MarkdownLink:
     url_end: int = 0
 
 
+@dataclass(frozen=True)
+class MarkdownProseBlock:
+    """A source-mapped block of Markdown prose."""
+
+    context: str
+    start_line: int
+    end_line: int
+    lines: tuple[tuple[int, str], ...]
+    break_before: bool = False
+
+
 class MarkdownParser:
     """Parser for Markdown documents.
 
@@ -81,6 +92,7 @@ class MarkdownParser:
         self._setext_heading_lines: set[int] | None = None
         self._setext_underline_lines: set[int] | None = None
         self._html_block_lines: set[int] | None = None
+        self._prose_blocks: list[MarkdownProseBlock] | None = None
         self._blockquote_re = re.compile(r"^(?:\s{0,3}>\s?)+")
         self._html_block_tags = {
             "div",
@@ -515,19 +527,114 @@ class MarkdownParser:
             if line_num not in code_lines and line_num not in html_lines
         ]
 
-    def get_prose_lines(self) -> list[tuple[int, str]]:
-        """Return prose lines with Markdown-only syntax removed."""
-        prose_lines: list[tuple[int, str]] = []
-        for line_num, line in self.get_lines():
-            stripped_line, _ = self._strip_blockquote_prefix(line)
-            if self._is_table_row(stripped_line):
+    def get_prose_blocks(self) -> list[MarkdownProseBlock]:
+        """Return source-mapped prose blocks grouped by Markdown context."""
+        if self._prose_blocks is not None:
+            return self._prose_blocks
+
+        code_lines = self._code_lines()
+        html_lines = self._html_lines()
+        setext_headings, setext_underlines = self._setext_lines()
+        skipped_lines = (
+            code_lines
+            | html_lines
+            | self._front_matter_lines()
+            | self._mdx_block_lines()
+        )
+        heading_re = re.compile(r"^ {0,3}#{1,6}[ \t]+")
+        trailing_heading_re = re.compile(r"[ \t]+#+[ \t]*$")
+        list_re = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
+
+        blocks: list[MarkdownProseBlock] = []
+        current_context = ""
+        current_lines: list[tuple[int, str]] = []
+        current_break = False
+        list_indent = 0
+        pending_break = False
+
+        def flush() -> None:
+            nonlocal current_context, current_lines, current_break, list_indent
+            if current_lines:
+                blocks.append(
+                    MarkdownProseBlock(
+                        context=current_context,
+                        start_line=current_lines[0][0],
+                        end_line=current_lines[-1][0],
+                        lines=tuple(current_lines),
+                        break_before=current_break,
+                    )
+                )
+            current_context = ""
+            current_lines = []
+            current_break = False
+            list_indent = 0
+
+        for line_num, line in enumerate(self._lines, start=1):
+            stripped_line, quote_prefix = self._strip_blockquote_prefix(line)
+            if line_num in skipped_lines or self._is_table_row(stripped_line):
+                flush()
+                pending_break = True
+                continue
+            if line_num in setext_underlines:
+                flush()
+                continue
+            if not stripped_line.strip():
+                flush()
                 continue
 
-            prose = self._strip_list_marker(stripped_line)
-            prose = self._mask_inline_code_and_links(prose).strip()
-            if prose:
-                prose_lines.append((line_num, prose))
-        return prose_lines
+            chars = list(line)
+            self._mask_chars(chars, 0, quote_prefix)
+            heading_match = heading_re.match(stripped_line)
+            list_match = list_re.match(stripped_line)
+            next_list_indent = list_match.end() if list_match else 0
+            force_new = False
+
+            if quote_prefix:
+                context = "blockquote"
+            elif line_num in setext_headings:
+                context = "heading"
+                force_new = True
+            elif heading_match:
+                context = "heading"
+                force_new = True
+                self._mask_chars(chars, 0, heading_match.end())
+                trailing_match = trailing_heading_re.search(stripped_line)
+                if trailing_match:
+                    self._mask_chars(
+                        chars, trailing_match.start(), trailing_match.end()
+                    )
+            elif list_match:
+                context = "list_item"
+                force_new = True
+                self._mask_chars(chars, 0, next_list_indent)
+            elif (
+                current_context == "list_item"
+                and list_indent
+                and len(line) - len(line.lstrip()) >= list_indent
+            ):
+                context = "list_item"
+            else:
+                context = "body"
+
+            prose = self._mask_inline_code_and_links("".join(chars))
+            if not prose.strip():
+                continue
+            if force_new or (current_context and context != current_context):
+                flush()
+            if not current_lines:
+                current_context = context
+                current_break = pending_break
+                list_indent = next_list_indent
+                pending_break = False
+            current_lines.append((line_num, prose))
+
+        flush()
+        self._prose_blocks = blocks
+        return blocks
+
+    def get_prose_lines(self) -> list[tuple[int, str]]:
+        """Return source-width-preserving Markdown prose lines."""
+        return [line for block in self.get_prose_blocks() for line in block.lines]
 
     @staticmethod
     def _is_table_row(line: str) -> bool:
@@ -538,9 +645,50 @@ class MarkdownParser:
         return stripped.count("|") >= 2
 
     @staticmethod
-    def _strip_list_marker(line: str) -> str:
-        """Remove a Markdown list marker while preserving item text."""
-        return re.sub(r"^\s*(?:[-*+]|\d+[.)])\s+", "", line)
+    def _mask_chars(chars: list[str], start: int, end: int) -> None:
+        """Mask a character range without changing source offsets."""
+        for idx in range(start, end):
+            chars[idx] = " "
+
+    def _front_matter_lines(self) -> set[int]:
+        """Return a complete leading YAML or TOML front-matter span."""
+        if not self._lines or self._lines[0].strip() not in {"---", "+++"}:
+            return set()
+        delimiter = self._lines[0].strip()
+        for idx, line in enumerate(self._lines[1:], start=2):
+            if line.strip() == delimiter:
+                return set(range(1, idx + 1))
+        return set()
+
+    def _mdx_block_lines(self) -> set[int]:
+        """Return narrow top-level MDX statement and component block spans."""
+        mdx_lines: set[int] = set()
+        import_re = re.compile(r'^\s*import\s+.+\s+from\s+["\'][^"\']+["\'];?\s*$')
+        export_re = re.compile(
+            r"^\s*export\s+(?:default|const|let|var|function|class|\{)\b"
+        )
+        open_re = re.compile(r"^\s*<([A-Z][\w.:]*)\b[^>]*>\s*$")
+        self_closing_re = re.compile(r"^\s*<[A-Z][\w.:]*\b[^>]*/>\s*$")
+        open_tag = ""
+
+        for line_num, line in enumerate(self._lines, start=1):
+            if open_tag:
+                mdx_lines.add(line_num)
+                if re.match(rf"^\s*</{re.escape(open_tag)}>\s*$", line):
+                    open_tag = ""
+                continue
+            if (
+                import_re.match(line)
+                or export_re.match(line)
+                or self_closing_re.match(line)
+            ):
+                mdx_lines.add(line_num)
+                continue
+            match = open_re.match(line)
+            if match:
+                mdx_lines.add(line_num)
+                open_tag = match.group(1)
+        return mdx_lines
 
     def _find_inline_code_spans(self, line: str) -> list[tuple[int, int]]:
         spans: list[tuple[int, int]] = []
@@ -578,8 +726,7 @@ class MarkdownParser:
         return "".join(chars)
 
     def _mask_inline_code_and_links(self, line: str) -> str:
-        stripped_line, _ = self._strip_blockquote_prefix(line)
-        masked = self._mask_inline_code(stripped_line)
+        masked = self._mask_inline_code(line)
         chars = list(masked)
         for match in re.finditer(r"\[([^\]]+)\]\(([^)]+)\)", masked):
             url_start = match.start(2)
@@ -610,6 +757,30 @@ def iter_prose_lines(content: str, filename: str) -> list[tuple[int, str]]:
     if is_markdown_file(filename):
         return _get_cached_parser(content).get_prose_lines()
     return list(enumerate(content.split("\n"), start=1))
+
+
+def iter_prose_blocks(content: str, filename: str) -> list[MarkdownProseBlock]:
+    """Return source-mapped prose blocks for Markdown or plain text."""
+    if is_markdown_file(filename):
+        return _get_cached_parser(content).get_prose_blocks()
+
+    blocks: list[MarkdownProseBlock] = []
+    current: list[tuple[int, str]] = []
+    for line_num, line in enumerate(content.split("\n"), start=1):
+        if line.strip():
+            current.append((line_num, line))
+        elif current:
+            blocks.append(
+                MarkdownProseBlock(
+                    "body", current[0][0], current[-1][0], tuple(current)
+                )
+            )
+            current = []
+    if current:
+        blocks.append(
+            MarkdownProseBlock("body", current[0][0], current[-1][0], tuple(current))
+        )
+    return blocks
 
 
 def iter_non_code_lines(content: str, filename: str) -> list[tuple[int, str]]:

@@ -3,12 +3,14 @@
 from slop_lint.parsers.markdown import (
     MarkdownLink,
     MarkdownParser,
+    MarkdownProseBlock,
     MarkdownSection,
     _get_cached_parser,
     _parser_cache,
     clear_parser_cache,
     is_markdown_file,
     iter_non_code_lines,
+    iter_prose_blocks,
     iter_prose_lines,
 )
 
@@ -107,8 +109,8 @@ This is prose.
 
         assert lines == [(5, "This is prose.")]
 
-    def test_prose_lines_strip_list_markers_but_keep_item_text(self) -> None:
-        """List item text is prose, but the bullet marker is not."""
+    def test_prose_lines_mask_list_markers_but_keep_item_text(self) -> None:
+        """List item text is prose, but the bullet marker is masked."""
         content = """\
 - First item explains the behavior.
 - Second item explains the tradeoff.
@@ -120,10 +122,130 @@ This is prose.
         lines = parser.get_prose_lines()
 
         assert lines == [
-            (1, "First item explains the behavior."),
-            (2, "Second item explains the tradeoff."),
+            (1, "  First item explains the behavior."),
+            (2, "  Second item explains the tradeoff."),
             (4, "This is prose."),
         ]
+
+    def test_get_prose_blocks_classifies_markdown_contexts(self) -> None:
+        """Prose blocks retain their structural Markdown context."""
+        content = """\
+# Heading
+
+Body text.
+
+- First item.
+  Continued item text.
+  - Nested item.
+
+> Quoted text.
+"""
+
+        blocks = iter_prose_blocks(content, "test.md")
+
+        assert all(isinstance(block, MarkdownProseBlock) for block in blocks)
+        assert [
+            (block.context, block.start_line, block.end_line) for block in blocks
+        ] == [
+            ("heading", 1, 1),
+            ("body", 3, 3),
+            ("list_item", 5, 6),
+            ("list_item", 7, 7),
+            ("blockquote", 9, 9),
+        ]
+        assert blocks[0].lines == ((1, "  Heading"),)
+        assert blocks[2].lines[0] == (5, "  First item.")
+        assert blocks[4].lines == ((9, "  Quoted text."),)
+
+    def test_get_prose_blocks_classifies_setext_heading(self) -> None:
+        """A Setext title is a heading block and its underline is syntax."""
+        blocks = MarkdownParser("Title\n-----\n\nBody.").get_prose_blocks()
+
+        assert [
+            (block.context, block.start_line, block.end_line) for block in blocks
+        ] == [
+            ("heading", 1, 1),
+            ("body", 4, 4),
+        ]
+        assert blocks[0].lines == ((1, "Title"),)
+
+    def test_unindented_text_ends_a_list_item_block(self) -> None:
+        """Unindented prose after a list item returns to body context."""
+        blocks = MarkdownParser("- Item.\nBody.").get_prose_blocks()
+
+        assert [block.context for block in blocks] == ["list_item", "body"]
+
+    def test_get_prose_blocks_marks_skipped_constructs_as_breaks(self) -> None:
+        """Code, HTML, and table content create structural sequence breaks."""
+        content = """\
+Before.
+
+```text
+hidden
+```
+
+After code.
+
+<div>
+hidden
+</div>
+
+After HTML.
+
+| A | B |
+| - | - |
+
+After table.
+"""
+
+        blocks = MarkdownParser(content).get_prose_blocks()
+
+        assert [block.lines[0][1] for block in blocks] == [
+            "Before.",
+            "After code.",
+            "After HTML.",
+            "After table.",
+        ]
+        assert [block.break_before for block in blocks] == [False, True, True, True]
+
+    def test_get_prose_blocks_skips_front_matter_and_mdx(self) -> None:
+        """Front matter and simple MDX constructs are structural barriers."""
+        content = """\
+---
+title: Hidden
+---
+import Card from "./Card"
+
+<Card>
+Hidden component text.
+</Card>
+
+Visible prose.
+"""
+
+        blocks = MarkdownParser(content).get_prose_blocks()
+
+        assert len(blocks) == 1
+        assert blocks[0].lines == ((10, "Visible prose."),)
+        assert blocks[0].break_before is True
+
+    def test_get_prose_blocks_unclosed_fence_is_a_break(self) -> None:
+        """An unclosed fence excludes the remainder of the document."""
+        blocks = MarkdownParser("Visible.\n\n```text\nhidden").get_prose_blocks()
+
+        assert len(blocks) == 1
+        assert blocks[0].lines == ((1, "Visible."),)
+
+    def test_prose_mask_preserves_source_columns(self) -> None:
+        """Masking Markdown syntax keeps matches at source offsets."""
+        source = "- Use `code` before pivotal [docs](https://example.com)."
+
+        line = MarkdownParser(source).get_prose_lines()[0][1]
+
+        assert len(line) == len(source)
+        assert line.index("pivotal") == source.index("pivotal")
+        assert "code" not in line
+        assert "https://example.com" not in line
 
     def test_get_links(self) -> None:
         """Test extracting markdown links."""
