@@ -1,0 +1,1063 @@
+{
+  "version": 1,
+  "files": {
+    "tests/fixtures/all_markdown_rules_fire.md": {
+      "expected": [
+        {
+          "rule_id": "G001",
+          "line": 67,
+          "column": 1
+        },
+        {
+          "rule_id": "G001",
+          "line": 69,
+          "column": 13
+        },
+        {
+          "rule_id": "G002",
+          "line": 71,
+          "column": 1
+        },
+        {
+          "rule_id": "G002",
+          "line": 71,
+          "column": 47
+        },
+        {
+          "rule_id": "G002",
+          "line": 71,
+          "column": 59
+        },
+        {
+          "rule_id": "G002",
+          "line": 91,
+          "column": 184
+        },
+        {
+          "rule_id": "G003",
+          "line": 33,
+          "column": 34
+        },
+        {
+          "rule_id": "G003",
+          "line": 73,
+          "column": 1
+        },
+        {
+          "rule_id": "G004",
+          "line": 75,
+          "column": 1
+        },
+        {
+          "rule_id": "G005",
+          "line": 77,
+          "column": 1
+        },
+        {
+          "rule_id": "G005",
+          "line": 79,
+          "column": 1
+        },
+        {
+          "rule_id": "G006",
+          "line": 79,
+          "column": 1
+        },
+        {
+          "rule_id": "G007",
+          "line": 81,
+          "column": 1
+        },
+        {
+          "rule_id": "G008",
+          "line": 83,
+          "column": 1
+        },
+        {
+          "rule_id": "G009",
+          "line": 85,
+          "column": 1
+        },
+        {
+          "rule_id": "G010",
+          "line": 87,
+          "column": 1
+        },
+        {
+          "rule_id": "G010",
+          "line": 87,
+          "column": 75
+        },
+        {
+          "rule_id": "G011",
+          "line": 89,
+          "column": 1
+        },
+        {
+          "rule_id": "G011",
+          "line": 89,
+          "column": 43
+        },
+        {
+          "rule_id": "G011",
+          "line": 89,
+          "column": 75
+        },
+        {
+          "rule_id": "G011",
+          "line": 89,
+          "column": 113
+        },
+        {
+          "rule_id": "G012",
+          "line": 91,
+          "column": 1
+        },
+        {
+          "rule_id": "G012",
+          "line": 91,
+          "column": 52
+        },
+        {
+          "rule_id": "G012",
+          "line": 91,
+          "column": 96
+        },
+        {
+          "rule_id": "G012",
+          "line": 91,
+          "column": 140
+        },
+        {
+          "rule_id": "G012",
+          "line": 91,
+          "column": 184
+        },
+        {
+          "rule_id": "G013",
+          "line": 93,
+          "column": 1
+        },
+        {
+          "rule_id": "G013",
+          "line": 93,
+          "column": 47
+        },
+        {
+          "rule_id": "G014",
+          "line": 95,
+          "column": 1
+        },
+        {
+          "rule_id": "G014",
+          "line": 95,
+          "column": 29
+        },
+        {
+          "rule_id": "M002",
+          "line": 115,
+          "column": 29
+        },
+        {
+          "rule_id": "M002",
+          "line": 115,
+          "column": 67
+        },
+        {
+          "rule_id": "M003",
+          "line": 117,
+          "column": 45
+        },
+        {
+          "rule_id": "M004",
+          "line": 119,
+          "column": 27
+        },
+        {
+          "rule_id": "M004",
+          "line": 119,
+          "column": 49
+        },
+        {
+          "rule_id": "S001",
+          "line": 19,
+          "column": 15
+        },
+        {
+          "rule_id": "S001",
+          "line": 20,
+          "column": 11
+        },
+        {
+          "rule_id": "S001",
+          "line": 21,
+          "column": 20
+        },
+        {
+          "rule_id": "S001",
+          "line": 47,
+          "column": 6
+        },
+        {
+          "rule_id": "S002",
+          "line": 23,
+          "column": 1
+        },
+        {
+          "rule_id": "S003",
+          "line": 25,
+          "column": 1
+        },
+        {
+          "rule_id": "S004",
+          "line": 27,
+          "column": 1
+        },
+        {
+          "rule_id": "S005",
+          "line": 31,
+          "column": 22
+        },
+        {
+          "rule_id": "S005",
+          "line": 31,
+          "column": 41
+        },
+        {
+          "rule_id": "S006",
+          "line": 33,
+          "column": 34
+        },
+        {
+          "rule_id": "S007",
+          "line": 35,
+          "column": 18
+        },
+        {
+          "rule_id": "S008",
+          "line": 37,
+          "column": 1
+        },
+        {
+          "rule_id": "S009",
+          "line": 39,
+          "column": 1
+        },
+        {
+          "rule_id": "S010",
+          "line": 41,
+          "column": 1
+        },
+        {
+          "rule_id": "S010",
+          "line": 45,
+          "column": 1
+        },
+        {
+          "rule_id": "S010",
+          "line": 91,
+          "column": 1
+        },
+        {
+          "rule_id": "S010",
+          "line": 105,
+          "column": 1
+        },
+        {
+          "rule_id": "S011",
+          "line": 43,
+          "column": 1
+        },
+        {
+          "rule_id": "S012",
+          "line": 45,
+          "column": 1
+        },
+        {
+          "rule_id": "S013",
+          "line": 47,
+          "column": 1
+        },
+        {
+          "rule_id": "S014",
+          "line": 49,
+          "column": 1
+        },
+        {
+          "rule_id": "S015",
+          "line": 51,
+          "column": 1
+        },
+        {
+          "rule_id": "S016",
+          "line": 57,
+          "column": 1
+        },
+        {
+          "rule_id": "S017",
+          "line": 59,
+          "column": 1
+        },
+        {
+          "rule_id": "S018",
+          "line": 61,
+          "column": 1
+        },
+        {
+          "rule_id": "S019",
+          "line": 63,
+          "column": 39
+        },
+        {
+          "rule_id": "S019",
+          "line": 63,
+          "column": 57
+        },
+        {
+          "rule_id": "S020",
+          "line": 65,
+          "column": 19
+        },
+        {
+          "rule_id": "S021",
+          "line": 67,
+          "column": 1
+        },
+        {
+          "rule_id": "T001",
+          "line": 1,
+          "column": 3
+        },
+        {
+          "rule_id": "T001",
+          "line": 103,
+          "column": 4
+        },
+        {
+          "rule_id": "T002",
+          "line": 97,
+          "column": 1
+        },
+        {
+          "rule_id": "T003",
+          "line": 99,
+          "column": 13
+        },
+        {
+          "rule_id": "T004",
+          "line": 101,
+          "column": 33
+        },
+        {
+          "rule_id": "T005",
+          "line": 103,
+          "column": 20
+        },
+        {
+          "rule_id": "T007",
+          "line": 107,
+          "column": 1
+        },
+        {
+          "rule_id": "T008",
+          "line": 113,
+          "column": 1
+        },
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 15
+        },
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 41
+        },
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 55
+        },
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 93
+        },
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 102
+        },
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 110
+        },
+        {
+          "rule_id": "V001",
+          "line": 9,
+          "column": 5
+        },
+        {
+          "rule_id": "V001",
+          "line": 13,
+          "column": 11
+        },
+        {
+          "rule_id": "V001",
+          "line": 31,
+          "column": 22
+        },
+        {
+          "rule_id": "V001",
+          "line": 31,
+          "column": 72
+        },
+        {
+          "rule_id": "V001",
+          "line": 33,
+          "column": 68
+        },
+        {
+          "rule_id": "V001",
+          "line": 33,
+          "column": 101
+        },
+        {
+          "rule_id": "V001",
+          "line": 49,
+          "column": 39
+        },
+        {
+          "rule_id": "V001",
+          "line": 61,
+          "column": 98
+        },
+        {
+          "rule_id": "V001",
+          "line": 65,
+          "column": 70
+        },
+        {
+          "rule_id": "V001",
+          "line": 71,
+          "column": 7
+        },
+        {
+          "rule_id": "V001",
+          "line": 73,
+          "column": 1
+        },
+        {
+          "rule_id": "V001",
+          "line": 73,
+          "column": 54
+        },
+        {
+          "rule_id": "V002",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "rule_id": "V002",
+          "line": 5,
+          "column": 12
+        },
+        {
+          "rule_id": "V002",
+          "line": 5,
+          "column": 31
+        },
+        {
+          "rule_id": "V002",
+          "line": 85,
+          "column": 1
+        },
+        {
+          "rule_id": "V003",
+          "line": 7,
+          "column": 1
+        },
+        {
+          "rule_id": "V004",
+          "line": 9,
+          "column": 5
+        },
+        {
+          "rule_id": "V004",
+          "line": 9,
+          "column": 29
+        },
+        {
+          "rule_id": "V004",
+          "line": 9,
+          "column": 36
+        },
+        {
+          "rule_id": "V004",
+          "line": 9,
+          "column": 60
+        },
+        {
+          "rule_id": "V004",
+          "line": 13,
+          "column": 11
+        },
+        {
+          "rule_id": "V004",
+          "line": 13,
+          "column": 48
+        },
+        {
+          "rule_id": "V005",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "rule_id": "V005",
+          "line": 11,
+          "column": 18
+        },
+        {
+          "rule_id": "V006",
+          "line": 13,
+          "column": 11
+        },
+        {
+          "rule_id": "V007",
+          "line": 15,
+          "column": 18
+        },
+        {
+          "rule_id": "V007",
+          "line": 15,
+          "column": 58
+        },
+        {
+          "rule_id": "V007",
+          "line": 15,
+          "column": 90
+        },
+        {
+          "rule_id": "V008",
+          "line": 17,
+          "column": 1
+        },
+        {
+          "rule_id": "V008",
+          "line": 17,
+          "column": 43
+        },
+        {
+          "rule_id": "V008",
+          "line": 17,
+          "column": 69
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G003",
+          "line": 17,
+          "note": "Ordinary progressive verbs are not a participle chain."
+        },
+        {
+          "rule_id": "G003",
+          "line": 63,
+          "note": "Gerunds inside a concrete layoff euphemism are not a participle chain."
+        },
+        {
+          "rule_id": "S010",
+          "line": 87,
+          "note": "Blank paragraphs break a repeated-sentence run."
+        },
+        {
+          "rule_id": "S021",
+          "line": 65,
+          "note": "The sentence has an explicit subject and finite verb."
+        },
+        {
+          "rule_id": "T006",
+          "line": 91,
+          "note": "Different reporting verbs in unrelated sentences are not elegant variation."
+        },
+        {
+          "rule_id": "V007",
+          "line": 93,
+          "note": "A literal research gap is not an invented concept label."
+        }
+      ]
+    },
+    "tests/fixtures/ai_generated/sample1.md": {
+      "expected": [
+        {
+          "rule_id": "S002",
+          "line": 15,
+          "column": 73
+        },
+        {
+          "rule_id": "S003",
+          "line": 13,
+          "column": 19
+        },
+        {
+          "rule_id": "S003",
+          "line": 15,
+          "column": 1
+        },
+        {
+          "rule_id": "T001",
+          "line": 1,
+          "column": 3
+        },
+        {
+          "rule_id": "T001",
+          "line": 13,
+          "column": 4
+        },
+        {
+          "rule_id": "V001",
+          "line": 1,
+          "column": 5
+        },
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 43
+        },
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 60
+        },
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 71
+        },
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 86
+        },
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 163
+        },
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 197
+        },
+        {
+          "rule_id": "V001",
+          "line": 5,
+          "column": 4
+        },
+        {
+          "rule_id": "V001",
+          "line": 7,
+          "column": 19
+        },
+        {
+          "rule_id": "V001",
+          "line": 8,
+          "column": 14
+        },
+        {
+          "rule_id": "V001",
+          "line": 11,
+          "column": 5
+        },
+        {
+          "rule_id": "V001",
+          "line": 11,
+          "column": 48
+        },
+        {
+          "rule_id": "V002",
+          "line": 17,
+          "column": 1
+        },
+        {
+          "rule_id": "V002",
+          "line": 17,
+          "column": 20
+        },
+        {
+          "rule_id": "V004",
+          "line": 11,
+          "column": 60
+        }
+      ],
+      "negative_cases": []
+    },
+    "tests/fixtures/human_written/sample2.md": {
+      "expected": [],
+      "negative_cases": [
+        {
+          "rule_id": "T007",
+          "line": 6,
+          "note": "Short headings separated by code blocks are not punchy prose."
+        }
+      ]
+    },
+    "quality/corpus/academic-excerpt.md": {
+      "expected": [],
+      "negative_cases": [
+        {
+          "rule_id": "G002",
+          "line": 14,
+          "note": "Measured uncertainty is appropriate for a small sample."
+        },
+        {
+          "rule_id": "G007",
+          "line": 14,
+          "note": "An explicit limitation is not performative vulnerability."
+        },
+        {
+          "rule_id": "G012",
+          "line": 11,
+          "note": "A procedural passive does not hide a policy actor."
+        },
+        {
+          "rule_id": "G013",
+          "line": 17,
+          "note": "Rejecting a universal gap claim is not a gap ritual."
+        },
+        {
+          "rule_id": "S006",
+          "line": 3,
+          "note": "A quantified result is substantive analysis."
+        },
+        {
+          "rule_id": "S013",
+          "line": 7,
+          "note": "Two relevant citations are not analogy stacking."
+        },
+        {
+          "rule_id": "S016",
+          "line": 7,
+          "note": "Two distinct citation sentences are not duplicate content."
+        },
+        {
+          "rule_id": "S018",
+          "line": 7,
+          "note": "Two synthesized citations stay below the name-dropping threshold."
+        },
+        {
+          "rule_id": "T006",
+          "line": 7,
+          "note": "Different precise research verbs are contextually justified."
+        },
+        {
+          "rule_id": "T008",
+          "line": 3,
+          "note": "The measured sentence is below the configured length limit."
+        },
+        {
+          "rule_id": "V007",
+          "line": 17,
+          "note": "A literal research gap is not a coined concept."
+        }
+      ]
+    },
+    "quality/corpus/business-memo.md": {
+      "expected": [],
+      "negative_cases": [
+        {
+          "rule_id": "G003",
+          "line": 3,
+          "note": "A technical restructuring noun is not a participle chain."
+        },
+        {
+          "rule_id": "G014",
+          "line": 6,
+          "note": "The sentence names both teams that agreed."
+        },
+        {
+          "rule_id": "S019",
+          "line": 3,
+          "note": "Database restructuring is a technical operation, not a layoff euphemism."
+        },
+        {
+          "rule_id": "S020",
+          "line": 9,
+          "note": "Memory alignment is a binary-format property."
+        },
+        {
+          "rule_id": "S021",
+          "line": 9,
+          "note": "The sentence has a subject, finite verb, and concrete measurement."
+        },
+        {
+          "rule_id": "T004",
+          "line": 6,
+          "note": "The paragraph consistently uses curly quotation marks."
+        }
+      ]
+    },
+    "quality/corpus/changelog.md": {
+      "expected": [],
+      "negative_cases": [
+        {
+          "rule_id": "G011",
+          "line": 20,
+          "note": "One concrete implementation noun is not nominalization overload."
+        },
+        {
+          "rule_id": "S003",
+          "line": 7,
+          "note": "A specific fix is not a formulaic challenge conclusion."
+        },
+        {
+          "rule_id": "S005",
+          "line": 7,
+          "note": "A factual release change does not inflate significance."
+        },
+        {
+          "rule_id": "T003",
+          "line": 5,
+          "note": "One date separator is not em-dash overuse."
+        },
+        {
+          "rule_id": "V001",
+          "line": 20,
+          "note": "Implementation names a concrete code change."
+        },
+        {
+          "rule_id": "V003",
+          "line": 10,
+          "note": "A dated release statement is not a knowledge-cutoff disclaimer."
+        }
+      ]
+    },
+    "quality/corpus/news-article.md": {
+      "expected": [],
+      "negative_cases": [
+        {
+          "rule_id": "G010",
+          "line": 14,
+          "note": "The article gives measured evidence after presenting both views."
+        },
+        {
+          "rule_id": "S007",
+          "line": 6,
+          "note": "The numeric range compares the same measured quantity."
+        },
+        {
+          "rule_id": "S017",
+          "line": 18,
+          "note": "The line discusses a dateline example rather than using an anecdote as proof."
+        },
+        {
+          "rule_id": "V005",
+          "line": 10,
+          "note": "The experts are named and tied to a dated inspection report."
+        },
+        {
+          "rule_id": "V006",
+          "line": 6,
+          "note": "A sourced percentage change does not claim grandiose stakes."
+        },
+        {
+          "rule_id": "V008",
+          "line": 6,
+          "note": "The trend claim includes the underlying figures and period."
+        }
+      ]
+    },
+    "quality/corpus/python-docs.py": {
+      "expected": [
+        {
+          "rule_id": "C001",
+          "line": 1,
+          "column": 1
+        },
+        {
+          "rule_id": "C002",
+          "line": 6,
+          "column": 5
+        },
+        {
+          "rule_id": "C003",
+          "line": 7,
+          "column": 5
+        },
+        {
+          "rule_id": "C004",
+          "line": 8,
+          "column": 5
+        },
+        {
+          "rule_id": "M001",
+          "line": 9,
+          "column": 5
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "C001",
+          "line": 14,
+          "note": "The docstring uses plain vocabulary."
+        },
+        {
+          "rule_id": "C002",
+          "line": 15,
+          "note": "The comment explains a non-obvious retry reason."
+        },
+        {
+          "rule_id": "C003",
+          "line": 16,
+          "note": "The comment describes caller behavior without chat language."
+        },
+        {
+          "rule_id": "C004",
+          "line": 17,
+          "note": "The TODO names a condition and tracking issue."
+        },
+        {
+          "rule_id": "M001",
+          "line": 15,
+          "note": "A plain Python comment contains no Markdown decoration."
+        }
+      ]
+    },
+    "quality/corpus/technical-guide.md": {
+      "expected": [
+        {
+          "rule_id": "T006",
+          "line": 35,
+          "column": 60
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G001",
+          "line": 3,
+          "note": "The sentence uses a direct verb."
+        },
+        {
+          "rule_id": "G004",
+          "line": 24,
+          "note": "A direct reference is not a suspense transition."
+        },
+        {
+          "rule_id": "G005",
+          "line": 24,
+          "note": "A direct reference is not a patronizing analogy."
+        },
+        {
+          "rule_id": "G006",
+          "line": 3,
+          "note": "Concrete current behavior is not futurist framing."
+        },
+        {
+          "rule_id": "G008",
+          "line": 3,
+          "note": "Measured retry behavior does not assert simplicity."
+        },
+        {
+          "rule_id": "G009",
+          "line": 24,
+          "note": "A direct instruction is not pedagogical stage-setting."
+        },
+        {
+          "rule_id": "M002",
+          "line": 24,
+          "note": "A normal Markdown link is not a model reference marker."
+        },
+        {
+          "rule_id": "M003",
+          "line": 24,
+          "note": "A documentation URL without tracking is valid."
+        },
+        {
+          "rule_id": "M004",
+          "line": 24,
+          "note": "A resolved inline link is not a broken reference."
+        },
+        {
+          "rule_id": "S001",
+          "line": 32,
+          "note": "One factual metric triad stays below the repetition threshold."
+        },
+        {
+          "rule_id": "S002",
+          "line": 3,
+          "note": "A single negative statement is not negative parallelism."
+        },
+        {
+          "rule_id": "S004",
+          "line": 19,
+          "note": "A table header is not an inline-header list."
+        },
+        {
+          "rule_id": "S008",
+          "line": 3,
+          "note": "One negative clause is not a dramatic countdown."
+        },
+        {
+          "rule_id": "S009",
+          "line": 24,
+          "note": "A direct sentence is not a rhetorical self-answer."
+        },
+        {
+          "rule_id": "S010",
+          "line": 7,
+          "note": "Platform headings are not a run of prose sentences."
+        },
+        {
+          "rule_id": "S011",
+          "line": 9,
+          "note": "Separated imperative instructions are not gerund fragments."
+        },
+        {
+          "rule_id": "S012",
+          "line": 19,
+          "note": "A table is not a listicle disguised as prose."
+        },
+        {
+          "rule_id": "S014",
+          "line": 32,
+          "note": "A final factual paragraph has no conclusion signpost."
+        },
+        {
+          "rule_id": "S015",
+          "line": 24,
+          "note": "A link to details is not a section summary ritual."
+        },
+        {
+          "rule_id": "T001",
+          "line": 1,
+          "note": "The heading already uses sentence case."
+        },
+        {
+          "rule_id": "T002",
+          "line": 24,
+          "note": "Inline link text is not bold overuse."
+        },
+        {
+          "rule_id": "T005",
+          "line": 1,
+          "note": "The heading contains no decorative emoji."
+        },
+        {
+          "rule_id": "T007",
+          "line": 7,
+          "note": "Short platform sections are headings, not punchy prose."
+        },
+        {
+          "rule_id": "V002",
+          "line": 24,
+          "note": "A direct instruction is not chat-like collaboration."
+        },
+        {
+          "rule_id": "V004",
+          "line": 3,
+          "note": "Measured retry behavior is not promotional language."
+        }
+      ]
+    }
+  }
+}

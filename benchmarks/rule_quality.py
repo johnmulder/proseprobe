@@ -355,13 +355,13 @@ def format_report(score: QualityScore) -> str:
         total.true_positives,
         total.true_positives + total.false_negatives,
     )
+    total_negatives = f"{total.negatives_passed}/{total.negatives_total}"
     lines.extend(
         [
             "-----  ---  ---  ---  ---------  -------  ---------",
             f"TOTAL  {total.true_positives:>3}  {total.false_positives:>3}  "
             f"{total.false_negatives:>3}  {total_precision:>9}  "
-            f"{total_recall:>7}  "
-            f"{total.negatives_passed}/{total.negatives_total:>5}",
+            f"{total_recall:>7}  {total_negatives:>9}",
         ]
     )
 

@@ -5,6 +5,8 @@ from pathlib import Path
 
 import pytest
 from benchmarks.rule_quality import (
+    DEFAULT_MANIFEST,
+    REPO_ROOT,
     ActualFinding,
     AnnotationError,
     ExpectedFinding,
@@ -13,6 +15,9 @@ from benchmarks.rule_quality import (
     load_annotations,
     score_findings,
 )
+
+from slop_lint.config import Config
+from slop_lint.rules import get_all_rules
 
 
 def test_scores_matches_mismatches_and_negative_cases() -> None:
@@ -145,3 +150,54 @@ def test_rejects_path_outside_repository(tmp_path: Path) -> None:
 
     with pytest.raises(AnnotationError, match="escapes the repository"):
         load_annotations(manifest, tmp_path, {"V001"})
+
+
+def test_rejects_malformed_json(tmp_path: Path) -> None:
+    """Invalid JSON should retain the manifest path in its error."""
+    manifest = tmp_path / "annotations.json"
+    manifest.write_text("{")
+
+    with pytest.raises(AnnotationError, match=r"annotations\.json: invalid JSON"):
+        load_annotations(manifest, tmp_path, {"V001"})
+
+
+def test_rejects_missing_corpus_file(tmp_path: Path) -> None:
+    """Every manifest path should resolve to a real source file."""
+    manifest = _write_manifest(tmp_path, _valid_manifest())
+
+    with pytest.raises(AnnotationError, match="source file does not exist"):
+        load_annotations(manifest, tmp_path, {"V001"})
+
+
+def test_rejects_duplicate_expected_location(tmp_path: Path) -> None:
+    """One source location may be expected only once per rule."""
+    (tmp_path / "doc.md").write_text("delve\nplain\n")
+    data = _valid_manifest()
+    expected = data["files"]["doc.md"]["expected"]  # type: ignore[index]
+    expected.append(dict(expected[0]))  # type: ignore[union-attr]
+    manifest = _write_manifest(tmp_path, data)
+
+    with pytest.raises(AnnotationError, match="duplicates an expected location"):
+        load_annotations(manifest, tmp_path, {"V001"})
+
+
+def test_rejects_conflicting_negative_case(tmp_path: Path) -> None:
+    """A location cannot assert that the same rule is present and absent."""
+    (tmp_path / "doc.md").write_text("delve\nplain\n")
+    data = _valid_manifest()
+    negative = data["files"]["doc.md"]["negative_cases"][0]  # type: ignore[index]
+    negative["line"] = 1  # type: ignore[index]
+    manifest = _write_manifest(tmp_path, data)
+
+    with pytest.raises(AnnotationError, match="conflicts with an expected finding"):
+        load_annotations(manifest, tmp_path, {"V001"})
+
+
+def test_reviewed_corpus_covers_every_registered_rule() -> None:
+    """The committed manifest should cover the live rule registry."""
+    rule_ids = {rule.id for rule in get_all_rules(Config())}
+
+    annotations = load_annotations(DEFAULT_MANIFEST, REPO_ROOT, rule_ids)
+
+    assert {item.rule_id for item in annotations.expected} == rule_ids
+    assert {item.rule_id for item in annotations.negative_cases} == rule_ids
