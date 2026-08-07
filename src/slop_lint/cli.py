@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 
 from slop_lint._ansi import clear_screen, style, table
 from slop_lint.config import ConfigError, load_config, validate_rule_references
+from slop_lint.core.baseline import Baseline, filter_new_issues, resolve_workspace
 from slop_lint.core.linter import Linter, LintReadError, LintResults
 from slop_lint.rules import get_all_rules
 from slop_lint.rules.base import (
@@ -117,70 +118,55 @@ def _filter_by_confidence(
     return {path: issues for path, issues in filtered.items() if issues}
 
 
+def _load_requested_baseline(args: argparse.Namespace) -> Baseline | None:
+    """Load an explicitly requested filtering baseline once."""
+    if not args.baseline or args.generate_baseline:
+        return None
+    baseline = Baseline(Path(args.baseline))
+    if not baseline.load():
+        raise ConfigError(baseline.baseline_path, "baseline file not found")
+    return baseline
+
+
 def _apply_baseline(
-    results: dict[Path, list[Issue]],
+    lint_results: LintResults,
     args: argparse.Namespace,
-    paths: list[Path],
-) -> dict[Path, list[Issue]] | None:
-    """Handle --generate-baseline or --baseline filtering.
-
-    Returns:
-        Filtered results, or *None* when a baseline was generated (caller
-        should return 0 immediately).
-    """
+    baseline: Baseline | None,
+    workspace: Path,
+) -> LintResults | None:
+    """Generate or apply a preloaded baseline after all other scan filters."""
+    results = lint_results.issues_by_file
     if args.generate_baseline:
-        from slop_lint.core.baseline import Baseline
-
-        baseline_path = Path(args.baseline) if args.baseline else None
-        baseline_obj = Baseline(baseline_path)
-        workspace = paths[0].parent if paths else Path.cwd()
-
+        generated = Baseline(Path(args.baseline) if args.baseline else None)
         for file_path, issues in results.items():
             try:
-                content = file_path.read_text()
-                for issue in issues:
-                    baseline_obj.add_issue(issue, file_path, content, workspace)
-            except OSError:
-                continue
-
-        baseline_obj.save()
+                content = file_path.read_text(encoding="utf-8")
+            except (OSError, UnicodeDecodeError) as exc:
+                raise LintReadError(file_path, str(exc)) from exc
+            for issue in issues:
+                generated.add_issue(issue, file_path, content, workspace)
+        generated.save()
         print(
-            style(
-                f"Generated baseline with {baseline_obj.count} issue(s)",
-                color="green",
-            )
-            + f" at {baseline_obj.baseline_path}"
+            style(f"Generated baseline with {generated.count} issue(s)", color="green")
+            + f" at {generated.baseline_path}"
         )
         return None
 
-    if args.baseline:
-        from slop_lint.core.baseline import Baseline, filter_new_issues
+    if baseline is None:
+        return lint_results
 
-        baseline_path = Path(args.baseline)
-        baseline_obj = Baseline(baseline_path)
-        if baseline_obj.load():
-            workspace = paths[0].parent if paths else Path.cwd()
-            original_count = sum(len(issues) for issues in results.values())
-            results = filter_new_issues(results, baseline_obj, workspace)
-            new_count = sum(len(issues) for issues in results.values())
-            if not args.quiet and args.verbose:
-                print(
-                    style(
-                        f"Baseline: {original_count} total, {new_count} new issue(s)",
-                        dim=True,
-                    ),
-                    file=sys.stderr,
-                )
-        else:
-            print(
-                style(
-                    f"Warning: Baseline file not found: {baseline_path}",
-                    color="yellow",
-                ),
-                file=sys.stderr,
-            )
-
-    return results
+    original_count = sum(len(issues) for issues in results.values())
+    filtered = filter_new_issues(results, baseline, workspace)
+    new_count = sum(len(issues) for issues in filtered.values())
+    if not args.quiet and args.verbose:
+        print(
+            style(
+                f"Baseline: {original_count} total, {new_count} new issue(s)",
+                dim=True,
+            ),
+            file=sys.stderr,
+        )
+    return LintResults(filtered, files_checked=lint_results.files_checked)
 
 
 def _prepare_scan(args: argparse.Namespace) -> tuple[Config, Linter, list[Rule]]:
@@ -218,14 +204,11 @@ def _scan_paths(
     paths: list[Path],
     args: argparse.Namespace,
     config: Config,
-) -> LintResults | None:
-    """Scan and filter one path batch with the effective CLI policy."""
+) -> LintResults:
+    """Scan paths and apply all non-baseline filters."""
     lint_results = linter.check(paths)
     results = _filter_by_confidence(lint_results.issues_by_file, args, config)
-    baseline_results = _apply_baseline(results, args, paths)
-    if baseline_results is None:
-        return None
-    return LintResults(baseline_results, files_checked=lint_results.files_checked)
+    return LintResults(results, files_checked=lint_results.files_checked)
 
 
 def _has_failing_issue(results: dict[Path, list[Issue]]) -> bool:
@@ -267,6 +250,8 @@ def _cmd_check(args: argparse.Namespace) -> int:
 
     try:
         config, linter, active_rules = _prepare_scan(args)
+        baseline = _load_requested_baseline(args)
+        workspace = resolve_workspace(paths)
     except ConfigError as exc:
         print(f"Configuration error: {exc}", file=sys.stderr)
         return 2
@@ -293,15 +278,16 @@ def _cmd_check(args: argparse.Namespace) -> int:
 
     try:
         lint_results = _scan_paths(linter, paths, args, config)
+        baseline_results = _apply_baseline(lint_results, args, baseline, workspace)
     except ConfigError as exc:
         print(f"Configuration error: {exc}", file=sys.stderr)
         return 2
     except LintReadError as exc:
         print(f"Could not read file: {exc}", file=sys.stderr)
         return 3
-    if lint_results is None:
+    if baseline_results is None:
         return 0
-    return _output_results(lint_results, args, rules=active_rules)
+    return _output_results(baseline_results, args, rules=active_rules)
 
 
 def _cmd_rules(_args: argparse.Namespace) -> int:
@@ -399,6 +385,8 @@ def _cmd_watch(args: argparse.Namespace) -> int:
 
     try:
         config, linter, active_rules = _prepare_scan(args)
+        baseline = _load_requested_baseline(args)
+        workspace = resolve_workspace(paths)
     except ConfigError as exc:
         print(f"Configuration error: {exc}", file=sys.stderr)
         return 2
@@ -423,13 +411,16 @@ def _cmd_watch(args: argparse.Namespace) -> int:
                     )
                 try:
                     lint_results = _scan_paths(linter, changed_files, args, config)
+                    baseline_results = _apply_baseline(
+                        lint_results, args, baseline, workspace
+                    )
                 except ConfigError as exc:
                     print(f"Configuration error: {exc}", file=sys.stderr)
                 except LintReadError as exc:
                     print(f"Could not read file: {exc}", file=sys.stderr)
                 else:
-                    if lint_results is not None:
-                        _output_results(lint_results, args, rules=active_rules)
+                    if baseline_results is not None:
+                        _output_results(baseline_results, args, rules=active_rules)
 
             time.sleep(args.interval)
 

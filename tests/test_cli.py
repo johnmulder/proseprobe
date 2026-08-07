@@ -401,7 +401,7 @@ class TestBaselineMode:
     """Tests for baseline mode."""
 
     def test_generate_baseline(self, tmp_path: Path) -> None:
-        """Test generating a baseline file."""
+        """Baseline generation should write the structured format."""
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
         baseline_file = tmp_path / ".slop-lint-baseline.json"
@@ -417,6 +417,7 @@ class TestBaselineMode:
         assert result.exit_code == 0
         assert baseline_file.exists()
         assert "Generated baseline" in result.stdout
+        assert json.loads(baseline_file.read_text())["version"] == 2
 
     def test_generate_baseline_excludes_suppressed_findings(
         self, tmp_path: Path
@@ -468,8 +469,8 @@ class TestBaselineMode:
         assert result.exit_code == 0
         assert "No issues found" in result.stdout
 
-    def test_baseline_warning_on_missing_file(self, tmp_path: Path) -> None:
-        """Test warning when baseline file doesn't exist."""
+    def test_missing_baseline_is_configuration_error(self, tmp_path: Path) -> None:
+        """An explicitly requested baseline must exist."""
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
 
@@ -480,27 +481,219 @@ class TestBaselineMode:
             str(tmp_path / "missing.json"),
         )
 
-        assert "Warning" in result.stderr
-        assert "not found" in result.stderr
+        assert result.exit_code == 2
+        assert result.stdout == ""
+        assert "Configuration error" in result.stderr
+        assert "baseline file not found" in result.stderr
 
-    def test_missing_baseline_does_not_corrupt_json(self, tmp_path: Path) -> None:
-        """Baseline diagnostics belong on stderr, not structured stdout."""
-        import json
-
+    @pytest.mark.parametrize("output_format", ["text", "json", "sarif"])
+    @pytest.mark.parametrize(
+        "payload",
+        ["not json", '{"version": 3, "entries": []}'],
+    )
+    def test_invalid_baseline_stops_before_reporting(
+        self, tmp_path: Path, output_format: str, payload: str
+    ) -> None:
+        """Invalid baselines should not emit findings or structured output."""
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
+        baseline_file = tmp_path / "baseline.json"
+        baseline_file.write_text(payload)
 
         result = run_cli(
             "check",
             str(test_file),
             "--format",
-            "json",
+            output_format,
             "--baseline",
-            str(tmp_path / "missing.json"),
+            str(baseline_file),
         )
 
-        assert json.loads(result.stdout)["summary"]["total_issues"] >= 1
-        assert "Baseline file not found" in result.stderr
+        assert result.exit_code == 2
+        assert result.stdout == ""
+        assert "Configuration error" in result.stderr
+        assert str(baseline_file) in result.stderr
+        assert "Traceback" not in result.stderr
+
+    def test_unreadable_baseline_is_configuration_error(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Read failures should use configuration exit semantics."""
+        baseline_file = tmp_path / "baseline.json"
+        baseline_file.write_text('{"version": 2, "entries": []}')
+        test_file = tmp_path / "test.md"
+        test_file.write_text("Clean content.")
+        original_read_text = Path.read_text
+
+        def fail_baseline(path: Path, *args: object, **kwargs: object) -> str:
+            if path == baseline_file:
+                raise PermissionError("permission denied")
+            return original_read_text(path, *args, **kwargs)  # type: ignore[arg-type]
+
+        monkeypatch.setattr(Path, "read_text", fail_baseline)
+
+        result = run_cli("check", str(test_file), "--baseline", str(baseline_file))
+
+        assert result.exit_code == 2
+        assert result.stdout == ""
+        assert "permission denied" in result.stderr
+
+    def test_watch_rejects_invalid_baseline_before_loop(self, tmp_path: Path) -> None:
+        """Watch should validate a baseline before printing loop output."""
+        baseline_file = tmp_path / "baseline.json"
+        baseline_file.write_text("not json")
+        test_file = tmp_path / "test.md"
+        test_file.write_text("Clean content.")
+
+        result = run_cli("watch", str(test_file), "--baseline", str(baseline_file))
+
+        assert result.exit_code == 2
+        assert result.stdout == ""
+        assert "Configuration error" in result.stderr
+
+    def test_watch_loads_baseline_once(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A watch command should reuse its preflight baseline object."""
+        from slop_lint.core.baseline import Baseline
+
+        baseline_file = tmp_path / "baseline.json"
+        baseline_file.write_text('{"version": 2, "entries": []}')
+        test_file = tmp_path / "test.md"
+        test_file.write_text("Clean content.")
+        original_load = Baseline.load
+        load_count = 0
+
+        def count_load(baseline: Baseline) -> bool:
+            nonlocal load_count
+            load_count += 1
+            return original_load(baseline)
+
+        def stop(_interval: float) -> None:
+            raise KeyboardInterrupt
+
+        monkeypatch.setattr(Baseline, "load", count_load)
+        monkeypatch.setattr("slop_lint.cli.time.sleep", stop)
+
+        result = run_cli("watch", str(test_file), "--baseline", str(baseline_file))
+
+        assert result.exit_code == 0
+        assert load_count == 1
+
+    def test_generation_uses_confidence_filtered_findings(self, tmp_path: Path) -> None:
+        """Low-confidence findings hidden by policy should not enter a baseline."""
+        test_file = tmp_path / "test.md"
+        test_file.write_text("This is a notable achievement.")
+        baseline_file = tmp_path / "baseline.json"
+
+        result = run_cli(
+            "check",
+            str(test_file),
+            "--select",
+            "V001",
+            "--min-confidence",
+            "high",
+            "--generate-baseline",
+            "--baseline",
+            str(baseline_file),
+        )
+
+        assert result.exit_code == 0
+        assert json.loads(baseline_file.read_text())["entries"] == []
+
+    def test_baseline_workspace_is_independent_of_path_order(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Files in different directories should share their repository root."""
+        (tmp_path / ".git").mkdir()
+        docs = tmp_path / "docs"
+        source = tmp_path / "src"
+        docs.mkdir()
+        source.mkdir()
+        markdown_file = docs / "guide.md"
+        python_file = source / "module.py"
+        markdown_file.write_text("This delves into topics.")
+        python_file.write_text("# This delves into setup.\n")
+        baseline_file = tmp_path / "baseline.json"
+        monkeypatch.chdir(tmp_path)
+
+        generated = run_cli(
+            "check",
+            "docs/guide.md",
+            str(python_file),
+            "--select",
+            "V001",
+            "--generate-baseline",
+            "--baseline",
+            str(baseline_file),
+        )
+        checked = run_cli(
+            "check",
+            str(python_file),
+            str(markdown_file),
+            "--select",
+            "V001",
+            "--baseline",
+            str(baseline_file),
+        )
+
+        assert generated.exit_code == 0
+        assert checked.exit_code == 0
+        assert "No issues found" in checked.stdout
+
+    def test_version_one_baseline_still_filters(self, tmp_path: Path) -> None:
+        """Legacy files should remain usable during the compatibility cycle."""
+        from slop_lint.core.baseline import Baseline
+        from slop_lint.rules.base import Issue
+
+        test_file = tmp_path / "test.md"
+        content = "This delves into topics."
+        test_file.write_text(content)
+        issue = Issue("V001", "Overused word: 'delves' → consider 'explore'", 1, 6)
+        baseline = Baseline(tmp_path / "baseline.json")
+        fingerprint = baseline._compute_legacy_fingerprint(
+            issue, test_file, content, tmp_path
+        )
+        baseline.baseline_path.write_text(
+            json.dumps({"version": "1.0", "fingerprints": [fingerprint]})
+        )
+
+        result = run_cli(
+            "check",
+            str(test_file),
+            "--select",
+            "V001",
+            "--baseline",
+            str(baseline.baseline_path),
+        )
+
+        assert result.exit_code == 0
+        assert "No issues found" in result.stdout
+
+    def test_baseline_write_failure_is_configuration_error(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Atomic write failures should be concise and recoverable."""
+        test_file = tmp_path / "test.md"
+        test_file.write_text("This delves into topics.")
+
+        def fail_replace(_source: object, _target: object) -> None:
+            raise OSError("disk unavailable")
+
+        monkeypatch.setattr("slop_lint.core.baseline.os.replace", fail_replace)
+
+        result = run_cli(
+            "check",
+            str(test_file),
+            "--generate-baseline",
+            "--baseline",
+            str(tmp_path / "baseline.json"),
+        )
+
+        assert result.exit_code == 2
+        assert result.stdout == ""
+        assert "disk unavailable" in result.stderr
+        assert "Traceback" not in result.stderr
 
     def test_verbose_baseline_counts_do_not_corrupt_json(self, tmp_path: Path) -> None:
         """Verbose scan diagnostics leave structured stdout parseable."""
