@@ -575,6 +575,18 @@ class TestHedgeStacking:
         ]
         assert len(hedge_stack_issues) >= 1
 
+    def test_detects_hedge_stacking_across_markdown_lines(self) -> None:
+        text = "The result may\npotentially perhaps fail."
+
+        issues = ExcessiveHedgingRule().check(text, "test.md")
+        stacking = [
+            issue for issue in issues if issue.message.startswith("Hedge stacking")
+        ]
+
+        assert len(stacking) == 1
+        assert (stacking[0].line, stacking[0].column) == (1, 1)
+        assert "3 hedges" in stacking[0].message
+
     def test_ignores_single_hedge(self) -> None:
         """Don't flag a single hedge as stacking."""
         rule = ExcessiveHedgingRule()

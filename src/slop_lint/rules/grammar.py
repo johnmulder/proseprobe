@@ -20,7 +20,7 @@ from slop_lint.data.phrases import (
     PATRONIZING_ANALOGY_PHRASES,
     PEDAGOGICAL_VOICE_PHRASES,
 )
-from slop_lint.parsers.prose import iter_prose_scopes
+from slop_lint.parsers.prose import iter_prose_scopes, iter_prose_sentences
 from slop_lint.rules.base import Confidence, Issue, Rule, Severity
 
 
@@ -89,22 +89,23 @@ class ExcessiveHedgingRule(Rule):
                         )
                     )
 
-            # Per-sentence hedge stacking detection
-            sentences = re.split(r"(?<=[.!?])\s+", line)
-            for sentence in sentences:
-                hedge_matches = list(self._HEDGE_WORDS.finditer(sentence))
-                if len(hedge_matches) >= 2:
-                    col = line.find(sentence)
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Hedge stacking: {len(hedge_matches)} hedges in one sentence",
-                            line=line_num,
-                            column=max(1, col + 1),
-                            severity=self.severity,
-                            confidence=Confidence.HIGH,
-                        )
-                    )
+        for sentence in iter_prose_sentences(content, filename):
+            hedge_matches = list(self._HEDGE_WORDS.finditer(sentence.text))
+            if len(hedge_matches) < 2:
+                continue
+            sentence_line, sentence_column = sentence.source_position()
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=(
+                        f"Hedge stacking: {len(hedge_matches)} hedges in one sentence"
+                    ),
+                    line=sentence_line,
+                    column=sentence_column,
+                    severity=self.severity,
+                    confidence=Confidence.HIGH,
+                )
+            )
 
         return list({(issue.line, issue.column): issue for issue in issues}.values())
 
