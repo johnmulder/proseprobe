@@ -119,23 +119,31 @@ class ParticipleChainsRule(Rule):
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
-    # Pattern for multiple -ing words in a row (3+)
-    _pattern = r"\b(\w+ing)\b[^.]*\b(\w+ing)\b[^.]*\b(\w+ing)\b"
+    _pattern = re.compile(
+        r"(?:^|,\s*)"
+        r"(?P<first>(?<!-)\b[a-z]+ing\b)"
+        r"[^.!?]*?(?:,\s*|\s+(?:and|while)\s+)"
+        r"(?P<second>(?<!-)\b[a-z]+ing\b)(?=\s+[a-z])"
+        r"(?:[^.!?]*?(?:,\s*|\s+(?:and|while)\s+)"
+        r"(?P<third>(?<!-)\b[a-z]+ing\b)(?=\s+[a-z]))?",
+        re.IGNORECASE,
+    )
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for participle chains."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
-            match = re.search(self._pattern, line, re.IGNORECASE)
+            match = self._pattern.search(line)
             if match:
-                # Extract the -ing words
-                words = [match.group(1), match.group(2), match.group(3)]
+                words = [match.group("first"), match.group("second")]
+                if third := match.group("third"):
+                    words.append(third)
                 issues.append(
                     Issue(
                         rule_id=self.id,
                         message=f"Participle chain: '{', '.join(words)}'",
                         line=line_num,
-                        column=match.start() + 1,
+                        column=match.start("first") + 1,
                         end_column=match.end() + 1,
                         severity=self.severity,
                     )

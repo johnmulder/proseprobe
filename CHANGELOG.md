@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Duplicate same-rule findings from overlapping G002, S012, and V001 patterns.
+- G003 false positives from unrelated progressive verbs and technical gerunds.
 
 ### Changed
 - `rules` and `explain` now show canonical confidence, context, profile, and

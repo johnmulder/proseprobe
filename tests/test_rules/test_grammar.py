@@ -66,12 +66,44 @@ class TestExcessiveHedging:
 class TestParticipleChainsRule:
     """Tests for G003: Participle Chains."""
 
-    def test_detects_participle_chains(self) -> None:
-        """Test detecting participle chains."""
+    def test_detects_two_participle_heads(self) -> None:
+        """Detect two coordinated participial clause heads."""
         text = "The team, working diligently while maintaining focus, delivered."
+        issues = ParticipleChainsRule().check(text, "test.md")
+
+        assert len(issues) == 1
+        assert issues[0].message == "Participle chain: 'working, maintaining'"
+        assert issues[0].column == 11
+        assert issues[0].end_column == 47
+
+    def test_detects_three_participle_heads(self) -> None:
+        """Detect three comma-separated participial clause heads."""
+        text = (
+            "Leveraging modern techniques, enhancing performance, fostering adoption."
+        )
+        issues = ParticipleChainsRule().check(text, "test.md")
+
+        assert len(issues) == 1
+        assert issues[0].message == (
+            "Participle chain: 'Leveraging, enhancing, fostering'"
+        )
+        assert issues[0].column == 1
+        assert issues[0].end_column == 63
+
+    def test_ignores_non_chains(self) -> None:
+        """Ignore progressive clauses, technical gerunds, and examples."""
         rule = ParticipleChainsRule()
-        issues = rule.check(text, "test.md")
-        assert isinstance(issues, list)
+        texts = (
+            "More people are adopting it, and everyone is talking about trends sweeping the industry.",
+            "The company is undergoing a strategic restructuring and right-sizing initiative.",
+            'The guide quotes "highlighting risks, reducing costs" as an example.',
+            "The working group reviewed naming conventions before testing them.",
+            "The report concludes by highlighting the result.",
+            "Running without a profile preserves the selection, warning",
+        )
+
+        for text in texts:
+            assert rule.check(text, "test.md") == []
 
     def test_rule_metadata(self) -> None:
         """Test rule has correct metadata."""
