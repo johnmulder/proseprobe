@@ -281,8 +281,8 @@ class TestParserInvariants:
             assert 1 <= n <= total
 
 
-class TestBaselineFingerprint:
-    """Property tests for baseline fingerprint stability."""
+class TestBaselineEntry:
+    """Property tests for baseline entry stability."""
 
     @given(
         rule_id=st.text(min_size=1, max_size=10, alphabet="A-Z0-9"),
@@ -291,10 +291,10 @@ class TestBaselineFingerprint:
         content=st.text(min_size=1, max_size=500),
     )
     @settings(max_examples=50, suppress_health_check=[HealthCheck.too_slow])
-    def test_fingerprint_is_deterministic(
+    def test_entry_is_deterministic(
         self, rule_id: str, message: str, line: int, content: str
     ) -> None:
-        """Same inputs must always produce the same fingerprint."""
+        """Same inputs must always produce the same structured identity."""
         from pathlib import Path as P
 
         from slop_lint.core.baseline import Baseline
@@ -304,6 +304,8 @@ class TestBaselineFingerprint:
 
         issue = Issue(rule_id=rule_id, message=message, line=line, column=1)
         bl = Baseline(P("/dev/null"))
-        fp1 = bl._compute_fingerprint(issue, P("test.md"), content)
-        fp2 = bl._compute_fingerprint(issue, P("test.md"), content)
-        assert fp1 == fp2
+        bl.add_issue(issue, P("test.md"), content)
+        first = bl.entries
+        bl.add_issue(issue, P("test.md"), content)
+
+        assert bl.entries == first

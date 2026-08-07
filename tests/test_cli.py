@@ -440,7 +440,7 @@ class TestBaselineMode:
 
         assert result.exit_code == 0
         assert "0 issue(s)" in result.stdout
-        assert json.loads(baseline_file.read_text())["fingerprints"] == []
+        assert json.loads(baseline_file.read_text()) == {"version": 2, "entries": []}
 
     def test_baseline_filters_known_issues(self, tmp_path: Path) -> None:
         """Test that baseline mode filters known issues."""
