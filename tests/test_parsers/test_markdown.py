@@ -282,6 +282,18 @@ Visible prose.
             content[link.url_start - 1 : link.url_end - 1] == "https://example.com/path"
         )
 
+    def test_get_links_retains_empty_inline_destination_span(self) -> None:
+        """An empty inline destination should retain its insertion point."""
+        [link] = MarkdownParser("[example]()").get_links()
+
+        assert (
+            link.url,
+            link.line,
+            link.column,
+            link.url_start,
+            link.url_end,
+        ) == ("", 1, 1, 11, 11)
+
     def test_get_links_autolink(self) -> None:
         """Test extracting autolink URLs."""
         content = "See <https://example.com/path> for details."
@@ -352,6 +364,18 @@ Visible prose.
             use.column,
             use.end_column,
         ) == ("ref", "text", None, 3, 5, 16)
+
+    def test_get_references_retains_empty_definition_destination(self) -> None:
+        """An empty definition should remain available to markup rules."""
+        [reference] = MarkdownParser("[ref]:").get_references()
+
+        assert reference.is_definition is True
+        assert (
+            reference.destination,
+            reference.line,
+            reference.destination_start,
+            reference.destination_end,
+        ) == ("", 1, 7, 7)
 
     def test_get_references_keeps_undefined_full_collapsed_and_image_uses(
         self,

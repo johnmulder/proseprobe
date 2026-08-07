@@ -459,7 +459,7 @@ class MarkdownParser:
         after_label = closing + 1
         if after_label >= len(line) or line[after_label] != ":":
             return None
-        destination_match = re.match(r"\s*(\S+)", line[after_label + 1 :])
+        destination_match = re.match(r"\s*(\S*)", line[after_label + 1 :])
         if destination_match is None:
             return None
         label = cls._normalize_reference_label(text)
@@ -584,7 +584,7 @@ class MarkdownParser:
         code_lines = self._code_lines()
         html_lines = self._html_lines()
         links: list[MarkdownLink] = []
-        link_re = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+        link_re = re.compile(r"\[([^\]]+)\]\(([^)]*)\)")
         autolink_re = re.compile(r"<(https?://[^>\s]+)>")
         references = self.get_references()
         reference_defs: dict[str, MarkdownReference] = {}
