@@ -75,6 +75,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `M002` | ChatGPT Markers | Markup | error | medium | markdown / prose | — |
 | `M003` | UTM Parameters | Markup | warning | medium | markdown / raw | — |
 | `M004` | Broken References | Markup | error | medium | markdown / prose | — |
+| `M005` | Unresolved Markdown References | Markup | error | high | markdown / non_code | — |
 
 <!-- rule-docs:inventory:end -->
 
@@ -650,6 +651,34 @@ See the attached document [attached_file:1] for details.
 ```markdown
 See `docs/architecture.md` for details.
 ```
+
+---
+
+### M005: Unresolved Markdown References
+
+Detects explicit Markdown reference uses without a matching definition and
+duplicate definitions that assign different destinations to the same normalized
+label. Undefined uses are high confidence; conflicting definitions are low
+confidence.
+
+**Example (bad):**
+```markdown
+See [the installation guide][install].
+
+[api]: /api/v1
+[API]: /api/v2
+```
+
+**Example (good):**
+```markdown
+See [the installation guide][install].
+
+[install]: /installation
+```
+
+Bare bracketed text is not considered an unresolved shortcut because shortcut
+references exist only when a matching definition is present. Footnotes and
+references inside code examples are ignored.
 
 ---
 

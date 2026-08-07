@@ -117,3 +117,7 @@ According to recent studies turn0search0, the approach works with contentReferen
 See [documentation](https://example.com/path?utm_source=chatgpt.com).
 
 See the attached document [attached_file:1] and grok_card for details.
+
+See [installation guide][missing-install].
+See [retry guide][retry-reference].
+[retry-reference]: https://example.com/retries

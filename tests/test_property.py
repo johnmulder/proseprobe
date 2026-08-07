@@ -25,6 +25,7 @@ from slop_lint.rules.grammar import (
 from slop_lint.rules.markup import (
     BrokenReferencesRule,
     ChatGPTMarkersRule,
+    UnresolvedMarkdownReferencesRule,
     UTMParametersRule,
     WrongMarkupRule,
 )
@@ -95,6 +96,7 @@ ALL_RULES = [
     ChatGPTMarkersRule(),
     UTMParametersRule(),
     BrokenReferencesRule(),
+    UnresolvedMarkdownReferencesRule(),
     DocstringVocabularyRule(),
     VerboseCommentsRule(),
     CollaborativeCommentsRule(),

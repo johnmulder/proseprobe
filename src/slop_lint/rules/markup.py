@@ -1,10 +1,16 @@
-"""Markup detection rules (M001-M004)."""
+"""Markup detection rules (M001-M005)."""
 
 import re
 from typing import ClassVar
 
-from slop_lint.parsers.markdown import is_markdown_file
-from slop_lint.parsers.python import _get_cached_parser
+from slop_lint.parsers.markdown import (
+    MarkdownReference,
+    is_markdown_file,
+)
+from slop_lint.parsers.markdown import (
+    _get_cached_parser as _get_cached_markdown_parser,
+)
+from slop_lint.parsers.python import _get_cached_parser as _get_cached_python_parser
 from slop_lint.rules.base import Confidence, Issue, Rule, Severity
 
 
@@ -34,7 +40,7 @@ class WrongMarkupRule(Rule):
         # Build a set of line numbers inside string literals so we can
         # skip #-prefixed lines that are really part of a string.
         string_lines: set[int] = set()
-        parser = _get_cached_parser(content)
+        parser = _get_cached_python_parser(content)
         if parser.parse():
             for start_line, _col, value in parser.get_string_literals():
                 line_count = value.count("\n")
@@ -191,3 +197,63 @@ class BrokenReferencesRule(Rule):
                     )
 
         return issues
+
+
+class UnresolvedMarkdownReferencesRule(Rule):
+    """M005: Detect undefined references and conflicting definitions."""
+
+    id = "M005"
+    name = "Unresolved Markdown References"
+    description = "Detects undefined reference labels and conflicting definitions"
+    severity = Severity.ERROR
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown"}
+    content_scope = "non_code"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check Markdown reference uses and definitions."""
+        if not is_markdown_file(filename):
+            return []
+
+        references = _get_cached_markdown_parser(content).get_references()
+        definitions: dict[str, list[MarkdownReference]] = {}
+        for reference in references:
+            if reference.is_definition:
+                definitions.setdefault(reference.label, []).append(reference)
+
+        issues = [
+            Issue(
+                rule_id=self.id,
+                message=f"Undefined reference label: '{reference.label}'",
+                line=reference.line,
+                column=reference.column,
+                end_column=reference.end_column,
+                severity=self.severity,
+                confidence=self.default_confidence,
+                suggestion=(
+                    f"Define '[{reference.label}]: destination' or use an inline link"
+                ),
+            )
+            for reference in references
+            if not reference.is_definition and reference.label not in definitions
+        ]
+
+        for label, label_definitions in definitions.items():
+            destinations = {reference.destination for reference in label_definitions}
+            if len(destinations) < 2:
+                continue
+            issues.extend(
+                Issue(
+                    rule_id=self.id,
+                    message=f"Conflicting reference definition: '{label}'",
+                    line=reference.line,
+                    column=reference.column,
+                    end_column=reference.end_column,
+                    severity=self.severity,
+                    confidence=Confidence.LOW,
+                    suggestion=f"Use one destination for reference label '{label}'",
+                )
+                for reference in label_definitions
+            )
+
+        return sorted(issues, key=lambda issue: (issue.line, issue.column))

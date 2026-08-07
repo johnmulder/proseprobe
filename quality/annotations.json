@@ -179,6 +179,11 @@
           "column": 49
         },
         {
+          "rule_id": "M005",
+          "line": 121,
+          "column": 5
+        },
+        {
           "rule_id": "S001",
           "line": 19,
           "column": 15
@@ -555,6 +560,11 @@
         }
       ],
       "negative_cases": [
+        {
+          "rule_id": "M005",
+          "line": 122,
+          "note": "The reference label has a matching definition."
+        },
         {
           "rule_id": "G003",
           "line": 17,

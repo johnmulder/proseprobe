@@ -448,9 +448,9 @@ class TestProfiles:
         [
             ("academic", "G011", "V008", "medium"),
             ("business", "S021", "G011", "low"),
-            ("general", "V001", "M004", "medium"),
+            ("general", "V001", "M005", "medium"),
             ("journalism", "V008", "S021", "medium"),
-            ("technical-docs", "M004", "V008", "low"),
+            ("technical-docs", "M005", "V008", "low"),
         ],
     )
     def test_cli_profile_resolves_policy(
