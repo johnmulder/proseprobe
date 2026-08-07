@@ -149,6 +149,28 @@ select = ["G001"]
 
         assert isinstance(config, Config)
         assert config.severity == "warning"
+        assert config.source_path is None
+
+    def test_records_explicit_config_path(self, tmp_path: Path) -> None:
+        """Loaded configuration should retain its source path."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text("select = ['V']\n")
+
+        config = load_config(config_file)
+
+        assert config.source_path == config_file
+
+    def test_records_discovered_config_path(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Auto-discovered configuration should retain its source path."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text("select = ['V']\n")
+        monkeypatch.chdir(tmp_path)
+
+        config = load_config()
+
+        assert config.source_path == config_file
 
     def test_load_config_with_vocabulary(self, tmp_path: Path) -> None:
         """Test loading custom vocabulary config."""
@@ -221,6 +243,118 @@ V001 = "error"
         config_file.write_text('[tool.slop-lint.severity]\nV001 = "critical"\n')
 
         with pytest.raises(ConfigError):
+            load_config(config_file)
+
+    @pytest.mark.parametrize(
+        ("config_text", "expected"),
+        [
+            ('selec = ["V"]\n', "selec"),
+            ('[vocabulary]\nadditionl = ["synergy"]\n', "vocabulary.additionl"),
+            ("[thresholds]\nrule_of_ther = 3\n", "thresholds.rule_of_ther"),
+            (
+                '[[per-file-ignores]]\npattern = "docs/**"\nignores = ["V001"]\n',
+                "per-file-ignores[0].ignores",
+            ),
+        ],
+    )
+    def test_unknown_keys_raise_config_error(
+        self, tmp_path: Path, config_text: str, expected: str
+    ) -> None:
+        """Unknown keys should identify the ineffective setting."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text(config_text)
+
+        with pytest.raises(ConfigError) as exc_info:
+            load_config(config_file)
+        assert expected in str(exc_info.value)
+
+    def test_unknown_key_suggests_close_match(self, tmp_path: Path) -> None:
+        """Likely key typos should include the supported spelling."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('min_confidnce = "high"\n')
+
+        with pytest.raises(ConfigError, match="did you mean 'min_confidence'"):
+            load_config(config_file)
+
+    @pytest.mark.parametrize(
+        "threshold",
+        [
+            "rule_of_three",
+            "inline_header_lists",
+            "bold_overuse",
+            "em_dash_overuse",
+            "nominalization_overload",
+            "passive_voice_overuse",
+            "sentence_length_max",
+            "citation_name_drop",
+            "anaphora_abuse",
+            "gerund_fragment_litany",
+            "historical_analogy_stacking",
+            "short_punchy_fragments",
+            "invented_concept_labels",
+        ],
+    )
+    @pytest.mark.parametrize("value", [0, -1])
+    def test_thresholds_must_be_positive(
+        self, tmp_path: Path, threshold: str, value: int
+    ) -> None:
+        """Thresholds that can never trigger should fail fast."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text(f"[thresholds]\n{threshold} = {value}\n")
+
+        with pytest.raises(ConfigError, match="must be a positive integer"):
+            load_config(config_file)
+
+    def test_boolean_threshold_is_not_an_integer(self, tmp_path: Path) -> None:
+        """TOML booleans should not pass integer threshold validation."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text("[thresholds]\nrule_of_three = true\n")
+
+        with pytest.raises(ConfigError, match="must be a positive integer"):
+            load_config(config_file)
+
+    @pytest.mark.parametrize("pattern", ["", "   "])
+    def test_per_file_ignore_pattern_must_not_be_blank(
+        self, tmp_path: Path, pattern: str
+    ) -> None:
+        """A per-file override must identify files."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text(
+            f'[[per-file-ignores]]\npattern = "{pattern}"\nignore = ["V001"]\n'
+        )
+
+        with pytest.raises(ConfigError, match="pattern must not be blank"):
+            load_config(config_file)
+
+    def test_minimum_severity_combines_with_overrides(self, tmp_path: Path) -> None:
+        """The unambiguous minimum key should coexist with an override table."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text(
+            '[tool.slop-lint]\nminimum_severity = "info"\n\n'
+            '[tool.slop-lint.severity]\nV001 = "error"\nS001 = "off"\n'
+        )
+
+        config = load_config(config_file)
+
+        assert config.severity == "info"
+        assert config.severity_overrides == {"V001": "error", "S001": "off"}
+
+    def test_legacy_scalar_severity_remains_supported(self, tmp_path: Path) -> None:
+        """Existing scalar severity configurations should still load."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('severity = "error"\n')
+
+        config = load_config(config_file)
+
+        assert config.severity == "error"
+        assert config.severity_overrides == {}
+
+    def test_two_minimum_severity_keys_are_rejected(self, tmp_path: Path) -> None:
+        """Legacy and replacement minimum keys should not compete silently."""
+        config_file = tmp_path / ".slop-lint.toml"
+        config_file.write_text('severity = "warning"\nminimum_severity = "info"\n')
+
+        with pytest.raises(ConfigError, match="cannot be used together"):
             load_config(config_file)
 
 
