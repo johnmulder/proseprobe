@@ -724,6 +724,240 @@ class TestBaselineMode:
         assert "Baseline:" in result.stderr
 
 
+class TestBaselineCommand:
+    """Tests for baseline lifecycle maintenance."""
+
+    @staticmethod
+    def _create_lifecycle_baseline(tmp_path: Path) -> tuple[Path, list[Path]]:
+        active = tmp_path / "active.md"
+        stale = tmp_path / "stale.md"
+        new = tmp_path / "new.md"
+        active.write_text("This delves into active topics.")
+        stale.write_text("This delves into stale topics.")
+        new.write_text("Clean content.")
+        baseline = tmp_path / "baseline.json"
+        created = run_cli(
+            "baseline",
+            "create",
+            str(active),
+            str(stale),
+            "--select",
+            "V001",
+            "--baseline",
+            str(baseline),
+        )
+        assert created.exit_code == 0
+        stale.write_text("Clean content.")
+        new.write_text("This delves into new topics.")
+        return baseline, [active, stale, new]
+
+    def test_help_lists_actions_and_scan_options(self) -> None:
+        """The compact command should advertise its complete surface."""
+        result = run_cli("baseline", "--help")
+
+        assert result.exit_code == 0
+        for value in ("create", "update", "prune", "summary"):
+            assert value in result.stdout
+        for option in ("--baseline", "--select", "--ignore", "--severity"):
+            assert option in result.stdout
+
+    def test_create_replaces_deterministically(self, tmp_path: Path) -> None:
+        """Create should write all current findings and be byte-stable."""
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("This delves into topics.")
+        baseline = tmp_path / "baseline.json"
+        baseline.write_text("old data")
+
+        first = run_cli(
+            "baseline",
+            "create",
+            str(test_file),
+            "--select",
+            "V001",
+            "--baseline",
+            str(baseline),
+        )
+        first_bytes = baseline.read_bytes()
+        second = run_cli(
+            "baseline",
+            "create",
+            str(test_file),
+            "--select",
+            "V001",
+            "--baseline",
+            str(baseline),
+        )
+
+        assert first.exit_code == second.exit_code == 0
+        assert "Active: 0" in first.stdout
+        assert "Stale: 0" in first.stdout
+        assert "New: 1" in first.stdout
+        assert "Entries: 1" in first.stdout
+        assert baseline.read_bytes() == first_bytes
+        assert json.loads(first_bytes)["version"] == 2
+
+    def test_summary_reports_lifecycle_without_writing(self, tmp_path: Path) -> None:
+        """Summary should classify entries without changing the baseline."""
+        baseline, paths = self._create_lifecycle_baseline(tmp_path)
+        before = baseline.read_bytes()
+
+        result = run_cli(
+            "baseline",
+            "summary",
+            *(str(path) for path in paths),
+            "--select",
+            "V001",
+            "--baseline",
+            str(baseline),
+        )
+
+        assert result.exit_code == 0
+        assert "Active: 1" in result.stdout
+        assert "Stale: 1" in result.stdout
+        assert "New: 1" in result.stdout
+        assert "Entries: 2" in result.stdout
+        assert baseline.read_bytes() == before
+
+    def test_update_adds_new_and_retains_stale_entries(self, tmp_path: Path) -> None:
+        """Update should accept new findings without pruning old entries."""
+        baseline, paths = self._create_lifecycle_baseline(tmp_path)
+
+        first = run_cli(
+            "baseline",
+            "update",
+            *(str(path) for path in paths),
+            "--select",
+            "V001",
+            "--baseline",
+            str(baseline),
+        )
+        first_bytes = baseline.read_bytes()
+        second = run_cli(
+            "baseline",
+            "update",
+            *(str(path) for path in paths),
+            "--select",
+            "V001",
+            "--baseline",
+            str(baseline),
+        )
+
+        assert first.exit_code == second.exit_code == 0
+        assert "Active: 1" in first.stdout
+        assert "Stale: 1" in first.stdout
+        assert "New: 1" in first.stdout
+        assert "Entries: 3" in first.stdout
+        assert baseline.read_bytes() == first_bytes
+
+    def test_prune_removes_stale_without_accepting_new(self, tmp_path: Path) -> None:
+        """Prune should retain active entries and leave new findings visible."""
+        baseline, paths = self._create_lifecycle_baseline(tmp_path)
+
+        first = run_cli(
+            "baseline",
+            "prune",
+            *(str(path) for path in paths),
+            "--select",
+            "V001",
+            "--baseline",
+            str(baseline),
+        )
+        first_bytes = baseline.read_bytes()
+        second = run_cli(
+            "baseline",
+            "prune",
+            *(str(path) for path in paths),
+            "--select",
+            "V001",
+            "--baseline",
+            str(baseline),
+        )
+
+        assert first.exit_code == second.exit_code == 0
+        assert "Active: 1" in first.stdout
+        assert "Stale: 1" in first.stdout
+        assert "New: 1" in first.stdout
+        assert "Entries: 1" in first.stdout
+        assert "New: 1" in second.stdout
+        assert baseline.read_bytes() == first_bytes
+
+    @pytest.mark.parametrize("action", ["update", "prune"])
+    def test_writing_action_migrates_version_one(
+        self, tmp_path: Path, action: str
+    ) -> None:
+        """A write should convert active v1 hashes and report opaque stale ones."""
+        from slop_lint.core.baseline import Baseline
+        from slop_lint.rules.base import Issue
+
+        test_file = tmp_path / "doc.md"
+        content = "This delves into topics."
+        test_file.write_text(content)
+        baseline = Baseline(tmp_path / "baseline.json")
+        issue = Issue("V001", "Overused word: 'delves' → consider 'explore'", 1, 6)
+        active = baseline._compute_legacy_fingerprint(
+            issue, test_file, content, tmp_path
+        )
+        baseline.baseline_path.write_text(
+            json.dumps({"version": "1.0", "fingerprints": [active, "0" * 32]})
+        )
+
+        result = run_cli(
+            "baseline",
+            action,
+            str(test_file),
+            "--select",
+            "V001",
+            "--baseline",
+            str(baseline.baseline_path),
+        )
+
+        assert result.exit_code == 0
+        assert "Format: 1" in result.stdout
+        assert "Active: 1" in result.stdout
+        assert "Stale: 1" in result.stdout
+        assert "New: 0" in result.stdout
+        data = json.loads(baseline.baseline_path.read_text())
+        assert data["version"] == 2
+        assert len(data["entries"]) == 1
+
+    @pytest.mark.parametrize("action", ["update", "prune", "summary"])
+    def test_existing_actions_require_baseline(
+        self, tmp_path: Path, action: str
+    ) -> None:
+        """Only create may begin without an existing baseline."""
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("Clean content.")
+
+        result = run_cli(
+            "baseline",
+            action,
+            str(test_file),
+            "--baseline",
+            str(tmp_path / "missing.json"),
+        )
+
+        assert result.exit_code == 2
+        assert result.stdout == ""
+        assert "baseline file not found" in result.stderr
+
+    def test_create_uses_default_path_and_scan_policy(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Create should share suppressions and default baseline location."""
+        monkeypatch.chdir(tmp_path)
+        test_file = tmp_path / "doc.md"
+        test_file.write_text(
+            "<!-- slop-lint-ignore-next-line V001 -->\nThis delves into topics.\n"
+        )
+
+        result = run_cli("baseline", "create", str(test_file), "--select", "V001")
+
+        baseline = tmp_path / ".slop-lint-baseline.json"
+        assert result.exit_code == 0
+        assert baseline.exists()
+        assert json.loads(baseline.read_text())["entries"] == []
+
+
 class TestWatchCommand:
     """Tests for the watch command."""
 

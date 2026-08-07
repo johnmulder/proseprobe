@@ -290,6 +290,55 @@ def _cmd_check(args: argparse.Namespace) -> int:
     return _output_results(baseline_results, args, rules=active_rules)
 
 
+def _cmd_baseline(args: argparse.Namespace) -> int:
+    """Create, update, prune, or summarize a baseline."""
+    paths = [Path(path) for path in args.paths]
+    path_error = _validate_existing_paths(paths)
+    if path_error is not None:
+        return path_error
+
+    baseline = Baseline(Path(args.baseline) if args.baseline else None)
+    try:
+        config, linter, _active_rules = _prepare_scan(args)
+        workspace = resolve_workspace(paths)
+        if args.action != "create" and not baseline.load():
+            raise ConfigError(baseline.baseline_path, "baseline file not found")
+        lint_results = _scan_paths(linter, paths, args, config)
+        comparison = baseline.compare(lint_results.issues_by_file, workspace)
+    except ConfigError as exc:
+        print(f"Configuration error: {exc}", file=sys.stderr)
+        return 2
+    except (LintReadError, OSError, UnicodeDecodeError) as exc:
+        print(f"Could not read file: {exc}", file=sys.stderr)
+        return 3
+
+    input_version = baseline.format_version or 2
+    try:
+        if args.action == "create":
+            baseline.replace_entries(comparison.active | comparison.new)
+            baseline.save()
+        elif args.action == "update":
+            retained = (
+                comparison.active if input_version == 1 else frozenset(baseline.entries)
+            )
+            baseline.replace_entries(retained | comparison.new)
+            baseline.save()
+        elif args.action == "prune":
+            baseline.replace_entries(comparison.active)
+            baseline.save()
+    except ConfigError as exc:
+        print(f"Configuration error: {exc}", file=sys.stderr)
+        return 2
+
+    print(f"Baseline {args.action}: {baseline.baseline_path}")
+    print(f"  Format: {input_version}")
+    print(f"  Active: {comparison.active_count}")
+    print(f"  Stale: {comparison.stale_count}")
+    print(f"  New: {comparison.new_count}")
+    print(f"  Entries: {baseline.count}")
+    return 0
+
+
 def _cmd_rules(_args: argparse.Namespace) -> int:
     """List all available rules."""
     all_rules = get_all_rules()
@@ -512,6 +561,24 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Generate baseline file from current issues",
     )
     p_check.set_defaults(func=_cmd_check)
+
+    # --- baseline ---
+    p_baseline = subparsers.add_parser(
+        "baseline",
+        help="Create and maintain a baseline",
+        add_help=False,
+    )
+    p_baseline.add_argument(
+        "-h", "--help", action="help", help="Show this help message and exit"
+    )
+    p_baseline.add_argument(
+        "action",
+        choices=("create", "update", "prune", "summary"),
+        help="Baseline maintenance action",
+    )
+    p_baseline.add_argument("paths", nargs="+", help="Files or directories to check")
+    _add_scan_options(p_baseline)
+    p_baseline.set_defaults(func=_cmd_baseline)
 
     # --- rules ---
     p_rules = subparsers.add_parser(
