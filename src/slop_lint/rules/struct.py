@@ -908,16 +908,16 @@ class CorporateEuphemismRule(Rule):
         for sentence in iter_prose_sentences(content, filename):
             sentence_lower = sentence.text.casefold()
             for phrase in CORPORATE_EUPHEMISM_PHRASES:
-                offset = sentence_lower.find(phrase)
-                if offset < 0:
+                match = re.search(re.escape(phrase), sentence.text, re.IGNORECASE)
+                if match is None:
                     continue
                 if (
                     phrase in self._AMBIGUOUS_PHRASES
                     and not self._ORGANIZATIONAL_CONTEXT.search(sentence_lower)
                 ):
                     continue
-                line_num, column = sentence.source_position(offset)
-                _, end_column = sentence.source_position(offset + len(phrase))
+                line_num, column = sentence.source_position(match.start())
+                _, end_column = sentence.source_position(match.end())
                 issues.append(
                     Issue(
                         rule_id=self.id,

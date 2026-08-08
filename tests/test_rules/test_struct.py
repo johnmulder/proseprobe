@@ -882,6 +882,15 @@ class TestCorporateEuphemism:
 
         assert [(issue.line, issue.column) for issue in issues] == [(2, 1)]
 
+    def test_preserves_offsets_before_casefold_expansion(self) -> None:
+        from slop_lint.rules.struct import CorporateEuphemismRule
+
+        text = "Straße company restructuring affects staff."
+
+        issues = CorporateEuphemismRule().check(text, "test.md")
+
+        assert [(issue.column, issue.end_column) for issue in issues] == [(16, 29)]
+
     @pytest.mark.parametrize(
         "text",
         [
