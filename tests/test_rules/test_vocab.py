@@ -204,6 +204,11 @@ class TestKnowledgeCutoffRule:
         assert len(issues) == 1
         assert issues[0].rule_id == "V003"
 
+    def test_ignores_plain_dated_statement(self, rule: KnowledgeCutoffRule) -> None:
+        content = "As of August 2026, version 1.4.0 is the supported release."
+
+        assert rule.check(content, "test.md") == []
+
 
 class TestPromotionalLanguageRule:
     """Tests for V004: Promotional Language."""

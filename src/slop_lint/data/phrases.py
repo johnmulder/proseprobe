@@ -48,7 +48,6 @@ COLLABORATIVE_PHRASES = [
 KNOWLEDGE_CUTOFF_PATTERNS = [
     r"as of my (last |knowledge )?(?:update|cutoff|training)",
     r"based on (my |available )?information",
-    r"as of \w+ \d{4}",
     r"my training (data )?(only )?(goes|extends|covers)",
     r"I don't have (access to )?real-time",
     r"I cannot (browse|access|search) the (internet|web)",
