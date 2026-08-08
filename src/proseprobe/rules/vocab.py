@@ -1,4 +1,4 @@
-"""Vocabulary detection rules (V001-V009)."""
+"""Vocabulary detection rules (V001-V010)."""
 
 import re
 from typing import ClassVar
@@ -9,6 +9,7 @@ from proseprobe.data.phrases import (
     INFLAMMATORY_CLICHE_PHRASES,
     KNOWLEDGE_CUTOFF_PATTERNS,
     PROMOTIONAL_PHRASES,
+    REDUNDANT_PAIR_REPLACEMENTS,
     TREND_OVERCLAIM_PHRASES,
     WEASEL_PHRASES,
     WORDY_PHRASE_REPLACEMENTS,
@@ -58,6 +59,38 @@ def _has_sentence_evidence(
         or "%" in source
         or len(numbers) >= 2
     )
+
+
+def _replacement_phrase_issues(
+    rule: Rule,
+    content: str,
+    filename: str,
+    replacements: dict[str, str],
+) -> list[Issue]:
+    """Return exact prose findings for a fixed replacement table."""
+    issues: list[Issue] = []
+    for block in iter_prose_blocks(content, filename):
+        if block.context == "heading":
+            continue
+        for line_num, line in block.lines:
+            for phrase, replacement in replacements.items():
+                for match in re.finditer(
+                    rf"\b{re.escape(phrase)}\b", line, re.IGNORECASE
+                ):
+                    issues.append(
+                        Issue(
+                            rule_id=rule.id,
+                            message=f"{rule.name.capitalize()}: '{match.group()}'",
+                            line=line_num,
+                            column=match.start() + 1,
+                            end_column=match.end() + 1,
+                            severity=rule.severity,
+                            confidence=rule.default_confidence,
+                            suggestion=replacement,
+                        )
+                    )
+
+    return sorted(issues, key=lambda issue: (issue.line, issue.column))
 
 
 class AIVocabularyRule(Rule):
@@ -519,26 +552,24 @@ class WordyPhraseRule(Rule):
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check prose for wordy phrases."""
-        issues: list[Issue] = []
-        for block in iter_prose_blocks(content, filename):
-            if block.context == "heading":
-                continue
-            for line_num, line in block.lines:
-                for phrase, replacement in WORDY_PHRASE_REPLACEMENTS.items():
-                    for match in re.finditer(
-                        rf"\b{re.escape(phrase)}\b", line, re.IGNORECASE
-                    ):
-                        issues.append(
-                            Issue(
-                                rule_id=self.id,
-                                message=f"Wordy phrase: '{match.group()}'",
-                                line=line_num,
-                                column=match.start() + 1,
-                                end_column=match.end() + 1,
-                                severity=self.severity,
-                                confidence=self.default_confidence,
-                                suggestion=replacement,
-                            )
-                        )
+        return _replacement_phrase_issues(
+            self, content, filename, WORDY_PHRASE_REPLACEMENTS
+        )
 
-        return sorted(issues, key=lambda issue: (issue.line, issue.column))
+
+class RedundantPairRule(Rule):
+    """V010: Detect fixed redundant word pairs."""
+
+    id = "V010"
+    name = "Redundant Pair"
+    description = "Detects fixed phrases containing redundant words"
+    severity = Severity.INFO
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose for fixed redundant pairs."""
+        return _replacement_phrase_issues(
+            self, content, filename, REDUNDANT_PAIR_REPLACEMENTS
+        )

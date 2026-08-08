@@ -16,6 +16,24 @@ WORDY_PHRASE_REPLACEMENTS = {
     "with regard to": "about",
 }
 
+# Fixed redundant pairs with unambiguous deletions (V010)
+REDUNDANT_PAIR_REPLACEMENTS = {
+    "each and every": "each",
+    "merge together": "merge",
+    "merged together": "merged",
+    "merges together": "merges",
+    "merging together": "merging",
+    "past history": "history",
+    "repeat again": "repeat",
+    "repeated again": "repeated",
+    "repeating again": "repeating",
+    "repeats again": "repeats",
+    "revert back": "revert",
+    "reverted back": "reverted",
+    "reverting back": "reverting",
+    "reverts back": "reverts",
+}
+
 # Collaborative/chat-like phrases (V002)
 COLLABORATIVE_PHRASES = [
     "I hope this helps",

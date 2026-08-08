@@ -1,9 +1,12 @@
-"""Tests for vocabulary rules (V001-V009)."""
+"""Tests for vocabulary rules (V001-V010)."""
 
 import pytest
 
 from proseprobe.config import Config
-from proseprobe.data.phrases import WORDY_PHRASE_REPLACEMENTS
+from proseprobe.data.phrases import (
+    REDUNDANT_PAIR_REPLACEMENTS,
+    WORDY_PHRASE_REPLACEMENTS,
+)
 from proseprobe.rules import get_all_rules
 from proseprobe.rules.base import Confidence, Rule, Severity
 from proseprobe.rules.vocab import (
@@ -13,6 +16,7 @@ from proseprobe.rules.vocab import (
     InventedConceptLabelsRule,
     KnowledgeCutoffRule,
     PromotionalLanguageRule,
+    RedundantPairRule,
     TrendOverclaimRule,
     WeaselWordsRule,
     WordyPhraseRule,
@@ -573,6 +577,98 @@ def retry():
         source = "The rows remain in order. The event that failed was recorded."
 
         assert WordyPhraseRule().check(source, "guide.md") == []
+
+
+class TestRedundantPair:
+    """Tests for V010: Redundant Pair."""
+
+    def test_curated_redundant_pair_table(self) -> None:
+        assert REDUNDANT_PAIR_REPLACEMENTS == {
+            "each and every": "each",
+            "merge together": "merge",
+            "merged together": "merged",
+            "merges together": "merges",
+            "merging together": "merging",
+            "past history": "history",
+            "repeat again": "repeat",
+            "repeated again": "repeated",
+            "repeating again": "repeating",
+            "repeats again": "repeats",
+            "revert back": "revert",
+            "reverted back": "reverted",
+            "reverting back": "reverting",
+            "reverts back": "reverts",
+        }
+
+    @pytest.mark.parametrize(
+        ("phrase", "replacement"), REDUNDANT_PAIR_REPLACEMENTS.items()
+    )
+    def test_suggests_each_curated_replacement(
+        self, phrase: str, replacement: str
+    ) -> None:
+        [issue] = RedundantPairRule().check(f"They {phrase} today.", "guide.md")
+
+        assert issue.suggestion == replacement
+
+    def test_reports_exact_metadata_and_source_span(self) -> None:
+        source = "Review each and every request."
+
+        [issue] = RedundantPairRule().check(source, "guide.md")
+
+        assert issue.rule_id == "V010"
+        assert issue.message == "Redundant pair: 'each and every'"
+        assert (issue.line, issue.column, issue.end_column) == (1, 8, 22)
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == "each"
+
+    def test_case_repetitions_and_different_pairs_follow_source_order(self) -> None:
+        source = "REVERT BACK, review past history, then revert back."
+
+        issues = RedundantPairRule().check(source, "guide.md")
+
+        assert [issue.message for issue in issues] == [
+            "Redundant pair: 'REVERT BACK'",
+            "Redundant pair: 'past history'",
+            "Redundant pair: 'revert back'",
+        ]
+
+    def test_ignores_markdown_headings_and_code(self) -> None:
+        source = """\
+# Each and every
+
+Use `past history` as the legacy label.
+
+```text
+revert back
+```
+"""
+
+        assert RedundantPairRule().check(source, "guide.md") == []
+
+    def test_checks_python_documentation_but_not_code_strings(self) -> None:
+        source = '''\
+label = "past history"
+# Review each and every request.
+
+def rollback():
+    """The client reverted back after the failure."""
+'''
+
+        issues = RedundantPairRule().check(source, "client.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_ignores_nearby_nonmatching_words(self) -> None:
+        source = "Review each request and every response in the history report."
+
+        assert RedundantPairRule().check(source, "guide.md") == []
+
+    def test_shared_scan_keeps_v009_message_and_suggestion(self) -> None:
+        [issue] = WordyPhraseRule().check("Use in order to retry.", "guide.md")
+
+        assert issue.message == "Wordy phrase: 'in order to'"
+        assert issue.suggestion == "to"
 
 
 class TestAcademicVocabularyExpansions:
