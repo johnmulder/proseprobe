@@ -1008,11 +1008,19 @@ class MarkdownParser:
     def _mask_inline_code_and_links(self, line: str) -> str:
         masked = self._mask_inline_code(line)
         chars = list(masked)
-        for match in re.finditer(r"\[([^\]]+)\]\(([^)]+)\)", masked):
-            url_start = match.start(2)
-            url_end = match.end(2)
-            for idx in range(url_start, url_end):
-                chars[idx] = " "
+        for match in re.finditer(r"\[[^\]]+\]\(", masked):
+            destination_start = match.end() - 1
+            depth = 0
+            for index in range(destination_start, len(masked)):
+                if index > destination_start and masked[index - 1] == "\\":
+                    continue
+                if masked[index] == "(":
+                    depth += 1
+                elif masked[index] == ")":
+                    depth -= 1
+                    if depth == 0:
+                        self._mask_chars(chars, destination_start, index + 1)
+                        break
         for match in re.finditer(r"^\s*\[([^\]]+)\]:\s*(\S+)", masked):
             url_start = match.start(2)
             url_end = match.end(2)

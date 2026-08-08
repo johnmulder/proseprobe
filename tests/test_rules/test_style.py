@@ -1,13 +1,14 @@
-"""Tests for style rules (T001-T006)."""
+"""Tests for style rules (T001-T008, T015)."""
 
 import pytest
 
-from proseprobe.rules.base import Rule
+from proseprobe.rules.base import Confidence, Rule, Severity
 from proseprobe.rules.style import (
     BoldOveruseRule,
     ElegantVariationRule,
     EmDashOveruseRule,
     EmojiInProseRule,
+    NestedParentheticalRule,
     QuoteInconsistencyRule,
     TitleCaseHeadingsRule,
 )
@@ -378,3 +379,93 @@ class TestSentenceLength:
         rule = SentenceLengthRule()
         assert rule.id == "T008"
         assert rule.name == "Sentence Length"
+
+
+class TestNestedParenthetical:
+    """Tests for T015: Nested Parenthetical."""
+
+    def test_reports_full_inner_parenthetical_span(self) -> None:
+        text = "Configure the cache (for example (on Linux)) before startup."
+        expected = "(on Linux)"
+
+        [issue] = NestedParentheticalRule().check(text, "test.md")
+
+        start = text.index(expected)
+        assert issue.rule_id == "T015"
+        assert issue.message == "Nested parenthetical"
+        assert (issue.line, issue.column) == (1, start + 1)
+        assert issue.end_line is None
+        assert issue.end_column == start + len(expected) + 1
+        assert text[issue.column - 1 : issue.end_column - 1] == expected
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == (
+            "Remove one level of parentheses or rewrite the sentence"
+        )
+
+    def test_reports_wrapped_inner_parenthetical_span(self) -> None:
+        text = (
+            "The parser (supports a nested\n"
+            "(parenthetical note\n"
+            "across source lines) in comments)."
+        )
+
+        [issue] = NestedParentheticalRule().check(text, "test.md")
+
+        assert (issue.line, issue.column) == (2, 1)
+        assert (issue.end_line, issue.end_column) == (
+            3,
+            len("across source lines)") + 1,
+        )
+
+    def test_reports_each_balanced_inner_pair_in_source_order(self) -> None:
+        text = "Use (a (nested) note) and (another (inner (deep)) note)."
+
+        issues = NestedParentheticalRule().check(text, "test.md")
+
+        assert [text[issue.column - 1 : issue.end_column - 1] for issue in issues] == [
+            "(nested)",
+            "(inner (deep))",
+            "(deep)",
+        ]
+
+    def test_ignores_code_and_link_destinations(self) -> None:
+        text = (
+            "Use `outer(inner(value))` in the example.\n\n"
+            "See the release ([reference](https://example.com/(v1))) first.\n\n"
+            "```text\n(outer (inner))\n```"
+        )
+
+        assert NestedParentheticalRule().check(text, "test.md") == []
+
+    def test_checks_python_comments_and_docstrings_only(self) -> None:
+        text = (
+            "value = outer(inner(value))\n"
+            "# Configure it (for example (on Linux)).\n"
+            "def explain():\n"
+            '    """Use a value (such as (zero))."""\n'
+            "    return value"
+        )
+
+        issues = NestedParentheticalRule().check(text, "test.py")
+
+        assert [issue.line for issue in issues] == [2, 4]
+
+    def test_ignores_single_unmatched_and_cross_block_parentheses(self) -> None:
+        text = (
+            "One (single-level) note. An unmatched (outer (inner).\n\n"
+            "A new (single-level) block."
+        )
+
+        assert NestedParentheticalRule().check(text, "test.md") == []
+
+    def test_rule_metadata(self) -> None:
+        rule = NestedParentheticalRule()
+
+        assert rule.id == "T015"
+        assert rule.name == "Nested Parenthetical"
+        assert rule.description == "Detects parentheses nested within prose parentheses"
+        assert rule.severity is Severity.INFO
+        assert rule.default_confidence is Confidence.HIGH
+        assert rule.applies_to == {"markdown", "python"}
+        assert rule.content_scope == "prose"

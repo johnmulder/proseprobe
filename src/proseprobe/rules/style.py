@@ -1,4 +1,4 @@
-"""Style detection rules (T001-T008)."""
+"""Style detection rules (T001-T008, T015)."""
 
 import re
 from itertools import groupby
@@ -13,7 +13,7 @@ from proseprobe.parsers.markdown import (
     is_markdown_file,
 )
 from proseprobe.parsers.prose import iter_prose_blocks, iter_prose_sentences
-from proseprobe.rules.base import Issue, Rule, Severity
+from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
 
 class TitleCaseHeadingsRule(Rule):
@@ -378,3 +378,53 @@ class SentenceLengthRule(Rule):
                 )
             )
         return issues
+
+
+class NestedParentheticalRule(Rule):
+    """T015: Detect balanced parentheses nested inside other parentheses."""
+
+    id = "T015"
+    name = "Nested Parenthetical"
+    description = "Detects parentheses nested within prose parentheses"
+    severity = Severity.INFO
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose blocks for balanced inner parentheticals."""
+        issues: list[Issue] = []
+        for block in iter_prose_blocks(content, filename):
+            openings: list[tuple[int, int]] = []
+            pairs: list[
+                tuple[tuple[int, int], tuple[int, int], tuple[int, int] | None]
+            ] = []
+            for line_num, line in block.lines:
+                for column, char in enumerate(line, start=1):
+                    if char == "(":
+                        openings.append((line_num, column))
+                    elif char == ")" and openings:
+                        start = openings.pop()
+                        parent = openings[-1] if openings else None
+                        pairs.append((start, (line_num, column + 1), parent))
+
+            matched_starts = {start for start, _, _ in pairs}
+            for start, end, parent in pairs:
+                if parent is None or parent not in matched_starts:
+                    continue
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message="Nested parenthetical",
+                        line=start[0],
+                        column=start[1],
+                        end_line=end[0] if end[0] != start[0] else None,
+                        end_column=end[1],
+                        severity=self.severity,
+                        confidence=self.default_confidence,
+                        suggestion=(
+                            "Remove one level of parentheses or rewrite the sentence"
+                        ),
+                    )
+                )
+        return sorted(issues, key=lambda issue: (issue.line, issue.column))

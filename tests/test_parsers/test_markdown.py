@@ -744,6 +744,18 @@ Visible prose.
         assert "https://example.com" not in masked
         assert "Example" in masked
 
+    def test_iter_prose_lines_masks_balanced_link_destination(self) -> None:
+        """Nested destination parentheses and delimiters are not prose."""
+        content = "See [API](https://example.com/releases/(v2)) now."
+
+        [(line_num, masked)] = iter_prose_lines(content, "test.md")
+
+        assert line_num == 1
+        assert "API" in masked
+        assert "https://example.com" not in masked
+        assert "(" not in masked
+        assert ")" not in masked
+
     def test_iter_prose_lines_masks_autolink(self) -> None:
         """Test iter_prose_lines masks autolink URLs."""
         content = "See <https://example.com/delve>."
