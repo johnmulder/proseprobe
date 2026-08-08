@@ -6,6 +6,11 @@ Prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
 source-mapped Python docstrings and comments. `C` rules handle Python-specific
 documentation issues, and `M` rules remain Markdown-only.
 
+Wrapped Markdown and Python prose is segmented into cached, source-mapped
+sentences. Records retain exact start and end positions while conservative
+standard-library handling preserves common abbreviations, decimals, URLs,
+trailing quotes, and hard prose-block boundaries without an NLP dependency.
+
 ## Rule Inventory
 
 This inventory is generated from rule classes and the registry. Update the
@@ -178,6 +183,10 @@ Our solution provides high performance for typical workloads.
 ### V005: Weasel Words
 
 Detects vague attributions without sources.
+
+A match becomes low confidence when its sentence or one adjacent sentence in
+the same prose block supplies a named source, date, link, percentage, or
+comparative figures.
 
 **Detected patterns:**
 - "Experts say...", "Studies show..."
@@ -420,6 +429,9 @@ This guide covers installation and basic usage.
 
 Detects unnatural synonyms to avoid repetition.
 
+Synonym pairs are compared only within one prose block, not across unrelated
+paragraphs or skipped constructs.
+
 **Example (bad):**
 ```markdown
 The function returns a value. The method yields a result.
@@ -458,6 +470,9 @@ This module is the main entry point.
 ### G002: Excessive Hedging
 
 Detects over-qualification phrases and hedge stacking (multiple hedges in one sentence).
+
+Hedge stacking uses wrapped, source-mapped sentence boundaries rather than
+physical source lines.
 
 **Detected patterns:**
 - "It is important to note that..."
@@ -837,7 +852,8 @@ The result was a measurable improvement in delivery times.
 Detects 3+ consecutive sentences starting with the same word.
 
 Runs stay within one body or block-quote paragraph; headings, lists, blank
-paragraphs, and skipped Markdown constructs reset them.
+paragraphs, and skipped Markdown constructs reset them. Wrapped source lines
+remain part of the same sentence.
 
 **Example (bad):**
 ```markdown
@@ -856,7 +872,7 @@ Teams, managers, and companies all benefit from this approach.
 Detects 3+ consecutive gerund-phrase fragments used for rhythmic effect.
 
 A run cannot cross a paragraph, heading, list, block quote, or skipped Markdown
-construct.
+construct. Wrapped source lines remain part of the same sentence.
 
 **Example (bad):**
 ```markdown
@@ -1131,7 +1147,8 @@ It worked every single time without exception.
 Detects excessively long sentences that exceed a word count threshold.
 
 Checks apply to body text, list items, and block quotes. Headings and skipped
-Markdown constructs are excluded.
+Markdown constructs are excluded. Word counts use wrapped, source-mapped
+sentences rather than physical lines.
 
 **Example (bad):**
 ```markdown
@@ -1154,6 +1171,10 @@ The following rules detect common low-quality journalism patterns.
 ### V008: Trend Overclaim
 
 Detects unsubstantiated trend claims without evidence.
+
+Trend language is downgraded to low confidence when a bounded neighboring
+sentence in the same prose block provides attribution, a date, a link, a
+percentage, or before-and-after figures.
 
 **Detected patterns:**
 - "more and more people", "a growing number of"
@@ -1268,6 +1289,10 @@ Prior work by Smith (2020) and Jones (2021) examined related aspects, but did no
 
 Detects single-anecdote openings used as evidence for broad claims.
 
+The rule requires a generalization in the anecdote sentence or the next
+sentence in the same prose block. Explicit examples, quoted-sentence
+discussion, and dateline-format discussion are ignored.
+
 **Detected patterns:**
 - "For [Name] of [Location], the…"
 - "Take [Name], a [descriptor]…"
@@ -1275,8 +1300,7 @@ Detects single-anecdote openings used as evidence for broad claims.
 
 **Example (bad):**
 ```markdown
-For Sarah of Ohio, the new policy meant losing her healthcare.
-Meet David, a software engineer who quit his job to start a company.
+For Sarah of Ohio, the new policy meant losing her healthcare. Her case proves the policy harms every family.
 ```
 
 **Example (good):**
@@ -1290,6 +1314,9 @@ A 2024 Kaiser Family Foundation survey found that 12% of respondents in Ohio los
 
 Detects 3+ consecutive "Author (Year) verb" sentences that list citations
 without synthesizing them.
+
+Consecutive runs use wrapped, source-mapped sentences and reset when ordinary
+prose or a hard prose-block boundary interrupts the citations.
 
 **Detected patterns:**
 - "Smith (2012) argues that..."

@@ -105,6 +105,10 @@ removes stale entries without accepting new ones. The older
 Prose-scoped `V`, `S`, `T`, and `G` rules run on Markdown prose and
 source-mapped Python docstrings and comments. `C` rules cover Python-specific
 documentation issues, while Markdown syntax rules remain Markdown-only.
+Wrapped prose is segmented once into cached sentences that retain start and end
+line and column positions. Conservative standard-library handling keeps common
+abbreviations, decimals, URLs, trailing quotes, and hard prose-block boundaries
+without adding an NLP dependency.
 
 ### Example Detections
 

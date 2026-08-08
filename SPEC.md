@@ -63,6 +63,12 @@ independently so thresholds do not combine unrelated documentation. `C` rules
 cover Python-specific documentation issues; Markdown syntax rules remain
 Markdown-only.
 
+Markdown and Python parsers cache source-mapped sentence records with exact
+start and end line and column positions. Sentence segmentation uses
+conservative standard-library handling for abbreviations, decimals, URLs,
+trailing quotes, and hard prose-block boundaries; it does not require an NLP
+dependency.
+
 ### 3.2 Rule Severity Levels
 
 | Level | Description | Default Exit Code Impact |
