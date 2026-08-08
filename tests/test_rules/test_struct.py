@@ -873,6 +873,27 @@ class TestCorporateEuphemism:
         issues = rule.check(text, "test.md")
         assert len(issues) >= 1
 
+    def test_detects_wrapped_organizational_context(self) -> None:
+        from slop_lint.rules.struct import CorporateEuphemismRule
+
+        text = "The company announced a\nrestructuring initiative next quarter."
+
+        issues = CorporateEuphemismRule().check(text, "test.md")
+
+        assert [(issue.line, issue.column) for issue in issues] == [(2, 1)]
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "The restructuring changes staffing levels.",
+            "The restructuring eliminated 300 jobs.",
+        ],
+    )
+    def test_detects_direct_workforce_context(self, text: str) -> None:
+        from slop_lint.rules.struct import CorporateEuphemismRule
+
+        assert len(CorporateEuphemismRule().check(text, "test.md")) == 1
+
     @pytest.mark.parametrize(
         "text",
         [

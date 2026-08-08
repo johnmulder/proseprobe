@@ -897,33 +897,37 @@ class CorporateEuphemismRule(Rule):
         {"restructuring", "resource optimization", "realignment"}
     )
     _ORGANIZATIONAL_CONTEXT: ClassVar[re.Pattern[str]] = re.compile(
-        r"\b(?:company|corporate|employees?|headcount|organization(?:al)?|"
-        r"personnel|roles?|staff|teams?|workforce)\b"
+        r"\b(?:company|corporate|departments?|employees?|headcount|jobs?|"
+        r"organization(?:al)?|personnel|positions?|roles?|staff(?:ing)?|"
+        r"teams?|workforce)\b"
     )
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect corporate euphemisms that obscure meaning."""
         issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
-            line_lower = line.lower()
+        for sentence in iter_prose_sentences(content, filename):
+            sentence_lower = sentence.text.casefold()
             for phrase in CORPORATE_EUPHEMISM_PHRASES:
-                if phrase in line_lower:
-                    if (
-                        phrase in self._AMBIGUOUS_PHRASES
-                        and not self._ORGANIZATIONAL_CONTEXT.search(line_lower)
-                    ):
-                        continue
-                    col = line_lower.find(phrase)
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Corporate euphemism: '{phrase}' \u2014 consider stating the action directly",
-                            line=line_num,
-                            column=col + 1,
-                            end_column=col + len(phrase) + 1,
-                            severity=self.severity,
-                        )
+                offset = sentence_lower.find(phrase)
+                if offset < 0:
+                    continue
+                if (
+                    phrase in self._AMBIGUOUS_PHRASES
+                    and not self._ORGANIZATIONAL_CONTEXT.search(sentence_lower)
+                ):
+                    continue
+                line_num, column = sentence.source_position(offset)
+                _, end_column = sentence.source_position(offset + len(phrase))
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Corporate euphemism: '{phrase}' \u2014 consider stating the action directly",
+                        line=line_num,
+                        column=column,
+                        end_column=end_column,
+                        severity=self.severity,
                     )
+                )
         return issues
 
 
