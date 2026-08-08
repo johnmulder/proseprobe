@@ -425,9 +425,13 @@ class InventedConceptLabelsRule(Rule):
 
         for line_num, line in self.iter_lines(content, filename):
             for match in self._pattern.finditer(line):
-                if match.start(1) > 0 and line[match.start(1) - 1] in {"'", "\u2019"}:
-                    continue
                 head = match.group(1).casefold()
+                if (
+                    head == "s"
+                    and match.start(1) > 0
+                    and line[match.start(1) - 1] in {"'", "\u2019"}
+                ):
+                    continue
                 suffix = match.group(2).casefold()
                 if (
                     head in self._LITERAL_REFERENCE_HEADS

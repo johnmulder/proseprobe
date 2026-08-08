@@ -387,6 +387,18 @@ class TestInventedConceptLabels:
 
         assert InventedConceptLabelsRule().check(content, "test.md") == []
 
+    def test_single_quoted_labels_still_satisfy_threshold(self) -> None:
+        from slop_lint.rules.vocab import InventedConceptLabelsRule
+
+        content = "The 'automation paradox' compounds the 'innovation trap'."
+
+        issues = InventedConceptLabelsRule().check(content, "test.md")
+
+        assert [issue.message for issue in issues] == [
+            "Invented concept label: 'automation paradox'",
+            "Invented concept label: 'innovation trap'",
+        ]
+
     def test_ignores_normal_prose(self) -> None:
         """Don't flag prose without compound labels."""
         from slop_lint.rules.vocab import InventedConceptLabelsRule
