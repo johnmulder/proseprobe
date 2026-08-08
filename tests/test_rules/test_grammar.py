@@ -1,4 +1,4 @@
-"""Tests for grammar rules (G001-G015, G017, G029)."""
+"""Tests for grammar rules (G001-G015, G017, G024, G029)."""
 
 import pytest
 
@@ -16,6 +16,7 @@ from proseprobe.rules.grammar import (
     ParticipleChainsRule,
     PatronizingAnalogyRule,
     PedagogicalVoiceRule,
+    UnclearActorRequirementRule,
 )
 
 
@@ -993,6 +994,113 @@ class TestEmptyItOpenerRule:
         )
         assert rule.severity is Severity.INFO
         assert rule.default_confidence is Confidence.HIGH
+        assert rule.applies_to == {"markdown", "python"}
+        assert rule.content_scope == "prose"
+
+
+class TestUnclearActorRequirementRule:
+    """Tests for G024: Unclear Actor in Requirement."""
+
+    @pytest.mark.parametrize(
+        "opener",
+        ["It must be ensured that", "Care should be taken to"],
+    )
+    def test_reports_supported_openers(self, opener: str) -> None:
+        [issue] = UnclearActorRequirementRule().check(
+            f"{opener} preserve file permissions.",
+            "test.md",
+        )
+
+        assert issue.rule_id == "G024"
+        assert issue.message == f"Unclear actor in requirement: '{opener}'"
+        assert (issue.line, issue.column) == (1, 1)
+        assert (issue.end_line, issue.end_column) == (1, len(opener) + 1)
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == "Name the actor responsible for the requirement"
+
+    def test_reports_wrapped_opener_at_exact_source_span(self) -> None:
+        text = "Care should be taken\nto preserve file permissions."
+
+        [issue] = UnclearActorRequirementRule().check(text, "test.md")
+
+        assert issue.message == (
+            "Unclear actor in requirement: 'Care should be taken to'"
+        )
+        assert (issue.line, issue.column) == (1, 1)
+        assert (issue.end_line, issue.end_column) == (2, 3)
+
+    def test_checks_each_sentence_not_only_the_first(self) -> None:
+        text = (
+            "The archive includes a checksum. "
+            "It must be ensured that every upload preserves it."
+        )
+
+        [issue] = UnclearActorRequirementRule().check(text, "test.md")
+
+        start = text.index("It must be ensured that")
+        assert (issue.line, issue.column) == (1, start + 1)
+        assert issue.end_column == start + len("It must be ensured that") + 1
+
+    @pytest.mark.parametrize(
+        ("text", "column"),
+        [
+            ("- It must be ensured that each upload succeeds.", 3),
+            ("> Care should be taken to preserve permissions.", 3),
+        ],
+    )
+    def test_checks_list_and_blockquote_sentences(self, text: str, column: int) -> None:
+        [issue] = UnclearActorRequirementRule().check(text, "test.md")
+
+        assert issue.column == column
+
+    def test_ignores_markdown_non_prose_and_example_contexts(self) -> None:
+        text = (
+            "# It must be ensured that this heading quotes the phrase\n\n"
+            "## Example\n\n"
+            "Care should be taken to demonstrate the phrase.\n\n"
+            "`It must be ensured that`\n\n"
+            "```text\nCare should be taken to\n```"
+        )
+
+        assert UnclearActorRequirementRule().check(text, "test.md") == []
+
+    def test_checks_python_comments_and_docstrings_only(self) -> None:
+        text = (
+            'message = "It must be ensured that code is ignored."\n'
+            "# Care should be taken to preserve permissions.\n"
+            "def explain():\n"
+            '    """It must be ensured that retries stop."""\n'
+            "    return message"
+        )
+
+        issues = UnclearActorRequirementRule().check(text, "test.py")
+
+        assert [issue.line for issue in issues] == [2, 4]
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "The operator must ensure that every archive has a checksum.",
+            "Take care to preserve file permissions.",
+            "It should be ensured that every upload succeeds.",
+            "Care must be taken to preserve file permissions.",
+            "The guide says care should be taken to preserve permissions.",
+        ],
+    )
+    def test_ignores_nearby_non_matches(self, text: str) -> None:
+        assert UnclearActorRequirementRule().check(text, "test.md") == []
+
+    def test_rule_metadata(self) -> None:
+        rule = UnclearActorRequirementRule()
+
+        assert rule.id == "G024"
+        assert rule.name == "Unclear Actor in Requirement"
+        assert rule.description == (
+            "Detects fixed impersonal requirement forms without a named actor"
+        )
+        assert rule.severity is Severity.INFO
+        assert rule.default_confidence is Confidence.MEDIUM
         assert rule.applies_to == {"markdown", "python"}
         assert rule.content_scope == "prose"
 
