@@ -331,15 +331,15 @@ version 2 file and retains its existing overwrite behavior.
 | `--quiet` | `-q` | all scans | In text reports, output only errors |
 | `--verbose` | `-v` | all scans | Show additional diagnostic info |
 | `--show-config` | | check | Display configuration and exit |
-| `--format` | `-f` | check | Output format: text, json, sarif |
+| `--format` | `-f` | check | Output format: text, json, jsonl, sarif |
 | `--filename` | | check | Required virtual path and file type for standard input `-` |
 | `--generate-baseline` | | check | Generate baseline file from current issues |
 | `--interval` | `-n` | watch | Check interval in seconds |
 | `--no-clear` | | watch | Do not clear the screen between checks |
 
 Watch is text-only because its output is a continuous stream. For `check`,
-JSON and SARIF findings are written to stdout while operational errors and
-verbose status messages are written to stderr.
+grouped JSON and SARIF reports and JSON Lines records are written to stdout,
+while operational errors and verbose status messages are written to stderr.
 
 ## Standard Input
 
@@ -410,6 +410,28 @@ start positions. `end_line` is the endpoint line, and `end_column` is a 1-based
 exclusive endpoint. `end_line`, `end_column`, and `suggestion` are always
 present and may be `null`. The schema version changes only for incompatible
 contract changes.
+
+### JSON Lines
+
+Use JSON Lines for line-oriented subprocess and agent integrations:
+
+```bash
+slop-lint check --format jsonl . > diagnostics.jsonl
+```
+
+Each line is one complete diagnostic object:
+
+```json
+{"schema_version":1,"version":"0.1.0","path":"docs/guide.md","rule_id":"V001","message":"Overused word: 'delve' → consider 'explore'","line":15,"column":5,"end_line":null,"end_column":10,"severity":"warning","confidence":"high","suggestion":"explore"}
+```
+
+Records use the same `schema_version`, package `version`, diagnostic fields,
+position semantics, and nullable fields as grouped JSON. Files are ordered by
+path, issue order within each file is preserved, and every record ends with one
+newline. JSON Lines has no wrapper, summary, or metadata record; use grouped
+JSON when run totals are required. A clean run writes no stdout. Operational
+and configuration diagnostics stay on stderr. Exit `0` may include info
+records, while warning or error records produce exit `1`.
 
 ### SARIF
 

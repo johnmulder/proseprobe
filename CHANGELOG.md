@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `check --format jsonl` emits one versioned diagnostic object per line for
+  line-oriented subprocess and agent integrations.
 - `check - --filename PATH` lints one standard-input document while preserving
   file-specific rules, configuration, structured output, and exit semantics.
 - JSON reports now declare `schema_version: 1`, with exact reporter and CLI

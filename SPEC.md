@@ -17,7 +17,7 @@
 | FR-02 | Scan Python files (`.py`) for bad practices in docstrings and comments | Must |
 | FR-03 | Report issues with file path, line number, column, and severity | Must |
 | FR-04 | Support configurable rule selection via CLI and config file | Must |
-| FR-05 | Output in text, JSON, and SARIF formats | Must |
+| FR-05 | Output in text, JSON, JSON Lines, and SARIF formats | Must |
 | FR-06 | Support `.slop-lint.toml` configuration file | Must |
 | FR-07 | Respect `.gitignore` patterns for file discovery | Should |
 | FR-08 | Process files in parallel for performance | Could |
@@ -114,7 +114,7 @@ slop-lint baseline ACTION [OPTIONS] [PATHS]...
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `--format` | choice | text | Output format: text, json, sarif |
+| `--format` | choice | text | Output format: text, json, jsonl, sarif |
 | `--filename` | path | none | Required virtual path and file type when the input path is `-` |
 | `--profile` | choice | none | Built-in rule profile |
 | `--select` | string | all | Comma-separated rules/prefixes to enable |
@@ -335,11 +335,26 @@ exclusive endpoint. `end_line`, `end_column`, and `suggestion` are always
 present and may be `null`. The schema version changes only for incompatible
 contract changes.
 
-### 6.3 SARIF
+### 6.3 JSON Lines
+
+JSON Lines (`--format jsonl`) writes one complete diagnostic object per line:
+
+```json
+{"schema_version":1,"version":"0.1.0","path":"docs/guide.md","rule_id":"V001","message":"Overused word: 'delve' → consider 'explore'","line":15,"column":5,"end_line":null,"end_column":10,"severity":"warning","confidence":"high","suggestion":"explore"}
+```
+
+Records use the same version, diagnostic fields, position semantics, and
+nullable fields as grouped JSON. Files are ordered by path, issue order within
+each file is preserved, and every record ends with one newline. There is no
+wrapper, summary, or metadata record; a clean run writes no stdout. Exit `0`
+may include info records, while warning or error records produce exit `1`.
+
+### 6.4 SARIF
 
 Standard SARIF 2.1.0 format for GitHub Code Scanning integration.
-JSON and SARIF are complete `check` documents written to stdout. Operational
-diagnostics are written to stderr so structured stdout remains parseable.
+Grouped JSON and SARIF are complete `check` documents written to stdout. JSON
+Lines is a diagnostic stream. Operational diagnostics are written to stderr so
+structured stdout remains parseable.
 
 ## 7. Architecture
 
@@ -350,7 +365,7 @@ diagnostics are written to stderr so structured stdout remains parseable.
 | `cli` | Command parsing, argument validation |
 | `config` | Configuration loading and merging |
 | `core/linter` | File discovery, rule orchestration |
-| `core/reporter` | Output formatting (text/JSON/SARIF) |
+| `core/reporter` | Output formatting (text/JSON/JSONL/SARIF) |
 | `rules/base` | Abstract rule interface |
 | `rules/__init__` | Rule registry and immutable metadata projection |
 | `rules/*` | Rule implementations by category |

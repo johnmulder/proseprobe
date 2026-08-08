@@ -16,7 +16,7 @@ Overused vocabulary, structural clichés, promotional language, and sloppy marku
 - 🎯 **Confidence levels** (high/medium/low) to reduce noise
 - 🗂️ Built-in profiles for general, technical, academic, journalism, and business prose
 - ⚙️ Configurable via `.slop-lint.toml`
-- 📊 Multiple output formats (text, JSON, SARIF)
+- 📊 Multiple output formats (text, JSON, JSON Lines, SARIF)
 - 🚀 Fast, parallel file processing
 - 🧭 Directory discovery respects `.gitignore` patterns
 
@@ -43,6 +43,9 @@ slop-lint check README.md docs/
 
 # Output as JSON
 slop-lint check --format json .
+
+# Output one JSON diagnostic per line
+slop-lint check --format jsonl .
 
 # Check one document from standard input
 printf 'This documentation delves into the API.\n' | \
@@ -82,10 +85,11 @@ slop-lint explain V001
 
 `check` and `watch` apply rule selection, severity, inline suppressions,
 confidence, and baseline filters in the same order. Watch output is text-only;
-JSON and SARIF are complete `check` reports. Operational errors and verbose
-status messages go to stderr so redirected stdout remains valid structured
-data. The versioned JSON contract and field semantics are documented in the
-[configuration guide](docs/configuration.md#json).
+grouped JSON and SARIF are complete `check` reports, while JSON Lines emits one
+diagnostic per line and no output for a clean run. Operational errors and
+verbose status messages go to stderr so redirected stdout remains valid
+structured data. The versioned JSON contracts and field semantics are
+documented in the [configuration guide](docs/configuration.md#output-formats).
 
 Standard input uses `-` with a required `--filename` virtual path. It cannot be
 mixed with filesystem paths or baselines; project configuration is still
