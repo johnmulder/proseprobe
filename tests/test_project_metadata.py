@@ -163,6 +163,68 @@ def test_dogfood_ci_is_enforced() -> None:
     assert "continue-on-error: true" not in workflow
 
 
+def test_agent_skill_uses_portable_minimal_structure() -> None:
+    """The portable skill should use only standard Agent Skills metadata."""
+    skill_dir = ROOT / "skills" / "slop-lint"
+    files = {
+        path.relative_to(skill_dir).as_posix()
+        for path in skill_dir.rglob("*")
+        if path.is_file()
+    }
+
+    assert files == {"SKILL.md"}
+
+    skill = (skill_dir / "SKILL.md").read_text()
+    opening, raw_frontmatter, body = skill.split("---", 2)
+    frontmatter = dict(
+        line.split(": ", 1) for line in raw_frontmatter.strip().splitlines()
+    )
+
+    assert opening == ""
+    assert frontmatter == {
+        "name": "slop-lint",
+        "description": (
+            "Use when an agent generates, edits, or reviews prose in Markdown "
+            "or Python docstrings and comments in a project that uses slop-lint."
+        ),
+        "license": "MIT",
+        "compatibility": "Requires the slop-lint executable on PATH.",
+    }
+    assert frontmatter["description"].startswith("Use when ")
+    assert len(frontmatter["description"]) <= 1024
+    assert body.strip()
+
+
+def test_agent_skill_documents_supported_workflow() -> None:
+    """The portable skill should match the supported agent CLI contract."""
+    skill = (ROOT / "skills" / "slop-lint" / "SKILL.md").read_text()
+    guide = (ROOT / "docs" / "agent-integration.md").read_text()
+
+    literals = (
+        "slop-lint check --format jsonl README.md docs/",
+        "slop-lint check - --filename docs/draft.md --format jsonl",
+        "slop-lint rules --format json",
+        "slop-lint explain V001 --format json",
+        "pre-commit run slop-lint",
+        "| `0` | No warning or error findings; info findings may still be present. |",
+        "| `1` | At least one warning or error finding was reported. |",
+        "| `2` | Command usage or project configuration is invalid. |",
+        "| `3` | An input could not be read. |",
+        "Run from the project root so configuration discovery matches normal project use.",
+        "Handle high-confidence findings first, then medium, then low.",
+        "Rerun the same command after every edit.",
+        "slop-lint reports findings; it does not rewrite files.",
+        "Do not add or switch to an `agent` profile.",
+    )
+
+    for literal in literals:
+        assert literal in guide
+        assert literal in skill
+
+    assert "--profile agent" not in skill
+    assert "plugin.json" not in skill
+
+
 def test_agent_integration_guide_documents_supported_contract() -> None:
     """The agent guide should stay aligned with supported CLI behavior."""
     guide_path = ROOT / "docs" / "agent-integration.md"
