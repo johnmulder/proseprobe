@@ -535,6 +535,13 @@ Visible prose.
         assert end_line == 4
         assert code.strip() == "code"
 
+    def test_unquoted_fence_preserves_blockquote_marker_in_content(self) -> None:
+        content = "```text\n> quoted-looking code\n```"
+
+        [block] = MarkdownParser(content).get_code_blocks()
+
+        assert block[3] == "> quoted-looking code"
+
     def test_get_code_blocks_unclosed(self) -> None:
         """Test unclosed fenced code blocks extend to EOF."""
         content = "Text\n```\ncode line"

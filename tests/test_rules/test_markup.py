@@ -498,6 +498,15 @@ class TestSkippedHeadingLevel:
         assert issue.line == 4
         assert issue.message == "Heading level jumps from 1 to 3"
 
+    @pytest.mark.parametrize("later_heading", ["   ### Details", ">    ### Details"])
+    def test_reports_indented_atx_heading(self, later_heading: str) -> None:
+        text = f"# Title\n\n{later_heading}"
+
+        [issue] = SkippedHeadingLevelRule().check(text, "guide.md")
+
+        assert issue.line == 3
+        assert issue.message == "Heading level jumps from 1 to 3"
+
     @pytest.mark.parametrize(
         "text",
         [
@@ -513,10 +522,18 @@ class TestSkippedHeadingLevel:
         [
             "```markdown\n### Hidden\n```",
             "<section>\n### Hidden\n</section>",
+            "<script>\n### Hidden\n</script>",
+            "<style>\n### Hidden\n</style>",
+            "<textarea>\n### Hidden\n</textarea>",
         ],
     )
     def test_ignores_headings_inside_hidden_blocks(self, hidden_block: str) -> None:
         text = f"# Title\n\n{hidden_block}\n\n## Visible"
+
+        assert SkippedHeadingLevelRule().check(text, "guide.md") == []
+
+    def test_ignores_heading_inside_blockquoted_fence(self) -> None:
+        text = "# Title\n\n> ```markdown\n> ### Hidden\n> ```\n\n## Visible"
 
         assert SkippedHeadingLevelRule().check(text, "guide.md") == []
 

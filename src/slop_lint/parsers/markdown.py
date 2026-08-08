@@ -141,6 +141,9 @@ class MarkdownParser:
             "th",
             "pre",
             "code",
+            "script",
+            "style",
+            "textarea",
             "details",
             "summary",
             "figure",
@@ -159,6 +162,7 @@ class MarkdownParser:
         fence_len = 0
         opening_fence = ""
         opening_column = 0
+        blockquoted_fence = False
         language = ""
         start_line = 0
         content_lines: list[str] = []
@@ -166,13 +170,15 @@ class MarkdownParser:
         fence_re = re.compile(r"^( {0,3})(`{3,}|~{3,})\s*([\w+-]+)?\s*$")
 
         for line_num, line in enumerate(self._lines, start=1):
+            fence_line, blockquote_prefix_length = self._strip_blockquote_prefix(line)
             if not in_block:
-                match = fence_re.match(line)
+                match = fence_re.match(fence_line)
                 if match:
                     opening_fence = match.group(2)
                     fence_char = opening_fence[0]
                     fence_len = len(opening_fence)
-                    opening_column = match.start(2) + 1
+                    opening_column = blockquote_prefix_length + match.start(2) + 1
+                    blockquoted_fence = blockquote_prefix_length > 0
                     language = match.group(3) or ""
                     start_line = line_num
                     content_lines = []
@@ -181,10 +187,11 @@ class MarkdownParser:
                 continue
 
             code_lines.add(line_num)
+            active_line = fence_line if blockquoted_fence else line
             close_re = re.compile(
                 rf"^ {{0,3}}{re.escape(fence_char)}{{{fence_len},}}\s*$"
             )
-            if close_re.match(line):
+            if close_re.match(active_line):
                 blocks.append(
                     MarkdownCodeBlock(
                         start_line=start_line,
@@ -198,7 +205,7 @@ class MarkdownParser:
                 )
                 in_block = False
             else:
-                content_lines.append(line)
+                content_lines.append(active_line)
 
         if in_block:
             blocks.append(
@@ -323,7 +330,7 @@ class MarkdownParser:
         code_lines = self._code_lines()
         html_lines = self._html_lines()
         headings: list[tuple[int, int, str]] = []
-        heading_re = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
+        heading_re = re.compile(r"^ {0,3}(#{1,6})\s+(.+?)\s*$")
         setext_re = re.compile(r"^ {0,3}(=+|-+)\s*$")
         idx = 0
         while idx < len(self._lines):
@@ -389,7 +396,7 @@ class MarkdownParser:
         html_lines = self._html_lines()
         setext_headings, setext_underline = self._setext_lines()
         paragraphs: list[tuple[int, int, str]] = []
-        heading_re = re.compile(r"^(#{1,6})\s+")
+        heading_re = re.compile(r"^ {0,3}(#{1,6})\s+")
         list_re = re.compile(r"^\s*(?:[-*+]|\d+\.)\s+")
 
         current_lines: list[str] = []
