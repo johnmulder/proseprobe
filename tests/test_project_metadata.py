@@ -268,6 +268,18 @@ def test_readme_links_agent_integration_guide() -> None:
     assert "[Agent integration guide](docs/agent-integration.md)" in readme
 
 
+def test_readme_documents_portable_agent_skill() -> None:
+    """The README should expose the skill artifact and installation boundary."""
+    readme = (ROOT / "README.md").read_text()
+
+    for statement in (
+        "[Portable Agent Skill](skills/slop-lint/SKILL.md)",
+        "The `skills/slop-lint/` directory is the copyable distribution unit.",
+        "Install the `slop-lint` executable separately before using the skill.",
+    ):
+        assert statement in readme
+
+
 def test_ci_enforces_coverage_threshold() -> None:
     """CI should use the same coverage threshold as local NFR checks."""
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text()

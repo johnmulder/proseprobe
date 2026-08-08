@@ -280,6 +280,13 @@ membership, and run `make rule-docs`. Do not edit content between
 - [docs/rules.md](docs/rules.md) — Detailed rule documentation
 - [docs/configuration.md](docs/configuration.md) — Configuration reference
 - [Agent integration guide](docs/agent-integration.md) — Portable lint-and-repair workflow for coding agents
+- [Portable Agent Skill](skills/slop-lint/SKILL.md) — Installable workflow for skills-compatible agents
+
+The `skills/slop-lint/` directory is the copyable distribution unit. Copy it
+into the skills location documented by your agent.
+Install the `slop-lint` executable separately before using the skill.
+The Python wheel does not install the skill or add provider-specific plugin
+metadata.
 
 ## Why "slop-lint"?
 

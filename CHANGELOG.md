@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- A portable Agent Skills-compatible `slop-lint` skill with tested activation
+  metadata and the structured lint-repair workflow.
 - Provider-neutral agent integration guidance for structured diagnostics,
   exit-code handling, intentional findings, and mandatory verification reruns.
 - `rules --format json` and `explain RULE --format json` expose versioned
