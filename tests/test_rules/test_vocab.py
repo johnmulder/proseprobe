@@ -1,4 +1,4 @@
-"""Tests for vocabulary rules (V001-V011, V013, and V016)."""
+"""Tests for vocabulary rules (V001-V011 and V013-V016)."""
 
 import pytest
 
@@ -16,6 +16,7 @@ from proseprobe.rules.vocab import (
     AIVocabularyRule,
     CollaborativePhrasesRule,
     GrandioseStakesRule,
+    ImpreciseQuantityRule,
     InventedConceptLabelsRule,
     KnowledgeCutoffRule,
     PromotionalLanguageRule,
@@ -866,6 +867,128 @@ def summarize():
         )
 
         assert RedundantModifierRule().check(source, "guide.md") == []
+
+
+class TestImpreciseQuantity:
+    """Tests for V014: Imprecise Quantity."""
+
+    @pytest.mark.parametrize(
+        "phrase",
+        [
+            "a considerable number of",
+            "a large number of",
+            "a small number of",
+            "a handful of",
+        ],
+    )
+    def test_reports_each_curated_phrase(self, phrase: str) -> None:
+        source = f"The queue contains {phrase} requests."
+
+        [issue] = ImpreciseQuantityRule().check(source, "guide.md")
+
+        assert issue.rule_id == "V014"
+        assert issue.message == f"Imprecise quantity: '{phrase}'"
+        assert source[issue.column - 1 : issue.end_column - 1] == phrase
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == "Use a measured quantity or cite the source"
+
+    def test_preserves_a_wrapped_source_span(self) -> None:
+        source = "A large number\nof requests failed."
+
+        [issue] = ImpreciseQuantityRule().check(source, "guide.md")
+
+        assert (issue.line, issue.column) == (1, 1)
+        assert (issue.end_line, issue.end_column) == (2, 3)
+        assert issue.message == "Imprecise quantity: 'A large number of'"
+
+    def test_reports_multiple_phrases_in_source_order(self) -> None:
+        source = "A handful of clients sent a small number of requests."
+
+        issues = ImpreciseQuantityRule().check(source, "guide.md")
+
+        assert [issue.message for issue in issues] == [
+            "Imprecise quantity: 'A handful of'",
+            "Imprecise quantity: 'a small number of'",
+        ]
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "A large number of requests failed; 42 timed out.",
+            "The benchmark found a large number of failures.",
+            "In July, a handful of clients retried.",
+            "Mina Ortiz reported a small number of failures.",
+            (
+                "The [benchmark report](https://example.com/report) found "
+                "a considerable number of failures."
+            ),
+        ],
+    )
+    def test_local_evidence_lowers_confidence(self, source: str) -> None:
+        [issue] = ImpreciseQuantityRule().check(source, "guide.md")
+
+        assert issue.confidence is Confidence.LOW
+
+    def test_uses_adjacent_evidence_in_the_same_scope(self) -> None:
+        source = (
+            "The benchmark measured 42 failures. A large number of requests timed out."
+        )
+
+        [issue] = ImpreciseQuantityRule().check(source, "guide.md")
+
+        assert issue.confidence is Confidence.LOW
+
+    def test_evidence_does_not_cross_scope_boundaries(self) -> None:
+        source = (
+            "The benchmark measured 42 failures.\n\n"
+            "# Findings\n\nA large number of requests timed out."
+        )
+
+        [issue] = ImpreciseQuantityRule().check(source, "guide.md")
+
+        assert issue.line == 5
+        assert issue.confidence is Confidence.MEDIUM
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "# A large number of failures",
+            "## Example\n\nA large number of requests failed.",
+            "Use `a large number of` as the legacy label.",
+            "```text\na handful of failures\n```",
+        ],
+    )
+    def test_ignores_headings_examples_and_code(self, source: str) -> None:
+        assert ImpreciseQuantityRule().check(source, "guide.md") == []
+
+    def test_checks_python_documentation_but_not_code_strings(self) -> None:
+        source = '''\
+label = "a large number of"
+# A handful of clients retried.
+
+def summarize():
+    """A small number of requests failed."""
+'''
+
+        issues = ImpreciseQuantityRule().check(source, "client.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_ignores_broad_and_overlapping_quantifiers(self) -> None:
+        source = (
+            "Many clients sent some requests. Several retries succeeded. "
+            "A significant number of jobs and a substantial number of tasks ran."
+        )
+
+        assert ImpreciseQuantityRule().check(source, "guide.md") == []
+
+    def test_rule_metadata(self) -> None:
+        rule = ImpreciseQuantityRule()
+
+        assert rule.id == "V014"
+        assert rule.name == "Imprecise Quantity"
+        assert rule.default_confidence is Confidence.MEDIUM
 
 
 class TestAbsoluteReliabilityClaim:

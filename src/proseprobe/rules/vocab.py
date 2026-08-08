@@ -1,4 +1,4 @@
-"""Vocabulary detection rules (V001-V011, V013, and V016)."""
+"""Vocabulary detection rules (V001-V011 and V013-V016)."""
 
 import re
 from typing import ClassVar
@@ -39,6 +39,9 @@ _MONTH = re.compile(
 _NAMED_SOURCE = re.compile(r"\b[A-Z][a-z]+ [A-Z][a-z]+\b")
 _NUMBER = re.compile(r"\b\d+(?:\.\d+)?%?\b")
 _LINK = re.compile(r"https?://|\[[^\]]+\]\([^)]+\)")
+_QUANTITY_EVIDENCE = re.compile(
+    r"\b(?:benchmark|measurement|report|study|survey)s?\b", re.IGNORECASE
+)
 _TESTED_BOUND = re.compile(
     r"(?:\b(?:across|during|for|in|over)\s+\d[\d,]*(?:\.\d+)?\s+"
     r"(?:tests?|trials?|test runs?|runs?|requests?|operations?|cases?|hours?|days?)\b"
@@ -90,6 +93,22 @@ def _has_tested_bound(
     """Return whether the local source states a concrete tested scope."""
     return bool(
         _TESTED_BOUND.search(_sentence_window_source(content, sentences, index))
+    )
+
+
+def _has_quantity_evidence(
+    content: str,
+    sentences: list[ProseSentence],
+    index: int,
+) -> bool:
+    """Return whether the local source supplies quantitative context."""
+    source = _sentence_window_source(content, sentences, index)
+    return bool(
+        _NUMBER.search(source)
+        or _LINK.search(source)
+        or _MONTH.search(source)
+        or _NAMED_SOURCE.search(source)
+        or _QUANTITY_EVIDENCE.search(source)
     )
 
 
@@ -657,6 +676,59 @@ class RedundantModifierRule(Rule):
         return _replacement_phrase_issues(
             self, content, filename, REDUNDANT_MODIFIER_REPLACEMENTS
         )
+
+
+class ImpreciseQuantityRule(Rule):
+    """V014: Detect narrow vague-quantity phrases without local evidence."""
+
+    id = "V014"
+    name = "Imprecise Quantity"
+    description = "Detects vague quantity phrases lacking measured context"
+    severity = Severity.INFO
+    default_confidence = Confidence.MEDIUM
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _QUANTITY: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:a\s+(?:considerable|large|small)\s+number\s+of"
+        r"|a\s+handful\s+of)\b",
+        re.IGNORECASE,
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose for imprecise quantity phrases."""
+        issues: list[Issue] = []
+        sentences = iter_prose_sentences(content, filename)
+        for index, sentence in enumerate(sentences):
+            if sentence.context == "heading" or is_example_line(
+                content, filename, sentence.start_line
+            ):
+                continue
+
+            confidence = (
+                Confidence.LOW
+                if _has_quantity_evidence(content, sentences, index)
+                else self.default_confidence
+            )
+            for match in self._QUANTITY.finditer(sentence.text):
+                line, column = sentence.source_position(match.start())
+                end_line, end_column = sentence.source_position(match.end())
+                quantity = " ".join(match.group().split())
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Imprecise quantity: '{quantity}'",
+                        line=line,
+                        column=column,
+                        end_line=end_line,
+                        end_column=end_column,
+                        severity=self.severity,
+                        confidence=confidence,
+                        suggestion="Use a measured quantity or cite the source",
+                    )
+                )
+
+        return issues
 
 
 class AbsoluteReliabilityClaimRule(Rule):
