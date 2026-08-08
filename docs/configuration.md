@@ -360,6 +360,7 @@ slop-lint check --format json . > report.json
 
 ```json
 {
+  "schema_version": 1,
   "version": "0.1.0",
   "files": [
     {
@@ -388,6 +389,13 @@ slop-lint check --format json . > report.json
   }
 }
 ```
+
+`schema_version` identifies the machine-output contract; `version` identifies
+the slop-lint package that produced the report. `line` and `column` are 1-based
+start positions. `end_line` is the endpoint line, and `end_column` is a 1-based
+exclusive endpoint. `end_line`, `end_column`, and `suggestion` are always
+present and may be `null`. The schema version changes only for incompatible
+contract changes.
 
 ### SARIF
 

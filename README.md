@@ -80,7 +80,8 @@ slop-lint explain V001
 confidence, and baseline filters in the same order. Watch output is text-only;
 JSON and SARIF are complete `check` reports. Operational errors and verbose
 status messages go to stderr so redirected stdout remains valid structured
-data.
+data. The versioned JSON contract and field semantics are documented in the
+[configuration guide](docs/configuration.md#json).
 
 Baselines use repository-relative source identity rather than line numbers or
 diagnostic wording. `update` explicitly accepts new findings, while `prune`
