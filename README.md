@@ -78,10 +78,16 @@ slop-lint baseline prune --baseline .slop-lint-baseline.json .
 
 # List all rules
 slop-lint rules
+slop-lint rules --format json
 
 # Explain a specific rule
 slop-lint explain V001
+slop-lint explain V001 --format json
 ```
+
+`rules --format json` and `explain RULE --format json` expose the canonical
+default rule metadata for machine consumers; human-readable output remains the
+default.
 
 `check` and `watch` apply rule selection, severity, inline suppressions,
 confidence, and baseline filters in the same order. Watch output is text-only;

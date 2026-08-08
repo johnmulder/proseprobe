@@ -101,8 +101,9 @@ minimum severity, and low minimum confidence.
 
 ```
 slop-lint check [OPTIONS] [PATHS]...   Check files for bad writing practices
-slop-lint rules                        List all available rules
-slop-lint explain RULE_ID              Show detailed rule documentation
+slop-lint rules [--format text|json]   List all available rules
+slop-lint explain RULE_ID [--format text|json]
+                                       Show detailed rule documentation
 slop-lint init                         Create .slop-lint.toml config file
 slop-lint version                      Show version information
 slop-lint watch [OPTIONS] [PATHS]...   Watch files and re-check changes
@@ -135,7 +136,16 @@ as the file identity. Standard input is mutually exclusive with filesystem
 paths, `--baseline`, and `--generate-baseline`; configuration discovery remains
 rooted at the current working directory.
 
-### 4.3 Watch Command Options
+### 4.3 Rule Metadata Command Options
+
+| Option | Type | Default | Commands | Description |
+|--------|------|---------|----------|-------------|
+| `--format` | choice | text | rules, explain | Metadata output format: text, json |
+
+Both commands retain human-readable text by default. JSON output contains
+canonical defaults and does not load project configuration.
+
+### 4.4 Watch Command Options
 
 `watch` supports the shared `--profile`, `--select`, `--ignore`, `--config`,
 `--severity`, `--min-confidence`, `--hide-low`, `--baseline`, `--quiet`, and
@@ -143,7 +153,7 @@ rooted at the current working directory.
 `2.0`) and `--no-clear`. Watch is text-only; `--format`,
 `--generate-baseline`, and `--show-config` remain check-only.
 
-### 4.4 Baseline Command
+### 4.5 Baseline Command
 
 `ACTION` is one of `create`, `update`, `prune`, or `summary`. The command uses
 the normal scan configuration and options but compares unbaselined findings:
@@ -169,7 +179,7 @@ currently matched hashes to version 2 and reports unmatched opaque hashes as
 stale. Explicit missing, malformed, unreadable, and unsupported baseline files
 are configuration errors before scanning begins.
 
-### 4.5 Scan Policy
+### 4.6 Scan Policy
 
 All scan commands load configuration, apply its profile defaults and explicit
 policy, then apply a CLI profile and direct CLI rule overrides. They construct
@@ -178,7 +188,7 @@ per-file ignore policy, apply inline suppressions, filter by confidence, apply
 the baseline, and finally report the ordered findings. A watch iteration uses
 the same batch pipeline as `check`.
 
-### 4.6 Exit Codes
+### 4.7 Exit Codes
 
 | Code | Meaning |
 |------|---------|
@@ -355,6 +365,45 @@ Standard SARIF 2.1.0 format for GitHub Code Scanning integration.
 Grouped JSON and SARIF are complete `check` documents written to stdout. JSON
 Lines is a diagnostic stream. Operational diagnostics are written to stderr so
 structured stdout remains parseable.
+
+### 6.5 Rule Metadata JSON
+
+`rules --format json` returns all canonical rule defaults in a deterministic
+`rules` array. `explain RULE --format json` returns the same object shape for
+one rule:
+
+```json
+{
+  "schema_version": 1,
+  "version": "0.1.0",
+  "rule": {
+    "id": "V001",
+    "category": "Vocabulary",
+    "name": "Overused Vocabulary",
+    "description": "Detects overused and clichéd words",
+    "default_severity": "warning",
+    "default_confidence": "medium",
+    "applies_to": ["markdown", "python"],
+    "content_scope": "prose",
+    "profiles": [
+      "academic",
+      "business",
+      "general",
+      "journalism",
+      "technical-docs"
+    ],
+    "config_key": null
+  }
+}
+```
+
+The `rules` envelope contains `schema_version`, package `version`, and `rules`.
+Each rule object has the fields shown above. Enum values are lowercase, tuple
+metadata is serialized as arrays, and `config_key` is nullable. These are
+canonical defaults: project configuration and CLI severity overrides do not
+affect them. Text remains the default format. An unknown explanation ID exits
+with code 1, writes no stdout, and writes a diagnostic to stderr. The schema
+version changes only for incompatible contract changes.
 
 ## 7. Architecture
 

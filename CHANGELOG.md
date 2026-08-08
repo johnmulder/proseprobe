@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `rules --format json` and `explain RULE --format json` expose versioned
+  canonical rule metadata for machine consumers.
 - `check --format jsonl` emits one versioned diagnostic object per line for
   line-oriented subprocess and agent integrations.
 - `check - --filename PATH` lints one standard-input document while preserving

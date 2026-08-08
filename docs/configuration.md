@@ -332,6 +332,7 @@ version 2 file and retains its existing overwrite behavior.
 | `--verbose` | `-v` | all scans | Show additional diagnostic info |
 | `--show-config` | | check | Display configuration and exit |
 | `--format` | `-f` | check | Output format: text, json, jsonl, sarif |
+| `--format` | `-f` | rules, explain | Metadata output format: text, json |
 | `--filename` | | check | Required virtual path and file type for standard input `-` |
 | `--generate-baseline` | | check | Generate baseline file from current issues |
 | `--interval` | `-n` | watch | Check interval in seconds |
@@ -440,6 +441,45 @@ For GitHub Code Scanning integration:
 ```bash
 slop-lint check --format sarif . > results.sarif
 ```
+
+### Rule Metadata JSON
+
+`rules --format json` returns all canonical rule defaults in a deterministic
+`rules` array. `explain RULE --format json` returns the same object shape for
+one rule:
+
+```json
+{
+  "schema_version": 1,
+  "version": "0.1.0",
+  "rule": {
+    "id": "V001",
+    "category": "Vocabulary",
+    "name": "Overused Vocabulary",
+    "description": "Detects overused and clichéd words",
+    "default_severity": "warning",
+    "default_confidence": "medium",
+    "applies_to": ["markdown", "python"],
+    "content_scope": "prose",
+    "profiles": [
+      "academic",
+      "business",
+      "general",
+      "journalism",
+      "technical-docs"
+    ],
+    "config_key": null
+  }
+}
+```
+
+The `rules` envelope contains `schema_version`, package `version`, and `rules`.
+Each rule object has the fields shown above. Enum values are lowercase, tuple
+metadata is serialized as arrays, and `config_key` is nullable. These are
+canonical defaults: project configuration and CLI severity overrides do not
+affect them. Text remains the default format. An unknown explanation ID exits
+with code 1, writes no stdout, and writes a diagnostic to stderr. The schema
+version changes only for incompatible contract changes.
 
 ## Exit Codes
 
