@@ -1,7 +1,7 @@
 # slop-lint - Technical Specification
 
 > Version: 0.1.0
-> Last Updated: 2026-08-06
+> Last Updated: 2026-08-08
 
 ## 1. Purpose
 
@@ -57,11 +57,12 @@ speed remains a tracked metric until the benchmark corpus reflects real projects
 
 <!-- rule-docs:categories:end -->
 
-Prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
-source-mapped Python docstrings and comments. Python blocks are evaluated
-independently so thresholds do not combine unrelated documentation. `C` rules
-cover Python-specific documentation issues; Markdown syntax rules remain
-Markdown-only.
+Most prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
+source-mapped Python docstrings and comments; `G015` examines only Markdown
+document openers. Python blocks are evaluated independently so thresholds do
+not combine unrelated documentation. `C` rules cover Python-specific
+documentation issues. `M001` checks Markdown syntax in Python comments, while
+`M002`-`M008` are Markdown-only.
 
 Markdown and Python parsers cache source-mapped sentence records with exact
 start and end line and column positions. Sentence segmentation uses
@@ -123,7 +124,7 @@ slop-lint baseline ACTION [OPTIONS] [PATHS]...
 | `--baseline` | path | none | Path to baseline file for incremental adoption |
 | `--generate-baseline` | flag | false | Generate baseline from current issues |
 | `--show-config` | flag | false | Display resolved configuration and exit |
-| `--quiet` | flag | false | Only output errors |
+| `--quiet` | flag | false | In text reports, output only errors |
 | `--verbose` | flag | false | Show additional diagnostic info |
 
 ### 4.3 Watch Command Options
@@ -173,10 +174,10 @@ the same batch pipeline as `check`.
 
 | Code | Meaning |
 |------|---------|
-| 0 | Success, no issues found |
+| 0 | No warning or error findings; info findings may still be reported |
 | 1 | Issues found (warning or error severity) |
 | 2 | Configuration or usage error |
-| 3 | Internal error |
+| 3 | An input file could not be read |
 
 ## 5. Configuration
 
@@ -194,8 +195,8 @@ Search order (first found wins):
 ```toml
 [tool.slop-lint]
 # File patterns (glob syntax)
-include = ["*.md", "*.py"]
-exclude = ["venv/**", "node_modules/**", ".git/**"]
+include = ["*.md", "*.mdx", "*.markdown", "*.py"]
+exclude = ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
 
 # Rule selection
 profile = "technical-docs"
@@ -221,7 +222,7 @@ S002 = "info"
 [tool.slop-lint.vocabulary]
 additional = []  # Extra words to flag
 allowed = []     # Domain-specific words to permit
-allowed_phrases = ["All notable changes"]  # Exact phrases to skip
+allowed_phrases = ["All notable changes"]  # Exact phrases V001 should skip
 
 # Per-file rule overrides
 [[tool.slop-lint.per-file-ignores]]
@@ -278,7 +279,7 @@ before confidence and baseline filtering.
 
 ```
 docs/api.md:15:10: V001 [high] [warning] Overused word: 'delve' → consider 'explore'
-docs/api.md:23:1: S001 [warning] Rule of three pattern detected
+docs/api.md:23:1: S001 [info] Triadic pattern (rule of three): 'fast, safe, and clear'
 src/main.py:45:8: V002 [warning] Collaborative phrase: 'I hope this helps'
 
 Found 3 issue(s) (0 error, 2 warning, 1 info) in 2 file(s)
@@ -299,18 +300,21 @@ Confidence: 1 high, 2 medium, 0 low
           "message": "Overused word: 'delve' → consider 'explore'",
           "line": 15,
           "column": 10,
+          "end_line": null,
+          "end_column": 15,
           "severity": "warning",
-          "confidence": "high"
+          "confidence": "high",
+          "suggestion": "explore"
         }
       ]
     }
   ],
   "summary": {
-    "total_issues": 3,
-    "files_checked": 2,
+    "total_issues": 1,
+    "files_checked": 1,
     "errors": 0,
-    "warnings": 2,
-    "info": 1
+    "warnings": 1,
+    "info": 0
   }
 }
 ```
@@ -334,7 +338,7 @@ diagnostics are written to stderr so structured stdout remains parseable.
 | `rules/base` | Abstract rule interface |
 | `rules/__init__` | Rule registry and immutable metadata projection |
 | `rules/*` | Rule implementations by category |
-| `parsers/*` | Markdown and Python AST parsing |
+| `parsers/*` | Markdown parsing and Python AST/source extraction |
 | `data/*` | Vocabulary lists and patterns |
 | `_rule_docs` | Deterministic generated-document synchronization |
 

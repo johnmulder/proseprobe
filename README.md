@@ -11,7 +11,7 @@ Overused vocabulary, structural clichés, promotional language, and sloppy marku
 
 ## Features
 
-- 🔍 **61 detection rules** across 6 categories
+- 🔍 **64 detection rules** across 6 categories
 - 📝 Scans Markdown prose and source-mapped Python docstrings and comments
 - 🎯 **Confidence levels** (high/medium/low) to reduce noise
 - 🗂️ Built-in profiles for general, technical, academic, journalism, and business prose
@@ -78,8 +78,9 @@ slop-lint explain V001
 
 `check` and `watch` apply rule selection, severity, inline suppressions,
 confidence, and baseline filters in the same order. Watch output is text-only;
-JSON and SARIF are complete `check` reports, with diagnostics kept on stderr so
-redirected stdout remains valid structured data.
+JSON and SARIF are complete `check` reports. Operational errors and verbose
+status messages go to stderr so redirected stdout remains valid structured
+data.
 
 Baselines use repository-relative source identity rather than line numbers or
 diagnostic wording. `update` explicitly accepts new findings, while `prune`
@@ -102,9 +103,10 @@ removes stale entries without accepting new ones. The older
 
 <!-- rule-docs:categories:end -->
 
-Prose-scoped `V`, `S`, `T`, and `G` rules run on Markdown prose and
-source-mapped Python docstrings and comments. `C` rules cover Python-specific
-documentation issues, while Markdown syntax rules remain Markdown-only.
+Most prose-scoped `V`, `S`, `T`, and `G` rules run on Markdown prose and
+source-mapped Python docstrings and comments; `G015` examines only Markdown
+document openers. `C` rules cover Python-specific documentation issues. `M001`
+checks Markdown syntax in Python comments, while `M002`-`M008` are Markdown-only.
 Wrapped prose is segmented once into cached sentences that retain start and end
 line and column positions. Conservative standard-library handling keeps common
 abbreviations, decimals, URLs, trailing quotes, and hard prose-block boundaries
@@ -114,7 +116,7 @@ without adding an NLP dependency.
 
 ```
 docs/guide.md:15:10: V001 [warning] Overused word: 'delve' → consider 'explore'
-docs/guide.md:23:1: S001 [warning] Rule of three pattern detected
+docs/guide.md:23:1: S001 [info] Triadic pattern (rule of three): 'fast, safe, and clear'
 src/main.py:45:8: V002 [warning] Collaborative phrase: 'I hope this helps'
 ```
 
@@ -125,7 +127,7 @@ Create a `.slop-lint.toml` in your project root:
 ```toml
 [tool.slop-lint]
 include = ["*.md", "*.mdx", "*.markdown", "*.py"]
-exclude = ["venv/**", "node_modules/**"]
+exclude = ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
 profile = "technical-docs"
 minimum_severity = "warning"
 
@@ -187,25 +189,33 @@ code fences and Python strings are inert examples.
 
 | Code | Meaning |
 |------|---------|
-| 0 | No issues found |
-| 1 | Issues found |
-| 2 | Configuration error |
-| 3 | Internal error |
+| 0 | No warning or error findings (info findings may still be reported) |
+| 1 | Warning or error findings reported |
+| 2 | Configuration or usage error |
+| 3 | An input file could not be read |
 
 ## CI/CD Integration
 
 ### GitHub Actions
 
 ```yaml
-- name: Check for bad writing practices
-  run: |
-    pip install slop-lint
-    slop-lint check --format sarif . > results.sarif
+permissions:
+  contents: read
+  security-events: write
 
-- name: Upload SARIF
-  uses: github/codeql-action/upload-sarif@v3
-  with:
-    sarif_file: results.sarif
+steps:
+  - uses: actions/checkout@v7
+
+  - name: Install slop-lint
+    run: pip install slop-lint
+
+  - name: Check for bad writing practices
+    run: slop-lint check --format sarif . > results.sarif || test $? -eq 1
+
+  - name: Upload SARIF
+    uses: github/codeql-action/upload-sarif@v4
+    with:
+      sarif_file: results.sarif
 ```
 
 ### Pre-commit

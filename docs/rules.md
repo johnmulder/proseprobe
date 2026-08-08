@@ -2,9 +2,11 @@
 
 This document describes all detection rules available in slop-lint.
 
-Prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
-source-mapped Python docstrings and comments. `C` rules handle Python-specific
-documentation issues, and `M` rules remain Markdown-only.
+Most prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
+source-mapped Python docstrings and comments; `G015` examines only Markdown
+document openers. `C` rules handle Python-specific documentation issues.
+`M001` checks Markdown syntax in Python comments, while `M002`-`M008` are
+Markdown-only.
 
 Wrapped Markdown and Python prose is segmented into cached, source-mapped
 sentences. Records retain exact start and end positions while conservative
@@ -219,6 +221,7 @@ Detects excessive triadic patterns ("X, Y, and Z").
 This provides speed, efficiency, and reliability.
 It offers flexibility, scalability, and maintainability.
 The system ensures security, stability, and performance.
+The API supports retries, timeouts, and cancellation.
 ```
 
 **Example (good):**
@@ -265,13 +268,13 @@ The framework has some known limitations: performance degrades with large datase
 
 ### S004: Inline-Header Lists
 
-Detects "- **Header:** Description" bullet patterns.
+Detects "- **Header**: Description" bullet patterns.
 
 **Example (bad):**
 ```markdown
-- **Performance:** Very fast execution
-- **Scalability:** Handles millions of requests
-- **Security:** Enterprise-grade protection
+- **Performance**: Very fast execution
+- **Scalability**: Handles millions of requests
+- **Security**: Enterprise-grade protection
 ```
 
 **Example (good):**
@@ -310,13 +313,12 @@ This release adds async support and improves memory usage by 40%.
 Detects present participle chains suggesting filler text.
 
 **Detected patterns:**
-- "highlighting its importance"
-- "underscoring the significance"
-- "fostering growth and development"
+- `highlighting ... underscoring/emphasizing/showcasing`
+- `fostering/encouraging/promoting ... while [verb]-ing`
 
 **Example (bad):**
 ```markdown
-The update improves performance, highlighting its importance to users.
+The update improves performance, highlighting its importance and underscoring its value.
 ```
 
 **Example (good):**
@@ -332,7 +334,7 @@ Detects "from X to Y" with incoherent extremes.
 
 **Example (bad):**
 ```markdown
-Used by everyone from beginners to seasoned professionals.
+Used in settings from basic to advanced.
 ```
 
 **Example (good):**
@@ -366,7 +368,7 @@ Detects excessive **bold** usage per paragraph.
 
 **Example (bad):**
 ```markdown
-The **quick** brown **fox** jumps over the **lazy** dog.
+The **quick** brown **fox** jumps over the **lazy** dog **today**.
 ```
 
 **Example (good):**
@@ -382,7 +384,7 @@ Detects excessive em dashes (—) for dramatic effect.
 
 **Example (bad):**
 ```markdown
-The solution—which took months to develop—was finally ready—and it worked.
+The solution—designed in January—tested in March—revised in April—shipped in May—and monitored in June—worked.
 ```
 
 **Example (good):**
@@ -398,7 +400,7 @@ Detects mixed curly and straight quote styles.
 
 **Example (bad):**
 ```markdown
-He said "hello" and she replied "goodbye".
+He said “hello” and she replied "goodbye".
 ```
 
 **Example (good):**
@@ -437,13 +439,12 @@ paragraphs or skipped constructs.
 
 **Example (bad):**
 ```markdown
-The function returns a value. The method yields a result.
-The procedure produces an output.
+Use the parser for CSV files. Employ the parser for TSV files.
 ```
 
 **Example (good):**
 ```markdown
-The function returns a value. See the function reference for details.
+Use the parser for CSV and TSV files.
 ```
 
 ---
@@ -583,8 +584,8 @@ Detects formulaic TODO patterns.
 
 **Example (bad):**
 ```python
-# TODO: Implement this function as per the requirements
-# TODO: Add error handling as needed
+# TODO: Implement
+# TODO: Add logic here
 ```
 
 **Example (good):**
@@ -1472,10 +1473,10 @@ substantive Markdown body sentence. Headings, block quotes, lists, code, and
 content under example-style headings do not become the document opener.
 
 **Detected patterns:**
-- "In today's rapidly evolving digital landscape…"
-- "In the modern world…"
-- "In a rapidly evolving landscape…"
-- "In an era defined by constant change…"
+- `In today's rapidly evolving digital landscape…`
+- `In the modern world…`
+- `In a rapidly evolving landscape…`
+- `In an era defined by constant change…`
 
 Replace the generic opener with the concrete subject or change the document
 actually addresses.

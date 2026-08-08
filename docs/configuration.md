@@ -39,8 +39,9 @@ profile = "technical-docs"
 
 The exact classification is:
 
-- general: `G001`-`G009`, `S001`-`S016`, `T001`-`T007`, and `V001`-`V007`;
-- technical documentation: `C001`-`C004` and `M001`-`M007`;
+- general: `G001`-`G009`, `G015`, `S001`-`S016`, `T001`-`T007`, and
+  `V001`-`V007`;
+- technical documentation: `C001`-`C004` and `M001`-`M008`;
 - academic: `G011`-`G013`, `S018`, and `T008`;
 - journalism: `G010`, `S017`, and `V008`;
 - business: `G014` and `S019`-`S021`.
@@ -57,8 +58,11 @@ minimum severity, and low minimum confidence.
 include = ["*.md", "*.mdx", "*.markdown", "*.py"]
 
 # Glob patterns for files to exclude
-exclude = ["venv/**", "node_modules/**", ".git/**"]
+exclude = ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
 ```
+
+`include` controls files discovered from directory arguments. An explicitly
+named file bypasses `include` and `.gitignore`, but still respects `exclude`.
 
 ### Rule Selection
 
@@ -98,6 +102,9 @@ be combined with `minimum_severity`; use the form above for new configuration.
 
 ### Custom Vocabulary
 
+These settings customize `V001`; `allowed` and `additional` also keep `C001`
+from duplicating vocabulary findings owned by `V001`.
+
 ```toml
 [tool.slop-lint.vocabulary]
 # Additional words to flag
@@ -106,7 +113,7 @@ additional = ["synergy", "utilize"]
 # Domain-specific words to allow
 allowed = ["crucial", "comprehensive"]
 
-# Exact phrases to skip (line is not checked if it contains one)
+# Exact phrases V001 should skip (case-insensitive substring match)
 allowed_phrases = ["All notable changes", "Critical issue"]
 ```
 
@@ -157,7 +164,7 @@ effect. Wider regions should continue to use per-file ignores.
 [tool.slop-lint.thresholds]
 # S001: Rule of three - max triads per document
 rule_of_three = 3
-# S004: Inline header lists - max consecutive inline headers
+# S004: Inline header lists - min consecutive inline headers to flag
 inline_header_lists = 3
 # T002: Bold overuse - max bold phrases per paragraph
 bold_overuse = 3
@@ -199,9 +206,10 @@ auto-discovered source path, or `default` when no file was loaded.
 
 ```toml
 [tool.slop-lint]
-include = ["*.md", "*.py", "*.rst"]
+include = ["*.md", "*.mdx", "*.markdown", "*.py"]
 exclude = [
     "venv/**",
+    ".venv/**",
     "node_modules/**",
     ".git/**",
     "*.min.js",
@@ -320,7 +328,7 @@ version 2 file and retains its existing overwrite behavior.
 | `--min-confidence` | | all scans | Minimum confidence: high, medium, low |
 | `--hide-low` | | all scans | Shorthand for `--min-confidence medium` |
 | `--baseline` | `-b` | all scans | Path to baseline file for incremental adoption |
-| `--quiet` | `-q` | all scans | Only output errors |
+| `--quiet` | `-q` | all scans | In text reports, output only errors |
 | `--verbose` | `-v` | all scans | Show additional diagnostic info |
 | `--show-config` | | check | Display configuration and exit |
 | `--format` | `-f` | check | Output format: text, json, sarif |
@@ -329,18 +337,18 @@ version 2 file and retains its existing overwrite behavior.
 | `--no-clear` | | watch | Do not clear the screen between checks |
 
 Watch is text-only because its output is a continuous stream. For `check`,
-JSON and SARIF findings are written to stdout while baseline warnings and
-verbose diagnostics are written to stderr.
+JSON and SARIF findings are written to stdout while operational errors and
+verbose status messages are written to stderr.
 
 ## Output Formats
 
 ### Text (default)
 
 ```
-docs/guide.md:15:5: V001 [high] [warning] Overused word: 'delve'
-docs/guide.md:23:1: S001 [warning] Rule of three pattern detected
+docs/guide.md:15:5: V001 [high] [warning] Overused word: 'delve' → consider 'explore'
+docs/guide.md:23:1: S001 [info] Triadic pattern (rule of three): 'fast, safe, and clear'
 
-Found 2 issue(s) (0 error, 2 warning, 0 info) in 1 file(s)
+Found 2 issue(s) (0 error, 1 warning, 1 info) in 1 file(s)
 Confidence: 1 high, 1 medium, 0 low
 ```
 
@@ -359,19 +367,24 @@ slop-lint check --format json . > report.json
       "issues": [
         {
           "rule_id": "V001",
-          "message": "Overused word: 'delve'",
+          "message": "Overused word: 'delve' → consider 'explore'",
           "line": 15,
           "column": 5,
+          "end_line": null,
+          "end_column": 10,
           "severity": "warning",
-          "confidence": "high"
+          "confidence": "high",
+          "suggestion": "explore"
         }
       ]
     }
   ],
   "summary": {
-    "total_issues": 2,
+    "total_issues": 1,
+    "files_checked": 1,
     "errors": 0,
-    "warnings": 2
+    "warnings": 1,
+    "info": 0
   }
 }
 ```
@@ -388,10 +401,10 @@ slop-lint check --format sarif . > results.sarif
 
 | Code | Meaning |
 |------|---------|
-| `0` | Success, no issues found |
-| `1` | Issues found |
+| `0` | No warning or error findings; info findings may still be reported |
+| `1` | Warning or error findings reported |
 | `2` | Configuration or usage error |
-| `3` | Internal error |
+| `3` | An input file could not be read |
 
 ## Pre-commit Integration
 
@@ -415,15 +428,17 @@ on: [push, pull_request]
 jobs:
   slop-lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - run: pip install slop-lint
-      - run: slop-lint check --format sarif docs/ > results.sarif
-        continue-on-error: true
-      - uses: github/codeql-action/upload-sarif@v3
+      - run: slop-lint check --format sarif docs/ > results.sarif || test $? -eq 1
+      - uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: results.sarif
 ```
