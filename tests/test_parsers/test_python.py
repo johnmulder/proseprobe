@@ -34,6 +34,28 @@ def hello():
         parser = PythonParser(content)
         assert parser.parse() is False
 
+    def test_docstring_prose_blocks_preserve_exact_source_lines(self) -> None:
+        source = '''\
+def build():
+    """Use a
+    bespoke adapter."""
+    return None
+
+# bespoke is only a comment here
+'''
+        parser = PythonParser(source)
+        assert parser.parse()
+
+        [block] = parser.get_docstring_prose_blocks()
+
+        matches = [
+            (line_num, line.index("bespoke") + 1)
+            for line_num, line in block.lines
+            if "bespoke" in line
+        ]
+        assert matches == [(3, 5)]
+        assert all("comment here" not in line for _, line in block.lines)
+
     def test_extract_docstrings(self) -> None:
         content = '''
 """Module docstring."""

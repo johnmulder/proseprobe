@@ -48,22 +48,29 @@ class DocstringVocabularyRule(Rule):
         if not parser.parse():
             return issues
 
-        for doc in parser.get_docstrings():
+        for block in parser.get_docstring_prose_blocks():
             for pattern, word, replacement in self._ai_words:
                 if word.lower() in self._allowed:
                     continue
-                match = re.search(pattern, doc.content, re.IGNORECASE)
-                if match:
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Overused word in docstring: '{word}'",
-                            line=doc.line,
-                            column=1,
-                            severity=self.severity,
-                            suggestion=replacement,
-                        )
+                found: tuple[int, re.Match[str]] | None = None
+                for line_num, line in block.lines:
+                    if match := re.search(pattern, line, re.IGNORECASE):
+                        found = (line_num, match)
+                        break
+                if found is None:
+                    continue
+                line_num, match = found
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Overused word in docstring: '{word}'",
+                        line=line_num,
+                        column=match.start() + 1,
+                        end_column=match.end() + 1,
+                        severity=self.severity,
+                        suggestion=replacement,
                     )
+                )
 
         return issues
 
@@ -84,10 +91,11 @@ class VerboseCommentsRule(Rule):
         parser = _get_cached_parser(content)
         comments = parser.get_comments()
 
+        lines = content.split("\n")
         for comment in comments:
-            comment_line = f"# {comment.content}".strip()
+            source_comment = lines[comment.line - 1][comment.column - 1 :]
             for pattern, reason in VERBOSE_COMMENT_PATTERNS:
-                match = re.search(pattern, comment_line, re.IGNORECASE)
+                match = re.search(pattern, source_comment, re.IGNORECASE)
                 if match:
                     issues.append(
                         Issue(
@@ -95,6 +103,7 @@ class VerboseCommentsRule(Rule):
                             message=f"Verbose comment: {reason}",
                             line=comment.line,
                             column=comment.column + match.start(),
+                            end_column=comment.column + match.end(),
                             severity=self.severity,
                         )
                     )
@@ -118,10 +127,11 @@ class CollaborativeCommentsRule(Rule):
         parser = _get_cached_parser(content)
         comments = parser.get_comments()
 
+        lines = content.split("\n")
         for comment in comments:
-            comment_line = f"# {comment.content}".strip()
+            source_comment = lines[comment.line - 1][comment.column - 1 :]
             for pattern, phrase in COLLABORATIVE_COMMENT_PATTERNS:
-                match = re.search(pattern, comment_line, re.IGNORECASE)
+                match = re.search(pattern, source_comment, re.IGNORECASE)
                 if match:
                     issues.append(
                         Issue(
@@ -129,6 +139,7 @@ class CollaborativeCommentsRule(Rule):
                             message=f"Chat phrase in comment: '{phrase}'",
                             line=comment.line,
                             column=comment.column + match.start(),
+                            end_column=comment.column + match.end(),
                             severity=self.severity,
                         )
                     )
@@ -156,9 +167,9 @@ class AIPlaceholdersRule(Rule):
 
         # Comment-only placeholders
         for comment in comments:
-            comment_line = f"# {comment.content}".strip()
+            source_comment = lines[comment.line - 1][comment.column - 1 :]
             for pattern, kind in AI_PLACEHOLDER_COMMENT_PATTERNS:
-                match = re.search(pattern, comment_line, re.IGNORECASE)
+                match = re.search(pattern, source_comment, re.IGNORECASE)
                 if match:
                     issues.append(
                         Issue(
@@ -166,6 +177,7 @@ class AIPlaceholdersRule(Rule):
                             message=f"Formulaic placeholder: {kind}",
                             line=comment.line,
                             column=comment.column + match.start(),
+                            end_column=comment.column + match.end(),
                             severity=self.severity,
                         )
                     )
@@ -174,16 +186,17 @@ class AIPlaceholdersRule(Rule):
             # Inline code + comment placeholders
             line_text = lines[comment.line - 1]
             before = line_text[: comment.column - 1]
+            source_comment = line_text[comment.column - 1 :]
             for code_pattern, todo_pattern, kind in AI_PLACEHOLDER_INLINE_PATTERNS:
-                if re.search(code_pattern, before) and re.search(
-                    todo_pattern, comment.content, re.IGNORECASE
-                ):
+                todo_match = re.search(todo_pattern, source_comment, re.IGNORECASE)
+                if re.search(code_pattern, before) and todo_match is not None:
                     issues.append(
                         Issue(
                             rule_id=self.id,
                             message=f"Formulaic placeholder: {kind}",
                             line=comment.line,
-                            column=comment.column,
+                            column=comment.column + todo_match.start(),
+                            end_column=comment.column + todo_match.end(),
                             severity=self.severity,
                         )
                     )
@@ -200,6 +213,7 @@ class AIPlaceholdersRule(Rule):
                             message=f"Formulaic placeholder: {kind}",
                             line=line_num,
                             column=match.start() + 1,
+                            end_column=match.end() + 1,
                             severity=self.severity,
                         )
                     )

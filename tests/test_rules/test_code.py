@@ -1,11 +1,64 @@
 """Tests for code rules (C001-C004)."""
 
+import pytest
+
+from slop_lint.rules.base import Rule
 from slop_lint.rules.code import (
     AIPlaceholdersRule,
     CollaborativeCommentsRule,
     DocstringVocabularyRule,
     VerboseCommentsRule,
 )
+
+
+@pytest.mark.parametrize(
+    ("rule", "source", "expected"),
+    [
+        (
+            DocstringVocabularyRule(),
+            'def build():\n    """Use a bespoke adapter."""',
+            "bespoke",
+        ),
+        (
+            VerboseCommentsRule(),
+            "value = 1  # This function returns the cached value",
+            "# This function",
+        ),
+        (
+            CollaborativeCommentsRule(),
+            "    # I hope this helps with setup",
+            "# I hope this helps",
+        ),
+        (
+            AIPlaceholdersRule(),
+            "    # TODO: Add logic here",
+            "# TODO: Add logic here",
+        ),
+        (
+            AIPlaceholdersRule(),
+            "pass  # TODO: replace this",
+            "TODO",
+        ),
+        (
+            AIPlaceholdersRule(),
+            "raise NotImplementedError('later')",
+            "raise NotImplementedError('later')",
+        ),
+    ],
+)
+def test_code_rules_report_exact_source_spans(
+    rule: Rule,
+    source: str,
+    expected: str,
+) -> None:
+    issues = rule.check(source, "test.py")
+    spans = [
+        source.splitlines()[issue.line - 1][issue.column - 1 : issue.end_column - 1]
+        for issue in issues
+        if issue.end_column is not None
+    ]
+
+    assert expected in spans
 
 
 class TestDocstringVocabulary:

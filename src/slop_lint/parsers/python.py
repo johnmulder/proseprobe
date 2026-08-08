@@ -189,7 +189,7 @@ class PythonParser:
         if not self._parsed:
             self.parse()
 
-        blocks = self._docstring_prose_blocks()
+        blocks = self.get_docstring_prose_blocks()
         blocks.extend(self._comment_prose_blocks())
         blocks.sort(key=lambda block: block.start_line)
         self._prose_blocks = [
@@ -269,7 +269,8 @@ class PythonParser:
         self._tokens = tokens
         return tokens
 
-    def _docstring_prose_blocks(self) -> list[ProseBlock]:
+    def get_docstring_prose_blocks(self) -> list[ProseBlock]:
+        """Return source-aligned prose blocks for Python docstrings."""
         blocks: list[ProseBlock] = []
         string_tokens = [
             token for token in self._get_tokens() if token.type == tokenize.STRING
