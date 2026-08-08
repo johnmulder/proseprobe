@@ -1,4 +1,4 @@
-"""Tests for grammar rules (G001-G015, G029)."""
+"""Tests for grammar rules (G001-G015, G017, G029)."""
 
 import pytest
 
@@ -7,6 +7,7 @@ from proseprobe.rules.grammar import (
     AssertedSimplicityRule,
     CopulaAvoidanceRule,
     DoubleNegativeRule,
+    EmptyItOpenerRule,
     ExcessiveHedgingRule,
     FalseSuspenseTransitionRule,
     FalseVulnerabilityRule,
@@ -892,6 +893,107 @@ class TestGenericSceneSettingOpenerRule:
         assert rule.severity is Severity.INFO
         assert rule.default_confidence is Confidence.MEDIUM
         assert rule.applies_to == {"markdown"}
+        assert rule.content_scope == "prose"
+
+
+class TestEmptyItOpenerRule:
+    """Tests for G017: Empty "It" Opener."""
+
+    @pytest.mark.parametrize(
+        "opener",
+        ["It is clear that", "It is obvious that", "It is evident that"],
+    )
+    def test_reports_supported_openers(self, opener: str) -> None:
+        [issue] = EmptyItOpenerRule().check(
+            f"{opener} the cache is stale.",
+            "test.md",
+        )
+
+        assert issue.rule_id == "G017"
+        assert issue.message == f"Empty 'It' opener: '{opener}'"
+        assert (issue.line, issue.column) == (1, 1)
+        assert (issue.end_line, issue.end_column) == (1, len(opener) + 1)
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == "State the evidence or conclusion directly"
+
+    def test_reports_wrapped_opener_at_exact_source_span(self) -> None:
+        text = "It is evident\nthat the timeout is repeatable."
+
+        [issue] = EmptyItOpenerRule().check(text, "test.md")
+
+        assert issue.message == "Empty 'It' opener: 'It is evident that'"
+        assert (issue.line, issue.column) == (1, 1)
+        assert (issue.end_line, issue.end_column) == (2, 5)
+
+    def test_checks_each_sentence_not_only_the_first(self) -> None:
+        text = "The logs show two failures. It is obvious that the cache is stale."
+
+        [issue] = EmptyItOpenerRule().check(text, "test.md")
+
+        start = text.index("It is obvious that")
+        assert (issue.line, issue.column) == (1, start + 1)
+        assert issue.end_column == start + len("It is obvious that") + 1
+
+    @pytest.mark.parametrize(
+        ("text", "column"),
+        [
+            ("- It is clear that the cache is stale.", 3),
+            ("> It is evident that the cache is stale.", 3),
+        ],
+    )
+    def test_checks_list_and_blockquote_sentences(self, text: str, column: int) -> None:
+        [issue] = EmptyItOpenerRule().check(text, "test.md")
+
+        assert issue.column == column
+
+    def test_ignores_markdown_non_prose_and_example_contexts(self) -> None:
+        text = (
+            "# It is clear that this heading demonstrates the phrase\n\n"
+            "## Example\n\n"
+            "It is obvious that this sentence demonstrates the phrase.\n\n"
+            "`It is evident that`\n\n"
+            "```text\nIt is clear that\n```"
+        )
+
+        assert EmptyItOpenerRule().check(text, "test.md") == []
+
+    def test_checks_python_comments_and_docstrings_only(self) -> None:
+        text = (
+            'message = "It is clear that code is ignored."\n'
+            "# It is obvious that the cache is stale.\n"
+            "def explain():\n"
+            '    """It is evident that the timeout repeats."""\n'
+            "    return message"
+        )
+
+        issues = EmptyItOpenerRule().check(text, "test.py")
+
+        assert [issue.line for issue in issues] == [2, 4]
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "It is possible that the cache is stale.",
+            "It is clear whether the cache is stale.",
+            "The report says it is clear that the cache is stale.",
+            "It was clear that the cache was stale.",
+        ],
+    )
+    def test_ignores_nearby_non_matches(self, text: str) -> None:
+        assert EmptyItOpenerRule().check(text, "test.md") == []
+
+    def test_rule_metadata(self) -> None:
+        rule = EmptyItOpenerRule()
+
+        assert rule.id == "G017"
+        assert rule.name == 'Empty "It" Opener'
+        assert rule.description == (
+            "Detects empty 'It is clear/obvious/evident that' sentence openers"
+        )
+        assert rule.severity is Severity.INFO
+        assert rule.default_confidence is Confidence.HIGH
+        assert rule.applies_to == {"markdown", "python"}
         assert rule.content_scope == "prose"
 
 

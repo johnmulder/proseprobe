@@ -1,4 +1,4 @@
-"""Grammar pattern detection rules (G001-G015, G029)."""
+"""Grammar pattern detection rules (G001-G015, G017, G029)."""
 
 import re
 from typing import ClassVar
@@ -594,6 +594,52 @@ class GenericSceneSettingOpenerRule(Rule):
                 )
             ]
         return []
+
+
+class EmptyItOpenerRule(Rule):
+    """G017: Detect narrow empty 'It' sentence openers."""
+
+    id = "G017"
+    name = 'Empty "It" Opener'
+    description = "Detects empty 'It is clear/obvious/evident that' sentence openers"
+    severity = Severity.INFO
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _pattern: ClassVar[re.Pattern[str]] = re.compile(
+        r"^It\s+is\s+(?:clear|obvious|evident)\s+that\b",
+        re.IGNORECASE,
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose sentences for the approved empty openers."""
+        issues: list[Issue] = []
+        for sentence in iter_prose_sentences(content, filename):
+            if sentence.context not in {"body", "list_item", "blockquote"}:
+                continue
+            if is_example_line(content, filename, sentence.start_line):
+                continue
+            match = self._pattern.match(sentence.text)
+            if match is None:
+                continue
+            line, column = sentence.source_position(match.start())
+            end_line, end_column = sentence.source_position(match.end())
+            opener = " ".join(match.group().split())
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=f"Empty 'It' opener: '{opener}'",
+                    line=line,
+                    column=column,
+                    end_line=end_line,
+                    end_column=end_column,
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion="State the evidence or conclusion directly",
+                )
+            )
+        return issues
 
 
 class DoubleNegativeRule(Rule):
