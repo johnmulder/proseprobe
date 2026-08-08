@@ -481,7 +481,7 @@ class TestRulesCommand:
         assert data["schema_version"] == 1
         assert data["version"] == __version__
         rules = data["rules"]
-        assert len(rules) == 67
+        assert len(rules) == 68
         assert [rule["id"] for rule in rules] == sorted(rule["id"] for rule in rules)
         assert next(rule for rule in rules if rule["id"] == "S001") == {
             "id": "S001",
@@ -1801,7 +1801,7 @@ class TestCliValidation:
         assert result.exit_code == 2
         assert result.stdout == ""
         assert "<command line>" in result.stderr
-        assert "did you mean 'V001'" in result.stderr
+        assert "did you mean 'V010'" in result.stderr
 
     @pytest.mark.parametrize("output_format", ["json", "sarif"])
     def test_invalid_config_rule_keeps_structured_stdout_empty(

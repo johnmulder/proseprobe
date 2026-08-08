@@ -32,6 +32,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `V007` | Invented Concept Labels | Vocabulary | info | medium | markdown, python / prose | `thresholds.invented_concept_labels` |
 | `V008` | Trend Overclaim | Vocabulary | info | medium | markdown, python / prose | — |
 | `V009` | Wordy Phrase | Vocabulary | info | high | markdown, python / prose | — |
+| `V010` | Redundant Pair | Vocabulary | info | high | markdown, python / prose | — |
 | `S001` | Rule of Three | Structure | info | medium | markdown, python / prose | `thresholds.rule_of_three` |
 | `S002` | Negative Parallelism | Structure | info | medium | markdown, python / prose | — |
 | `S003` | Challenge Conclusions | Structure | warning | medium | markdown, python / prose | — |
@@ -1285,6 +1286,31 @@ At this point in time, the service retries in order to recover.
 **Example (good):**
 ```markdown
 The service now retries to recover.
+```
+
+---
+
+### V010: Redundant Pair
+
+Detects fixed word pairs where removing one term preserves the meaning.
+Matching is case-insensitive and applies to Markdown prose plus Python comments
+and docstrings; headings and code are excluded.
+
+**Detected patterns:**
+- "each and every" → "each"
+- "past history" → "history"
+- "merge together" → "merge" (including inflected forms)
+- "repeat again" → "repeat" (including inflected forms)
+- "revert back" → "revert" (including inflected forms)
+
+**Example (bad):**
+```markdown
+Review each and every request before the client reverts back.
+```
+
+**Example (good):**
+```markdown
+Review each request before the client reverts.
 ```
 
 ---

@@ -1302,6 +1302,42 @@
         }
       ]
     },
+    "quality/corpus/redundant-pairs.md": {
+      "expected": [
+        {
+          "rule_id": "V010",
+          "line": 3,
+          "column": 8
+        },
+        {
+          "rule_id": "V010",
+          "line": 4,
+          "column": 24
+        },
+        {
+          "rule_id": "V010",
+          "line": 5,
+          "column": 12
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V010",
+          "line": 7,
+          "note": "Inline code is not document prose."
+        },
+        {
+          "rule_id": "V010",
+          "line": 10,
+          "note": "Fenced code is not document prose."
+        },
+        {
+          "rule_id": "V010",
+          "line": 13,
+          "note": "Separated terms and plain history are not redundant pairs."
+        }
+      ]
+    },
     "quality/corpus/template-residue.md": {
       "expected": [
         {
