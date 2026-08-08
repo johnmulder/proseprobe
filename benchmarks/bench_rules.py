@@ -29,7 +29,7 @@ class BenchmarkResult:
 
 def generate_markdown_content(size_kb: int) -> str:
     """Generate Markdown content of approximate size."""
-    # Sample content with some bad writing patterns to exercise rules
+    # Representative prose patterns used to exercise rules
     block = """\
 # Section Title
 

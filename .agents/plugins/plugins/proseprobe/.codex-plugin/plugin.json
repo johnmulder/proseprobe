@@ -1,7 +1,7 @@
 {
   "name": "proseprobe",
-  "version": "0.1.0+codex.20260808173037",
-  "description": "Detect bad writing practices in Markdown and Python files",
+  "version": "0.1.0+codex.20260808173836",
+  "description": "A Unix-style linter for common prose, documentation, and Markdown problems",
   "author": {
     "name": "John Mulder"
   },

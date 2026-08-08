@@ -9,7 +9,7 @@
 #
 - id: proseprobe
   name: ProseProbe
-  description: Detect bad writing practices in Markdown and Python files
+  description: A Unix-style linter for common prose, documentation, and Markdown problems
   entry: proseprobe check
   language: python
   types_or: [markdown, python]

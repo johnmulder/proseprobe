@@ -285,7 +285,7 @@ def _output_results(
 
 
 def _cmd_check(args: argparse.Namespace) -> int:
-    """Check files for bad writing practices."""
+    """Check files for prose and documentation problems."""
     stdin_requested = "-" in args.paths
     if stdin_requested and args.paths != ["-"]:
         print(
@@ -681,7 +681,10 @@ def _build_parser() -> argparse.ArgumentParser:
     """Build the argument parser with all subcommands."""
     parser = argparse.ArgumentParser(
         prog="proseprobe",
-        description="Detect bad writing practices in Markdown and Python files.",
+        description=(
+            "A Unix-style linter for common prose, documentation, "
+            "and Markdown problems."
+        ),
         add_help=False,
     )
     parser.add_argument(
@@ -692,7 +695,7 @@ def _build_parser() -> argparse.ArgumentParser:
     # --- check ---
     p_check = subparsers.add_parser(
         "check",
-        help="Check files for bad writing practices",
+        help="Check files for prose and documentation problems",
         add_help=False,
     )
     p_check.add_argument(

@@ -1591,7 +1591,7 @@ class TestHelpFlags:
         result = run_cli("-h")
 
         assert result.exit_code == 0
-        assert "Detect bad writing practices" in result.stdout
+        assert "A Unix-style linter" in result.stdout
         assert "check" in result.stdout
 
     def test_check_help_short_flag(self) -> None:

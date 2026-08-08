@@ -1,6 +1,6 @@
 # ProseProbe
 
-A Unix-style command-line tool to detect bad writing practices in Markdown and Python files.
+A Unix-style linter for common prose, documentation, and Markdown problems.
 
 [![CI](https://github.com/johnmulder/proseprobe/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/johnmulder/proseprobe/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/proseprobe.svg)](https://pypi.org/project/proseprobe/)
@@ -229,7 +229,7 @@ steps:
   - name: Install proseprobe
     run: pip install proseprobe
 
-  - name: Check for bad writing practices
+  - name: Check prose and documentation
     run: proseprobe check --format sarif . > results.sarif || test $? -eq 1
 
   - name: Upload SARIF

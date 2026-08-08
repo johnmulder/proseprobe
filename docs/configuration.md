@@ -506,7 +506,7 @@ repos:
 
 ```yaml
 # .github/workflows/lint.yml
-name: Lint for Bad Writing Practices
+name: Lint prose and documentation
 on: [push, pull_request]
 
 jobs:
@@ -516,8 +516,8 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - run: pip install proseprobe

@@ -5,7 +5,7 @@
 
 ## 1. Purpose
 
-`proseprobe` is a command-line linting tool that detects bad writing practices in Markdown and Python files. It identifies overused vocabulary, structural clichés, stylistic problems, and markup errors.
+`proseprobe` is a Unix-style linter for common prose, documentation, and Markdown problems. It detects overused vocabulary, structural clichés, repetitive patterns, style issues, and markup errors in Markdown and Python documentation.
 
 ## 2. Requirements
 
@@ -13,8 +13,8 @@
 
 | ID | Requirement | Priority |
 |----|-------------|----------|
-| FR-01 | Scan Markdown files (`.md`, `.mdx`, `.markdown`) for bad writing practices | Must |
-| FR-02 | Scan Python files (`.py`) for bad practices in docstrings and comments | Must |
+| FR-01 | Scan Markdown files (`.md`, `.mdx`, `.markdown`) for configured prose and markup problems | Must |
+| FR-02 | Scan Python files (`.py`) for configured problems in docstrings and comments | Must |
 | FR-03 | Report issues with file path, line number, column, and severity | Must |
 | FR-04 | Support configurable rule selection via CLI and config file | Must |
 | FR-05 | Output in text, JSON, JSON Lines, and SARIF formats | Must |
@@ -100,7 +100,7 @@ minimum severity, and low minimum confidence.
 ### 4.1 Commands
 
 ```
-proseprobe check [OPTIONS] [PATHS]...   Check files for bad writing practices
+proseprobe check [OPTIONS] [PATHS]...   Check files for prose and documentation problems
 proseprobe rules [--format text|json]   List all available rules
 proseprobe explain RULE_ID [--format text|json]
                                        Show detailed rule documentation

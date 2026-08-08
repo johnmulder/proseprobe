@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "proseprobe"
 version = "0.1.0"
-description = "Detect bad writing practices in Markdown and Python files"
+description = "A Unix-style linter for common prose, documentation, and Markdown problems"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
