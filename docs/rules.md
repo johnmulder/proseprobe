@@ -6,7 +6,7 @@ Most prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
 source-mapped Python docstrings and comments; `G015` examines only Markdown
 document openers. `C` rules handle Python-specific documentation issues.
 `M001` checks Markdown syntax in Python comments, while `M002`-`M010` and
-`S025` are Markdown-only.
+`S025` and `S028` are Markdown-only.
 
 Wrapped Markdown and Python prose is segmented into cached, source-mapped
 sentences. Records retain exact start and end positions while conservative
@@ -60,6 +60,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `S021` | Slide Deck Fragment | Structure | info | low | markdown, python / prose | — |
 | `S022` | Wall-of-Text Paragraph | Structure | info | medium | markdown, python / prose | `thresholds.wall_of_text_sentences` |
 | `S025` | Heading Without Body | Structure | warning | high | markdown / raw | — |
+| `S028` | Excessive Heading Depth | Structure | info | medium | markdown / raw | — |
 | `T001` | Title Case Headings | Style | info | medium | markdown / raw | — |
 | `T002` | Bold Overuse | Style | info | medium | markdown / raw | `thresholds.bold_overuse` |
 | `T003` | Em Dash Overuse | Style | info | medium | markdown, python / prose | `thresholds.em_dash_overuse` |
@@ -1749,6 +1750,26 @@ following boundary that proves the section is empty.
 Choose the package for your operating system.
 
 ## Configuration
+```
+
+---
+
+### S028: Excessive Heading Depth
+
+Reports level-5 and level-6 Markdown headings as informational maintainability
+signals. Deep heading trees are harder to scan and often indicate that the
+section hierarchy should be flattened.
+
+Fenced code, HTML blocks, and front matter are excluded by the Markdown parser.
+
+**Example (bad):**
+```markdown
+##### Retry state details
+```
+
+**Example (good):**
+```markdown
+#### Retry state details
 ```
 
 ---

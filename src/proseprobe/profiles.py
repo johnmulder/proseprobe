@@ -37,6 +37,7 @@ _TECHNICAL_DOCS_RULES = frozenset(
         *(f"M{number:03}" for number in range(1, 11)),
         "S022",
         "S025",
+        "S028",
         "T015",
         "V009",
         "V010",
