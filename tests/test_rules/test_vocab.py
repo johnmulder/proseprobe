@@ -310,6 +310,29 @@ class TestInventedConceptLabels:
         issues = InventedConceptLabelsRule().check(content, "test.md")
         assert len(issues) == 0
 
+    def test_excludes_literal_reference_from_reported_labels(self) -> None:
+        from slop_lint.rules.vocab import InventedConceptLabelsRule
+
+        content = (
+            "The automation paradox slows delivery.\n"
+            "The innovation trap wastes time.\n"
+            "This study fills that gap."
+        )
+
+        issues = InventedConceptLabelsRule().check(content, "test.md")
+
+        assert [issue.message for issue in issues] == [
+            "Invented concept label: 'automation paradox'",
+            "Invented concept label: 'innovation trap'",
+        ]
+
+    def test_literal_references_do_not_satisfy_threshold(self) -> None:
+        from slop_lint.rules.vocab import InventedConceptLabelsRule
+
+        content = "This study fills a gap. That dilemma remains unresolved."
+
+        assert InventedConceptLabelsRule().check(content, "test.md") == []
+
     def test_ignores_normal_prose(self) -> None:
         """Don't flag prose without compound labels."""
         from slop_lint.rules.vocab import InventedConceptLabelsRule

@@ -377,6 +377,12 @@ class InventedConceptLabelsRule(Rule):
         "spiral",
         "dilemma",
     ]
+    _LITERAL_REFERENCE_HEADS: ClassVar[frozenset[str]] = frozenset(
+        {"a", "an", "the", "this", "that", "these", "those"}
+    )
+    _LITERAL_REFERENCE_SUFFIXES: ClassVar[frozenset[str]] = frozenset(
+        {"gap", "dilemma"}
+    )
 
     def __init__(self, threshold: int = 2) -> None:
         super().__init__()
@@ -391,6 +397,13 @@ class InventedConceptLabelsRule(Rule):
 
         for line_num, line in self.iter_lines(content, filename):
             for match in self._pattern.finditer(line):
+                head = match.group(1).casefold()
+                suffix = match.group(2).casefold()
+                if (
+                    head in self._LITERAL_REFERENCE_HEADS
+                    and suffix in self._LITERAL_REFERENCE_SUFFIXES
+                ):
+                    continue
                 matches.append((line_num, match.start() + 1, match.group()))
 
         if len(matches) >= self._threshold:
