@@ -55,22 +55,28 @@ class RuleOfThreeRule(Rule):
         """Check for rule of three patterns."""
         issues: list[Issue] = []
         for block in iter_prose_scopes(content, filename):
-            triads_found: list[tuple[int, int, str]] = []
+            triads_found: list[tuple[int, int, int, str]] = []
             for line_num, line in block.lines:
                 for pattern in RULE_OF_THREE_PATTERNS:
                     for match in re.finditer(pattern, line, re.IGNORECASE):
                         triads_found.append(
-                            (line_num, match.start() + 1, match.group())
+                            (
+                                line_num,
+                                match.start() + 1,
+                                match.end() + 1,
+                                match.group(),
+                            )
                         )
 
             if len(triads_found) > self._threshold:
-                for line_num, col, text in triads_found:
+                for line_num, col, end_col, text in triads_found:
                     issues.append(
                         Issue(
                             rule_id=self.id,
                             message=f"Triadic pattern (rule of three): '{text}'",
                             line=line_num,
                             column=col,
+                            end_column=end_col,
                             severity=self.severity,
                         )
                     )
@@ -350,6 +356,7 @@ class DramaticCountdownRule(Rule):
                         message=f"Dramatic countdown: '{match.group().strip()}'",
                         line=line_num,
                         column=match.start() + 1,
+                        end_column=match.end() + 1,
                         severity=self.severity,
                     )
                 )
@@ -385,6 +392,7 @@ class RhetoricalSelfAnswerRule(Rule):
                             message=f"Rhetorical self-answer: '{match.group().strip()}'",
                             line=line_num,
                             column=match.start() + 1,
+                            end_column=match.end() + 1,
                             severity=self.severity,
                         )
                     )
@@ -557,17 +565,20 @@ class ListicleInProseRule(Rule):
 
             for line_num, line in lines:
                 for pattern in LISTICLE_PROSE_PATTERNS:
-                    if re.search(pattern, line, re.IGNORECASE):
-                        issues.append(
-                            Issue(
-                                rule_id=self.id,
-                                message="Listicle in prose pattern",
-                                line=line_num,
-                                column=1,
-                                severity=self.severity,
-                            )
+                    match = re.search(pattern, line, re.IGNORECASE)
+                    if match is None:
+                        continue
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message="Listicle in prose pattern",
+                            line=line_num,
+                            column=match.start() + 1,
+                            end_column=match.end() + 1,
+                            severity=self.severity,
                         )
-                        break
+                    )
+                    break
 
         return issues
 
@@ -670,7 +681,7 @@ class SignpostedConclusionRule(Rule):
         """Check content for detect 'In conclusion', 'To sum up' signposted conclusions."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
-            line_lower = line.lower().strip()
+            line_lower = line.casefold()
             for phrase in SIGNPOSTED_CONCLUSION_PHRASES:
                 if phrase in line_lower:
                     col = line_lower.find(phrase)
@@ -680,6 +691,7 @@ class SignpostedConclusionRule(Rule):
                             message=f"Signposted conclusion: '{phrase}'",
                             line=line_num,
                             column=col + 1,
+                            end_column=col + len(phrase) + 1,
                             severity=self.severity,
                         )
                     )
@@ -709,6 +721,7 @@ class FractalSummaryRule(Rule):
                             message=f"Fractal summary: '{match.group()}'",
                             line=line_num,
                             column=match.start() + 1,
+                            end_column=match.end() + 1,
                             severity=self.severity,
                         )
                     )
@@ -730,28 +743,37 @@ class ContentDuplicationRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect repeated paragraphs within the same document."""
         issues: list[Issue] = []
-        # Split into paragraphs (separated by blank lines)
-        paragraphs: list[tuple[int, str]] = []
-        current_lines: list[str] = []
-        start_line = 1
+        paragraphs: list[tuple[int, int, int, int, str]] = []
+        current_lines: list[tuple[int, str]] = []
 
-        for i, line in enumerate(content.split("\n"), start=1):
-            if not line.strip():
-                if current_lines:
-                    paragraphs.append((start_line, " ".join(current_lines)))
-                    current_lines = []
-                start_line = i + 1
+        def flush() -> None:
+            if not current_lines:
+                return
+            first_line_num, first_line = current_lines[0]
+            last_line_num, last_line = current_lines[-1]
+            start_column = len(first_line) - len(first_line.lstrip()) + 1
+            end_column = len(last_line.rstrip()) + 1
+            paragraphs.append(
+                (
+                    first_line_num,
+                    start_column,
+                    last_line_num,
+                    end_column,
+                    " ".join(line.strip() for _, line in current_lines),
+                )
+            )
+
+        for line_num, line in enumerate(content.split("\n"), start=1):
+            if line.strip():
+                current_lines.append((line_num, line))
             else:
-                if not current_lines:
-                    start_line = i
-                current_lines.append(line.strip())
-
-        if current_lines:
-            paragraphs.append((start_line, " ".join(current_lines)))
+                flush()
+                current_lines = []
+        flush()
 
         # Compare paragraphs by normalized word content
         seen: dict[str, int] = {}
-        for line_num, text in paragraphs:
+        for line_num, column, end_line, end_column, text in paragraphs:
             words = text.lower().split()
             if len(words) < self._MIN_WORDS:
                 continue
@@ -762,7 +784,9 @@ class ContentDuplicationRule(Rule):
                         rule_id=self.id,
                         message=f"Duplicate paragraph (first seen at line {seen[key]})",
                         line=line_num,
-                        column=1,
+                        column=column,
+                        end_line=end_line,
+                        end_column=end_column,
                         severity=self.severity,
                     )
                 )
@@ -992,6 +1016,8 @@ class SlideDeckFragmentRule(Rule):
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             stripped = line.strip()
+            start = len(line) - len(line.lstrip())
+            end = len(line.rstrip())
             # Skip very short or very long lines
             if len(stripped.split()) < 4 or len(stripped.split()) > 20:
                 continue
@@ -1026,7 +1052,8 @@ class SlideDeckFragmentRule(Rule):
                         rule_id=self.id,
                         message=f"Slide deck fragment: '{stripped}' \u2014 consider adding a subject and verb",
                         line=line_num,
-                        column=1,
+                        column=start + 1,
+                        end_column=end + 1,
                         severity=self.severity,
                         confidence=self.default_confidence,
                     )

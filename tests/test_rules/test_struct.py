@@ -2,18 +2,94 @@
 
 import pytest
 
+from slop_lint.rules.base import Rule
 from slop_lint.rules.struct import (
     ChallengeConclusionsRule,
+    ContentDuplicationRule,
+    DramaticCountdownRule,
     FalseRangesRule,
+    FractalSummaryRule,
     InlineHeaderListsRule,
+    ListicleInProseRule,
     NegativeParallelismRule,
+    RhetoricalSelfAnswerRule,
     RuleOfThreeRule,
     SignificanceEmphasisRule,
+    SignpostedConclusionRule,
+    SlideDeckFragmentRule,
     SuperficialAnalysisRule,
 )
 
-# New S008-S016 imports will be added once implemented
-# (Tests written first — TDD red phase)
+
+@pytest.mark.parametrize(
+    ("rule", "source", "expected"),
+    [
+        (
+            RuleOfThreeRule(threshold=0),
+            "Fast, safe, and clear.",
+            "Fast, safe, and clear",
+        ),
+        (
+            DramaticCountdownRule(),
+            "Not slow. Not fragile. Just clear.",
+            "Not slow. Not fragile. Just clear.",
+        ),
+        (
+            RhetoricalSelfAnswerRule(),
+            "The result? A clean build.",
+            "The result? A clean build.",
+        ),
+        (
+            ListicleInProseRule(),
+            "The first takeaway is smaller scope.",
+            "The first takeaway",
+        ),
+        (
+            SignpostedConclusionRule(),
+            "- In conclusion, ship the tested patch.",
+            "In conclusion",
+        ),
+        (
+            FractalSummaryRule(),
+            "In this section, we'll explore the parser.",
+            "In this section, we'll explore",
+        ),
+        (
+            SlideDeckFragmentRule(),
+            "> Driving alignment across strategic initiatives for scalable impact.",
+            "Driving alignment across strategic initiatives for scalable impact.",
+        ),
+    ],
+)
+def test_concrete_structural_findings_have_exact_spans(
+    rule: Rule,
+    source: str,
+    expected: str,
+) -> None:
+    [issue] = rule.check(source, "test.md")
+
+    assert issue.end_column is not None
+    assert (
+        source.splitlines()[issue.line - 1][
+            issue.column - 1 : issue.end_column - 1
+        ].casefold()
+        == expected.casefold()
+    )
+
+
+def test_duplicate_paragraph_reports_the_exact_second_source_span() -> None:
+    source = (
+        "Alpha beta gamma delta\n"
+        "epsilon zeta eta theta.\n\n"
+        "  Alpha beta gamma delta\n"
+        "  epsilon zeta eta theta."
+    )
+
+    [issue] = ContentDuplicationRule().check(source, "test.md")
+
+    assert (issue.line, issue.column) == (4, 3)
+    assert issue.end_line == 5
+    assert issue.end_column == len("  epsilon zeta eta theta.") + 1
 
 
 class TestRuleOfThree:
