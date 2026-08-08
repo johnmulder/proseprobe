@@ -986,11 +986,6 @@ class SlideDeckFragmentRule(Rule):
         r"\b(?:that|which|who)\b", re.IGNORECASE
     )
     _GERUND_LED: ClassVar[re.Pattern[str]] = re.compile(r"^[a-z-]+ing\b", re.IGNORECASE)
-    _POST_RELATIVE_PREDICATE: ClassVar[re.Pattern[str]] = re.compile(
-        r"\b(?:appears?|becomes?|continues?|fails?|matters?|persists?|remains?"
-        r"|seems?|succeeds?|works?)\b",
-        re.IGNORECASE,
-    )
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect verbless buzzword-heavy fragments from slide-deck writing."""
@@ -1016,15 +1011,10 @@ class SlideDeckFragmentRule(Rule):
                     self._GERUND_LED.match(prefix)
                     or len(prefix_words & SLIDE_DECK_BUZZWORDS) >= self._MIN_BUZZWORDS
                 )
-                relative_tail = stripped[relative_clause.end() :]
-                finite_matches = list(self._FINITE_VERB.finditer(relative_tail))
-                trailing_predicate = len(finite_matches) > 1 or (
-                    bool(finite_matches)
-                    and self._POST_RELATIVE_PREDICATE.search(
-                        relative_tail, finite_matches[0].end()
-                    )
+                final_word = (
+                    stripped.rsplit(maxsplit=1)[-1].casefold().strip(".,;:!?'\"")
                 )
-                if fragment_prefix and not trailing_predicate:
+                if fragment_prefix and final_word in SLIDE_DECK_BUZZWORDS:
                     main_clause = prefix
             if self._FINITE_VERB.search(main_clause):
                 continue

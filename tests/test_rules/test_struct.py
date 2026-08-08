@@ -1070,6 +1070,16 @@ class TestSlideDeckFragment:
 
         assert SlideDeckFragmentRule().check(text, "test.md") == []
 
+    def test_ignores_unlisted_main_predicate_after_relative_clause(self) -> None:
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        text = (
+            "Strategic alignment for initiatives that will deliver scalable impact "
+            "requires planning."
+        )
+
+        assert SlideDeckFragmentRule().check(text, "test.md") == []
+
     @pytest.mark.parametrize(
         "text",
         [
@@ -1082,6 +1092,13 @@ class TestSlideDeckFragment:
     )
     def test_detects_fragment_with_subordinate_auxiliary(self, text: str) -> None:
         from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        assert len(SlideDeckFragmentRule().check(text, "test.md")) == 1
+
+    def test_detects_fragment_with_multiple_subordinate_auxiliaries(self) -> None:
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        text = "Strategic alignment for initiatives that will have scalable impact."
 
         assert len(SlideDeckFragmentRule().check(text, "test.md")) == 1
 
