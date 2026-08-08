@@ -303,9 +303,11 @@ Install the `proseprobe` executable separately before using the plugin.
 The Codex wrapper is not included in the Python wheel.
 Start a new Codex thread after installation so it loads the skill.
 
-## Why "proseprobe"?
+## Why "ProseProbe"?
 
-Sloppy writing is everywhere—vague buzzwords, wall-of-text paragraphs, promotional fluff, broken markup. proseprobe catches these patterns so you can write documentation and code comments that are clear, direct, and worth reading.
+Poor writing is everywhere—vague buzzwords, wall-of-text paragraphs, promotional
+fluff, and broken markup. ProseProbe catches these patterns so you can write
+documentation and code comments that are clear, direct, and worth reading.
 
 ## License
 
