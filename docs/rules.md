@@ -139,13 +139,14 @@ Here's the code for the requested feature.
 
 ### V003: Knowledge Cutoff
 
-Detects temporal disclaimers about training data.
+Detects model-qualified temporal disclaimers about training data or access.
+Ordinary dated release and publication statements do not count.
 
 **Detected patterns:**
-- "As of my last update..."
-- "Based on available information..."
-- "At the time of writing..."
-- "As of [date]..."
+- "As of my last update/training/cutoff…"
+- "Based on my/available information…"
+- "My training data only goes/extends/covers…"
+- Statements that model knowledge is limited or real-time/web access is unavailable
 
 **Example (bad):**
 ```markdown
@@ -154,7 +155,7 @@ As of my last update, Python 3.12 was the latest version.
 
 **Example (good):**
 ```markdown
-Python 3.12 is the latest version (as of January 2024).
+As of August 2026, version 1.4.0 is the supported release.
 ```
 
 ---
@@ -797,6 +798,9 @@ AI is changing several industries, particularly customer service and logistics.
 Detects compound pseudo-analytical labels ("the X paradox", "the Y trap")
 when 2+ appear in the same document.
 
+Determiner-led references such as "a gap", "that gap", or "the dilemma" do
+not count toward the threshold and are not reported after other labels cross it.
+
 **Detected suffixes:** paradox, trap, creep, divide, vacuum, inversion,
 deficit, gap, spiral, dilemma
 
@@ -809,7 +813,7 @@ Meanwhile, the complexity creep threatens progress.
 **Example (good):**
 ```markdown
 Automating too aggressively can backfire when teams lose the skills to
-intervene manually.
+intervene manually. This experiment addresses a gap in the available data.
 ```
 
 ---
@@ -1340,6 +1344,11 @@ Several scholars have examined the impact of technology on communities. Smith (2
 Detects corporate euphemisms that obscure plain meaning — language designed
 to soften layoffs, budget cuts, or organisational failure.
 
+The ambiguous terms "restructuring", "realignment", and "resource
+optimization" require company, workforce, staffing, or organizational context.
+Unambiguous phrases such as "right-sizing" and explicit headcount reductions
+remain findings without that extra gate.
+
 **Detected patterns:**
 - "restructuring", "right-sizing", "resource optimization"
 - "headcount reduction", "workforce adjustment"
@@ -1353,7 +1362,7 @@ The company is undergoing a strategic restructuring and right-sizing initiative.
 
 **Example (good):**
 ```markdown
-The company is laying off 300 employees and closing two offices.
+The database restructuring moves two indexes to the reporting tablespace.
 ```
 
 ---
@@ -1384,6 +1393,9 @@ We need the marketing and engineering teams to agree on the launch date before w
 
 Detects verbless, buzzword-heavy fragments that read like bullet points
 from a slide deck rather than prose.
+
+Lines with a finite auxiliary or an explicit pronoun-led predicate are complete
+clauses, even when they contain two or more buzzwords.
 
 **Detected patterns:**
 Lines that contain 2+ buzzwords (alignment, synergy, strategic, impact,

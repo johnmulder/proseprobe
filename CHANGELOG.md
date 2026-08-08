@@ -34,6 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - G003 false positives from unrelated progressive verbs and technical gerunds.
 - M004 now reports explicit, empty, and bare-fragment Markdown link
   destinations at their source locations.
+- V003, V007, S019, and S021 now exclude ordinary release dates, literal
+  gap/dilemma references, technical restructuring terms, and explicit finite
+  clauses from their targeted slop patterns.
 
 ### Changed
 - Prose rules now share cached, source-mapped sentence records across wrapped
