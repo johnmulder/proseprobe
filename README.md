@@ -288,6 +288,21 @@ Install the `slop-lint` executable separately before using the skill.
 The Python wheel does not install the skill or add provider-specific plugin
 metadata.
 
+### Codex plugin marketplace
+
+Codex users can install the same skill through the
+[Codex plugin marketplace](.agents/plugins/marketplace.json) checked into this
+repository. From the root of a cloned checkout, run:
+
+```bash
+codex plugin marketplace add "$PWD/.agents/plugins"
+codex plugin add slop-lint@slop-lint
+```
+
+Install the `slop-lint` executable separately before using the plugin.
+The Codex wrapper is not included in the Python wheel.
+Start a new Codex thread after installation so it loads the skill.
+
 ## Why "slop-lint"?
 
 Sloppy writing is everywhere—vague buzzwords, wall-of-text paragraphs, promotional fluff, broken markup. slop-lint catches these patterns so you can write documentation and code comments that are clear, direct, and worth reading.

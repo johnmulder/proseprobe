@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- A repo-local Codex marketplace wrapper packages the portable skill for
+  managed Codex installation without apps, MCP servers, or Python wheel changes.
 - A portable Agent Skills-compatible `slop-lint` skill with tested activation
   metadata and the structured lint-repair workflow.
 - Provider-neutral agent integration guidance for structured diagnostics,

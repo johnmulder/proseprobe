@@ -349,6 +349,23 @@ def test_readme_documents_portable_agent_skill() -> None:
         assert statement in readme
 
 
+def test_readme_documents_codex_plugin_marketplace() -> None:
+    """Public docs should explain the Codex install and packaging boundary."""
+    readme = (ROOT / "README.md").read_text()
+    changelog = (ROOT / "CHANGELOG.md").read_text()
+
+    for statement in (
+        "[Codex plugin marketplace](.agents/plugins/marketplace.json)",
+        'codex plugin marketplace add "$PWD/.agents/plugins"',
+        "codex plugin add slop-lint@slop-lint",
+        "The Codex wrapper is not included in the Python wheel.",
+        "Start a new Codex thread after installation so it loads the skill.",
+    ):
+        assert statement in readme
+
+    assert "A repo-local Codex marketplace wrapper" in changelog
+
+
 def test_ci_enforces_coverage_threshold() -> None:
     """CI should use the same coverage threshold as local NFR checks."""
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text()
