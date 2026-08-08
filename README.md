@@ -2,8 +2,9 @@
 
 A Unix-style command-line tool to detect bad writing practices in Markdown and Python files.
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![CI](https://github.com/johnmulder/proseprobe/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/johnmulder/proseprobe/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/proseprobe.svg)](https://pypi.org/project/proseprobe/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/johnmulder/proseprobe/blob/master/LICENSE)
 
 ## Overview
 
