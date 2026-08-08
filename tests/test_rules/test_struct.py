@@ -1,5 +1,7 @@
 """Tests for structural rules (S001-S007)."""
 
+import pytest
+
 from slop_lint.rules.struct import (
     ChallengeConclusionsRule,
     FalseRangesRule,
@@ -870,6 +872,19 @@ class TestCorporateEuphemism:
         rule = CorporateEuphemismRule()
         issues = rule.check(text, "test.md")
         assert len(issues) >= 1
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "The database restructuring moves two indexes.",
+            "Memory realignment preserves 64-byte boundaries.",
+            "Resource optimization reduced allocator overhead.",
+        ],
+    )
+    def test_ignores_technical_ambiguous_terms(self, text: str) -> None:
+        from slop_lint.rules.struct import CorporateEuphemismRule
+
+        assert CorporateEuphemismRule().check(text, "test.md") == []
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal prose."""

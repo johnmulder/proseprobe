@@ -893,6 +893,14 @@ class CorporateEuphemismRule(Rule):
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
+    _AMBIGUOUS_PHRASES: ClassVar[frozenset[str]] = frozenset(
+        {"restructuring", "resource optimization", "realignment"}
+    )
+    _ORGANIZATIONAL_CONTEXT: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:company|corporate|employees?|headcount|organization(?:al)?|"
+        r"personnel|roles?|staff|teams?|workforce)\b"
+    )
+
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect corporate euphemisms that obscure meaning."""
         issues: list[Issue] = []
@@ -900,6 +908,11 @@ class CorporateEuphemismRule(Rule):
             line_lower = line.lower()
             for phrase in CORPORATE_EUPHEMISM_PHRASES:
                 if phrase in line_lower:
+                    if (
+                        phrase in self._AMBIGUOUS_PHRASES
+                        and not self._ORGANIZATIONAL_CONTEXT.search(line_lower)
+                    ):
+                        continue
                     col = line_lower.find(phrase)
                     issues.append(
                         Issue(
