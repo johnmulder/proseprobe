@@ -1,4 +1,4 @@
-"""Vocabulary detection rules (V001-V010)."""
+"""Vocabulary detection rules (V001-V010 and V016)."""
 
 import re
 from typing import ClassVar
@@ -37,6 +37,31 @@ _MONTH = re.compile(
 _NAMED_SOURCE = re.compile(r"\b[A-Z][a-z]+ [A-Z][a-z]+\b")
 _NUMBER = re.compile(r"\b\d+(?:\.\d+)?%?\b")
 _LINK = re.compile(r"https?://|\[[^\]]+\]\([^)]+\)")
+_TESTED_BOUND = re.compile(
+    r"(?:\b(?:across|during|for|in|over)\s+\d[\d,]*(?:\.\d+)?\s+"
+    r"(?:tests?|trials?|test runs?|runs?|requests?|operations?|cases?|hours?|days?)\b"
+    r"|\bunder\s+(?:our|the|these|this)\s+tested\s+"
+    r"(?:conditions?|configuration|environment|setup)\b"
+    r"|\b(?:benchmarked|measured|observed|tested)\b[^.!?\n]{0,80}"
+    r"\b\d[\d,]*(?:\.\d+)?\s+"
+    r"(?:tests?|trials?|test runs?|runs?|requests?|operations?|cases?|hours?|days?)\b)",
+    re.IGNORECASE,
+)
+
+
+def _sentence_window_source(
+    content: str,
+    sentences: list[ProseSentence],
+    index: int,
+) -> str:
+    """Return the adjacent same-scope sentence window as original source."""
+    sentence = sentences[index]
+    window = [
+        candidate
+        for candidate in sentences[max(0, index - 1) : index + 2]
+        if candidate.scope_id == sentence.scope_id
+    ]
+    return " ".join(candidate.source_text(content) for candidate in window)
 
 
 def _has_sentence_evidence(
@@ -44,13 +69,7 @@ def _has_sentence_evidence(
     sentences: list[ProseSentence],
     index: int,
 ) -> bool:
-    sentence = sentences[index]
-    window = [
-        candidate
-        for candidate in sentences[max(0, index - 1) : index + 2]
-        if candidate.scope_id == sentence.scope_id
-    ]
-    source = " ".join(candidate.source_text(content) for candidate in window)
+    source = _sentence_window_source(content, sentences, index)
     numbers = _NUMBER.findall(source)
     return bool(
         _LINK.search(source)
@@ -58,6 +77,17 @@ def _has_sentence_evidence(
         or _NAMED_SOURCE.search(source)
         or "%" in source
         or len(numbers) >= 2
+    )
+
+
+def _has_tested_bound(
+    content: str,
+    sentences: list[ProseSentence],
+    index: int,
+) -> bool:
+    """Return whether the local source states a concrete tested scope."""
+    return bool(
+        _TESTED_BOUND.search(_sentence_window_source(content, sentences, index))
     )
 
 
@@ -573,3 +603,59 @@ class RedundantPairRule(Rule):
         return _replacement_phrase_issues(
             self, content, filename, REDUNDANT_PAIR_REPLACEMENTS
         )
+
+
+class AbsoluteReliabilityClaimRule(Rule):
+    """V016: Detect narrow absolute reliability claims without tested bounds."""
+
+    id = "V016"
+    name = "Absolute Reliability Claim"
+    description = "Detects absolute reliability and security claims"
+    severity = Severity.INFO
+    default_confidence = Confidence.MEDIUM
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _CLAIM: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:never\s+fails|always\s+succeeds|eliminates\s+all\s+errors)\b"
+        r"|(?<!\w)100%\s+secure\b",
+        re.IGNORECASE,
+    )
+    _LITERAL_CONTEXT: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:avoid|do not|don't)\s+"
+        r"(?:claim(?:ing)?|say(?:ing)?|writ(?:e|ing))\b"
+        r"|\bthe (?:phrase|wording)\b",
+        re.IGNORECASE,
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose for unbounded absolute reliability claims."""
+        issues: list[Issue] = []
+        sentences = iter_prose_sentences(content, filename)
+        for index, sentence in enumerate(sentences):
+            if (
+                is_example_line(content, filename, sentence.start_line)
+                or self._LITERAL_CONTEXT.search(sentence.text)
+                or _has_tested_bound(content, sentences, index)
+            ):
+                continue
+
+            for match in self._CLAIM.finditer(sentence.text):
+                line, column = sentence.source_position(match.start())
+                end_line, end_column = sentence.source_position(match.end())
+                claim = " ".join(match.group().split())
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Absolute reliability claim: '{claim}'",
+                        line=line,
+                        column=column,
+                        end_line=end_line,
+                        end_column=end_column,
+                        severity=self.severity,
+                        confidence=self.default_confidence,
+                        suggestion="State the tested scope and observed result",
+                    )
+                )
+
+        return issues

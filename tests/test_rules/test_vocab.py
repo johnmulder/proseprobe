@@ -1,4 +1,4 @@
-"""Tests for vocabulary rules (V001-V010)."""
+"""Tests for vocabulary rules (V001-V010 and V016)."""
 
 import pytest
 
@@ -10,6 +10,7 @@ from proseprobe.data.phrases import (
 from proseprobe.rules import get_all_rules
 from proseprobe.rules.base import Confidence, Rule, Severity
 from proseprobe.rules.vocab import (
+    AbsoluteReliabilityClaimRule,
     AIVocabularyRule,
     CollaborativePhrasesRule,
     GrandioseStakesRule,
@@ -669,6 +670,113 @@ def rollback():
 
         assert issue.message == "Wordy phrase: 'in order to'"
         assert issue.suggestion == "to"
+
+
+class TestAbsoluteReliabilityClaim:
+    """Tests for V016: Absolute Reliability Claim."""
+
+    @pytest.mark.parametrize(
+        ("source", "claim"),
+        [
+            ("The cache never fails.", "never fails"),
+            ("The deployment always succeeds.", "always succeeds"),
+            ("The filter eliminates all errors.", "eliminates all errors"),
+            ("The gateway is 100% secure.", "100% secure"),
+        ],
+    )
+    def test_reports_each_curated_claim(self, source: str, claim: str) -> None:
+        [issue] = AbsoluteReliabilityClaimRule().check(source, "guide.md")
+
+        assert issue.rule_id == "V016"
+        assert issue.message == f"Absolute reliability claim: '{claim}'"
+        assert source[issue.column - 1 : issue.end_column - 1] == claim
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == "State the tested scope and observed result"
+
+    def test_reports_multiple_claims_in_source_order(self) -> None:
+        source = "The cache never fails, and deployment always succeeds."
+
+        issues = AbsoluteReliabilityClaimRule().check(source, "guide.md")
+
+        assert [issue.message for issue in issues] == [
+            "Absolute reliability claim: 'never fails'",
+            "Absolute reliability claim: 'always succeeds'",
+        ]
+
+    def test_preserves_a_wrapped_source_span(self) -> None:
+        source = "The migration always\nsucceeds after validation."
+
+        [issue] = AbsoluteReliabilityClaimRule().check(source, "guide.md")
+
+        assert (issue.line, issue.column) == (1, 15)
+        assert (issue.end_line, issue.end_column) == (2, 9)
+        assert issue.message == "Absolute reliability claim: 'always succeeds'"
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "Across 10,000 test runs, the migration always succeeds.",
+            "Under the tested configuration, the retry loop never fails.",
+            (
+                "We observed no failures in 5,000 requests. "
+                "The parser eliminates all errors."
+            ),
+        ],
+    )
+    def test_suppresses_concrete_test_bounds(self, source: str) -> None:
+        assert AbsoluteReliabilityClaimRule().check(source, "guide.md") == []
+
+    def test_test_evidence_does_not_cross_scope_boundaries(self) -> None:
+        source = (
+            "We observed no failures in 5,000 requests.\n\n"
+            "# Deployment\n\nThe migration always succeeds."
+        )
+
+        [issue] = AbsoluteReliabilityClaimRule().check(source, "guide.md")
+
+        assert issue.line == 5
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            'Avoid saying "never fails" in release notes.',
+            "The phrase always succeeds is misleading.",
+            "## Example\n\nThe migration always succeeds.",
+            "Use `always succeeds` only as a test label.",
+            "```text\nThe migration always succeeds.\n```",
+        ],
+    )
+    def test_ignores_literal_examples_and_code(self, source: str) -> None:
+        assert AbsoluteReliabilityClaimRule().check(source, "guide.md") == []
+
+    def test_checks_python_documentation_but_not_code_strings(self) -> None:
+        source = '''\
+label = "always succeeds"
+# The deployment always succeeds.
+
+def retry():
+    """The retry loop never fails."""
+'''
+
+        issues = AbsoluteReliabilityClaimRule().check(source, "client.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_ignores_near_misses(self) -> None:
+        source = (
+            "The migration should always succeed. The test never failed. "
+            "The gateway is 99.9% secure. The filter eliminates most errors."
+        )
+
+        assert AbsoluteReliabilityClaimRule().check(source, "guide.md") == []
+
+    def test_rule_metadata(self) -> None:
+        rule = AbsoluteReliabilityClaimRule()
+
+        assert rule.id == "V016"
+        assert rule.name == "Absolute Reliability Claim"
+        assert rule.default_confidence is Confidence.MEDIUM
 
 
 class TestAcademicVocabularyExpansions:
