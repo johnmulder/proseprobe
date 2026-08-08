@@ -1577,6 +1577,82 @@
         }
       ]
     },
+    "quality/corpus/redundant-modifiers.md": {
+      "expected": [
+        {
+          "rule_id": "V013",
+          "line": 3,
+          "column": 20
+        },
+        {
+          "rule_id": "V013",
+          "line": 5,
+          "column": 27
+        },
+        {
+          "rule_id": "V013",
+          "line": 7,
+          "column": 26
+        },
+        {
+          "rule_id": "V013",
+          "line": 9,
+          "column": 21
+        },
+        {
+          "rule_id": "V013",
+          "line": 11,
+          "column": 22
+        },
+        {
+          "rule_id": "V013",
+          "line": 13,
+          "column": 25
+        },
+        {
+          "rule_id": "V013",
+          "line": 15,
+          "column": 24
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V013",
+          "line": 19,
+          "note": "A heading is outside the replacement scanner's prose scope."
+        },
+        {
+          "rule_id": "V013",
+          "line": 21,
+          "note": "Inline code preserves a literal course label."
+        },
+        {
+          "rule_id": "V013",
+          "line": 24,
+          "note": "Fenced code preserves literal output."
+        },
+        {
+          "rule_id": "V013",
+          "line": 29,
+          "note": "Brief summary and final outcome retain useful context."
+        },
+        {
+          "rule_id": "V013",
+          "line": 31,
+          "note": "Future plans and past experience can distinguish time periods."
+        },
+        {
+          "rule_id": "V013",
+          "line": 33,
+          "note": "Debatable intensifiers are intentionally outside the curated table."
+        },
+        {
+          "rule_id": "V013",
+          "line": 35,
+          "note": "Separated positive and benefit terms are not a fixed modifier pair."
+        }
+      ]
+    },
     "quality/corpus/redundant-pairs.md": {
       "expected": [
         {

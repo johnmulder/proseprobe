@@ -34,6 +34,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `V009` | Wordy Phrase | Vocabulary | info | high | markdown, python / prose | — |
 | `V010` | Redundant Pair | Vocabulary | info | high | markdown, python / prose | — |
 | `V011` | Verbose Verb Phrase | Vocabulary | info | high | markdown, python / prose | — |
+| `V013` | Redundant Modifier | Vocabulary | info | high | markdown, python / prose | — |
 | `V016` | Absolute Reliability Claim | Vocabulary | info | medium | markdown, python / prose | — |
 | `S001` | Rule of Three | Structure | info | medium | markdown, python / prose | `thresholds.rule_of_three` |
 | `S002` | Negative Parallelism | Structure | info | medium | markdown, python / prose | — |
@@ -1388,6 +1389,40 @@ The team must make a decision after conducting an analysis.
 **Example (good):**
 ```markdown
 The team must decide after analyzing the results.
+```
+
+Matching is case-insensitive and applies to Markdown prose plus Python comments
+and docstrings; headings and code are excluded.
+
+---
+
+### V013: Redundant Modifier
+
+Detects modifier–noun combinations whose modifier repeats meaning already
+carried by the noun. Findings are high-confidence informational diagnostics
+with exact spans and direct deletion suggestions.
+
+**Detected patterns:**
+- "advance planning" → "planning"
+- "basic fundamental(s)" → "fundamental(s)"
+- "joint collaboration(s)" → "collaboration(s)"
+- "negative drawback(s)" → "drawback(s)"
+- "positive benefit(s)" → "benefit(s)"
+- "true fact(s)" → "fact(s)"
+- "unexpected surprise(s)" → "surprise(s)"
+
+Debatable intensifiers and context-dependent combinations—including `very
+unique`, `completely unanimous`, `final outcome`, `future plans`, and `past
+experience`—are intentionally omitted.
+
+**Example (bad):**
+```markdown
+Advance planning produced a positive benefit for the rollout.
+```
+
+**Example (good):**
+```markdown
+Planning benefited the rollout.
 ```
 
 Matching is case-insensitive and applies to Markdown prose plus Python comments

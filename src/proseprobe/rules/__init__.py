@@ -93,6 +93,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         vocab.WordyPhraseRule(),
         vocab.RedundantPairRule(),
         vocab.VerboseVerbPhraseRule(),
+        vocab.RedundantModifierRule(),
         vocab.AbsoluteReliabilityClaimRule(),
     ]
     for rule in rules:
