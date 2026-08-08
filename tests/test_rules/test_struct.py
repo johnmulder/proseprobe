@@ -1,14 +1,15 @@
-"""Tests for structural rules (S001-S007)."""
+"""Tests for structural rules (S001-S021 and S025)."""
 
 import pytest
 
-from proseprobe.rules.base import Rule
+from proseprobe.rules.base import Confidence, Rule, Severity
 from proseprobe.rules.struct import (
     ChallengeConclusionsRule,
     ContentDuplicationRule,
     DramaticCountdownRule,
     FalseRangesRule,
     FractalSummaryRule,
+    HeadingWithoutBodyRule,
     InlineHeaderListsRule,
     ListicleInProseRule,
     NegativeParallelismRule,
@@ -1210,3 +1211,92 @@ class TestSlideDeckFragment:
         rule = SlideDeckFragmentRule()
         assert rule.id == "S021"
         assert rule.name == "Slide Deck Fragment"
+
+
+class TestHeadingWithoutBody:
+    """Tests for S025: Heading Without Body."""
+
+    def test_reports_the_empty_heading_exactly(self) -> None:
+        source = "## Empty\n\n## Next\n"
+
+        [issue] = HeadingWithoutBodyRule().check(source, "guide.md")
+
+        assert issue.rule_id == "S025"
+        assert issue.message == "Heading without body: 'Empty'"
+        assert (issue.line, issue.column, issue.end_column) == (1, 4, 9)
+        assert issue.severity is Severity.WARNING
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == "Add content under this heading or remove it"
+
+    def test_reports_same_and_higher_level_boundaries_in_order(self) -> None:
+        source = "## First\n\n## Second\n\n# Last"
+
+        issues = HeadingWithoutBodyRule().check(source, "guide.markdown")
+
+        assert [issue.message for issue in issues] == [
+            "Heading without body: 'First'",
+            "Heading without body: 'Second'",
+        ]
+
+    def test_allows_parent_heading_before_child(self) -> None:
+        source = "# Parent\n## Empty child\n\n# Peer"
+
+        [issue] = HeadingWithoutBodyRule().check(source, "guide.mdx")
+
+        assert issue.message == "Heading without body: 'Empty child'"
+
+    @pytest.mark.parametrize(
+        "body",
+        [
+            "Body prose.",
+            "- unordered item",
+            "1. ordered item",
+            "| Name | Value |\n| --- | --- |\n| alpha | beta |",
+            "> quoted body",
+            "<div>\nHTML body.\n</div>",
+            "```python\npass\n```",
+        ],
+    )
+    def test_body_content_prevents_a_finding(self, body: str) -> None:
+        source = f"## Populated\n\n{body}\n\n## Next"
+
+        assert HeadingWithoutBodyRule().check(source, "guide.md") == []
+
+    @pytest.mark.parametrize(
+        ("source", "line", "column", "end_column"),
+        [
+            ("Empty\n-----\n\n# Next", 1, 1, 6),
+            ("> Empty\n> -----\n>\n> # Next", 1, 3, 8),
+            ("> ## Empty\n>\n> ## Next", 1, 6, 11),
+        ],
+    )
+    def test_setext_and_blank_blockquotes_are_empty(
+        self, source: str, line: int, column: int, end_column: int
+    ) -> None:
+        [issue] = HeadingWithoutBodyRule().check(source, "guide.md")
+
+        assert (issue.line, issue.column, issue.end_column) == (
+            line,
+            column,
+            end_column,
+        )
+
+    @pytest.mark.parametrize(
+        "hidden_body",
+        [
+            "```markdown\n## Hidden\n```",
+            "<section>\n## Hidden\n</section>",
+        ],
+    )
+    def test_hidden_headings_do_not_create_boundaries(self, hidden_body: str) -> None:
+        source = f"## Populated\n\n{hidden_body}\n\n## Empty\n\n## Next"
+
+        [issue] = HeadingWithoutBodyRule().check(source, "guide.md")
+
+        assert issue.message == "Heading without body: 'Empty'"
+
+    def test_ignores_final_heading_and_non_markdown_input(self) -> None:
+        rule = HeadingWithoutBodyRule()
+
+        assert rule.check("## Final", "guide.md") == []
+        assert rule.check("## Empty\n\n## Next", "guide.py") == []

@@ -1,7 +1,7 @@
-"""Structural detection rules (S001-S018)."""
+"""Structural detection rules (S001-S021 and S025)."""
 
 import re
-from itertools import groupby
+from itertools import groupby, pairwise
 from typing import ClassVar
 
 from proseprobe.data.patterns import (
@@ -22,6 +22,7 @@ from proseprobe.data.phrases import (
     FRACTAL_SUMMARY_PHRASES,
     SIGNPOSTED_CONCLUSION_PHRASES,
 )
+from proseprobe.parsers.markdown import _get_cached_parser, is_markdown_file
 from proseprobe.parsers.prose import (
     ProseSentence,
     iter_prose_blocks,
@@ -1058,4 +1059,64 @@ class SlideDeckFragmentRule(Rule):
                         confidence=self.default_confidence,
                     )
                 )
+        return issues
+
+
+class HeadingWithoutBodyRule(Rule):
+    """S025: Detect headings without content before a peer or ancestor."""
+
+    id = "S025"
+    name = "Heading Without Body"
+    description = "Detects headings without body content"
+    severity = Severity.WARNING
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown"}
+    content_scope = "raw"
+
+    _BLOCKQUOTE_PREFIX = re.compile(r"^(?:\s{0,3}>\s?)+")
+    _ATX_HEADING = re.compile(r"^ {0,3}#{1,6}\s+")
+    _SETEXT_UNDERLINE = re.compile(r"^ {0,3}(?:=+|-+)\s*$")
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check for headings with no body before a peer or ancestor."""
+        if not is_markdown_file(filename):
+            return []
+
+        lines = content.split("\n")
+        headings = _get_cached_parser(content).get_headings()
+        issues: list[Issue] = []
+
+        for current, following in pairwise(headings):
+            if following.level > current.level:
+                continue
+
+            body_start = current.start_line
+            heading_line = self._BLOCKQUOTE_PREFIX.sub(
+                "", lines[current.start_line - 1]
+            )
+            if not self._ATX_HEADING.match(heading_line) and body_start < len(lines):
+                underline = self._BLOCKQUOTE_PREFIX.sub("", lines[body_start])
+                if self._SETEXT_UNDERLINE.fullmatch(underline):
+                    body_start += 1
+
+            body_end = following.start_line - 1
+            if any(
+                self._BLOCKQUOTE_PREFIX.sub("", line).strip()
+                for line in lines[body_start:body_end]
+            ):
+                continue
+
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=f"Heading without body: '{current.title}'",
+                    line=current.start_line,
+                    column=current.column,
+                    end_column=current.end_column,
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion="Add content under this heading or remove it",
+                )
+            )
+
         return issues
