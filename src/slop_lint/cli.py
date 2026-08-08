@@ -524,6 +524,19 @@ def _cmd_explain(args: argparse.Namespace) -> int:
         print(f"Unknown rule: {args.rule_id}", file=sys.stderr)
         return 1
 
+    if args.format == "json":
+        print(
+            json.dumps(
+                {
+                    "schema_version": JSON_SCHEMA_VERSION,
+                    "version": __version__,
+                    "rule": _serialize_rule_metadata(metadata),
+                },
+                indent=2,
+            )
+        )
+        return 0
+
     print(f"{style(metadata.id, bold=True, color='cyan')}: {metadata.name}")
     print(f"\n{style('Description:', bold=True)}\n{metadata.description}")
     print(
@@ -758,6 +771,13 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     p_explain.add_argument(
         "-h", "--help", action="help", help="Show this help message and exit"
+    )
+    p_explain.add_argument(
+        "--format",
+        "-f",
+        choices=("text", "json"),
+        default="text",
+        help="Output format: text, json",
     )
     p_explain.add_argument("rule_id", help="Rule ID (e.g., V001)")
     p_explain.set_defaults(func=_cmd_explain)

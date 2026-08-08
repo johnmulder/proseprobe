@@ -518,17 +518,43 @@ class TestExplainCommand:
         assert "Profiles:" in result.stdout
         assert "Configuration:" in result.stdout
 
-    def test_explain_invalid_rule(self) -> None:
-        """Test explaining an invalid rule."""
-        result = run_cli("explain", "X999")
+    def test_explain_json_uses_inventory_object_shape(self) -> None:
+        """JSON explanation returns one canonical metadata object."""
+        result = run_cli("explain", "V001", "--format", "json")
+
+        assert result.exit_code == 0
+        assert result.stderr == ""
+        assert json.loads(result.stdout) == {
+            "schema_version": 1,
+            "version": __version__,
+            "rule": {
+                "id": "V001",
+                "category": "Vocabulary",
+                "name": "Overused Vocabulary",
+                "description": "Detects overused and clichéd words",
+                "default_severity": "warning",
+                "default_confidence": "medium",
+                "applies_to": ["markdown", "python"],
+                "content_scope": "prose",
+                "profiles": [
+                    "academic",
+                    "business",
+                    "general",
+                    "journalism",
+                    "technical-docs",
+                ],
+                "config_key": None,
+            },
+        }
+
+    @pytest.mark.parametrize("format_args", [(), ("--format", "json")])
+    def test_explain_invalid_rule(self, format_args: tuple[str, ...]) -> None:
+        """Unknown rules leave human and JSON stdout empty."""
+        result = run_cli("explain", "X999", *format_args)
 
         assert result.exit_code == 1
-        output = result.stdout + result.stderr
-        assert (
-            "Unknown rule" in output
-            or "unknown" in output.lower()
-            or result.exit_code == 1
-        )
+        assert result.stdout == ""
+        assert result.stderr == "Unknown rule: X999\n"
 
 
 class TestInitCommand:
