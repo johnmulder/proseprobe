@@ -54,6 +54,23 @@ VERBOSE_VERB_PHRASE_REPLACEMENTS = {
     "providing an explanation": "explaining",
 }
 
+# Redundant modifier combinations with direct deletions (V013)
+REDUNDANT_MODIFIER_REPLACEMENTS = {
+    "advance planning": "planning",
+    "basic fundamental": "fundamental",
+    "basic fundamentals": "fundamentals",
+    "joint collaboration": "collaboration",
+    "joint collaborations": "collaborations",
+    "negative drawback": "drawback",
+    "negative drawbacks": "drawbacks",
+    "positive benefit": "benefit",
+    "positive benefits": "benefits",
+    "true fact": "fact",
+    "true facts": "facts",
+    "unexpected surprise": "surprise",
+    "unexpected surprises": "surprises",
+}
+
 # Fixed double-negative forms with direct positive replacements (G029)
 DOUBLE_NEGATIVE_REPLACEMENTS = {
     "not uncommon": "common",

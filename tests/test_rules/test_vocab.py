@@ -1,9 +1,10 @@
-"""Tests for vocabulary rules (V001-V011 and V016)."""
+"""Tests for vocabulary rules (V001-V011, V013, and V016)."""
 
 import pytest
 
 from proseprobe.config import Config
 from proseprobe.data.phrases import (
+    REDUNDANT_MODIFIER_REPLACEMENTS,
     REDUNDANT_PAIR_REPLACEMENTS,
     VERBOSE_VERB_PHRASE_REPLACEMENTS,
     WORDY_PHRASE_REPLACEMENTS,
@@ -18,6 +19,7 @@ from proseprobe.rules.vocab import (
     InventedConceptLabelsRule,
     KnowledgeCutoffRule,
     PromotionalLanguageRule,
+    RedundantModifierRule,
     RedundantPairRule,
     TrendOverclaimRule,
     VerboseVerbPhraseRule,
@@ -773,6 +775,97 @@ def explain():
         source = f"The builder makes a {compound} available."
 
         assert VerboseVerbPhraseRule().check(source, "guide.md") == []
+
+
+class TestRedundantModifier:
+    """Tests for V013: Redundant Modifier."""
+
+    def test_curated_modifier_table(self) -> None:
+        assert REDUNDANT_MODIFIER_REPLACEMENTS == {
+            "advance planning": "planning",
+            "basic fundamental": "fundamental",
+            "basic fundamentals": "fundamentals",
+            "joint collaboration": "collaboration",
+            "joint collaborations": "collaborations",
+            "negative drawback": "drawback",
+            "negative drawbacks": "drawbacks",
+            "positive benefit": "benefit",
+            "positive benefits": "benefits",
+            "true fact": "fact",
+            "true facts": "facts",
+            "unexpected surprise": "surprise",
+            "unexpected surprises": "surprises",
+        }
+
+    @pytest.mark.parametrize(
+        ("phrase", "replacement"), REDUNDANT_MODIFIER_REPLACEMENTS.items()
+    )
+    def test_suggests_each_curated_replacement(
+        self, phrase: str, replacement: str
+    ) -> None:
+        [issue] = RedundantModifierRule().check(
+            f"Review the {phrase} today.", "guide.md"
+        )
+
+        assert issue.suggestion == replacement
+
+    def test_reports_exact_metadata_and_source_span(self) -> None:
+        source = "Review the basic fundamentals before deployment."
+
+        [issue] = RedundantModifierRule().check(source, "guide.md")
+
+        assert issue.rule_id == "V013"
+        assert issue.message == "Redundant modifier: 'basic fundamentals'"
+        assert (issue.line, issue.column, issue.end_column) == (1, 12, 30)
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == "fundamentals"
+
+    def test_reports_repeated_and_different_phrases_in_source_order(self) -> None:
+        source = "TRUE FACTS, one positive benefit, then another positive benefit."
+
+        issues = RedundantModifierRule().check(source, "guide.md")
+
+        assert [issue.message for issue in issues] == [
+            "Redundant modifier: 'TRUE FACTS'",
+            "Redundant modifier: 'positive benefit'",
+            "Redundant modifier: 'positive benefit'",
+        ]
+
+    def test_ignores_markdown_headings_and_code(self) -> None:
+        source = """\
+# Basic fundamentals
+
+Use `positive benefit` as the legacy label.
+
+```text
+unexpected surprise
+```
+"""
+
+        assert RedundantModifierRule().check(source, "guide.md") == []
+
+    def test_checks_python_documentation_but_not_code_strings(self) -> None:
+        source = '''\
+label = "basic fundamentals"
+# Record every positive benefit.
+
+def summarize():
+    """Report any unexpected surprise."""
+'''
+
+        issues = RedundantModifierRule().check(source, "client.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_ignores_debatable_modifiers_and_near_misses(self) -> None:
+        source = (
+            "The brief summary covers the final outcome and future plans. "
+            "Past experience found a completely unanimous result and a very unique "
+            "case. The benefit was positive for one group but negative for another."
+        )
+
+        assert RedundantModifierRule().check(source, "guide.md") == []
 
 
 class TestAbsoluteReliabilityClaim:

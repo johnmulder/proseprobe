@@ -1,4 +1,4 @@
-"""Vocabulary detection rules (V001-V011 and V016)."""
+"""Vocabulary detection rules (V001-V011, V013, and V016)."""
 
 import re
 from typing import ClassVar
@@ -9,6 +9,7 @@ from proseprobe.data.phrases import (
     INFLAMMATORY_CLICHE_PHRASES,
     KNOWLEDGE_CUTOFF_PATTERNS,
     PROMOTIONAL_PHRASES,
+    REDUNDANT_MODIFIER_REPLACEMENTS,
     REDUNDANT_PAIR_REPLACEMENTS,
     TREND_OVERCLAIM_PHRASES,
     VERBOSE_VERB_PHRASE_REPLACEMENTS,
@@ -638,6 +639,24 @@ class VerboseVerbPhraseRule(Rule):
                 lines[issue.line - 1][(issue.end_column or 1) - 1 :]
             )
         ]
+
+
+class RedundantModifierRule(Rule):
+    """V013: Detect strongly redundant modifier combinations."""
+
+    id = "V013"
+    name = "Redundant Modifier"
+    description = "Detects modifiers redundant with the words they modify"
+    severity = Severity.INFO
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose for redundant modifier combinations."""
+        return _replacement_phrase_issues(
+            self, content, filename, REDUNDANT_MODIFIER_REPLACEMENTS
+        )
 
 
 class AbsoluteReliabilityClaimRule(Rule):
