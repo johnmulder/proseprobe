@@ -92,6 +92,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         vocab.TrendOverclaimRule(),
         vocab.WordyPhraseRule(),
         vocab.RedundantPairRule(),
+        vocab.AbsoluteReliabilityClaimRule(),
     ]
     for rule in rules:
         override = config.severity_overrides.get(rule.id)

@@ -50,6 +50,7 @@ def test_profiles_include_only_their_specialized_rules() -> None:
     assert "T015" in PROFILES["technical-docs"].rules
     assert "V009" in PROFILES["technical-docs"].rules
     assert "V010" in PROFILES["technical-docs"].rules
+    assert "V016" in PROFILES["technical-docs"].rules
 
     assert "G011" not in PROFILES["journalism"].rules
     assert "G017" not in PROFILES["general"].rules
@@ -66,6 +67,7 @@ def test_profiles_include_only_their_specialized_rules() -> None:
     assert "T015" not in PROFILES["general"].rules
     assert "V009" not in PROFILES["general"].rules
     assert "V010" not in PROFILES["general"].rules
+    assert "V016" not in PROFILES["general"].rules
 
 
 def test_reverse_profile_tags_are_sorted() -> None:
@@ -86,6 +88,7 @@ def test_reverse_profile_tags_are_sorted() -> None:
     assert profile_names_for_rule("T015") == ("technical-docs",)
     assert profile_names_for_rule("V009") == ("technical-docs",)
     assert profile_names_for_rule("V010") == ("technical-docs",)
+    assert profile_names_for_rule("V016") == ("technical-docs",)
     assert profile_names_for_rule("G015") == (
         "academic",
         "business",

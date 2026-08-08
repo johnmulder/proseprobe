@@ -712,6 +712,87 @@
         }
       ]
     },
+    "quality/corpus/absolute-reliability-claims.md": {
+      "expected": [
+        {
+          "rule_id": "V016",
+          "line": 3,
+          "column": 22
+        },
+        {
+          "rule_id": "V016",
+          "line": 5,
+          "column": 25
+        },
+        {
+          "rule_id": "V016",
+          "line": 7,
+          "column": 13
+        },
+        {
+          "rule_id": "V016",
+          "line": 9,
+          "column": 23
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V016",
+          "line": 13,
+          "note": "A numbered test population bounds the success observation."
+        },
+        {
+          "rule_id": "V016",
+          "line": 15,
+          "note": "An explicitly tested configuration bounds the claim."
+        },
+        {
+          "rule_id": "V016",
+          "line": 17,
+          "note": "An adjacent measured request population supplies the bound."
+        },
+        {
+          "rule_id": "V016",
+          "line": 21,
+          "note": "Editorial guidance discusses the literal wording."
+        },
+        {
+          "rule_id": "V016",
+          "line": 25,
+          "note": "A demonstration section is not an authorial reliability claim."
+        },
+        {
+          "rule_id": "V016",
+          "line": 29,
+          "note": "Inline code preserves a literal test label."
+        },
+        {
+          "rule_id": "V016",
+          "line": 32,
+          "note": "Fenced code preserves literal output."
+        },
+        {
+          "rule_id": "V016",
+          "line": 37,
+          "note": "Always succeed is not the curated always succeeds claim."
+        },
+        {
+          "rule_id": "V016",
+          "line": 39,
+          "note": "Never failed is not the curated never fails claim."
+        },
+        {
+          "rule_id": "V016",
+          "line": 41,
+          "note": "A measured 99.9 percent result is not a 100 percent claim."
+        },
+        {
+          "rule_id": "V016",
+          "line": 43,
+          "note": "Eliminates most errors is not the curated absolute phrase."
+        }
+      ]
+    },
     "quality/corpus/academic-excerpt.md": {
       "expected": [],
       "negative_cases": [

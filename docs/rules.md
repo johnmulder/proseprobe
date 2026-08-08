@@ -33,6 +33,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `V008` | Trend Overclaim | Vocabulary | info | medium | markdown, python / prose | — |
 | `V009` | Wordy Phrase | Vocabulary | info | high | markdown, python / prose | — |
 | `V010` | Redundant Pair | Vocabulary | info | high | markdown, python / prose | — |
+| `V016` | Absolute Reliability Claim | Vocabulary | info | medium | markdown, python / prose | — |
 | `S001` | Rule of Three | Structure | info | medium | markdown, python / prose | `thresholds.rule_of_three` |
 | `S002` | Negative Parallelism | Structure | info | medium | markdown, python / prose | — |
 | `S003` | Challenge Conclusions | Structure | warning | medium | markdown, python / prose | — |
@@ -1359,6 +1360,31 @@ Review each and every request before the client reverts back.
 ```markdown
 Review each request before the client reverts.
 ```
+
+---
+
+### V016: Absolute Reliability Claim
+
+Detects the absolute claims `never fails`, `always succeeds`, `eliminates all
+errors`, and `100% secure`. Findings are medium-confidence informational
+diagnostics on the exact claim and suggest stating the tested scope and
+observed result.
+
+**Example (bad):**
+```markdown
+The deployment always succeeds.
+```
+
+**Example (good):**
+```markdown
+Across 10,000 test runs, the deployment completed without a failure.
+```
+
+A claim is suppressed when its sentence or an adjacent sentence in the same
+prose scope states a numbered test population or an explicitly tested
+configuration. Code, demonstration sections, and sentences discussing the
+literal wording are also excluded. The rule applies to Markdown prose and
+Python comments and docstrings.
 
 ---
 
