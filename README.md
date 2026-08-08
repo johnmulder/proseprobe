@@ -95,10 +95,10 @@ removes stale entries without accepting new ones. The older
 | `V` | Vocabulary | 8 | Overused and clichéd words and phrases |
 | `S` | Structure | 21 | Organizational patterns |
 | `T` | Style | 8 | Typographic issues |
-| `G` | Grammar | 14 | Grammatical patterns |
+| `G` | Grammar | 15 | Grammatical patterns |
 | `C` | Code | 4 | Python docstring/comment issues |
 | `M` | Markup | 8 | Markdown artifacts |
-| **Total** | | **63** | |
+| **Total** | | **64** | |
 
 <!-- rule-docs:categories:end -->
 

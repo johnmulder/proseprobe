@@ -50,10 +50,10 @@ speed remains a tracked metric until the benchmark corpus reflects real projects
 | `V` | Vocabulary | 8 | Overused and clichéd words and phrases |
 | `S` | Structure | 21 | Organizational patterns |
 | `T` | Style | 8 | Typographic issues |
-| `G` | Grammar | 14 | Grammatical patterns |
+| `G` | Grammar | 15 | Grammatical patterns |
 | `C` | Code | 4 | Python docstring/comment issues |
 | `M` | Markup | 8 | Markdown artifacts |
-| **Total** | | **63** | |
+| **Total** | | **64** | |
 
 <!-- rule-docs:categories:end -->
 
@@ -88,7 +88,8 @@ dependency.
 | `journalism` | General plus G010, S017, and V008 | info | medium |
 | `business` | General plus G014 and S019-S021 | info | low |
 
-General prose rules are G001-G009, S001-S016, T001-T007, and V001-V007.
+General prose rules are G001-G009 and G015, S001-S016, T001-T007, and
+V001-V007.
 Running without a profile retains the legacy all-category selection, warning
 minimum severity, and low minimum confidence.
 

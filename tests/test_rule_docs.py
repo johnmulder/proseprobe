@@ -40,14 +40,15 @@ def test_category_table_is_derived_from_registry() -> None:
     assert "| `V` | Vocabulary | 8 |" in rendered
     assert "| `S` | Structure | 21 |" in rendered
     assert "| `M` | Markup | 8 |" in rendered
-    assert "| **Total** | | **63** | |" in rendered
+    assert "| `G` | Grammar | 15 |" in rendered
+    assert "| **Total** | | **64** | |" in rendered
 
 
 def test_rule_inventory_contains_canonical_metadata() -> None:
     rendered = render_rule_inventory()
     rule_rows = [line for line in rendered.splitlines() if line.startswith("| `")]
 
-    assert len(rule_rows) == 63
+    assert len(rule_rows) == 64
     assert rule_rows[0].startswith("| `V001`")
     assert rule_rows[-1].startswith("| `M008`")
     assert any(
@@ -59,6 +60,13 @@ def test_rule_inventory_contains_canonical_metadata() -> None:
         for row in rule_rows
     )
     assert any("`M001`" in row and "low" in row for row in rule_rows)
+    assert any(
+        "`G015`" in row
+        and "info" in row
+        and "medium" in row
+        and "markdown / prose" in row
+        for row in rule_rows
+    )
 
 
 def test_handwritten_rule_sections_match_registry_exactly() -> None:

@@ -34,6 +34,7 @@ def test_profiles_cover_the_registry_without_unknown_rules() -> None:
 
 
 def test_profiles_include_only_their_specialized_rules() -> None:
+    assert "G015" in PROFILES["general"].rules
     assert "G011" in PROFILES["academic"].rules
     assert "V008" in PROFILES["journalism"].rules
     assert "S021" in PROFILES["business"].rules
@@ -58,4 +59,11 @@ def test_reverse_profile_tags_are_sorted() -> None:
         "technical-docs",
     )
     assert profile_names_for_rule("G011") == ("academic",)
+    assert profile_names_for_rule("G015") == (
+        "academic",
+        "business",
+        "general",
+        "journalism",
+        "technical-docs",
+    )
     assert profile_names_for_rule("unknown") == ()

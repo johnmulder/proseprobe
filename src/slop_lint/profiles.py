@@ -19,6 +19,7 @@ class Profile:
 _GENERAL_RULES = frozenset(
     {
         *(f"G{number:03}" for number in range(1, 10)),
+        "G015",
         *(f"S{number:03}" for number in range(1, 17)),
         *(f"T{number:03}" for number in range(1, 8)),
         *(f"V{number:03}" for number in range(1, 8)),

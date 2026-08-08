@@ -26,11 +26,15 @@ class TestLinter:
         linter = Linter(config)
         assert linter.config.ignore == ["V001"]
 
-    def test_general_prose_rule_metadata_includes_python(self) -> None:
-        """Every general prose rule declares Python documentation support."""
+    def test_general_prose_rule_metadata_includes_supported_formats(self) -> None:
+        """General prose rules declare Markdown and intended Python support."""
+        markdown_only = {"G015"}
         for rule in get_all_rules():
             if rule.id[0] in {"V", "G", "S", "T"} and rule.content_scope == "prose":
-                assert {"markdown", "python"} <= rule.applies_to, rule.id
+                assert "markdown" in rule.applies_to, rule.id
+                assert ("python" in rule.applies_to) == (
+                    rule.id not in markdown_only
+                ), rule.id
 
 
 class TestDiscoverFiles:

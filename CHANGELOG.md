@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- G015 reports generic scene-setting clauses in the first substantive Markdown
+  body sentence.
 - M008 reports skipped Markdown heading levels between consecutive visible headings.
 - M007 reports unclosed Markdown code fences at their opening delimiters.
 - M006 detects explicit Markdown template residue at high confidence and

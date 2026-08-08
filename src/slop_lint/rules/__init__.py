@@ -33,6 +33,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         grammar.PassiveVoiceOveruseRule(thresholds.passive_voice_overuse),
         grammar.GapRitualRule(),
         grammar.ImpersonalCorporatePassiveRule(),
+        grammar.GenericSceneSettingOpenerRule(),
         markup.WrongMarkupRule(),
         markup.ChatGPTMarkersRule(),
         markup.UTMParametersRule(),

@@ -72,6 +72,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `G012` | Passive Voice Overuse | Grammar | info | medium | markdown, python / prose | `thresholds.passive_voice_overuse` |
 | `G013` | Gap Ritual | Grammar | info | medium | markdown, python / prose | — |
 | `G014` | Impersonal Corporate Passive | Grammar | info | medium | markdown, python / prose | — |
+| `G015` | Generic Scene-Setting Opener | Grammar | info | medium | markdown / prose | — |
 | `C001` | Docstring-Only Vocabulary | Code | warning | medium | python / raw | — |
 | `C002` | Verbose Comments | Code | info | medium | python / raw | — |
 | `C003` | Collaborative Comments | Code | warning | medium | python / raw | — |
@@ -1460,4 +1461,31 @@ It has been determined that adjustments will be made to the compensation structu
 **Example (good):**
 ```markdown
 The finance team decided to reduce bonuses by 10% starting in Q3.
+```
+
+---
+
+### G015: Generic Scene-Setting Opener
+
+At medium confidence, detects a generic scene-setting clause in the first
+substantive Markdown body sentence. Headings, block quotes, lists, code, and
+content under example-style headings do not become the document opener.
+
+**Detected patterns:**
+- "In today's rapidly evolving digital landscape…"
+- "In the modern world…"
+- "In a rapidly evolving landscape…"
+- "In an era defined by constant change…"
+
+Replace the generic opener with the concrete subject or change the document
+actually addresses.
+
+**Example (bad):**
+```markdown
+In today's rapidly evolving digital landscape, reliable payments matter more than ever.
+```
+
+**Example (good):**
+```markdown
+The payment API now retries one timed-out request after 200 milliseconds.
 ```

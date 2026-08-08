@@ -736,6 +736,11 @@
           "note": "Rejecting a universal gap claim is not a gap ritual."
         },
         {
+          "rule_id": "G015",
+          "line": 3,
+          "note": "A quantified research introduction is concrete."
+        },
+        {
           "rule_id": "S006",
           "line": 3,
           "note": "A quantified result is substantive analysis."
@@ -786,6 +791,11 @@
           "note": "The sentence names both teams that agreed."
         },
         {
+          "rule_id": "G015",
+          "line": 3,
+          "note": "A concrete domain change is not generic scene-setting."
+        },
+        {
           "rule_id": "S019",
           "line": 3,
           "note": "Database restructuring is a technical operation, not a layoff euphemism."
@@ -816,6 +826,11 @@
           "note": "One concrete implementation noun is not nominalization overload."
         },
         {
+          "rule_id": "G015",
+          "line": 3,
+          "note": "A release-note introduction names its purpose."
+        },
+        {
           "rule_id": "S003",
           "line": 7,
           "note": "A specific fix is not a formulaic challenge conclusion."
@@ -839,6 +854,22 @@
           "rule_id": "V003",
           "line": 10,
           "note": "A dated release statement is not a knowledge-cutoff disclaimer."
+        }
+      ]
+    },
+    "quality/corpus/generic-openers.md": {
+      "expected": [
+        {
+          "rule_id": "G015",
+          "line": 7,
+          "column": 1
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G015",
+          "line": 3,
+          "note": "A blockquoted matching phrase is an example, not body prose."
         }
       ]
     },
@@ -910,6 +941,11 @@
           "rule_id": "G010",
           "line": 14,
           "note": "The article gives measured evidence after presenting both views."
+        },
+        {
+          "rule_id": "G015",
+          "line": 3,
+          "note": "A dated, sourced statistic is a concrete lead."
         },
         {
           "rule_id": "S007",
