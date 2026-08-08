@@ -1,4 +1,4 @@
-"""Tests for structural rules (S001-S022 and S025)."""
+"""Tests for structural rules (S001-S022, S025, and S028)."""
 
 import pytest
 
@@ -7,6 +7,7 @@ from proseprobe.rules.struct import (
     ChallengeConclusionsRule,
     ContentDuplicationRule,
     DramaticCountdownRule,
+    ExcessiveHeadingDepthRule,
     FalseRangesRule,
     FractalSummaryRule,
     HeadingWithoutBodyRule,
@@ -60,6 +61,11 @@ from proseprobe.rules.struct import (
             SlideDeckFragmentRule(),
             "> Driving alignment across strategic initiatives for scalable impact.",
             "Driving alignment across strategic initiatives for scalable impact.",
+        ),
+        (
+            ExcessiveHeadingDepthRule(),
+            "> ###### Retry details ######",
+            "Retry details",
         ),
     ],
 )
@@ -1386,3 +1392,58 @@ class TestHeadingWithoutBody:
 
         assert rule.check("## Final", "guide.md") == []
         assert rule.check("## Empty\n\n## Next", "guide.py") == []
+
+
+class TestExcessiveHeadingDepth:
+    """Tests for S028: Excessive Heading Depth."""
+
+    @pytest.mark.parametrize(("marker", "level"), [("#####", 5), ("######", 6)])
+    def test_reports_excessive_heading_fields(self, marker: str, level: int) -> None:
+        source = f"{marker} Internal details"
+
+        [issue] = ExcessiveHeadingDepthRule().check(source, "guide.md")
+
+        assert issue.rule_id == "S028"
+        assert issue.message == (
+            f"Excessive heading depth: level {level} heading 'Internal details'"
+        )
+        assert (issue.line, issue.column, issue.end_column) == (
+            1,
+            len(marker) + 2,
+            len(source) + 1,
+        )
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == "Use a level-4 or shallower heading"
+
+    def test_reports_visible_headings_in_source_order(self) -> None:
+        source = "##### First detail\n\nBody.\n\n> ###### Nested detail ######"
+
+        issues = ExcessiveHeadingDepthRule().check(source, "guide.mdx")
+
+        assert [(issue.line, issue.column) for issue in issues] == [(1, 7), (5, 10)]
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "#### Supported depth",
+            "```markdown\n###### Hidden\n```\n\n#### Visible",
+            "<section>\n###### Hidden\n</section>\n\n#### Visible",
+            "---\ntitle: Guide\n###### Hidden\n---\n\n#### Visible",
+        ],
+    )
+    def test_ignores_supported_and_hidden_headings(self, source: str) -> None:
+        assert ExcessiveHeadingDepthRule().check(source, "guide.md") == []
+
+    def test_applies_only_to_markdown(self) -> None:
+        assert (
+            ExcessiveHeadingDepthRule().check("###### Comment heading", "guide.py")
+            == []
+        )
+
+    def test_rule_metadata(self) -> None:
+        rule = ExcessiveHeadingDepthRule()
+
+        assert rule.id == "S028"
+        assert rule.name == "Excessive Heading Depth"
+        assert rule.config_key is None

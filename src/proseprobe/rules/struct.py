@@ -1,4 +1,4 @@
-"""Structural detection rules (S001-S022 and S025)."""
+"""Structural detection rules (S001-S022, S025, and S028)."""
 
 import re
 from itertools import groupby, pairwise
@@ -1173,3 +1173,37 @@ class HeadingWithoutBodyRule(Rule):
             )
 
         return issues
+
+
+class ExcessiveHeadingDepthRule(Rule):
+    """S028: Detect Markdown headings deeper than level four."""
+
+    id = "S028"
+    name = "Excessive Heading Depth"
+    description = "Detects level-5 and level-6 Markdown headings"
+    severity = Severity.INFO
+    applies_to: ClassVar[set[str]] = {"markdown"}
+    content_scope = "raw"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Report visible Markdown headings deeper than level four."""
+        if not is_markdown_file(filename):
+            return []
+
+        return [
+            Issue(
+                rule_id=self.id,
+                message=(
+                    f"Excessive heading depth: level {heading.level} "
+                    f"heading '{heading.title}'"
+                ),
+                line=heading.start_line,
+                column=heading.column,
+                end_column=heading.end_column,
+                severity=self.severity,
+                confidence=self.default_confidence,
+                suggestion="Use a level-4 or shallower heading",
+            )
+            for heading in _get_cached_parser(content).get_headings()
+            if heading.level >= 5
+        ]
