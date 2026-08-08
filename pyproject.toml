@@ -94,10 +94,9 @@ select = [
 ]
 ignore = [
     "E501",   # line too long (handled by formatter)
-    "ARG001", # unused function argument (TODO stubs)
-    "ARG002", # unused method argument (TODO stubs)
-    "D102",   # missing docstring in public method (gradual adoption)
-    "D107",   # missing docstring in __init__ (gradual adoption)
+    "ARG002", # rule methods share a signature; not every rule needs path context
+    "D102",   # trivial public state and count accessors are self-explanatory
+    "D107",   # class docstrings document construction without redundant init docs
     "S101",   # assert used (expected in tests)
 ]
 
