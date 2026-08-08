@@ -332,6 +332,7 @@ version 2 file and retains its existing overwrite behavior.
 | `--verbose` | `-v` | all scans | Show additional diagnostic info |
 | `--show-config` | | check | Display configuration and exit |
 | `--format` | `-f` | check | Output format: text, json, sarif |
+| `--filename` | | check | Required virtual path and file type for standard input `-` |
 | `--generate-baseline` | | check | Generate baseline file from current issues |
 | `--interval` | `-n` | watch | Check interval in seconds |
 | `--no-clear` | | watch | Do not clear the screen between checks |
@@ -339,6 +340,19 @@ version 2 file and retains its existing overwrite behavior.
 Watch is text-only because its output is a continuous stream. For `check`,
 JSON and SARIF findings are written to stdout while operational errors and
 verbose status messages are written to stderr.
+
+## Standard Input
+
+Lint one generated document without creating a temporary file:
+
+```bash
+generate-draft | slop-lint check - --filename docs/draft.md --format json
+```
+
+`--filename` is required and controls file-type rules, per-file ignores, and
+the reported path. Standard input cannot be mixed with filesystem paths or used
+with baseline filtering or generation. Configuration is discovered from the
+current working directory.
 
 ## Output Formats
 

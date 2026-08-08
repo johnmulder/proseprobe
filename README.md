@@ -44,6 +44,10 @@ slop-lint check README.md docs/
 # Output as JSON
 slop-lint check --format json .
 
+# Check one document from standard input
+printf 'This documentation delves into the API.\n' | \
+  slop-lint check - --filename draft.md --format json
+
 # Filter by confidence level
 slop-lint check --min-confidence high .
 slop-lint check --hide-low .
@@ -82,6 +86,10 @@ JSON and SARIF are complete `check` reports. Operational errors and verbose
 status messages go to stderr so redirected stdout remains valid structured
 data. The versioned JSON contract and field semantics are documented in the
 [configuration guide](docs/configuration.md#json).
+
+Standard input uses `-` with a required `--filename` virtual path. It cannot be
+mixed with filesystem paths or baselines; project configuration is still
+discovered from the current working directory.
 
 Baselines use repository-relative source identity rather than line numbers or
 diagnostic wording. `update` explicitly accepts new findings, while `prune`

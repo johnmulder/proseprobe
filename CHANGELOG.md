@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `check - --filename PATH` lints one standard-input document while preserving
+  file-specific rules, configuration, structured output, and exit semantics.
 - JSON reports now declare `schema_version: 1`, with exact reporter and CLI
   contract tests for payload fields, stream separation, and exit behavior.
 - G015 reports generic scene-setting clauses in the first substantive Markdown

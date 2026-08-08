@@ -24,6 +24,7 @@
 | FR-09 | Provide `explain` command for rule documentation | Should |
 | FR-10 | Support line-scoped Markdown and Python suppressions | Must |
 | FR-11 | Provide built-in rule profiles for common document genres | Should |
+| FR-12 | Check one standard-input document through `-` with an explicit virtual filename | Should |
 
 ### 2.2 Non-Functional Requirements
 
@@ -114,6 +115,7 @@ slop-lint baseline ACTION [OPTIONS] [PATHS]...
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `--format` | choice | text | Output format: text, json, sarif |
+| `--filename` | path | none | Required virtual path and file type when the input path is `-` |
 | `--profile` | choice | none | Built-in rule profile |
 | `--select` | string | all | Comma-separated rules/prefixes to enable |
 | `--ignore` | string | none | Comma-separated rules/prefixes to disable |
@@ -126,6 +128,12 @@ slop-lint baseline ACTION [OPTIONS] [PATHS]...
 | `--show-config` | flag | false | Display resolved configuration and exit |
 | `--quiet` | flag | false | In text reports, output only errors |
 | `--verbose` | flag | false | Show additional diagnostic info |
+
+`check - --filename PATH` reads one UTF-8 document from standard input. The
+virtual path selects file-specific rules and per-file ignores and is reported
+as the file identity. Standard input is mutually exclusive with filesystem
+paths, `--baseline`, and `--generate-baseline`; configuration discovery remains
+rooted at the current working directory.
 
 ### 4.3 Watch Command Options
 
