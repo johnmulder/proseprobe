@@ -1,6 +1,6 @@
 # Rule Reference
 
-This document describes all detection rules available in slop-lint.
+This document describes all detection rules available in ProseProbe.
 
 Most prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
 source-mapped Python docstrings and comments; `G015` examines only Markdown

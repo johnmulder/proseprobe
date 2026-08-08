@@ -1,15 +1,14 @@
 ---
-name: slop-lint
-description: Use when an agent generates, edits, or reviews prose in Markdown or Python docstrings and comments in a project that uses slop-lint.
+name: proseprobe
+description: Use when an agent generates, edits, or reviews prose in Markdown or Python docstrings and comments in a project that uses proseprobe.
 license: MIT
-compatibility: Requires the slop-lint executable on PATH.
 ---
 
-# slop-lint
+# ProseProbe
 
-Use `slop-lint` as a deterministic review step for Markdown prose and
+Use `proseprobe` as a deterministic review step for Markdown prose and
 source-mapped Python docstrings and comments.
-slop-lint reports findings; it does not rewrite files.
+ProseProbe reports findings; it does not rewrite files.
 
 ## Check
 
@@ -17,19 +16,19 @@ Run from the project root so configuration discovery matches normal project use.
 For files already in the checkout, request JSON Lines:
 
 ```bash
-slop-lint check --format jsonl README.md docs/
+proseprobe check --format jsonl README.md docs/
 ```
 
 For one generated document, use standard input with a virtual filename:
 
 ```bash
-generate-draft | slop-lint check - --filename docs/draft.md --format jsonl
+generate-draft | proseprobe check - --filename docs/draft.md --format jsonl
 ```
 
 If the repository installs the published pre-commit hook, run:
 
 ```bash
-pre-commit run slop-lint
+pre-commit run proseprobe
 ```
 
 Respect the project's selected rules, profile, severities, confidence policy,
@@ -46,8 +45,8 @@ Handle high-confidence findings first, then medium, then low.
 Inspect unfamiliar or intentional findings through canonical rule metadata:
 
 ```bash
-slop-lint rules --format json
-slop-lint explain V001 --format json
+proseprobe rules --format json
+proseprobe explain V001 --format json
 ```
 
 | Code | Meaning |
@@ -72,4 +71,4 @@ editing prose.
    handoff.
 
 Keep rewriting in the calling agent. Do not add model credentials, provider
-SDKs, network access, prompt scoring, or rewrite behavior to `slop-lint`.
+SDKs, network access, prompt scoring, or rewrite behavior to `proseprobe`.

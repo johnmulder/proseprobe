@@ -1,11 +1,11 @@
-# slop-lint - Technical Specification
+# ProseProbe - Technical Specification
 
 > Version: 0.1.0
 > Last Updated: 2026-08-08
 
 ## 1. Purpose
 
-`slop-lint` is a command-line linting tool that detects bad writing practices in Markdown and Python files. It identifies overused vocabulary, structural clichés, stylistic problems, and markup errors.
+`proseprobe` is a command-line linting tool that detects bad writing practices in Markdown and Python files. It identifies overused vocabulary, structural clichés, stylistic problems, and markup errors.
 
 ## 2. Requirements
 
@@ -18,7 +18,7 @@
 | FR-03 | Report issues with file path, line number, column, and severity | Must |
 | FR-04 | Support configurable rule selection via CLI and config file | Must |
 | FR-05 | Output in text, JSON, JSON Lines, and SARIF formats | Must |
-| FR-06 | Support `.slop-lint.toml` configuration file | Must |
+| FR-06 | Support `.proseprobe.toml` configuration file | Must |
 | FR-07 | Respect `.gitignore` patterns for file discovery | Should |
 | FR-08 | Process files in parallel for performance | Could |
 | FR-09 | Provide `explain` command for rule documentation | Should |
@@ -100,14 +100,14 @@ minimum severity, and low minimum confidence.
 ### 4.1 Commands
 
 ```
-slop-lint check [OPTIONS] [PATHS]...   Check files for bad writing practices
-slop-lint rules [--format text|json]   List all available rules
-slop-lint explain RULE_ID [--format text|json]
+proseprobe check [OPTIONS] [PATHS]...   Check files for bad writing practices
+proseprobe rules [--format text|json]   List all available rules
+proseprobe explain RULE_ID [--format text|json]
                                        Show detailed rule documentation
-slop-lint init                         Create .slop-lint.toml config file
-slop-lint version                      Show version information
-slop-lint watch [OPTIONS] [PATHS]...   Watch files and re-check changes
-slop-lint baseline ACTION [OPTIONS] [PATHS]...
+proseprobe init                         Create .proseprobe.toml config file
+proseprobe version                      Show version information
+proseprobe watch [OPTIONS] [PATHS]...   Watch files and re-check changes
+proseprobe baseline ACTION [OPTIONS] [PATHS]...
                                        Create and maintain a baseline
 ```
 
@@ -164,7 +164,7 @@ the normal scan configuration and options but compares unbaselined findings:
 - `prune` removes stale entries without accepting new findings.
 
 Successful maintenance actions return 0. `--baseline` defaults to
-`.slop-lint-baseline.json`. `check --generate-baseline` remains a compatibility
+`.proseprobe-baseline.json`. `check --generate-baseline` remains a compatibility
 form for creating a version 2 file.
 
 Version 2 entries contain a workspace-relative path, rule ID, normalized
@@ -203,15 +203,15 @@ the same batch pipeline as `check`.
 
 Search order (first found wins):
 1. `--config` CLI argument
-2. `.slop-lint.toml` in current directory
-3. `pyproject.toml` `[tool.slop-lint]` section
-4. `.slop-lint.toml` in parent directories (up to git root)
-5. `~/.config/slop-lint/config.toml`
+2. `.proseprobe.toml` in current directory
+3. `pyproject.toml` `[tool.proseprobe]` section
+4. `.proseprobe.toml` in parent directories (up to git root)
+5. `~/.config/proseprobe/config.toml`
 
 ### 5.2 Config Schema
 
 ```toml
-[tool.slop-lint]
+[tool.proseprobe]
 # File patterns (glob syntax)
 include = ["*.md", "*.mdx", "*.markdown", "*.py"]
 exclude = ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
@@ -232,23 +232,23 @@ Severity overrides use a nested table:
 
 ```toml
 # Severity overrides per rule
-[tool.slop-lint.severity]
+[tool.proseprobe.severity]
 V001 = "error"
 S002 = "info"
 
 # Custom vocabulary additions
-[tool.slop-lint.vocabulary]
+[tool.proseprobe.vocabulary]
 additional = []  # Extra words to flag
 allowed = []     # Domain-specific words to permit
 allowed_phrases = ["All notable changes"]  # Exact phrases V001 should skip
 
 # Per-file rule overrides
-[[tool.slop-lint.per-file-ignores]]
+[[tool.proseprobe.per-file-ignores]]
 pattern = "CHANGELOG.md"
 ignore = ["S004"]
 ```
 
-Only documented keys are valid in the slop-lint table and its nested tables.
+Only documented keys are valid in the proseprobe table and its nested tables.
 All numeric thresholds are positive integers. `select`, `ignore`, and per-file
 ignore entries accept case-insensitive full rule IDs or one-letter category
 prefixes; severity override keys accept full rule IDs only. References are
@@ -265,7 +265,7 @@ per-file-ignore, and per-rule severity settings remain active.
 
 The legacy scalar `severity = "warning"` remains valid for one deprecation
 cycle. It cannot be combined with `minimum_severity`; the latter can coexist
-with the `[tool.slop-lint.severity]` override table. `--show-config` displays
+with the `[tool.proseprobe.severity]` override table. `--show-config` displays
 the normalized effective policy and the explicit or discovered source file,
 or `default` when no file was loaded.
 
@@ -275,7 +275,7 @@ A standalone Markdown directive suppresses matching findings reported on the
 immediately following physical line:
 
 ```markdown
-<!-- slop-lint-ignore-next-line V001,S010 -->
+<!-- proseprobe-ignore-next-line V001,S010 -->
 This documentation delves into three related concerns.
 ```
 
@@ -283,7 +283,7 @@ A Python directive must be a real comment token and suppresses matching
 findings reported on the same physical line:
 
 ```python
-"""This documentation delves into the API."""  # slop-lint: ignore=V001,S010
+"""This documentation delves into the API."""  # proseprobe: ignore=V001,S010
 ```
 
 Tokens are case-insensitive rule IDs or one-letter category prefixes. Empty,
@@ -339,7 +339,7 @@ Confidence: 1 high, 2 medium, 0 low
 ```
 
 `schema_version` identifies the machine-output contract; `version` identifies
-the slop-lint package that produced the report. `line` and `column` are 1-based
+the proseprobe package that produced the report. `line` and `column` are 1-based
 start positions. `end_line` is the endpoint line, and `end_column` is a 1-based
 exclusive endpoint. `end_line`, `end_column`, and `suggestion` are always
 present and may be `null`. The schema version changes only for incompatible
@@ -485,7 +485,7 @@ after the corpus contains enough reviewed examples to represent real usage.
 
 ### 9.1 Runtime Dependencies
 
-No third-party runtime dependencies are required. `slop-lint` uses the Python
+No third-party runtime dependencies are required. `proseprobe` uses the Python
 standard library for CLI parsing, TOML parsing on Python 3.11+, Markdown-oriented
 scanning, ANSI formatting, file discovery, and concurrency.
 

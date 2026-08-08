@@ -1,4 +1,4 @@
-"""Memory probe for slop-lint workspace scanning."""
+"""Memory probe for proseprobe workspace scanning."""
 
 from __future__ import annotations
 
@@ -7,9 +7,9 @@ import tempfile
 import tracemalloc
 from pathlib import Path
 
-from slop_lint.config import Config
-from slop_lint.core.linter import Linter
-from slop_lint.rules import get_all_rules
+from proseprobe.config import Config
+from proseprobe.core.linter import Linter
+from proseprobe.rules import get_all_rules
 
 
 def _write_workspace(root: Path, file_count: int) -> None:
@@ -27,7 +27,7 @@ def _write_workspace(root: Path, file_count: int) -> None:
 
 def run_probe(file_count: int, limit_mb: float) -> int:
     """Run a synthetic scan and return a process exit code."""
-    with tempfile.TemporaryDirectory(prefix="slop-lint-memory-") as temp_dir:
+    with tempfile.TemporaryDirectory(prefix="proseprobe-memory-") as temp_dir:
         root = Path(temp_dir)
         _write_workspace(root, file_count)
 

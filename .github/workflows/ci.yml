@@ -51,7 +51,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install slop-lint
+      - name: Install ProseProbe
         run: |
           python -m pip install --upgrade pip
           pip install -e .

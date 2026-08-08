@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - A repo-local Codex marketplace wrapper packages the portable skill for
   managed Codex installation without apps, MCP servers, or Python wheel changes.
-- A portable Agent Skills-compatible `slop-lint` skill with tested activation
+- A portable Agent Skills-compatible `proseprobe` skill with tested activation
   metadata and the structured lint-repair workflow.
 - Provider-neutral agent integration guidance for structured diagnostics,
   exit-code handling, intentional findings, and mandatory verification reruns.
@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Structured version 2 baselines and `baseline create`, `update`, `prune`, and
   `summary` maintenance actions.
 - `minimum_severity` configuration key, which can coexist with the per-rule
-  `[tool.slop-lint.severity]` override table.
+  `[tool.proseprobe.severity]` override table.
 - Line-scoped Markdown and Python suppression directives with rule-ID and
   category-prefix validation.
 - Reviewed rule-quality corpus and `make rule-quality` precision/recall report.
@@ -53,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   destinations at their source locations.
 - V003, V007, S019, and S021 now exclude ordinary release dates, literal
   gap/dilemma references, technical restructuring terms, and explicit finite
-  clauses from their targeted slop patterns.
+  clauses from their targeted low-quality patterns.
 
 ### Changed
 - Concrete-match diagnostics now report exact exclusive source spans across
@@ -92,9 +92,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - FR-08: file checking now uses parallel execution with deterministic
     result ordering.
 - Config auto-discovery order now aligns with documented behavior:
-  1. current `.slop-lint.toml`
-  2. current `pyproject.toml` `[tool.slop-lint]`
-  3. parent `.slop-lint.toml` (up to git root)
+  1. current `.proseprobe.toml`
+  2. current `pyproject.toml` `[tool.proseprobe]`
+  3. parent `.proseprobe.toml` (up to git root)
   4. user config
 - NFR validation workflow now includes reproducible coverage/startup/throughput
   probes via `make nfr-check`.
@@ -134,13 +134,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Issues under example headings in Markdown are downgraded to low
 - **`--min-confidence`** CLI flag to filter issues by confidence level
 - **`--hide-low`** flag as shorthand for `--min-confidence medium`
-- **`min_confidence`** config option in `.slop-lint.toml`
+- **`min_confidence`** config option in `.proseprobe.toml`
 - **`allowed_phrases`** vocabulary option to skip lines containing exact phrases
   - Ships with defaults: "All notable changes", "Critical issue"
 - Confidence breakdown in text output summary line
 - Confidence field in JSON and SARIF output
 - M001 now skips `#`-prefixed lines inside Python string literals
-- **Watch mode**: `slop-lint watch <paths>` for continuous file monitoring
+- **Watch mode**: `proseprobe watch <paths>` for continuous file monitoring
 - **Baseline mode**: `--baseline` and `--generate-baseline` for gradual adoption
 - `--show-config` flag to display current configuration
 - Pre-commit hook configuration (`.pre-commit-hooks.yaml`)
@@ -176,7 +176,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2026-02-01
 
 ### Added
-- Initial release of slop-lint CLI
+- Initial release of the ProseProbe CLI
 - 29 detection rules across 6 categories:
   - **V (Vocabulary)**: V001-V005 - Overused and clichéd words and phrases
   - **S (Structure)**: S001-S007 - Organizational patterns
@@ -188,10 +188,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `check` - Lint files for bad writing practices
   - `rules` - List all available rules
   - `explain` - Explain a specific rule
-  - `init` - Create a `.slop-lint.toml` config file
+  - `init` - Create a `.proseprobe.toml` config file
   - `version` - Show version information
 - Output formats: text, JSON, SARIF
-- Configuration via `.slop-lint.toml` or `pyproject.toml`
+- Configuration via `.proseprobe.toml` or `pyproject.toml`
 - Per-file ignore patterns
 - Custom vocabulary (additional/allowed words)
 - 129 tests with 90%+ code coverage
@@ -201,5 +201,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Strict mypy type checking
 - Dependencies: typer, rich, tomli, mistune, regex
 
-[Unreleased]: https://github.com/slop-lint/slop-lint/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/slop-lint/slop-lint/releases/tag/v0.1.0
+[Unreleased]: https://github.com/johnmulder/proseprobe/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/johnmulder/proseprobe/releases/tag/v0.1.0

@@ -2,7 +2,7 @@
 
 import pytest
 
-from slop_lint.parsers.prose import ProseSentence, iter_prose_sentences
+from proseprobe.parsers.prose import ProseSentence, iter_prose_sentences
 
 
 def test_wrapped_sentences_preserve_source_positions() -> None:

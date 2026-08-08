@@ -6,14 +6,14 @@ from pathlib import Path
 
 import pytest
 
-from slop_lint._rule_docs import (
+from proseprobe._rule_docs import (
     MarkerError,
     _replace_generated_block,
     render_category_table,
     render_rule_inventory,
     synchronize_rule_docs,
 )
-from slop_lint.rules import get_rule_metadata
+from proseprobe.rules import get_rule_metadata
 
 ROOT = Path(__file__).resolve().parents[1]
 

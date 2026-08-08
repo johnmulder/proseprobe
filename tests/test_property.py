@@ -10,19 +10,19 @@ import pytest
 from hypothesis import HealthCheck, assume, given, settings
 from hypothesis import strategies as st
 
-from slop_lint.rules.base import Issue, Rule, Severity
-from slop_lint.rules.code import (
+from proseprobe.rules.base import Issue, Rule, Severity
+from proseprobe.rules.code import (
     AIPlaceholdersRule,
     CollaborativeCommentsRule,
     DocstringVocabularyRule,
     VerboseCommentsRule,
 )
-from slop_lint.rules.grammar import (
+from proseprobe.rules.grammar import (
     CopulaAvoidanceRule,
     ExcessiveHedgingRule,
     ParticipleChainsRule,
 )
-from slop_lint.rules.markup import (
+from proseprobe.rules.markup import (
     BrokenReferencesRule,
     ChatGPTMarkersRule,
     UnclosedCodeFenceRule,
@@ -30,7 +30,7 @@ from slop_lint.rules.markup import (
     UTMParametersRule,
     WrongMarkupRule,
 )
-from slop_lint.rules.struct import (
+from proseprobe.rules.struct import (
     ChallengeConclusionsRule,
     FalseRangesRule,
     InlineHeaderListsRule,
@@ -39,7 +39,7 @@ from slop_lint.rules.struct import (
     SignificanceEmphasisRule,
     SuperficialAnalysisRule,
 )
-from slop_lint.rules.style import (
+from proseprobe.rules.style import (
     BoldOveruseRule,
     ElegantVariationRule,
     EmDashOveruseRule,
@@ -47,7 +47,7 @@ from slop_lint.rules.style import (
     QuoteInconsistencyRule,
     TitleCaseHeadingsRule,
 )
-from slop_lint.rules.vocab import (
+from proseprobe.rules.vocab import (
     AIVocabularyRule,
     CollaborativePhrasesRule,
     KnowledgeCutoffRule,
@@ -267,7 +267,7 @@ class TestParserInvariants:
     @settings(max_examples=50, suppress_health_check=[HealthCheck.too_slow])
     def test_iter_prose_lines_in_bounds(self, content: str, filename: str) -> None:
         """Prose line numbers must reference valid lines in the original content."""
-        from slop_lint.parsers.prose import iter_prose_lines
+        from proseprobe.parsers.prose import iter_prose_lines
 
         result = iter_prose_lines(content, filename)
         total_lines = len(content.split("\n"))
@@ -282,7 +282,7 @@ class TestParserInvariants:
     @settings(max_examples=50, suppress_health_check=[HealthCheck.too_slow])
     def test_iter_non_code_lines_subset(self, content: str, filename: str) -> None:
         """Non-code lines must be a subset of all lines."""
-        from slop_lint.parsers.markdown import iter_non_code_lines
+        from proseprobe.parsers.markdown import iter_non_code_lines
 
         result = iter_non_code_lines(content, filename)
         all_lines = content.split("\n")
@@ -312,7 +312,7 @@ class TestBaselineEntry:
         """Same inputs must always produce the same structured identity."""
         from pathlib import Path as P
 
-        from slop_lint.core.baseline import Baseline
+        from proseprobe.core.baseline import Baseline
 
         lines = content.split("\n")
         line = min(line, len(lines))

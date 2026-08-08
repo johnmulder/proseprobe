@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from slop_lint.config import (
+from proseprobe.config import (
     Config,
     ConfigError,
     PerFileIgnore,
@@ -19,9 +19,9 @@ from slop_lint.config import (
 class TestFindConfigFile:
     """Tests for find_config_file function."""
 
-    def test_finds_slop_lint_toml(self, tmp_path: Path) -> None:
-        """Test finding .slop-lint.toml file."""
-        config_file = tmp_path / ".slop-lint.toml"
+    def test_finds_proseprobe_toml(self, tmp_path: Path) -> None:
+        """Test finding .proseprobe.toml file."""
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text("[lint]")
 
         result = find_config_file(tmp_path)
@@ -29,25 +29,25 @@ class TestFindConfigFile:
         assert result == config_file
 
     def test_finds_pyproject_toml(self, tmp_path: Path) -> None:
-        """Test finding pyproject.toml with slop-lint config."""
+        """Test finding pyproject.toml with proseprobe config."""
         config_file = tmp_path / "pyproject.toml"
-        config_file.write_text("[tool.slop-lint]\nrules = {}")
+        config_file.write_text("[tool.proseprobe]\nrules = {}")
 
         result = find_config_file(tmp_path)
 
         assert result == config_file
 
-    def test_prefers_slop_lint_toml(self, tmp_path: Path) -> None:
-        """Test that .slop-lint.toml is preferred over pyproject.toml."""
-        slop_lint_toml = tmp_path / ".slop-lint.toml"
-        slop_lint_toml.write_text("[lint]")
+    def test_prefers_proseprobe_toml(self, tmp_path: Path) -> None:
+        """Test that .proseprobe.toml is preferred over pyproject.toml."""
+        proseprobe_toml = tmp_path / ".proseprobe.toml"
+        proseprobe_toml.write_text("[lint]")
 
         pyproject = tmp_path / "pyproject.toml"
-        pyproject.write_text("[tool.slop-lint]")
+        pyproject.write_text("[tool.proseprobe]")
 
         result = find_config_file(tmp_path)
 
-        assert result == slop_lint_toml
+        assert result == proseprobe_toml
 
     def test_returns_none_if_not_found(self, tmp_path: Path) -> None:
         """Test returns None when no config file exists."""
@@ -58,8 +58,8 @@ class TestFindConfigFile:
 
         assert result is None
 
-    def test_ignores_pyproject_without_slop_lint(self, tmp_path: Path) -> None:
-        """Test ignores pyproject.toml without [tool.slop-lint]."""
+    def test_ignores_pyproject_without_proseprobe(self, tmp_path: Path) -> None:
+        """Test ignores pyproject.toml without [tool.proseprobe]."""
         pyproject = tmp_path / "pyproject.toml"
         pyproject.write_text("[project]\nname = 'test'")
         # Create a .git to stop search
@@ -71,7 +71,7 @@ class TestFindConfigFile:
 
     def test_searches_parent_directories(self, tmp_path: Path) -> None:
         """Test that config is found in parent directories."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text("[lint]")
 
         subdir = tmp_path / "subdir" / "deep"
@@ -91,7 +91,7 @@ class TestFindConfigFile:
         monkeypatch.setenv("HOME", str(home))
 
         pyproject = tmp_path / "pyproject.toml"
-        pyproject.write_text("[tool.slop-lint]\nselect = ['V001']\n")
+        pyproject.write_text("[tool.proseprobe]\nselect = ['V001']\n")
         (tmp_path / ".git").mkdir()
 
         subdir = tmp_path / "subdir"
@@ -105,12 +105,12 @@ class TestFindConfigFile:
 class TestLoadConfig:
     """Tests for load_config function."""
 
-    def test_load_slop_lint_toml(
+    def test_load_proseprobe_toml(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """Test loading .slop-lint.toml."""
+        """Test loading .proseprobe.toml."""
         monkeypatch.chdir(tmp_path)
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text("""
 select = ["V001", "V002"]
 ignore = ["S001"]
@@ -130,7 +130,7 @@ severity = "warning"
 [project]
 name = "test"
 
-[tool.slop-lint]
+[tool.proseprobe]
 select = ["G001"]
 """)
 
@@ -156,7 +156,7 @@ select = ["G001"]
 
     def test_profile_supplies_policy_defaults(self, tmp_path: Path) -> None:
         """A profile should fill policy keys omitted from configuration."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text('profile = "academic"\n')
 
         config = load_config(config_file)
@@ -169,7 +169,7 @@ select = ["G001"]
 
     def test_explicit_policy_overrides_profile_defaults(self, tmp_path: Path) -> None:
         """Explicit config policy should take precedence over its profile."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text(
             'profile = "business"\n'
             'select = ["V001"]\n'
@@ -191,7 +191,7 @@ select = ["G001"]
     def test_loads_profile_from_pyproject(self, tmp_path: Path) -> None:
         """Profiles should work in the pyproject configuration form."""
         config_file = tmp_path / "pyproject.toml"
-        config_file.write_text('[tool.slop-lint]\nprofile = "technical-docs"\n')
+        config_file.write_text('[tool.proseprobe]\nprofile = "technical-docs"\n')
 
         config = load_config(config_file)
 
@@ -202,7 +202,7 @@ select = ["G001"]
     @pytest.mark.parametrize("value", ["missing", 1, ["general"]])
     def test_rejects_invalid_profile(self, tmp_path: Path, value: object) -> None:
         """Profile values should be known names encoded as strings."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text(f"profile = {value!r}\n")
 
         with pytest.raises(ConfigError, match="profile"):
@@ -210,7 +210,7 @@ select = ["G001"]
 
     def test_unknown_profile_suggests_close_match(self, tmp_path: Path) -> None:
         """A near-miss profile should suggest the supported spelling."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text('profile = "technical-doc"\n')
 
         with pytest.raises(ConfigError, match="did you mean 'technical-docs'"):
@@ -218,7 +218,7 @@ select = ["G001"]
 
     def test_records_explicit_config_path(self, tmp_path: Path) -> None:
         """Loaded configuration should retain its source path."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text("select = ['V']\n")
 
         config = load_config(config_file)
@@ -229,7 +229,7 @@ select = ["G001"]
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
         """Auto-discovered configuration should retain its source path."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text("select = ['V']\n")
         monkeypatch.chdir(tmp_path)
 
@@ -239,7 +239,7 @@ select = ["G001"]
 
     def test_load_config_with_vocabulary(self, tmp_path: Path) -> None:
         """Test loading custom vocabulary config."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text("""
 [vocabulary]
 additional = ["synergy", "leverage"]
@@ -254,12 +254,12 @@ allowed = ["delve"]
 
     def test_load_severity_overrides_table(self, tmp_path: Path) -> None:
         """Test parsing severity overrides table."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text("""
-[tool.slop-lint]
+[tool.proseprobe]
 select = ["V"]
 
-[tool.slop-lint.severity]
+[tool.proseprobe.severity]
 V001 = "error"
 """)
 
@@ -270,7 +270,7 @@ V001 = "error"
 
     def test_load_invalid_toml(self, tmp_path: Path) -> None:
         """Test loading invalid TOML raises error."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text("invalid [ toml ][")
 
         with pytest.raises(ConfigError):
@@ -278,24 +278,24 @@ V001 = "error"
 
     def test_invalid_min_confidence_raises_config_error(self, tmp_path: Path) -> None:
         """Invalid confidence values should fail fast."""
-        config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text('[tool.slop-lint]\nmin_confidence = "certain"\n')
+        config_file = tmp_path / ".proseprobe.toml"
+        config_file.write_text('[tool.proseprobe]\nmin_confidence = "certain"\n')
 
         with pytest.raises(ConfigError):
             load_config(config_file)
 
     def test_invalid_threshold_type_raises_config_error(self, tmp_path: Path) -> None:
         """Threshold values should be integers."""
-        config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text('[tool.slop-lint.thresholds]\nrule_of_three = "many"\n')
+        config_file = tmp_path / ".proseprobe.toml"
+        config_file.write_text('[tool.proseprobe.thresholds]\nrule_of_three = "many"\n')
 
         with pytest.raises(ConfigError):
             load_config(config_file)
 
     def test_invalid_include_type_raises_config_error(self, tmp_path: Path) -> None:
         """Include patterns should be a list of strings."""
-        config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text('[tool.slop-lint]\ninclude = "*.md"\n')
+        config_file = tmp_path / ".proseprobe.toml"
+        config_file.write_text('[tool.proseprobe]\ninclude = "*.md"\n')
 
         with pytest.raises(ConfigError):
             load_config(config_file)
@@ -304,8 +304,8 @@ V001 = "error"
         self, tmp_path: Path
     ) -> None:
         """Severity override values should be known severity names."""
-        config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text('[tool.slop-lint.severity]\nV001 = "critical"\n')
+        config_file = tmp_path / ".proseprobe.toml"
+        config_file.write_text('[tool.proseprobe.severity]\nV001 = "critical"\n')
 
         with pytest.raises(ConfigError):
             load_config(config_file)
@@ -326,7 +326,7 @@ V001 = "error"
         self, tmp_path: Path, config_text: str, expected: str
     ) -> None:
         """Unknown keys should identify the ineffective setting."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text(config_text)
 
         with pytest.raises(ConfigError) as exc_info:
@@ -335,7 +335,7 @@ V001 = "error"
 
     def test_unknown_key_suggests_close_match(self, tmp_path: Path) -> None:
         """Likely key typos should include the supported spelling."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text('min_confidnce = "high"\n')
 
         with pytest.raises(ConfigError, match="did you mean 'min_confidence'"):
@@ -364,7 +364,7 @@ V001 = "error"
         self, tmp_path: Path, threshold: str, value: int
     ) -> None:
         """Thresholds that can never trigger should fail fast."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text(f"[thresholds]\n{threshold} = {value}\n")
 
         with pytest.raises(ConfigError, match="must be a positive integer"):
@@ -372,7 +372,7 @@ V001 = "error"
 
     def test_boolean_threshold_is_not_an_integer(self, tmp_path: Path) -> None:
         """TOML booleans should not pass integer threshold validation."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text("[thresholds]\nrule_of_three = true\n")
 
         with pytest.raises(ConfigError, match="must be a positive integer"):
@@ -383,7 +383,7 @@ V001 = "error"
         self, tmp_path: Path, pattern: str
     ) -> None:
         """A per-file override must identify files."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text(
             f'[[per-file-ignores]]\npattern = "{pattern}"\nignore = ["V001"]\n'
         )
@@ -393,10 +393,10 @@ V001 = "error"
 
     def test_minimum_severity_combines_with_overrides(self, tmp_path: Path) -> None:
         """The unambiguous minimum key should coexist with an override table."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text(
-            '[tool.slop-lint]\nminimum_severity = "info"\n\n'
-            '[tool.slop-lint.severity]\nV001 = "error"\nS001 = "off"\n'
+            '[tool.proseprobe]\nminimum_severity = "info"\n\n'
+            '[tool.proseprobe.severity]\nV001 = "error"\nS001 = "off"\n'
         )
 
         config = load_config(config_file)
@@ -406,7 +406,7 @@ V001 = "error"
 
     def test_legacy_scalar_severity_remains_supported(self, tmp_path: Path) -> None:
         """Existing scalar severity configurations should still load."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text('severity = "error"\n')
 
         config = load_config(config_file)
@@ -416,7 +416,7 @@ V001 = "error"
 
     def test_two_minimum_severity_keys_are_rejected(self, tmp_path: Path) -> None:
         """Legacy and replacement minimum keys should not compete silently."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text('severity = "warning"\nminimum_severity = "info"\n')
 
         with pytest.raises(ConfigError, match="cannot be used together"):
@@ -462,7 +462,7 @@ class TestConfig:
 
     def test_load_thresholds_config(self, tmp_path: Path) -> None:
         """Test loading custom thresholds from config file."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text("""
 [thresholds]
 rule_of_three = 5
@@ -480,7 +480,7 @@ em_dash_overuse = 10
 
     def test_partial_thresholds_config(self, tmp_path: Path) -> None:
         """Test loading partial thresholds uses defaults for missing values."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text("""
 [thresholds]
 rule_of_three = 10
@@ -615,7 +615,7 @@ class TestMinConfidenceConfig:
         assert config.min_confidence == "low"
 
     def test_load_min_confidence_from_toml(self, tmp_path: Path) -> None:
-        config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text('[tool.slop-lint]\nmin_confidence = "medium"\n')
+        config_file = tmp_path / ".proseprobe.toml"
+        config_file.write_text('[tool.proseprobe]\nmin_confidence = "medium"\n')
         config = load_config(config_file)
         assert config.min_confidence == "medium"

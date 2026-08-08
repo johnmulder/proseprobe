@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Benchmark suite for slop-lint performance testing.
+"""Benchmark suite for proseprobe performance testing.
 
 Usage:
     python -m benchmarks.bench_rules     # Run benchmarks
@@ -11,8 +11,8 @@ Tracks performance regressions in rule checking across content sizes.
 import time
 from dataclasses import dataclass
 
-from slop_lint.rules import get_all_rules
-from slop_lint.rules.base import Issue
+from proseprobe.rules import get_all_rules
+from proseprobe.rules.base import Issue
 
 
 @dataclass
@@ -153,7 +153,7 @@ def run_benchmark(
 def print_results(results: list[BenchmarkResult]) -> None:
     """Print benchmark results in a table."""
     print("\n" + "=" * 80)
-    print("SLOP-LINT BENCHMARK RESULTS")
+    print("PROSEPROBE BENCHMARK RESULTS")
     print("=" * 80)
     print(
         f"{'Benchmark':<30} {'Size':>10} {'Time':>12} {'Issues':>8} {'Throughput':>15}"

@@ -1,7 +1,7 @@
 """Tests for built-in rule profiles."""
 
-from slop_lint.profiles import PROFILES, profile_names_for_rule
-from slop_lint.rules import get_all_rules
+from proseprobe.profiles import PROFILES, profile_names_for_rule
+from proseprobe.rules import get_all_rules
 
 
 def test_profile_catalog_has_expected_names_and_policy() -> None:

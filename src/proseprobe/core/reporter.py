@@ -5,7 +5,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from slop_lint.rules.base import Confidence, Issue, Severity
+from proseprobe.rules.base import Confidence, Issue, Severity
 
 __all__ = ["JSON_SCHEMA_VERSION", "format_results"]
 
@@ -85,7 +85,7 @@ def _format_text(results: _Results, *, quiet: bool = False) -> str:
 
 def _format_json(results: _Results, files_checked: int | None = None) -> str:
     """Format results as JSON."""
-    from slop_lint import __version__
+    from proseprobe import __version__
 
     output: dict[str, Any] = {
         "schema_version": JSON_SCHEMA_VERSION,
@@ -123,7 +123,7 @@ def _format_json(results: _Results, files_checked: int | None = None) -> str:
 
 def _format_jsonl(results: _Results) -> str:
     """Format each issue as one JSON Lines record."""
-    from slop_lint import __version__
+    from proseprobe import __version__
 
     return "".join(
         json.dumps(
@@ -156,10 +156,10 @@ _SARIF_RANK = {
 
 def _format_sarif(results: _Results, rules: list[Any] | None = None) -> str:
     """Format results as SARIF 2.1.0."""
-    from slop_lint import __version__
+    from proseprobe import __version__
 
     if rules is None:
-        from slop_lint.rules import get_all_rules
+        from proseprobe.rules import get_all_rules
 
         rules = list(get_all_rules())
 
@@ -185,9 +185,9 @@ def _format_sarif(results: _Results, rules: list[Any] | None = None) -> str:
             {
                 "tool": {
                     "driver": {
-                        "name": "slop-lint",
+                        "name": "proseprobe",
                         "version": __version__,
-                        "informationUri": "https://github.com/slop-lint/slop-lint",
+                        "informationUri": "https://github.com/johnmulder/proseprobe",
                         "rules": rule_definitions,
                     }
                 },

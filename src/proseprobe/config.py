@@ -6,7 +6,7 @@ from difflib import get_close_matches
 from pathlib import Path
 from typing import Any
 
-from slop_lint.profiles import PROFILES, Profile
+from proseprobe.profiles import PROFILES, Profile
 
 __all__ = [
     "Config",
@@ -79,7 +79,7 @@ class VocabularyConfig:
 
 @dataclass
 class Config:
-    """slop-lint configuration."""
+    """ProseProbe configuration."""
 
     include: list[str] = field(
         default_factory=lambda: ["*.md", "*.mdx", "*.markdown", "*.py"]
@@ -153,33 +153,33 @@ def find_config_file(start_dir: Path | None = None) -> Path | None:
     """Find configuration file.
 
     Search order:
-    1. .slop-lint.toml in current directory
-    2. pyproject.toml [tool.slop-lint] section
-    3. .slop-lint.toml in parent directories (up to git root)
-    4. ~/.config/slop-lint/config.toml
+    1. .proseprobe.toml in current directory
+    2. pyproject.toml [tool.proseprobe] section
+    3. .proseprobe.toml in parent directories (up to git root)
+    4. ~/.config/proseprobe/config.toml
     """
     if start_dir is None:
         start_dir = Path.cwd()
 
     current = start_dir.resolve()
 
-    # 1) Current directory .slop-lint.toml
-    slop_lint_config = current / ".slop-lint.toml"
-    if slop_lint_config.exists():
-        return slop_lint_config
+    # 1) Current directory .proseprobe.toml
+    proseprobe_config = current / ".proseprobe.toml"
+    if proseprobe_config.exists():
+        return proseprobe_config
 
-    # 2) Current directory pyproject.toml [tool.slop-lint]
+    # 2) Current directory pyproject.toml [tool.proseprobe]
     pyproject = current / "pyproject.toml"
     if pyproject.exists():
         with open(pyproject, "rb") as f:
             data = tomllib.load(f)
-            if "tool" in data and "slop-lint" in data["tool"]:
+            if "tool" in data and "proseprobe" in data["tool"]:
                 return pyproject
 
-    # 3) Parent directories .slop-lint.toml (up to git root)
+    # 3) Parent directories .proseprobe.toml (up to git root)
     parent = current.parent
     while parent != parent.parent:
-        parent_config = parent / ".slop-lint.toml"
+        parent_config = parent / ".proseprobe.toml"
         if parent_config.exists():
             return parent_config
 
@@ -189,7 +189,7 @@ def find_config_file(start_dir: Path | None = None) -> Path | None:
         parent = parent.parent
 
     # Check user config
-    user_config = Path.home() / ".config" / "slop-lint" / "config.toml"
+    user_config = Path.home() / ".config" / "proseprobe" / "config.toml"
     if user_config.exists():
         return user_config
 
@@ -221,9 +221,9 @@ def load_config(config_path: Path | None = None) -> Config:
 
     # Handle pyproject.toml structure
     if config_path.name == "pyproject.toml":
-        data = data.get("tool", {}).get("slop-lint", {})
+        data = data.get("tool", {}).get("proseprobe", {})
     else:
-        data = data.get("tool", {}).get("slop-lint", data)
+        data = data.get("tool", {}).get("proseprobe", data)
 
     try:
         config = _parse_config(data)

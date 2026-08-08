@@ -1,1 +1,1 @@
-"""Benchmarks package for slop-lint performance testing."""
+"""Benchmarks package for proseprobe performance testing."""

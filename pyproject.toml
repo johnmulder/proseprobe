@@ -3,14 +3,14 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "slop-lint"
+name = "proseprobe"
 version = "0.1.0"
 description = "Detect bad writing practices in Markdown and Python files"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
 authors = [
-    { name = "slop-lint contributors" },
+    { name = "ProseProbe contributors" },
 ]
 keywords = [
     "writing",
@@ -35,6 +35,12 @@ classifiers = [
 ]
 dependencies = []
 
+[project.urls]
+Homepage = "https://github.com/johnmulder/proseprobe"
+Repository = "https://github.com/johnmulder/proseprobe"
+Issues = "https://github.com/johnmulder/proseprobe/issues"
+Changelog = "https://github.com/johnmulder/proseprobe/blob/master/CHANGELOG.md"
+
 [project.optional-dependencies]
 dev = [
     "build>=1.0",
@@ -48,10 +54,10 @@ dev = [
 ]
 
 [project.scripts]
-slop-lint = "slop_lint.cli:main"
+proseprobe = "proseprobe.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/slop_lint"]
+packages = ["src/proseprobe"]
 
 [tool.mypy]
 python_version = "3.11"
@@ -105,14 +111,14 @@ convention = "google"
 "benchmarks/**/*.py" = ["D", "S603"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["slop_lint"]
+known-first-party = ["proseprobe"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra -q"
 
 [tool.coverage.run]
-source = ["src/slop_lint"]
+source = ["src/proseprobe"]
 branch = true
 
 [tool.coverage.report]

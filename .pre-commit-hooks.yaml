@@ -1,16 +1,16 @@
-# Pre-commit hooks for slop-lint
+# Pre-commit hooks for ProseProbe
 # Add to your .pre-commit-config.yaml:
 #
 # repos:
-#   - repo: https://github.com/slop-lint/slop-lint
+#   - repo: https://github.com/johnmulder/proseprobe
 #     rev: v0.1.0
 #     hooks:
-#       - id: slop-lint
+#       - id: proseprobe
 #
-- id: slop-lint
-  name: slop-lint
+- id: proseprobe
+  name: ProseProbe
   description: Detect bad writing practices in Markdown and Python files
-  entry: slop-lint check
+  entry: proseprobe check
   language: python
   types_or: [markdown, python]
   require_serial: false

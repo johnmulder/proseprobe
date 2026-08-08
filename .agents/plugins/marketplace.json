@@ -1,14 +1,14 @@
 {
-  "name": "slop-lint",
+  "name": "proseprobe",
   "interface": {
-    "displayName": "Slop Lint"
+    "displayName": "ProseProbe"
   },
   "plugins": [
     {
-      "name": "slop-lint",
+      "name": "proseprobe",
       "source": {
         "source": "local",
-        "path": "./plugins/slop-lint"
+        "path": "./plugins/proseprobe"
       },
       "policy": {
         "installation": "AVAILABLE",

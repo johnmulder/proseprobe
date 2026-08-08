@@ -3,7 +3,7 @@
 import re
 from dataclasses import dataclass
 
-from slop_lint.parsers.prose import (
+from proseprobe.parsers.prose import (
     InlineSuppression,
     ProseBlock,
     ProseSentence,
@@ -770,7 +770,7 @@ class MarkdownParser:
             return self._inline_suppressions
 
         directive_re = re.compile(
-            r"^\s*<!--\s*slop-lint-ignore-next-line(?:\s+(.*?))?\s*-->\s*$",
+            r"^\s*<!--\s*proseprobe-ignore-next-line(?:\s+(.*?))?\s*-->\s*$",
             re.IGNORECASE,
         )
         suppressions: list[InlineSuppression] = []
@@ -780,7 +780,7 @@ class MarkdownParser:
                 continue
             stripped = line.strip()
             if not stripped.lower().startswith("<!--") or (
-                "slop-lint-ignore-next-line" not in stripped.lower()
+                "proseprobe-ignore-next-line" not in stripped.lower()
             ):
                 continue
             match = directive_re.fullmatch(line)

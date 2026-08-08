@@ -4,16 +4,16 @@ import re
 from itertools import pairwise
 from typing import ClassVar
 
-from slop_lint.parsers.markdown import (
+from proseprobe.parsers.markdown import (
     MarkdownReference,
     is_example_line,
     is_markdown_file,
 )
-from slop_lint.parsers.markdown import (
+from proseprobe.parsers.markdown import (
     _get_cached_parser as _get_cached_markdown_parser,
 )
-from slop_lint.parsers.python import _get_cached_parser as _get_cached_python_parser
-from slop_lint.rules.base import Confidence, Issue, Rule, Severity
+from proseprobe.parsers.python import _get_cached_parser as _get_cached_python_parser
+from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
 
 class WrongMarkupRule(Rule):
@@ -126,7 +126,7 @@ class UTMParametersRule(Rule):
         """Check for tracking UTM parameters."""
         issues: list[Issue] = []
         if is_markdown_file(filename):
-            from slop_lint.parsers.markdown import MarkdownParser
+            from proseprobe.parsers.markdown import MarkdownParser
 
             parser = MarkdownParser(content)
             for link in parser.get_links():

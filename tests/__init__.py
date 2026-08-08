@@ -1,1 +1,1 @@
-"""Test suite for slop-lint."""
+"""Test suite for proseprobe."""

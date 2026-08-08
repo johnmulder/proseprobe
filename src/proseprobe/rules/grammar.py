@@ -3,13 +3,13 @@
 import re
 from typing import ClassVar
 
-from slop_lint.data.patterns import (
+from proseprobe.data.patterns import (
     COPULA_AVOIDANCE_PATTERNS,
     HEDGING_PATTERNS,
     NOMINALIZATION_PATTERNS,
     PASSIVE_VOICE_PATTERNS,
 )
-from slop_lint.data.phrases import (
+from proseprobe.data.phrases import (
     ASSERTED_SIMPLICITY_PHRASES,
     FALSE_BALANCE_PHRASES,
     FALSE_SUSPENSE_PHRASES,
@@ -20,9 +20,9 @@ from slop_lint.data.phrases import (
     PATRONIZING_ANALOGY_PHRASES,
     PEDAGOGICAL_VOICE_PHRASES,
 )
-from slop_lint.parsers.markdown import is_example_line, is_markdown_file
-from slop_lint.parsers.prose import iter_prose_scopes, iter_prose_sentences
-from slop_lint.rules.base import Confidence, Issue, Rule, Severity
+from proseprobe.parsers.markdown import is_example_line, is_markdown_file
+from proseprobe.parsers.prose import iter_prose_scopes, iter_prose_sentences
+from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
 
 class CopulaAvoidanceRule(Rule):

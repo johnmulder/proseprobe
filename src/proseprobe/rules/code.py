@@ -3,16 +3,16 @@
 import re
 from typing import ClassVar
 
-from slop_lint.data.code_patterns import (
+from proseprobe.data.code_patterns import (
     AI_PLACEHOLDER_CODE_PATTERNS,
     AI_PLACEHOLDER_COMMENT_PATTERNS,
     AI_PLACEHOLDER_INLINE_PATTERNS,
     COLLABORATIVE_COMMENT_PATTERNS,
     VERBOSE_COMMENT_PATTERNS,
 )
-from slop_lint.data.vocabulary import AI_VOCABULARY, DOCSTRING_AI_VOCABULARY
-from slop_lint.parsers.python import _get_cached_parser
-from slop_lint.rules.base import Issue, Rule, Severity
+from proseprobe.data.vocabulary import AI_VOCABULARY, DOCSTRING_AI_VOCABULARY
+from proseprobe.parsers.python import _get_cached_parser
+from proseprobe.rules.base import Issue, Rule, Severity
 
 
 class DocstringVocabularyRule(Rule):

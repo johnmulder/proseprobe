@@ -1,16 +1,16 @@
 # Configuration Reference
 
-slop-lint can be configured via a `.slop-lint.toml` file or the `[tool.slop-lint]` section of `pyproject.toml`.
+ProseProbe can be configured via a `.proseprobe.toml` file or the `[tool.proseprobe]` section of `pyproject.toml`.
 
 ## Config File Discovery
 
 Config files are discovered in this order:
 
 1. `--config` CLI argument
-2. `.slop-lint.toml` in current directory
-3. `pyproject.toml` in current directory with `[tool.slop-lint]` section
-4. `.slop-lint.toml` in parent directories (up to git root)
-5. `~/.config/slop-lint/config.toml`
+2. `.proseprobe.toml` in current directory
+3. `pyproject.toml` in current directory with `[tool.proseprobe]` section
+4. `.proseprobe.toml` in parent directories (up to git root)
+5. `~/.config/proseprobe/config.toml`
 
 Directory scanning in Git worktrees also respects `.gitignore` patterns, including nested
 `.gitignore` files in subdirectories. Patterns are applied in parent-to-child
@@ -25,7 +25,7 @@ Profiles are fixed presets for rule selection, minimum severity, and minimum
 confidence:
 
 ```toml
-[tool.slop-lint]
+[tool.proseprobe]
 profile = "technical-docs"
 ```
 
@@ -53,7 +53,7 @@ minimum severity, and low minimum confidence.
 ### File Patterns
 
 ```toml
-[tool.slop-lint]
+[tool.proseprobe]
 # Glob patterns for files to include
 include = ["*.md", "*.mdx", "*.markdown", "*.py"]
 
@@ -67,7 +67,7 @@ named file bypasses `include` and `.gitignore`, but still respects `exclude`.
 ### Rule Selection
 
 ```toml
-[tool.slop-lint]
+[tool.proseprobe]
 # Rule prefixes or specific rules to enable
 select = ["V", "S", "T", "G", "C", "M"]
 
@@ -82,7 +82,7 @@ likely typos include a close-match suggestion.
 ### Severity Configuration
 
 ```toml
-[tool.slop-lint]
+[tool.proseprobe]
 # Minimum severity to report
 minimum_severity = "warning"  # error, warning, info
 ```
@@ -91,7 +91,7 @@ Per-rule severity overrides use a nested table:
 
 ```toml
 # Per-rule severity overrides
-[tool.slop-lint.severity]
+[tool.proseprobe.severity]
 V001 = "error"      # Upgrade to error
 S002 = "info"       # Downgrade to info
 ```
@@ -106,7 +106,7 @@ These settings customize `V001`; `allowed` and `additional` also keep `C001`
 from duplicating vocabulary findings owned by `V001`.
 
 ```toml
-[tool.slop-lint.vocabulary]
+[tool.proseprobe.vocabulary]
 # Additional words to flag
 additional = ["synergy", "utilize"]
 
@@ -120,7 +120,7 @@ allowed_phrases = ["All notable changes", "Critical issue"]
 ### Confidence Filtering
 
 ```toml
-[tool.slop-lint]
+[tool.proseprobe]
 # Minimum confidence to report (low, medium, high)
 min_confidence = "low"  # default: show all
 ```
@@ -128,11 +128,11 @@ min_confidence = "low"  # default: show all
 ### Per-File Ignores
 
 ```toml
-[[tool.slop-lint.per-file-ignores]]
+[[tool.proseprobe.per-file-ignores]]
 pattern = "CHANGELOG.md"
 ignore = ["S004"]
 
-[[tool.slop-lint.per-file-ignores]]
+[[tool.proseprobe.per-file-ignores]]
 pattern = "tests/**"
 ignore = ["C001", "C002"]
 ```
@@ -143,14 +143,14 @@ Use a line-scoped directive when a single intentional finding should remain in
 the source. Markdown targets the immediately following physical line:
 
 ```markdown
-<!-- slop-lint-ignore-next-line V001,S010 -->
+<!-- proseprobe-ignore-next-line V001,S010 -->
 This documentation delves into three related concerns.
 ```
 
 Python targets the same physical line as a real comment token:
 
 ```python
-"""This documentation delves into the API."""  # slop-lint: ignore=V001,S010
+"""This documentation delves into the API."""  # proseprobe: ignore=V001,S010
 ```
 
 Each token must be an existing rule ID or one-letter category prefix. Tokens
@@ -161,7 +161,7 @@ effect. Wider regions should continue to use per-file ignores.
 ### Thresholds
 
 ```toml
-[tool.slop-lint.thresholds]
+[tool.proseprobe.thresholds]
 # S001: Rule of three - max triads per document
 rule_of_three = 3
 # S004: Inline header lists - min consecutive inline headers to flag
@@ -195,7 +195,7 @@ and unknown threshold keys are configuration errors.
 
 ### Validation
 
-Only documented keys are accepted in the slop-lint configuration table and its
+Only documented keys are accepted in the proseprobe configuration table and its
 nested vocabulary, threshold, and per-file-ignore tables. Rule IDs and category
 prefixes are normalized to uppercase; repeated references are collapsed.
 Unknown profiles, keys, or rule references stop scan commands with exit code 2.
@@ -205,7 +205,7 @@ auto-discovered source path, or `default` when no file was loaded.
 ## Example Configuration
 
 ```toml
-[tool.slop-lint]
+[tool.proseprobe]
 include = ["*.md", "*.mdx", "*.markdown", "*.py"]
 exclude = [
     "venv/**",
@@ -220,21 +220,21 @@ profile = "technical-docs"
 ignore = ["T001", "T005"]
 minimum_severity = "warning"
 
-[tool.slop-lint.severity]
+[tool.proseprobe.severity]
 V001 = "error"
 M002 = "error"
 M004 = "error"
 
-[tool.slop-lint.vocabulary]
+[tool.proseprobe.vocabulary]
 additional = ["leverage", "synergy"]
 allowed = ["comprehensive"]
 allowed_phrases = ["All notable changes"]
 
-[[tool.slop-lint.per-file-ignores]]
+[[tool.proseprobe.per-file-ignores]]
 pattern = "CHANGELOG.md"
 ignore = ["S004", "V004"]
 
-[[tool.slop-lint.per-file-ignores]]
+[[tool.proseprobe.per-file-ignores]]
 pattern = "tests/**"
 ignore = ["C001", "C002", "C003"]
 ```
@@ -252,7 +252,7 @@ CLI arguments override config file settings:
 
 ```bash
 # Config says ignore T001, but CLI enables it
-slop-lint check --select T001 .
+proseprobe check --select T001 .
 ```
 
 All scan commands use the resulting policy in this order:
@@ -278,21 +278,21 @@ This order makes one watch iteration report the same ordered findings as
 Create a version 2 baseline and use it to report only new findings:
 
 ```bash
-slop-lint baseline create --baseline .slop-lint-baseline.json .
-slop-lint check --baseline .slop-lint-baseline.json .
+proseprobe baseline create --baseline .proseprobe-baseline.json .
+proseprobe check --baseline .proseprobe-baseline.json .
 ```
 
 Maintain it with one of three explicit actions:
 
 ```bash
 # Report active, stale, and new counts without writing
-slop-lint baseline summary --baseline .slop-lint-baseline.json .
+proseprobe baseline summary --baseline .proseprobe-baseline.json .
 
 # Accept new findings and retain stale entries
-slop-lint baseline update --baseline .slop-lint-baseline.json .
+proseprobe baseline update --baseline .proseprobe-baseline.json .
 
 # Remove stale entries without accepting new findings
-slop-lint baseline prune --baseline .slop-lint-baseline.json .
+proseprobe baseline prune --baseline .proseprobe-baseline.json .
 ```
 
 The baseline command applies the normal configuration, rule selection,
@@ -347,7 +347,7 @@ while operational errors and verbose status messages are written to stderr.
 Lint one generated document without creating a temporary file:
 
 ```bash
-generate-draft | slop-lint check - --filename docs/draft.md --format json
+generate-draft | proseprobe check - --filename docs/draft.md --format json
 ```
 
 `--filename` is required and controls file-type rules, per-file ignores, and
@@ -370,7 +370,7 @@ Confidence: 1 high, 1 medium, 0 low
 ### JSON
 
 ```bash
-slop-lint check --format json . > report.json
+proseprobe check --format json . > report.json
 ```
 
 ```json
@@ -406,7 +406,7 @@ slop-lint check --format json . > report.json
 ```
 
 `schema_version` identifies the machine-output contract; `version` identifies
-the slop-lint package that produced the report. `line` and `column` are 1-based
+the proseprobe package that produced the report. `line` and `column` are 1-based
 start positions. `end_line` is the endpoint line, and `end_column` is a 1-based
 exclusive endpoint. `end_line`, `end_column`, and `suggestion` are always
 present and may be `null`. The schema version changes only for incompatible
@@ -417,7 +417,7 @@ contract changes.
 Use JSON Lines for line-oriented subprocess and agent integrations:
 
 ```bash
-slop-lint check --format jsonl . > diagnostics.jsonl
+proseprobe check --format jsonl . > diagnostics.jsonl
 ```
 
 Each line is one complete diagnostic object:
@@ -439,7 +439,7 @@ records, while warning or error records produce exit `1`.
 For GitHub Code Scanning integration:
 
 ```bash
-slop-lint check --format sarif . > results.sarif
+proseprobe check --format sarif . > results.sarif
 ```
 
 ### Rule Metadata JSON
@@ -495,10 +495,10 @@ version changes only for incompatible contract changes.
 ```yaml
 # .pre-commit-config.yaml
 repos:
-  - repo: https://github.com/slop-lint/slop-lint
+  - repo: https://github.com/johnmulder/proseprobe
     rev: v0.1.0
     hooks:
-      - id: slop-lint
+      - id: proseprobe
         args: [--select, "V001,V002,M002,M003"]
 ```
 
@@ -510,7 +510,7 @@ name: Lint for Bad Writing Practices
 on: [push, pull_request]
 
 jobs:
-  slop-lint:
+  proseprobe:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -520,8 +520,8 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - run: pip install slop-lint
-      - run: slop-lint check --format sarif docs/ > results.sarif || test $? -eq 1
+      - run: pip install proseprobe
+      - run: proseprobe check --format sarif docs/ > results.sarif || test $? -eq 1
       - uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: results.sarif

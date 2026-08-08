@@ -7,7 +7,7 @@ import tokenize
 from dataclasses import dataclass
 from functools import lru_cache
 
-from slop_lint.parsers.prose import (
+from proseprobe.parsers.prose import (
     InlineSuppression,
     ProseBlock,
     ProseSentence,
@@ -164,13 +164,13 @@ class PythonParser:
             return self._inline_suppressions
 
         directive_re = re.compile(
-            r"#\s*slop-lint:\s*ignore\s*=\s*(.*?)\s*$", re.IGNORECASE
+            r"#\s*proseprobe:\s*ignore\s*=\s*(.*?)\s*$", re.IGNORECASE
         )
         suppressions: list[InlineSuppression] = []
         for token in self._get_tokens():
             if (
                 token.type != tokenize.COMMENT
-                or "slop-lint:" not in token.string.lower()
+                or "proseprobe:" not in token.string.lower()
             ):
                 continue
             match = directive_re.search(token.string)

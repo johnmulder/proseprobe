@@ -2,8 +2,8 @@
 
 import pytest
 
-from slop_lint.rules.base import Rule
-from slop_lint.rules.code import (
+from proseprobe.rules.base import Rule
+from proseprobe.rules.code import (
     AIPlaceholdersRule,
     CollaborativeCommentsRule,
     DocstringVocabularyRule,

@@ -2,8 +2,8 @@
 
 import pytest
 
-from slop_lint.rules.base import Rule
-from slop_lint.rules.struct import (
+from proseprobe.rules.base import Rule
+from proseprobe.rules.struct import (
     ChallengeConclusionsRule,
     ContentDuplicationRule,
     DramaticCountdownRule,
@@ -256,7 +256,7 @@ class TestDramaticCountdown:
 
     def test_detects_not_x_not_y_just_z(self) -> None:
         """Detect 'Not X. Not Y. Just Z.' countdown pattern."""
-        from slop_lint.rules.struct import DramaticCountdownRule
+        from proseprobe.rules.struct import DramaticCountdownRule
 
         text = "Not a bug. Not a feature. Just a fundamental design flaw."
         rule = DramaticCountdownRule()
@@ -266,7 +266,7 @@ class TestDramaticCountdown:
 
     def test_detects_not_not_but(self) -> None:
         """Detect variant with 'But' instead of 'Just'."""
-        from slop_lint.rules.struct import DramaticCountdownRule
+        from proseprobe.rules.struct import DramaticCountdownRule
 
         text = "Not recklessly. Not completely. But enough."
         rule = DramaticCountdownRule()
@@ -275,7 +275,7 @@ class TestDramaticCountdown:
 
     def test_ignores_normal_negation(self) -> None:
         """Don't flag single negation in normal prose."""
-        from slop_lint.rules.struct import DramaticCountdownRule
+        from proseprobe.rules.struct import DramaticCountdownRule
 
         text = "This is not the right approach for production use."
         rule = DramaticCountdownRule()
@@ -283,7 +283,7 @@ class TestDramaticCountdown:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import DramaticCountdownRule
+        from proseprobe.rules.struct import DramaticCountdownRule
 
         rule = DramaticCountdownRule()
         assert rule.id == "S008"
@@ -295,7 +295,7 @@ class TestRhetoricalSelfAnswer:
 
     def test_detects_the_result_devastating(self) -> None:
         """Detect 'The result? Devastating.' pattern."""
-        from slop_lint.rules.struct import RhetoricalSelfAnswerRule
+        from proseprobe.rules.struct import RhetoricalSelfAnswerRule
 
         text = "The result? Devastating."
         rule = RhetoricalSelfAnswerRule()
@@ -305,7 +305,7 @@ class TestRhetoricalSelfAnswer:
 
     def test_detects_the_worst_part(self) -> None:
         """Detect 'The worst part? Nobody saw it coming.' pattern."""
-        from slop_lint.rules.struct import RhetoricalSelfAnswerRule
+        from proseprobe.rules.struct import RhetoricalSelfAnswerRule
 
         text = "The worst part? Nobody saw it coming."
         rule = RhetoricalSelfAnswerRule()
@@ -314,7 +314,7 @@ class TestRhetoricalSelfAnswer:
 
     def test_ignores_real_questions(self) -> None:
         """Don't flag genuine questions followed by long answers."""
-        from slop_lint.rules.struct import RhetoricalSelfAnswerRule
+        from proseprobe.rules.struct import RhetoricalSelfAnswerRule
 
         text = (
             "What is the best way to handle errors in Python?\n"
@@ -326,7 +326,7 @@ class TestRhetoricalSelfAnswer:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import RhetoricalSelfAnswerRule
+        from proseprobe.rules.struct import RhetoricalSelfAnswerRule
 
         rule = RhetoricalSelfAnswerRule()
         assert rule.id == "S009"
@@ -338,7 +338,7 @@ class TestAnaphoraAbuse:
 
     def test_detects_repeated_they(self) -> None:
         """Detect 3+ consecutive sentences starting with same word."""
-        from slop_lint.rules.struct import AnaphoraAbuseRule
+        from proseprobe.rules.struct import AnaphoraAbuseRule
 
         text = (
             "They built the platform. They hired the team. They launched the product."
@@ -350,7 +350,7 @@ class TestAnaphoraAbuse:
 
     def test_detects_repeated_they_could(self) -> None:
         """Detect 'They could... They could... They could...' pattern."""
-        from slop_lint.rules.struct import AnaphoraAbuseRule
+        from proseprobe.rules.struct import AnaphoraAbuseRule
 
         text = (
             "They could expose new APIs.\n"
@@ -364,7 +364,7 @@ class TestAnaphoraAbuse:
 
     def test_ignores_varied_openings(self) -> None:
         """Don't flag sentences with different openings."""
-        from slop_lint.rules.struct import AnaphoraAbuseRule
+        from proseprobe.rules.struct import AnaphoraAbuseRule
 
         text = (
             "The team built the platform. "
@@ -377,7 +377,7 @@ class TestAnaphoraAbuse:
 
     def test_ignores_markdown_table_rows(self) -> None:
         """Markdown table pipes should not count as repeated sentence openings."""
-        from slop_lint.rules.struct import AnaphoraAbuseRule
+        from proseprobe.rules.struct import AnaphoraAbuseRule
 
         text = """\
 | Prefix | Category |
@@ -393,14 +393,14 @@ class TestAnaphoraAbuse:
 
     def test_blank_paragraphs_break_repeated_openings(self) -> None:
         """Repeated openings in separate paragraphs are not consecutive."""
-        from slop_lint.rules.struct import AnaphoraAbuseRule
+        from proseprobe.rules.struct import AnaphoraAbuseRule
 
         text = "The first statement.\n\nThe second statement.\n\nThe third statement."
 
         assert AnaphoraAbuseRule().check(text, "test.md") == []
 
     def test_anaphora_spans_wrapped_sentences_but_not_paragraphs(self) -> None:
-        from slop_lint.rules.struct import AnaphoraAbuseRule
+        from proseprobe.rules.struct import AnaphoraAbuseRule
 
         wrapped = "They built the platform. They hired\ncarefully. They launched it."
         separated = (
@@ -414,7 +414,7 @@ class TestAnaphoraAbuse:
 
     def test_headings_do_not_form_repeated_openings(self) -> None:
         """Heading text is not a run of prose sentences."""
-        from slop_lint.rules.struct import AnaphoraAbuseRule
+        from proseprobe.rules.struct import AnaphoraAbuseRule
 
         text = "## The first section\n\n## The second section\n\n## The third section"
 
@@ -422,7 +422,7 @@ class TestAnaphoraAbuse:
 
     def test_does_not_count_list_marker_as_opening(self) -> None:
         """Markdown bullet markers should not become the repeated opening."""
-        from slop_lint.rules.struct import AnaphoraAbuseRule
+        from proseprobe.rules.struct import AnaphoraAbuseRule
 
         text = """\
 - First item explains setup.
@@ -436,7 +436,7 @@ class TestAnaphoraAbuse:
 
     def test_custom_threshold(self) -> None:
         """Respect configurable threshold."""
-        from slop_lint.rules.struct import AnaphoraAbuseRule
+        from proseprobe.rules.struct import AnaphoraAbuseRule
 
         text = "We built X. We built Y. We built Z."
         rule_low = AnaphoraAbuseRule(threshold=2)
@@ -447,7 +447,7 @@ class TestAnaphoraAbuse:
         assert len(issues_high) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import AnaphoraAbuseRule
+        from proseprobe.rules.struct import AnaphoraAbuseRule
 
         rule = AnaphoraAbuseRule()
         assert rule.id == "S010"
@@ -459,7 +459,7 @@ class TestGerundFragmentLitany:
 
     def test_detects_gerund_litany(self) -> None:
         """Detect 3+ consecutive gerund fragments."""
-        from slop_lint.rules.struct import GerundFragmentLitanyRule
+        from proseprobe.rules.struct import GerundFragmentLitanyRule
 
         text = "Fixing small bugs. Writing straightforward features. Implementing well-defined tickets."
         rule = GerundFragmentLitanyRule()
@@ -469,7 +469,7 @@ class TestGerundFragmentLitany:
 
     def test_detects_shipping_litany(self) -> None:
         """Detect short gerund fragments."""
-        from slop_lint.rules.struct import GerundFragmentLitanyRule
+        from proseprobe.rules.struct import GerundFragmentLitanyRule
 
         text = "Shipping faster. Moving quicker. Delivering more."
         rule = GerundFragmentLitanyRule()
@@ -477,7 +477,7 @@ class TestGerundFragmentLitany:
         assert len(issues) >= 1
 
     def test_gerund_litany_spans_wrapped_sentences(self) -> None:
-        from slop_lint.rules.struct import GerundFragmentLitanyRule
+        from proseprobe.rules.struct import GerundFragmentLitanyRule
 
         text = (
             "Fixing small bugs. Writing straightforward\nfeatures. Shipping releases."
@@ -490,7 +490,7 @@ class TestGerundFragmentLitany:
 
     def test_ignores_normal_gerunds(self) -> None:
         """Don't flag gerunds in normal sentences."""
-        from slop_lint.rules.struct import GerundFragmentLitanyRule
+        from proseprobe.rules.struct import GerundFragmentLitanyRule
 
         text = "Running the tests was easy. The team was coding all day."
         rule = GerundFragmentLitanyRule()
@@ -499,14 +499,14 @@ class TestGerundFragmentLitany:
 
     def test_blank_paragraphs_break_gerund_run(self) -> None:
         """Gerund fragments in separate paragraphs do not form a litany."""
-        from slop_lint.rules.struct import GerundFragmentLitanyRule
+        from proseprobe.rules.struct import GerundFragmentLitanyRule
 
         text = "Building quickly.\n\nShipping safely.\n\nLearning constantly."
 
         assert GerundFragmentLitanyRule().check(text, "test.md") == []
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import GerundFragmentLitanyRule
+        from proseprobe.rules.struct import GerundFragmentLitanyRule
 
         rule = GerundFragmentLitanyRule()
         assert rule.id == "S011"
@@ -518,7 +518,7 @@ class TestListicleInProse:
 
     def test_detects_first_second_third(self) -> None:
         """Detect 'The first... The second... The third...' pattern."""
-        from slop_lint.rules.struct import ListicleInProseRule
+        from proseprobe.rules.struct import ListicleInProseRule
 
         text = (
             "The first wall is the absence of a free API. "
@@ -532,7 +532,7 @@ class TestListicleInProse:
 
     def test_detects_fallback_only_listicle_pattern_once(self) -> None:
         """A single named ordinal should retain fallback coverage."""
-        from slop_lint.rules.struct import ListicleInProseRule
+        from proseprobe.rules.struct import ListicleInProseRule
 
         text = "The first takeaway is to reduce scope."
 
@@ -543,7 +543,7 @@ class TestListicleInProse:
 
     def test_ignores_single_ordinal(self) -> None:
         """Don't flag a single ordinal reference."""
-        from slop_lint.rules.struct import ListicleInProseRule
+        from proseprobe.rules.struct import ListicleInProseRule
 
         text = "The first thing to consider is performance."
         rule = ListicleInProseRule()
@@ -552,14 +552,14 @@ class TestListicleInProse:
 
     def test_does_not_join_ordinals_across_paragraphs(self) -> None:
         """Separate paragraphs do not become one disguised listicle."""
-        from slop_lint.rules.struct import ListicleInProseRule
+        from proseprobe.rules.struct import ListicleInProseRule
 
         text = "The first result is stable.\n\nThe second is faster.\n\nThe third is safer."
 
         assert ListicleInProseRule().check(text, "test.md") == []
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import ListicleInProseRule
+        from proseprobe.rules.struct import ListicleInProseRule
 
         rule = ListicleInProseRule()
         assert rule.id == "S012"
@@ -571,7 +571,7 @@ class TestHistoricalAnalogyStacking:
 
     def test_detects_company_stacking(self) -> None:
         """Detect rapid-fire company name-drops."""
-        from slop_lint.rules.struct import HistoricalAnalogyStackingRule
+        from proseprobe.rules.struct import HistoricalAnalogyStackingRule
 
         text = (
             "Apple didn't build Uber. Facebook didn't build Spotify. "
@@ -584,7 +584,7 @@ class TestHistoricalAnalogyStacking:
 
     def test_detects_take_or_consider_pattern(self) -> None:
         """Detect 'Take X... Or consider Y...' pattern."""
-        from slop_lint.rules.struct import HistoricalAnalogyStackingRule
+        from proseprobe.rules.struct import HistoricalAnalogyStackingRule
 
         text = (
             "Take Spotify. Or consider Uber. "
@@ -596,7 +596,7 @@ class TestHistoricalAnalogyStacking:
 
     def test_ignores_single_mention(self) -> None:
         """Don't flag a single company mention."""
-        from slop_lint.rules.struct import HistoricalAnalogyStackingRule
+        from proseprobe.rules.struct import HistoricalAnalogyStackingRule
 
         text = "Apple released a new product last year."
         rule = HistoricalAnalogyStackingRule()
@@ -604,7 +604,7 @@ class TestHistoricalAnalogyStacking:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import HistoricalAnalogyStackingRule
+        from proseprobe.rules.struct import HistoricalAnalogyStackingRule
 
         rule = HistoricalAnalogyStackingRule()
         assert rule.id == "S013"
@@ -616,7 +616,7 @@ class TestSignpostedConclusion:
 
     def test_detects_in_conclusion(self) -> None:
         """Detect 'In conclusion' at sentence start."""
-        from slop_lint.rules.struct import SignpostedConclusionRule
+        from proseprobe.rules.struct import SignpostedConclusionRule
 
         text = "In conclusion, the future of AI depends on trust."
         rule = SignpostedConclusionRule()
@@ -626,7 +626,7 @@ class TestSignpostedConclusion:
 
     def test_detects_to_sum_up(self) -> None:
         """Detect 'To sum up' phrase."""
-        from slop_lint.rules.struct import SignpostedConclusionRule
+        from proseprobe.rules.struct import SignpostedConclusionRule
 
         text = "To sum up, we've explored three key themes."
         rule = SignpostedConclusionRule()
@@ -635,7 +635,7 @@ class TestSignpostedConclusion:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag prose without signposted conclusions."""
-        from slop_lint.rules.struct import SignpostedConclusionRule
+        from proseprobe.rules.struct import SignpostedConclusionRule
 
         text = "The system handles errors gracefully and logs all events."
         rule = SignpostedConclusionRule()
@@ -643,7 +643,7 @@ class TestSignpostedConclusion:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import SignpostedConclusionRule
+        from proseprobe.rules.struct import SignpostedConclusionRule
 
         rule = SignpostedConclusionRule()
         assert rule.id == "S014"
@@ -655,7 +655,7 @@ class TestFractalSummary:
 
     def test_detects_section_framing(self) -> None:
         """Detect 'In this section, we'll explore...' framing."""
-        from slop_lint.rules.struct import FractalSummaryRule
+        from proseprobe.rules.struct import FractalSummaryRule
 
         text = "In this section, we'll explore the architecture of the system."
         rule = FractalSummaryRule()
@@ -665,7 +665,7 @@ class TestFractalSummary:
 
     def test_detects_section_outro(self) -> None:
         """Detect 'As we've seen in this section' outro."""
-        from slop_lint.rules.struct import FractalSummaryRule
+        from proseprobe.rules.struct import FractalSummaryRule
 
         text = "As we've seen in this section, the approach has clear benefits."
         rule = FractalSummaryRule()
@@ -674,7 +674,7 @@ class TestFractalSummary:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag prose without fractal summaries."""
-        from slop_lint.rules.struct import FractalSummaryRule
+        from proseprobe.rules.struct import FractalSummaryRule
 
         text = "The module provides logging utilities for the application."
         rule = FractalSummaryRule()
@@ -682,7 +682,7 @@ class TestFractalSummary:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import FractalSummaryRule
+        from proseprobe.rules.struct import FractalSummaryRule
 
         rule = FractalSummaryRule()
         assert rule.id == "S015"
@@ -694,7 +694,7 @@ class TestContentDuplication:
 
     def test_detects_duplicate_paragraphs(self) -> None:
         """Detect verbatim repeated paragraphs."""
-        from slop_lint.rules.struct import ContentDuplicationRule
+        from proseprobe.rules.struct import ContentDuplicationRule
 
         text = (
             "The system provides reliable error handling and logging.\n\n"
@@ -708,7 +708,7 @@ class TestContentDuplication:
 
     def test_ignores_unique_paragraphs(self) -> None:
         """Don't flag unique paragraphs."""
-        from slop_lint.rules.struct import ContentDuplicationRule
+        from proseprobe.rules.struct import ContentDuplicationRule
 
         text = (
             "First paragraph about one topic.\n\n"
@@ -721,7 +721,7 @@ class TestContentDuplication:
 
     def test_ignores_short_paragraphs(self) -> None:
         """Don't flag very short repeated paragraphs (e.g., 'Yes.')."""
-        from slop_lint.rules.struct import ContentDuplicationRule
+        from proseprobe.rules.struct import ContentDuplicationRule
 
         text = "Yes.\n\nSomething else.\n\nYes."
         rule = ContentDuplicationRule()
@@ -729,7 +729,7 @@ class TestContentDuplication:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import ContentDuplicationRule
+        from proseprobe.rules.struct import ContentDuplicationRule
 
         rule = ContentDuplicationRule()
         assert rule.id == "S016"
@@ -744,7 +744,7 @@ class TestAnecdoteAsEvidence:
 
     def test_detects_for_name_of_location(self) -> None:
         """Detect 'For Sarah of Ohio...' anecdote pattern."""
-        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+        from proseprobe.rules.struct import AnecdoteAsEvidenceRule
 
         text = (
             "For Sarah of Ohio, the policy change meant losing her healthcare. "
@@ -757,7 +757,7 @@ class TestAnecdoteAsEvidence:
 
     def test_detects_take_name_a_descriptor(self) -> None:
         """Detect 'Take Marcus, a software engineer...' anecdote pattern."""
-        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+        from proseprobe.rules.struct import AnecdoteAsEvidenceRule
 
         text = (
             "Take Marcus, a software engineer from Portland. "
@@ -769,7 +769,7 @@ class TestAnecdoteAsEvidence:
 
     def test_detects_meet_name(self) -> None:
         """Detect 'Meet Lisa' anecdote pattern."""
-        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+        from proseprobe.rules.struct import AnecdoteAsEvidenceRule
 
         text = (
             "Meet Lisa, who transformed her career through coding bootcamps. "
@@ -781,7 +781,7 @@ class TestAnecdoteAsEvidence:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal prose without anecdotes."""
-        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+        from proseprobe.rules.struct import AnecdoteAsEvidenceRule
 
         text = "The system handles errors gracefully and logs all events."
         rule = AnecdoteAsEvidenceRule()
@@ -790,7 +790,7 @@ class TestAnecdoteAsEvidence:
 
     def test_ignores_non_anecdote_for(self) -> None:
         """Don't flag normal use of 'for' in prose."""
-        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+        from proseprobe.rules.struct import AnecdoteAsEvidenceRule
 
         text = "For best results, use a virtual environment."
         rule = AnecdoteAsEvidenceRule()
@@ -798,7 +798,7 @@ class TestAnecdoteAsEvidence:
         assert len(issues) == 0
 
     def test_anecdote_requires_generalization_and_ignores_examples(self) -> None:
-        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+        from proseprobe.rules.struct import AnecdoteAsEvidenceRule
 
         unsupported = "For Sarah of Ohio, the policy changed her commute."
         example = (
@@ -815,7 +815,7 @@ class TestAnecdoteAsEvidence:
         assert len(AnecdoteAsEvidenceRule().check(supported, "report.md")) == 1
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import AnecdoteAsEvidenceRule
+        from proseprobe.rules.struct import AnecdoteAsEvidenceRule
 
         rule = AnecdoteAsEvidenceRule()
         assert rule.id == "S017"
@@ -830,7 +830,7 @@ class TestCitationNameDropping:
 
     def test_detects_name_dropping(self) -> None:
         """Detect 3+ consecutive 'Author (Year) verb' sentences."""
-        from slop_lint.rules.struct import CitationNameDroppingRule
+        from proseprobe.rules.struct import CitationNameDroppingRule
 
         text = (
             "Smith (2012) argues that technology reshapes communities. "
@@ -845,7 +845,7 @@ class TestCitationNameDropping:
 
     def test_ignores_synthesized_discussion(self) -> None:
         """Don't flag synthesized literature discussion."""
-        from slop_lint.rules.struct import CitationNameDroppingRule
+        from proseprobe.rules.struct import CitationNameDroppingRule
 
         text = (
             "Smith (2012) and Jones (2014) both argue that technology reshapes communities. "
@@ -856,7 +856,7 @@ class TestCitationNameDropping:
         assert len(issues) == 0
 
     def test_citation_runs_use_wrapped_sentences_and_reset_on_prose(self) -> None:
-        from slop_lint.rules.struct import CitationNameDroppingRule
+        from proseprobe.rules.struct import CitationNameDroppingRule
 
         wrapped = (
             "Smith (2012) argues that communities change. "
@@ -875,7 +875,7 @@ class TestCitationNameDropping:
 
     def test_ignores_below_threshold(self) -> None:
         """Don't flag when below threshold."""
-        from slop_lint.rules.struct import CitationNameDroppingRule
+        from proseprobe.rules.struct import CitationNameDroppingRule
 
         text = (
             "Smith (2012) argues that technology matters. "
@@ -887,7 +887,7 @@ class TestCitationNameDropping:
 
     def test_custom_threshold(self) -> None:
         """Respect configurable threshold."""
-        from slop_lint.rules.struct import CitationNameDroppingRule
+        from proseprobe.rules.struct import CitationNameDroppingRule
 
         text = "Smith (2012) argues X. Jones (2014) claims Y. Patel (2018) suggests Z."
         rule_low = CitationNameDroppingRule(threshold=2)
@@ -898,7 +898,7 @@ class TestCitationNameDropping:
         assert len(issues_high) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import CitationNameDroppingRule
+        from proseprobe.rules.struct import CitationNameDroppingRule
 
         rule = CitationNameDroppingRule()
         assert rule.id == "S018"
@@ -913,7 +913,7 @@ class TestCorporateEuphemism:
 
     def test_detects_restructuring(self) -> None:
         """Detect 'restructuring' corporate euphemism."""
-        from slop_lint.rules.struct import CorporateEuphemismRule
+        from proseprobe.rules.struct import CorporateEuphemismRule
 
         text = "The company announced a major restructuring initiative."
         rule = CorporateEuphemismRule()
@@ -924,7 +924,7 @@ class TestCorporateEuphemism:
 
     def test_detects_right_sizing(self) -> None:
         """Detect 'right-sizing' euphemism."""
-        from slop_lint.rules.struct import CorporateEuphemismRule
+        from proseprobe.rules.struct import CorporateEuphemismRule
 
         text = "We are right-sizing the organization to align with market conditions."
         rule = CorporateEuphemismRule()
@@ -933,7 +933,7 @@ class TestCorporateEuphemism:
 
     def test_detects_sunsetting(self) -> None:
         """Detect 'sunsetting' euphemism."""
-        from slop_lint.rules.struct import CorporateEuphemismRule
+        from proseprobe.rules.struct import CorporateEuphemismRule
 
         text = "We will be sunsetting the legacy platform next quarter."
         rule = CorporateEuphemismRule()
@@ -942,7 +942,7 @@ class TestCorporateEuphemism:
 
     def test_detects_headcount_reduction(self) -> None:
         """Detect 'headcount reduction' euphemism."""
-        from slop_lint.rules.struct import CorporateEuphemismRule
+        from proseprobe.rules.struct import CorporateEuphemismRule
 
         text = "The headcount reduction will affect 200 employees."
         rule = CorporateEuphemismRule()
@@ -950,7 +950,7 @@ class TestCorporateEuphemism:
         assert len(issues) >= 1
 
     def test_detects_wrapped_organizational_context(self) -> None:
-        from slop_lint.rules.struct import CorporateEuphemismRule
+        from proseprobe.rules.struct import CorporateEuphemismRule
 
         text = "The company announced a\nrestructuring initiative next quarter."
 
@@ -959,7 +959,7 @@ class TestCorporateEuphemism:
         assert [(issue.line, issue.column) for issue in issues] == [(2, 1)]
 
     def test_preserves_offsets_before_casefold_expansion(self) -> None:
-        from slop_lint.rules.struct import CorporateEuphemismRule
+        from proseprobe.rules.struct import CorporateEuphemismRule
 
         text = "Straße company restructuring affects staff."
 
@@ -975,7 +975,7 @@ class TestCorporateEuphemism:
         ],
     )
     def test_detects_direct_workforce_context(self, text: str) -> None:
-        from slop_lint.rules.struct import CorporateEuphemismRule
+        from proseprobe.rules.struct import CorporateEuphemismRule
 
         assert len(CorporateEuphemismRule().check(text, "test.md")) == 1
 
@@ -988,13 +988,13 @@ class TestCorporateEuphemism:
         ],
     )
     def test_ignores_technical_ambiguous_terms(self, text: str) -> None:
-        from slop_lint.rules.struct import CorporateEuphemismRule
+        from proseprobe.rules.struct import CorporateEuphemismRule
 
         assert CorporateEuphemismRule().check(text, "test.md") == []
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal prose."""
-        from slop_lint.rules.struct import CorporateEuphemismRule
+        from proseprobe.rules.struct import CorporateEuphemismRule
 
         text = "The team completed the migration to the new database."
         rule = CorporateEuphemismRule()
@@ -1002,7 +1002,7 @@ class TestCorporateEuphemism:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import CorporateEuphemismRule
+        from proseprobe.rules.struct import CorporateEuphemismRule
 
         rule = CorporateEuphemismRule()
         assert rule.id == "S019"
@@ -1014,7 +1014,7 @@ class TestAlignmentRitual:
 
     def test_detects_fully_aligned(self) -> None:
         """Detect 'fully aligned on' alignment ritual."""
-        from slop_lint.rules.struct import AlignmentRitualRule
+        from proseprobe.rules.struct import AlignmentRitualRule
 
         text = "We are fully aligned on the strategic direction moving forward."
         rule = AlignmentRitualRule()
@@ -1024,7 +1024,7 @@ class TestAlignmentRitual:
 
     def test_detects_on_the_same_page(self) -> None:
         """Detect 'on the same page' alignment ritual."""
-        from slop_lint.rules.struct import AlignmentRitualRule
+        from proseprobe.rules.struct import AlignmentRitualRule
 
         text = "Let's make sure everyone is on the same page before we proceed."
         rule = AlignmentRitualRule()
@@ -1033,7 +1033,7 @@ class TestAlignmentRitual:
 
     def test_detects_cross_functional_alignment(self) -> None:
         """Detect 'cross-functional alignment' ritual."""
-        from slop_lint.rules.struct import AlignmentRitualRule
+        from proseprobe.rules.struct import AlignmentRitualRule
 
         text = "We need cross-functional alignment before launching."
         rule = AlignmentRitualRule()
@@ -1042,7 +1042,7 @@ class TestAlignmentRitual:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal prose."""
-        from slop_lint.rules.struct import AlignmentRitualRule
+        from proseprobe.rules.struct import AlignmentRitualRule
 
         text = "The text is aligned to the left margin."
         rule = AlignmentRitualRule()
@@ -1050,7 +1050,7 @@ class TestAlignmentRitual:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import AlignmentRitualRule
+        from proseprobe.rules.struct import AlignmentRitualRule
 
         rule = AlignmentRitualRule()
         assert rule.id == "S020"
@@ -1062,7 +1062,7 @@ class TestSlideDeckFragment:
 
     def test_detects_buzzword_fragment(self) -> None:
         """Detect verbless buzzword-heavy fragment."""
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         text = "Driving alignment across strategic initiatives for scalable impact."
         rule = SlideDeckFragmentRule()
@@ -1072,7 +1072,7 @@ class TestSlideDeckFragment:
 
     def test_detects_operational_excellence(self) -> None:
         """Detect 'operational excellence' fragment."""
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         text = (
             "Operational excellence through cross-functional synergy and optimization."
@@ -1083,7 +1083,7 @@ class TestSlideDeckFragment:
 
     def test_ignores_normal_sentences(self) -> None:
         """Don't flag normal sentences with verbs."""
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         text = "The team will coordinate projects to improve scalability."
         rule = SlideDeckFragmentRule()
@@ -1091,7 +1091,7 @@ class TestSlideDeckFragment:
         assert len(issues) == 0
 
     def test_ignores_pronoun_led_finite_clause(self) -> None:
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         text = (
             "We need to ensure cross-functional alignment and get buy-in "
@@ -1101,7 +1101,7 @@ class TestSlideDeckFragment:
         assert SlideDeckFragmentRule().check(text, "test.md") == []
 
     def test_ignores_contracted_pronoun_led_finite_clause(self) -> None:
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         text = (
             "We're driving alignment across strategic initiatives for scalable impact."
@@ -1110,7 +1110,7 @@ class TestSlideDeckFragment:
         assert SlideDeckFragmentRule().check(text, "test.md") == []
 
     def test_ignores_typographic_contracted_pronoun_led_finite_clause(self) -> None:
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         text = "We\u2019re driving alignment across strategic initiatives for scalable impact."
 
@@ -1124,7 +1124,7 @@ class TestSlideDeckFragment:
         ],
     )
     def test_ignores_complete_clause_with_relative_word(self, text: str) -> None:
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         assert SlideDeckFragmentRule().check(text, "test.md") == []
 
@@ -1142,12 +1142,12 @@ class TestSlideDeckFragment:
         ],
     )
     def test_ignores_main_predicate_after_relative_clause(self, text: str) -> None:
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         assert SlideDeckFragmentRule().check(text, "test.md") == []
 
     def test_ignores_unlisted_main_predicate_after_relative_clause(self) -> None:
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         text = (
             "Strategic alignment for initiatives that will deliver scalable impact "
@@ -1167,12 +1167,12 @@ class TestSlideDeckFragment:
         ],
     )
     def test_detects_fragment_with_subordinate_auxiliary(self, text: str) -> None:
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         assert len(SlideDeckFragmentRule().check(text, "test.md")) == 1
 
     def test_detects_fragment_with_multiple_subordinate_auxiliaries(self) -> None:
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         text = "Strategic alignment for initiatives that will have scalable impact."
 
@@ -1191,13 +1191,13 @@ class TestSlideDeckFragment:
     def test_detects_varied_fragment_prefix_before_relative_clause(
         self, text: str
     ) -> None:
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         assert len(SlideDeckFragmentRule().check(text, "test.md")) == 1
 
     def test_ignores_short_lines(self) -> None:
         """Don't flag lines with fewer than 4 words."""
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         text = "Strategic alignment."
         rule = SlideDeckFragmentRule()
@@ -1205,7 +1205,7 @@ class TestSlideDeckFragment:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.struct import SlideDeckFragmentRule
+        from proseprobe.rules.struct import SlideDeckFragmentRule
 
         rule = SlideDeckFragmentRule()
         assert rule.id == "S021"

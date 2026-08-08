@@ -2,8 +2,8 @@
 
 import pytest
 
-from slop_lint.rules.base import Rule
-from slop_lint.rules.style import (
+from proseprobe.rules.base import Rule
+from proseprobe.rules.style import (
     BoldOveruseRule,
     ElegantVariationRule,
     EmDashOveruseRule,
@@ -203,7 +203,7 @@ class TestShortPunchyFragments:
 
     def test_detects_consecutive_short_paras(self) -> None:
         """Detect 3+ consecutive short-sentence paragraphs."""
-        from slop_lint.rules.style import ShortPunchyFragmentsRule
+        from proseprobe.rules.style import ShortPunchyFragmentsRule
 
         text = "He published this.\n\nOpenly.\n\nIn a book.\n\nAs a priest."
         rule = ShortPunchyFragmentsRule()
@@ -213,7 +213,7 @@ class TestShortPunchyFragments:
 
     def test_detects_punchy_prose(self) -> None:
         """Detect 'But I adapted.' style fragments."""
-        from slop_lint.rules.style import ShortPunchyFragmentsRule
+        from proseprobe.rules.style import ShortPunchyFragmentsRule
 
         text = "These weren't just products.\n\nAnd the software matched.\n\nThen it changed.\n\nBut I adapted."
         rule = ShortPunchyFragmentsRule()
@@ -222,7 +222,7 @@ class TestShortPunchyFragments:
 
     def test_ignores_normal_paragraphs(self) -> None:
         """Don't flag normal-length paragraphs."""
-        from slop_lint.rules.style import ShortPunchyFragmentsRule
+        from proseprobe.rules.style import ShortPunchyFragmentsRule
 
         text = (
             "The system provides reliable error handling and comprehensive logging.\n\n"
@@ -235,7 +235,7 @@ class TestShortPunchyFragments:
 
     def test_ignores_short_headings(self) -> None:
         """Consecutive short headings are not punchy prose paragraphs."""
-        from slop_lint.rules.style import ShortPunchyFragmentsRule
+        from proseprobe.rules.style import ShortPunchyFragmentsRule
 
         text = "# Linux\n\n## macOS\n\n## Windows"
 
@@ -243,7 +243,7 @@ class TestShortPunchyFragments:
 
     def test_code_block_breaks_short_paragraph_run(self) -> None:
         """Skipped structural content resets a short-paragraph run."""
-        from slop_lint.rules.style import ShortPunchyFragmentsRule
+        from proseprobe.rules.style import ShortPunchyFragmentsRule
 
         text = "First.\n\nSecond.\n\n```text\nexample\n```\n\nThird."
 
@@ -251,7 +251,7 @@ class TestShortPunchyFragments:
 
     def test_custom_threshold(self) -> None:
         """Respect configurable threshold."""
-        from slop_lint.rules.style import ShortPunchyFragmentsRule
+        from proseprobe.rules.style import ShortPunchyFragmentsRule
 
         text = "Stop.\n\nThink.\n\nAct."
         rule_low = ShortPunchyFragmentsRule(threshold=2)
@@ -262,7 +262,7 @@ class TestShortPunchyFragments:
         assert len(issues_high) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.style import ShortPunchyFragmentsRule
+        from proseprobe.rules.style import ShortPunchyFragmentsRule
 
         rule = ShortPunchyFragmentsRule()
         assert rule.id == "T007"
@@ -277,7 +277,7 @@ class TestSentenceLength:
 
     def test_detects_long_sentence(self) -> None:
         """Detect sentence exceeding threshold."""
-        from slop_lint.rules.style import SentenceLengthRule
+        from proseprobe.rules.style import SentenceLengthRule
 
         # 45-word sentence
         text = (
@@ -294,7 +294,7 @@ class TestSentenceLength:
 
     def test_ignores_short_sentence(self) -> None:
         """Don't flag short sentences."""
-        from slop_lint.rules.style import SentenceLengthRule
+        from proseprobe.rules.style import SentenceLengthRule
 
         text = "This is a simple sentence. Another one follows."
         rule = SentenceLengthRule(threshold=40)
@@ -302,7 +302,7 @@ class TestSentenceLength:
         assert len(issues) == 0
 
     def test_long_sentence_counts_words_across_source_lines(self) -> None:
-        from slop_lint.rules.style import SentenceLengthRule
+        from proseprobe.rules.style import SentenceLengthRule
 
         text = "One two three four five\nsix seven eight nine ten."
 
@@ -317,7 +317,7 @@ class TestSentenceLength:
 
     def test_ignores_code_blocks(self) -> None:
         """Don't flag long lines inside code blocks."""
-        from slop_lint.rules.style import SentenceLengthRule
+        from proseprobe.rules.style import SentenceLengthRule
 
         text = (
             "Short intro sentence.\n\n"
@@ -334,7 +334,7 @@ class TestSentenceLength:
 
     def test_ignores_long_heading(self) -> None:
         """Sentence length applies to prose contexts, not headings."""
-        from slop_lint.rules.style import SentenceLengthRule
+        from proseprobe.rules.style import SentenceLengthRule
 
         text = "# " + "word " * 45
 
@@ -342,7 +342,7 @@ class TestSentenceLength:
 
     def test_checks_long_list_items(self) -> None:
         """List-item prose remains eligible for sentence-length checks."""
-        from slop_lint.rules.style import SentenceLengthRule
+        from proseprobe.rules.style import SentenceLengthRule
 
         text = "- " + "word " * 45
 
@@ -353,7 +353,7 @@ class TestSentenceLength:
 
     def test_custom_threshold(self) -> None:
         """Respect configurable threshold."""
-        from slop_lint.rules.style import SentenceLengthRule
+        from proseprobe.rules.style import SentenceLengthRule
 
         text = "This sentence has exactly ten words in it right here now."
         rule_low = SentenceLengthRule(threshold=5)
@@ -365,7 +365,7 @@ class TestSentenceLength:
 
     def test_multiple_sentences_only_long_flagged(self) -> None:
         """Only flag long sentences, not short ones on same line."""
-        from slop_lint.rules.style import SentenceLengthRule
+        from proseprobe.rules.style import SentenceLengthRule
 
         text = "Short. " + "word " * 45 + "end of very long sentence."
         rule = SentenceLengthRule(threshold=40)
@@ -373,7 +373,7 @@ class TestSentenceLength:
         assert len(issues) == 1
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.style import SentenceLengthRule
+        from proseprobe.rules.style import SentenceLengthRule
 
         rule = SentenceLengthRule()
         assert rule.id == "T008"

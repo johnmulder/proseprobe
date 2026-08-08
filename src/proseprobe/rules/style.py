@@ -4,16 +4,16 @@ import re
 from itertools import groupby
 from typing import ClassVar
 
-from slop_lint.data.style_patterns import (
+from proseprobe.data.style_patterns import (
     ELEGANT_VARIATION_PAIRS,
     TITLE_CASE_SMALL_WORDS,
 )
-from slop_lint.parsers.markdown import (
+from proseprobe.parsers.markdown import (
     MarkdownParser,
     is_markdown_file,
 )
-from slop_lint.parsers.prose import iter_prose_blocks, iter_prose_sentences
-from slop_lint.rules.base import Issue, Rule, Severity
+from proseprobe.parsers.prose import iter_prose_blocks, iter_prose_sentences
+from proseprobe.rules.base import Issue, Rule, Severity
 
 
 class TitleCaseHeadingsRule(Rule):

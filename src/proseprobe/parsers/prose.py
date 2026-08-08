@@ -172,13 +172,13 @@ def _validate_suppression_tokens(raw: str, line: int) -> str:
 def iter_inline_suppressions(content: str, filename: str) -> list[InlineSuppression]:
     """Return source-mapped inline suppressions for a supported file type."""
     if filename.lower().endswith((".md", ".mdx", ".markdown")):
-        from slop_lint.parsers.markdown import (
+        from proseprobe.parsers.markdown import (
             _get_cached_parser as get_markdown_parser,
         )
 
         return get_markdown_parser(content).get_inline_suppressions()
     if filename.lower().endswith(".py"):
-        from slop_lint.parsers.python import _get_cached_parser as get_python_parser
+        from proseprobe.parsers.python import _get_cached_parser as get_python_parser
 
         return get_python_parser(content).get_inline_suppressions()
     return []
@@ -187,13 +187,13 @@ def iter_inline_suppressions(content: str, filename: str) -> list[InlineSuppress
 def iter_prose_lines(content: str, filename: str) -> list[tuple[int, str]]:
     """Return source-mapped prose lines for the input file type."""
     if filename.lower().endswith((".md", ".mdx", ".markdown")):
-        from slop_lint.parsers.markdown import (
+        from proseprobe.parsers.markdown import (
             _get_cached_parser as get_markdown_parser,
         )
 
         return get_markdown_parser(content).get_prose_lines()
     if filename.lower().endswith(".py"):
-        from slop_lint.parsers.python import _get_cached_parser as get_python_parser
+        from proseprobe.parsers.python import _get_cached_parser as get_python_parser
 
         return get_python_parser(content).get_prose_lines()
     return list(enumerate(content.split("\n"), start=1))
@@ -202,13 +202,13 @@ def iter_prose_lines(content: str, filename: str) -> list[tuple[int, str]]:
 def iter_prose_blocks(content: str, filename: str) -> list[ProseBlock]:
     """Return source-mapped prose blocks for the input file type."""
     if filename.lower().endswith((".md", ".mdx", ".markdown")):
-        from slop_lint.parsers.markdown import (
+        from proseprobe.parsers.markdown import (
             _get_cached_parser as get_markdown_parser,
         )
 
         return get_markdown_parser(content).get_prose_blocks()
     if filename.lower().endswith(".py"):
-        from slop_lint.parsers.python import _get_cached_parser as get_python_parser
+        from proseprobe.parsers.python import _get_cached_parser as get_python_parser
 
         return get_python_parser(content).get_prose_blocks()
 
@@ -230,13 +230,13 @@ def iter_prose_blocks(content: str, filename: str) -> list[ProseBlock]:
 def iter_prose_sentences(content: str, filename: str) -> list[ProseSentence]:
     """Return cached source-mapped prose sentences for supported file types."""
     if filename.lower().endswith((".md", ".mdx", ".markdown")):
-        from slop_lint.parsers.markdown import (
+        from proseprobe.parsers.markdown import (
             _get_cached_parser as get_markdown_parser,
         )
 
         return get_markdown_parser(content).get_prose_sentences()
     if filename.lower().endswith(".py"):
-        from slop_lint.parsers.python import _get_cached_parser as get_python_parser
+        from proseprobe.parsers.python import _get_cached_parser as get_python_parser
 
         return get_python_parser(content).get_prose_sentences()
     return _sentences_from_blocks(iter_prose_blocks(content, filename))

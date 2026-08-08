@@ -4,14 +4,14 @@ from dataclasses import FrozenInstanceError, fields
 
 import pytest
 
-from slop_lint.config import Config, ThresholdsConfig
-from slop_lint.profiles import profile_names_for_rule
-from slop_lint.rules import (
+from proseprobe.config import Config, ThresholdsConfig
+from proseprobe.profiles import profile_names_for_rule
+from proseprobe.rules import (
     get_all_rules,
     get_rule_metadata,
     get_rule_metadata_by_id,
 )
-from slop_lint.rules.base import Confidence, Severity
+from proseprobe.rules.base import Confidence, Severity
 
 
 def test_metadata_covers_registry_in_rule_id_order() -> None:

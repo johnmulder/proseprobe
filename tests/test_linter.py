@@ -5,10 +5,10 @@ from pathlib import Path
 
 import pytest
 
-from slop_lint.config import Config, ConfigError, PerFileIgnore, VocabularyConfig
-from slop_lint.core.linter import Linter, LintResults
-from slop_lint.rules import get_all_rules
-from slop_lint.rules.vocab import AIVocabularyRule
+from proseprobe.config import Config, ConfigError, PerFileIgnore, VocabularyConfig
+from proseprobe.core.linter import Linter, LintResults
+from proseprobe.rules import get_all_rules
+from proseprobe.rules.vocab import AIVocabularyRule
 
 
 class TestLinter:
@@ -267,7 +267,7 @@ class TestCheckContent:
         linter.register_rule(AIVocabularyRule())
 
         issues = linter.check_content(
-            "<!-- slop-lint-ignore-next-line V001 -->\n"
+            "<!-- proseprobe-ignore-next-line V001 -->\n"
             "This delves into setup.\n"
             "This delves into teardown.\n",
             Path("draft.md"),
@@ -465,10 +465,10 @@ class TestCheckFile:
         """Rule IDs and prefixes apply only to the reported target line."""
         test_file = tmp_path / "suppressed.md"
         test_file.write_text(
-            "<!-- slop-lint-ignore-next-line v001, v001 -->\n"
+            "<!-- proseprobe-ignore-next-line v001, v001 -->\n"
             "This delves into a topic. I hope this helps.\n"
             "This delves into another topic.\n"
-            "<!-- slop-lint-ignore-next-line V -->\n"
+            "<!-- proseprobe-ignore-next-line V -->\n"
             "This delves into a final topic. I hope this helps.\n"
         )
         linter = Linter(Config(select=["V001", "V002"]))
@@ -488,8 +488,8 @@ class TestCheckFile:
         """Python directives suppress docstring and comment findings in place."""
         test_file = tmp_path / "suppressed.py"
         test_file.write_text(
-            '"""This delves into the API."""  # slop-lint: ignore=V001\n'
-            "# This delves into setup.  # slop-lint: ignore=V001\n"
+            '"""This delves into the API."""  # proseprobe: ignore=V001\n'
+            "# This delves into setup.  # proseprobe: ignore=V001\n"
             "# This delves into teardown.\n"
         )
         linter = Linter(Config(select=["V001"]))
@@ -503,8 +503,8 @@ class TestCheckFile:
     @pytest.mark.parametrize(
         ("directive", "detail"),
         [
-            ("<!-- slop-lint-ignore-next-line V999 -->", "unknown"),
-            ("<!-- slop-lint-ignore-next-line V001, -->", "malformed"),
+            ("<!-- proseprobe-ignore-next-line V999 -->", "unknown"),
+            ("<!-- proseprobe-ignore-next-line V001, -->", "malformed"),
         ],
     )
     def test_invalid_inline_suppression_is_a_config_error(
@@ -526,7 +526,7 @@ class TestCheckFile:
         """Threaded scans surface directive errors without swallowing them."""
         (tmp_path / "clean.md").write_text("Clean content.\n")
         invalid = tmp_path / "invalid.md"
-        invalid.write_text("<!-- slop-lint-ignore-next-line X -->\nClean content.\n")
+        invalid.write_text("<!-- proseprobe-ignore-next-line X -->\nClean content.\n")
         linter = Linter(Config())
         for rule in get_all_rules():
             linter.register_rule(rule)
@@ -618,7 +618,7 @@ class TestCheck:
             def map(self, fn: object, iterable: list[Path]) -> list[object]:
                 return [fn(item) for item in iterable]  # type: ignore[misc,operator]
 
-        monkeypatch.setattr("slop_lint.core.linter.ThreadPoolExecutor", FakeExecutor)
+        monkeypatch.setattr("proseprobe.core.linter.ThreadPoolExecutor", FakeExecutor)
         linter.check([tmp_path])
 
         assert called["value"]

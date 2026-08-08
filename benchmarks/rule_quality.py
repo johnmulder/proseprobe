@@ -9,9 +9,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from slop_lint.config import Config
-from slop_lint.core.linter import Linter
-from slop_lint.rules import get_all_rules
+from proseprobe.config import Config
+from proseprobe.core.linter import Linter
+from proseprobe.rules import get_all_rules
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = REPO_ROOT / "quality" / "annotations.json"

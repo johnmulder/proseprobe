@@ -1,9 +1,9 @@
 """Detection rule registration."""
 
-from slop_lint.config import Config
-from slop_lint.profiles import profile_names_for_rule
-from slop_lint.rules import code, grammar, markup, struct, style, vocab
-from slop_lint.rules.base import Rule, RuleMetadata, severity_from_str
+from proseprobe.config import Config
+from proseprobe.profiles import profile_names_for_rule
+from proseprobe.rules import code, grammar, markup, struct, style, vocab
+from proseprobe.rules.base import Rule, RuleMetadata, severity_from_str
 
 __all__ = ["get_all_rules", "get_rule_metadata", "get_rule_metadata_by_id"]
 

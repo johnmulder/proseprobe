@@ -9,7 +9,7 @@ from collections import Counter
 from collections.abc import Callable, Sequence
 from pathlib import Path
 
-from slop_lint.rules import get_rule_metadata
+from proseprobe.rules import get_rule_metadata
 
 _CATEGORY_ORDER = ("V", "S", "T", "G", "C", "M")
 _CATEGORY_DESCRIPTIONS = {

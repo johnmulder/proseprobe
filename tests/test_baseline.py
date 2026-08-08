@@ -6,20 +6,20 @@ from pathlib import Path
 
 import pytest
 
-from slop_lint.config import ConfigError
-from slop_lint.core.baseline import (
+from proseprobe.config import ConfigError
+from proseprobe.core.baseline import (
     Baseline,
     filter_new_issues,
     resolve_workspace,
 )
-from slop_lint.rules.base import Confidence, Issue, Severity
+from proseprobe.rules.base import Confidence, Issue, Severity
 
 
 class TestBaseline:
     """Tests for Baseline class."""
 
     def test_empty_baseline(self, tmp_path: Path) -> None:
-        baseline = Baseline(tmp_path / ".slop-lint-baseline.json")
+        baseline = Baseline(tmp_path / ".proseprobe-baseline.json")
         assert baseline.count == 0
         assert not baseline.is_loaded
 
@@ -29,7 +29,7 @@ class TestBaseline:
         assert not baseline.is_loaded
 
     def test_save_and_load(self, tmp_path: Path) -> None:
-        baseline_path = tmp_path / ".slop-lint-baseline.json"
+        baseline_path = tmp_path / ".proseprobe-baseline.json"
         baseline = Baseline(baseline_path)
 
         # Add an issue
@@ -71,7 +71,7 @@ class TestBaseline:
         }
 
     def test_is_new_issue(self, tmp_path: Path) -> None:
-        baseline = Baseline(tmp_path / ".slop-lint-baseline.json")
+        baseline = Baseline(tmp_path / ".proseprobe-baseline.json")
 
         issue = Issue(
             rule_id="V001",
@@ -94,7 +94,7 @@ class TestBaseline:
         assert not baseline.is_new_issue(issue, file_path, content, tmp_path)
 
     def test_different_issues_are_new(self, tmp_path: Path) -> None:
-        baseline = Baseline(tmp_path / ".slop-lint-baseline.json")
+        baseline = Baseline(tmp_path / ".proseprobe-baseline.json")
 
         issue1 = Issue(
             rule_id="V001",
@@ -317,7 +317,7 @@ class TestFilterNewIssues:
     """Tests for filter_new_issues function."""
 
     def test_filter_removes_known_issues(self, tmp_path: Path) -> None:
-        baseline = Baseline(tmp_path / ".slop-lint-baseline.json")
+        baseline = Baseline(tmp_path / ".proseprobe-baseline.json")
 
         issue1 = Issue(
             rule_id="V001",
@@ -350,7 +350,7 @@ class TestFilterNewIssues:
         assert filtered[file_path][0].rule_id == "V002"
 
     def test_filter_empty_when_all_known(self, tmp_path: Path) -> None:
-        baseline = Baseline(tmp_path / ".slop-lint-baseline.json")
+        baseline = Baseline(tmp_path / ".proseprobe-baseline.json")
 
         issue = Issue(
             rule_id="V001",

@@ -1,4 +1,4 @@
-"""Startup latency probe for slop-lint."""
+"""Startup latency probe for proseprobe."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ def run_probe(limit_ms: float) -> int:
     """Run the version command once and enforce a latency limit."""
     start = time.perf_counter()
     result = subprocess.run(
-        [sys.executable, "-m", "slop_lint", "version"],
+        [sys.executable, "-m", "proseprobe", "version"],
         check=False,
         capture_output=True,
         text=True,

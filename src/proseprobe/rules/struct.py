@@ -4,7 +4,7 @@ import re
 from itertools import groupby
 from typing import ClassVar
 
-from slop_lint.data.patterns import (
+from proseprobe.data.patterns import (
     ANECDOTE_EVIDENCE_PATTERNS,
     CHALLENGE_CONCLUSION_PATTERNS,
     CITATION_NAME_DROP_PATTERN,
@@ -16,19 +16,19 @@ from slop_lint.data.patterns import (
     SIGNIFICANCE_PATTERNS,
     SLIDE_DECK_BUZZWORDS,
 )
-from slop_lint.data.phrases import (
+from proseprobe.data.phrases import (
     ALIGNMENT_RITUAL_PHRASES,
     CORPORATE_EUPHEMISM_PHRASES,
     FRACTAL_SUMMARY_PHRASES,
     SIGNPOSTED_CONCLUSION_PHRASES,
 )
-from slop_lint.parsers.prose import (
+from proseprobe.parsers.prose import (
     ProseSentence,
     iter_prose_blocks,
     iter_prose_scopes,
     iter_prose_sentences,
 )
-from slop_lint.rules.base import Confidence, Issue, Rule, Severity
+from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
 
 class RuleOfThreeRule(Rule):

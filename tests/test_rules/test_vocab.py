@@ -2,10 +2,10 @@
 
 import pytest
 
-from slop_lint.config import Config
-from slop_lint.rules import get_all_rules
-from slop_lint.rules.base import Confidence, Rule, Severity
-from slop_lint.rules.vocab import (
+from proseprobe.config import Config
+from proseprobe.rules import get_all_rules
+from proseprobe.rules.base import Confidence, Rule, Severity
+from proseprobe.rules.vocab import (
     AIVocabularyRule,
     CollaborativePhrasesRule,
     GrandioseStakesRule,
@@ -266,7 +266,7 @@ class TestGrandioseStakes:
 
     def test_detects_fundamentally_reshape(self) -> None:
         """Detect 'fundamentally reshape' grandiose claim."""
-        from slop_lint.rules.vocab import GrandioseStakesRule
+        from proseprobe.rules.vocab import GrandioseStakesRule
 
         content = "This will fundamentally reshape how we think about everything."
         issues = GrandioseStakesRule().check(content, "test.md")
@@ -275,7 +275,7 @@ class TestGrandioseStakes:
 
     def test_detects_define_the_next_era(self) -> None:
         """Detect 'define the next era' inflation."""
-        from slop_lint.rules.vocab import GrandioseStakesRule
+        from proseprobe.rules.vocab import GrandioseStakesRule
 
         content = "This technology will define the next era of computing."
         issues = GrandioseStakesRule().check(content, "test.md")
@@ -283,7 +283,7 @@ class TestGrandioseStakes:
 
     def test_detects_change_everything(self) -> None:
         """Detect 'will change everything' inflation."""
-        from slop_lint.rules.vocab import GrandioseStakesRule
+        from proseprobe.rules.vocab import GrandioseStakesRule
 
         content = "AI will change everything about how we work."
         issues = GrandioseStakesRule().check(content, "test.md")
@@ -291,14 +291,14 @@ class TestGrandioseStakes:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal technical prose."""
-        from slop_lint.rules.vocab import GrandioseStakesRule
+        from proseprobe.rules.vocab import GrandioseStakesRule
 
         content = "The library provides a simple API for HTTP requests."
         issues = GrandioseStakesRule().check(content, "test.md")
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.vocab import GrandioseStakesRule
+        from proseprobe.rules.vocab import GrandioseStakesRule
 
         rule = GrandioseStakesRule()
         assert rule.id == "V006"
@@ -310,7 +310,7 @@ class TestInventedConceptLabels:
 
     def test_detects_multiple_labels(self) -> None:
         """Detect 2+ compound analytical labels in same document."""
-        from slop_lint.rules.vocab import InventedConceptLabelsRule
+        from proseprobe.rules.vocab import InventedConceptLabelsRule
 
         content = (
             "The supervision paradox makes management harder.\n"
@@ -323,14 +323,14 @@ class TestInventedConceptLabels:
 
     def test_ignores_single_label(self) -> None:
         """Don't flag a single compound label."""
-        from slop_lint.rules.vocab import InventedConceptLabelsRule
+        from proseprobe.rules.vocab import InventedConceptLabelsRule
 
         content = "The productivity paradox has been studied extensively."
         issues = InventedConceptLabelsRule().check(content, "test.md")
         assert len(issues) == 0
 
     def test_excludes_literal_reference_from_reported_labels(self) -> None:
-        from slop_lint.rules.vocab import InventedConceptLabelsRule
+        from proseprobe.rules.vocab import InventedConceptLabelsRule
 
         content = (
             "The automation paradox slows delivery.\n"
@@ -346,7 +346,7 @@ class TestInventedConceptLabels:
         ]
 
     def test_literal_references_do_not_satisfy_threshold(self) -> None:
-        from slop_lint.rules.vocab import InventedConceptLabelsRule
+        from proseprobe.rules.vocab import InventedConceptLabelsRule
 
         content = "This study fills a gap. That dilemma remains unresolved."
 
@@ -364,7 +364,7 @@ class TestInventedConceptLabels:
     def test_other_literal_determiners_do_not_satisfy_threshold(
         self, gap_reference: str, dilemma_reference: str
     ) -> None:
-        from slop_lint.rules.vocab import InventedConceptLabelsRule
+        from proseprobe.rules.vocab import InventedConceptLabelsRule
 
         content = (
             f"This study fills {gap_reference}. The team studies {dilemma_reference}."
@@ -379,7 +379,7 @@ class TestInventedConceptLabels:
     def test_other_literal_determiners_are_not_reported_with_labels(
         self, literal_reference: str
     ) -> None:
-        from slop_lint.rules.vocab import InventedConceptLabelsRule
+        from proseprobe.rules.vocab import InventedConceptLabelsRule
 
         content = (
             "The automation paradox slows delivery.\n"
@@ -402,12 +402,12 @@ class TestInventedConceptLabels:
         ],
     )
     def test_possessive_clitics_do_not_satisfy_threshold(self, content: str) -> None:
-        from slop_lint.rules.vocab import InventedConceptLabelsRule
+        from proseprobe.rules.vocab import InventedConceptLabelsRule
 
         assert InventedConceptLabelsRule().check(content, "test.md") == []
 
     def test_single_quoted_labels_still_satisfy_threshold(self) -> None:
-        from slop_lint.rules.vocab import InventedConceptLabelsRule
+        from proseprobe.rules.vocab import InventedConceptLabelsRule
 
         content = "The 'automation paradox' compounds the 'innovation trap'."
 
@@ -420,14 +420,14 @@ class TestInventedConceptLabels:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag prose without compound labels."""
-        from slop_lint.rules.vocab import InventedConceptLabelsRule
+        from proseprobe.rules.vocab import InventedConceptLabelsRule
 
         content = "The system handles errors gracefully and logs all events."
         issues = InventedConceptLabelsRule().check(content, "test.md")
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.vocab import InventedConceptLabelsRule
+        from proseprobe.rules.vocab import InventedConceptLabelsRule
 
         rule = InventedConceptLabelsRule()
         assert rule.id == "V007"
@@ -442,7 +442,7 @@ class TestTrendOverclaim:
 
     def test_detects_more_and_more_people(self) -> None:
         """Detect 'more and more people' trend overclaim."""
-        from slop_lint.rules.vocab import TrendOverclaimRule
+        from proseprobe.rules.vocab import TrendOverclaimRule
 
         content = "More and more people are adopting this framework."
         issues = TrendOverclaimRule().check(content, "test.md")
@@ -451,7 +451,7 @@ class TestTrendOverclaim:
 
     def test_detects_growing_number(self) -> None:
         """Detect 'a growing number of' trend overclaim."""
-        from slop_lint.rules.vocab import TrendOverclaimRule
+        from proseprobe.rules.vocab import TrendOverclaimRule
 
         content = "A growing number of developers prefer TypeScript."
         issues = TrendOverclaimRule().check(content, "test.md")
@@ -459,7 +459,7 @@ class TestTrendOverclaim:
 
     def test_detects_everyone_is_talking(self) -> None:
         """Detect 'everyone is talking about' trend overclaim."""
-        from slop_lint.rules.vocab import TrendOverclaimRule
+        from proseprobe.rules.vocab import TrendOverclaimRule
 
         content = "Everyone is talking about this new approach."
         issues = TrendOverclaimRule().check(content, "test.md")
@@ -467,7 +467,7 @@ class TestTrendOverclaim:
 
     def test_detects_increasingly_popular(self) -> None:
         """Detect 'increasingly popular' trend overclaim."""
-        from slop_lint.rules.vocab import TrendOverclaimRule
+        from proseprobe.rules.vocab import TrendOverclaimRule
 
         content = "Rust is increasingly popular among systems programmers."
         issues = TrendOverclaimRule().check(content, "test.md")
@@ -475,14 +475,14 @@ class TestTrendOverclaim:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal technical prose."""
-        from slop_lint.rules.vocab import TrendOverclaimRule
+        from proseprobe.rules.vocab import TrendOverclaimRule
 
         content = "The library provides a simple API for HTTP requests."
         issues = TrendOverclaimRule().check(content, "test.md")
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.vocab import TrendOverclaimRule
+        from proseprobe.rules.vocab import TrendOverclaimRule
 
         rule = TrendOverclaimRule()
         assert rule.id == "V008"
@@ -535,7 +535,7 @@ class TestAcademicVocabularyExpansions:
 
     def test_suggestions_for_new_words(self) -> None:
         """New words should have suggestions."""
-        from slop_lint.data.vocabulary import VOCABULARY_SUGGESTIONS
+        from proseprobe.data.vocabulary import VOCABULARY_SUGGESTIONS
 
         new_words = [
             "problematize",
@@ -607,7 +607,7 @@ class TestBusinessJargonVocabulary:
 
     def test_suggestions_for_business_words(self) -> None:
         """Business jargon words should have suggestions."""
-        from slop_lint.data.vocabulary import VOCABULARY_SUGGESTIONS
+        from proseprobe.data.vocabulary import VOCABULARY_SUGGESTIONS
 
         new_words = [
             "synergy",
@@ -626,7 +626,7 @@ class TestPolitenessFogPhrases:
 
     def test_detects_just_circling_back(self) -> None:
         """Detect 'just circling back' politeness fog."""
-        from slop_lint.rules.vocab import CollaborativePhrasesRule
+        from proseprobe.rules.vocab import CollaborativePhrasesRule
 
         rule = CollaborativePhrasesRule()
         issues = rule.check("Just circling back on the previous thread.", "test.md")
@@ -634,7 +634,7 @@ class TestPolitenessFogPhrases:
 
     def test_detects_just_following_up(self) -> None:
         """Detect 'just following up' politeness fog."""
-        from slop_lint.rules.vocab import CollaborativePhrasesRule
+        from proseprobe.rules.vocab import CollaborativePhrasesRule
 
         rule = CollaborativePhrasesRule()
         issues = rule.check("Just following up on the proposal.", "test.md")
@@ -642,7 +642,7 @@ class TestPolitenessFogPhrases:
 
     def test_detects_gentle_reminder(self) -> None:
         """Detect 'just a gentle reminder' politeness fog."""
-        from slop_lint.rules.vocab import CollaborativePhrasesRule
+        from proseprobe.rules.vocab import CollaborativePhrasesRule
 
         rule = CollaborativePhrasesRule()
         issues = rule.check("Just a gentle reminder about the deadline.", "test.md")
@@ -650,7 +650,7 @@ class TestPolitenessFogPhrases:
 
     def test_detects_per_our_last_conversation(self) -> None:
         """Detect 'per our last conversation' politeness fog."""
-        from slop_lint.rules.vocab import CollaborativePhrasesRule
+        from proseprobe.rules.vocab import CollaborativePhrasesRule
 
         rule = CollaborativePhrasesRule()
         issues = rule.check("Per our last conversation, here is the update.", "test.md")

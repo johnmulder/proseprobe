@@ -12,8 +12,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from slop_lint.config import ConfigError
-from slop_lint.rules.base import Issue
+from proseprobe.config import ConfigError
+from proseprobe.rules.base import Issue
 
 __all__ = [
     "Baseline",
@@ -100,7 +100,7 @@ class Baseline:
     """Manage known issue identities in baseline format 1 or 2."""
 
     def __init__(self, baseline_path: Path | None = None) -> None:
-        self.baseline_path = baseline_path or Path(".slop-lint-baseline.json")
+        self.baseline_path = baseline_path or Path(".proseprobe-baseline.json")
         self._entries: set[BaselineEntry] = set()
         self._legacy_fingerprints: set[str] = set()
         self._loaded = False

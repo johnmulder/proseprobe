@@ -1,9 +1,9 @@
 # Agent integration guide
 
-Use `slop-lint` as a deterministic review step for Markdown prose and
+Use `proseprobe` as a deterministic review step for Markdown prose and
 source-mapped Python docstrings and comments. It reports source locations,
 severity, confidence, and optional suggestions.
-slop-lint reports findings; it does not rewrite files.
+ProseProbe reports findings; it does not rewrite files.
 
 ## When to run
 
@@ -22,7 +22,7 @@ change.
 For files already in the checkout, pass their paths and request JSON Lines:
 
 ```bash
-slop-lint check --format jsonl README.md docs/
+proseprobe check --format jsonl README.md docs/
 ```
 
 JSON Lines writes one diagnostic object per line, preserves deterministic
@@ -33,17 +33,17 @@ For one generated document, send it through standard input and supply a virtual
 filename:
 
 ```bash
-generate-draft | slop-lint check - --filename docs/draft.md --format jsonl
+generate-draft | proseprobe check - --filename docs/draft.md --format jsonl
 ```
 
 The filename selects file-type rules and per-file policy. Standard input cannot
 be mixed with filesystem paths or baseline operations.
 
 When the repository has installed its published pre-commit hook, this checks the
-staged files without adding Git-specific behavior to slop-lint:
+staged files without adding Git-specific behavior to proseprobe:
 
 ```bash
-pre-commit run slop-lint
+pre-commit run proseprobe
 ```
 
 Otherwise, pass the exact files changed by the current task. Avoid shell command
@@ -64,8 +64,8 @@ it does not replace repository policy.
 Inspect canonical rule metadata instead of hard-coding the rule catalog:
 
 ```bash
-slop-lint rules --format json
-slop-lint explain V001 --format json
+proseprobe rules --format json
+proseprobe explain V001 --format json
 ```
 
 `explain` is the first step when terminology may be intentional or a diagnostic
@@ -107,6 +107,6 @@ The exact syntax and validation rules are in the
 
 ## Boundaries
 
-Keep generation and rewriting in the calling agent. `slop-lint` needs no model
+Keep generation and rewriting in the calling agent. `proseprobe` needs no model
 credentials, provider SDK, network access, prompt scoring, or embedded rewrite
 mode. Its structured diagnostics and rule metadata are the integration API.

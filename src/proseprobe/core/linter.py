@@ -8,9 +8,9 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 
-from slop_lint.config import Config, ConfigError
-from slop_lint.parsers.prose import iter_inline_suppressions
-from slop_lint.rules.base import Issue, Rule
+from proseprobe.config import Config, ConfigError
+from proseprobe.parsers.prose import iter_inline_suppressions
+from proseprobe.rules.base import Issue, Rule
 
 __all__ = ["LintReadError", "LintResults", "Linter"]
 

@@ -3,9 +3,9 @@
 import json
 from pathlib import Path
 
-from slop_lint import __version__
-from slop_lint.core.reporter import format_results
-from slop_lint.rules.base import Confidence, Issue, Severity
+from proseprobe import __version__
+from proseprobe.core.reporter import format_results
+from proseprobe.rules.base import Confidence, Issue, Severity
 
 
 class TestTextFormat:

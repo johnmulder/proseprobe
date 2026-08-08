@@ -1,4 +1,4 @@
-# slop-lint
+# ProseProbe
 
 A Unix-style command-line tool to detect bad writing practices in Markdown and Python files.
 
@@ -7,7 +7,7 @@ A Unix-style command-line tool to detect bad writing practices in Markdown and P
 
 ## Overview
 
-Overused vocabulary, structural clichés, promotional language, and sloppy markup creep into documentation and code all the time. **slop-lint** detects these bad practices and helps you write clearer, more direct prose.
+Overused vocabulary, structural clichés, promotional language, and careless markup creep into documentation and code all the time. **ProseProbe** detects these bad practices and helps you write clearer, more direct prose.
 
 ## Features
 
@@ -15,7 +15,7 @@ Overused vocabulary, structural clichés, promotional language, and sloppy marku
 - 📝 Scans Markdown prose and source-mapped Python docstrings and comments
 - 🎯 **Confidence levels** (high/medium/low) to reduce noise
 - 🗂️ Built-in profiles for general, technical, academic, journalism, and business prose
-- ⚙️ Configurable via `.slop-lint.toml`
+- ⚙️ Configurable via `.proseprobe.toml`
 - 📊 Multiple output formats (text, JSON, JSON Lines, SARIF)
 - 🚀 Fast, parallel file processing
 - 🧭 Directory discovery respects `.gitignore` patterns
@@ -23,66 +23,66 @@ Overused vocabulary, structural clichés, promotional language, and sloppy marku
 ## Installation
 
 ```bash
-pip install slop-lint
+pip install proseprobe
 ```
 
 Or with [pipx](https://pipx.pypa.io/):
 
 ```bash
-pipx install slop-lint
+pipx install proseprobe
 ```
 
 ## Quick Start
 
 ```bash
 # Check current directory
-slop-lint check .
+proseprobe check .
 
 # Check specific files
-slop-lint check README.md docs/
+proseprobe check README.md docs/
 
 # Output as JSON
-slop-lint check --format json .
+proseprobe check --format json .
 
 # Output one JSON diagnostic per line
-slop-lint check --format jsonl .
+proseprobe check --format jsonl .
 
 # Check one document from standard input
 printf 'This documentation delves into the API.\n' | \
-  slop-lint check - --filename draft.md --format json
+  proseprobe check - --filename draft.md --format json
 
 # Filter by confidence level
-slop-lint check --min-confidence high .
-slop-lint check --hide-low .
+proseprobe check --min-confidence high .
+proseprobe check --hide-low .
 
 # Apply a built-in rule profile
-slop-lint check --profile technical-docs .
+proseprobe check --profile technical-docs .
 
 # Watch mode (continuous checking)
-slop-lint watch .
+proseprobe watch .
 
 # Watch with the same filters used by check
-slop-lint watch --severity error --min-confidence high \
-  --baseline .slop-lint-baseline.json .
+proseprobe watch --severity error --min-confidence high \
+  --baseline .proseprobe-baseline.json .
 
 # Create a baseline for gradual adoption
-slop-lint baseline create --baseline .slop-lint-baseline.json .
+proseprobe baseline create --baseline .proseprobe-baseline.json .
 
 # Check only new issues (not in baseline)
-slop-lint check --baseline .slop-lint-baseline.json .
+proseprobe check --baseline .proseprobe-baseline.json .
 
 # Inspect, accept, or remove baseline entries
-slop-lint baseline summary --baseline .slop-lint-baseline.json .
-slop-lint baseline update --baseline .slop-lint-baseline.json .
-slop-lint baseline prune --baseline .slop-lint-baseline.json .
+proseprobe baseline summary --baseline .proseprobe-baseline.json .
+proseprobe baseline update --baseline .proseprobe-baseline.json .
+proseprobe baseline prune --baseline .proseprobe-baseline.json .
 
 # List all rules
-slop-lint rules
-slop-lint rules --format json
+proseprobe rules
+proseprobe rules --format json
 
 # Explain a specific rule
-slop-lint explain V001
-slop-lint explain V001 --format json
+proseprobe explain V001
+proseprobe explain V001 --format json
 ```
 
 `rules --format json` and `explain RULE --format json` expose the canonical
@@ -141,10 +141,10 @@ src/main.py:45:8: V002 [warning] Collaborative phrase: 'I hope this helps'
 
 ## Configuration
 
-Create a `.slop-lint.toml` in your project root:
+Create a `.proseprobe.toml` in your project root:
 
 ```toml
-[tool.slop-lint]
+[tool.proseprobe]
 include = ["*.md", "*.mdx", "*.markdown", "*.py"]
 exclude = ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
 profile = "technical-docs"
@@ -154,22 +154,22 @@ minimum_severity = "warning"
 ignore = ["T001", "T005"]
 
 # Upgrade severity
-[tool.slop-lint.severity]
+[tool.proseprobe.severity]
 V001 = "error"
 
 # Allow domain-specific vocabulary
-[tool.slop-lint.vocabulary]
+[tool.proseprobe.vocabulary]
 allowed = ["crucial", "comprehensive"]
 
 # Per-file overrides
-[[tool.slop-lint.per-file-ignores]]
+[[tool.proseprobe.per-file-ignores]]
 pattern = "CHANGELOG.md"
 ignore = ["S004"]
 ```
 
 Rule IDs and one-letter category prefixes are case-insensitive. Unknown keys,
 unknown rule references, and non-positive thresholds are configuration errors;
-`slop-lint check --show-config` prints the normalized policy and its source.
+`proseprobe check --show-config` prints the normalized policy and its source.
 
 The built-in profiles are `general`, `technical-docs`, `academic`,
 `journalism`, and `business`. A profile supplies rule, severity, and confidence
@@ -179,7 +179,7 @@ defaults. Explicit configuration keys override a configured profile; a CLI
 Or add to `pyproject.toml`:
 
 ```toml
-[tool.slop-lint]
+[tool.proseprobe]
 ignore = ["T001"]
 ```
 
@@ -190,14 +190,14 @@ finding should not require a wider ignore. Markdown targets the immediately
 following physical line:
 
 ```markdown
-<!-- slop-lint-ignore-next-line V001,S010 -->
+<!-- proseprobe-ignore-next-line V001,S010 -->
 This documentation delves into three related concerns.
 ```
 
 Python targets the same physical line as a real comment token:
 
 ```python
-"""This documentation delves into the API."""  # slop-lint: ignore=V001,S010
+"""This documentation delves into the API."""  # proseprobe: ignore=V001,S010
 ```
 
 Directives are applied before confidence and baseline filtering. Empty,
@@ -225,11 +225,11 @@ permissions:
 steps:
   - uses: actions/checkout@v7
 
-  - name: Install slop-lint
-    run: pip install slop-lint
+  - name: Install proseprobe
+    run: pip install proseprobe
 
   - name: Check for bad writing practices
-    run: slop-lint check --format sarif . > results.sarif || test $? -eq 1
+    run: proseprobe check --format sarif . > results.sarif || test $? -eq 1
 
   - name: Upload SARIF
     uses: github/codeql-action/upload-sarif@v4
@@ -241,18 +241,18 @@ steps:
 
 ```yaml
 repos:
-  - repo: https://github.com/slop-lint/slop-lint
+  - repo: https://github.com/johnmulder/proseprobe
     rev: v0.1.0
     hooks:
-      - id: slop-lint
+      - id: proseprobe
 ```
 
 ## Development
 
 ```bash
 # Clone and install development dependencies
-git clone https://github.com/slop-lint/slop-lint.git
-cd slop-lint
+git clone https://github.com/johnmulder/proseprobe.git
+cd proseprobe
 make dev
 
 # Run tests
@@ -280,11 +280,11 @@ membership, and run `make rule-docs`. Do not edit content between
 - [docs/rules.md](docs/rules.md) — Detailed rule documentation
 - [docs/configuration.md](docs/configuration.md) — Configuration reference
 - [Agent integration guide](docs/agent-integration.md) — Portable lint-and-repair workflow for coding agents
-- [Portable Agent Skill](skills/slop-lint/SKILL.md) — Installable workflow for skills-compatible agents
+- [Portable Agent Skill](skills/proseprobe/SKILL.md) — Installable workflow for skills-compatible agents
 
-The `skills/slop-lint/` directory is the copyable distribution unit. Copy it
+The `skills/proseprobe/` directory is the copyable distribution unit. Copy it
 into the skills location documented by your agent.
-Install the `slop-lint` executable separately before using the skill.
+Install the `proseprobe` executable separately before using the skill.
 The Python wheel does not install the skill or add provider-specific plugin
 metadata.
 
@@ -296,16 +296,16 @@ repository. From the root of a cloned checkout, run:
 
 ```bash
 codex plugin marketplace add "$PWD/.agents/plugins"
-codex plugin add slop-lint@slop-lint
+codex plugin add proseprobe@proseprobe
 ```
 
-Install the `slop-lint` executable separately before using the plugin.
+Install the `proseprobe` executable separately before using the plugin.
 The Codex wrapper is not included in the Python wheel.
 Start a new Codex thread after installation so it loads the skill.
 
-## Why "slop-lint"?
+## Why "proseprobe"?
 
-Sloppy writing is everywhere—vague buzzwords, wall-of-text paragraphs, promotional fluff, broken markup. slop-lint catches these patterns so you can write documentation and code comments that are clear, direct, and worth reading.
+Sloppy writing is everywhere—vague buzzwords, wall-of-text paragraphs, promotional fluff, broken markup. proseprobe catches these patterns so you can write documentation and code comments that are clear, direct, and worth reading.
 
 ## License
 

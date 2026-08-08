@@ -2,8 +2,8 @@
 
 import pytest
 
-from slop_lint.rules.base import Confidence, Rule, Severity
-from slop_lint.rules.grammar import (
+from proseprobe.rules.base import Confidence, Rule, Severity
+from proseprobe.rules.grammar import (
     AssertedSimplicityRule,
     CopulaAvoidanceRule,
     ExcessiveHedgingRule,
@@ -162,7 +162,7 @@ class TestFalseSuspenseTransition:
 
     def test_detects_heres_the_kicker(self) -> None:
         """Detect 'Here's the kicker' false suspense."""
-        from slop_lint.rules.grammar import FalseSuspenseTransitionRule
+        from proseprobe.rules.grammar import FalseSuspenseTransitionRule
 
         text = "Here's the kicker."
         rule = FalseSuspenseTransitionRule()
@@ -172,7 +172,7 @@ class TestFalseSuspenseTransition:
 
     def test_detects_heres_the_thing(self) -> None:
         """Detect 'Here's the thing about' false suspense."""
-        from slop_lint.rules.grammar import FalseSuspenseTransitionRule
+        from proseprobe.rules.grammar import FalseSuspenseTransitionRule
 
         text = "Here's the thing about AI adoption."
         rule = FalseSuspenseTransitionRule()
@@ -181,7 +181,7 @@ class TestFalseSuspenseTransition:
 
     def test_detects_heres_where_it_gets_interesting(self) -> None:
         """Detect 'Here's where it gets interesting' variant."""
-        from slop_lint.rules.grammar import FalseSuspenseTransitionRule
+        from proseprobe.rules.grammar import FalseSuspenseTransitionRule
 
         text = "Here's where it gets interesting."
         rule = FalseSuspenseTransitionRule()
@@ -190,7 +190,7 @@ class TestFalseSuspenseTransition:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal use of 'here'."""
-        from slop_lint.rules.grammar import FalseSuspenseTransitionRule
+        from proseprobe.rules.grammar import FalseSuspenseTransitionRule
 
         text = "Here is the configuration file for the project."
         rule = FalseSuspenseTransitionRule()
@@ -198,7 +198,7 @@ class TestFalseSuspenseTransition:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.grammar import FalseSuspenseTransitionRule
+        from proseprobe.rules.grammar import FalseSuspenseTransitionRule
 
         rule = FalseSuspenseTransitionRule()
         assert rule.id == "G004"
@@ -210,7 +210,7 @@ class TestPatronizingAnalogy:
 
     def test_detects_think_of_it_as(self) -> None:
         """Detect 'Think of it as...' patronizing analogy."""
-        from slop_lint.rules.grammar import PatronizingAnalogyRule
+        from proseprobe.rules.grammar import PatronizingAnalogyRule
 
         text = "Think of it as a Swiss Army knife for your workflow."
         rule = PatronizingAnalogyRule()
@@ -220,7 +220,7 @@ class TestPatronizingAnalogy:
 
     def test_detects_think_of_it_like(self) -> None:
         """Detect 'Think of it like...' variant."""
-        from slop_lint.rules.grammar import PatronizingAnalogyRule
+        from proseprobe.rules.grammar import PatronizingAnalogyRule
 
         text = "Think of it like a highway system for data."
         rule = PatronizingAnalogyRule()
@@ -229,7 +229,7 @@ class TestPatronizingAnalogy:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal prose without patronizing analogies."""
-        from slop_lint.rules.grammar import PatronizingAnalogyRule
+        from proseprobe.rules.grammar import PatronizingAnalogyRule
 
         text = "The system uses a caching layer for performance."
         rule = PatronizingAnalogyRule()
@@ -237,7 +237,7 @@ class TestPatronizingAnalogy:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.grammar import PatronizingAnalogyRule
+        from proseprobe.rules.grammar import PatronizingAnalogyRule
 
         rule = PatronizingAnalogyRule()
         assert rule.id == "G005"
@@ -249,7 +249,7 @@ class TestFuturistInvitation:
 
     def test_detects_imagine_a_world(self) -> None:
         """Detect 'Imagine a world where...' invitation."""
-        from slop_lint.rules.grammar import FuturistInvitationRule
+        from proseprobe.rules.grammar import FuturistInvitationRule
 
         text = "Imagine a world where every tool has a quiet intelligence behind it."
         rule = FuturistInvitationRule()
@@ -259,7 +259,7 @@ class TestFuturistInvitation:
 
     def test_detects_in_that_world(self) -> None:
         """Detect 'In that world,...' follow-up."""
-        from slop_lint.rules.grammar import FuturistInvitationRule
+        from proseprobe.rules.grammar import FuturistInvitationRule
 
         text = "In that world, workflows stop being manual steps."
         rule = FuturistInvitationRule()
@@ -268,7 +268,7 @@ class TestFuturistInvitation:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal use of 'imagine'."""
-        from slop_lint.rules.grammar import FuturistInvitationRule
+        from proseprobe.rules.grammar import FuturistInvitationRule
 
         text = "You can imagine how complex this becomes at scale."
         rule = FuturistInvitationRule()
@@ -276,7 +276,7 @@ class TestFuturistInvitation:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.grammar import FuturistInvitationRule
+        from proseprobe.rules.grammar import FuturistInvitationRule
 
         rule = FuturistInvitationRule()
         assert rule.id == "G006"
@@ -288,7 +288,7 @@ class TestFalseVulnerability:
 
     def test_detects_this_is_not_a_rant(self) -> None:
         """Detect 'This is not a rant' false vulnerability."""
-        from slop_lint.rules.grammar import FalseVulnerabilityRule
+        from proseprobe.rules.grammar import FalseVulnerabilityRule
 
         text = "This is not a rant; it's a diagnosis."
         rule = FalseVulnerabilityRule()
@@ -298,7 +298,7 @@ class TestFalseVulnerability:
 
     def test_detects_let_me_be_honest(self) -> None:
         """Detect 'Let me be honest' variant."""
-        from slop_lint.rules.grammar import FalseVulnerabilityRule
+        from proseprobe.rules.grammar import FalseVulnerabilityRule
 
         text = "Let me be honest about the state of this project."
         rule = FalseVulnerabilityRule()
@@ -307,7 +307,7 @@ class TestFalseVulnerability:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal prose."""
-        from slop_lint.rules.grammar import FalseVulnerabilityRule
+        from proseprobe.rules.grammar import FalseVulnerabilityRule
 
         text = "The integration test revealed a subtle timing bug."
         rule = FalseVulnerabilityRule()
@@ -315,7 +315,7 @@ class TestFalseVulnerability:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.grammar import FalseVulnerabilityRule
+        from proseprobe.rules.grammar import FalseVulnerabilityRule
 
         rule = FalseVulnerabilityRule()
         assert rule.id == "G007"
@@ -327,7 +327,7 @@ class TestAssertedSimplicity:
 
     def test_detects_reality_is_simpler(self) -> None:
         """Detect 'The reality is simpler' assertion."""
-        from slop_lint.rules.grammar import AssertedSimplicityRule
+        from proseprobe.rules.grammar import AssertedSimplicityRule
 
         text = "The reality is simpler and less flattering."
         rule = AssertedSimplicityRule()
@@ -337,7 +337,7 @@ class TestAssertedSimplicity:
 
     def test_detects_history_is_clear(self) -> None:
         """Detect 'History is clear' assertion."""
-        from slop_lint.rules.grammar import AssertedSimplicityRule
+        from proseprobe.rules.grammar import AssertedSimplicityRule
 
         text = "History is clear on this point."
         rule = AssertedSimplicityRule()
@@ -346,7 +346,7 @@ class TestAssertedSimplicity:
 
     def test_detects_the_truth_is(self) -> None:
         """Detect 'The truth is' assertion."""
-        from slop_lint.rules.grammar import AssertedSimplicityRule
+        from proseprobe.rules.grammar import AssertedSimplicityRule
 
         text = "The truth is most teams don't need microservices."
         rule = AssertedSimplicityRule()
@@ -355,7 +355,7 @@ class TestAssertedSimplicity:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag prose without asserted simplicity."""
-        from slop_lint.rules.grammar import AssertedSimplicityRule
+        from proseprobe.rules.grammar import AssertedSimplicityRule
 
         text = "The algorithm runs in O(n log n) time complexity."
         rule = AssertedSimplicityRule()
@@ -363,7 +363,7 @@ class TestAssertedSimplicity:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.grammar import AssertedSimplicityRule
+        from proseprobe.rules.grammar import AssertedSimplicityRule
 
         rule = AssertedSimplicityRule()
         assert rule.id == "G008"
@@ -375,7 +375,7 @@ class TestPedagogicalVoice:
 
     def test_detects_lets_break_this_down(self) -> None:
         """Detect 'Let's break this down' pedagogical voice."""
-        from slop_lint.rules.grammar import PedagogicalVoiceRule
+        from proseprobe.rules.grammar import PedagogicalVoiceRule
 
         text = "Let's break this down step by step."
         rule = PedagogicalVoiceRule()
@@ -385,7 +385,7 @@ class TestPedagogicalVoice:
 
     def test_detects_lets_unpack(self) -> None:
         """Detect 'Let's unpack' variant."""
-        from slop_lint.rules.grammar import PedagogicalVoiceRule
+        from proseprobe.rules.grammar import PedagogicalVoiceRule
 
         text = "Let's unpack what this really means."
         rule = PedagogicalVoiceRule()
@@ -394,7 +394,7 @@ class TestPedagogicalVoice:
 
     def test_detects_lets_dive_in(self) -> None:
         """Detect 'Let's dive in' variant."""
-        from slop_lint.rules.grammar import PedagogicalVoiceRule
+        from proseprobe.rules.grammar import PedagogicalVoiceRule
 
         text = "Let's dive into the details."
         rule = PedagogicalVoiceRule()
@@ -403,7 +403,7 @@ class TestPedagogicalVoice:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal prose."""
-        from slop_lint.rules.grammar import PedagogicalVoiceRule
+        from proseprobe.rules.grammar import PedagogicalVoiceRule
 
         text = "The configuration file supports TOML format."
         rule = PedagogicalVoiceRule()
@@ -411,7 +411,7 @@ class TestPedagogicalVoice:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.grammar import PedagogicalVoiceRule
+        from proseprobe.rules.grammar import PedagogicalVoiceRule
 
         rule = PedagogicalVoiceRule()
         assert rule.id == "G009"
@@ -426,7 +426,7 @@ class TestFalseBalance:
 
     def test_detects_supporters_critics(self) -> None:
         """Detect 'Supporters say X. Critics say Y.' false balance."""
-        from slop_lint.rules.grammar import FalseBalanceRule
+        from proseprobe.rules.grammar import FalseBalanceRule
 
         text = (
             "Supporters say it will create jobs, but critics say it will destroy them."
@@ -438,7 +438,7 @@ class TestFalseBalance:
 
     def test_detects_truth_in_the_middle(self) -> None:
         """Detect 'the truth lies somewhere in the middle' false balance."""
-        from slop_lint.rules.grammar import FalseBalanceRule
+        from proseprobe.rules.grammar import FalseBalanceRule
 
         text = "The truth lies somewhere in the middle of these views."
         rule = FalseBalanceRule()
@@ -447,7 +447,7 @@ class TestFalseBalance:
 
     def test_detects_both_sides_of_debate(self) -> None:
         """Detect 'both sides of the debate' false balance."""
-        from slop_lint.rules.grammar import FalseBalanceRule
+        from proseprobe.rules.grammar import FalseBalanceRule
 
         text = "We must consider both sides of the debate before deciding."
         rule = FalseBalanceRule()
@@ -456,7 +456,7 @@ class TestFalseBalance:
 
     def test_detects_opponents_argue(self) -> None:
         """Detect 'on the other hand, opponents argue' false balance."""
-        from slop_lint.rules.grammar import FalseBalanceRule
+        from proseprobe.rules.grammar import FalseBalanceRule
 
         text = "On the other hand, opponents argue this will cause harm."
         rule = FalseBalanceRule()
@@ -465,7 +465,7 @@ class TestFalseBalance:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal prose without false balance."""
-        from slop_lint.rules.grammar import FalseBalanceRule
+        from proseprobe.rules.grammar import FalseBalanceRule
 
         text = "The algorithm runs in O(n log n) time complexity."
         rule = FalseBalanceRule()
@@ -473,7 +473,7 @@ class TestFalseBalance:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.grammar import FalseBalanceRule
+        from proseprobe.rules.grammar import FalseBalanceRule
 
         rule = FalseBalanceRule()
         assert rule.id == "G010"
@@ -488,7 +488,7 @@ class TestNominalizationOverload:
 
     def test_detects_nominalization(self) -> None:
         """Detect multiple nominalizations above threshold."""
-        from slop_lint.rules.grammar import NominalizationOverloadRule
+        from proseprobe.rules.grammar import NominalizationOverloadRule
 
         text = (
             "The implementation of the analysis led to the identification of patterns.\n"
@@ -501,7 +501,7 @@ class TestNominalizationOverload:
 
     def test_ignores_single_nominalization(self) -> None:
         """Don't flag when below threshold."""
-        from slop_lint.rules.grammar import NominalizationOverloadRule
+        from proseprobe.rules.grammar import NominalizationOverloadRule
 
         text = "The implementation of the feature was smooth."
         rule = NominalizationOverloadRule(threshold=3)
@@ -510,7 +510,7 @@ class TestNominalizationOverload:
 
     def test_custom_threshold(self) -> None:
         """Respect configurable threshold."""
-        from slop_lint.rules.grammar import NominalizationOverloadRule
+        from proseprobe.rules.grammar import NominalizationOverloadRule
 
         text = (
             "The implementation of the analysis led to the identification of patterns."
@@ -524,7 +524,7 @@ class TestNominalizationOverload:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal prose with verb forms."""
-        from slop_lint.rules.grammar import NominalizationOverloadRule
+        from proseprobe.rules.grammar import NominalizationOverloadRule
 
         text = "The team implemented the analysis and identified patterns."
         rule = NominalizationOverloadRule(threshold=3)
@@ -532,7 +532,7 @@ class TestNominalizationOverload:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.grammar import NominalizationOverloadRule
+        from proseprobe.rules.grammar import NominalizationOverloadRule
 
         rule = NominalizationOverloadRule()
         assert rule.id == "G011"
@@ -544,7 +544,7 @@ class TestPassiveVoiceOveruse:
 
     def test_detects_academic_passive(self) -> None:
         """Detect formulaic academic passive constructions above threshold."""
-        from slop_lint.rules.grammar import PassiveVoiceOveruseRule
+        from proseprobe.rules.grammar import PassiveVoiceOveruseRule
 
         text = (
             "It is suggested that the results indicate a trend.\n"
@@ -561,7 +561,7 @@ class TestPassiveVoiceOveruse:
 
     def test_ignores_below_threshold(self) -> None:
         """Don't flag when below threshold."""
-        from slop_lint.rules.grammar import PassiveVoiceOveruseRule
+        from proseprobe.rules.grammar import PassiveVoiceOveruseRule
 
         text = (
             "It is suggested that the results indicate a trend.\n"
@@ -573,7 +573,7 @@ class TestPassiveVoiceOveruse:
 
     def test_ignores_technical_passive(self) -> None:
         """Don't flag normal technical passive voice."""
-        from slop_lint.rules.grammar import PassiveVoiceOveruseRule
+        from proseprobe.rules.grammar import PassiveVoiceOveruseRule
 
         text = "The file was created. Errors are logged. The server was restarted."
         rule = PassiveVoiceOveruseRule(threshold=1)
@@ -582,7 +582,7 @@ class TestPassiveVoiceOveruse:
 
     def test_custom_threshold(self) -> None:
         """Respect configurable threshold."""
-        from slop_lint.rules.grammar import PassiveVoiceOveruseRule
+        from proseprobe.rules.grammar import PassiveVoiceOveruseRule
 
         text = (
             "It is suggested that the results indicate a trend.\n"
@@ -596,7 +596,7 @@ class TestPassiveVoiceOveruse:
         assert len(issues_high) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.grammar import PassiveVoiceOveruseRule
+        from proseprobe.rules.grammar import PassiveVoiceOveruseRule
 
         rule = PassiveVoiceOveruseRule()
         assert rule.id == "G012"
@@ -685,7 +685,7 @@ class TestGapRitual:
 
     def test_detects_gap_ritual(self) -> None:
         """Detect 'the literature has overlooked' gap phrase."""
-        from slop_lint.rules.grammar import GapRitualRule
+        from proseprobe.rules.grammar import GapRitualRule
 
         text = "The literature has overlooked the role of community in this process."
         rule = GapRitualRule()
@@ -695,7 +695,7 @@ class TestGapRitual:
 
     def test_detects_fills_gap(self) -> None:
         """Detect 'fills that gap' phrase."""
-        from slop_lint.rules.grammar import GapRitualRule
+        from proseprobe.rules.grammar import GapRitualRule
 
         text = "This study fills that gap by examining the overlooked variables."
         rule = GapRitualRule()
@@ -704,7 +704,7 @@ class TestGapRitual:
 
     def test_detects_underexplored(self) -> None:
         """Detect 'remains underexplored' phrase."""
-        from slop_lint.rules.grammar import GapRitualRule
+        from proseprobe.rules.grammar import GapRitualRule
 
         text = "This topic remains underexplored in the existing literature."
         rule = GapRitualRule()
@@ -713,7 +713,7 @@ class TestGapRitual:
 
     def test_detects_few_scholars(self) -> None:
         """Detect 'few scholars have examined' phrase."""
-        from slop_lint.rules.grammar import GapRitualRule
+        from proseprobe.rules.grammar import GapRitualRule
 
         text = "Few scholars have examined the intersection of these two fields."
         rule = GapRitualRule()
@@ -722,7 +722,7 @@ class TestGapRitual:
 
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal academic prose."""
-        from slop_lint.rules.grammar import GapRitualRule
+        from proseprobe.rules.grammar import GapRitualRule
 
         text = (
             "The researchers examined the data carefully and reported their findings."
@@ -732,7 +732,7 @@ class TestGapRitual:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.grammar import GapRitualRule
+        from proseprobe.rules.grammar import GapRitualRule
 
         rule = GapRitualRule()
         assert rule.id == "G013"
@@ -747,7 +747,7 @@ class TestImpersonalCorporatePassive:
 
     def test_detects_it_has_been_determined(self) -> None:
         """Detect 'It has been determined' impersonal passive."""
-        from slop_lint.rules.grammar import ImpersonalCorporatePassiveRule
+        from proseprobe.rules.grammar import ImpersonalCorporatePassiveRule
 
         text = "It has been determined that adjustments will be made."
         rule = ImpersonalCorporatePassiveRule()
@@ -757,7 +757,7 @@ class TestImpersonalCorporatePassive:
 
     def test_detects_a_decision_has_been_made(self) -> None:
         """Detect 'A decision has been made' impersonal passive."""
-        from slop_lint.rules.grammar import ImpersonalCorporatePassiveRule
+        from proseprobe.rules.grammar import ImpersonalCorporatePassiveRule
 
         text = "A decision has been made to proceed with Option B."
         rule = ImpersonalCorporatePassiveRule()
@@ -766,7 +766,7 @@ class TestImpersonalCorporatePassive:
 
     def test_detects_steps_will_be_taken(self) -> None:
         """Detect 'Steps will be taken' impersonal passive."""
-        from slop_lint.rules.grammar import ImpersonalCorporatePassiveRule
+        from proseprobe.rules.grammar import ImpersonalCorporatePassiveRule
 
         text = "Steps will be taken to address the issue."
         rule = ImpersonalCorporatePassiveRule()
@@ -775,7 +775,7 @@ class TestImpersonalCorporatePassive:
 
     def test_detects_changes_will_be_implemented(self) -> None:
         """Detect 'Changes will be implemented' impersonal passive."""
-        from slop_lint.rules.grammar import ImpersonalCorporatePassiveRule
+        from proseprobe.rules.grammar import ImpersonalCorporatePassiveRule
 
         text = "Changes will be implemented across all departments."
         rule = ImpersonalCorporatePassiveRule()
@@ -784,7 +784,7 @@ class TestImpersonalCorporatePassive:
 
     def test_ignores_active_voice(self) -> None:
         """Don't flag active voice sentences."""
-        from slop_lint.rules.grammar import ImpersonalCorporatePassiveRule
+        from proseprobe.rules.grammar import ImpersonalCorporatePassiveRule
 
         text = "The leadership team decided to change the plan."
         rule = ImpersonalCorporatePassiveRule()
@@ -792,7 +792,7 @@ class TestImpersonalCorporatePassive:
         assert len(issues) == 0
 
     def test_rule_metadata(self) -> None:
-        from slop_lint.rules.grammar import ImpersonalCorporatePassiveRule
+        from proseprobe.rules.grammar import ImpersonalCorporatePassiveRule
 
         rule = ImpersonalCorporatePassiveRule()
         assert rule.id == "G014"

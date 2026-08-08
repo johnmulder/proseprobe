@@ -19,7 +19,7 @@ def test_benchmark_output_uses_project_name(capsys) -> None:  # type: ignore[no-
     print_results([result])
 
     output = capsys.readouterr().out
-    assert "SLOP-LINT BENCHMARK RESULTS" in output
+    assert "PROSEPROBE BENCHMARK RESULTS" in output
     assert "HUMANIZE" not in output
     assert "Files/sec estimate" in output
 

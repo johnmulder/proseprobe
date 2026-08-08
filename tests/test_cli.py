@@ -12,9 +12,9 @@ from unittest.mock import patch
 
 import pytest
 
-from slop_lint import __version__
-from slop_lint.cli import main
-from slop_lint.config import load_config
+from proseprobe import __version__
+from proseprobe.cli import main
+from proseprobe.config import load_config
 
 
 @dataclass
@@ -131,8 +131,8 @@ class TestCheckCommand:
 
     def test_cli_select_overrides_config_ignore(self, tmp_path: Path) -> None:
         """CLI --select should re-enable a rule ignored by config."""
-        config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text('[tool.slop-lint]\nignore = ["V001"]\n')
+        config_file = tmp_path / ".proseprobe.toml"
+        config_file.write_text('[tool.proseprobe]\nignore = ["V001"]\n')
         test_file = tmp_path / "doc.md"
         test_file.write_text("This delves into the topic.\n")
 
@@ -238,7 +238,7 @@ class TestCheckCommand:
         """Suppressed issues never reach a reporter."""
         test_file = tmp_path / "suppressed.md"
         test_file.write_text(
-            "<!-- slop-lint-ignore-next-line V001 -->\nThis delves into topics.\n"
+            "<!-- proseprobe-ignore-next-line V001 -->\nThis delves into topics.\n"
         )
 
         result = run_cli(
@@ -262,7 +262,7 @@ class TestCheckCommand:
         """Validation uses the full registry rather than only active rules."""
         test_file = tmp_path / "suppressed.md"
         test_file.write_text(
-            "<!-- slop-lint-ignore-next-line V003 -->\nClean content.\n"
+            "<!-- proseprobe-ignore-next-line V003 -->\nClean content.\n"
         )
 
         result = run_cli(
@@ -345,8 +345,8 @@ class TestStdinInput:
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
         monkeypatch.chdir(tmp_path)
-        (tmp_path / ".slop-lint.toml").write_text(
-            "[[tool.slop-lint.per-file-ignores]]\n"
+        (tmp_path / ".proseprobe.toml").write_text(
+            "[[tool.proseprobe.per-file-ignores]]\n"
             'pattern = "generated.md"\n'
             'ignore = ["V001"]\n'
         )
@@ -374,7 +374,7 @@ class TestStdinInput:
             "--format",
             "json",
             stdin=(
-                "<!-- slop-lint-ignore-next-line V999 -->\n"
+                "<!-- proseprobe-ignore-next-line V999 -->\n"
                 "This delves into the topic.\n"
             ),
         )
@@ -567,7 +567,7 @@ class TestInitCommand:
         result = run_cli("init")
 
         assert result.exit_code == 0
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         assert config_file.exists()
         assert '# profile = "technical-docs"' in config_file.read_text()
         assert 'minimum_severity = "warning"' in config_file.read_text()
@@ -576,7 +576,7 @@ class TestInitCommand:
     def test_init_fails_if_exists(self, tmp_path: Path, monkeypatch: object) -> None:
         """Test that init fails if config already exists."""
         monkeypatch.chdir(tmp_path)  # type: ignore[attr-defined]
-        (tmp_path / ".slop-lint.toml").write_text("[tool.slop-lint]")
+        (tmp_path / ".proseprobe.toml").write_text("[tool.proseprobe]")
 
         result = run_cli("init")
 
@@ -619,8 +619,8 @@ class TestShowConfigFlag:
 
     def test_show_config_with_custom_config(self, tmp_path: Path) -> None:
         """Show-config should identify an explicit config file."""
-        config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text('[tool.slop-lint]\nignore = ["v001"]')
+        config_file = tmp_path / ".proseprobe.toml"
+        config_file.write_text('[tool.proseprobe]\nignore = ["v001"]')
         test_file = tmp_path / "test.md"
         test_file.write_text("Clean content.")
 
@@ -640,8 +640,8 @@ class TestShowConfigFlag:
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
         """Show-config should identify an auto-discovered config file."""
-        config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text('[tool.slop-lint]\nselect = ["v001"]\n')
+        config_file = tmp_path / ".proseprobe.toml"
+        config_file.write_text('[tool.proseprobe]\nselect = ["v001"]\n')
         test_file = tmp_path / "test.md"
         test_file.write_text("Clean content.")
         monkeypatch.chdir(tmp_path)
@@ -825,7 +825,7 @@ class TestBaselineMode:
         """Baseline generation should write the structured format."""
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
-        baseline_file = tmp_path / ".slop-lint-baseline.json"
+        baseline_file = tmp_path / ".proseprobe-baseline.json"
 
         result = run_cli(
             "check",
@@ -846,7 +846,7 @@ class TestBaselineMode:
         """Inline suppression runs before baseline generation."""
         test_file = tmp_path / "suppressed.md"
         test_file.write_text(
-            "<!-- slop-lint-ignore-next-line V001 -->\nThis delves into topics.\n"
+            "<!-- proseprobe-ignore-next-line V001 -->\nThis delves into topics.\n"
         )
         baseline_file = tmp_path / "baseline.json"
 
@@ -868,7 +868,7 @@ class TestBaselineMode:
         """Test that baseline mode filters known issues."""
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
-        baseline_file = tmp_path / ".slop-lint-baseline.json"
+        baseline_file = tmp_path / ".proseprobe-baseline.json"
 
         # Generate baseline first
         run_cli(
@@ -976,7 +976,7 @@ class TestBaselineMode:
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
         """A watch command should reuse its preflight baseline object."""
-        from slop_lint.core.baseline import Baseline
+        from proseprobe.core.baseline import Baseline
 
         baseline_file = tmp_path / "baseline.json"
         baseline_file.write_text('{"version": 2, "entries": []}')
@@ -994,7 +994,7 @@ class TestBaselineMode:
             raise KeyboardInterrupt
 
         monkeypatch.setattr(Baseline, "load", count_load)
-        monkeypatch.setattr("slop_lint.cli.time.sleep", stop)
+        monkeypatch.setattr("proseprobe.cli.time.sleep", stop)
 
         result = run_cli("watch", str(test_file), "--baseline", str(baseline_file))
 
@@ -1064,8 +1064,8 @@ class TestBaselineMode:
 
     def test_version_one_baseline_still_filters(self, tmp_path: Path) -> None:
         """Legacy files should remain usable during the compatibility cycle."""
-        from slop_lint.core.baseline import Baseline
-        from slop_lint.rules.base import Issue
+        from proseprobe.core.baseline import Baseline
+        from proseprobe.rules.base import Issue
 
         test_file = tmp_path / "test.md"
         content = "This delves into topics."
@@ -1101,7 +1101,7 @@ class TestBaselineMode:
         def fail_replace(_source: object, _target: object) -> None:
             raise OSError("disk unavailable")
 
-        monkeypatch.setattr("slop_lint.core.baseline.os.replace", fail_replace)
+        monkeypatch.setattr("proseprobe.core.baseline.os.replace", fail_replace)
 
         result = run_cli(
             "check",
@@ -1307,8 +1307,8 @@ class TestBaselineCommand:
         self, tmp_path: Path, action: str
     ) -> None:
         """A write should convert active v1 hashes and report opaque stale ones."""
-        from slop_lint.core.baseline import Baseline
-        from slop_lint.rules.base import Issue
+        from proseprobe.core.baseline import Baseline
+        from proseprobe.rules.base import Issue
 
         test_file = tmp_path / "doc.md"
         content = "This delves into topics."
@@ -1368,12 +1368,12 @@ class TestBaselineCommand:
         monkeypatch.chdir(tmp_path)
         test_file = tmp_path / "doc.md"
         test_file.write_text(
-            "<!-- slop-lint-ignore-next-line V001 -->\nThis delves into topics.\n"
+            "<!-- proseprobe-ignore-next-line V001 -->\nThis delves into topics.\n"
         )
 
         result = run_cli("baseline", "create", str(test_file), "--select", "V001")
 
-        baseline = tmp_path / ".slop-lint-baseline.json"
+        baseline = tmp_path / ".proseprobe-baseline.json"
         assert result.exit_code == 0
         assert baseline.exists()
         assert json.loads(baseline.read_text())["entries"] == []
@@ -1387,7 +1387,7 @@ class TestWatchCommand:
         def stop(_interval: float) -> None:
             raise KeyboardInterrupt
 
-        monkeypatch.setattr("slop_lint.cli.time.sleep", stop)  # type: ignore[attr-defined]
+        monkeypatch.setattr("proseprobe.cli.time.sleep", stop)  # type: ignore[attr-defined]
 
     @staticmethod
     def _finding_lines(output: str, path: Path) -> list[str]:
@@ -1464,7 +1464,7 @@ class TestWatchCommand:
         """One watch batch applies the same line suppression as check."""
         test_file = tmp_path / "doc.md"
         test_file.write_text(
-            "<!-- slop-lint-ignore-next-line V001 -->\n"
+            "<!-- proseprobe-ignore-next-line V001 -->\n"
             "This delves into a topic.\n"
             "This delves into another topic.\n"
         )
@@ -1483,7 +1483,7 @@ class TestWatchCommand:
         """Watch reports a configuration error and remains controllable."""
         test_file = tmp_path / "doc.md"
         test_file.write_text(
-            "<!-- slop-lint-ignore-next-line V001, -->\nThis delves.\n"
+            "<!-- proseprobe-ignore-next-line V001, -->\nThis delves.\n"
         )
         self._stop_after_first_iteration(monkeypatch)
 
@@ -1524,7 +1524,7 @@ class TestWatchCommand:
     ) -> None:
         """Configured rule severity is considered before minimum severity."""
         config_file = tmp_path / "config.toml"
-        config_file.write_text('[tool.slop-lint.severity]\nV003 = "warning"\n')
+        config_file.write_text('[tool.proseprobe.severity]\nV003 = "warning"\n')
         test_file = tmp_path / "doc.md"
         test_file.write_text("As of my last update, this was accurate.")
         self._stop_after_first_iteration(monkeypatch)
@@ -1549,7 +1549,7 @@ class TestWatchCommand:
     ) -> None:
         """Quiet watch suppresses loop status, summaries, and warnings."""
         config_file = tmp_path / "config.toml"
-        config_file.write_text('[tool.slop-lint.severity]\nV001 = "error"\n')
+        config_file.write_text('[tool.proseprobe.severity]\nV001 = "error"\n')
         test_file = tmp_path / "doc.md"
         test_file.write_text("This delves into a topic.")
         self._stop_after_first_iteration(monkeypatch)
@@ -1762,21 +1762,21 @@ class TestCliValidation:
 
     def test_missing_check_path_returns_usage_error(self) -> None:
         """Missing check paths should not be treated as clean scans."""
-        result = run_cli("check", "/private/tmp/slop-lint-path-that-does-not-exist.md")
+        result = run_cli("check", "/private/tmp/proseprobe-path-that-does-not-exist.md")
 
         assert result.exit_code == 2
         assert "Path does not exist" in result.stderr
 
     def test_missing_watch_path_returns_usage_error(self) -> None:
         """Missing watch paths should fail before entering the watch loop."""
-        result = run_cli("watch", "/private/tmp/slop-lint-path-that-does-not-exist.md")
+        result = run_cli("watch", "/private/tmp/proseprobe-path-that-does-not-exist.md")
 
         assert result.exit_code == 2
         assert "Path does not exist" in result.stderr
 
     def test_invalid_config_returns_config_error(self, tmp_path: Path) -> None:
         """Malformed config files should not print Python tracebacks."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text("invalid [ toml ][\n")
         test_file = tmp_path / "clean.md"
         test_file.write_text("Clean content.")
@@ -1808,8 +1808,8 @@ class TestCliValidation:
         self, tmp_path: Path, output_format: str
     ) -> None:
         """Configuration diagnostics should not corrupt structured output."""
-        config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text('[tool.slop-lint]\nselect = ["X999"]\n')
+        config_file = tmp_path / ".proseprobe.toml"
+        config_file.write_text('[tool.proseprobe]\nselect = ["X999"]\n')
         test_file = tmp_path / "clean.md"
         test_file.write_text("Clean content.")
 
@@ -1829,8 +1829,8 @@ class TestCliValidation:
 
     def test_watch_rejects_invalid_config_before_loop(self, tmp_path: Path) -> None:
         """Watch should share check's configuration failure semantics."""
-        config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text('[tool.slop-lint]\nignore = ["X999"]\n')
+        config_file = tmp_path / ".proseprobe.toml"
+        config_file.write_text('[tool.proseprobe]\nignore = ["X999"]\n')
         test_file = tmp_path / "clean.md"
         test_file.write_text("Clean content.")
 
@@ -1846,10 +1846,10 @@ class TestCliValidation:
         self, tmp_path: Path
     ) -> None:
         """Normalized override IDs should be applied during rule construction."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text(
-            '[tool.slop-lint]\nminimum_severity = "warning"\nselect = ["v003"]\n\n'
-            '[tool.slop-lint.severity]\nv003 = "warning"\n'
+            '[tool.proseprobe]\nminimum_severity = "warning"\nselect = ["v003"]\n\n'
+            '[tool.proseprobe.severity]\nv003 = "warning"\n'
         )
         test_file = tmp_path / "doc.md"
         test_file.write_text("As of my last update, this was accurate.")
@@ -1862,10 +1862,10 @@ class TestCliValidation:
 
     def test_lowercase_per_file_ignore_suppresses_rule(self, tmp_path: Path) -> None:
         """Normalized per-file IDs should affect rule selection."""
-        config_file = tmp_path / ".slop-lint.toml"
+        config_file = tmp_path / ".proseprobe.toml"
         config_file.write_text(
-            '[tool.slop-lint]\nselect = ["v001"]\n\n'
-            "[[tool.slop-lint.per-file-ignores]]\n"
+            '[tool.proseprobe]\nselect = ["v001"]\n\n'
+            "[[tool.proseprobe.per-file-ignores]]\n"
             'pattern = "doc.md"\nignore = ["v001"]\n'
         )
         test_file = tmp_path / "doc.md"
@@ -1880,8 +1880,8 @@ class TestCliValidation:
     @pytest.mark.parametrize(
         ("directive", "detail"),
         [
-            ("<!-- slop-lint-ignore-next-line V999 -->", "unknown"),
-            ("<!-- slop-lint-ignore-next-line V001, -->", "malformed"),
+            ("<!-- proseprobe-ignore-next-line V999 -->", "unknown"),
+            ("<!-- proseprobe-ignore-next-line V001, -->", "malformed"),
         ],
     )
     def test_invalid_inline_suppression_returns_config_error(
@@ -2001,8 +2001,8 @@ class TestCliExitSemantics:
 
     def test_quiet_outputs_error_issues(self, tmp_path: Path) -> None:
         """Quiet mode should print error findings and suppress non-errors."""
-        config_file = tmp_path / ".slop-lint.toml"
-        config_file.write_text('[tool.slop-lint.severity]\nV001 = "error"\n')
+        config_file = tmp_path / ".proseprobe.toml"
+        config_file.write_text('[tool.proseprobe.severity]\nV001 = "error"\n')
         test_file = tmp_path / "doc.md"
         test_file.write_text("Let us delve into this topic.\n")
 

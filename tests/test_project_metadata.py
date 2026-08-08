@@ -5,20 +5,20 @@ import re
 import tomllib
 from pathlib import Path
 
-from slop_lint.profiles import PROFILES
+from proseprobe.profiles import PROFILES
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_ci_workflow_uses_slop_lint_names() -> None:
+def test_ci_workflow_uses_proseprobe_names() -> None:
     """CI should exercise this package, not stale predecessor names."""
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text()
     makefile = (ROOT / "Makefile").read_text()
 
     assert "make coverage-analyze" in workflow
     assert "make dogfood" in workflow
-    assert "--cov=src/slop_lint" in makefile
-    assert "slop_lint check README.md docs/" in makefile
+    assert "--cov=src/proseprobe" in makefile
+    assert "proseprobe check README.md docs/" in makefile
     assert "humanize" not in workflow
     assert "src/humanize" not in workflow
     assert "humanize" not in makefile
@@ -28,8 +28,8 @@ def test_ci_workflow_uses_slop_lint_names() -> None:
 def test_pre_commit_hook_uses_existing_cli() -> None:
     """Published pre-commit hook metadata should call the implemented CLI."""
     hooks = (ROOT / ".pre-commit-hooks.yaml").read_text()
-    assert "id: slop-lint" in hooks
-    assert "entry: slop-lint check" in hooks
+    assert "id: proseprobe" in hooks
+    assert "entry: proseprobe check" in hooks
     assert "humanize" not in hooks
     assert "--fix" not in hooks
 
@@ -58,7 +58,7 @@ def test_spec_mentions_existing_test_files() -> None:
 def test_spec_documents_watch_command() -> None:
     """SPEC should include the implemented watch command."""
     spec = (ROOT / "SPEC.md").read_text()
-    assert "slop-lint watch [OPTIONS] [PATHS]..." in spec
+    assert "proseprobe watch [OPTIONS] [PATHS]..." in spec
 
 
 def test_spec_documents_baseline_lifecycle() -> None:
@@ -66,7 +66,7 @@ def test_spec_documents_baseline_lifecycle() -> None:
     spec = (ROOT / "SPEC.md").read_text()
     makefile = (ROOT / "Makefile").read_text()
 
-    assert "slop-lint baseline ACTION [OPTIONS] [PATHS]..." in spec
+    assert "proseprobe baseline ACTION [OPTIONS] [PATHS]..." in spec
     for action in ("create", "update", "prune", "summary"):
         assert f"`{action}`" in spec
         assert f'grep -q "{action}"' in makefile
@@ -80,7 +80,7 @@ def test_public_docs_match_profile_catalog() -> None:
         (ROOT / "docs" / "configuration.md").read_text(),
     ]
     makefile = (ROOT / "Makefile").read_text()
-    cli = (ROOT / "src" / "slop_lint" / "cli.py").read_text()
+    cli = (ROOT / "src" / "proseprobe" / "cli.py").read_text()
 
     for profile in PROFILES:
         assert all(profile in document for document in documents)
@@ -110,8 +110,8 @@ def test_docs_explain_inline_suppression_contract() -> None:
 
     for path in paths:
         text = path.read_text()
-        assert "<!-- slop-lint-ignore-next-line V001,S010 -->" in text
-        assert "# slop-lint: ignore=V001,S010" in text
+        assert "<!-- proseprobe-ignore-next-line V001,S010 -->" in text
+        assert "# proseprobe: ignore=V001,S010" in text
         assert "following physical line" in text
         assert "same physical line" in text
 
@@ -166,7 +166,7 @@ def test_dogfood_ci_is_enforced() -> None:
 
 def test_agent_skill_uses_portable_minimal_structure() -> None:
     """The portable skill should use only standard Agent Skills metadata."""
-    skill_dir = ROOT / "skills" / "slop-lint"
+    skill_dir = ROOT / "skills" / "proseprobe"
     files = {
         path.relative_to(skill_dir).as_posix()
         for path in skill_dir.rglob("*")
@@ -183,13 +183,12 @@ def test_agent_skill_uses_portable_minimal_structure() -> None:
 
     assert opening == ""
     assert frontmatter == {
-        "name": "slop-lint",
+        "name": "proseprobe",
         "description": (
             "Use when an agent generates, edits, or reviews prose in Markdown "
-            "or Python docstrings and comments in a project that uses slop-lint."
+            "or Python docstrings and comments in a project that uses proseprobe."
         ),
         "license": "MIT",
-        "compatibility": "Requires the slop-lint executable on PATH.",
     }
     assert frontmatter["description"].startswith("Use when ")
     assert len(frontmatter["description"]) <= 1024
@@ -198,15 +197,15 @@ def test_agent_skill_uses_portable_minimal_structure() -> None:
 
 def test_agent_skill_documents_supported_workflow() -> None:
     """The portable skill should match the supported agent CLI contract."""
-    skill = (ROOT / "skills" / "slop-lint" / "SKILL.md").read_text()
+    skill = (ROOT / "skills" / "proseprobe" / "SKILL.md").read_text()
     guide = (ROOT / "docs" / "agent-integration.md").read_text()
 
     literals = (
-        "slop-lint check --format jsonl README.md docs/",
-        "slop-lint check - --filename docs/draft.md --format jsonl",
-        "slop-lint rules --format json",
-        "slop-lint explain V001 --format json",
-        "pre-commit run slop-lint",
+        "proseprobe check --format jsonl README.md docs/",
+        "proseprobe check - --filename docs/draft.md --format jsonl",
+        "proseprobe rules --format json",
+        "proseprobe explain V001 --format json",
+        "pre-commit run proseprobe",
         "| `0` | No warning or error findings; info findings may still be present. |",
         "| `1` | At least one warning or error finding was reported. |",
         "| `2` | Command usage or project configuration is invalid. |",
@@ -214,7 +213,7 @@ def test_agent_skill_documents_supported_workflow() -> None:
         "Run from the project root so configuration discovery matches normal project use.",
         "Handle high-confidence findings first, then medium, then low.",
         "Rerun the same command after every edit.",
-        "slop-lint reports findings; it does not rewrite files.",
+        "ProseProbe reports findings; it does not rewrite files.",
         "Do not add or switch to an `agent` profile.",
     )
 
@@ -228,7 +227,7 @@ def test_agent_skill_documents_supported_workflow() -> None:
 
 def test_codex_plugin_wrapper_is_minimal_and_in_sync() -> None:
     """The Codex adapter should contain only metadata and the portable skill."""
-    plugin_root = ROOT / ".agents" / "plugins" / "plugins" / "slop-lint"
+    plugin_root = ROOT / ".agents" / "plugins" / "plugins" / "proseprobe"
     files = {
         path.relative_to(plugin_root).as_posix()
         for path in plugin_root.rglob("*")
@@ -237,50 +236,53 @@ def test_codex_plugin_wrapper_is_minimal_and_in_sync() -> None:
 
     assert files == {
         ".codex-plugin/plugin.json",
-        "skills/slop-lint/SKILL.md",
+        "skills/proseprobe/SKILL.md",
     }
-    assert (plugin_root / "skills" / "slop-lint" / "SKILL.md").read_bytes() == (
-        ROOT / "skills" / "slop-lint" / "SKILL.md"
+    assert (plugin_root / "skills" / "proseprobe" / "SKILL.md").read_bytes() == (
+        ROOT / "skills" / "proseprobe" / "SKILL.md"
     ).read_bytes()
 
 
 def test_codex_plugin_metadata_matches_project() -> None:
     """The marketplace and plugin manifest should stay aligned with the project."""
     marketplace_root = ROOT / ".agents" / "plugins"
-    plugin_root = marketplace_root / "plugins" / "slop-lint"
+    plugin_root = marketplace_root / "plugins" / "proseprobe"
     project = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]
     manifest = json.loads((plugin_root / ".codex-plugin" / "plugin.json").read_text())
     marketplace = json.loads((marketplace_root / "marketplace.json").read_text())
 
+    manifest_version = manifest.pop("version")
+    assert manifest_version.startswith(f"{project['version']}+codex.")
     assert manifest == {
         "name": project["name"],
-        "version": project["version"],
         "description": project["description"],
         "author": {"name": project["authors"][0]["name"]},
+        "homepage": project["urls"]["Homepage"],
+        "repository": project["urls"]["Repository"],
         "license": project["license"],
         "skills": "./skills/",
         "interface": {
-            "displayName": "Slop Lint",
+            "displayName": "ProseProbe",
             "shortDescription": "Lint Markdown and Python prose.",
             "longDescription": (
-                "Review Markdown and Python prose with structured slop-lint "
+                "Review Markdown and Python prose with structured ProseProbe "
                 "diagnostics."
             ),
             "developerName": project["authors"][0]["name"],
             "category": "Productivity",
             "capabilities": ["Write"],
-            "defaultPrompt": ["Review my changed prose with slop-lint."],
+            "defaultPrompt": ["Review my changed prose with ProseProbe."],
         },
     }
     assert marketplace == {
-        "name": "slop-lint",
-        "interface": {"displayName": "Slop Lint"},
+        "name": "proseprobe",
+        "interface": {"displayName": "ProseProbe"},
         "plugins": [
             {
                 "name": manifest["name"],
                 "source": {
                     "source": "local",
-                    "path": "./plugins/slop-lint",
+                    "path": "./plugins/proseprobe",
                 },
                 "policy": {
                     "installation": "AVAILABLE",
@@ -302,11 +304,11 @@ def test_agent_integration_guide_documents_supported_contract() -> None:
     guide = guide_path.read_text()
 
     for command in (
-        "slop-lint check --format jsonl README.md docs/",
-        "slop-lint check - --filename docs/draft.md --format jsonl",
-        "slop-lint rules --format json",
-        "slop-lint explain V001 --format json",
-        "pre-commit run slop-lint",
+        "proseprobe check --format jsonl README.md docs/",
+        "proseprobe check - --filename docs/draft.md --format jsonl",
+        "proseprobe rules --format json",
+        "proseprobe explain V001 --format json",
+        "pre-commit run proseprobe",
     ):
         assert command in guide
 
@@ -322,7 +324,7 @@ def test_agent_integration_guide_documents_supported_contract() -> None:
         "Run from the project root so configuration discovery matches normal project use.",
         "Handle high-confidence findings first, then medium, then low.",
         "Rerun the same command after every edit.",
-        "slop-lint reports findings; it does not rewrite files.",
+        "ProseProbe reports findings; it does not rewrite files.",
         "Do not add or switch to an `agent` profile.",
     ):
         assert statement in guide
@@ -342,9 +344,9 @@ def test_readme_documents_portable_agent_skill() -> None:
     readme = (ROOT / "README.md").read_text()
 
     for statement in (
-        "[Portable Agent Skill](skills/slop-lint/SKILL.md)",
-        "The `skills/slop-lint/` directory is the copyable distribution unit.",
-        "Install the `slop-lint` executable separately before using the skill.",
+        "[Portable Agent Skill](skills/proseprobe/SKILL.md)",
+        "The `skills/proseprobe/` directory is the copyable distribution unit.",
+        "Install the `proseprobe` executable separately before using the skill.",
     ):
         assert statement in readme
 
@@ -357,7 +359,7 @@ def test_readme_documents_codex_plugin_marketplace() -> None:
     for statement in (
         "[Codex plugin marketplace](.agents/plugins/marketplace.json)",
         'codex plugin marketplace add "$PWD/.agents/plugins"',
-        "codex plugin add slop-lint@slop-lint",
+        "codex plugin add proseprobe@proseprobe",
         "The Codex wrapper is not included in the Python wheel.",
         "Start a new Codex thread after installation so it loads the skill.",
     ):

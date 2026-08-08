@@ -2,7 +2,7 @@
 
 import pytest
 
-from slop_lint.parsers.markdown import (
+from proseprobe.parsers.markdown import (
     MarkdownCodeBlock,
     MarkdownLink,
     MarkdownParser,
@@ -18,7 +18,7 @@ from slop_lint.parsers.markdown import (
     iter_prose_blocks,
     iter_prose_lines,
 )
-from slop_lint.parsers.prose import iter_inline_suppressions
+from proseprobe.parsers.prose import iter_inline_suppressions
 
 
 def test_heading_records_preserve_exact_title_source_spans() -> None:
@@ -788,9 +788,9 @@ Visible prose.
         """A standalone Markdown directive targets exactly the next line."""
         content = (
             "Intro\n"
-            "  <!-- slop-lint-ignore-next-line v001, S010 -->\n"
+            "  <!-- proseprobe-ignore-next-line v001, S010 -->\n"
             "Target\n"
-            "<!-- slop-lint-ignore-next-line V002 -->\n"
+            "<!-- proseprobe-ignore-next-line V002 -->\n"
             "\n"
             "Not targeted\n"
         )
@@ -804,10 +804,10 @@ Visible prose.
         """Fenced and inline-code examples are not active directives."""
         content = (
             "```markdown\n"
-            "<!-- slop-lint-ignore-next-line V001 -->\n"
+            "<!-- proseprobe-ignore-next-line V001 -->\n"
             "Target\n"
             "```\n"
-            "`<!-- slop-lint-ignore-next-line V002 -->`\n"
+            "`<!-- proseprobe-ignore-next-line V002 -->`\n"
         )
 
         assert iter_inline_suppressions(content, "test.md") == []
@@ -815,7 +815,7 @@ Visible prose.
     def test_malformed_markdown_suppression_reports_source_line(self) -> None:
         """Marker-bearing standalone comments reject malformed token lists."""
         parser = MarkdownParser(
-            "Intro\n<!-- slop-lint-ignore-next-line V001, -->\nTarget"
+            "Intro\n<!-- proseprobe-ignore-next-line V001, -->\nTarget"
         )
 
         with pytest.raises(ValueError, match=r"line 2"):

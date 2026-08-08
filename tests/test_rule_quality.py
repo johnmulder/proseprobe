@@ -17,9 +17,9 @@ from benchmarks.rule_quality import (
     score_findings,
 )
 
-from slop_lint.config import Config
-from slop_lint.core.linter import Linter
-from slop_lint.rules import get_all_rules
+from proseprobe.config import Config
+from proseprobe.core.linter import Linter
+from proseprobe.rules import get_all_rules
 
 _EXACT_SPAN_RULE_IDS = frozenset(
     {

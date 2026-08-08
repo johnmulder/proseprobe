@@ -3,7 +3,7 @@
 import re
 from typing import ClassVar
 
-from slop_lint.data.phrases import (
+from proseprobe.data.phrases import (
     COLLABORATIVE_PHRASES,
     GRANDIOSE_STAKES_PHRASES,
     INFLAMMATORY_CLICHE_PHRASES,
@@ -12,16 +12,16 @@ from slop_lint.data.phrases import (
     TREND_OVERCLAIM_PHRASES,
     WEASEL_PHRASES,
 )
-from slop_lint.data.vocabulary import (
+from proseprobe.data.vocabulary import (
     AI_VOCABULARY,
     AI_VOCABULARY_TIER1,
     AI_VOCABULARY_TIER2,
     AI_VOCABULARY_TIER3,
     VOCABULARY_SUGGESTIONS,
 )
-from slop_lint.parsers.markdown import is_example_line
-from slop_lint.parsers.prose import ProseSentence, iter_prose_sentences
-from slop_lint.rules.base import Confidence, Issue, Rule, Severity
+from proseprobe.parsers.markdown import is_example_line
+from proseprobe.parsers.prose import ProseSentence, iter_prose_sentences
+from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
 _MONTH = re.compile(
     r"\b(?:January|February|March|April|May|June|July|August|September|"

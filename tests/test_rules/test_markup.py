@@ -2,8 +2,8 @@
 
 import pytest
 
-from slop_lint.rules.base import Confidence, Severity
-from slop_lint.rules.markup import (
+from proseprobe.rules.base import Confidence, Severity
+from proseprobe.rules.markup import (
     BrokenReferencesRule,
     ChatGPTMarkersRule,
     SkippedHeadingLevelRule,
@@ -63,7 +63,7 @@ class TestWrongMarkup:
         text = '''
 default_config = """
 # This is a **bold** TOML comment
-# [tool.slop-lint]
+# [tool.proseprobe]
 """
 '''
         rule = WrongMarkupRule()

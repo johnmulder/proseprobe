@@ -1,4 +1,4 @@
-"""Command-line interface for slop-lint."""
+"""Command-line interface for ProseProbe."""
 
 from __future__ import annotations
 
@@ -9,19 +9,19 @@ import time
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from slop_lint import __version__
-from slop_lint._ansi import clear_screen, style, table
-from slop_lint.config import ConfigError, load_config, validate_rule_references
-from slop_lint.core.baseline import Baseline, filter_new_issues, resolve_workspace
-from slop_lint.core.linter import Linter, LintReadError, LintResults
-from slop_lint.core.reporter import JSON_SCHEMA_VERSION
-from slop_lint.profiles import PROFILES
-from slop_lint.rules import (
+from proseprobe import __version__
+from proseprobe._ansi import clear_screen, style, table
+from proseprobe.config import ConfigError, load_config, validate_rule_references
+from proseprobe.core.baseline import Baseline, filter_new_issues, resolve_workspace
+from proseprobe.core.linter import Linter, LintReadError, LintResults
+from proseprobe.core.reporter import JSON_SCHEMA_VERSION
+from proseprobe.profiles import PROFILES
+from proseprobe.rules import (
     get_all_rules,
     get_rule_metadata,
     get_rule_metadata_by_id,
 )
-from slop_lint.rules.base import (
+from proseprobe.rules.base import (
     Confidence,
     Issue,
     Rule,
@@ -32,7 +32,7 @@ from slop_lint.rules.base import (
 )
 
 if TYPE_CHECKING:
-    from slop_lint.config import Config
+    from proseprobe.config import Config
 
 _CONFIDENCE_RANK = {Confidence.LOW: 0, Confidence.MEDIUM: 1, Confidence.HIGH: 2}
 
@@ -269,7 +269,7 @@ def _output_results(
     rules: list[Rule] | None = None,
 ) -> int:
     """Format and print results; return exit code."""
-    from slop_lint.core.reporter import format_results
+    from proseprobe.core.reporter import format_results
 
     output = format_results(
         lint_results.issues_by_file,
@@ -481,17 +481,17 @@ def _cmd_rules(args: argparse.Namespace) -> int:
 
 
 def _cmd_init(_args: argparse.Namespace) -> int:
-    """Create a .slop-lint.toml config file."""
-    config_file = Path(".slop-lint.toml")
+    """Create a .proseprobe.toml config file."""
+    config_file = Path(".proseprobe.toml")
     if config_file.exists():
         print(f"Config file already exists: {config_file}", file=sys.stderr)
         return 2
 
     default_config = """\
-# slop-lint configuration
-# See: https://github.com/slop-lint/slop-lint
+# ProseProbe configuration
+# See: https://github.com/johnmulder/proseprobe
 
-[tool.slop-lint]
+[tool.proseprobe]
 # include = ["*.md", "*.mdx", "*.markdown", "*.py"]
 # exclude = ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
 # profile = "technical-docs"
@@ -500,14 +500,14 @@ def _cmd_init(_args: argparse.Namespace) -> int:
 minimum_severity = "warning"  # error, warning, info
 
 # Per-rule severity overrides
-# [tool.slop-lint.severity]
+# [tool.proseprobe.severity]
 # V001 = "error"
 
-[tool.slop-lint.vocabulary]
+[tool.proseprobe.vocabulary]
 # additional = ["synergy", "leverage"]
 # allowed = ["crucial"]
 
-# [[tool.slop-lint.per-file-ignores]]
+# [[tool.proseprobe.per-file-ignores]]
 # pattern = "tests/*"
 # ignore = ["V001", "V002"]
 """
@@ -552,7 +552,7 @@ def _cmd_explain(args: argparse.Namespace) -> int:
 
 def _cmd_version(_args: argparse.Namespace) -> int:
     """Show version information."""
-    print(f"slop-lint {__version__}")
+    print(f"proseprobe {__version__}")
     return 0
 
 
@@ -680,7 +680,7 @@ def _add_scan_options(parser: argparse.ArgumentParser) -> None:
 def _build_parser() -> argparse.ArgumentParser:
     """Build the argument parser with all subcommands."""
     parser = argparse.ArgumentParser(
-        prog="slop-lint",
+        prog="proseprobe",
         description="Detect bad writing practices in Markdown and Python files.",
         add_help=False,
     )
@@ -758,7 +758,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
     # --- init ---
     p_init = subparsers.add_parser(
-        "init", help="Create a .slop-lint.toml config file", add_help=False
+        "init", help="Create a .proseprobe.toml config file", add_help=False
     )
     p_init.add_argument(
         "-h", "--help", action="help", help="Show this help message and exit"

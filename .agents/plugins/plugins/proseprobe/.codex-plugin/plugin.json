@@ -1,0 +1,25 @@
+{
+  "name": "proseprobe",
+  "version": "0.1.0+codex.20260808164042",
+  "description": "Detect bad writing practices in Markdown and Python files",
+  "author": {
+    "name": "ProseProbe contributors"
+  },
+  "homepage": "https://github.com/johnmulder/proseprobe",
+  "repository": "https://github.com/johnmulder/proseprobe",
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "ProseProbe",
+    "shortDescription": "Lint Markdown and Python prose.",
+    "longDescription": "Review Markdown and Python prose with structured ProseProbe diagnostics.",
+    "developerName": "ProseProbe contributors",
+    "category": "Productivity",
+    "capabilities": [
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Review my changed prose with ProseProbe."
+    ]
+  }
+}

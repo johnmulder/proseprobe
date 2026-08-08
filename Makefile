@@ -41,7 +41,7 @@ help: ## Show available development commands
 	@echo "  format               Format code and apply ruff fixes"
 	@echo "  clean                Remove generated build, test, and cache artifacts"
 	@echo "  build                Build source and wheel distributions"
-	@echo "  dogfood              Run slop-lint on its own docs"
+	@echo "  dogfood              Run proseprobe on its own docs"
 	@echo "  rule-docs            Update generated rule documentation"
 	@echo "  rule-docs-check      Verify generated rule documentation"
 	@echo ""
@@ -74,7 +74,7 @@ test-spec: ## Run SPEC-alignment regression tests
 
 # Run tests with coverage
 test-cov: ## Run tests with coverage reports
-	$(PYTEST) tests/ -v --cov=src/slop_lint --cov-report=term-missing --cov-report=html --cov-report=xml
+	$(PYTEST) tests/ -v --cov=src/proseprobe --cov-report=term-missing --cov-report=html --cov-report=xml
 
 # Run linter
 lint: ## Run ruff
@@ -116,9 +116,9 @@ clean: ## Remove generated artifacts
 build: clean ## Build package
 	$(PYTHON) -m build
 
-# Run slop-lint on itself (dogfooding)
-dogfood: ## Run slop-lint on its own docs
-	$(PYTHON) -m slop_lint check README.md docs/ --baseline .slop-lint-baseline.json
+# Run proseprobe on itself (dogfooding)
+dogfood: ## Run proseprobe on its own docs
+	$(PYTHON) -m proseprobe check README.md docs/ --baseline .proseprobe-baseline.json
 
 # Quick check for development
 quick: ## Run quick local fix-and-test loop
@@ -135,10 +135,10 @@ rule-quality: ## Measure rule precision and recall
 
 # Generate repetitive rule reference content from canonical metadata
 rule-docs: ## Update generated rule documentation
-	$(PYTHON) -m slop_lint._rule_docs --write
+	$(PYTHON) -m proseprobe._rule_docs --write
 
 rule-docs-check: ## Verify generated rule documentation
-	$(PYTHON) -m slop_lint._rule_docs --check
+	$(PYTHON) -m proseprobe._rule_docs --check
 
 # Run only trope-related tests (fast TDD loop)
 test-tropes: ## Run trope-related rule tests
@@ -146,8 +146,8 @@ test-tropes: ## Run trope-related rule tests
 
 # Integration: verify all-rules fixture still reports issues
 test-tropes-integration: ## Verify the all-rules Markdown fixture still reports issues
-	@$(PYTHON) -m slop_lint check tests/fixtures/all_markdown_rules_fire.md --format json --severity info >/tmp/slop-lint-tropes.json || test $$? -eq 1
-	@$(PYTHON) -c "import json; data=json.load(open('/tmp/slop-lint-tropes.json')); assert data['summary']['total_issues'] > 0"
+	@$(PYTHON) -m proseprobe check tests/fixtures/all_markdown_rules_fire.md --format json --severity info >/tmp/proseprobe-tropes.json || test $$? -eq 1
+	@$(PYTHON) -c "import json; data=json.load(open('/tmp/proseprobe-tropes.json')); assert data['summary']['total_issues'] > 0"
 
 # Full validation (lint + type-check + test)
 all: check ## Alias for check
@@ -169,33 +169,33 @@ doc-audit: rule-docs-check ## Verify generated docs and README/SPEC structure
 # Verify CLI matches documented commands
 spec-verify: ## Verify documented CLI commands
 	@echo "Verifying CLI commands match SPEC.md..."
-	@$(PYTHON) -m slop_lint --help | grep -q "check" || (echo "ERROR: 'check' command missing" && exit 1)
-	@$(PYTHON) -m slop_lint --help | grep -q "rules" || (echo "ERROR: 'rules' command missing" && exit 1)
-	@$(PYTHON) -m slop_lint --help | grep -q "explain" || (echo "ERROR: 'explain' command missing" && exit 1)
-	@$(PYTHON) -m slop_lint --help | grep -q "init" || (echo "ERROR: 'init' command missing" && exit 1)
-	@$(PYTHON) -m slop_lint --help | grep -q "version" || (echo "ERROR: 'version' command missing" && exit 1)
-	@$(PYTHON) -m slop_lint --help | grep -q "baseline" || (echo "ERROR: 'baseline' command missing" && exit 1)
+	@$(PYTHON) -m proseprobe --help | grep -q "check" || (echo "ERROR: 'check' command missing" && exit 1)
+	@$(PYTHON) -m proseprobe --help | grep -q "rules" || (echo "ERROR: 'rules' command missing" && exit 1)
+	@$(PYTHON) -m proseprobe --help | grep -q "explain" || (echo "ERROR: 'explain' command missing" && exit 1)
+	@$(PYTHON) -m proseprobe --help | grep -q "init" || (echo "ERROR: 'init' command missing" && exit 1)
+	@$(PYTHON) -m proseprobe --help | grep -q "version" || (echo "ERROR: 'version' command missing" && exit 1)
+	@$(PYTHON) -m proseprobe --help | grep -q "baseline" || (echo "ERROR: 'baseline' command missing" && exit 1)
 	@echo "Verifying check command options..."
-	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-format" || (echo "ERROR: --format option missing" && exit 1)
-	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-select" || (echo "ERROR: --select option missing" && exit 1)
-	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-ignore" || (echo "ERROR: --ignore option missing" && exit 1)
-	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-config" || (echo "ERROR: --config option missing" && exit 1)
-	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-severity" || (echo "ERROR: --severity option missing" && exit 1)
-	@$(PYTHON) -m slop_lint check --help | grep -q "\-\-profile" || (echo "ERROR: --profile option missing" && exit 1)
+	@$(PYTHON) -m proseprobe check --help | grep -q "\-\-format" || (echo "ERROR: --format option missing" && exit 1)
+	@$(PYTHON) -m proseprobe check --help | grep -q "\-\-select" || (echo "ERROR: --select option missing" && exit 1)
+	@$(PYTHON) -m proseprobe check --help | grep -q "\-\-ignore" || (echo "ERROR: --ignore option missing" && exit 1)
+	@$(PYTHON) -m proseprobe check --help | grep -q "\-\-config" || (echo "ERROR: --config option missing" && exit 1)
+	@$(PYTHON) -m proseprobe check --help | grep -q "\-\-severity" || (echo "ERROR: --severity option missing" && exit 1)
+	@$(PYTHON) -m proseprobe check --help | grep -q "\-\-profile" || (echo "ERROR: --profile option missing" && exit 1)
 	@for profile in academic business general journalism technical-docs; do \
-		$(PYTHON) -m slop_lint check --help | grep -q "$$profile" || (echo "ERROR: profile $$profile missing" && exit 1); \
+		$(PYTHON) -m proseprobe check --help | grep -q "$$profile" || (echo "ERROR: profile $$profile missing" && exit 1); \
 	done
 	@echo "Verifying baseline actions..."
-	@$(PYTHON) -m slop_lint baseline --help | grep -q "create" || (echo "ERROR: baseline create missing" && exit 1)
-	@$(PYTHON) -m slop_lint baseline --help | grep -q "update" || (echo "ERROR: baseline update missing" && exit 1)
-	@$(PYTHON) -m slop_lint baseline --help | grep -q "prune" || (echo "ERROR: baseline prune missing" && exit 1)
-	@$(PYTHON) -m slop_lint baseline --help | grep -q "summary" || (echo "ERROR: baseline summary missing" && exit 1)
+	@$(PYTHON) -m proseprobe baseline --help | grep -q "create" || (echo "ERROR: baseline create missing" && exit 1)
+	@$(PYTHON) -m proseprobe baseline --help | grep -q "update" || (echo "ERROR: baseline update missing" && exit 1)
+	@$(PYTHON) -m proseprobe baseline --help | grep -q "prune" || (echo "ERROR: baseline prune missing" && exit 1)
+	@$(PYTHON) -m proseprobe baseline --help | grep -q "summary" || (echo "ERROR: baseline summary missing" && exit 1)
 	@echo "✓ CLI matches specification"
 
 # Check test coverage meets threshold (90%)
 coverage-analyze: ## Enforce coverage threshold
 	@echo "Running coverage analysis..."
-	@$(PYTEST) tests/ --cov=src/slop_lint --cov-report=term-missing --cov-report=xml --cov-fail-under=90 -q || \
+	@$(PYTEST) tests/ --cov=src/proseprobe --cov-report=term-missing --cov-report=xml --cov-fail-under=90 -q || \
 		(echo "WARNING: Coverage below 90% threshold. Run 'make test-cov' for details." && exit 1)
 	@echo "✓ Coverage meets 90% threshold"
 
