@@ -1,4 +1,4 @@
-"""Grammar pattern detection rules (G001-G013)."""
+"""Grammar pattern detection rules (G001-G015)."""
 
 import re
 from typing import ClassVar
@@ -20,6 +20,7 @@ from slop_lint.data.phrases import (
     PATRONIZING_ANALOGY_PHRASES,
     PEDAGOGICAL_VOICE_PHRASES,
 )
+from slop_lint.parsers.markdown import is_example_line, is_markdown_file
 from slop_lint.parsers.prose import iter_prose_scopes, iter_prose_sentences
 from slop_lint.rules.base import Confidence, Issue, Rule, Severity
 
@@ -505,3 +506,80 @@ class ImpersonalCorporatePassiveRule(Rule):
                         )
                     )
         return issues
+
+
+class GenericSceneSettingOpenerRule(Rule):
+    """G015: Detect generic scene-setting clauses in Markdown openers."""
+
+    id = "G015"
+    name = "Generic Scene-Setting Opener"
+    description = "Detects generic scene-setting clauses in Markdown openers"
+    severity = Severity.INFO
+    default_confidence = Confidence.MEDIUM
+    applies_to: ClassVar[set[str]] = {"markdown"}
+    content_scope = "prose"
+
+    _patterns: ClassVar[tuple[re.Pattern[str], ...]] = (
+        re.compile(
+            r"^In\s+today['\u2019]s\s+(?:rapidly\s+evolving\s+)?"
+            r"(?:digital\s+)?(?:world|landscape)(?=\s*[,:\u2013\u2014-])",
+            re.IGNORECASE,
+        ),
+        re.compile(
+            r"^In\s+the\s+modern\s+(?:digital\s+)?"
+            r"(?:world|era|landscape)(?=\s*[,:\u2013\u2014-])",
+            re.IGNORECASE,
+        ),
+        re.compile(
+            r"^In\s+an?\s+rapidly\s+evolving\s+(?:digital\s+)?"
+            r"(?:world|era|landscape)(?=\s*[,:\u2013\u2014-])",
+            re.IGNORECASE,
+        ),
+        re.compile(
+            r"^In\s+an\s+era\s+(?:defined|marked|characterized)\s+by\s+"
+            r"(?:constant|rapid|unprecedented)\s+change"
+            r"(?=\s*[,:\u2013\u2014-])",
+            re.IGNORECASE,
+        ),
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check the first substantive Markdown body sentence."""
+        if not is_markdown_file(filename):
+            return []
+
+        sentence = next(
+            (
+                candidate
+                for candidate in iter_prose_sentences(content, filename)
+                if candidate.context == "body"
+                and not is_example_line(content, filename, candidate.start_line)
+            ),
+            None,
+        )
+        if sentence is None:
+            return []
+
+        for pattern in self._patterns:
+            match = pattern.match(sentence.text)
+            if match is None:
+                continue
+            line, column = sentence.source_position(match.start())
+            end_line, end_column = sentence.source_position(match.end())
+            opener = " ".join(match.group().split())
+            return [
+                Issue(
+                    rule_id=self.id,
+                    message=f"Generic scene-setting opener: '{opener}'",
+                    line=line,
+                    column=column,
+                    end_line=end_line,
+                    end_column=end_column,
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion=(
+                        "Replace the generic opener with the concrete subject or change"
+                    ),
+                )
+            ]
+        return []

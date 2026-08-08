@@ -1,9 +1,12 @@
-"""Tests for grammar rules (G001-G003)."""
+"""Tests for grammar rules (G001-G015)."""
 
-from slop_lint.rules.base import Confidence
+import pytest
+
+from slop_lint.rules.base import Confidence, Severity
 from slop_lint.rules.grammar import (
     CopulaAvoidanceRule,
     ExcessiveHedgingRule,
+    GenericSceneSettingOpenerRule,
     ParticipleChainsRule,
 )
 
@@ -754,3 +757,98 @@ class TestImpersonalCorporatePassive:
         rule = ImpersonalCorporatePassiveRule()
         assert rule.id == "G014"
         assert rule.name == "Impersonal Corporate Passive"
+
+
+class TestGenericSceneSettingOpenerRule:
+    """Tests for G015: Generic Scene-Setting Opener."""
+
+    def test_reports_wrapped_opener_at_exact_source_span(self) -> None:
+        text = (
+            "# Report\n\n"
+            "In an era defined by\n"
+            "constant change, teams still need a named subject."
+        )
+
+        [issue] = GenericSceneSettingOpenerRule().check(text, "report.md")
+
+        assert issue.rule_id == "G015"
+        assert issue.message == (
+            "Generic scene-setting opener: 'In an era defined by constant change'"
+        )
+        assert issue.suggestion == (
+            "Replace the generic opener with the concrete subject or change"
+        )
+        assert issue.line == 3
+        assert issue.column == 1
+        assert issue.end_line == 4
+        assert issue.end_column == 16
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "In today's rapidly evolving digital landscape, the report names no change.",
+            "In today\u2019s digital world: the report names no subject.",
+            "In the modern world, the report should begin with its result.",
+            "In a rapidly evolving landscape \u2014 the report still needs specifics.",
+        ],
+    )
+    def test_detects_supported_frames(self, text: str) -> None:
+        issues = GenericSceneSettingOpenerRule().check(text, "report.md")
+
+        assert len(issues) == 1
+
+    def test_skips_non_body_and_example_contexts(self) -> None:
+        text = (
+            "# Report\n\n"
+            "> In an era defined by constant change, this phrase is quoted.\n\n"
+            "## Example\n\n"
+            "In today's digital world, this phrase demonstrates the rule.\n\n"
+            "## Findings\n\n"
+            "In the modern world, this report should name its actual finding."
+        )
+
+        [issue] = GenericSceneSettingOpenerRule().check(text, "report.md")
+
+        assert issue.line == 11
+        assert issue.message == "Generic scene-setting opener: 'In the modern world'"
+
+    def test_ignores_matching_second_sentence(self) -> None:
+        text = (
+            "The report measures storage latency. "
+            "In the modern world, teams still need exact figures."
+        )
+
+        assert GenericSceneSettingOpenerRule().check(text, "report.md") == []
+
+    def test_ignores_python(self) -> None:
+        text = "In an era defined by constant change, the module needs documentation."
+
+        assert GenericSceneSettingOpenerRule().check(text, "module.py") == []
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "Maria Chen joined the storage team in 2024.",
+            "Version 2.1 adds Setext heading support.",
+            "In August 2026, the team published version 2.1.",
+            "In the modern era of Canadian history, rail schedules changed twice.",
+            "In the modern threat landscape, analysts track three named campaigns.",
+        ],
+    )
+    def test_ignores_specific_introductions(self, text: str) -> None:
+        assert GenericSceneSettingOpenerRule().check(text, "report.md") == []
+
+    def test_rule_metadata(self) -> None:
+        rule = GenericSceneSettingOpenerRule()
+
+        assert rule.id == "G015"
+        assert rule.name == "Generic Scene-Setting Opener"
+        assert rule.description == (
+            "Detects generic scene-setting clauses in Markdown openers"
+        )
+        assert rule.severity is Severity.INFO
+        assert rule.default_confidence is Confidence.MEDIUM
+        assert rule.applies_to == {"markdown"}
+        assert rule.content_scope == "prose"
