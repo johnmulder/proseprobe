@@ -333,6 +333,43 @@ class TestInventedConceptLabels:
 
         assert InventedConceptLabelsRule().check(content, "test.md") == []
 
+    @pytest.mark.parametrize(
+        ("gap_reference", "dilemma_reference"),
+        [
+            ("our gap", "their dilemma"),
+            ("another gap", "every dilemma"),
+        ],
+    )
+    def test_other_literal_determiners_do_not_satisfy_threshold(
+        self, gap_reference: str, dilemma_reference: str
+    ) -> None:
+        from slop_lint.rules.vocab import InventedConceptLabelsRule
+
+        content = (
+            f"This study fills {gap_reference}. The team studies {dilemma_reference}."
+        )
+
+        assert InventedConceptLabelsRule().check(content, "test.md") == []
+
+    @pytest.mark.parametrize("literal_reference", ["our gap", "every dilemma"])
+    def test_other_literal_determiners_are_not_reported_with_labels(
+        self, literal_reference: str
+    ) -> None:
+        from slop_lint.rules.vocab import InventedConceptLabelsRule
+
+        content = (
+            "The automation paradox slows delivery.\n"
+            "The innovation trap wastes time.\n"
+            f"This study addresses {literal_reference}."
+        )
+
+        issues = InventedConceptLabelsRule().check(content, "test.md")
+
+        assert [issue.message for issue in issues] == [
+            "Invented concept label: 'automation paradox'",
+            "Invented concept label: 'innovation trap'",
+        ]
+
     def test_ignores_normal_prose(self) -> None:
         """Don't flag prose without compound labels."""
         from slop_lint.rules.vocab import InventedConceptLabelsRule

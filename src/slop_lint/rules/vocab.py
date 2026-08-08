@@ -378,7 +378,31 @@ class InventedConceptLabelsRule(Rule):
         "dilemma",
     ]
     _LITERAL_REFERENCE_HEADS: ClassVar[frozenset[str]] = frozenset(
-        {"a", "an", "the", "this", "that", "these", "those"}
+        {
+            "a",
+            "an",
+            "another",
+            "any",
+            "each",
+            "either",
+            "every",
+            "her",
+            "his",
+            "its",
+            "my",
+            "no",
+            "one",
+            "our",
+            "some",
+            "that",
+            "the",
+            "their",
+            "these",
+            "this",
+            "those",
+            "whose",
+            "your",
+        }
     )
     _LITERAL_REFERENCE_SUFFIXES: ClassVar[frozenset[str]] = frozenset(
         {"gap", "dilemma"}
