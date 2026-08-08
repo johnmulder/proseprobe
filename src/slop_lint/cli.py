@@ -275,7 +275,7 @@ def _output_results(
         quiet=args.quiet,
     )
     if output:
-        print(output)
+        print(output, end="" if args.format == "jsonl" else "\n")
 
     return 1 if _has_failing_issue(lint_results.issues_by_file) else 0
 
@@ -663,9 +663,9 @@ def _build_parser() -> argparse.ArgumentParser:
     p_check.add_argument(
         "--format",
         "-f",
-        choices=("text", "json", "sarif"),
+        choices=("text", "json", "jsonl", "sarif"),
         default="text",
-        help="Output format: text, json, sarif",
+        help="Output format: text, json, jsonl, sarif",
     )
     p_check.add_argument(
         "--generate-baseline",

@@ -1566,6 +1566,36 @@ class TestOutputFormats:
         }
         assert data["files"][0]["issues"][0]["rule_id"] == "V001"
 
+    def test_jsonl_warning_record_and_exit_one(self, tmp_path: Path) -> None:
+        """JSONL emits one warning record and retains failure semantics."""
+        test_file = tmp_path / "test.md"
+        test_file.write_text("This delves into topics.")
+
+        result = run_cli(
+            "check", str(test_file), "--select", "V001", "--format", "jsonl"
+        )
+
+        assert result.exit_code == 1
+        assert result.stderr == ""
+        assert result.stdout.endswith("\n")
+        assert result.stdout.count("\n") == 1
+        record = json.loads(result.stdout)
+        assert record["schema_version"] == 1
+        assert record["path"] == str(test_file)
+        assert record["rule_id"] == "V001"
+        assert record["severity"] == "warning"
+
+    def test_jsonl_no_issues_is_empty(self, tmp_path: Path) -> None:
+        """A clean JSONL CLI run writes nothing to stdout."""
+        test_file = tmp_path / "clean.md"
+        test_file.write_text("This is clean content.")
+
+        result = run_cli("check", str(test_file), "--format", "jsonl")
+
+        assert result.exit_code == 0
+        assert result.stdout == ""
+        assert result.stderr == ""
+
     def test_sarif_format_valid(self, tmp_path: Path) -> None:
         """Test that --format sarif outputs valid SARIF."""
         import json
@@ -1787,6 +1817,7 @@ class TestCliValidation:
         assert result.exit_code == 0
         assert "V001" not in result.stdout
 
+    @pytest.mark.parametrize("output_format", ["json", "jsonl"])
     @pytest.mark.parametrize(
         ("directive", "detail"),
         [
@@ -1795,14 +1826,23 @@ class TestCliValidation:
         ],
     )
     def test_invalid_inline_suppression_returns_config_error(
-        self, tmp_path: Path, directive: str, detail: str
+        self,
+        tmp_path: Path,
+        directive: str,
+        detail: str,
+        output_format: str,
     ) -> None:
         """Directive errors use configuration exit semantics and stderr."""
         test_file = tmp_path / "invalid.md"
         test_file.write_text(f"Intro\n{directive}\nThis delves.\n")
 
         result = run_cli(
-            "check", str(test_file), "--format", "json", "--select", "V001"
+            "check",
+            str(test_file),
+            "--format",
+            output_format,
+            "--select",
+            "V001",
         )
 
         assert result.exit_code == 2
@@ -1867,6 +1907,28 @@ class TestCliExitSemantics:
             "info": 1,
         }
         assert data["files"][0]["issues"][0]["rule_id"] == "S002"
+
+    def test_jsonl_info_only_findings_exit_zero(self, tmp_path: Path) -> None:
+        """Info-only JSONL findings are records without process failure."""
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("This not only improves speed but also reliability.")
+
+        result = run_cli(
+            "check",
+            "--select",
+            "S002",
+            "--severity",
+            "info",
+            "--format",
+            "jsonl",
+            str(test_file),
+        )
+
+        assert result.exit_code == 0
+        assert result.stderr == ""
+        record = json.loads(result.stdout)
+        assert record["rule_id"] == "S002"
+        assert record["severity"] == "info"
 
     def test_warning_issues_fail(self, tmp_path: Path) -> None:
         """Warnings should still make the process fail."""
