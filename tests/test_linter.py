@@ -259,6 +259,32 @@ class TestPerFileIgnores:
         assert linter._rule_enabled(rule, Path("example.md"))
 
 
+class TestCheckContent:
+    """Tests for linting content without reading a file."""
+
+    def test_check_content_uses_virtual_path_and_inline_suppressions(self) -> None:
+        linter = Linter(Config(select=["V001"]))
+        linter.register_rule(AIVocabularyRule())
+
+        issues = linter.check_content(
+            "<!-- slop-lint-ignore-next-line V001 -->\n"
+            "This delves into setup.\n"
+            "This delves into teardown.\n",
+            Path("draft.md"),
+        )
+
+        assert [(issue.rule_id, issue.line) for issue in issues] == [("V001", 3)]
+
+    def test_check_file_matches_check_content(self, tmp_path: Path) -> None:
+        path = tmp_path / "draft.md"
+        content = "This delves into the topic.\n"
+        path.write_text(content)
+        linter = Linter(Config(select=["V001"]))
+        linter.register_rule(AIVocabularyRule())
+
+        assert linter.check_file(path) == linter.check_content(content, path)
+
+
 class TestCheckFile:
     """Tests for file checking."""
 

@@ -199,18 +199,15 @@ class Linter:
         return self._discovery.discover(paths)
 
     def check_file(self, path: Path) -> list[Issue]:
-        """Check a single file for issues.
-
-        Args:
-            path: Path to file.
-
-        Returns:
-            List of issues found.
-        """
+        """Read and check a single file for issues."""
         try:
             content = path.read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError) as exc:
             raise LintReadError(path, str(exc)) from exc
+        return self.check_content(content, path)
+
+    def check_content(self, content: str, path: Path) -> list[Issue]:
+        """Check in-memory content using a path for file-specific policy."""
         issues: list[Issue] = []
 
         for rule in self._rules:
