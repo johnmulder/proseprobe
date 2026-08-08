@@ -1,6 +1,7 @@
-"""Markup detection rules (M001-M007)."""
+"""Markup detection rules (M001-M008)."""
 
 import re
+from itertools import pairwise
 from typing import ClassVar
 
 from slop_lint.parsers.markdown import (
@@ -419,4 +420,41 @@ class UnclosedCodeFenceRule(Rule):
             )
             for block in _get_cached_markdown_parser(content).get_code_block_records()
             if not block.closed
+        ]
+
+
+class SkippedHeadingLevelRule(Rule):
+    """M008: Detect upward Markdown heading jumps greater than one level."""
+
+    id = "M008"
+    name = "Skipped Heading Level"
+    description = "Detects Markdown headings that skip an intermediate level"
+    severity = Severity.WARNING
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown"}
+    content_scope = "raw"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check consecutive visible Markdown headings for upward level jumps."""
+        if not is_markdown_file(filename):
+            return []
+
+        headings = _get_cached_markdown_parser(content).get_headings()
+        return [
+            Issue(
+                rule_id=self.id,
+                message=(
+                    f"Heading level jumps from {previous.level} to {current.level}"
+                ),
+                line=current.start_line,
+                column=1,
+                severity=self.severity,
+                confidence=self.default_confidence,
+                suggestion=(
+                    f"Add a level-{previous.level + 1} heading before this "
+                    f"level-{current.level} heading"
+                ),
+            )
+            for previous, current in pairwise(headings)
+            if current.level > previous.level + 1
         ]

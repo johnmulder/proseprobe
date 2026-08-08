@@ -1,4 +1,4 @@
-"""Tests for markup rules (M001-M007)."""
+"""Tests for markup rules (M001-M008)."""
 
 import pytest
 
@@ -6,6 +6,7 @@ from slop_lint.rules.base import Confidence, Severity
 from slop_lint.rules.markup import (
     BrokenReferencesRule,
     ChatGPTMarkersRule,
+    SkippedHeadingLevelRule,
     TemplateResidueRule,
     UnclosedCodeFenceRule,
     UnresolvedMarkdownReferencesRule,
@@ -471,3 +472,55 @@ class TestUnclosedCodeFence:
     def test_applies_only_to_markdown(self) -> None:
         """Fence-like Python strings are outside M007's scope."""
         assert UnclosedCodeFenceRule().check("```\nbody", "guide.py") == []
+
+
+class TestSkippedHeadingLevel:
+    """Tests for M008: Skipped Heading Level."""
+
+    def test_reports_skipped_atx_heading_fields(self) -> None:
+        text = "# Title\n\n### Details"
+
+        [issue] = SkippedHeadingLevelRule().check(text, "guide.md")
+
+        assert issue.rule_id == "M008"
+        assert issue.message == "Heading level jumps from 1 to 3"
+        assert issue.line == 3
+        assert issue.column == 1
+        assert issue.severity is Severity.WARNING
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == ("Add a level-2 heading before this level-3 heading")
+
+    def test_uses_setext_heading_as_previous_visible_heading(self) -> None:
+        text = "> Title\n> =====\n\n> ### Details"
+
+        [issue] = SkippedHeadingLevelRule().check(text, "guide.md")
+
+        assert issue.line == 4
+        assert issue.message == "Heading level jumps from 1 to 3"
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "### Fragment title\n\n### Peer",
+            "# Title\n\n## Section\n\n### Detail\n\n## Peer\n\n# Next",
+        ],
+    )
+    def test_ignores_valid_heading_sequences(self, text: str) -> None:
+        assert SkippedHeadingLevelRule().check(text, "guide.md") == []
+
+    @pytest.mark.parametrize(
+        "hidden_block",
+        [
+            "```markdown\n### Hidden\n```",
+            "<section>\n### Hidden\n</section>",
+        ],
+    )
+    def test_ignores_headings_inside_hidden_blocks(self, hidden_block: str) -> None:
+        text = f"# Title\n\n{hidden_block}\n\n## Visible"
+
+        assert SkippedHeadingLevelRule().check(text, "guide.md") == []
+
+    def test_applies_only_to_markdown(self) -> None:
+        text = "# Title\n\n### Details"
+
+        assert SkippedHeadingLevelRule().check(text, "guide.py") == []
