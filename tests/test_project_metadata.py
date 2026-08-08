@@ -129,11 +129,12 @@ def test_public_docs_do_not_contain_placeholder_repository_names() -> None:
         assert "yourusername" not in text
 
 
-def test_changelog_unreleased_counts_match_current_project() -> None:
+def test_changelog_release_counts_match_current_project() -> None:
     """Changelog should not advertise stale rule or test counts."""
     changelog = (ROOT / "CHANGELOG.md").read_text()
 
-    assert "Complete documentation for all 59 rules" in changelog
+    assert "64 detection rules" in changelog
+    assert "59 rules" not in changelog
     assert "all 55 rules" not in changelog
     assert "596 tests passing" not in changelog
 
@@ -365,7 +366,7 @@ def test_readme_documents_codex_plugin_marketplace() -> None:
     ):
         assert statement in readme
 
-    assert "A repo-local Codex marketplace wrapper" in changelog
+    assert "repo-local Codex marketplace plugin" in changelog
 
 
 def test_ci_enforces_coverage_threshold() -> None:
