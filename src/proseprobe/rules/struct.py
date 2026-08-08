@@ -1,4 +1,4 @@
-"""Structural detection rules (S001-S021 and S025)."""
+"""Structural detection rules (S001-S022 and S025)."""
 
 import re
 from itertools import groupby, pairwise
@@ -22,7 +22,11 @@ from proseprobe.data.phrases import (
     FRACTAL_SUMMARY_PHRASES,
     SIGNPOSTED_CONCLUSION_PHRASES,
 )
-from proseprobe.parsers.markdown import _get_cached_parser, is_markdown_file
+from proseprobe.parsers.markdown import (
+    _get_cached_parser,
+    is_example_line,
+    is_markdown_file,
+)
 from proseprobe.parsers.prose import (
     ProseSentence,
     iter_prose_blocks,
@@ -1059,6 +1063,55 @@ class SlideDeckFragmentRule(Rule):
                         confidence=self.default_confidence,
                     )
                 )
+        return issues
+
+
+class WallOfTextParagraphRule(Rule):
+    """S022: Detect paragraphs with unusually many sentences."""
+
+    id = "S022"
+    name = "Wall-of-Text Paragraph"
+    description = "Detects paragraphs with unusually many sentences"
+    severity = Severity.INFO
+    config_key = "thresholds.wall_of_text_sentences"
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    def __init__(self, threshold: int = 6) -> None:
+        """Initialize the rule with the minimum sentence count to flag."""
+        super().__init__()
+        self._threshold = threshold
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Report body and blockquote paragraphs meeting the threshold."""
+        issues: list[Issue] = []
+        sentences = iter_prose_sentences(content, filename)
+        for _, scope in groupby(sentences, key=lambda sentence: sentence.scope_id):
+            paragraph = list(scope)
+            first = paragraph[0]
+            if first.context not in {"body", "blockquote"} or is_example_line(
+                content, filename, first.start_line
+            ):
+                continue
+            if len(paragraph) < self._threshold:
+                continue
+            last = paragraph[-1]
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=(
+                        f"Wall-of-text paragraph: {len(paragraph)} sentences "
+                        f"(threshold {self._threshold})"
+                    ),
+                    line=first.start_line,
+                    column=first.start_column,
+                    end_line=last.end_line,
+                    end_column=last.end_column,
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion="Split the paragraph into shorter paragraphs",
+                )
+            )
         return issues
 
 

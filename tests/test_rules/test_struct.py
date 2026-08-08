@@ -1,4 +1,4 @@
-"""Tests for structural rules (S001-S021 and S025)."""
+"""Tests for structural rules (S001-S022 and S025)."""
 
 import pytest
 
@@ -19,6 +19,7 @@ from proseprobe.rules.struct import (
     SignpostedConclusionRule,
     SlideDeckFragmentRule,
     SuperficialAnalysisRule,
+    WallOfTextParagraphRule,
 )
 
 
@@ -1211,6 +1212,91 @@ class TestSlideDeckFragment:
         rule = SlideDeckFragmentRule()
         assert rule.id == "S021"
         assert rule.name == "Slide Deck Fragment"
+
+
+class TestWallOfTextParagraph:
+    """Tests for S022: Wall-of-Text Paragraph."""
+
+    SIX_SENTENCES = (
+        "The cache warms at startup. Workers load configuration next. "
+        "Validation checks required fields. The client opens its connection. "
+        "Requests begin after readiness. Metrics record the completed startup."
+    )
+
+    def test_reports_default_threshold_with_exact_span(self) -> None:
+        [issue] = WallOfTextParagraphRule().check(self.SIX_SENTENCES, "guide.md")
+
+        assert issue.rule_id == "S022"
+        assert issue.message == "Wall-of-text paragraph: 6 sentences (threshold 6)"
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            1,
+            1,
+            len(self.SIX_SENTENCES) + 1,
+        )
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == "Split the paragraph into shorter paragraphs"
+
+    def test_uses_configured_threshold(self) -> None:
+        text = "First sentence. Second sentence. Third sentence."
+
+        assert WallOfTextParagraphRule().check(text, "guide.md") == []
+        assert len(WallOfTextParagraphRule(threshold=3).check(text, "guide.md")) == 1
+
+    def test_does_not_combine_separate_paragraphs(self) -> None:
+        text = (
+            "First sentence. Second sentence. Third sentence.\n\n"
+            "Fourth sentence. Fifth sentence. Sixth sentence."
+        )
+
+        assert WallOfTextParagraphRule().check(text, "guide.md") == []
+        issues = WallOfTextParagraphRule(threshold=3).check(text, "guide.md")
+        assert [issue.line for issue in issues] == [1, 3]
+
+    def test_counts_wrapped_blockquote_sentences(self) -> None:
+        text = (
+            "> Operators start the migration. A backup captures current data.\n"
+            "> Schema checks verify compatibility. The service copies each record.\n"
+            "> Validation compares row counts. Reviewers inspect the final report."
+        )
+
+        [issue] = WallOfTextParagraphRule().check(text, "guide.md")
+
+        assert (issue.line, issue.column, issue.end_line) == (1, 3, 3)
+        assert issue.end_column == len(text.splitlines()[-1]) + 1
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "# One. Two. Three. Four. Five. Six.",
+            "- One. Two. Three. Four. Five. Six.",
+            "## Example\n\nOne. Two. Three. Four. Five. Six.",
+            "```text\nOne. Two. Three. Four. Five. Six.\n```",
+        ],
+    )
+    def test_ignores_ineligible_markdown_contexts(self, text: str) -> None:
+        assert WallOfTextParagraphRule().check(text, "guide.md") == []
+
+    def test_checks_python_comments_and_docstrings_but_not_strings(self) -> None:
+        text = (
+            'label = "One. Two. Three. Four. Five. Six."\n'
+            "# One. Two. Three. Four. Five. Six.\n\n"
+            "def load() -> None:\n"
+            '    """One. Two. Three. Four. Five. Six."""\n'
+            "    return None\n"
+        )
+
+        issues = WallOfTextParagraphRule().check(text, "loader.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_rule_metadata(self) -> None:
+        rule = WallOfTextParagraphRule()
+
+        assert rule.id == "S022"
+        assert rule.name == "Wall-of-Text Paragraph"
+        assert rule.config_key == "thresholds.wall_of_text_sentences"
 
 
 class TestHeadingWithoutBody:
