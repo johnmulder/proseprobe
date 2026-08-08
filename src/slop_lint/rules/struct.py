@@ -976,8 +976,8 @@ class SlideDeckFragmentRule(Rule):
 
     # Simple heuristic for a conjugated main verb (not gerund/participle-only)
     _FINITE_VERB: ClassVar[re.Pattern[str]] = re.compile(
-        r"^(?:i|we|you|he|she|it|they)\s+"
-        r"(?![a-z-]+ing\b)[a-z-]+\b"
+        r"^(?:i|we|you|he|she|it|they)(?:"
+        r"'(?:m|re|s|ve|d|ll)\b|\s+(?![a-z-]+ing\b)[a-z-]+\b)"
         r"|\b(?:is|are|was|were|has|have|had|do|does|did|will|shall|can|could"
         r"|would|should|may|might|must)\b",
         re.IGNORECASE,
@@ -995,7 +995,10 @@ class SlideDeckFragmentRule(Rule):
             if not stripped.endswith("."):
                 continue
             # Skip if it has a conjugated main verb
-            if self._FINITE_VERB.search(stripped):
+            main_clause = re.split(
+                r"\b(?:that|which|who)\b", stripped, maxsplit=1, flags=re.IGNORECASE
+            )[0]
+            if self._FINITE_VERB.search(main_clause):
                 continue
             # Count buzzwords
             words_lower = {w.lower().rstrip(".,;:!?'\"") for w in stripped.split()}

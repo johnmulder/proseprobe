@@ -1015,6 +1015,30 @@ class TestSlideDeckFragment:
 
         assert SlideDeckFragmentRule().check(text, "test.md") == []
 
+    def test_ignores_contracted_pronoun_led_finite_clause(self) -> None:
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        text = (
+            "We're driving alignment across strategic initiatives for scalable impact."
+        )
+
+        assert SlideDeckFragmentRule().check(text, "test.md") == []
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            (
+                "Driving strategic alignment for initiatives that will "
+                "deliver scalable impact."
+            ),
+            ("Strategic alignment for initiatives that will deliver scalable impact."),
+        ],
+    )
+    def test_detects_fragment_with_subordinate_auxiliary(self, text: str) -> None:
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        assert len(SlideDeckFragmentRule().check(text, "test.md")) == 1
+
     def test_ignores_short_lines(self) -> None:
         """Don't flag lines with fewer than 4 words."""
         from slop_lint.rules.struct import SlideDeckFragmentRule
