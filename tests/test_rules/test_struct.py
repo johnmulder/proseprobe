@@ -984,6 +984,16 @@ class TestSlideDeckFragment:
         issues = rule.check(text, "test.md")
         assert len(issues) == 0
 
+    def test_ignores_pronoun_led_finite_clause(self) -> None:
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        text = (
+            "We need to ensure cross-functional alignment and get buy-in "
+            "from all stakeholders."
+        )
+
+        assert SlideDeckFragmentRule().check(text, "test.md") == []
+
     def test_ignores_short_lines(self) -> None:
         """Don't flag lines with fewer than 4 words."""
         from slop_lint.rules.struct import SlideDeckFragmentRule
