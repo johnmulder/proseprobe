@@ -19,7 +19,7 @@ def test_metadata_covers_registry_in_rule_id_order() -> None:
     metadata_ids = tuple(item.id for item in metadata)
 
     assert metadata_ids == tuple(rule.id for rule in get_all_rules())
-    assert len(metadata) == 77
+    assert len(metadata) == 78
     assert len(set(metadata_ids)) == len(metadata_ids)
 
 
@@ -122,6 +122,27 @@ def test_s025_metadata_matches_the_empty_heading_contract() -> None:
     assert metadata.content_scope == "raw"
     assert metadata.profiles == ("technical-docs",)
     assert metadata.config_key is None
+
+
+def test_s022_metadata_matches_the_wall_of_text_contract() -> None:
+    metadata = get_rule_metadata_by_id("S022")
+
+    assert metadata is not None
+    assert metadata.name == "Wall-of-Text Paragraph"
+    assert metadata.default_severity is Severity.INFO
+    assert metadata.default_confidence is Confidence.MEDIUM
+    assert metadata.applies_to == ("markdown", "python")
+    assert metadata.content_scope == "prose"
+    assert metadata.profiles == ("technical-docs",)
+    assert metadata.config_key == "thresholds.wall_of_text_sentences"
+
+
+def test_s022_registry_uses_configured_threshold() -> None:
+    config = Config(thresholds=ThresholdsConfig(wall_of_text_sentences=7))
+    rule = next(rule for rule in get_all_rules(config) if rule.id == "S022")
+    six_sentences = "One. Two. Three. Four. Five. Six."
+
+    assert rule.check(six_sentences, "guide.md") == []
 
 
 def test_v009_metadata_matches_the_wordy_phrase_contract() -> None:

@@ -357,6 +357,7 @@ V001 = "error"
             "historical_analogy_stacking",
             "short_punchy_fragments",
             "invented_concept_labels",
+            "wall_of_text_sentences",
         ],
     )
     @pytest.mark.parametrize("value", [0, -1])
@@ -459,6 +460,7 @@ class TestConfig:
         assert config.thresholds.inline_header_lists == 3
         assert config.thresholds.bold_overuse == 3
         assert config.thresholds.em_dash_overuse == 5
+        assert config.thresholds.wall_of_text_sentences == 6
 
     def test_load_thresholds_config(self, tmp_path: Path) -> None:
         """Test loading custom thresholds from config file."""
@@ -469,6 +471,7 @@ rule_of_three = 5
 inline_header_lists = 4
 bold_overuse = 2
 em_dash_overuse = 10
+wall_of_text_sentences = 8
 """)
 
         config = load_config(config_file)
@@ -477,6 +480,7 @@ em_dash_overuse = 10
         assert config.thresholds.inline_header_lists == 4
         assert config.thresholds.bold_overuse == 2
         assert config.thresholds.em_dash_overuse == 10
+        assert config.thresholds.wall_of_text_sentences == 8
 
     def test_partial_thresholds_config(self, tmp_path: Path) -> None:
         """Test loading partial thresholds uses defaults for missing values."""
@@ -578,6 +582,7 @@ class TestThresholdsConfig:
         assert thresholds.inline_header_lists == 3
         assert thresholds.bold_overuse == 3
         assert thresholds.em_dash_overuse == 5
+        assert thresholds.wall_of_text_sentences == 6
 
     def test_custom_values(self) -> None:
         """Test custom threshold values."""
@@ -586,12 +591,14 @@ class TestThresholdsConfig:
             inline_header_lists=5,
             bold_overuse=4,
             em_dash_overuse=8,
+            wall_of_text_sentences=9,
         )
 
         assert thresholds.rule_of_three == 10
         assert thresholds.inline_header_lists == 5
         assert thresholds.bold_overuse == 4
         assert thresholds.em_dash_overuse == 8
+        assert thresholds.wall_of_text_sentences == 9
 
 
 class TestVocabularyConfig:

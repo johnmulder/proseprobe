@@ -61,6 +61,8 @@ class ThresholdsConfig:
     short_punchy_fragments: int = 3
     # V007: InventedConceptLabelsRule - flag if >= N pseudo-analytical labels
     invented_concept_labels: int = 2
+    # S022: WallOfTextParagraphRule - flag if >= N sentences per paragraph
+    wall_of_text_sentences: int = 6
 
 
 @dataclass
@@ -135,6 +137,7 @@ _THRESHOLD_KEYS = frozenset(
         "rule_of_three",
         "sentence_length_max",
         "short_punchy_fragments",
+        "wall_of_text_sentences",
     }
 )
 _PER_FILE_IGNORE_KEYS = frozenset({"ignore", "pattern"})
@@ -476,6 +479,10 @@ def _parse_config(data: dict[str, Any]) -> Config:
         invented_concept_labels=_require_positive_int(
             thresholds_data.get("invented_concept_labels", 2),
             "thresholds.invented_concept_labels",
+        ),
+        wall_of_text_sentences=_require_positive_int(
+            thresholds_data.get("wall_of_text_sentences", 6),
+            "thresholds.wall_of_text_sentences",
         ),
     )
 

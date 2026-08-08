@@ -12,7 +12,7 @@ Overused vocabulary, structural clichés, promotional language, and careless mar
 
 ## Features
 
-- 🔍 **77 detection rules** across 6 categories
+- 🔍 **78 detection rules** across 6 categories
 - 📝 Scans Markdown prose and source-mapped Python docstrings and comments
 - 🎯 **Confidence levels** (high/medium/low) to reduce noise
 - 🗂️ Built-in profiles for general, technical, academic, journalism, and business prose
@@ -114,12 +114,12 @@ removes stale entries without accepting new ones. The older
 | Prefix | Category | Rules | Description |
 |--------|----------|-------|-------------|
 | `V` | Vocabulary | 14 | Overused and clichéd words and phrases |
-| `S` | Structure | 22 | Organizational patterns |
+| `S` | Structure | 23 | Organizational patterns |
 | `T` | Style | 9 | Typographic issues |
 | `G` | Grammar | 18 | Grammatical patterns |
 | `C` | Code | 4 | Python docstring/comment issues |
 | `M` | Markup | 10 | Markdown artifacts |
-| **Total** | | **77** | |
+| **Total** | | **78** | |
 
 <!-- rule-docs:categories:end -->
 

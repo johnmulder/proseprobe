@@ -58,6 +58,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `S019` | Corporate Euphemism | Structure | info | medium | markdown, python / prose | — |
 | `S020` | Alignment Ritual | Structure | info | medium | markdown, python / prose | — |
 | `S021` | Slide Deck Fragment | Structure | info | low | markdown, python / prose | — |
+| `S022` | Wall-of-Text Paragraph | Structure | info | medium | markdown, python / prose | `thresholds.wall_of_text_sentences` |
 | `S025` | Heading Without Body | Structure | warning | high | markdown / raw | — |
 | `T001` | Title Case Headings | Style | info | medium | markdown / raw | — |
 | `T002` | Bold Overuse | Style | info | medium | markdown / raw | `thresholds.bold_overuse` |
@@ -1697,6 +1698,29 @@ Driving alignment across strategic initiatives for scalable impact.
 **Example (good):**
 ```markdown
 The team will coordinate across three initiatives to improve scalability.
+```
+
+---
+
+### S022: Wall-of-Text Paragraph
+
+Detects body and blockquote paragraphs containing six or more sentences by
+default. The `thresholds.wall_of_text_sentences` setting changes the minimum
+sentence count.
+
+Separate paragraphs are counted independently. Headings, list items, example
+sections, code, tables, and other non-prose content are excluded.
+
+**Example (bad):**
+```markdown
+The cache warms at startup. Workers load configuration next. Validation checks required fields. The client opens its connection. Requests begin after readiness. Metrics record the completed startup.
+```
+
+**Example (good):**
+```markdown
+The cache warms at startup. Workers load configuration next. Validation checks required fields.
+
+The client then opens its connection. Requests begin after readiness. Metrics record the completed startup.
 ```
 
 ---

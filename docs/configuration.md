@@ -42,7 +42,8 @@ The exact classification is:
 - general: `G001`-`G009`, `G015`, `S001`-`S016`, `T001`-`T007`, and
   `V001`-`V007`;
 - technical documentation: `C001`-`C004`, `G017`, `G024`, `G029`,
-  `M001`-`M010`, `S025`, `T015`, `V009`-`V011`, `V013`-`V014`, and `V016`;
+  `M001`-`M010`, `S022`, `S025`, `T015`, `V009`-`V011`, `V013`-`V014`, and
+  `V016`;
 - academic: `G011`-`G013`, `S018`, and `T008`;
 - journalism: `G010`, `S017`, and `V008`;
 - business: `G014` and `S019`-`S021`.
@@ -189,6 +190,8 @@ historical_analogy_stacking = 3
 short_punchy_fragments = 3
 # V007: Invented concept labels - min pseudo-analytical labels to flag
 invented_concept_labels = 2
+# S022: Wall-of-text paragraph - min sentences per paragraph to flag
+wall_of_text_sentences = 6
 ```
 
 Every threshold must be a positive integer. Zero, negative values, booleans,

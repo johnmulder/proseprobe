@@ -68,6 +68,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         struct.CorporateEuphemismRule(),
         struct.AlignmentRitualRule(),
         struct.SlideDeckFragmentRule(),
+        struct.WallOfTextParagraphRule(thresholds.wall_of_text_sentences),
         struct.HeadingWithoutBodyRule(),
         style.TitleCaseHeadingsRule(),
         style.BoldOveruseRule(thresholds.bold_overuse),
