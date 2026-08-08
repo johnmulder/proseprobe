@@ -31,6 +31,7 @@ _JOURNALISM_RULES = frozenset({"G010", "S017", "V008"})
 _TECHNICAL_DOCS_RULES = frozenset(
     {
         *(f"C{number:03}" for number in range(1, 5)),
+        "G017",
         "G029",
         *(f"M{number:03}" for number in range(1, 9)),
         "M010",

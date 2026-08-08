@@ -79,6 +79,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `G013` | Gap Ritual | Grammar | info | medium | markdown, python / prose | — |
 | `G014` | Impersonal Corporate Passive | Grammar | info | medium | markdown, python / prose | — |
 | `G015` | Generic Scene-Setting Opener | Grammar | info | medium | markdown / prose | — |
+| `G017` | Empty "It" Opener | Grammar | info | high | markdown, python / prose | — |
 | `G029` | Double Negative | Grammar | info | high | markdown, python / prose | — |
 | `C001` | Docstring-Only Vocabulary | Code | warning | medium | python / raw | — |
 | `C002` | Verbose Comments | Code | info | medium | python / raw | — |
@@ -1626,6 +1627,25 @@ In today's rapidly evolving digital landscape, reliable payments matter more tha
 **Example (good):**
 ```markdown
 The payment API now retries one timed-out request after 200 milliseconds.
+```
+
+---
+
+### G017: Empty "It" Opener
+
+At high confidence, detects three empty sentence openers: `It is clear that`,
+`It is obvious that`, and `It is evident that`. The rule checks body, list-item,
+and blockquote prose but excludes headings, code, and example sections. It does
+not infer other empty-pronoun constructions.
+
+**Example (bad):**
+```markdown
+It is obvious that the cache is stale.
+```
+
+**Example (good):**
+```markdown
+The two failed lookups show that the cache is stale.
 ```
 
 ---

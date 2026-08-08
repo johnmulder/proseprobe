@@ -893,6 +893,47 @@
         }
       ]
     },
+    "quality/corpus/empty-it-openers.md": {
+      "expected": [
+        {
+          "rule_id": "G017",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "rule_id": "G017",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "rule_id": "G017",
+          "line": 7,
+          "column": 1
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G017",
+          "line": 11,
+          "note": "Prose under an example heading demonstrates the rule."
+        },
+        {
+          "rule_id": "G017",
+          "line": 15,
+          "note": "Inline code is not document prose."
+        },
+        {
+          "rule_id": "G017",
+          "line": 18,
+          "note": "Fenced code is not document prose."
+        },
+        {
+          "rule_id": "G017",
+          "line": 21,
+          "note": "A different 'It is' opener is outside the fixed phrase set."
+        }
+      ]
+    },
     "quality/corpus/generic-openers.md": {
       "expected": [
         {
