@@ -375,6 +375,18 @@ class TestInventedConceptLabels:
             "Invented concept label: 'innovation trap'",
         ]
 
+    @pytest.mark.parametrize(
+        "content",
+        [
+            "The team's gap remains. John's dilemma continues.",
+            "The team\u2019s gap remains. John\u2019s dilemma continues.",
+        ],
+    )
+    def test_possessive_clitics_do_not_satisfy_threshold(self, content: str) -> None:
+        from slop_lint.rules.vocab import InventedConceptLabelsRule
+
+        assert InventedConceptLabelsRule().check(content, "test.md") == []
+
     def test_ignores_normal_prose(self) -> None:
         """Don't flag prose without compound labels."""
         from slop_lint.rules.vocab import InventedConceptLabelsRule
