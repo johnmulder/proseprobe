@@ -878,7 +878,7 @@
         {
           "rule_id": "M008",
           "line": 9,
-          "column": 1
+          "column": 5
         }
       ],
       "negative_cases": [
@@ -1010,7 +1010,7 @@
         {
           "rule_id": "C001",
           "line": 1,
-          "column": 1
+          "column": 29
         },
         {
           "rule_id": "C002",
@@ -1040,7 +1040,7 @@
         {
           "rule_id": "M001",
           "line": 9,
-          "column": 5
+          "column": 7
         },
         {
           "rule_id": "T008",

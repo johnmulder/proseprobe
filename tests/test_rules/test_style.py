@@ -1,5 +1,8 @@
 """Tests for style rules (T001-T006)."""
 
+import pytest
+
+from slop_lint.rules.base import Rule
 from slop_lint.rules.style import (
     BoldOveruseRule,
     ElegantVariationRule,
@@ -8,6 +11,38 @@ from slop_lint.rules.style import (
     QuoteInconsistencyRule,
     TitleCaseHeadingsRule,
 )
+
+
+@pytest.mark.parametrize(
+    ("rule", "source", "expected"),
+    [
+        (
+            TitleCaseHeadingsRule(),
+            "## Reliable System Design",
+            "Reliable System Design",
+        ),
+        (
+            QuoteInconsistencyRule(),
+            'He said "hello" and “goodbye”.',
+            "“",
+        ),
+        (EmojiInProseRule(), "Ship it 🚀 today.", "🚀"),
+        (
+            ElegantVariationRule(),
+            "The guide said this. The reference stated that.",
+            "stated",
+        ),
+    ],
+)
+def test_style_rules_report_exact_source_spans(
+    rule: Rule,
+    source: str,
+    expected: str,
+) -> None:
+    [issue] = rule.check(source, "test.md")
+
+    assert issue.end_column is not None
+    assert source[issue.column - 1 : issue.end_column - 1] == expected
 
 
 class TestTitleCaseHeadings:
@@ -275,6 +310,10 @@ class TestSentenceLength:
 
         assert issue.message == "Long sentence: 10 words (threshold 8)"
         assert (issue.line, issue.column) == (1, 1)
+        assert (issue.end_line, issue.end_column) == (
+            2,
+            len("six seven eight nine ten.") + 1,
+        )
 
     def test_ignores_code_blocks(self) -> None:
         """Don't flag long lines inside code blocks."""

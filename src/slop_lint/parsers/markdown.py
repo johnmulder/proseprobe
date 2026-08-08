@@ -56,6 +56,8 @@ class MarkdownSection:
     content: str
     start_line: int
     end_line: int
+    column: int
+    end_column: int
 
 
 @dataclass
@@ -329,7 +331,7 @@ class MarkdownParser:
         self._ensure_code_blocks()
         code_lines = self._code_lines()
         html_lines = self._html_lines()
-        headings: list[tuple[int, int, str]] = []
+        headings: list[tuple[int, int, str, int, int]] = []
         heading_re = re.compile(r"^ {0,3}(#{1,6})\s+(.+?)\s*$")
         setext_re = re.compile(r"^ {0,3}(=+|-+)\s*$")
         idx = 0
@@ -339,13 +341,14 @@ class MarkdownParser:
                 idx += 1
                 continue
             raw_line = self._lines[idx]
-            stripped_line, _ = self._strip_blockquote_prefix(raw_line)
+            stripped_line, prefix_len = self._strip_blockquote_prefix(raw_line)
             match = heading_re.match(stripped_line)
             if match:
                 level = len(match.group(1))
                 title = match.group(2).strip()
                 title = re.sub(r"\s+#+\s*$", "", title).strip()
-                headings.append((line_num, level, title))
+                column = prefix_len + match.start(2) + 1
+                headings.append((line_num, level, title, column, column + len(title)))
                 idx += 1
                 continue
 
@@ -358,14 +361,19 @@ class MarkdownParser:
                     setext_match = setext_re.match(next_stripped)
                     if setext_match and stripped_line.strip():
                         level = 1 if setext_match.group(1).startswith("=") else 2
-                        headings.append((line_num, level, stripped_line.strip()))
+                        title = stripped_line.strip()
+                        leading = len(stripped_line) - len(stripped_line.lstrip())
+                        column = prefix_len + leading + 1
+                        headings.append(
+                            (line_num, level, title, column, column + len(title))
+                        )
                         idx += 2
                         continue
 
             idx += 1
 
         sections: list[MarkdownSection] = []
-        for idx, (line_num, level, title) in enumerate(headings):
+        for idx, (line_num, level, title, column, end_column) in enumerate(headings):
             next_line = headings[idx + 1][0] if idx + 1 < len(headings) else None
             end_line = (next_line - 1) if next_line else len(self._lines)
             content_lines: list[str] = []
@@ -380,6 +388,8 @@ class MarkdownParser:
                     content="\n".join(content_lines).rstrip(),
                     start_line=line_num,
                     end_line=end_line,
+                    column=column,
+                    end_column=end_column,
                 )
             )
 

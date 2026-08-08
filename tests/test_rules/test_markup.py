@@ -15,6 +15,21 @@ from slop_lint.rules.markup import (
 )
 
 
+def test_wrong_markup_reports_only_the_markup_token() -> None:
+    source = "    # This is **bold** prose"
+    [issue] = WrongMarkupRule().check(source, "test.py")
+
+    assert source[issue.column - 1 : issue.end_column - 1] == "**bold**"
+
+
+def test_skipped_heading_reports_the_heading_title() -> None:
+    source = "# Top\n\n### Skipped"
+    [issue] = SkippedHeadingLevelRule().check(source, "test.md")
+    line = source.splitlines()[issue.line - 1]
+
+    assert line[issue.column - 1 : issue.end_column - 1] == "Skipped"
+
+
 class TestWrongMarkup:
     """Tests for M001: Wrong Markup."""
 
@@ -485,7 +500,8 @@ class TestSkippedHeadingLevel:
         assert issue.rule_id == "M008"
         assert issue.message == "Heading level jumps from 1 to 3"
         assert issue.line == 3
-        assert issue.column == 1
+        assert issue.column == 5
+        assert issue.end_column == 12
         assert issue.severity is Severity.WARNING
         assert issue.confidence is Confidence.HIGH
         assert issue.suggestion == ("Add a level-2 heading before this level-3 heading")

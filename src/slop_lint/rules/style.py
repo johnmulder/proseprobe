@@ -49,7 +49,8 @@ class TitleCaseHeadingsRule(Rule):
                         rule_id=self.id,
                         message="Title case heading (consider sentence case)",
                         line=section.start_line,
-                        column=section.level + 2,
+                        column=section.column,
+                        end_column=section.end_column,
                         severity=self.severity,
                     )
                 )
@@ -196,6 +197,7 @@ class QuoteInconsistencyRule(Rule):
                             message="Mixed quote styles (curly and straight)",
                             line=line_num,
                             column=match.start() + 1,
+                            end_column=match.end() + 1,
                             severity=self.severity,
                         )
                     )
@@ -228,6 +230,7 @@ class EmojiInProseRule(Rule):
                         message=f"Emoji in prose: '{match.group()}'",
                         line=line_num,
                         column=match.start() + 1,
+                        end_column=match.end() + 1,
                         severity=self.severity,
                     )
                 )
@@ -265,6 +268,7 @@ class ElegantVariationRule(Rule):
                     if match is None:
                         continue
                     line, column = sentence.source_position(match.start())
+                    end_line, end_column = sentence.source_position(match.end())
                     issues.append(
                         Issue(
                             rule_id=self.id,
@@ -274,6 +278,8 @@ class ElegantVariationRule(Rule):
                             ),
                             line=line,
                             column=column,
+                            end_line=end_line,
+                            end_column=end_column,
                             severity=self.severity,
                         )
                     )
@@ -366,6 +372,8 @@ class SentenceLengthRule(Rule):
                     ),
                     line=sentence.start_line,
                     column=sentence.start_column,
+                    end_line=sentence.end_line,
+                    end_column=sentence.end_column,
                     severity=self.severity,
                 )
             )

@@ -21,6 +21,19 @@ from slop_lint.parsers.markdown import (
 from slop_lint.parsers.prose import iter_inline_suppressions
 
 
+def test_heading_records_preserve_exact_title_source_spans() -> None:
+    source = "  ## Reliable System Design ##\n\n> Setext Title\n> ============"
+
+    headings = MarkdownParser(source).get_headings()
+
+    assert [
+        source.splitlines()[heading.start_line - 1][
+            heading.column - 1 : heading.end_column - 1
+        ]
+        for heading in headings
+    ] == ["Reliable System Design", "Setext Title"]
+
+
 class TestMarkdownParser:
     """Tests for MarkdownParser class."""
 
@@ -827,6 +840,8 @@ class TestMarkdownSection:
             content="Some content",
             start_line=1,
             end_line=3,
+            column=3,
+            end_column=13,
         )
 
         assert section.level == 1
@@ -834,6 +849,8 @@ class TestMarkdownSection:
         assert section.content == "Some content"
         assert section.start_line == 1
         assert section.end_line == 3
+        assert section.column == 3
+        assert section.end_column == 13
 
 
 class TestMarkdownLink:

@@ -28,11 +28,10 @@ class WrongMarkupRule(Rule):
 
     # Markdown patterns that don't belong in code
     _md_patterns: ClassVar[list[tuple[str, str]]] = [
-        (r"#\s*.*\*\*[^*]+\*\*", "bold (**text**)"),
-        (r"#\s*.*\*[^*]+\*(?!\*)", "italic (*text*)"),
-        (r"#\s*.*`[^`]+`", "inline code (`code`)"),
-        (r"#\s*.*\[[^\]]+\]\([^)]+\)", "link ([text](url))"),
-        (r'"""[^"]*\*\*[^*]+\*\*[^"]*"""', "bold in docstring"),
+        (r"\*\*[^*]+\*\*", "bold (**text**)"),
+        (r"(?<!\*)\*[^*]+\*(?!\*)", "italic (*text*)"),
+        (r"`[^`]+`", "inline code (`code`)"),
+        (r"\[[^\]]+\]\([^)]+\)", "link ([text](url))"),
     ]
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -66,6 +65,7 @@ class WrongMarkupRule(Rule):
                                 message=f"Markdown in comment: {markup_type}",
                                 line=line_num,
                                 column=match.start() + 1,
+                                end_column=match.end() + 1,
                                 severity=self.severity,
                                 confidence=self.default_confidence,
                             )
@@ -447,7 +447,8 @@ class SkippedHeadingLevelRule(Rule):
                     f"Heading level jumps from {previous.level} to {current.level}"
                 ),
                 line=current.start_line,
-                column=1,
+                column=current.column,
+                end_column=current.end_column,
                 severity=self.severity,
                 confidence=self.default_confidence,
                 suggestion=(

@@ -140,6 +140,17 @@ class TestRuleRobustness:
 
             # Column should be positive
             assert issue.column >= 1, f"Column {issue.column} should be >= 1"
+            if issue.end_column is None:
+                assert issue.end_line is None
+                continue
+            end_line = issue.end_line or issue.line
+            assert issue.line <= end_line <= len(lines)
+            assert issue.end_column >= 1
+            assert issue.end_column <= len(lines[end_line - 1]) + 1
+            if issue.line == end_line:
+                assert issue.column <= issue.end_column
+                if issue.column == issue.end_column:
+                    assert issue.rule_id == "M004"
 
     @pytest.mark.parametrize("rule", ALL_RULES, ids=lambda r: r.id)
     @given(content=text_content, filename=filenames)

@@ -18,7 +18,39 @@ from benchmarks.rule_quality import (
 )
 
 from slop_lint.config import Config
+from slop_lint.core.linter import Linter
 from slop_lint.rules import get_all_rules
+
+_EXACT_SPAN_RULE_IDS = frozenset(
+    {
+        "C001",
+        "C002",
+        "C003",
+        "C004",
+        "G004",
+        "G005",
+        "G006",
+        "G007",
+        "G008",
+        "G009",
+        "M001",
+        "M008",
+        "S001",
+        "S008",
+        "S009",
+        "S014",
+        "S015",
+        "S016",
+        "S021",
+        "T001",
+        "T004",
+        "T005",
+        "T006",
+        "T008",
+        "V006",
+        "V007",
+    }
+)
 
 
 def test_scores_matches_mismatches_and_negative_cases() -> None:
@@ -213,3 +245,31 @@ def test_reviewed_findings_have_unique_rule_source_starts() -> None:
     locations = [(item.path, item.rule_id, item.line, item.column) for item in findings]
 
     assert len(locations) == len(set(locations))
+
+
+def test_reviewed_concrete_spans_are_complete_and_in_bounds() -> None:
+    config = Config()
+    rules = get_all_rules(config)
+    annotations = load_annotations(DEFAULT_MANIFEST, REPO_ROOT, {r.id for r in rules})
+    linter = Linter(config)
+    for rule in rules:
+        linter.register_rule(rule)
+
+    results = linter.check(list(annotations.files)).issues_by_file
+
+    for path, issues in results.items():
+        lines = path.read_text(encoding="utf-8").splitlines()
+        for issue in issues:
+            if issue.rule_id in _EXACT_SPAN_RULE_IDS:
+                assert issue.end_column is not None, issue.rule_id
+            if issue.end_column is None:
+                assert issue.end_line is None
+                continue
+            end_line = issue.end_line or issue.line
+            assert issue.line <= end_line <= len(lines)
+            assert 1 <= issue.column <= len(lines[issue.line - 1]) + 1
+            assert 1 <= issue.end_column <= len(lines[end_line - 1]) + 1
+            if issue.line == end_line:
+                assert issue.column <= issue.end_column
+                if issue.column == issue.end_column:
+                    assert issue.rule_id == "M004"
