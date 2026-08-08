@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Provider-neutral agent integration guidance for structured diagnostics,
+  exit-code handling, intentional findings, and mandatory verification reruns.
 - `rules --format json` and `explain RULE --format json` expose versioned
   canonical rule metadata for machine consumers.
 - `check --format jsonl` emits one versioned diagnostic object per line for

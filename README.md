@@ -279,6 +279,7 @@ membership, and run `make rule-docs`. Do not edit content between
 - [SPEC.md](SPEC.md) — Technical specification
 - [docs/rules.md](docs/rules.md) — Detailed rule documentation
 - [docs/configuration.md](docs/configuration.md) — Configuration reference
+- [Agent integration guide](docs/agent-integration.md) — Portable lint-and-repair workflow for coding agents
 
 ## Why "slop-lint"?
 

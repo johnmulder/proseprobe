@@ -199,6 +199,13 @@ def test_agent_integration_guide_documents_supported_contract() -> None:
     assert "--profile agent" not in guide
 
 
+def test_readme_links_agent_integration_guide() -> None:
+    """The public documentation index should expose the agent workflow."""
+    readme = (ROOT / "README.md").read_text()
+
+    assert "[Agent integration guide](docs/agent-integration.md)" in readme
+
+
 def test_ci_enforces_coverage_threshold() -> None:
     """CI should use the same coverage threshold as local NFR checks."""
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text()
