@@ -165,6 +165,22 @@ def test_dogfood_ci_is_enforced() -> None:
     assert "continue-on-error: true" not in workflow
 
 
+def test_release_workflow_uses_trusted_publishing() -> None:
+    """Release artifacts should be built once and published without API tokens."""
+    workflow = (ROOT / ".github" / "workflows" / "release.yml").read_text()
+
+    assert "types: [published]" in workflow
+    assert "needs: build" in workflow
+    assert workflow.count("name: python-package-distributions") == 3
+    assert "environment:\n      name: pypi" in workflow
+    assert "id-token: write" in workflow
+    assert "pypa/gh-action-pypi-publish@release/v1" in workflow
+    assert "gh release upload" in workflow
+    assert "PYPI_TOKEN" not in workflow
+    assert "workflow_dispatch" not in workflow
+    assert "push:" not in workflow
+
+
 def test_agent_skill_uses_portable_minimal_structure() -> None:
     """The portable skill should use only standard Agent Skills metadata."""
     skill_dir = ROOT / "skills" / "proseprobe"

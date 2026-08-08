@@ -223,7 +223,7 @@ permissions:
   security-events: write
 
 steps:
-  - uses: actions/checkout@v7
+  - uses: actions/checkout@v6
 
   - name: Install proseprobe
     run: pip install proseprobe
