@@ -1,4 +1,4 @@
-"""Markup detection rules (M001-M008 and M010)."""
+"""Markup detection rules (M001-M010)."""
 
 import re
 from itertools import pairwise
@@ -12,6 +12,7 @@ from proseprobe.parsers.markdown import (
 from proseprobe.parsers.markdown import (
     _get_cached_parser as _get_cached_markdown_parser,
 )
+from proseprobe.parsers.prose import iter_prose_sentences
 from proseprobe.parsers.python import _get_cached_parser as _get_cached_python_parser
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
@@ -459,6 +460,66 @@ class SkippedHeadingLevelRule(Rule):
             for previous, current in pairwise(headings)
             if current.level > previous.level + 1
         ]
+
+
+class BareURLInProseRule(Rule):
+    """M009: Detect raw HTTP(S) URLs in Markdown body prose."""
+
+    id = "M009"
+    name = "Bare URL in Prose"
+    description = "Detects raw HTTP(S) URLs in Markdown body prose"
+    severity = Severity.INFO
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown"}
+    content_scope = "prose"
+
+    _URL: ClassVar[re.Pattern[str]] = re.compile(
+        r"\bhttps?://[^\s<>\[\]{}\"'`]+", re.IGNORECASE
+    )
+    _LITERAL_CONTEXT: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:literal URL|URL (?:literal|string|value|format|syntax))\b",
+        re.IGNORECASE,
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check body prose for unwrapped HTTP(S) URLs."""
+        if not is_markdown_file(filename):
+            return []
+
+        issues: list[Issue] = []
+        for sentence in iter_prose_sentences(content, filename):
+            if sentence.context != "body" or is_example_line(
+                content, filename, sentence.start_line
+            ):
+                continue
+            if self._LITERAL_CONTEXT.search(sentence.text):
+                continue
+
+            for match in self._URL.finditer(sentence.text):
+                url = match.group().rstrip(".,;:!?")
+                while url.endswith(")") and url.count(")") > url.count("("):
+                    url = url[:-1]
+
+                line, column = sentence.source_position(match.start())
+                end_line, end_column = sentence.source_position(
+                    match.start() + len(url)
+                )
+                assert line == end_line
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Bare URL in prose: '{url}'",
+                        line=line,
+                        column=column,
+                        end_line=end_line,
+                        end_column=end_column,
+                        severity=self.severity,
+                        confidence=self.default_confidence,
+                        suggestion="Use descriptive Markdown link text",
+                    )
+                )
+
+        return issues
 
 
 class NonDescriptiveLinkTextRule(Rule):

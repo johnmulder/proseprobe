@@ -1,9 +1,10 @@
-"""Tests for markup rules (M001-M008 and M010)."""
+"""Tests for markup rules (M001-M010)."""
 
 import pytest
 
 from proseprobe.rules.base import Confidence, Severity
 from proseprobe.rules.markup import (
+    BareURLInProseRule,
     BrokenReferencesRule,
     ChatGPTMarkersRule,
     NonDescriptiveLinkTextRule,
@@ -558,6 +559,102 @@ class TestSkippedHeadingLevel:
         text = "# Title\n\n### Details"
 
         assert SkippedHeadingLevelRule().check(text, "guide.py") == []
+
+
+class TestBareURLInProse:
+    """Tests for M009: Bare URL in Prose."""
+
+    def test_reports_exact_url_fields(self) -> None:
+        source = "Read https://example.com/guide?mode=fast."
+
+        [issue] = BareURLInProseRule().check(source, "guide.md")
+
+        assert issue.rule_id == "M009"
+        assert issue.message == (
+            "Bare URL in prose: 'https://example.com/guide?mode=fast'"
+        )
+        assert issue.line == 1
+        assert issue.column == 6
+        assert issue.end_line == 1
+        assert issue.end_column == 41
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == "Use descriptive Markdown link text"
+
+    @pytest.mark.parametrize(
+        ("source", "expected"),
+        [
+            ("Read HTTP://example.com.", "HTTP://example.com"),
+            (
+                "Read https://example.com/releases/(v2).",
+                "https://example.com/releases/(v2)",
+            ),
+            ("Read (https://example.com/guide).", "https://example.com/guide"),
+        ],
+    )
+    def test_handles_url_boundaries(self, source: str, expected: str) -> None:
+        [issue] = BareURLInProseRule().check(source, "guide.md")
+
+        assert issue.message == f"Bare URL in prose: '{expected}'"
+        assert source[issue.column - 1 : issue.end_column - 1] == expected
+
+    def test_reports_multiple_urls_in_source_order(self) -> None:
+        source = "See https://a.example then http://b.example/path."
+
+        issues = BareURLInProseRule().check(source, "guide.md")
+
+        assert [issue.message for issue in issues] == [
+            "Bare URL in prose: 'https://a.example'",
+            "Bare URL in prose: 'http://b.example/path'",
+        ]
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "Read [the guide](https://example.com/guide).",
+            "Read <https://example.com/guide>.",
+            "[guide]: https://example.com/guide",
+            "Use `https://example.com/guide`.",
+            "```text\nhttps://example.com/guide\n```",
+        ],
+    )
+    def test_ignores_protected_markdown_syntax(self, source: str) -> None:
+        assert BareURLInProseRule().check(source, "guide.md") == []
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "# https://example.com/heading",
+            "- https://example.com/resource",
+            "> https://example.com/quote",
+            "| URL |\n| --- |\n| https://example.com/table |",
+        ],
+    )
+    def test_ignores_non_body_contexts(self, source: str) -> None:
+        assert BareURLInProseRule().check(source, "guide.md") == []
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "The literal URL is https://example.com/test.",
+            "The URL string is https://example.com/test.",
+            "## Example\n\nVisit https://example.com/test.",
+        ],
+    )
+    def test_ignores_explicit_literal_and_example_context(self, source: str) -> None:
+        assert BareURLInProseRule().check(source, "guide.md") == []
+
+    def test_does_not_suppress_a_normal_url_mention(self) -> None:
+        [issue] = BareURLInProseRule().check(
+            "Read the URL https://example.com/test.", "guide.md"
+        )
+
+        assert issue.rule_id == "M009"
+
+    def test_applies_only_to_markdown(self) -> None:
+        assert (
+            BareURLInProseRule().check("Visit https://example.com.", "guide.py") == []
+        )
 
 
 class TestNonDescriptiveLinkText:
