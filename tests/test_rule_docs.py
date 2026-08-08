@@ -37,18 +37,18 @@ def _seed_documents(root: Path) -> None:
 def test_category_table_is_derived_from_registry() -> None:
     rendered = render_category_table()
 
-    assert "| `V` | Vocabulary | 8 |" in rendered
+    assert "| `V` | Vocabulary | 9 |" in rendered
     assert "| `S` | Structure | 22 |" in rendered
     assert "| `M` | Markup | 9 |" in rendered
     assert "| `G` | Grammar | 15 |" in rendered
-    assert "| **Total** | | **66** | |" in rendered
+    assert "| **Total** | | **67** | |" in rendered
 
 
 def test_rule_inventory_contains_canonical_metadata() -> None:
     rendered = render_rule_inventory()
     rule_rows = [line for line in rendered.splitlines() if line.startswith("| `")]
 
-    assert len(rule_rows) == 66
+    assert len(rule_rows) == 67
     assert rule_rows[0].startswith("| `V001`")
     assert rule_rows[-1].startswith("| `M010`")
     assert any(
@@ -60,6 +60,13 @@ def test_rule_inventory_contains_canonical_metadata() -> None:
         for row in rule_rows
     )
     assert any("`M001`" in row and "low" in row for row in rule_rows)
+    assert any(
+        "`V009`" in row
+        and "info" in row
+        and "high" in row
+        and "markdown, python / prose" in row
+        for row in rule_rows
+    )
     assert any(
         "`S025`" in row
         and "warning" in row

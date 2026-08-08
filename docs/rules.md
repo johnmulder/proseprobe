@@ -31,6 +31,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `V006` | Grandiose Stakes | Vocabulary | warning | medium | markdown, python / prose | — |
 | `V007` | Invented Concept Labels | Vocabulary | info | medium | markdown, python / prose | `thresholds.invented_concept_labels` |
 | `V008` | Trend Overclaim | Vocabulary | info | medium | markdown, python / prose | — |
+| `V009` | Wordy Phrase | Vocabulary | info | high | markdown, python / prose | — |
 | `S001` | Rule of Three | Structure | info | medium | markdown, python / prose | `thresholds.rule_of_three` |
 | `S002` | Negative Parallelism | Structure | info | medium | markdown, python / prose | — |
 | `S003` | Challenge Conclusions | Structure | warning | medium | markdown, python / prose | — |
@@ -1254,6 +1255,36 @@ More and more people are switching to this framework.
 **Example (good):**
 ```markdown
 According to the 2025 Stack Overflow survey, 34% of respondents use this framework, up from 21% in 2024.
+```
+
+---
+
+### V009: Wordy Phrase
+
+Detects fixed wordy phrases that have shorter, direct replacements. Matching is
+case-insensitive and applies to Markdown prose plus Python comments and
+docstrings; headings and code are excluded.
+
+**Detected patterns:**
+- "at this point in time" → "now"
+- "due to the fact that" → "because"
+- "during the course of" → "during"
+- "enable(s) the ability to" → "allow(s)"
+- "has/have the ability to" → "can"
+- "in close proximity to" → "near"
+- "in order to" → "to"
+- "in the event that" → "if"
+- "on the basis of" → "based on"
+- "with regard to" → "about"
+
+**Example (bad):**
+```markdown
+At this point in time, the service retries in order to recover.
+```
+
+**Example (good):**
+```markdown
+The service now retries to recover.
 ```
 
 ---

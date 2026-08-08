@@ -19,7 +19,7 @@ def test_metadata_covers_registry_in_rule_id_order() -> None:
     metadata_ids = tuple(item.id for item in metadata)
 
     assert metadata_ids == tuple(rule.id for rule in get_all_rules())
-    assert len(metadata) == 66
+    assert len(metadata) == 67
     assert len(set(metadata_ids)) == len(metadata_ids)
 
 
@@ -49,6 +49,7 @@ def test_metadata_reports_low_confidence_rule_defaults() -> None:
     assert get_rule_metadata_by_id("M008").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("M010").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("S025").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
+    assert get_rule_metadata_by_id("V009").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("G015").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
 
 
@@ -96,5 +97,18 @@ def test_s025_metadata_matches_the_empty_heading_contract() -> None:
     assert metadata.default_confidence is Confidence.HIGH
     assert metadata.applies_to == ("markdown",)
     assert metadata.content_scope == "raw"
+    assert metadata.profiles == ("technical-docs",)
+    assert metadata.config_key is None
+
+
+def test_v009_metadata_matches_the_wordy_phrase_contract() -> None:
+    metadata = get_rule_metadata_by_id("V009")
+
+    assert metadata is not None
+    assert metadata.name == "Wordy Phrase"
+    assert metadata.default_severity is Severity.INFO
+    assert metadata.default_confidence is Confidence.HIGH
+    assert metadata.applies_to == ("markdown", "python")
+    assert metadata.content_scope == "prose"
     assert metadata.profiles == ("technical-docs",)
     assert metadata.config_key is None

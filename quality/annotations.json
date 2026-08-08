@@ -1338,6 +1338,37 @@
           "note": "A tilde fence closed by a longer tilde delimiter is valid."
         }
       ]
+    },
+    "quality/corpus/wordy-phrases.md": {
+      "expected": [
+        {
+          "rule_id": "V009",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "rule_id": "V009",
+          "line": 4,
+          "column": 21
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V009",
+          "line": 6,
+          "note": "Inline code is not document prose."
+        },
+        {
+          "rule_id": "V009",
+          "line": 9,
+          "note": "Fenced code is not document prose."
+        },
+        {
+          "rule_id": "V009",
+          "line": 12,
+          "note": "Related words do not contain a complete curated phrase."
+        }
+      ]
     }
   }
 }

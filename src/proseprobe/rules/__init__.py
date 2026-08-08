@@ -85,6 +85,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         vocab.GrandioseStakesRule(),
         vocab.InventedConceptLabelsRule(thresholds.invented_concept_labels),
         vocab.TrendOverclaimRule(),
+        vocab.WordyPhraseRule(),
     ]
     for rule in rules:
         override = config.severity_overrides.get(rule.id)
