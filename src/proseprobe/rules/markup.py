@@ -1,4 +1,4 @@
-"""Markup detection rules (M001-M008)."""
+"""Markup detection rules (M001-M008 and M010)."""
 
 import re
 from itertools import pairwise
@@ -459,3 +459,66 @@ class SkippedHeadingLevelRule(Rule):
             for previous, current in pairwise(headings)
             if current.level > previous.level + 1
         ]
+
+
+class NonDescriptiveLinkTextRule(Rule):
+    """M010: Detect vague Markdown link labels."""
+
+    id = "M010"
+    name = "Non-Descriptive Link Text"
+    description = "Detects vague Markdown link labels"
+    severity = Severity.WARNING
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown"}
+    content_scope = "non_code"
+
+    _WEAK_LABELS: ClassVar[frozenset[str]] = frozenset(
+        {"here", "click here", "this link", "link"}
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check rendered Markdown links for non-descriptive labels."""
+        if not is_markdown_file(filename):
+            return []
+
+        parser = _get_cached_markdown_parser(content)
+        definition_destinations = {
+            (reference.line, reference.destination_start, reference.destination_end)
+            for reference in parser.get_references()
+            if reference.is_definition
+        }
+        lines = content.split("\n")
+        issues: list[Issue] = []
+
+        for link in parser.get_links():
+            if " ".join(link.text.split()).casefold() not in self._WEAK_LABELS:
+                continue
+            if (link.line, link.url_start, link.url_end) in definition_destinations:
+                continue
+
+            source = lines[link.line - 1]
+            offset = link.column - 1
+            if source[offset : offset + 2] == "![" or (
+                offset > 0 and source[offset - 1 : offset + 1] == "!["
+            ):
+                continue
+            if offset >= len(source) or source[offset] != "[":
+                continue
+            if is_example_line(content, filename, link.line):
+                continue
+
+            column = link.column + 1
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=f"Non-descriptive link text: '{link.text}'",
+                    line=link.line,
+                    column=column,
+                    end_column=column + len(link.text),
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion="Replace with text that describes the destination",
+                )
+            )
+
+        return sorted(issues, key=lambda issue: (issue.line, issue.column))

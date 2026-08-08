@@ -995,6 +995,11 @@
           "rule_id": "M004",
           "line": 8,
           "column": 25
+        },
+        {
+          "rule_id": "M010",
+          "line": 12,
+          "column": 9
         }
       ],
       "negative_cases": [
@@ -1002,6 +1007,11 @@
           "rule_id": "M004",
           "line": 10,
           "note": "Relative, named-fragment, mailto, and reserved example destinations are valid."
+        },
+        {
+          "rule_id": "M010",
+          "line": 10,
+          "note": "Destination-specific link labels are descriptive."
         }
       ]
     },

@@ -1,4 +1,4 @@
-"""Tests for markup rules (M001-M008)."""
+"""Tests for markup rules (M001-M008 and M010)."""
 
 import pytest
 
@@ -6,6 +6,7 @@ from proseprobe.rules.base import Confidence, Severity
 from proseprobe.rules.markup import (
     BrokenReferencesRule,
     ChatGPTMarkersRule,
+    NonDescriptiveLinkTextRule,
     SkippedHeadingLevelRule,
     TemplateResidueRule,
     UnclosedCodeFenceRule,
@@ -557,3 +558,80 @@ class TestSkippedHeadingLevel:
         text = "# Title\n\n### Details"
 
         assert SkippedHeadingLevelRule().check(text, "guide.py") == []
+
+
+class TestNonDescriptiveLinkText:
+    """Tests for M010: Non-Descriptive Link Text."""
+
+    def test_reports_exact_inline_label_fields(self) -> None:
+        source = "Read [click here](/guide)."
+
+        [issue] = NonDescriptiveLinkTextRule().check(source, "guide.md")
+
+        assert issue.rule_id == "M010"
+        assert issue.message == "Non-descriptive link text: 'click here'"
+        assert issue.line == 1
+        assert issue.column == 7
+        assert issue.end_column == 17
+        assert issue.severity is Severity.WARNING
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == "Replace with text that describes the destination"
+        assert source[issue.column - 1 : issue.end_column - 1] == "click here"
+
+    @pytest.mark.parametrize("label", ["here", "CLICK HERE", " this   link ", "link"])
+    def test_normalizes_only_fixed_weak_labels(self, label: str) -> None:
+        issues = NonDescriptiveLinkTextRule().check(
+            f"Read [{label}](/guide).", "guide.md"
+        )
+
+        assert len(issues) == 1
+
+    @pytest.mark.parametrize(
+        ("source", "line"),
+        [
+            ("[target]: /guide\n\nRead [this link][target].", 3),
+            ("[here]: /guide\n\nRead [here][].", 3),
+            ("[here]: /guide\n\nRead [here].", 3),
+            ("> Read [here](/guide).", 1),
+            ("| Resource |\n| --- |\n| [here](/guide) |", 3),
+        ],
+    )
+    def test_handles_supported_markdown_link_forms(
+        self, source: str, line: int
+    ) -> None:
+        [issue] = NonDescriptiveLinkTextRule().check(source, "guide.md")
+
+        assert issue.line == line
+
+    def test_returns_multiple_findings_in_source_order(self) -> None:
+        source = "[target]: /guide\n\n[here][target] then [link](/other)."
+
+        issues = NonDescriptiveLinkTextRule().check(source, "guide.md")
+
+        assert [issue.column for issue in issues] == sorted(
+            issue.column for issue in issues
+        )
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "Read [click here for installation](/guide).",
+            "Read [deployment guide](/guide).",
+            "Read <https://example.com>.",
+            "![here](/diagram.png)",
+            "[target]: /diagram.png\n\n![here][target]",
+            "[here]: /guide",
+            "Read [here][missing].",
+            "Use `[here](/guide)` as the example.",
+            "```markdown\n[here](/guide)\n```",
+            "<div>\n[here](/guide)\n</div>",
+            "## Example\n\nRead [here](/guide).",
+        ],
+    )
+    def test_ignores_out_of_scope_links(self, source: str) -> None:
+        assert NonDescriptiveLinkTextRule().check(source, "guide.md") == []
+
+    def test_ignores_non_markdown_input(self) -> None:
+        assert (
+            NonDescriptiveLinkTextRule().check("Read [here](/guide).", "guide.py") == []
+        )

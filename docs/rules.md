@@ -5,8 +5,8 @@ This document describes all detection rules available in ProseProbe.
 Most prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
 source-mapped Python docstrings and comments; `G015` examines only Markdown
 document openers. `C` rules handle Python-specific documentation issues.
-`M001` checks Markdown syntax in Python comments, while `M002`-`M008` are
-Markdown-only.
+`M001` checks Markdown syntax in Python comments, while `M002`-`M008` and
+`M010` are Markdown-only.
 
 Wrapped Markdown and Python prose is segmented into cached, source-mapped
 sentences. Records retain exact start and end positions while conservative
@@ -87,6 +87,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `M006` | Template Residue | Markup | warning | high | markdown / prose | — |
 | `M007` | Unclosed Code Fence | Markup | error | high | markdown / raw | — |
 | `M008` | Skipped Heading Level | Markup | warning | high | markdown / raw | — |
+| `M010` | Non-Descriptive Link Text | Markup | warning | high | markdown / non_code | — |
 
 <!-- rule-docs:inventory:end -->
 
@@ -791,6 +792,36 @@ The first visible heading may start at any level. Repeated levels, transitions
 to shallower headings, and headings inside fenced code or HTML blocks are not
 reported. ATX and Setext headings, including blockquoted headings, participate
 in comparisons through the shared Markdown parser.
+
+---
+
+### M010: Non-Descriptive Link Text
+
+Detects Markdown links whose visible label does not describe the destination.
+Findings are high-confidence warnings on the label text and suggest replacing
+it with destination-specific wording.
+
+**Detected labels:**
+- `here`
+- `click here`
+- `this link`
+- `link`
+
+**Example (bad):**
+```markdown
+Read [click here](/installation) before deploying.
+```
+
+**Example (good):**
+```markdown
+Read the [installation guide](/installation) before deploying.
+```
+
+Matching is case-insensitive and ignores whitespace differences, but the whole
+visible label must match. Additional descriptive words are not reported.
+Autolinks, images, reference definitions, undefined references, code, HTML
+blocks, and demonstration sections are excluded. Inline and resolved reference
+links are checked through the shared Markdown parser.
 
 ---
 

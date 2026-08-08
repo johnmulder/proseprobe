@@ -42,6 +42,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         markup.TemplateResidueRule(),
         markup.UnclosedCodeFenceRule(),
         markup.SkippedHeadingLevelRule(),
+        markup.NonDescriptiveLinkTextRule(),
         struct.RuleOfThreeRule(thresholds.rule_of_three),
         struct.NegativeParallelismRule(),
         struct.ChallengeConclusionsRule(),
