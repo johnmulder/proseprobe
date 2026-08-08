@@ -1379,19 +1379,23 @@ class TestOutputFormats:
 
     def test_json_format_valid(self, tmp_path: Path) -> None:
         """Test that --format json outputs valid JSON."""
-        import json
-
         test_file = tmp_path / "test.md"
         test_file.write_text("This delves into topics.")
 
         result = run_cli("check", str(test_file), "--format", "json")
 
         assert result.exit_code == 1
-        # Should be valid JSON
+        assert result.stderr == ""
         data = json.loads(result.stdout)
-        assert "files" in data
-        assert "summary" in data
-        assert data["summary"]["total_issues"] >= 1
+        assert data["schema_version"] == 1
+        assert data["summary"] == {
+            "total_issues": 1,
+            "files_checked": 1,
+            "errors": 0,
+            "warnings": 1,
+            "info": 0,
+        }
+        assert data["files"][0]["issues"][0]["rule_id"] == "V001"
 
     def test_sarif_format_valid(self, tmp_path: Path) -> None:
         """Test that --format sarif outputs valid SARIF."""
@@ -1412,17 +1416,23 @@ class TestOutputFormats:
 
     def test_json_format_no_issues(self, tmp_path: Path) -> None:
         """Test JSON output with no issues."""
-        import json
-
         test_file = tmp_path / "clean.md"
         test_file.write_text("This is clean content.")
 
         result = run_cli("check", str(test_file), "--format", "json")
 
         assert result.exit_code == 0
+        assert result.stderr == ""
         data = json.loads(result.stdout)
-        assert data["summary"]["total_issues"] == 0
-        assert data["summary"]["files_checked"] == 1
+        assert data["schema_version"] == 1
+        assert data["files"] == []
+        assert data["summary"] == {
+            "total_issues": 0,
+            "files_checked": 1,
+            "errors": 0,
+            "warnings": 0,
+            "info": 0,
+        }
 
 
 class TestMinConfidenceFlag:
@@ -1659,6 +1669,35 @@ class TestCliExitSemantics:
 
         assert result.exit_code == 0
         assert "S002" in result.stdout
+
+    def test_json_info_only_findings_exit_zero(self, tmp_path: Path) -> None:
+        """Info-only JSON findings should be reported without failing."""
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("This not only improves speed but also reliability.")
+
+        result = run_cli(
+            "check",
+            "--select",
+            "S002",
+            "--severity",
+            "info",
+            "--format",
+            "json",
+            str(test_file),
+        )
+
+        assert result.exit_code == 0
+        assert result.stderr == ""
+        data = json.loads(result.stdout)
+        assert data["schema_version"] == 1
+        assert data["summary"] == {
+            "total_issues": 1,
+            "files_checked": 1,
+            "errors": 0,
+            "warnings": 0,
+            "info": 1,
+        }
+        assert data["files"][0]["issues"][0]["rule_id"] == "S002"
 
     def test_warning_issues_fail(self, tmp_path: Path) -> None:
         """Warnings should still make the process fail."""

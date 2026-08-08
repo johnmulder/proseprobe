@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+from slop_lint import __version__
 from slop_lint.core.reporter import format_results
 from slop_lint.rules.base import Confidence, Issue, Severity
 
@@ -70,20 +71,23 @@ class TestJsonFormat:
 
     def test_json_no_issues(self) -> None:
         """Test JSON format with no issues."""
-        output = format_results({}, "json")
-
-        data = json.loads(output)
-        assert isinstance(data, dict)
-
-    def test_json_reports_files_checked_from_metadata(self) -> None:
-        """JSON summary should distinguish checked files from files with issues."""
         output = format_results({}, "json", files_checked=3)
 
-        data = json.loads(output)
-        assert data["summary"]["files_checked"] == 3
+        assert json.loads(output) == {
+            "schema_version": 1,
+            "version": __version__,
+            "files": [],
+            "summary": {
+                "total_issues": 0,
+                "files_checked": 3,
+                "errors": 0,
+                "warnings": 0,
+                "info": 0,
+            },
+        }
 
-    def test_json_single_issue(self) -> None:
-        """Test JSON format with single issue."""
+    def test_json_issue_contract(self) -> None:
+        """Test the complete JSON issue and summary contract."""
         results = {
             Path("test.md"): [
                 Issue(
@@ -91,18 +95,64 @@ class TestJsonFormat:
                     message="Test message",
                     line=5,
                     column=10,
+                    end_line=5,
+                    end_column=15,
                     severity=Severity.WARNING,
-                )
+                    confidence=Confidence.HIGH,
+                    suggestion="Explore",
+                ),
+                Issue(
+                    rule_id="S001",
+                    message="Second message",
+                    line=8,
+                    column=1,
+                    severity=Severity.INFO,
+                ),
             ]
         }
 
         output = format_results(results, "json")
-        data = json.loads(output)
 
-        assert isinstance(data, dict)
-        # Verify the JSON contains issue information
-        output_str = json.dumps(data)
-        assert "V001" in output_str
+        assert json.loads(output) == {
+            "schema_version": 1,
+            "version": __version__,
+            "files": [
+                {
+                    "path": "test.md",
+                    "issues": [
+                        {
+                            "rule_id": "V001",
+                            "message": "Test message",
+                            "line": 5,
+                            "column": 10,
+                            "end_line": 5,
+                            "end_column": 15,
+                            "severity": "warning",
+                            "confidence": "high",
+                            "suggestion": "Explore",
+                        },
+                        {
+                            "rule_id": "S001",
+                            "message": "Second message",
+                            "line": 8,
+                            "column": 1,
+                            "end_line": None,
+                            "end_column": None,
+                            "severity": "info",
+                            "confidence": "medium",
+                            "suggestion": None,
+                        },
+                    ],
+                }
+            ],
+            "summary": {
+                "total_issues": 2,
+                "files_checked": 1,
+                "errors": 0,
+                "warnings": 1,
+                "info": 1,
+            },
+        }
 
 
 class TestSarifFormat:

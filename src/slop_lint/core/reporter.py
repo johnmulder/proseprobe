@@ -14,6 +14,22 @@ __all__ = ["format_results"]
 # ---------------------------------------------------------------------------
 
 _Results = dict[Path, list[Issue]]
+_JSON_SCHEMA_VERSION = 1
+
+
+def _serialize_issue(issue: Issue) -> dict[str, Any]:
+    """Serialize an issue for machine-readable output."""
+    return {
+        "rule_id": issue.rule_id,
+        "message": issue.message,
+        "line": issue.line,
+        "column": issue.column,
+        "end_line": issue.end_line,
+        "end_column": issue.end_column,
+        "severity": issue.severity.value,
+        "confidence": issue.confidence.value,
+        "suggestion": issue.suggestion,
+    }
 
 
 def _format_text(results: _Results, *, quiet: bool = False) -> str:
@@ -72,6 +88,7 @@ def _format_json(results: _Results, files_checked: int | None = None) -> str:
     from slop_lint import __version__
 
     output: dict[str, Any] = {
+        "schema_version": _JSON_SCHEMA_VERSION,
         "version": __version__,
         "files": [],
         "summary": {
@@ -88,20 +105,7 @@ def _format_json(results: _Results, files_checked: int | None = None) -> str:
     for path, issues in sorted(results.items()):
         file_entry = {
             "path": str(path),
-            "issues": [
-                {
-                    "rule_id": issue.rule_id,
-                    "message": issue.message,
-                    "line": issue.line,
-                    "column": issue.column,
-                    "end_line": issue.end_line,
-                    "end_column": issue.end_column,
-                    "severity": issue.severity.value,
-                    "confidence": issue.confidence.value,
-                    "suggestion": issue.suggestion,
-                }
-                for issue in issues
-            ],
+            "issues": [_serialize_issue(issue) for issue in issues],
         }
         output["files"].append(file_entry)
 
