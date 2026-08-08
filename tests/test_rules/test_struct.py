@@ -1033,6 +1033,25 @@ class TestSlideDeckFragment:
 
         assert SlideDeckFragmentRule().check(text, "test.md") == []
 
+    def test_ignores_typographic_contracted_pronoun_led_finite_clause(self) -> None:
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        text = "We\u2019re driving alignment across strategic initiatives for scalable impact."
+
+        assert SlideDeckFragmentRule().check(text, "test.md") == []
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "The analysis shows that strategic alignment will deliver scalable impact.",
+            "That strategic alignment will deliver scalable impact.",
+        ],
+    )
+    def test_ignores_complete_clause_with_relative_word(self, text: str) -> None:
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        assert SlideDeckFragmentRule().check(text, "test.md") == []
+
     @pytest.mark.parametrize(
         "text",
         [

@@ -977,10 +977,17 @@ class SlideDeckFragmentRule(Rule):
     # Simple heuristic for a conjugated main verb (not gerund/participle-only)
     _FINITE_VERB: ClassVar[re.Pattern[str]] = re.compile(
         r"^(?:i|we|you|he|she|it|they)(?:"
-        r"'(?:m|re|s|ve|d|ll)\b|\s+(?![a-z-]+ing\b)[a-z-]+\b)"
+        r"['\u2019](?:m|re|s|ve|d|ll)\b|\s+(?![a-z-]+ing\b)[a-z-]+\b)"
         r"|\b(?:is|are|was|were|has|have|had|do|does|did|will|shall|can|could"
         r"|would|should|may|might|must)\b",
         re.IGNORECASE,
+    )
+    _RELATIVE_CLAUSE: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:that|which|who)\b", re.IGNORECASE
+    )
+    _GERUND_LED: ClassVar[re.Pattern[str]] = re.compile(r"^[a-z-]+ing\b", re.IGNORECASE)
+    _FRAGMENT_CONNECTOR: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:across|for|through|via|with)\b", re.IGNORECASE
     )
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -995,13 +1002,29 @@ class SlideDeckFragmentRule(Rule):
             if not stripped.endswith("."):
                 continue
             # Skip if it has a conjugated main verb
-            main_clause = re.split(
-                r"\b(?:that|which|who)\b", stripped, maxsplit=1, flags=re.IGNORECASE
-            )[0]
+            words_lower = {w.lower().rstrip(".,;:!?'\"") for w in stripped.split()}
+            main_clause = stripped
+            relative_clause = self._RELATIVE_CLAUSE.search(stripped)
+            if relative_clause is not None and relative_clause.start() > 0:
+                prefix = stripped[: relative_clause.start()].rstrip()
+                connector = self._FRAGMENT_CONNECTOR.search(prefix)
+                leading_words: list[str] = []
+                if connector is not None:
+                    leading_words = [
+                        word.casefold().strip(".,;:!?'\"")
+                        for word in prefix[: connector.start()].split()
+                    ]
+                    leading_words = [
+                        word for word in leading_words if word not in {"a", "an", "the"}
+                    ]
+                noun_fragment = len(leading_words) >= 2 and all(
+                    word in SLIDE_DECK_BUZZWORDS for word in leading_words
+                )
+                if self._GERUND_LED.match(prefix) or noun_fragment:
+                    main_clause = prefix
             if self._FINITE_VERB.search(main_clause):
                 continue
             # Count buzzwords
-            words_lower = {w.lower().rstrip(".,;:!?'\"") for w in stripped.split()}
             buzzword_count = len(words_lower & SLIDE_DECK_BUZZWORDS)
             if buzzword_count >= self._MIN_BUZZWORDS:
                 issues.append(
