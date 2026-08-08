@@ -986,8 +986,10 @@ class SlideDeckFragmentRule(Rule):
         r"\b(?:that|which|who)\b", re.IGNORECASE
     )
     _GERUND_LED: ClassVar[re.Pattern[str]] = re.compile(r"^[a-z-]+ing\b", re.IGNORECASE)
-    _FRAGMENT_CONNECTOR: ClassVar[re.Pattern[str]] = re.compile(
-        r"\b(?:across|for|through|via|with)\b", re.IGNORECASE
+    _POST_RELATIVE_PREDICATE: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:appears?|becomes?|continues?|fails?|matters?|persists?|remains?"
+        r"|seems?|succeeds?|works?)\b",
+        re.IGNORECASE,
     )
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -1007,20 +1009,22 @@ class SlideDeckFragmentRule(Rule):
             relative_clause = self._RELATIVE_CLAUSE.search(stripped)
             if relative_clause is not None and relative_clause.start() > 0:
                 prefix = stripped[: relative_clause.start()].rstrip()
-                connector = self._FRAGMENT_CONNECTOR.search(prefix)
-                leading_words: list[str] = []
-                if connector is not None:
-                    leading_words = [
-                        word.casefold().strip(".,;:!?'\"")
-                        for word in prefix[: connector.start()].split()
-                    ]
-                    leading_words = [
-                        word for word in leading_words if word not in {"a", "an", "the"}
-                    ]
-                noun_fragment = len(leading_words) >= 2 and all(
-                    word in SLIDE_DECK_BUZZWORDS for word in leading_words
+                prefix_words = {
+                    word.casefold().strip(".,;:!?'\"") for word in prefix.split()
+                }
+                fragment_prefix = (
+                    self._GERUND_LED.match(prefix)
+                    or len(prefix_words & SLIDE_DECK_BUZZWORDS) >= self._MIN_BUZZWORDS
                 )
-                if self._GERUND_LED.match(prefix) or noun_fragment:
+                relative_tail = stripped[relative_clause.end() :]
+                finite_matches = list(self._FINITE_VERB.finditer(relative_tail))
+                trailing_predicate = len(finite_matches) > 1 or (
+                    bool(finite_matches)
+                    and self._POST_RELATIVE_PREDICATE.search(
+                        relative_tail, finite_matches[0].end()
+                    )
+                )
+                if fragment_prefix and not trailing_predicate:
                     main_clause = prefix
             if self._FINITE_VERB.search(main_clause):
                 continue

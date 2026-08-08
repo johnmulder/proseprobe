@@ -1056,6 +1056,24 @@ class TestSlideDeckFragment:
         "text",
         [
             (
+                "Driving strategic alignment for initiatives that will deliver "
+                "scalable impact is difficult."
+            ),
+            (
+                "Strategic alignment for initiatives that will deliver scalable "
+                "impact remains difficult."
+            ),
+        ],
+    )
+    def test_ignores_main_predicate_after_relative_clause(self, text: str) -> None:
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        assert SlideDeckFragmentRule().check(text, "test.md") == []
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            (
                 "Driving strategic alignment for initiatives that will "
                 "deliver scalable impact."
             ),
@@ -1063,6 +1081,23 @@ class TestSlideDeckFragment:
         ],
     )
     def test_detects_fragment_with_subordinate_auxiliary(self, text: str) -> None:
+        from slop_lint.rules.struct import SlideDeckFragmentRule
+
+        assert len(SlideDeckFragmentRule().check(text, "test.md")) == 1
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            (
+                "Enterprise strategic alignment for initiatives that will deliver "
+                "scalable impact."
+            ),
+            ("Strategic alignment among teams that will deliver scalable impact."),
+        ],
+    )
+    def test_detects_varied_fragment_prefix_before_relative_clause(
+        self, text: str
+    ) -> None:
         from slop_lint.rules.struct import SlideDeckFragmentRule
 
         assert len(SlideDeckFragmentRule().check(text, "test.md")) == 1
