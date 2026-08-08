@@ -35,6 +35,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         grammar.ImpersonalCorporatePassiveRule(),
         grammar.GenericSceneSettingOpenerRule(),
         grammar.EmptyItOpenerRule(),
+        grammar.UnclearActorRequirementRule(),
         grammar.DoubleNegativeRule(),
         markup.WrongMarkupRule(),
         markup.ChatGPTMarkersRule(),

@@ -1477,6 +1477,47 @@
         }
       ]
     },
+    "quality/corpus/unclear-actor-requirements.md": {
+      "expected": [
+        {
+          "rule_id": "G024",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "rule_id": "G024",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "rule_id": "G024",
+          "line": 7,
+          "column": 1
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G024",
+          "line": 11,
+          "note": "Prose under an example heading demonstrates the rule."
+        },
+        {
+          "rule_id": "G024",
+          "line": 15,
+          "note": "Inline code is not document prose."
+        },
+        {
+          "rule_id": "G024",
+          "line": 18,
+          "note": "Fenced code is not document prose."
+        },
+        {
+          "rule_id": "G024",
+          "line": 21,
+          "note": "An active requirement names the responsible actor."
+        }
+      ]
+    },
     "quality/corpus/unclosed-fences.md": {
       "expected": [
         {

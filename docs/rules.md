@@ -80,6 +80,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `G014` | Impersonal Corporate Passive | Grammar | info | medium | markdown, python / prose | — |
 | `G015` | Generic Scene-Setting Opener | Grammar | info | medium | markdown / prose | — |
 | `G017` | Empty "It" Opener | Grammar | info | high | markdown, python / prose | — |
+| `G024` | Unclear Actor in Requirement | Grammar | info | medium | markdown, python / prose | — |
 | `G029` | Double Negative | Grammar | info | high | markdown, python / prose | — |
 | `C001` | Docstring-Only Vocabulary | Code | warning | medium | python / raw | — |
 | `C002` | Verbose Comments | Code | info | medium | python / raw | — |
@@ -1646,6 +1647,25 @@ It is obvious that the cache is stale.
 **Example (good):**
 ```markdown
 The two failed lookups show that the cache is stale.
+```
+
+---
+
+### G024: Unclear Actor in Requirement
+
+At medium confidence, detects two fixed impersonal requirement openers:
+`It must be ensured that` and `Care should be taken to`. The rule asks the
+author to name who must act; it does not attempt general passive-voice or actor
+inference.
+
+**Example (bad):**
+```markdown
+It must be ensured that every archive has a checksum.
+```
+
+**Example (good):**
+```markdown
+The release operator must ensure that every archive has a checksum.
 ```
 
 ---
