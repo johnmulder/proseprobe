@@ -97,8 +97,8 @@ removes stale entries without accepting new ones. The older
 | `T` | Style | 8 | Typographic issues |
 | `G` | Grammar | 14 | Grammatical patterns |
 | `C` | Code | 4 | Python docstring/comment issues |
-| `M` | Markup | 7 | Markdown artifacts |
-| **Total** | | **62** | |
+| `M` | Markup | 8 | Markdown artifacts |
+| **Total** | | **63** | |
 
 <!-- rule-docs:categories:end -->
 

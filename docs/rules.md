@@ -83,6 +83,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `M005` | Unresolved Markdown References | Markup | error | high | markdown / non_code | — |
 | `M006` | Template Residue | Markup | warning | high | markdown / prose | — |
 | `M007` | Unclosed Code Fence | Markup | error | high | markdown / raw | — |
+| `M008` | Skipped Heading Level | Markup | warning | high | markdown / raw | — |
 
 <!-- rule-docs:inventory:end -->
 
@@ -762,6 +763,32 @@ This block uses a longer valid closer.
 Only the same fence character repeated at least as many times closes a block.
 The swallowed body remains classified as code, preventing cascaded prose
 findings after the syntax error.
+
+---
+
+### M008: Skipped Heading Level
+
+Detects visible Markdown headings that jump upward by more than one level. The
+finding is a high-confidence warning on the later heading and suggests the next
+missing intermediate level.
+
+**Example (bad):**
+```markdown
+# Deployment
+### Rollback
+```
+
+**Example (good):**
+```markdown
+# Deployment
+## Recovery
+### Rollback
+```
+
+The first visible heading may start at any level. Repeated levels, transitions
+to shallower headings, and headings inside fenced code or HTML blocks are not
+reported. ATX and Setext headings, including blockquoted headings, participate
+in comparisons through the shared Markdown parser.
 
 ---
 

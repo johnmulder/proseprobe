@@ -842,6 +842,27 @@
         }
       ]
     },
+    "quality/corpus/heading-levels.md": {
+      "expected": [
+        {
+          "rule_id": "M008",
+          "line": 9,
+          "column": 1
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "M008",
+          "line": 5,
+          "note": "A one-level transition is valid."
+        },
+        {
+          "rule_id": "M008",
+          "line": 13,
+          "note": "A heading inside a fenced example is not visible structure."
+        }
+      ]
+    },
     "quality/corpus/markdown-context.md": {
       "expected": [],
       "negative_cases": [

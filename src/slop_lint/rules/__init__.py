@@ -40,6 +40,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         markup.UnresolvedMarkdownReferencesRule(),
         markup.TemplateResidueRule(),
         markup.UnclosedCodeFenceRule(),
+        markup.SkippedHeadingLevelRule(),
         struct.RuleOfThreeRule(thresholds.rule_of_three),
         struct.NegativeParallelismRule(),
         struct.ChallengeConclusionsRule(),

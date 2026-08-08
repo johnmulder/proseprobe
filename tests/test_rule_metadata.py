@@ -19,7 +19,7 @@ def test_metadata_covers_registry_in_rule_id_order() -> None:
     metadata_ids = tuple(item.id for item in metadata)
 
     assert metadata_ids == tuple(rule.id for rule in get_all_rules())
-    assert len(metadata) == 62
+    assert len(metadata) == 63
     assert len(set(metadata_ids)) == len(metadata_ids)
 
 
@@ -46,6 +46,7 @@ def test_metadata_reports_low_confidence_rule_defaults() -> None:
     assert get_rule_metadata_by_id("M005").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("M006").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("M007").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
+    assert get_rule_metadata_by_id("M008").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
 
 
 def test_metadata_config_keys_match_threshold_fields() -> None:
