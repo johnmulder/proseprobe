@@ -2,13 +2,53 @@
 
 import pytest
 
-from slop_lint.rules.base import Confidence, Severity
+from slop_lint.rules.base import Confidence, Rule, Severity
 from slop_lint.rules.grammar import (
+    AssertedSimplicityRule,
     CopulaAvoidanceRule,
     ExcessiveHedgingRule,
+    FalseSuspenseTransitionRule,
+    FalseVulnerabilityRule,
+    FuturistInvitationRule,
     GenericSceneSettingOpenerRule,
     ParticipleChainsRule,
+    PatronizingAnalogyRule,
+    PedagogicalVoiceRule,
 )
+
+
+@pytest.mark.parametrize(
+    ("rule", "source", "expected"),
+    [
+        (
+            FalseSuspenseTransitionRule(),
+            "Wait: here's the kicker.",
+            "here's the kicker",
+        ),
+        (PatronizingAnalogyRule(), "Think of it as a queue.", "think of it as"),
+        (
+            FuturistInvitationRule(),
+            "Picture a world where retries vanish.",
+            "picture a world where",
+        ),
+        (FalseVulnerabilityRule(), "Let me be honest about this.", "Let me be honest"),
+        (AssertedSimplicityRule(), "Put simply, the cache is stale.", "Put simply"),
+        (PedagogicalVoiceRule(), "Let's unpack what this means.", "let's unpack what"),
+    ],
+)
+def test_trope_matches_have_exact_source_spans(
+    rule: Rule,
+    source: str,
+    expected: str,
+) -> None:
+    [issue] = rule.check(source, "test.md")
+
+    assert issue.end_line is None
+    assert issue.end_column is not None
+    assert (
+        source[issue.column - 1 : issue.end_column - 1].casefold()
+        == expected.casefold()
+    )
 
 
 class TestCopulaAvoidance:

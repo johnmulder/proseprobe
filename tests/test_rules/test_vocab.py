@@ -8,11 +8,30 @@ from slop_lint.rules.base import Confidence, Rule, Severity
 from slop_lint.rules.vocab import (
     AIVocabularyRule,
     CollaborativePhrasesRule,
+    GrandioseStakesRule,
+    InventedConceptLabelsRule,
     KnowledgeCutoffRule,
     PromotionalLanguageRule,
     TrendOverclaimRule,
     WeaselWordsRule,
 )
+
+
+def test_grandiose_stakes_has_exact_source_span() -> None:
+    source = "This release will change everything."
+    [issue] = GrandioseStakesRule().check(source, "test.md")
+
+    assert source[issue.column - 1 : issue.end_column - 1] == "will change everything"
+
+
+def test_invented_labels_retain_each_exact_span() -> None:
+    source = "The trust gap compounds the access divide."
+    issues = InventedConceptLabelsRule(threshold=2).check(source, "test.md")
+
+    assert [source[issue.column - 1 : issue.end_column - 1] for issue in issues] == [
+        "trust gap",
+        "access divide",
+    ]
 
 
 @pytest.mark.parametrize(

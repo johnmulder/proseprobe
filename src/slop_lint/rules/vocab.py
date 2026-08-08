@@ -348,6 +348,7 @@ class GrandioseStakesRule(Rule):
                             message=f"Grandiose stakes: '{match.group()}'",
                             line=line_num,
                             column=match.start() + 1,
+                            end_column=match.end() + 1,
                             severity=self.severity,
                         )
                     )
@@ -421,7 +422,7 @@ class InventedConceptLabelsRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for rule violations."""
         issues: list[Issue] = []
-        matches: list[tuple[int, int, str]] = []
+        matches: list[tuple[int, int, int, str]] = []
 
         for line_num, line in self.iter_lines(content, filename):
             for match in self._pattern.finditer(line):
@@ -438,16 +439,19 @@ class InventedConceptLabelsRule(Rule):
                     and suffix in self._LITERAL_REFERENCE_SUFFIXES
                 ):
                     continue
-                matches.append((line_num, match.start() + 1, match.group()))
+                matches.append(
+                    (line_num, match.start() + 1, match.end() + 1, match.group())
+                )
 
         if len(matches) >= self._threshold:
-            for line_num, col, text in matches:
+            for line_num, col, end_col, text in matches:
                 issues.append(
                     Issue(
                         rule_id=self.id,
                         message=f"Invented concept label: '{text}'",
                         line=line_num,
                         column=col,
+                        end_column=end_col,
                         severity=self.severity,
                     )
                 )

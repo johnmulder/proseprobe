@@ -182,6 +182,7 @@ class FalseSuspenseTransitionRule(Rule):
                             message=f"False suspense: '{phrase}'",
                             line=line_num,
                             column=col + 1,
+                            end_column=col + len(phrase) + 1,
                             severity=self.severity,
                         )
                     )
@@ -212,6 +213,7 @@ class PatronizingAnalogyRule(Rule):
                             message=f"Patronizing analogy: '{phrase}'",
                             line=line_num,
                             column=col + 1,
+                            end_column=col + len(phrase) + 1,
                             severity=self.severity,
                         )
                     )
@@ -242,6 +244,7 @@ class FuturistInvitationRule(Rule):
                             message=f"Futurist invitation: '{phrase}'",
                             line=line_num,
                             column=col + 1,
+                            end_column=col + len(phrase) + 1,
                             severity=self.severity,
                         )
                     )
@@ -271,6 +274,7 @@ class FalseVulnerabilityRule(Rule):
                             message=f"False vulnerability: '{match.group()}'",
                             line=line_num,
                             column=match.start() + 1,
+                            end_column=match.end() + 1,
                             severity=self.severity,
                         )
                     )
@@ -300,6 +304,7 @@ class AssertedSimplicityRule(Rule):
                             message=f"Asserted simplicity: '{match.group()}'",
                             line=line_num,
                             column=match.start() + 1,
+                            end_column=match.end() + 1,
                             severity=self.severity,
                         )
                     )
@@ -330,6 +335,7 @@ class PedagogicalVoiceRule(Rule):
                             message=f"Pedagogical voice: '{phrase}'",
                             line=line_num,
                             column=col + 1,
+                            end_column=col + len(phrase) + 1,
                             severity=self.severity,
                         )
                     )
