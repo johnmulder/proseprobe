@@ -1,0 +1,20 @@
+{
+  "name": "slop-lint",
+  "interface": {
+    "displayName": "Slop Lint"
+  },
+  "plugins": [
+    {
+      "name": "slop-lint",
+      "source": {
+        "source": "local",
+        "path": "./plugins/slop-lint"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

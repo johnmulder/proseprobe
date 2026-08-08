@@ -1,5 +1,6 @@
 """Project metadata regression tests."""
 
+import json
 import re
 import tomllib
 from pathlib import Path
@@ -223,6 +224,74 @@ def test_agent_skill_documents_supported_workflow() -> None:
 
     assert "--profile agent" not in skill
     assert "plugin.json" not in skill
+
+
+def test_codex_plugin_wrapper_is_minimal_and_in_sync() -> None:
+    """The Codex adapter should contain only metadata and the portable skill."""
+    plugin_root = ROOT / ".agents" / "plugins" / "plugins" / "slop-lint"
+    files = {
+        path.relative_to(plugin_root).as_posix()
+        for path in plugin_root.rglob("*")
+        if path.is_file()
+    }
+
+    assert files == {
+        ".codex-plugin/plugin.json",
+        "skills/slop-lint/SKILL.md",
+    }
+    assert (plugin_root / "skills" / "slop-lint" / "SKILL.md").read_bytes() == (
+        ROOT / "skills" / "slop-lint" / "SKILL.md"
+    ).read_bytes()
+
+
+def test_codex_plugin_metadata_matches_project() -> None:
+    """The marketplace and plugin manifest should stay aligned with the project."""
+    marketplace_root = ROOT / ".agents" / "plugins"
+    plugin_root = marketplace_root / "plugins" / "slop-lint"
+    project = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]
+    manifest = json.loads((plugin_root / ".codex-plugin" / "plugin.json").read_text())
+    marketplace = json.loads((marketplace_root / "marketplace.json").read_text())
+
+    assert manifest == {
+        "name": project["name"],
+        "version": project["version"],
+        "description": project["description"],
+        "author": {"name": project["authors"][0]["name"]},
+        "license": project["license"],
+        "skills": "./skills/",
+        "interface": {
+            "displayName": "Slop Lint",
+            "shortDescription": "Lint Markdown and Python prose.",
+            "longDescription": (
+                "Review Markdown and Python prose with structured slop-lint "
+                "diagnostics."
+            ),
+            "developerName": project["authors"][0]["name"],
+            "category": "Productivity",
+            "capabilities": ["Write"],
+            "defaultPrompt": ["Review my changed prose with slop-lint."],
+        },
+    }
+    assert marketplace == {
+        "name": "slop-lint",
+        "interface": {"displayName": "Slop Lint"},
+        "plugins": [
+            {
+                "name": manifest["name"],
+                "source": {
+                    "source": "local",
+                    "path": "./plugins/slop-lint",
+                },
+                "policy": {
+                    "installation": "AVAILABLE",
+                    "authentication": "ON_INSTALL",
+                },
+                "category": "Productivity",
+            }
+        ],
+    }
+    source = marketplace_root / marketplace["plugins"][0]["source"]["path"]
+    assert source.resolve() == plugin_root.resolve()
 
 
 def test_agent_integration_guide_documents_supported_contract() -> None:

@@ -1,0 +1,23 @@
+{
+  "name": "slop-lint",
+  "version": "0.1.0",
+  "description": "Detect bad writing practices in Markdown and Python files",
+  "author": {
+    "name": "slop-lint contributors"
+  },
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Slop Lint",
+    "shortDescription": "Lint Markdown and Python prose.",
+    "longDescription": "Review Markdown and Python prose with structured slop-lint diagnostics.",
+    "developerName": "slop-lint contributors",
+    "category": "Productivity",
+    "capabilities": [
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Review my changed prose with slop-lint."
+    ]
+  }
+}
