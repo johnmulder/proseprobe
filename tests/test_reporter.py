@@ -155,6 +155,97 @@ class TestJsonFormat:
         }
 
 
+class TestJsonLinesFormat:
+    """Tests for JSON Lines output format."""
+
+    def test_jsonl_no_issues_is_empty(self) -> None:
+        """A clean JSONL report has no records."""
+        assert format_results({}, "jsonl", files_checked=3) == ""
+
+    def test_jsonl_issue_contract_and_order(self) -> None:
+        """Each issue is one complete, deterministically ordered record."""
+        results = {
+            Path("z.md"): [
+                Issue(
+                    rule_id="S001",
+                    message="Nullable fields",
+                    line=8,
+                    column=1,
+                    severity=Severity.INFO,
+                )
+            ],
+            Path("a.md"): [
+                Issue(
+                    rule_id="V001",
+                    message="First issue",
+                    line=5,
+                    column=10,
+                    end_line=5,
+                    end_column=15,
+                    severity=Severity.WARNING,
+                    confidence=Confidence.HIGH,
+                    suggestion="Explore",
+                ),
+                Issue(
+                    rule_id="G001",
+                    message="Second issue",
+                    line=6,
+                    column=2,
+                    severity=Severity.WARNING,
+                ),
+            ],
+        }
+
+        output = format_results(results, "jsonl")
+
+        assert output.endswith("\n")
+        assert output.count("\n") == 3
+        assert [json.loads(line) for line in output.splitlines()] == [
+            {
+                "schema_version": 1,
+                "version": __version__,
+                "path": "a.md",
+                "rule_id": "V001",
+                "message": "First issue",
+                "line": 5,
+                "column": 10,
+                "end_line": 5,
+                "end_column": 15,
+                "severity": "warning",
+                "confidence": "high",
+                "suggestion": "Explore",
+            },
+            {
+                "schema_version": 1,
+                "version": __version__,
+                "path": "a.md",
+                "rule_id": "G001",
+                "message": "Second issue",
+                "line": 6,
+                "column": 2,
+                "end_line": None,
+                "end_column": None,
+                "severity": "warning",
+                "confidence": "medium",
+                "suggestion": None,
+            },
+            {
+                "schema_version": 1,
+                "version": __version__,
+                "path": "z.md",
+                "rule_id": "S001",
+                "message": "Nullable fields",
+                "line": 8,
+                "column": 1,
+                "end_line": None,
+                "end_column": None,
+                "severity": "info",
+                "confidence": "medium",
+                "suggestion": None,
+            },
+        ]
+
+
 class TestSarifFormat:
     """Tests for SARIF output format."""
 

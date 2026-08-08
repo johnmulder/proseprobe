@@ -121,6 +121,25 @@ def _format_json(results: _Results, files_checked: int | None = None) -> str:
     return json.dumps(output, indent=2)
 
 
+def _format_jsonl(results: _Results) -> str:
+    """Format each issue as one JSON Lines record."""
+    from slop_lint import __version__
+
+    return "".join(
+        json.dumps(
+            {
+                "schema_version": _JSON_SCHEMA_VERSION,
+                "version": __version__,
+                "path": str(path),
+                **_serialize_issue(issue),
+            }
+        )
+        + "\n"
+        for path, issues in sorted(results.items())
+        for issue in issues
+    )
+
+
 _SARIF_LEVEL = {
     Severity.ERROR: "error",
     Severity.WARNING: "warning",
@@ -214,9 +233,11 @@ def format_results(
     *,
     quiet: bool = False,
 ) -> str:
-    """Format lint results as text, JSON, or SARIF."""
+    """Format lint results as text, JSON, JSON Lines, or SARIF."""
     if format == "sarif":
         return _format_sarif(results, rules)
     if format == "json":
         return _format_json(results, files_checked)
+    if format == "jsonl":
+        return _format_jsonl(results)
     return _format_text(results, quiet=quiet)
