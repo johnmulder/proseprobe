@@ -132,7 +132,7 @@ def _sentences_from_blocks(blocks: list[ProseBlock]) -> list[ProseSentence]:
 
         for chunk in chunks:
             joined = "\n".join(line for _, line in chunk)
-            for start, end in _sentence_spans(joined):
+            for sentence_index, (start, end) in enumerate(_sentence_spans(joined)):
                 start_index = joined[:start].count("\n")
                 end_index = joined[:end].count("\n")
                 line_start = joined.rfind("\n", 0, start) + 1
@@ -146,7 +146,7 @@ def _sentences_from_blocks(blocks: list[ProseBlock]) -> list[ProseSentence]:
                         end_line=chunk[end_index][0],
                         end_column=end - line_end + 1,
                         scope_id=scope_id,
-                        break_before=bool(sentences),
+                        break_before=bool(sentences) and sentence_index == 0,
                         source_lines=tuple(
                             line_num
                             for line_num, _ in chunk[start_index : end_index + 1]

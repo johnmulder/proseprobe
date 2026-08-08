@@ -54,6 +54,14 @@ def test_prose_blocks_become_hard_sentence_scopes() -> None:
     assert [sentence.break_before for sentence in sentences] == [False, True, True]
 
 
+def test_break_before_marks_scopes_not_each_sentence() -> None:
+    content = "First sentence. Second sentence.\n\nThird sentence."
+
+    sentences = iter_prose_sentences(content, "notes.md")
+
+    assert [sentence.break_before for sentence in sentences] == [False, False, True]
+
+
 def test_plain_text_dispatch_preserves_unterminated_final_sentence() -> None:
     [sentence] = iter_prose_sentences("A final fragment", "notes.txt")
 
