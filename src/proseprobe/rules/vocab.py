@@ -617,11 +617,27 @@ class VerboseVerbPhraseRule(Rule):
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
 
+    _DECISION_REPLACEMENTS: ClassVar[frozenset[str]] = frozenset(
+        {"decide", "decided", "decides", "deciding"}
+    )
+    _DECISION_COMPOUND: ClassVar[re.Pattern[str]] = re.compile(
+        r"\s+(?:boundary|matrix|model|rule|table|tree)\b", re.IGNORECASE
+    )
+
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check prose for verbose verb phrases."""
-        return _replacement_phrase_issues(
+        issues = _replacement_phrase_issues(
             self, content, filename, VERBOSE_VERB_PHRASE_REPLACEMENTS
         )
+        lines = content.split("\n")
+        return [
+            issue
+            for issue in issues
+            if issue.suggestion not in self._DECISION_REPLACEMENTS
+            or not self._DECISION_COMPOUND.match(
+                lines[issue.line - 1][(issue.end_column or 1) - 1 :]
+            )
+        ]
 
 
 class AbsoluteReliabilityClaimRule(Rule):

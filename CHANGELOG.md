@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The ProseProbe CLI with `check`, `watch`, `rules`, `explain`, `init`, `version`,
   and `baseline` commands.
-- 74 detection rules across vocabulary, structure, style, grammar, Python code,
+- 75 detection rules across vocabulary, structure, style, grammar, Python code,
   and Markdown markup categories.
 - Markdown, MDX, and Python scanning with source-mapped prose blocks, sentences,
   docstrings, comments, and exact diagnostic spans.

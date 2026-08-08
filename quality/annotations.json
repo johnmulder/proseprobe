@@ -1691,6 +1691,62 @@
         }
       ]
     },
+    "quality/corpus/verbose-verb-phrases.md": {
+      "expected": [
+        {
+          "rule_id": "V011",
+          "line": 3,
+          "column": 15
+        },
+        {
+          "rule_id": "V011",
+          "line": 5,
+          "column": 19
+        },
+        {
+          "rule_id": "V011",
+          "line": 7,
+          "column": 21
+        },
+        {
+          "rule_id": "V011",
+          "line": 9,
+          "column": 21
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V011",
+          "line": 13,
+          "note": "Decision tree is a noun compound, not a verbose decision verb."
+        },
+        {
+          "rule_id": "V011",
+          "line": 15,
+          "note": "A heading is outside the replacement scanner's prose scope."
+        },
+        {
+          "rule_id": "V011",
+          "line": 17,
+          "note": "Inline code preserves a literal legacy task label."
+        },
+        {
+          "rule_id": "V011",
+          "line": 20,
+          "note": "Fenced code preserves literal output."
+        },
+        {
+          "rule_id": "V011",
+          "line": 25,
+          "note": "Make the decision and conduct analysis are not curated phrases."
+        },
+        {
+          "rule_id": "V011",
+          "line": 27,
+          "note": "Modified consideration and plural explanations are near misses."
+        }
+      ]
+    },
     "quality/corpus/wordy-phrases.md": {
       "expected": [
         {

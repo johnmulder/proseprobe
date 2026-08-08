@@ -766,6 +766,14 @@ def explain():
 
         assert VerboseVerbPhraseRule().check(source, "guide.md") == []
 
+    @pytest.mark.parametrize(
+        "compound", ["decision boundary", "decision table", "decision tree"]
+    )
+    def test_ignores_decision_compounds(self, compound: str) -> None:
+        source = f"The builder makes a {compound} available."
+
+        assert VerboseVerbPhraseRule().check(source, "guide.md") == []
+
 
 class TestAbsoluteReliabilityClaim:
     """Tests for V016: Absolute Reliability Claim."""

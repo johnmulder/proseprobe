@@ -33,6 +33,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `V008` | Trend Overclaim | Vocabulary | info | medium | markdown, python / prose | — |
 | `V009` | Wordy Phrase | Vocabulary | info | high | markdown, python / prose | — |
 | `V010` | Redundant Pair | Vocabulary | info | high | markdown, python / prose | — |
+| `V011` | Verbose Verb Phrase | Vocabulary | info | high | markdown, python / prose | — |
 | `V016` | Absolute Reliability Claim | Vocabulary | info | medium | markdown, python / prose | — |
 | `S001` | Rule of Three | Structure | info | medium | markdown, python / prose | `thresholds.rule_of_three` |
 | `S002` | Negative Parallelism | Structure | info | medium | markdown, python / prose | — |
@@ -1360,6 +1361,37 @@ Review each and every request before the client reverts back.
 ```markdown
 Review each request before the client reverts.
 ```
+
+---
+
+### V011: Verbose Verb Phrase
+
+Detects a small set of verbose verb phrases with direct replacements. Findings
+are high-confidence informational diagnostics with exact spans and concise
+suggestions.
+
+**Detected patterns:**
+- "make a decision" → "decide"
+- "conduct an analysis" → "analyze"
+- "provide an explanation" → "explain"
+- "give consideration to" → "consider"
+
+Common present, past, and continuous inflections receive matching replacement
+forms. Decision compounds such as `decision tree`, `decision table`, and
+`decision boundary` are excluded.
+
+**Example (bad):**
+```markdown
+The team must make a decision after conducting an analysis.
+```
+
+**Example (good):**
+```markdown
+The team must decide after analyzing the results.
+```
+
+Matching is case-insensitive and applies to Markdown prose plus Python comments
+and docstrings; headings and code are excluded.
 
 ---
 
