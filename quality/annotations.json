@@ -777,6 +777,82 @@
         }
       ]
     },
+    "quality/corpus/bare-urls.md": {
+      "expected": [
+        {
+          "rule_id": "M009",
+          "line": 3,
+          "column": 6
+        },
+        {
+          "rule_id": "M009",
+          "line": 5,
+          "column": 26
+        },
+        {
+          "rule_id": "M009",
+          "line": 7,
+          "column": 27
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "M009",
+          "line": 10,
+          "note": "A URL in an example section demonstrates syntax rather than body prose."
+        },
+        {
+          "rule_id": "M009",
+          "line": 14,
+          "note": "The sentence explicitly identifies a literal URL."
+        },
+        {
+          "rule_id": "M009",
+          "line": 16,
+          "note": "An inline-code URL is protected Markdown syntax."
+        },
+        {
+          "rule_id": "M009",
+          "line": 18,
+          "note": "An autolink is already valid Markdown link syntax."
+        },
+        {
+          "rule_id": "M009",
+          "line": 20,
+          "note": "A Markdown link destination is masked from prose."
+        },
+        {
+          "rule_id": "M009",
+          "line": 22,
+          "note": "A reference-definition destination is not body prose."
+        },
+        {
+          "rule_id": "M009",
+          "line": 24,
+          "note": "A resource-list URL is outside the body-prose scope."
+        },
+        {
+          "rule_id": "M009",
+          "line": 26,
+          "note": "A blockquoted URL is outside the body-prose scope."
+        },
+        {
+          "rule_id": "M009",
+          "line": 28,
+          "note": "A heading URL is outside the body-prose scope."
+        },
+        {
+          "rule_id": "M009",
+          "line": 32,
+          "note": "A table-cell URL is outside the body-prose scope."
+        },
+        {
+          "rule_id": "M009",
+          "line": 35,
+          "note": "A fenced-code URL is protected Markdown syntax."
+        }
+      ]
+    },
     "quality/corpus/business-memo.md": {
       "expected": [],
       "negative_cases": [

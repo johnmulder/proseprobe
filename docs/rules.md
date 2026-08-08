@@ -5,8 +5,8 @@ This document describes all detection rules available in ProseProbe.
 Most prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
 source-mapped Python docstrings and comments; `G015` examines only Markdown
 document openers. `C` rules handle Python-specific documentation issues.
-`M001` checks Markdown syntax in Python comments, while `M002`-`M008`, `M010`,
-and `S025` are Markdown-only.
+`M001` checks Markdown syntax in Python comments, while `M002`-`M010` and
+`S025` are Markdown-only.
 
 Wrapped Markdown and Python prose is segmented into cached, source-mapped
 sentences. Records retain exact start and end positions while conservative
@@ -94,6 +94,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `M006` | Template Residue | Markup | warning | high | markdown / prose | — |
 | `M007` | Unclosed Code Fence | Markup | error | high | markdown / raw | — |
 | `M008` | Skipped Heading Level | Markup | warning | high | markdown / raw | — |
+| `M009` | Bare URL in Prose | Markup | info | high | markdown / prose | — |
 | `M010` | Non-Descriptive Link Text | Markup | warning | high | markdown / non_code | — |
 
 <!-- rule-docs:inventory:end -->
@@ -799,6 +800,30 @@ The first visible heading may start at any level. Repeated levels, transitions
 to shallower headings, and headings inside fenced code or HTML blocks are not
 reported. ATX and Setext headings, including blockquoted headings, participate
 in comparisons through the shared Markdown parser.
+
+---
+
+### M009: Bare URL in Prose
+
+Detects raw HTTP(S) URLs in Markdown body prose. Findings are high-confidence
+informational diagnostics on the exact URL and suggest using descriptive
+Markdown link text.
+
+**Example (bad):**
+```markdown
+Read https://example.com/installation before deploying.
+```
+
+**Example (good):**
+```markdown
+Read the [installation guide](https://example.com/installation) before deploying.
+```
+
+Markdown link destinations, autolinks, reference definitions, inline and
+fenced code, headings, lists, blockquotes, tables, demonstration sections, and
+sentences explicitly describing a literal URL are excluded. Sentence source
+maps preserve exact URL spans, including balanced parentheses, while trailing
+prose punctuation is omitted.
 
 ---
 
