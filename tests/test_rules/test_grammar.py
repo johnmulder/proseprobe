@@ -1,4 +1,4 @@
-"""Tests for grammar rules (G001-G015)."""
+"""Tests for grammar rules (G001-G015, G029)."""
 
 import pytest
 
@@ -6,6 +6,7 @@ from proseprobe.rules.base import Confidence, Rule, Severity
 from proseprobe.rules.grammar import (
     AssertedSimplicityRule,
     CopulaAvoidanceRule,
+    DoubleNegativeRule,
     ExcessiveHedgingRule,
     FalseSuspenseTransitionRule,
     FalseVulnerabilityRule,
@@ -891,4 +892,83 @@ class TestGenericSceneSettingOpenerRule:
         assert rule.severity is Severity.INFO
         assert rule.default_confidence is Confidence.MEDIUM
         assert rule.applies_to == {"markdown"}
+        assert rule.content_scope == "prose"
+
+
+class TestDoubleNegativeRule:
+    """Tests for G029: Double Negative."""
+
+    @pytest.mark.parametrize(
+        ("phrase", "suggestion"),
+        [
+            ("not uncommon", "common"),
+            ("not unlikely", "likely"),
+            ("not impossible", "possible"),
+        ],
+    )
+    def test_reports_supported_forms(self, phrase: str, suggestion: str) -> None:
+        [issue] = DoubleNegativeRule().check(f"The outcome is {phrase}.", "test.md")
+
+        assert issue.rule_id == "G029"
+        assert issue.message == f"Double negative: '{phrase}'"
+        assert issue.line == 1
+        assert issue.column == 16
+        assert issue.end_column == 16 + len(phrase)
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == suggestion
+
+    def test_reports_repeated_case_insensitive_matches_in_source_order(self) -> None:
+        text = "NOT IMPOSSIBLE, not uncommon, and not impossible."
+
+        issues = DoubleNegativeRule().check(text, "test.md")
+
+        assert [issue.message for issue in issues] == [
+            "Double negative: 'NOT IMPOSSIBLE'",
+            "Double negative: 'not uncommon'",
+            "Double negative: 'not impossible'",
+        ]
+        assert [issue.suggestion for issue in issues] == [
+            "possible",
+            "common",
+            "possible",
+        ]
+
+    def test_ignores_markdown_non_prose_contexts(self) -> None:
+        text = (
+            "# not uncommon\n\n"
+            "The literal is `not unlikely`.\n\n"
+            "```text\nnot impossible\n```"
+        )
+
+        assert DoubleNegativeRule().check(text, "test.md") == []
+
+    def test_checks_python_comments_and_docstrings_only(self) -> None:
+        text = (
+            'label = "not uncommon"\n'
+            "# A retry is not unlikely.\n"
+            "def recover():\n"
+            '    """Recovery is not impossible."""\n'
+            "    return True"
+        )
+
+        issues = DoubleNegativeRule().check(text, "test.py")
+
+        assert [issue.line for issue in issues] == [2, 4]
+        assert [issue.suggestion for issue in issues] == ["likely", "possible"]
+
+    def test_ignores_nearby_non_matches(self) -> None:
+        text = "The outcome is not common. Failure is impossible."
+
+        assert DoubleNegativeRule().check(text, "test.md") == []
+
+    def test_rule_metadata(self) -> None:
+        rule = DoubleNegativeRule()
+
+        assert rule.id == "G029"
+        assert rule.name == "Double Negative"
+        assert rule.description == "Detects fixed double-negative phrases"
+        assert rule.severity is Severity.INFO
+        assert rule.default_confidence is Confidence.HIGH
+        assert rule.applies_to == {"markdown", "python"}
         assert rule.content_scope == "prose"

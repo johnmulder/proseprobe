@@ -1,4 +1,4 @@
-"""Grammar pattern detection rules (G001-G015)."""
+"""Grammar pattern detection rules (G001-G015, G029)."""
 
 import re
 from typing import ClassVar
@@ -11,6 +11,7 @@ from proseprobe.data.patterns import (
 )
 from proseprobe.data.phrases import (
     ASSERTED_SIMPLICITY_PHRASES,
+    DOUBLE_NEGATIVE_REPLACEMENTS,
     FALSE_BALANCE_PHRASES,
     FALSE_SUSPENSE_PHRASES,
     FALSE_VULNERABILITY_PHRASES,
@@ -21,7 +22,11 @@ from proseprobe.data.phrases import (
     PEDAGOGICAL_VOICE_PHRASES,
 )
 from proseprobe.parsers.markdown import is_example_line, is_markdown_file
-from proseprobe.parsers.prose import iter_prose_scopes, iter_prose_sentences
+from proseprobe.parsers.prose import (
+    iter_prose_blocks,
+    iter_prose_scopes,
+    iter_prose_sentences,
+)
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
 
@@ -589,3 +594,39 @@ class GenericSceneSettingOpenerRule(Rule):
                 )
             ]
         return []
+
+
+class DoubleNegativeRule(Rule):
+    """G029: Detect fixed double-negative forms."""
+
+    id = "G029"
+    name = "Double Negative"
+    description = "Detects fixed double-negative phrases"
+    severity = Severity.INFO
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose for fixed double-negative phrases."""
+        issues: list[Issue] = []
+        for block in iter_prose_blocks(content, filename):
+            if block.context == "heading":
+                continue
+            for line_num, line in block.lines:
+                for phrase, replacement in DOUBLE_NEGATIVE_REPLACEMENTS.items():
+                    pattern = rf"\b{re.escape(phrase)}\b"
+                    for match in re.finditer(pattern, line, re.IGNORECASE):
+                        issues.append(
+                            Issue(
+                                rule_id=self.id,
+                                message=f"Double negative: '{match.group()}'",
+                                line=line_num,
+                                column=match.start() + 1,
+                                end_column=match.end() + 1,
+                                severity=self.severity,
+                                confidence=self.default_confidence,
+                                suggestion=replacement,
+                            )
+                        )
+        return sorted(issues, key=lambda issue: (issue.line, issue.column))

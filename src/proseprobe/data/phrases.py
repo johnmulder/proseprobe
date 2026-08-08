@@ -34,6 +34,13 @@ REDUNDANT_PAIR_REPLACEMENTS = {
     "reverts back": "reverts",
 }
 
+# Fixed double-negative forms with direct positive replacements (G029)
+DOUBLE_NEGATIVE_REPLACEMENTS = {
+    "not uncommon": "common",
+    "not unlikely": "likely",
+    "not impossible": "possible",
+}
+
 # Collaborative/chat-like phrases (V002)
 COLLABORATIVE_PHRASES = [
     "I hope this helps",
