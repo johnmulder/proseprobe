@@ -63,6 +63,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `T006` | Elegant Variation | Style | info | medium | markdown, python / prose | — |
 | `T007` | Short Punchy Fragments | Style | info | medium | markdown, python / prose | `thresholds.short_punchy_fragments` |
 | `T008` | Sentence Length | Style | info | medium | markdown, python / prose | `thresholds.sentence_length_max` |
+| `T015` | Nested Parenthetical | Style | info | high | markdown, python / prose | — |
 | `G001` | Copula Avoidance | Grammar | info | medium | markdown, python / prose | — |
 | `G002` | Excessive Hedging | Grammar | info | medium | markdown, python / prose | — |
 | `G003` | Participle Chains | Grammar | warning | medium | markdown, python / prose | — |
@@ -1226,6 +1227,24 @@ In considering the implications of the findings which themselves arise from a co
 **Example (good):**
 ```markdown
 The findings arise from a complex interaction of factors. We must also consider the broader context and the methodological limitations that constrain our interpretations.
+```
+
+---
+
+### T015: Nested Parenthetical
+
+At high confidence, detects a balanced parenthetical nested inside another
+balanced prose parenthetical. Wrapped parentheticals remain one source-mapped
+span; code and Markdown link destinations are excluded.
+
+**Example (bad):**
+```markdown
+Configure the cache (for example (on Linux)) before startup.
+```
+
+**Example (good):**
+```markdown
+For example, configure the cache on Linux before startup.
 ```
 
 ---
