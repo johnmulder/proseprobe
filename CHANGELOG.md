@@ -50,6 +50,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   clauses from their targeted slop patterns.
 
 ### Changed
+- Concrete-match diagnostics now report exact exclusive source spans across
+  code, grammar, markup, structure, style, and vocabulary rules; aggregate-only
+  findings remain explicitly nullable.
 - Prose rules now share cached, source-mapped sentence records across wrapped
   Markdown and Python prose. G002, S010, S011, S018, and T008 use those
   sentence boundaries; V005/V008 use bounded evidence confidence; S017

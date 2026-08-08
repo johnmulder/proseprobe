@@ -316,13 +316,13 @@
     {
       "path": "docs/rules.md",
       "rule_id": "V006",
-      "match": "entirely",
-      "context_hash": "202ce4da066e349e"
+      "match": "entirely new paradigm",
+      "context_hash": "5012683057bfb06c"
     },
     {
       "path": "docs/rules.md",
       "rule_id": "V006",
-      "match": "fundamentally",
+      "match": "fundamentally reshape",
       "context_hash": "7566eb9a4dea5f38"
     }
   ]
