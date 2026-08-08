@@ -163,6 +163,42 @@ def test_dogfood_ci_is_enforced() -> None:
     assert "continue-on-error: true" not in workflow
 
 
+def test_agent_integration_guide_documents_supported_contract() -> None:
+    """The agent guide should stay aligned with supported CLI behavior."""
+    guide_path = ROOT / "docs" / "agent-integration.md"
+
+    assert guide_path.is_file()
+    guide = guide_path.read_text()
+
+    for command in (
+        "slop-lint check --format jsonl README.md docs/",
+        "slop-lint check - --filename docs/draft.md --format jsonl",
+        "slop-lint rules --format json",
+        "slop-lint explain V001 --format json",
+        "pre-commit run slop-lint",
+    ):
+        assert command in guide
+
+    for row in (
+        "| `0` | No warning or error findings; info findings may still be present. |",
+        "| `1` | At least one warning or error finding was reported. |",
+        "| `2` | Command usage or project configuration is invalid. |",
+        "| `3` | An input could not be read. |",
+    ):
+        assert row in guide
+
+    for statement in (
+        "Run from the project root so configuration discovery matches normal project use.",
+        "Handle high-confidence findings first, then medium, then low.",
+        "Rerun the same command after every edit.",
+        "slop-lint reports findings; it does not rewrite files.",
+        "Do not add or switch to an `agent` profile.",
+    ):
+        assert statement in guide
+
+    assert "--profile agent" not in guide
+
+
 def test_ci_enforces_coverage_threshold() -> None:
     """CI should use the same coverage threshold as local NFR checks."""
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text()
