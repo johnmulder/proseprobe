@@ -34,6 +34,26 @@ REDUNDANT_PAIR_REPLACEMENTS = {
     "reverts back": "reverts",
 }
 
+# Verbose verb phrases with direct replacements (V011)
+VERBOSE_VERB_PHRASE_REPLACEMENTS = {
+    "conduct an analysis": "analyze",
+    "conducted an analysis": "analyzed",
+    "conducting an analysis": "analyzing",
+    "conducts an analysis": "analyzes",
+    "gave consideration to": "considered",
+    "give consideration to": "consider",
+    "gives consideration to": "considers",
+    "giving consideration to": "considering",
+    "made a decision": "decided",
+    "make a decision": "decide",
+    "makes a decision": "decides",
+    "making a decision": "deciding",
+    "provide an explanation": "explain",
+    "provided an explanation": "explained",
+    "provides an explanation": "explains",
+    "providing an explanation": "explaining",
+}
+
 # Fixed double-negative forms with direct positive replacements (G029)
 DOUBLE_NEGATIVE_REPLACEMENTS = {
     "not uncommon": "common",

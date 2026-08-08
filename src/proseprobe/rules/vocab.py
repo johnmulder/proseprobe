@@ -1,4 +1,4 @@
-"""Vocabulary detection rules (V001-V010 and V016)."""
+"""Vocabulary detection rules (V001-V011 and V016)."""
 
 import re
 from typing import ClassVar
@@ -11,6 +11,7 @@ from proseprobe.data.phrases import (
     PROMOTIONAL_PHRASES,
     REDUNDANT_PAIR_REPLACEMENTS,
     TREND_OVERCLAIM_PHRASES,
+    VERBOSE_VERB_PHRASE_REPLACEMENTS,
     WEASEL_PHRASES,
     WORDY_PHRASE_REPLACEMENTS,
 )
@@ -602,6 +603,24 @@ class RedundantPairRule(Rule):
         """Check prose for fixed redundant pairs."""
         return _replacement_phrase_issues(
             self, content, filename, REDUNDANT_PAIR_REPLACEMENTS
+        )
+
+
+class VerboseVerbPhraseRule(Rule):
+    """V011: Detect verbose verb phrases with direct replacements."""
+
+    id = "V011"
+    name = "Verbose Verb Phrase"
+    description = "Detects verbose verb phrases with direct replacements"
+    severity = Severity.INFO
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose for verbose verb phrases."""
+        return _replacement_phrase_issues(
+            self, content, filename, VERBOSE_VERB_PHRASE_REPLACEMENTS
         )
 
 

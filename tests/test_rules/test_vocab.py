@@ -1,10 +1,11 @@
-"""Tests for vocabulary rules (V001-V010 and V016)."""
+"""Tests for vocabulary rules (V001-V011 and V016)."""
 
 import pytest
 
 from proseprobe.config import Config
 from proseprobe.data.phrases import (
     REDUNDANT_PAIR_REPLACEMENTS,
+    VERBOSE_VERB_PHRASE_REPLACEMENTS,
     WORDY_PHRASE_REPLACEMENTS,
 )
 from proseprobe.rules import get_all_rules
@@ -19,6 +20,7 @@ from proseprobe.rules.vocab import (
     PromotionalLanguageRule,
     RedundantPairRule,
     TrendOverclaimRule,
+    VerboseVerbPhraseRule,
     WeaselWordsRule,
     WordyPhraseRule,
 )
@@ -670,6 +672,99 @@ def rollback():
 
         assert issue.message == "Wordy phrase: 'in order to'"
         assert issue.suggestion == "to"
+
+
+class TestVerboseVerbPhrase:
+    """Tests for V011: Verbose Verb Phrase."""
+
+    def test_curated_phrase_table(self) -> None:
+        assert VERBOSE_VERB_PHRASE_REPLACEMENTS == {
+            "conduct an analysis": "analyze",
+            "conducted an analysis": "analyzed",
+            "conducting an analysis": "analyzing",
+            "conducts an analysis": "analyzes",
+            "gave consideration to": "considered",
+            "give consideration to": "consider",
+            "gives consideration to": "considers",
+            "giving consideration to": "considering",
+            "made a decision": "decided",
+            "make a decision": "decide",
+            "makes a decision": "decides",
+            "making a decision": "deciding",
+            "provide an explanation": "explain",
+            "provided an explanation": "explained",
+            "provides an explanation": "explains",
+            "providing an explanation": "explaining",
+        }
+
+    @pytest.mark.parametrize(
+        ("phrase", "replacement"), VERBOSE_VERB_PHRASE_REPLACEMENTS.items()
+    )
+    def test_suggests_each_curated_replacement(
+        self, phrase: str, replacement: str
+    ) -> None:
+        [issue] = VerboseVerbPhraseRule().check(
+            f"They {phrase} the result.", "guide.md"
+        )
+
+        assert issue.suggestion == replacement
+
+    def test_reports_exact_metadata_and_source_span(self) -> None:
+        source = "Teams make a decision before deployment."
+
+        [issue] = VerboseVerbPhraseRule().check(source, "guide.md")
+
+        assert issue.rule_id == "V011"
+        assert issue.message == "Verbose verb phrase: 'make a decision'"
+        assert (issue.line, issue.column, issue.end_column) == (1, 7, 22)
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == "decide"
+
+    def test_reports_repeated_and_different_phrases_in_source_order(self) -> None:
+        source = "MAKE A DECISION, conduct an analysis, then make a decision again."
+
+        issues = VerboseVerbPhraseRule().check(source, "guide.md")
+
+        assert [issue.message for issue in issues] == [
+            "Verbose verb phrase: 'MAKE A DECISION'",
+            "Verbose verb phrase: 'conduct an analysis'",
+            "Verbose verb phrase: 'make a decision'",
+        ]
+
+    def test_ignores_markdown_headings_and_code(self) -> None:
+        source = """\
+# Make a decision
+
+Use `conduct an analysis` as the legacy label.
+
+```text
+provide an explanation
+```
+"""
+
+        assert VerboseVerbPhraseRule().check(source, "guide.md") == []
+
+    def test_checks_python_documentation_but_not_code_strings(self) -> None:
+        source = '''\
+label = "make a decision"
+# Conduct an analysis before deployment.
+
+def explain():
+    """Provide an explanation for the result."""
+'''
+
+        issues = VerboseVerbPhraseRule().check(source, "client.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_ignores_near_misses(self) -> None:
+        source = (
+            "Make the decision after teams conduct analysis. Provide explanations "
+            "and give careful consideration to every result."
+        )
+
+        assert VerboseVerbPhraseRule().check(source, "guide.md") == []
 
 
 class TestAbsoluteReliabilityClaim:
