@@ -879,6 +879,11 @@
           "rule_id": "M008",
           "line": 9,
           "column": 5
+        },
+        {
+          "rule_id": "S025",
+          "line": 5,
+          "column": 5
         }
       ],
       "negative_cases": [
@@ -891,6 +896,26 @@
           "rule_id": "M008",
           "line": 13,
           "note": "A heading inside a fenced example is not visible structure."
+        },
+        {
+          "rule_id": "S025",
+          "line": 3,
+          "note": "A parent heading may lead directly into a child heading."
+        },
+        {
+          "rule_id": "S025",
+          "line": 9,
+          "note": "Fenced code counts as section body content."
+        },
+        {
+          "rule_id": "S025",
+          "line": 16,
+          "note": "Prose counts as section body content."
+        },
+        {
+          "rule_id": "S025",
+          "line": 20,
+          "note": "A final heading has no following boundary that proves it empty."
         }
       ]
     },

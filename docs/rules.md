@@ -5,8 +5,8 @@ This document describes all detection rules available in ProseProbe.
 Most prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
 source-mapped Python docstrings and comments; `G015` examines only Markdown
 document openers. `C` rules handle Python-specific documentation issues.
-`M001` checks Markdown syntax in Python comments, while `M002`-`M008` and
-`M010` are Markdown-only.
+`M001` checks Markdown syntax in Python comments, while `M002`-`M008`, `M010`,
+and `S025` are Markdown-only.
 
 Wrapped Markdown and Python prose is segmented into cached, source-mapped
 sentences. Records retain exact start and end positions while conservative
@@ -52,6 +52,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `S019` | Corporate Euphemism | Structure | info | medium | markdown, python / prose | — |
 | `S020` | Alignment Ritual | Structure | info | medium | markdown, python / prose | — |
 | `S021` | Slide Deck Fragment | Structure | info | low | markdown, python / prose | — |
+| `S025` | Heading Without Body | Structure | warning | high | markdown / raw | — |
 | `T001` | Title Case Headings | Style | info | medium | markdown / raw | — |
 | `T002` | Bold Overuse | Style | info | medium | markdown / raw | `thresholds.bold_overuse` |
 | `T003` | Em Dash Overuse | Style | info | medium | markdown, python / prose | `thresholds.em_dash_overuse` |
@@ -1469,6 +1470,34 @@ Driving alignment across strategic initiatives for scalable impact.
 **Example (good):**
 ```markdown
 The team will coordinate across three initiatives to improve scalability.
+```
+
+---
+
+### S025: Heading Without Body
+
+Detects a Markdown heading followed by a peer or ancestor heading with no body
+content between them. A parent heading followed immediately by a child heading
+is valid.
+
+Prose, lists, tables, blockquotes, raw HTML, and fenced code all count as body
+content. The final heading in a document is not flagged because there is no
+following boundary that proves the section is empty.
+
+**Example (bad):**
+```markdown
+## Installation
+
+## Configuration
+```
+
+**Example (good):**
+```markdown
+## Installation
+
+Choose the package for your operating system.
+
+## Configuration
 ```
 
 ---

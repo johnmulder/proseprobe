@@ -49,12 +49,12 @@ speed remains a tracked metric until the benchmark corpus reflects real projects
 | Prefix | Category | Rules | Description |
 |--------|----------|-------|-------------|
 | `V` | Vocabulary | 8 | Overused and clichéd words and phrases |
-| `S` | Structure | 21 | Organizational patterns |
+| `S` | Structure | 22 | Organizational patterns |
 | `T` | Style | 8 | Typographic issues |
 | `G` | Grammar | 15 | Grammatical patterns |
 | `C` | Code | 4 | Python docstring/comment issues |
 | `M` | Markup | 9 | Markdown artifacts |
-| **Total** | | **65** | |
+| **Total** | | **66** | |
 
 <!-- rule-docs:categories:end -->
 
@@ -63,7 +63,7 @@ source-mapped Python docstrings and comments; `G015` examines only Markdown
 document openers. Python blocks are evaluated independently so thresholds do
 not combine unrelated documentation. `C` rules cover Python-specific
 documentation issues. `M001` checks Markdown syntax in Python comments, while
-`M002`-`M008` and `M010` are Markdown-only.
+`M002`-`M008`, `M010`, and `S025` are Markdown-only.
 
 Markdown and Python parsers cache source-mapped sentence records with exact
 start and end line and column positions. Sentence segmentation uses
@@ -85,7 +85,7 @@ dependency.
 | Profile | Selected rules | Minimum severity | Minimum confidence |
 |---------|----------------|------------------|--------------------|
 | `general` | General prose rules | info | medium |
-| `technical-docs` | General plus C001-C004, M001-M008, and M010 | info | low |
+| `technical-docs` | General plus C001-C004, M001-M008, M010, and S025 | info | low |
 | `academic` | General plus G011-G013, S018, and T008 | info | medium |
 | `journalism` | General plus G010, S017, and V008 | info | medium |
 | `business` | General plus G014 and S019-S021 | info | low |

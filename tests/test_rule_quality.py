@@ -43,6 +43,7 @@ _EXACT_SPAN_RULE_IDS = frozenset(
         "S015",
         "S016",
         "S021",
+        "S025",
         "T001",
         "T004",
         "T005",

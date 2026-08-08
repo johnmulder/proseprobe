@@ -331,13 +331,18 @@ class MarkdownParser:
         self._ensure_code_blocks()
         code_lines = self._code_lines()
         html_lines = self._html_lines()
+        front_matter_lines = self._front_matter_lines()
         headings: list[tuple[int, int, str, int, int]] = []
         heading_re = re.compile(r"^ {0,3}(#{1,6})\s+(.+?)\s*$")
         setext_re = re.compile(r"^ {0,3}(=+|-+)\s*$")
         idx = 0
         while idx < len(self._lines):
             line_num = idx + 1
-            if line_num in code_lines or line_num in html_lines:
+            if (
+                line_num in code_lines
+                or line_num in html_lines
+                or line_num in front_matter_lines
+            ):
                 idx += 1
                 continue
             raw_line = self._lines[idx]
@@ -354,7 +359,11 @@ class MarkdownParser:
 
             if idx + 1 < len(self._lines):
                 next_line_num = idx + 2
-                if next_line_num not in code_lines and next_line_num not in html_lines:
+                if (
+                    next_line_num not in code_lines
+                    and next_line_num not in html_lines
+                    and next_line_num not in front_matter_lines
+                ):
                     next_stripped, _ = self._strip_blockquote_prefix(
                         self._lines[idx + 1]
                     )

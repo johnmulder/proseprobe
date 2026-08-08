@@ -83,6 +83,15 @@ class TestMarkdownParser:
         assert headings[0].level == 2
         assert headings[0].title == "Quoted Title"
 
+    def test_get_headings_ignores_front_matter(self) -> None:
+        content = "---\ntitle: Hidden\n---\n\n# Visible"
+
+        headings = MarkdownParser(content).get_headings()
+
+        assert [(heading.title, heading.start_line) for heading in headings] == [
+            ("Visible", 5)
+        ]
+
     def test_get_headings_strips_trailing_hashes(self) -> None:
         """Test stripping trailing heading markers."""
         content = "## Heading ##\nText"

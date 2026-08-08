@@ -64,6 +64,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         struct.CorporateEuphemismRule(),
         struct.AlignmentRitualRule(),
         struct.SlideDeckFragmentRule(),
+        struct.HeadingWithoutBodyRule(),
         style.TitleCaseHeadingsRule(),
         style.BoldOveruseRule(thresholds.bold_overuse),
         style.EmDashOveruseRule(thresholds.em_dash_overuse),

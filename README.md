@@ -12,7 +12,7 @@ Overused vocabulary, structural clichés, promotional language, and careless mar
 
 ## Features
 
-- 🔍 **65 detection rules** across 6 categories
+- 🔍 **66 detection rules** across 6 categories
 - 📝 Scans Markdown prose and source-mapped Python docstrings and comments
 - 🎯 **Confidence levels** (high/medium/low) to reduce noise
 - 🗂️ Built-in profiles for general, technical, academic, journalism, and business prose
@@ -114,20 +114,20 @@ removes stale entries without accepting new ones. The older
 | Prefix | Category | Rules | Description |
 |--------|----------|-------|-------------|
 | `V` | Vocabulary | 8 | Overused and clichéd words and phrases |
-| `S` | Structure | 21 | Organizational patterns |
+| `S` | Structure | 22 | Organizational patterns |
 | `T` | Style | 8 | Typographic issues |
 | `G` | Grammar | 15 | Grammatical patterns |
 | `C` | Code | 4 | Python docstring/comment issues |
 | `M` | Markup | 9 | Markdown artifacts |
-| **Total** | | **65** | |
+| **Total** | | **66** | |
 
 <!-- rule-docs:categories:end -->
 
 Most prose-scoped `V`, `S`, `T`, and `G` rules run on Markdown prose and
 source-mapped Python docstrings and comments; `G015` examines only Markdown
 document openers. `C` rules cover Python-specific documentation issues. `M001`
-checks Markdown syntax in Python comments, while `M002`-`M008` and `M010` are
-Markdown-only.
+checks Markdown syntax in Python comments, while `M002`-`M008`, `M010`, and
+`S025` are Markdown-only.
 Wrapped prose is segmented once into cached sentences that retain start and end
 line and column positions. Conservative standard-library handling keeps common
 abbreviations, decimals, URLs, trailing quotes, and hard prose-block boundaries
