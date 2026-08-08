@@ -7,14 +7,14 @@ from typing import Any
 
 from slop_lint.rules.base import Confidence, Issue, Severity
 
-__all__ = ["format_results"]
+__all__ = ["JSON_SCHEMA_VERSION", "format_results"]
 
 # ---------------------------------------------------------------------------
 # Format-specific helpers (each has a single reason to change)
 # ---------------------------------------------------------------------------
 
 _Results = dict[Path, list[Issue]]
-_JSON_SCHEMA_VERSION = 1
+JSON_SCHEMA_VERSION = 1
 
 
 def _serialize_issue(issue: Issue) -> dict[str, Any]:
@@ -88,7 +88,7 @@ def _format_json(results: _Results, files_checked: int | None = None) -> str:
     from slop_lint import __version__
 
     output: dict[str, Any] = {
-        "schema_version": _JSON_SCHEMA_VERSION,
+        "schema_version": JSON_SCHEMA_VERSION,
         "version": __version__,
         "files": [],
         "summary": {
@@ -128,7 +128,7 @@ def _format_jsonl(results: _Results) -> str:
     return "".join(
         json.dumps(
             {
-                "schema_version": _JSON_SCHEMA_VERSION,
+                "schema_version": JSON_SCHEMA_VERSION,
                 "version": __version__,
                 "path": str(path),
                 **_serialize_issue(issue),

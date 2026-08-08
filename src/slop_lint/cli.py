@@ -3,15 +3,18 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 import time
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from slop_lint import __version__
 from slop_lint._ansi import clear_screen, style, table
 from slop_lint.config import ConfigError, load_config, validate_rule_references
 from slop_lint.core.baseline import Baseline, filter_new_issues, resolve_workspace
 from slop_lint.core.linter import Linter, LintReadError, LintResults
+from slop_lint.core.reporter import JSON_SCHEMA_VERSION
 from slop_lint.profiles import PROFILES
 from slop_lint.rules import (
     get_all_rules,
@@ -22,6 +25,7 @@ from slop_lint.rules.base import (
     Confidence,
     Issue,
     Rule,
+    RuleMetadata,
     Severity,
     severity_from_str,
     severity_rank,
@@ -412,8 +416,41 @@ def _cmd_baseline(args: argparse.Namespace) -> int:
     return 0
 
 
-def _cmd_rules(_args: argparse.Namespace) -> int:
+def _serialize_rule_metadata(metadata: RuleMetadata) -> dict[str, object]:
+    """Serialize canonical rule metadata for machine-readable output."""
+    return {
+        "id": metadata.id,
+        "category": metadata.category,
+        "name": metadata.name,
+        "description": metadata.description,
+        "default_severity": metadata.default_severity.value,
+        "default_confidence": metadata.default_confidence.value,
+        "applies_to": list(metadata.applies_to),
+        "content_scope": metadata.content_scope,
+        "profiles": list(metadata.profiles),
+        "config_key": metadata.config_key,
+    }
+
+
+def _cmd_rules(args: argparse.Namespace) -> int:
     """List all available rules."""
+    metadata_entries = get_rule_metadata()
+    if args.format == "json":
+        print(
+            json.dumps(
+                {
+                    "schema_version": JSON_SCHEMA_VERSION,
+                    "version": __version__,
+                    "rules": [
+                        _serialize_rule_metadata(metadata)
+                        for metadata in metadata_entries
+                    ],
+                },
+                indent=2,
+            )
+        )
+        return 0
+
     headers = [
         "ID",
         "Name",
@@ -437,7 +474,7 @@ def _cmd_rules(_args: argparse.Namespace) -> int:
             metadata.config_key or "-",
             metadata.description,
         ]
-        for metadata in get_rule_metadata()
+        for metadata in metadata_entries
     ]
     print(table(headers, rows, title="Available Rules"))
     return 0
@@ -502,8 +539,6 @@ def _cmd_explain(args: argparse.Namespace) -> int:
 
 def _cmd_version(_args: argparse.Namespace) -> int:
     """Show version information."""
-    from slop_lint import __version__
-
     print(f"slop-lint {__version__}")
     return 0
 
@@ -698,6 +733,13 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     p_rules.add_argument(
         "-h", "--help", action="help", help="Show this help message and exit"
+    )
+    p_rules.add_argument(
+        "--format",
+        "-f",
+        choices=("text", "json"),
+        default="text",
+        help="Output format: text, json",
     )
     p_rules.set_defaults(func=_cmd_rules)
 

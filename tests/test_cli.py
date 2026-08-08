@@ -12,6 +12,7 @@ from unittest.mock import patch
 
 import pytest
 
+from slop_lint import __version__
 from slop_lint.cli import main
 from slop_lint.config import load_config
 
@@ -468,6 +469,38 @@ class TestRulesCommand:
         assert "Scope" in result.stdout
         assert "Config" in result.stdout
         assert "thresholds.rule_of_three" in result.stdout
+
+    def test_rules_json_contract_and_order(self) -> None:
+        """JSON rule inventory exposes canonical metadata in rule-ID order."""
+        result = run_cli("rules", "--format", "json")
+
+        assert result.exit_code == 0
+        assert result.stderr == ""
+        data = json.loads(result.stdout)
+        assert set(data) == {"schema_version", "version", "rules"}
+        assert data["schema_version"] == 1
+        assert data["version"] == __version__
+        rules = data["rules"]
+        assert len(rules) == 64
+        assert [rule["id"] for rule in rules] == sorted(rule["id"] for rule in rules)
+        assert next(rule for rule in rules if rule["id"] == "S001") == {
+            "id": "S001",
+            "category": "Structure",
+            "name": "Rule of Three",
+            "description": "Detects excessive 'X, Y, and Z' patterns",
+            "default_severity": "info",
+            "default_confidence": "medium",
+            "applies_to": ["markdown", "python"],
+            "content_scope": "prose",
+            "profiles": [
+                "academic",
+                "business",
+                "general",
+                "journalism",
+                "technical-docs",
+            ],
+            "config_key": "thresholds.rule_of_three",
+        }
 
 
 class TestExplainCommand:
