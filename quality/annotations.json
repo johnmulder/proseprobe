@@ -857,6 +857,42 @@
         }
       ]
     },
+    "quality/corpus/double-negatives.md": {
+      "expected": [
+        {
+          "rule_id": "G029",
+          "line": 3,
+          "column": 16
+        },
+        {
+          "rule_id": "G029",
+          "line": 4,
+          "column": 12
+        },
+        {
+          "rule_id": "G029",
+          "line": 5,
+          "column": 13
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G029",
+          "line": 7,
+          "note": "Inline code is not document prose."
+        },
+        {
+          "rule_id": "G029",
+          "line": 10,
+          "note": "Fenced code is not document prose."
+        },
+        {
+          "rule_id": "G029",
+          "line": 13,
+          "note": "Separate negation and positive wording are not a fixed double negative."
+        }
+      ]
+    },
     "quality/corpus/generic-openers.md": {
       "expected": [
         {

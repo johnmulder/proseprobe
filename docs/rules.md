@@ -78,6 +78,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `G013` | Gap Ritual | Grammar | info | medium | markdown, python / prose | — |
 | `G014` | Impersonal Corporate Passive | Grammar | info | medium | markdown, python / prose | — |
 | `G015` | Generic Scene-Setting Opener | Grammar | info | medium | markdown / prose | — |
+| `G029` | Double Negative | Grammar | info | high | markdown, python / prose | — |
 | `C001` | Docstring-Only Vocabulary | Code | warning | medium | python / raw | — |
 | `C002` | Verbose Comments | Code | info | medium | python / raw | — |
 | `C003` | Collaborative Comments | Code | warning | medium | python / raw | — |
@@ -1606,4 +1607,27 @@ In today's rapidly evolving digital landscape, reliable payments matter more tha
 **Example (good):**
 ```markdown
 The payment API now retries one timed-out request after 200 milliseconds.
+```
+
+---
+
+### G029: Double Negative
+
+At high confidence, detects three fixed double-negative forms with direct
+positive replacements. The rule does not attempt to infer arbitrary logical
+negation.
+
+**Detected patterns:**
+- `not uncommon` → `common`
+- `not unlikely` → `likely`
+- `not impossible` → `possible`
+
+**Example (bad):**
+```markdown
+A retry is not unlikely after a network timeout.
+```
+
+**Example (good):**
+```markdown
+A retry is likely after a network timeout.
 ```
