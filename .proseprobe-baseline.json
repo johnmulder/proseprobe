@@ -27,6 +27,12 @@
     },
     {
       "path": "docs/rules.md",
+      "rule_id": "S016",
+      "match": "matching",
+      "context_hash": "8ccff27982d28676"
+    },
+    {
+      "path": "docs/rules.md",
       "rule_id": "V001",
       "match": "arguably",
       "context_hash": "5a76e65d2d88aa8f"
@@ -52,8 +58,8 @@
     {
       "path": "docs/rules.md",
       "rule_id": "V001",
-      "match": "fostering",
-      "context_hash": "9de0d9d8e327439a"
+      "match": "fundamental",
+      "context_hash": "12bffef17fbe05a7"
     },
     {
       "path": "docs/rules.md",
@@ -162,12 +168,6 @@
       "rule_id": "V001",
       "match": "testament",
       "context_hash": "8642fe65e05f2467"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
-      "match": "underscoring",
-      "context_hash": "1b8ea92b5fcde48d"
     },
     {
       "path": "docs/rules.md",
