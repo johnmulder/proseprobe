@@ -338,6 +338,8 @@ class TestInventedConceptLabels:
         [
             ("our gap", "their dilemma"),
             ("another gap", "every dilemma"),
+            ("which gap", "neither dilemma"),
+            ("other gap", "what dilemma"),
         ],
     )
     def test_other_literal_determiners_do_not_satisfy_threshold(
@@ -351,7 +353,10 @@ class TestInventedConceptLabels:
 
         assert InventedConceptLabelsRule().check(content, "test.md") == []
 
-    @pytest.mark.parametrize("literal_reference", ["our gap", "every dilemma"])
+    @pytest.mark.parametrize(
+        "literal_reference",
+        ["our gap", "every dilemma", "which gap", "other dilemma"],
+    )
     def test_other_literal_determiners_are_not_reported_with_labels(
         self, literal_reference: str
     ) -> None:
