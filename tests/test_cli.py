@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import io
 import json
+import sys
 from contextlib import redirect_stderr, redirect_stdout
 from dataclasses import dataclass
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
@@ -23,12 +25,17 @@ class Result:
     stderr: str
 
 
-def run_cli(*args: str) -> Result:
-    """Run the CLI with the given arguments and capture output."""
+def run_cli(*args: str, stdin: str | None = None) -> Result:
+    """Run the CLI with the given arguments, input, and captured output."""
     out = io.StringIO()
     err = io.StringIO()
+    input_stream = sys.stdin if stdin is None else io.StringIO(stdin)
     try:
-        with redirect_stdout(out), redirect_stderr(err):
+        with (
+            patch.object(sys, "stdin", input_stream),
+            redirect_stdout(out),
+            redirect_stderr(err),
+        ):
             exit_code = main(list(args))
     except SystemExit as exc:
         exit_code = exc.code if isinstance(exc.code, int) else 1
@@ -263,6 +270,168 @@ class TestCheckCommand:
 
         assert result.exit_code == 0
         assert "Configuration error" not in result.stderr
+
+
+class TestStdinInput:
+    """Tests for checking one document from standard input."""
+
+    def test_stdin_json_uses_virtual_filename_and_unicode(self) -> None:
+        result = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "draft.md",
+            "--format",
+            "json",
+            "--select",
+            "V001",
+            stdin="Café documentation delves into the topic.\n",
+        )
+
+        assert result.exit_code == 1
+        assert result.stderr == ""
+        data = json.loads(result.stdout)
+        assert data["schema_version"] == 1
+        assert data["summary"]["files_checked"] == 1
+        assert data["files"][0]["path"] == "draft.md"
+        assert data["files"][0]["issues"][0]["rule_id"] == "V001"
+
+    def test_empty_stdin_is_one_clean_checked_file(self) -> None:
+        result = run_cli(
+            "check", "-", "--filename", "empty.md", "--format", "json", stdin=""
+        )
+
+        assert result.exit_code == 0
+        assert result.stderr == ""
+        data = json.loads(result.stdout)
+        assert data["files"] == []
+        assert data["summary"] == {
+            "total_issues": 0,
+            "files_checked": 1,
+            "errors": 0,
+            "warnings": 0,
+            "info": 0,
+        }
+
+    def test_stdin_filename_selects_file_type(self) -> None:
+        content = 'message = "This delves into the topic."\n'
+
+        markdown = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "notes.md",
+            "--select",
+            "V001",
+            stdin=content,
+        )
+        python = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "module.py",
+            "--select",
+            "V001",
+            stdin=content,
+        )
+
+        assert markdown.exit_code == 1
+        assert "V001" in markdown.stdout
+        assert python.exit_code == 0
+        assert "V001" not in python.stdout
+
+    def test_stdin_discovers_config_and_uses_filename_for_ignores(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        monkeypatch.chdir(tmp_path)
+        (tmp_path / ".slop-lint.toml").write_text(
+            "[[tool.slop-lint.per-file-ignores]]\n"
+            'pattern = "generated.md"\n'
+            'ignore = ["V001"]\n'
+        )
+
+        result = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "generated.md",
+            "--select",
+            "V001",
+            stdin="This delves into the topic.\n",
+        )
+
+        assert result.exit_code == 0
+        assert result.stderr == ""
+        assert result.stdout == "No issues found!\n"
+
+    def test_stdin_malformed_suppression_is_a_config_error(self) -> None:
+        result = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "draft.md",
+            "--format",
+            "json",
+            stdin=(
+                "<!-- slop-lint-ignore-next-line V999 -->\n"
+                "This delves into the topic.\n"
+            ),
+        )
+
+        assert result.exit_code == 2
+        assert result.stdout == ""
+        assert "draft.md: line 1: unknown" in result.stderr
+
+    def test_stdin_read_failure_is_an_input_error(self) -> None:
+        with patch.object(sys, "stdin") as broken_input:
+            broken_input.read.side_effect = OSError("broken stream")
+            result = run_cli("check", "-", "--filename", "draft.md", "--format", "json")
+
+        assert result.exit_code == 3
+        assert result.stdout == ""
+        assert "Could not read standard input: broken stream" in result.stderr
+
+    @pytest.mark.parametrize(
+        ("args", "message"),
+        [
+            (("check", "-"), "--filename is required with standard input"),
+            (
+                ("check", "-", "README.md", "--filename", "draft.md"),
+                "Standard input '-' cannot be combined with file paths",
+            ),
+            (
+                ("check", "-", "-", "--filename", "draft.md"),
+                "Standard input '-' cannot be combined with file paths",
+            ),
+            (
+                ("check", "README.md", "--filename", "draft.md"),
+                "--filename can only be used with standard input '-'",
+            ),
+            (
+                (
+                    "check",
+                    "-",
+                    "--filename",
+                    "draft.md",
+                    "--baseline",
+                    "baseline.json",
+                ),
+                "Baselines are not supported with standard input",
+            ),
+            (
+                ("check", "-", "--filename", "draft.md", "--generate-baseline"),
+                "Baselines are not supported with standard input",
+            ),
+        ],
+    )
+    def test_stdin_rejects_invalid_combinations(
+        self, args: tuple[str, ...], message: str
+    ) -> None:
+        result = run_cli(*args, stdin="")
+
+        assert result.exit_code == 2
+        assert result.stdout == ""
+        assert message in result.stderr
 
 
 class TestRulesCommand:

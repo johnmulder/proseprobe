@@ -236,6 +236,20 @@ def _scan_paths(
     return LintResults(results, files_checked=lint_results.files_checked)
 
 
+def _scan_content(
+    linter: Linter,
+    content: str,
+    path: Path,
+    args: argparse.Namespace,
+    config: Config,
+) -> LintResults:
+    """Scan one in-memory document and apply non-baseline filters."""
+    issues = linter.check_content(content, path)
+    results = {path: issues} if issues else {}
+    filtered = _filter_by_confidence(results, args, config)
+    return LintResults(filtered, files_checked=1)
+
+
 def _has_failing_issue(results: dict[Path, list[Issue]]) -> bool:
     """Return True when any issue should make the process fail."""
     return any(
@@ -268,7 +282,27 @@ def _output_results(
 
 def _cmd_check(args: argparse.Namespace) -> int:
     """Check files for bad writing practices."""
-    paths = [Path(p) for p in args.paths]
+    stdin_requested = "-" in args.paths
+    if stdin_requested and args.paths != ["-"]:
+        print(
+            "Standard input '-' cannot be combined with file paths",
+            file=sys.stderr,
+        )
+        return 2
+    if stdin_requested and not args.filename:
+        print("--filename is required with standard input", file=sys.stderr)
+        return 2
+    if not stdin_requested and args.filename is not None:
+        print(
+            "--filename can only be used with standard input '-'",
+            file=sys.stderr,
+        )
+        return 2
+    if stdin_requested and (args.baseline or args.generate_baseline):
+        print("Baselines are not supported with standard input", file=sys.stderr)
+        return 2
+
+    paths = [] if stdin_requested else [Path(path) for path in args.paths]
     path_error = _validate_existing_paths(paths)
     if path_error is not None:
         return path_error
@@ -276,7 +310,7 @@ def _cmd_check(args: argparse.Namespace) -> int:
     try:
         config, linter, active_rules = _prepare_scan(args)
         baseline = _load_requested_baseline(args)
-        workspace = resolve_workspace(paths)
+        workspace = Path.cwd() if stdin_requested else resolve_workspace(paths)
     except ConfigError as exc:
         print(f"Configuration error: {exc}", file=sys.stderr)
         return 2
@@ -307,13 +341,22 @@ def _cmd_check(args: argparse.Namespace) -> int:
         return 0
 
     try:
-        lint_results = _scan_paths(linter, paths, args, config)
+        if stdin_requested:
+            content = sys.stdin.read()
+            lint_results = _scan_content(
+                linter, content, Path(args.filename), args, config
+            )
+        else:
+            lint_results = _scan_paths(linter, paths, args, config)
         baseline_results = _apply_baseline(lint_results, args, baseline, workspace)
     except ConfigError as exc:
         print(f"Configuration error: {exc}", file=sys.stderr)
         return 2
     except LintReadError as exc:
         print(f"Could not read file: {exc}", file=sys.stderr)
+        return 3
+    except (OSError, UnicodeError) as exc:
+        print(f"Could not read standard input: {exc}", file=sys.stderr)
         return 3
     if baseline_results is None:
         return 0
@@ -609,6 +652,11 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     p_check.add_argument("paths", nargs="+", help="Files or directories to check")
     _add_scan_options(p_check)
+    p_check.add_argument(
+        "--filename",
+        default=None,
+        help="Virtual path and file type when reading standard input from '-'",
+    )
     p_check.add_argument(
         "--show-config", action="store_true", help="Display configuration and exit"
     )
