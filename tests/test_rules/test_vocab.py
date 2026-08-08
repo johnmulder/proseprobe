@@ -1,8 +1,9 @@
-"""Tests for vocabulary rules (V001-V005)."""
+"""Tests for vocabulary rules (V001-V009)."""
 
 import pytest
 
 from proseprobe.config import Config
+from proseprobe.data.phrases import WORDY_PHRASE_REPLACEMENTS
 from proseprobe.rules import get_all_rules
 from proseprobe.rules.base import Confidence, Rule, Severity
 from proseprobe.rules.vocab import (
@@ -14,6 +15,7 @@ from proseprobe.rules.vocab import (
     PromotionalLanguageRule,
     TrendOverclaimRule,
     WeaselWordsRule,
+    WordyPhraseRule,
 )
 
 
@@ -487,6 +489,90 @@ class TestTrendOverclaim:
         rule = TrendOverclaimRule()
         assert rule.id == "V008"
         assert rule.name == "Trend Overclaim"
+
+
+class TestWordyPhrase:
+    """Tests for V009: Wordy Phrase."""
+
+    def test_curated_phrase_table(self) -> None:
+        assert WORDY_PHRASE_REPLACEMENTS == {
+            "at this point in time": "now",
+            "due to the fact that": "because",
+            "during the course of": "during",
+            "enable the ability to": "allow",
+            "enables the ability to": "allows",
+            "has the ability to": "can",
+            "have the ability to": "can",
+            "in close proximity to": "near",
+            "in order to": "to",
+            "in the event that": "if",
+            "on the basis of": "based on",
+            "with regard to": "about",
+        }
+
+    @pytest.mark.parametrize(
+        ("phrase", "replacement"), WORDY_PHRASE_REPLACEMENTS.items()
+    )
+    def test_suggests_each_curated_replacement(
+        self, phrase: str, replacement: str
+    ) -> None:
+        [issue] = WordyPhraseRule().check(f"Use {phrase} finish.", "guide.md")
+
+        assert issue.suggestion == replacement
+
+    def test_reports_exact_metadata_and_source_span(self) -> None:
+        source = "Use in order to retry."
+
+        [issue] = WordyPhraseRule().check(source, "guide.md")
+
+        assert issue.rule_id == "V009"
+        assert issue.message == "Wordy phrase: 'in order to'"
+        assert (issue.line, issue.column, issue.end_column) == (1, 5, 16)
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == "to"
+
+    def test_case_repetitions_and_different_phrases_follow_source_order(self) -> None:
+        source = "IN ORDER TO retry, act at this point in time, in order to recover."
+
+        issues = WordyPhraseRule().check(source, "guide.md")
+
+        assert [issue.message for issue in issues] == [
+            "Wordy phrase: 'IN ORDER TO'",
+            "Wordy phrase: 'at this point in time'",
+            "Wordy phrase: 'in order to'",
+        ]
+
+    def test_ignores_markdown_headings_and_code(self) -> None:
+        source = """\
+# In order to
+
+Use `in order to` as the legacy label.
+
+```text
+due to the fact that
+```
+"""
+
+        assert WordyPhraseRule().check(source, "guide.md") == []
+
+    def test_checks_python_documentation_but_not_code_strings(self) -> None:
+        source = '''\
+label = "in order to"
+# In order to retry, call the client again.
+
+def retry():
+    """At this point in time, retry once."""
+'''
+
+        issues = WordyPhraseRule().check(source, "client.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_ignores_nonmatching_fragments(self) -> None:
+        source = "The rows remain in order. The event that failed was recorded."
+
+        assert WordyPhraseRule().check(source, "guide.md") == []
 
 
 class TestAcademicVocabularyExpansions:

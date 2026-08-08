@@ -1,5 +1,21 @@
 """Bad phrase patterns."""
 
+# Wordy phrases with direct replacements (V009)
+WORDY_PHRASE_REPLACEMENTS = {
+    "at this point in time": "now",
+    "due to the fact that": "because",
+    "during the course of": "during",
+    "enable the ability to": "allow",
+    "enables the ability to": "allows",
+    "has the ability to": "can",
+    "have the ability to": "can",
+    "in close proximity to": "near",
+    "in order to": "to",
+    "in the event that": "if",
+    "on the basis of": "based on",
+    "with regard to": "about",
+}
+
 # Collaborative/chat-like phrases (V002)
 COLLABORATIVE_PHRASES = [
     "I hope this helps",

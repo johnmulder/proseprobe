@@ -1,4 +1,4 @@
-"""Vocabulary detection rules (V001-V007)."""
+"""Vocabulary detection rules (V001-V009)."""
 
 import re
 from typing import ClassVar
@@ -11,6 +11,7 @@ from proseprobe.data.phrases import (
     PROMOTIONAL_PHRASES,
     TREND_OVERCLAIM_PHRASES,
     WEASEL_PHRASES,
+    WORDY_PHRASE_REPLACEMENTS,
 )
 from proseprobe.data.vocabulary import (
     AI_VOCABULARY,
@@ -20,7 +21,11 @@ from proseprobe.data.vocabulary import (
     VOCABULARY_SUGGESTIONS,
 )
 from proseprobe.parsers.markdown import is_example_line
-from proseprobe.parsers.prose import ProseSentence, iter_prose_sentences
+from proseprobe.parsers.prose import (
+    ProseSentence,
+    iter_prose_blocks,
+    iter_prose_sentences,
+)
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
 _MONTH = re.compile(
@@ -499,3 +504,41 @@ class TrendOverclaimRule(Rule):
                         )
                     )
         return issues
+
+
+class WordyPhraseRule(Rule):
+    """V009: Detect wordy phrases with direct replacements."""
+
+    id = "V009"
+    name = "Wordy Phrase"
+    description = "Detects wordy phrases with concise replacements"
+    severity = Severity.INFO
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose for wordy phrases."""
+        issues: list[Issue] = []
+        for block in iter_prose_blocks(content, filename):
+            if block.context == "heading":
+                continue
+            for line_num, line in block.lines:
+                for phrase, replacement in WORDY_PHRASE_REPLACEMENTS.items():
+                    for match in re.finditer(
+                        rf"\b{re.escape(phrase)}\b", line, re.IGNORECASE
+                    ):
+                        issues.append(
+                            Issue(
+                                rule_id=self.id,
+                                message=f"Wordy phrase: '{match.group()}'",
+                                line=line_num,
+                                column=match.start() + 1,
+                                end_column=match.end() + 1,
+                                severity=self.severity,
+                                confidence=self.default_confidence,
+                                suggestion=replacement,
+                            )
+                        )
+
+        return sorted(issues, key=lambda issue: (issue.line, issue.column))
