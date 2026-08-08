@@ -35,6 +35,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `V010` | Redundant Pair | Vocabulary | info | high | markdown, python / prose | — |
 | `V011` | Verbose Verb Phrase | Vocabulary | info | high | markdown, python / prose | — |
 | `V013` | Redundant Modifier | Vocabulary | info | high | markdown, python / prose | — |
+| `V014` | Imprecise Quantity | Vocabulary | info | medium | markdown, python / prose | — |
 | `V016` | Absolute Reliability Claim | Vocabulary | info | medium | markdown, python / prose | — |
 | `S001` | Rule of Three | Structure | info | medium | markdown, python / prose | `thresholds.rule_of_three` |
 | `S002` | Negative Parallelism | Structure | info | medium | markdown, python / prose | — |
@@ -1427,6 +1428,35 @@ Planning benefited the rollout.
 
 Matching is case-insensitive and applies to Markdown prose plus Python comments
 and docstrings; headings and code are excluded.
+
+---
+
+### V014: Imprecise Quantity
+
+Detects four multiword phrases that state a quantity without measuring it:
+`a considerable number of`, `a large number of`, `a small number of`, and `a
+handful of`. Findings are medium-confidence informational diagnostics with
+exact spans and a suggestion to measure or cite the quantity.
+
+**Example (unsupported):**
+```markdown
+A large number of requests failed during deployment.
+```
+
+**Example (supported):**
+```markdown
+The benchmark found a large number of failures across 500 requests.
+```
+
+A number, benchmark/report term, date, named source, or link in the same or an
+adjacent sentence lowers confidence. Evidence does not cross prose scope
+boundaries. Headings, demonstration sections, and code are excluded.
+
+Noisy single-word quantifiers such as `many`, `some`, and `several` are omitted.
+`A significant number of` and `a substantial number of` remain under V001's
+existing vocabulary ownership rather than producing a second finding.
+
+The rule applies to Markdown prose and Python comments and docstrings.
 
 ---
 

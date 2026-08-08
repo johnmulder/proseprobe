@@ -42,7 +42,7 @@ The exact classification is:
 - general: `G001`-`G009`, `G015`, `S001`-`S016`, `T001`-`T007`, and
   `V001`-`V007`;
 - technical documentation: `C001`-`C004`, `G017`, `G024`, `G029`,
-  `M001`-`M010`, `S025`, `T015`, `V009`-`V011`, `V013`, and `V016`;
+  `M001`-`M010`, `S025`, `T015`, `V009`-`V011`, `V013`-`V014`, and `V016`;
 - academic: `G011`-`G013`, `S018`, and `T008`;
 - journalism: `G010`, `S017`, and `V008`;
 - business: `G014` and `S019`-`S021`.

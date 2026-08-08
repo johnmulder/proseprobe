@@ -94,6 +94,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         vocab.RedundantPairRule(),
         vocab.VerboseVerbPhraseRule(),
         vocab.RedundantModifierRule(),
+        vocab.ImpreciseQuantityRule(),
         vocab.AbsoluteReliabilityClaimRule(),
     ]
     for rule in rules:
