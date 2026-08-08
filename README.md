@@ -133,7 +133,7 @@ without adding an NLP dependency.
 
 ### Example Detections
 
-```
+```text
 docs/guide.md:15:10: V001 [warning] Overused word: 'delve' → consider 'explore'
 docs/guide.md:23:1: S001 [info] Triadic pattern (rule of three): 'fast, safe, and clear'
 src/main.py:45:8: V002 [warning] Collaborative phrase: 'I hope this helps'
