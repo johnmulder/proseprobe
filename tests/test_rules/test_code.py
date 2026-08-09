@@ -1,11 +1,12 @@
-"""Tests for code rules (C001-C004)."""
+"""Tests for code rules (C001-C004, C007)."""
 
 import pytest
 
-from proseprobe.rules.base import Rule
+from proseprobe.rules.base import Rule, Severity
 from proseprobe.rules.code import (
     AIPlaceholdersRule,
     CollaborativeCommentsRule,
+    DocstringRepeatsSignatureRule,
     DocstringVocabularyRule,
     VerboseCommentsRule,
 )
@@ -208,3 +209,123 @@ class TestAIPlaceholders:
         rule = AIPlaceholdersRule()
         issues = rule.check(text, "test.py")
         assert len(issues) == 0
+
+
+class TestDocstringRepeatsSignature:
+    """Tests for C007: Docstring Repeats Signature."""
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            'def process(data):\n    """Process data."""',
+            'def calculate_total(items):\n    """Calculate the total for items."""',
+            'async def fetch_user(user_id):\n    """Fetch user by user ID."""',
+            'def add(a, b):\n    """Add a and b."""',
+            (
+                "class Client:\n"
+                "    def create_client(self, name, active=True):\n"
+                '        """Create a client with name and active."""'
+            ),
+        ],
+    )
+    def test_detects_exact_signature_restatements(self, source: str) -> None:
+        issues = DocstringRepeatsSignatureRule().check(source, "test.py")
+
+        assert len(issues) == 1
+        assert issues[0].rule_id == "C007"
+
+    def test_splits_camel_case_and_snake_case_identifiers(self) -> None:
+        source = '''
+def loadHTTPResponse(response_code):
+    """Load HTTP response by response code."""
+'''
+
+        assert len(DocstringRepeatsSignatureRule().check(source, "test.py")) == 1
+
+    def test_reports_exact_source_span(self) -> None:
+        source = 'def process(data):\n    """Process data."""'
+
+        [issue] = DocstringRepeatsSignatureRule().check(source, "test.py")
+
+        assert issue.line == 2
+        assert issue.end_line == 2
+        assert issue.column == 8
+        assert issue.end_column is not None
+        assert source.splitlines()[1][issue.column - 1 : issue.end_column - 1] == (
+            "Process data."
+        )
+
+    def test_reports_multiline_opening_span(self) -> None:
+        source = '''
+def create_user(name, email):
+    """Create a user with
+    name and email.
+
+    Store the user in the primary database.
+    """
+'''
+
+        [issue] = DocstringRepeatsSignatureRule().check(source, "test.py")
+
+        assert (issue.line, issue.column) == (3, 8)
+        assert (issue.end_line, issue.end_column) == (4, 20)
+
+    @pytest.mark.parametrize(
+        "opening",
+        [
+            "Process validated data.",
+            "Process data in stable order.",
+            "Processes data.",
+            "Process.",
+            "Process data or metadata.",
+        ],
+    )
+    def test_ignores_openings_that_are_not_exact_restatements(
+        self, opening: str
+    ) -> None:
+        source = f'def process(data):\n    """{opening}"""'
+
+        assert DocstringRepeatsSignatureRule().check(source, "test.py") == []
+
+    def test_checks_only_the_opening_sentence(self) -> None:
+        source = '''
+def process(data):
+    """Validate data before processing. Process data."""
+'''
+
+        assert DocstringRepeatsSignatureRule().check(source, "test.py") == []
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            '"""Package tools."""',
+            'class PackageTools:\n    """Package tools."""',
+            'def run():\n    """Run."""',
+            'message = "Process data."',
+            "# Process data.\ndef process(data):\n    pass",
+            'def broken(\n    """Process data."""',
+        ],
+    )
+    def test_ignores_unsupported_or_non_docstring_text(self, source: str) -> None:
+        assert DocstringRepeatsSignatureRule().check(source, "test.py") == []
+
+    def test_reports_each_matching_function(self) -> None:
+        source = '''
+def process(data):
+    """Process data."""
+
+async def fetch(item):
+    """Fetch item."""
+'''
+
+        issues = DocstringRepeatsSignatureRule().check(source, "test.py")
+
+        assert [(issue.line, issue.column) for issue in issues] == [(3, 8), (6, 8)]
+
+    def test_rule_metadata(self) -> None:
+        rule = DocstringRepeatsSignatureRule()
+
+        assert rule.id == "C007"
+        assert rule.name == "Docstring Repeats Signature"
+        assert rule.severity is Severity.INFO
+        assert rule.applies_to == {"python"}

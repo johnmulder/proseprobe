@@ -1,4 +1,4 @@
-"""Code-specific detection rules (C001-C004)."""
+"""Code-specific detection rules (C001-C004, C007)."""
 
 import re
 from typing import ClassVar
@@ -11,8 +11,13 @@ from proseprobe.data.code_patterns import (
     VERBOSE_COMMENT_PATTERNS,
 )
 from proseprobe.data.vocabulary import AI_VOCABULARY, DOCSTRING_AI_VOCABULARY
-from proseprobe.parsers.python import _get_cached_parser
+from proseprobe.parsers.python import Docstring, _get_cached_parser
 from proseprobe.rules.base import Issue, Rule, Severity
+
+_IDENTIFIER_WORD = re.compile(r"[A-Z]+(?=[A-Z][a-z]|\b)|[A-Z]?[a-z]+|[A-Z]+|\d+")
+_SIGNATURE_CONNECTIVES = frozenset(
+    {"a", "an", "and", "by", "for", "from", "of", "the", "to", "with"}
+)
 
 
 class DocstringVocabularyRule(Rule):
@@ -219,4 +224,66 @@ class AIPlaceholdersRule(Rule):
                     )
                     break
 
+        return issues
+
+
+class DocstringRepeatsSignatureRule(Rule):
+    """C007: Detect opening docstring sentences that repeat the signature."""
+
+    id = "C007"
+    name = "Docstring Repeats Signature"
+    description = "Detects function docstrings that only repeat signature words"
+    severity = Severity.INFO
+    applies_to: ClassVar[set[str]] = {"python"}
+
+    @staticmethod
+    def _words(text: str) -> set[str]:
+        return {match.group().casefold() for match in _IDENTIFIER_WORD.finditer(text)}
+
+    @classmethod
+    def _repeats_signature(cls, opening: str, docstring: Docstring) -> bool:
+        signature = cls._words(
+            " ".join((docstring.owner_name or "", *docstring.parameters))
+        )
+        if len(signature) < 2:
+            return False
+        opening_words = cls._words(opening)
+        opening_words.difference_update(_SIGNATURE_CONNECTIVES - signature)
+        return opening_words == signature
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check function docstring openings against their signatures."""
+        parser = _get_cached_parser(content)
+        if not parser.parse():
+            return []
+
+        sentences = parser.get_prose_sentences()
+        issues: list[Issue] = []
+        for docstring in parser.get_docstrings():
+            if docstring.node_type != "function":
+                continue
+            opening = next(
+                (
+                    sentence
+                    for sentence in sentences
+                    if docstring.line <= sentence.start_line <= docstring.end_line
+                ),
+                None,
+            )
+            if opening is None or not self._repeats_signature(opening.text, docstring):
+                continue
+            line, column = opening.source_position()
+            end_line, end_column = opening.source_position(len(opening.text))
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message="Docstring opening repeats the function signature",
+                    line=line,
+                    column=column,
+                    end_line=end_line,
+                    end_column=end_column,
+                    severity=self.severity,
+                    suggestion="Describe behavior, results, or constraints",
+                )
+            )
         return issues
