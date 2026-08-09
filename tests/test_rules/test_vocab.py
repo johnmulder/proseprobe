@@ -23,6 +23,7 @@ from proseprobe.rules.vocab import (
     RedundantModifierRule,
     RedundantPairRule,
     TrendOverclaimRule,
+    UnboundedSuperlativeRule,
     VerboseVerbPhraseRule,
     WeaselWordsRule,
     WordyPhraseRule,
@@ -989,6 +990,109 @@ def summarize():
         assert rule.id == "V014"
         assert rule.name == "Imprecise Quantity"
         assert rule.default_confidence is Confidence.MEDIUM
+
+
+class TestUnboundedSuperlative:
+    """Tests for V015: Unbounded Superlative."""
+
+    @pytest.mark.parametrize(
+        ("source", "claim"),
+        [
+            ("Atlas is the best option.", "the best"),
+            ("The legacy route was the worst.", "the worst"),
+            ("This parser is fastest.", "fastest"),
+            ("The fallback remains the most reliable.", "the most reliable"),
+            ("These clusters are the least scalable.", "the least scalable"),
+            ("Its queue is smallest.", "smallest"),
+        ],
+    )
+    def test_reports_each_curated_claim(self, source: str, claim: str) -> None:
+        [issue] = UnboundedSuperlativeRule().check(source, "guide.md")
+
+        assert issue.rule_id == "V015"
+        assert issue.message == f"Unbounded superlative: '{claim}'"
+        assert source[issue.column - 1 : issue.end_column - 1] == claim
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.LOW
+        assert issue.suggestion == "Name the comparison set and supporting evidence"
+
+    def test_preserves_a_wrapped_source_span(self) -> None:
+        source = "Atlas is the most\nreliable option."
+
+        [issue] = UnboundedSuperlativeRule().check(source, "guide.md")
+
+        assert (issue.line, issue.column) == (1, 10)
+        assert (issue.end_line, issue.end_column) == (2, 9)
+        assert issue.message == "Unbounded superlative: 'the most reliable'"
+
+    def test_reports_multiple_claims_in_source_order(self) -> None:
+        source = "Atlas is fastest, but Boreal is slowest."
+
+        issues = UnboundedSuperlativeRule().check(source, "guide.md")
+
+        assert [issue.message for issue in issues] == [
+            "Unbounded superlative: 'fastest'",
+            "Unbounded superlative: 'slowest'",
+        ]
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "We compared three parsers. Atlas is the fastest among them.",
+            "In our benchmark, Atlas is fastest.",
+            "Of the three options, Atlas is best.",
+            "Atlas processed 100 requests in 12 ms. It is the fastest.",
+            "Mina Ortiz reported that Atlas is the most reliable.",
+        ],
+    )
+    def test_suppresses_local_comparison_or_evidence(self, source: str) -> None:
+        assert UnboundedSuperlativeRule().check(source, "guide.md") == []
+
+    def test_comparison_evidence_does_not_cross_scope_boundaries(self) -> None:
+        source = "We compared three parsers.\n\n# Finding\n\nAtlas is the fastest."
+
+        [issue] = UnboundedSuperlativeRule().check(source, "guide.md")
+
+        assert issue.line == 5
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "Which parser is fastest?",
+            "If Atlas is fastest, deploy it.",
+            "Determine whether Atlas is fastest.",
+            'Avoid claiming "Atlas is the best" in release notes.',
+            "Choose the fastest parser.",
+            "Atlas is best-in-class.",
+            "Atlas performs fastest under load.",
+            "# Atlas is the fastest",
+            "## Example\n\nAtlas is the fastest.",
+            "Use `Atlas is the fastest` as the label.",
+            "```text\nAtlas is the fastest.\n```",
+        ],
+    )
+    def test_ignores_non_claim_and_excluded_contexts(self, source: str) -> None:
+        assert UnboundedSuperlativeRule().check(source, "guide.md") == []
+
+    def test_checks_python_documentation_but_not_code_strings(self) -> None:
+        source = '''\
+label = "Atlas is the fastest"
+# Atlas is the fastest.
+
+def rank():
+    """Boreal is the least efficient."""
+'''
+
+        issues = UnboundedSuperlativeRule().check(source, "client.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_rule_metadata(self) -> None:
+        rule = UnboundedSuperlativeRule()
+
+        assert rule.id == "V015"
+        assert rule.name == "Unbounded Superlative"
+        assert rule.default_confidence is Confidence.LOW
 
 
 class TestAbsoluteReliabilityClaim:

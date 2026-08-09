@@ -731,6 +731,82 @@ class ImpreciseQuantityRule(Rule):
         return issues
 
 
+class UnboundedSuperlativeRule(Rule):
+    """V015: Detect narrow superlative claims without a comparison set."""
+
+    id = "V015"
+    name = "Unbounded Superlative"
+    description = "Detects curated superlative claims lacking local comparison"
+    severity = Severity.INFO
+    default_confidence = Confidence.LOW
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _CLAIM: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:is|are|was|were|remains?)\s+"
+        r"(?P<claim>(?:the\s+)?(?:best(?![- ]in[- ]class\b)|worst|fastest|"
+        r"slowest|largest|smallest|highest|lowest|"
+        r"(?:most|least)\s+(?:accurate|efficient|reliable|scalable|secure)))\b",
+        re.IGNORECASE,
+    )
+    _COMPARISON_SET: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:among|between|compared\s+(?:to|with)|out\s+of|within)\b"
+        r"|\bof\s+(?:all|our|the|these|those|\d+|one|two|three|four|five|"
+        r"six|seven|eight|nine|ten)\b"
+        r"|\bin\s+(?:our|the|this)\s+"
+        r"(?:benchmark|comparison|evaluation|test)s?\b",
+        re.IGNORECASE,
+    )
+    _LITERAL_CONTEXT: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:avoid|do not|don't)\s+"
+        r"(?:claim(?:ing)?|say(?:ing)?|writ(?:e|ing))\b"
+        r"|\bthe (?:label|phrase|wording)\b",
+        re.IGNORECASE,
+    )
+    _HYPOTHETICAL: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:if|whether)\b", re.IGNORECASE
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose for curated superlatives without a local comparison."""
+        issues: list[Issue] = []
+        sentences = iter_prose_sentences(content, filename)
+        for index, sentence in enumerate(sentences):
+            window = _sentence_window_source(content, sentences, index)
+            if (
+                sentence.context == "heading"
+                or is_example_line(content, filename, sentence.start_line)
+                or sentence.text.rstrip().endswith("?")
+                or self._LITERAL_CONTEXT.search(sentence.text)
+                or self._COMPARISON_SET.search(window)
+                or _has_quantity_evidence(content, sentences, index)
+            ):
+                continue
+
+            for match in self._CLAIM.finditer(sentence.text):
+                if self._HYPOTHETICAL.search(sentence.text[: match.start()]):
+                    continue
+                claim_match = match.span("claim")
+                line, column = sentence.source_position(claim_match[0])
+                end_line, end_column = sentence.source_position(claim_match[1])
+                claim = " ".join(match.group("claim").split())
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Unbounded superlative: '{claim}'",
+                        line=line,
+                        column=column,
+                        end_line=end_line,
+                        end_column=end_column,
+                        severity=self.severity,
+                        confidence=self.default_confidence,
+                        suggestion="Name the comparison set and supporting evidence",
+                    )
+                )
+
+        return issues
+
+
 class AbsoluteReliabilityClaimRule(Rule):
     """V016: Detect narrow absolute reliability claims without tested bounds."""
 
