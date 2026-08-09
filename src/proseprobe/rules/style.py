@@ -1,4 +1,4 @@
-"""Style detection rules (T001-T008, T015)."""
+"""Style detection rules (T001-T010, T015)."""
 
 import re
 from itertools import groupby
@@ -10,6 +10,7 @@ from proseprobe.data.style_patterns import (
 )
 from proseprobe.parsers.markdown import (
     MarkdownParser,
+    is_example_line,
     is_markdown_file,
 )
 from proseprobe.parsers.prose import iter_prose_blocks, iter_prose_sentences
@@ -377,6 +378,44 @@ class SentenceLengthRule(Rule):
                     severity=self.severity,
                 )
             )
+        return issues
+
+
+class RepeatedOrMixedPunctuationRule(Rule):
+    """T010: Detect repeated or mixed terminal punctuation."""
+
+    id = "T010"
+    name = "Repeated or Mixed Punctuation"
+    description = "Detects repeated, mixed, and rhetorical punctuation clusters"
+    severity = Severity.INFO
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _CLUSTER: ClassVar[re.Pattern[str]] = re.compile(r"(?:\.{3,}|\u2026)[!?]+|[!?]{2,}")
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Report repeated or mixed punctuation in source-mapped prose."""
+        issues: list[Issue] = []
+        for sentence in iter_prose_sentences(content, filename):
+            if is_example_line(content, filename, sentence.start_line):
+                continue
+            for match in self._CLUSTER.finditer(sentence.text):
+                line, column = sentence.source_position(match.start())
+                end_line, end_column = sentence.source_position(match.end())
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Repeated or mixed punctuation: '{match.group()}'",
+                        line=line,
+                        column=column,
+                        end_line=end_line,
+                        end_column=end_column,
+                        severity=self.severity,
+                        confidence=self.default_confidence,
+                        suggestion="Use a single terminal punctuation mark",
+                    )
+                )
         return issues
 
 

@@ -1,4 +1,4 @@
-"""Tests for style rules (T001-T008, T015)."""
+"""Tests for style rules (T001-T010, T015)."""
 
 import pytest
 
@@ -10,6 +10,7 @@ from proseprobe.rules.style import (
     EmojiInProseRule,
     NestedParentheticalRule,
     QuoteInconsistencyRule,
+    RepeatedOrMixedPunctuationRule,
     TitleCaseHeadingsRule,
 )
 
@@ -33,6 +34,7 @@ from proseprobe.rules.style import (
             "The guide said this. The reference stated that.",
             "stated",
         ),
+        (RepeatedOrMixedPunctuationRule(), "Really?!", "?!"),
     ],
 )
 def test_style_rules_report_exact_source_spans(
@@ -379,6 +381,75 @@ class TestSentenceLength:
         rule = SentenceLengthRule()
         assert rule.id == "T008"
         assert rule.name == "Sentence Length"
+
+
+class TestRepeatedOrMixedPunctuation:
+    """Tests for T010: Repeated or Mixed Punctuation."""
+
+    @pytest.mark.parametrize("cluster", ["!!", "??", "?!", "!?", "?!?", "...?!", "…!"])
+    def test_reports_supported_clusters(self, cluster: str) -> None:
+        source = f"Really{cluster} Next step."
+
+        [issue] = RepeatedOrMixedPunctuationRule().check(source, "guide.md")
+
+        assert issue.rule_id == "T010"
+        assert issue.message == f"Repeated or mixed punctuation: '{cluster}'"
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            len("Really") + 1,
+            1,
+            len("Really") + len(cluster) + 1,
+        )
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == "Use a single terminal punctuation mark"
+
+    def test_reports_multiple_clusters_in_source_order(self) -> None:
+        source = "Really?! Stop!! Why??"
+
+        issues = RepeatedOrMixedPunctuationRule().check(source, "guide.markdown")
+
+        assert [
+            source[issue.column - 1 : issue.end_column - 1] for issue in issues
+        ] == [
+            "?!",
+            "!!",
+            "??",
+        ]
+
+    @pytest.mark.parametrize("source", ["Really!", "Why?", "Wait...", "Pause…"])
+    def test_ignores_single_marks_and_bare_ellipses(self, source: str) -> None:
+        assert RepeatedOrMixedPunctuationRule().check(source, "guide.md") == []
+
+    def test_ignores_markdown_literal_and_example_contexts(self) -> None:
+        source = (
+            "Use `?!` as the token.\n\n"
+            "[Query](https://example.com/search??mode=all)\n\n"
+            "```text\nReally?!\n```\n\n"
+            "## Example\n\nReally?!"
+        )
+
+        assert RepeatedOrMixedPunctuationRule().check(source, "guide.md") == []
+
+    def test_checks_python_comments_and_docstrings_but_not_strings(self) -> None:
+        source = (
+            'value = "Really?!"\n'
+            "# Really?!\n\n"
+            "def retry() -> None:\n"
+            '    """Wait...!"""\n'
+            "    return None\n"
+        )
+
+        issues = RepeatedOrMixedPunctuationRule().check(source, "guide.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_rule_metadata(self) -> None:
+        rule = RepeatedOrMixedPunctuationRule()
+
+        assert rule.id == "T010"
+        assert rule.name == "Repeated or Mixed Punctuation"
+        assert rule.config_key is None
 
 
 class TestNestedParenthetical:
