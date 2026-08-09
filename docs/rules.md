@@ -94,6 +94,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `G019` | Ambiguous "This" | Grammar | info | medium | markdown, python / prose | — |
 | `G022` | Former/Latter Reference | Grammar | info | medium | markdown, python / prose | — |
 | `G024` | Unclear Actor in Requirement | Grammar | info | medium | markdown, python / prose | — |
+| `G025` | Weak Instruction Verb | Grammar | info | medium | markdown, python / prose | — |
 | `G029` | Double Negative | Grammar | info | high | markdown, python / prose | — |
 | `C001` | Docstring-Only Vocabulary | Code | warning | medium | python / raw | — |
 | `C002` | Verbose Comments | Code | info | medium | python / raw | — |
@@ -2000,6 +2001,26 @@ It must be ensured that every archive has a checksum.
 **Example (good):**
 ```markdown
 The release operator must ensure that every archive has a checksum.
+```
+
+---
+
+### G025: Weak Instruction Verb
+
+At medium confidence and informational severity, detects only
+`You will need to` and `You can proceed to` in body, list-item, and blockquote
+prose. The rule excludes headings, code, Python strings, and example sections.
+It does not flag other second-person instructions or infer whether permission
+language is appropriate in context.
+
+**Example (bad):**
+```markdown
+You will need to restart the worker after changing the token.
+```
+
+**Example (good):**
+```markdown
+Restart the worker after changing the token.
 ```
 
 ---
