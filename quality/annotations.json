@@ -1676,6 +1676,102 @@
         }
       ]
     },
+    "quality/corpus/unbounded-superlatives.md": {
+      "expected": [
+        {
+          "rule_id": "V015",
+          "line": 3,
+          "column": 10
+        },
+        {
+          "rule_id": "V015",
+          "line": 5,
+          "column": 11
+        },
+        {
+          "rule_id": "V015",
+          "line": 7,
+          "column": 22
+        },
+        {
+          "rule_id": "V015",
+          "line": 9,
+          "column": 21
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V015",
+          "line": 13,
+          "note": "An explicit comparison set bounds the superlative."
+        },
+        {
+          "rule_id": "V015",
+          "line": 15,
+          "note": "A named benchmark supplies the comparison context."
+        },
+        {
+          "rule_id": "V015",
+          "line": 17,
+          "note": "Adjacent quantitative evidence supports the claim."
+        },
+        {
+          "rule_id": "V015",
+          "line": 19,
+          "note": "The preceding phrase names a three-option comparison set."
+        },
+        {
+          "rule_id": "V015",
+          "line": 23,
+          "note": "A question is not an authorial superlative claim."
+        },
+        {
+          "rule_id": "V015",
+          "line": 25,
+          "note": "A conditional use does not assert the superlative."
+        },
+        {
+          "rule_id": "V015",
+          "line": 27,
+          "note": "Whether introduces a hypothetical use."
+        },
+        {
+          "rule_id": "V015",
+          "line": 29,
+          "note": "Editorial guidance discusses the literal claim."
+        },
+        {
+          "rule_id": "V015",
+          "line": 31,
+          "note": "An attributive superlative is outside the copular claim scope."
+        },
+        {
+          "rule_id": "V015",
+          "line": 33,
+          "note": "A non-copular adverbial use is outside the rule scope."
+        },
+        {
+          "rule_id": "V015",
+          "line": 35,
+          "note": "A heading is outside the rule's prose scope."
+        },
+        {
+          "rule_id": "V015",
+          "line": 37,
+          "note": "Inline code preserves a literal label."
+        },
+        {
+          "rule_id": "V015",
+          "line": 40,
+          "note": "Fenced code preserves literal output."
+        },
+        {
+          "rule_id": "V015",
+          "line": 45,
+          "note": "A demonstration section is not an authorial claim."
+        }
+      ]
+    },
     "quality/corpus/markdown-context.md": {
       "expected": [],
       "negative_cases": [

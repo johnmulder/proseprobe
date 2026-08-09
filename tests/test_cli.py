@@ -481,7 +481,7 @@ class TestRulesCommand:
         assert data["schema_version"] == 1
         assert data["version"] == __version__
         rules = data["rules"]
-        assert len(rules) == 91
+        assert len(rules) == 92
         assert [rule["id"] for rule in rules] == sorted(rule["id"] for rule in rules)
         assert next(rule for rule in rules if rule["id"] == "S001") == {
             "id": "S001",
@@ -782,6 +782,29 @@ class TestProfiles:
         assert "V008" not in academic.stdout
         assert "V008" in journalism.stdout
         assert "G013" not in journalism.stdout
+
+    def test_experimental_rule_requires_explicit_selection(
+        self, tmp_path: Path
+    ) -> None:
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("Atlas is fastest.\n")
+
+        profiled = run_cli("check", str(test_file), "--profile", "technical-docs")
+        selected = run_cli(
+            "check",
+            str(test_file),
+            "--select",
+            "V015",
+            "--severity",
+            "info",
+            "--min-confidence",
+            "low",
+        )
+
+        assert profiled.exit_code == 0
+        assert "V015" not in profiled.stdout
+        assert selected.exit_code == 0
+        assert "V015" in selected.stdout
 
     def test_baseline_create_uses_profile_policy(self, tmp_path: Path) -> None:
         test_file = tmp_path / "doc.md"

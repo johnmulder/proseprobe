@@ -15,7 +15,7 @@ from proseprobe.config import ConfigError, load_config, validate_rule_references
 from proseprobe.core.baseline import Baseline, filter_new_issues, resolve_workspace
 from proseprobe.core.linter import Linter, LintReadError, LintResults
 from proseprobe.core.reporter import JSON_SCHEMA_VERSION
-from proseprobe.profiles import PROFILES
+from proseprobe.profiles import EXPERIMENTAL_RULES, PROFILES
 from proseprobe.rules import (
     get_all_rules,
     get_rule_metadata,
@@ -196,9 +196,10 @@ def _prepare_scan(args: argparse.Namespace) -> tuple[Config, Linter, list[Rule]]
     registry_rules = get_all_rules()
     valid_rule_ids = {rule.id for rule in registry_rules}
     profiled_rule_ids = set().union(*(profile.rules for profile in PROFILES.values()))
-    if profiled_rule_ids != valid_rule_ids:
-        unknown = sorted(profiled_rule_ids - valid_rule_ids)
-        missing = sorted(valid_rule_ids - profiled_rule_ids)
+    categorized_rule_ids = profiled_rule_ids | EXPERIMENTAL_RULES
+    if categorized_rule_ids != valid_rule_ids or profiled_rule_ids & EXPERIMENTAL_RULES:
+        unknown = sorted(categorized_rule_ids - valid_rule_ids)
+        missing = sorted(valid_rule_ids - categorized_rule_ids)
         raise ConfigError(
             Path("<profiles>"),
             f"profile catalog mismatch (unknown={unknown}, untagged={missing})",

@@ -4,7 +4,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from types import MappingProxyType
 
-__all__ = ["PROFILES", "Profile", "profile_names_for_rule"]
+__all__ = ["EXPERIMENTAL_RULES", "PROFILES", "Profile", "profile_names_for_rule"]
 
 
 @dataclass(frozen=True)
@@ -59,6 +59,8 @@ _TECHNICAL_DOCS_RULES = frozenset(
         "V016",
     }
 )
+
+EXPERIMENTAL_RULES = frozenset({"V015"})
 
 PROFILES: Mapping[str, Profile] = MappingProxyType(
     {

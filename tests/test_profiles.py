@@ -1,6 +1,6 @@
 """Tests for built-in rule profiles."""
 
-from proseprobe.profiles import PROFILES, profile_names_for_rule
+from proseprobe.profiles import EXPERIMENTAL_RULES, PROFILES, profile_names_for_rule
 from proseprobe.rules import get_all_rules
 
 
@@ -24,13 +24,14 @@ def test_profile_catalog_has_expected_names_and_policy() -> None:
     }
 
 
-def test_profiles_cover_the_registry_without_unknown_rules() -> None:
+def test_profiles_cover_non_experimental_rules_without_unknown_rules() -> None:
     registered = {rule.id for rule in get_all_rules()}
     profiled = set().union(*(profile.rules for profile in PROFILES.values()))
-
     assert all(profile.rules <= registered for profile in PROFILES.values())
     assert all(profile.rules for profile in PROFILES.values())
-    assert profiled == registered
+    assert {"V015"} == EXPERIMENTAL_RULES
+    assert profiled == registered - EXPERIMENTAL_RULES
+    assert EXPERIMENTAL_RULES.isdisjoint(profiled)
 
 
 def test_profiles_include_only_their_specialized_rules() -> None:
@@ -139,6 +140,7 @@ def test_reverse_profile_tags_are_sorted() -> None:
     assert profile_names_for_rule("V011") == ("technical-docs",)
     assert profile_names_for_rule("V013") == ("technical-docs",)
     assert profile_names_for_rule("V014") == ("technical-docs",)
+    assert profile_names_for_rule("V015") == ()
     assert profile_names_for_rule("V016") == ("technical-docs",)
     assert profile_names_for_rule("G015") == (
         "academic",

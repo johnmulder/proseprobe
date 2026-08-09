@@ -19,7 +19,7 @@ def test_metadata_covers_registry_in_rule_id_order() -> None:
     metadata_ids = tuple(item.id for item in metadata)
 
     assert metadata_ids == tuple(rule.id for rule in get_all_rules())
-    assert len(metadata) == 91
+    assert len(metadata) == 92
     assert len(set(metadata_ids)) == len(metadata_ids)
 
 
@@ -57,6 +57,7 @@ def test_metadata_reports_low_confidence_rule_defaults() -> None:
     assert get_rule_metadata_by_id("V011").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("V013").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("V014").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
+    assert get_rule_metadata_by_id("V015").default_confidence is Confidence.LOW  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("V016").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("G015").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("G016").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
@@ -258,6 +259,19 @@ def test_v014_metadata_matches_the_imprecise_quantity_contract() -> None:
     assert metadata.applies_to == ("markdown", "python")
     assert metadata.content_scope == "prose"
     assert metadata.profiles == ("technical-docs",)
+    assert metadata.config_key is None
+
+
+def test_v015_metadata_matches_the_unbounded_superlative_contract() -> None:
+    metadata = get_rule_metadata_by_id("V015")
+
+    assert metadata is not None
+    assert metadata.name == "Unbounded Superlative"
+    assert metadata.default_severity is Severity.INFO
+    assert metadata.default_confidence is Confidence.LOW
+    assert metadata.applies_to == ("markdown", "python")
+    assert metadata.content_scope == "prose"
+    assert metadata.profiles == ()
     assert metadata.config_key is None
 
 

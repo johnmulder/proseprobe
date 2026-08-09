@@ -52,6 +52,16 @@ Each specialized profile includes the general set plus its listed rules.
 Running without a profile preserves the all-category selection, warning
 minimum severity, and low minimum confidence.
 
+`V015` is experimental and is not included in any built-in profile. Enable it
+explicitly, including its informational severity and low confidence:
+
+```toml
+[tool.proseprobe]
+select = ["V015"]
+minimum_severity = "info"
+min_confidence = "low"
+```
+
 ### File Patterns
 
 ```toml

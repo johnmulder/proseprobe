@@ -36,6 +36,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `V011` | Verbose Verb Phrase | Vocabulary | info | high | markdown, python / prose | — |
 | `V013` | Redundant Modifier | Vocabulary | info | high | markdown, python / prose | — |
 | `V014` | Imprecise Quantity | Vocabulary | info | medium | markdown, python / prose | — |
+| `V015` | Unbounded Superlative | Vocabulary | info | low | markdown, python / prose | — |
 | `V016` | Absolute Reliability Claim | Vocabulary | info | medium | markdown, python / prose | — |
 | `S001` | Rule of Three | Structure | info | medium | markdown, python / prose | `thresholds.rule_of_three` |
 | `S002` | Negative Parallelism | Structure | info | medium | markdown, python / prose | — |
@@ -1589,6 +1590,33 @@ Noisy single-word quantifiers such as `many`, `some`, and `several` are omitted.
 existing vocabulary ownership rather than producing a second finding.
 
 The rule applies to Markdown prose and Python comments and docstrings.
+
+---
+
+### V015: Unbounded Superlative
+
+Detects curated superlative claims such as `is the best`, `was fastest`, and
+`remains the most reliable` when the local prose does not name a comparison
+set or supporting evidence. Findings are low-confidence informational
+diagnostics on the exact superlative phrase.
+
+**Example (unbounded):**
+```markdown
+Atlas is the fastest.
+```
+
+**Example (bounded):**
+```markdown
+Among the three parsers in our benchmark, Atlas is the fastest.
+```
+
+Questions, hypothetical and literal mentions, headings, examples, and
+`best-in-class` are excluded. Comparison markers, benchmark language, or
+quantitative evidence in the same or an adjacent sentence suppress a finding.
+The rule applies to Markdown prose and Python comments and docstrings.
+
+V015 is experimental and is not included in any built-in profile. Select it
+explicitly with informational severity and low confidence to evaluate it.
 
 ---
 
