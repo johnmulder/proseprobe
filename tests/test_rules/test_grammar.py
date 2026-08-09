@@ -1,9 +1,10 @@
-"""Tests for grammar rules (G001-G017, G024, G029)."""
+"""Tests for grammar rules (G001-G017, G019, G024, G029)."""
 
 import pytest
 
 from proseprobe.rules.base import Confidence, Rule, Severity
 from proseprobe.rules.grammar import (
+    AmbiguousThisRule,
     AssertedSimplicityRule,
     CopulaAvoidanceRule,
     DoubleNegativeRule,
@@ -1114,6 +1115,110 @@ class TestEmptyItOpenerRule:
         )
         assert rule.severity is Severity.INFO
         assert rule.default_confidence is Confidence.HIGH
+        assert rule.applies_to == {"markdown", "python"}
+        assert rule.content_scope == "prose"
+
+
+class TestAmbiguousThisRule:
+    """Tests for G019: Ambiguous “This”."""
+
+    @pytest.mark.parametrize("verb", ["causes", "means", "shows"])
+    def test_reports_supported_openers(self, verb: str) -> None:
+        source = f"This {verb} a cache failure."
+        opener = f"This {verb}"
+
+        [issue] = AmbiguousThisRule().check(source, "test.md")
+
+        assert issue.rule_id == "G019"
+        assert issue.message == f"Ambiguous 'This' opener: '{opener}'"
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            1,
+            1,
+            len(opener) + 1,
+        )
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == "Name what 'This' refers to"
+
+    def test_reports_wrapped_opener_at_exact_source_span(self) -> None:
+        source = "This\nmeans the cache is stale."
+
+        [issue] = AmbiguousThisRule().check(source, "test.md")
+
+        assert issue.message == "Ambiguous 'This' opener: 'This means'"
+        assert (issue.line, issue.column) == (1, 1)
+        assert (issue.end_line, issue.end_column) == (2, 6)
+
+    def test_checks_each_sentence_and_preserves_casing(self) -> None:
+        source = "THIS SHOWS a timeout. This causes a retry."
+
+        issues = AmbiguousThisRule().check(source, "test.md")
+
+        assert [issue.message for issue in issues] == [
+            "Ambiguous 'This' opener: 'THIS SHOWS'",
+            "Ambiguous 'This' opener: 'This causes'",
+        ]
+
+    @pytest.mark.parametrize(
+        ("source", "column"),
+        [
+            ("- This means the cache is stale.", 3),
+            ("> This shows the timeout is repeatable.", 3),
+        ],
+    )
+    def test_checks_list_and_blockquote_sentences(
+        self, source: str, column: int
+    ) -> None:
+        [issue] = AmbiguousThisRule().check(source, "test.md")
+
+        assert issue.column == column
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "This cache causes every request to miss.",
+            "This caused the retry storm.",
+            "This indicates that the cache is stale.",
+            "That shows the timeout is repeatable.",
+            "The report says this shows the timeout is repeatable.",
+            "This means-tested benefit remains available.",
+        ],
+    )
+    def test_ignores_non_allowlisted_and_non_opening_forms(self, source: str) -> None:
+        assert AmbiguousThisRule().check(source, "test.md") == []
+
+    def test_ignores_markdown_non_prose_and_example_contexts(self) -> None:
+        source = (
+            "# This shows the timeout is repeatable\n\n"
+            "Use `This means the cache is stale` as sample text.\n\n"
+            "```text\nThis causes every request to fail.\n```\n\n"
+            "## Example\n\nThis shows the timeout is repeatable."
+        )
+
+        assert AmbiguousThisRule().check(source, "test.md") == []
+
+    def test_checks_python_comments_and_docstrings_only(self) -> None:
+        sentence = "This means the cache is stale."
+        source = (
+            f'message = "{sentence}"\n'
+            f"# {sentence}\n"
+            "def explain():\n"
+            f'    """{sentence}"""\n'
+            "    return message"
+        )
+
+        issues = AmbiguousThisRule().check(source, "test.py")
+
+        assert [issue.line for issue in issues] == [2, 4]
+
+    def test_rule_metadata(self) -> None:
+        rule = AmbiguousThisRule()
+
+        assert rule.id == "G019"
+        assert rule.name == 'Ambiguous "This"'
+        assert rule.config_key is None
+        assert rule.default_confidence is Confidence.MEDIUM
         assert rule.applies_to == {"markdown", "python"}
         assert rule.content_scope == "prose"
 
