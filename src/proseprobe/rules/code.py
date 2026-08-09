@@ -1,5 +1,6 @@
-"""Code-specific detection rules (C001-C004, C007)."""
+"""Code-specific detection rules (C001-C004, C007-C008)."""
 
+import ast
 import re
 from typing import ClassVar
 
@@ -12,7 +13,7 @@ from proseprobe.data.code_patterns import (
 )
 from proseprobe.data.vocabulary import AI_VOCABULARY, DOCSTRING_AI_VOCABULARY
 from proseprobe.parsers.python import Docstring, _get_cached_parser
-from proseprobe.rules.base import Issue, Rule, Severity
+from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
 _IDENTIFIER_WORD = re.compile(r"[A-Z]+(?=[A-Z][a-z]|\b)|[A-Z]?[a-z]+|[A-Z]+|\d+")
 _SIGNATURE_CONNECTIVES = frozenset(
@@ -284,6 +285,71 @@ class DocstringRepeatsSignatureRule(Rule):
                     end_column=end_column,
                     severity=self.severity,
                     suggestion="Describe behavior, results, or constraints",
+                )
+            )
+        return issues
+
+
+class CommentedOutCodeRule(Rule):
+    """C008: Detect full-line comments that parse as code statements."""
+
+    id = "C008"
+    name = "Commented-Out Code"
+    description = "Detects full-line comments containing exact Python statements"
+    severity = Severity.INFO
+    default_confidence = Confidence.LOW
+    applies_to: ClassVar[set[str]] = {"python"}
+
+    @staticmethod
+    def _statement_kind(text: str) -> str | None:
+        try:
+            tree = ast.parse(text)
+        except SyntaxError:
+            if not text.rstrip().endswith(":"):
+                return None
+            try:
+                tree = ast.parse(f"{text}\n    pass")
+            except SyntaxError:
+                return None
+
+        if len(tree.body) != 1:
+            return None
+        statement = tree.body[0]
+        if isinstance(statement, (ast.Assign, ast.AugAssign)) or (
+            isinstance(statement, ast.AnnAssign) and statement.value is not None
+        ):
+            return "assignment"
+        if isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call):
+            return "call"
+        if isinstance(statement, (ast.Import, ast.ImportFrom)):
+            return "import"
+        if isinstance(statement, (ast.If, ast.For, ast.While, ast.With)):
+            return "control statement"
+        return None
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check full-line Python comments for exact statement syntax."""
+        lines = content.split("\n")
+        issues: list[Issue] = []
+        for comment in _get_cached_parser(content).get_comments():
+            if comment.is_inline:
+                continue
+            kind = self._statement_kind(comment.content)
+            if kind is None:
+                continue
+            after_hash = lines[comment.line - 1][comment.column :]
+            leading_space = len(after_hash) - len(after_hash.lstrip())
+            column = comment.column + leading_space + 1
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=f"Commented-out code: {kind}",
+                    line=comment.line,
+                    column=column,
+                    end_column=column + len(comment.content),
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion="Delete it or restore it as executable code",
                 )
             )
         return issues

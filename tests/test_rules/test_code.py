@@ -1,11 +1,12 @@
-"""Tests for code rules (C001-C004, C007)."""
+"""Tests for code rules (C001-C004, C007-C008)."""
 
 import pytest
 
-from proseprobe.rules.base import Rule, Severity
+from proseprobe.rules.base import Confidence, Rule, Severity
 from proseprobe.rules.code import (
     AIPlaceholdersRule,
     CollaborativeCommentsRule,
+    CommentedOutCodeRule,
     DocstringRepeatsSignatureRule,
     DocstringVocabularyRule,
     VerboseCommentsRule,
@@ -44,6 +45,11 @@ from proseprobe.rules.code import (
             AIPlaceholdersRule(),
             "raise NotImplementedError('later')",
             "raise NotImplementedError('later')",
+        ),
+        (
+            CommentedOutCodeRule(),
+            "    #   value = load_cache()",
+            "value = load_cache()",
         ),
     ],
 )
@@ -328,4 +334,79 @@ async def fetch(item):
         assert rule.id == "C007"
         assert rule.name == "Docstring Repeats Signature"
         assert rule.severity is Severity.INFO
+        assert rule.applies_to == {"python"}
+
+
+class TestCommentedOutCode:
+    """Tests for C008: Commented-Out Code."""
+
+    @pytest.mark.parametrize(
+        ("source", "kind"),
+        [
+            ("# value = load_cache()", "assignment"),
+            ("# value += 1", "assignment"),
+            ("# value: int = 1", "assignment"),
+            ("# send(payload)", "call"),
+            ("# import os", "import"),
+            ("# from pathlib import Path", "import"),
+            ("# if ready:", "control statement"),
+            ("# for item in items:", "control statement"),
+            ("# while pending:", "control statement"),
+            ("# with open(path) as stream:", "control statement"),
+            ("# if ready: send(payload)", "control statement"),
+        ],
+    )
+    def test_detects_supported_statements(self, source: str, kind: str) -> None:
+        [issue] = CommentedOutCodeRule().check(source, "test.py")
+
+        assert issue.rule_id == "C008"
+        assert issue.message == f"Commented-out code: {kind}"
+        assert issue.confidence is Confidence.LOW
+
+    def test_reports_multiple_comments_in_source_order(self) -> None:
+        source = "# value = load_cache()\n# send(value)\n# import os"
+
+        issues = CommentedOutCodeRule().check(source, "test.py")
+
+        assert [(issue.line, issue.column) for issue in issues] == [
+            (1, 3),
+            (2, 3),
+            (3, 3),
+        ]
+
+    def test_tokenizes_comments_even_when_surrounding_python_is_invalid(self) -> None:
+        source = "def broken(\n# value = load_cache()"
+
+        [issue] = CommentedOutCodeRule().check(source, "test.py")
+
+        assert (issue.line, issue.column) == (2, 3)
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "value = 1  # cached = load_cache()",
+            "# Use send(payload) to notify the client.",
+            "# TODO: Implement",
+            "# Note: important",
+            "# value: int",
+            "# first = 1; second = 2",
+            "# def build():",
+            "# return result",
+            "# [item for item in items]",
+            "# >>> send(payload)",
+            'message = "# value = load_cache()"',
+            "# if ready, send payload",
+            "# try:",
+        ],
+    )
+    def test_ignores_non_target_comments(self, source: str) -> None:
+        assert CommentedOutCodeRule().check(source, "test.py") == []
+
+    def test_rule_metadata(self) -> None:
+        rule = CommentedOutCodeRule()
+
+        assert rule.id == "C008"
+        assert rule.name == "Commented-Out Code"
+        assert rule.severity is Severity.INFO
+        assert rule.default_confidence is Confidence.LOW
         assert rule.applies_to == {"python"}
