@@ -1,4 +1,4 @@
-"""Tests for grammar rules (G001-G017, G019, G024, G029)."""
+"""Tests for grammar rules (G001-G017, G019, G022, G024, G029)."""
 
 import pytest
 
@@ -13,6 +13,7 @@ from proseprobe.rules.grammar import (
     ExistentialOpenerRule,
     FalseSuspenseTransitionRule,
     FalseVulnerabilityRule,
+    FormerLatterReferenceRule,
     FuturistInvitationRule,
     GenericSceneSettingOpenerRule,
     ParticipleChainsRule,
@@ -1217,6 +1218,107 @@ class TestAmbiguousThisRule:
 
         assert rule.id == "G019"
         assert rule.name == 'Ambiguous "This"'
+        assert rule.config_key is None
+        assert rule.default_confidence is Confidence.MEDIUM
+        assert rule.applies_to == {"markdown", "python"}
+        assert rule.content_scope == "prose"
+
+
+class TestFormerLatterReferenceRule:
+    """Tests for G022: Former/Latter Reference."""
+
+    @pytest.mark.parametrize("reference", ["the former", "the latter"])
+    def test_reports_exact_references(self, reference: str) -> None:
+        source = f"Choose the local or remote runner; {reference} needs a token."
+
+        [issue] = FormerLatterReferenceRule().check(source, "test.md")
+
+        assert issue.rule_id == "G022"
+        assert issue.message == f"Former/latter reference: '{reference}'"
+        assert (issue.line, issue.column) == (1, source.index(reference) + 1)
+        assert (issue.end_line, issue.end_column) == (
+            1,
+            source.index(reference) + len(reference) + 1,
+        )
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == "Name the referenced item directly"
+
+    def test_reports_each_reference_and_preserves_casing(self) -> None:
+        source = "THE FORMER uses disk; the latter uses memory."
+
+        issues = FormerLatterReferenceRule().check(source, "test.md")
+
+        assert [issue.message for issue in issues] == [
+            "Former/latter reference: 'THE FORMER'",
+            "Former/latter reference: 'the latter'",
+        ]
+        assert [issue.column for issue in issues] == [1, 23]
+
+    def test_reports_wrapped_reference_at_exact_source_span(self) -> None:
+        source = "Choose either backend; the\nlatter records a version."
+
+        [issue] = FormerLatterReferenceRule().check(source, "test.md")
+
+        assert issue.message == "Former/latter reference: 'the latter'"
+        assert (issue.line, issue.column) == (1, 24)
+        assert (issue.end_line, issue.end_column) == (2, 7)
+
+    @pytest.mark.parametrize(
+        ("source", "column"),
+        [
+            ("- Use either backend; the former writes locally.", 23),
+            ("> Compare both formats; the latter is compact.", 25),
+        ],
+    )
+    def test_checks_list_and_blockquote_sentences(
+        self, source: str, column: int
+    ) -> None:
+        [issue] = FormerLatterReferenceRule().check(source, "test.md")
+
+        assert issue.column == column
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "A former release used a different checksum.",
+            "The formerly active node now rejects writes.",
+            "The lattermost stage emits the archive.",
+            "Name the primary node directly.",
+        ],
+    )
+    def test_ignores_nearby_non_matches(self, source: str) -> None:
+        assert FormerLatterReferenceRule().check(source, "test.md") == []
+
+    def test_ignores_markdown_non_prose_and_example_contexts(self) -> None:
+        source = (
+            "# The former writes locally\n\n"
+            "Use `the latter` as sample text.\n\n"
+            "```text\nThe former accepts writes.\n```\n\n"
+            "## Example\n\nThe latter needs a token."
+        )
+
+        assert FormerLatterReferenceRule().check(source, "test.md") == []
+
+    def test_checks_python_comments_and_docstrings_only(self) -> None:
+        sentence = "Compare both backends; the latter records a version."
+        source = (
+            f'message = "{sentence}"\n'
+            f"# {sentence}\n"
+            "def explain():\n"
+            f'    """{sentence}"""\n'
+            "    return message"
+        )
+
+        issues = FormerLatterReferenceRule().check(source, "test.py")
+
+        assert [issue.line for issue in issues] == [2, 4]
+
+    def test_rule_metadata(self) -> None:
+        rule = FormerLatterReferenceRule()
+
+        assert rule.id == "G022"
+        assert rule.name == "Former/Latter Reference"
         assert rule.config_key is None
         assert rule.default_confidence is Confidence.MEDIUM
         assert rule.applies_to == {"markdown", "python"}
