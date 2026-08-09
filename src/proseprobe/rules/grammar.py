@@ -1,4 +1,4 @@
-"""Grammar pattern detection rules (G001-G015, G017, G024, G029)."""
+"""Grammar pattern detection rules (G001-G017, G024, G029)."""
 
 import re
 from typing import ClassVar
@@ -594,6 +594,57 @@ class GenericSceneSettingOpenerRule(Rule):
                 )
             ]
         return []
+
+
+class ExistentialOpenerRule(Rule):
+    """G016: Detect existential openers with enough following text."""
+
+    id = "G016"
+    name = "Existential Opener"
+    description = "Detects 'There is/are/was/were' followed by five or more words"
+    severity = Severity.INFO
+    default_confidence = Confidence.MEDIUM
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _pattern: ClassVar[re.Pattern[str]] = re.compile(
+        r"^There\s+(?:is|are|was|were)\b", re.IGNORECASE
+    )
+    _word: ClassVar[re.Pattern[str]] = re.compile(r"\b\w+(?:[-'\u2019]\w+)*\b")
+    _MIN_REMAINDER_WORDS = 5
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose sentences for supported existential openers."""
+        issues: list[Issue] = []
+        for sentence in iter_prose_sentences(content, filename):
+            if sentence.context not in {"body", "list_item", "blockquote"}:
+                continue
+            if is_example_line(content, filename, sentence.start_line):
+                continue
+            match = self._pattern.match(sentence.text)
+            if (
+                match is None
+                or len(self._word.findall(sentence.text[match.end() :]))
+                < self._MIN_REMAINDER_WORDS
+            ):
+                continue
+            line, column = sentence.source_position(match.start())
+            end_line, end_column = sentence.source_position(match.end())
+            opener = " ".join(match.group().split())
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=f"Existential opener: '{opener}'",
+                    line=line,
+                    column=column,
+                    end_line=end_line,
+                    end_column=end_column,
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion="Start with the sentence's subject",
+                )
+            )
+        return issues
 
 
 class EmptyItOpenerRule(Rule):
