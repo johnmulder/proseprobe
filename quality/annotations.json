@@ -1889,6 +1889,72 @@
         }
       ]
     },
+    "quality/corpus/docstring-signatures.py": {
+      "expected": [
+        {
+          "rule_id": "C007",
+          "line": 5,
+          "column": 8
+        },
+        {
+          "rule_id": "C007",
+          "line": 10,
+          "column": 8
+        },
+        {
+          "rule_id": "C007",
+          "line": 18,
+          "column": 12
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "C007",
+          "line": 1,
+          "note": "Module docstrings have no function signature to repeat."
+        },
+        {
+          "rule_id": "C007",
+          "line": 23,
+          "note": "The opening adds the discount behavior."
+        },
+        {
+          "rule_id": "C007",
+          "line": 28,
+          "note": "Only the informative opening sentence is compared."
+        },
+        {
+          "rule_id": "C007",
+          "line": 33,
+          "note": "Class docstrings are outside the rule's scope."
+        },
+        {
+          "rule_id": "C007",
+          "line": 37,
+          "note": "Single-word signatures are too ambiguous to report."
+        },
+        {
+          "rule_id": "C007",
+          "line": 41,
+          "note": "Inflected near matches are not guessed."
+        },
+        {
+          "rule_id": "C007",
+          "line": 46,
+          "note": "The opening adds the structured-data constraint."
+        },
+        {
+          "rule_id": "C007",
+          "line": 50,
+          "note": "Ordinary string literals are not docstrings."
+        },
+        {
+          "rule_id": "C007",
+          "line": 52,
+          "note": "Comments are not function docstrings."
+        }
+      ]
+    },
     "quality/corpus/python-docs.py": {
       "expected": [
         {

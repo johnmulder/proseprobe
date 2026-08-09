@@ -102,6 +102,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `C002` | Verbose Comments | Code | info | medium | python / raw | — |
 | `C003` | Collaborative Comments | Code | warning | medium | python / raw | — |
 | `C004` | Formulaic Placeholders | Code | info | medium | python / raw | — |
+| `C007` | Docstring Repeats Signature | Code | info | medium | python / raw | — |
 | `M001` | Wrong Markup | Markup | warning | low | python / raw | — |
 | `M002` | ChatGPT Markers | Markup | error | medium | markdown / prose | — |
 | `M003` | UTM Parameters | Markup | warning | medium | markdown / raw | — |
@@ -616,6 +617,26 @@ Detects formulaic TODO patterns.
 **Example (good):**
 ```python
 # TODO: Add retry logic for network failures (issue #42)
+```
+
+---
+
+### C007: Docstring Repeats Signature
+
+Detects function and async-function docstrings whose opening sentence contains
+only words already present in the function name and parameters. It ignores
+single-word signatures and does not use stemming or fuzzy similarity.
+
+**Example (bad):**
+```python
+def calculate_total(items):
+    """Calculate the total for items."""
+```
+
+**Example (good):**
+```python
+def calculate_total(items):
+    """Return the total after applying discounts."""
 ```
 
 ---
