@@ -32,6 +32,7 @@ _TECHNICAL_DOCS_RULES = frozenset(
     {
         *(f"C{number:03}" for number in range(1, 5)),
         "C007",
+        "C008",
         "G016",
         "G017",
         "G019",

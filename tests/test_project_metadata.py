@@ -133,7 +133,8 @@ def test_changelog_release_counts_match_current_project() -> None:
     """Changelog should not advertise stale rule or test counts."""
     changelog = (ROOT / "CHANGELOG.md").read_text()
 
-    assert "90 detection rules" in changelog
+    assert "91 detection rules" in changelog
+    assert "90 detection rules" not in changelog
     assert "89 detection rules" not in changelog
     assert "88 detection rules" not in changelog
     assert "87 detection rules" not in changelog

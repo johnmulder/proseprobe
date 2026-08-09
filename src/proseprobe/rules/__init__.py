@@ -20,6 +20,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         code.CollaborativeCommentsRule(),
         code.AIPlaceholdersRule(),
         code.DocstringRepeatsSignatureRule(),
+        code.CommentedOutCodeRule(),
         grammar.CopulaAvoidanceRule(),
         grammar.ExcessiveHedgingRule(),
         grammar.ParticipleChainsRule(),

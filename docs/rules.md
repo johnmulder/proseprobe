@@ -103,6 +103,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `C003` | Collaborative Comments | Code | warning | medium | python / raw | — |
 | `C004` | Formulaic Placeholders | Code | info | medium | python / raw | — |
 | `C007` | Docstring Repeats Signature | Code | info | medium | python / raw | — |
+| `C008` | Commented-Out Code | Code | info | low | python / raw | — |
 | `M001` | Wrong Markup | Markup | warning | low | python / raw | — |
 | `M002` | ChatGPT Markers | Markup | error | medium | markdown / prose | — |
 | `M003` | UTM Parameters | Markup | warning | medium | markdown / raw | — |
@@ -637,6 +638,27 @@ def calculate_total(items):
 ```python
 def calculate_total(items):
     """Return the total after applying discounts."""
+```
+
+---
+
+### C008: Commented-Out Code
+
+Detects full-line comments that parse as one assignment, call, import, or
+supported control statement. Inline comments, prose near-misses, labels,
+type-only annotations, and multi-statement lines are excluded. Findings start
+at low confidence.
+
+**Example (bad):**
+```python
+# result = load_cache()
+# if ready:
+```
+
+**Example (good):**
+```python
+# Cache loading is deferred until the first request.
+result = load_cache()
 ```
 
 ---

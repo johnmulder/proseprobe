@@ -19,7 +19,7 @@ def test_metadata_covers_registry_in_rule_id_order() -> None:
     metadata_ids = tuple(item.id for item in metadata)
 
     assert metadata_ids == tuple(rule.id for rule in get_all_rules())
-    assert len(metadata) == 90
+    assert len(metadata) == 91
     assert len(set(metadata_ids)) == len(metadata_ids)
 
 
@@ -41,6 +41,7 @@ def test_metadata_is_immutable_and_complete() -> None:
 
 def test_metadata_reports_low_confidence_rule_defaults() -> None:
     assert get_rule_metadata_by_id("C007").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
+    assert get_rule_metadata_by_id("C008").default_confidence is Confidence.LOW  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("M001").default_confidence is Confidence.LOW  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("S021").default_confidence is Confidence.LOW  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("V001").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
@@ -117,6 +118,19 @@ def test_c007_metadata_matches_the_docstring_signature_contract() -> None:
     assert metadata.name == "Docstring Repeats Signature"
     assert metadata.default_severity is Severity.INFO
     assert metadata.default_confidence is Confidence.MEDIUM
+    assert metadata.applies_to == ("python",)
+    assert metadata.content_scope == "raw"
+    assert metadata.profiles == ("technical-docs",)
+    assert metadata.config_key is None
+
+
+def test_c008_metadata_matches_the_commented_code_contract() -> None:
+    metadata = get_rule_metadata_by_id("C008")
+
+    assert metadata is not None
+    assert metadata.name == "Commented-Out Code"
+    assert metadata.default_severity is Severity.INFO
+    assert metadata.default_confidence is Confidence.LOW
     assert metadata.applies_to == ("python",)
     assert metadata.content_scope == "raw"
     assert metadata.profiles == ("technical-docs",)
