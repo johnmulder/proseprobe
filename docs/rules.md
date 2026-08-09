@@ -97,6 +97,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `G025` | Weak Instruction Verb | Grammar | info | medium | markdown, python / prose | — |
 | `G029` | Double Negative | Grammar | info | high | markdown, python / prose | — |
 | `G031` | Clause/Coordination Overload | Grammar | info | medium | markdown, python / prose | — |
+| `G037` | Hedged Requirement | Grammar | info | medium | markdown, python / prose | — |
 | `C001` | Docstring-Only Vocabulary | Code | warning | medium | python / raw | — |
 | `C002` | Verbose Comments | Code | info | medium | python / raw | — |
 | `C003` | Collaborative Comments | Code | warning | medium | python / raw | — |
@@ -2066,4 +2067,24 @@ The parser reads and validates and normalizes and writes and logs each record.
 **Example (good):**
 ```markdown
 The parser reads and validates each record. It then normalizes, writes, and logs the result.
+```
+
+---
+
+### G037: Hedged Requirement
+
+At medium confidence and informational severity, detects only `must normally`
+and `should generally`. The rule excludes headings, code, Python strings, and
+example sections. It also suppresses a quoted or emphasized term immediately
+followed by `means`, `refers to`, `is defined as`, or `denotes`, so standards
+can define their normative vocabulary without a finding.
+
+**Example (bad):**
+```markdown
+The service must normally reject an unsigned archive.
+```
+
+**Example (good):**
+```markdown
+The service must reject an unsigned archive.
 ```

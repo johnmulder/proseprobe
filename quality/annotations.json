@@ -1127,6 +1127,87 @@
         }
       ]
     },
+    "quality/corpus/hedged-requirements.md": {
+      "expected": [
+        {
+          "rule_id": "G037",
+          "line": 3,
+          "column": 13
+        },
+        {
+          "rule_id": "G037",
+          "line": 5,
+          "column": 11
+        },
+        {
+          "rule_id": "G037",
+          "line": 7,
+          "column": 11
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G037",
+          "line": 11,
+          "note": "An unhedged must states one requirement strength."
+        },
+        {
+          "rule_id": "G037",
+          "line": 13,
+          "note": "Normally without a modal is outside the exact combinations."
+        },
+        {
+          "rule_id": "G037",
+          "line": 15,
+          "note": "An unhedged should states one recommendation strength."
+        },
+        {
+          "rule_id": "G037",
+          "line": 17,
+          "note": "Generally without a modal is outside the exact combinations."
+        },
+        {
+          "rule_id": "G037",
+          "line": 19,
+          "note": "Negation breaks the exact must-normally combination."
+        },
+        {
+          "rule_id": "G037",
+          "line": 21,
+          "note": "Standards text explicitly defines the quoted normative term."
+        },
+        {
+          "rule_id": "G037",
+          "line": 23,
+          "note": "A definition using is defined as is exempt."
+        },
+        {
+          "rule_id": "G037",
+          "line": 25,
+          "note": "An emphasized standards term followed by refers to is exempt."
+        },
+        {
+          "rule_id": "G037",
+          "line": 27,
+          "note": "Grammar requirement checks do not apply to headings."
+        },
+        {
+          "rule_id": "G037",
+          "line": 29,
+          "note": "Inline code preserves literal sample text."
+        },
+        {
+          "rule_id": "G037",
+          "line": 32,
+          "note": "Fenced content is outside document prose."
+        },
+        {
+          "rule_id": "G037",
+          "line": 37,
+          "note": "Prose under an example heading demonstrates the rule."
+        }
+      ]
+    },
     "quality/corpus/bare-urls.md": {
       "expected": [
         {
