@@ -89,6 +89,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `G013` | Gap Ritual | Grammar | info | medium | markdown, python / prose | — |
 | `G014` | Impersonal Corporate Passive | Grammar | info | medium | markdown, python / prose | — |
 | `G015` | Generic Scene-Setting Opener | Grammar | info | medium | markdown / prose | — |
+| `G016` | Existential Opener | Grammar | info | medium | markdown, python / prose | — |
 | `G017` | Empty "It" Opener | Grammar | info | high | markdown, python / prose | — |
 | `G024` | Unclear Actor in Requirement | Grammar | info | medium | markdown, python / prose | — |
 | `G029` | Double Negative | Grammar | info | high | markdown, python / prose | — |
@@ -1902,6 +1903,25 @@ In today's rapidly evolving digital landscape, reliable payments matter more tha
 **Example (good):**
 ```markdown
 The payment API now retries one timed-out request after 200 milliseconds.
+```
+
+---
+
+### G016: Existential Opener
+
+At medium confidence, detects sentence-opening `There is`, `There are`,
+`There was`, and `There were` when at least five words follow the opener. The
+rule checks body, list-item, and blockquote prose but excludes headings, code,
+Python strings, short fragments, unsupported forms, and example sections.
+
+**Example (bad):**
+```markdown
+There are two retry queues for failed requests.
+```
+
+**Example (good):**
+```markdown
+Failed requests enter one of two retry queues.
 ```
 
 ---
