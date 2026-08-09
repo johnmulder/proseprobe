@@ -1,4 +1,4 @@
-"""Tests for style rules (T001-T010, T012, T015)."""
+"""Tests for style rules (T001-T010, T012, T014-T015)."""
 
 import pytest
 
@@ -9,6 +9,7 @@ from proseprobe.rules.style import (
     EmDashOveruseRule,
     EmojiInProseRule,
     NestedParentheticalRule,
+    ParentheticalOverloadRule,
     QuoteInconsistencyRule,
     RepeatedOrMixedPunctuationRule,
     RhetoricalEllipsisRule,
@@ -37,6 +38,13 @@ from proseprobe.rules.style import (
         ),
         (RepeatedOrMixedPunctuationRule(), "Really?!", "?!"),
         (RhetoricalEllipsisRule(), "The request may finish...", "..."),
+        (
+            ParentheticalOverloadRule(),
+            "Use it (after the first timeout) (while the replica recovers) "
+            "(before client traffic resumes).",
+            "(after the first timeout) (while the replica recovers) "
+            "(before client traffic resumes)",
+        ),
     ],
 )
 def test_style_rules_report_exact_source_spans(
@@ -534,6 +542,132 @@ class TestRhetoricalEllipsis:
         assert rule.id == "T012"
         assert rule.name == "Rhetorical Ellipsis"
         assert rule.config_key is None
+
+
+class TestParentheticalOverload:
+    """Tests for T014: Parenthetical Overload."""
+
+    def test_reports_substantial_parentheticals_as_one_exact_span(self) -> None:
+        source = (
+            "The service retries (after the first timeout) requests "
+            "(while the replica recovers) and reports status "
+            "(when the final attempt fails)."
+        )
+        expected = source[source.index("(") : source.rindex(")") + 1]
+
+        [issue] = ParentheticalOverloadRule().check(source, "guide.md")
+
+        assert issue.rule_id == "T014"
+        assert issue.message == (
+            "Parenthetical overload: 3 substantial parentheticals in one sentence"
+        )
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            source.index("(") + 1,
+            1,
+            source.rindex(")") + 2,
+        )
+        assert source[issue.column - 1 : issue.end_column - 1] == expected
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == (
+            "Rewrite the sentence or move parenthetical details into separate sentences"
+        )
+
+    def test_maps_parentheticals_across_wrapped_source_lines(self) -> None:
+        source = (
+            "The service retries (after the first timeout)\n"
+            "through the proxy (while the replica recovers)\n"
+            "and reports status (when the final attempt fails)."
+        )
+
+        [issue] = ParentheticalOverloadRule().check(source, "guide.md")
+
+        assert (issue.line, issue.column) == (1, source.splitlines()[0].index("(") + 1)
+        assert (issue.end_line, issue.end_column) == (
+            3,
+            source.splitlines()[2].rindex(")") + 2,
+        )
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            (
+                "Retry requests (after the first timeout) through the proxy "
+                "(while the replica recovers)."
+            ),
+            "Support Linux (Linux), version two (v2), and secure transport (TLS).",
+            (
+                "Retry (after the first timeout) through the proxy (v2) and report "
+                "status (when the final attempt fails)."
+            ),
+            (
+                "Retry (after the first timeout) through the proxy "
+                "(while the replica recovers). Report status "
+                "(when the final attempt fails)."
+            ),
+            "An unmatched (opening contains several words without a close.",
+        ],
+    )
+    def test_requires_three_substantial_spans_in_one_sentence(
+        self, source: str
+    ) -> None:
+        assert ParentheticalOverloadRule().check(source, "guide.md") == []
+
+    def test_counts_nested_parentheses_as_one_top_level_span(self) -> None:
+        source = (
+            "Use it (with a detailed note (for Linux users)) "
+            "(while the replica recovers) (before client traffic resumes)."
+        )
+
+        [issue] = ParentheticalOverloadRule().check(source, "guide.md")
+
+        assert issue.message == (
+            "Parenthetical overload: 3 substantial parentheticals in one sentence"
+        )
+
+    def test_ignores_markdown_literal_heading_and_example_contexts(self) -> None:
+        source = (
+            "# Guide (with useful details) (for system operators) "
+            "(during active recovery)\n\n"
+            "Use `(one two three) (four five six) (seven eight nine)` as a token.\n\n"
+            "```text\n"
+            "Retry (after the first timeout) (while the replica recovers) "
+            "(before client traffic resumes).\n"
+            "```\n\n"
+            "## Example\n\n"
+            "Retry (after the first timeout) (while the replica recovers) "
+            "(before client traffic resumes)."
+        )
+
+        assert ParentheticalOverloadRule().check(source, "guide.md") == []
+
+    def test_checks_python_comments_and_docstrings_but_not_strings(self) -> None:
+        sentence = (
+            "Retry (after the first timeout) (while the replica recovers) "
+            "(before client traffic resumes)."
+        )
+        source = (
+            f'value = "{sentence}"\n'
+            f"# {sentence}\n\n"
+            "def retry() -> None:\n"
+            f'    """{sentence}"""\n'
+            "    return None\n"
+        )
+
+        issues = ParentheticalOverloadRule().check(source, "guide.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_rule_metadata(self) -> None:
+        rule = ParentheticalOverloadRule()
+
+        assert rule.id == "T014"
+        assert rule.name == "Parenthetical Overload"
+        assert rule.config_key is None
+        assert rule.default_confidence is Confidence.MEDIUM
+        assert rule.applies_to == {"markdown", "python"}
+        assert rule.content_scope == "prose"
 
 
 class TestNestedParenthetical:

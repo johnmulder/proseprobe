@@ -1,4 +1,4 @@
-"""Style detection rules (T001-T010, T012, T015)."""
+"""Style detection rules (T001-T010, T012, T014-T015)."""
 
 import re
 from itertools import groupby
@@ -466,6 +466,70 @@ class RhetoricalEllipsisRule(Rule):
                         suggestion=("Use direct punctuation or complete the thought"),
                     )
                 )
+        return issues
+
+
+class ParentheticalOverloadRule(Rule):
+    """T014: Detect multiple substantial parentheticals in one sentence."""
+
+    id = "T014"
+    name = "Parenthetical Overload"
+    description = "Detects sentences overloaded with substantial parentheticals"
+    severity = Severity.INFO
+    default_confidence = Confidence.MEDIUM
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _MIN_PARENTHESES = 3
+    _MIN_WORDS = 3
+    _WORD: ClassVar[re.Pattern[str]] = re.compile(r"\b\w+(?:[-'\u2019]\w+)*\b")
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Report sentences with three substantial top-level parentheticals."""
+        issues: list[Issue] = []
+        for sentence in iter_prose_sentences(content, filename):
+            if sentence.context not in {"body", "list_item", "blockquote"}:
+                continue
+            if is_example_line(content, filename, sentence.start_line):
+                continue
+
+            openings: list[int] = []
+            spans: list[tuple[int, int]] = []
+            for offset, char in enumerate(sentence.text):
+                if char == "(":
+                    openings.append(offset)
+                elif char == ")" and openings:
+                    start = openings.pop()
+                    if (
+                        not openings
+                        and len(self._WORD.findall(sentence.text[start + 1 : offset]))
+                        >= self._MIN_WORDS
+                    ):
+                        spans.append((start, offset + 1))
+
+            if len(spans) < self._MIN_PARENTHESES:
+                continue
+            start_line, start_column = sentence.source_position(spans[0][0])
+            end_line, end_column = sentence.source_position(spans[-1][1])
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=(
+                        "Parenthetical overload: "
+                        f"{len(spans)} substantial parentheticals in one sentence"
+                    ),
+                    line=start_line,
+                    column=start_column,
+                    end_line=end_line,
+                    end_column=end_column,
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion=(
+                        "Rewrite the sentence or move parenthetical details "
+                        "into separate sentences"
+                    ),
+                )
+            )
         return issues
 
 
