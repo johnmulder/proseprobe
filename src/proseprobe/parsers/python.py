@@ -24,6 +24,8 @@ class Docstring:
     line: int
     end_line: int
     node_type: str  # "module", "class", "function"
+    owner_name: str | None
+    parameters: tuple[str, ...]
 
 
 @dataclass
@@ -96,6 +98,7 @@ class PythonParser:
                 node_type = "module"
             else:
                 node_type = "class" if isinstance(node, ast.ClassDef) else "function"
+            owner_name, parameters = self._docstring_owner(node)
 
             line = value.lineno
             end_line = value.end_lineno
@@ -108,11 +111,34 @@ class PythonParser:
                     line=line,
                     end_line=end_line,
                     node_type=node_type,
+                    owner_name=owner_name,
+                    parameters=parameters,
                 )
             )
 
         self._docstrings = sorted(docstrings, key=lambda doc: doc.line)
         return self._docstrings
+
+    @staticmethod
+    def _docstring_owner(
+        node: ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef,
+    ) -> tuple[str | None, tuple[str, ...]]:
+        if isinstance(node, ast.Module):
+            return None, ()
+        if isinstance(node, ast.ClassDef):
+            return node.name, ()
+
+        arguments = node.args
+        parameters = (
+            *(argument.arg for argument in arguments.posonlyargs),
+            *(argument.arg for argument in arguments.args),
+            *((arguments.vararg.arg,) if arguments.vararg else ()),
+            *(argument.arg for argument in arguments.kwonlyargs),
+            *((arguments.kwarg.arg,) if arguments.kwarg else ()),
+        )
+        return node.name, tuple(
+            name for name in parameters if name not in {"self", "cls"}
+        )
 
     def get_comments(self) -> list[Comment]:
         """Extract all comments from the source.

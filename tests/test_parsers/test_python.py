@@ -76,6 +76,31 @@ class MyClass:
         assert any("Module" in d.content for d in docstrings)
         assert any("Function" in d.content for d in docstrings)
         assert any("Class" in d.content for d in docstrings)
+        assert [(doc.owner_name, doc.parameters) for doc in docstrings] == [
+            (None, ()),
+            ("func", ()),
+            ("MyClass", ()),
+        ]
+
+    def test_docstrings_retain_function_parameters(self) -> None:
+        content = '''
+class Client:
+    def send(self, request, /, timeout=30, *tags, verify=True, **options):
+        """Send a request."""
+
+    @classmethod
+    async def create(cls, name, *, active=True):
+        """Create a client."""
+'''
+        parser = PythonParser(content)
+        assert parser.parse()
+
+        docstrings = parser.get_docstrings()
+
+        assert [(doc.owner_name, doc.parameters) for doc in docstrings] == [
+            ("send", ("request", "timeout", "tags", "verify", "options")),
+            ("create", ("name", "active")),
+        ]
 
     def test_extract_comments(self) -> None:
         content = """
@@ -307,12 +332,16 @@ class TestDocstringDataclass:
             line=10,
             end_line=12,
             node_type="function",
+            owner_name="build",
+            parameters=("source",),
         )
 
         assert doc.content == "Test docstring"
         assert doc.line == 10
         assert doc.end_line == 12
         assert doc.node_type == "function"
+        assert doc.owner_name == "build"
+        assert doc.parameters == ("source",)
 
 
 class TestCommentDataclass:
