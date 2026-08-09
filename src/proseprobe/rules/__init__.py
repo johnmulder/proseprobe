@@ -41,6 +41,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         grammar.UnclearActorRequirementRule(),
         grammar.WeakInstructionVerbRule(),
         grammar.DoubleNegativeRule(),
+        grammar.ClauseCoordinationOverloadRule(),
         markup.WrongMarkupRule(),
         markup.ChatGPTMarkersRule(),
         markup.UTMParametersRule(),

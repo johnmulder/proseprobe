@@ -96,6 +96,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `G024` | Unclear Actor in Requirement | Grammar | info | medium | markdown, python / prose | — |
 | `G025` | Weak Instruction Verb | Grammar | info | medium | markdown, python / prose | — |
 | `G029` | Double Negative | Grammar | info | high | markdown, python / prose | — |
+| `G031` | Clause/Coordination Overload | Grammar | info | medium | markdown, python / prose | — |
 | `C001` | Docstring-Only Vocabulary | Code | warning | medium | python / raw | — |
 | `C002` | Verbose Comments | Code | info | medium | python / raw | — |
 | `C003` | Collaborative Comments | Code | warning | medium | python / raw | — |
@@ -2044,4 +2045,25 @@ A retry is not unlikely after a network timeout.
 **Example (good):**
 ```markdown
 A retry is likely after a network timeout.
+```
+
+---
+
+### G031: Clause/Coordination Overload
+
+At medium confidence and informational severity, reports a sentence with four
+or more conservative complexity boundaries. The rule counts semicolons,
+coordinators (`and`, `but`, `nor`, `or`, `so`, `yet`), and the explicit
+subordinators `although`, `because`, `even if`, `even though`, `if`, `unless`,
+`whereas`, and `while`. It excludes `because of`, avoids double-counting a
+coordinator after a semicolon, and does not attempt syntax parsing.
+
+**Example (bad):**
+```markdown
+The parser reads and validates and normalizes and writes and logs each record.
+```
+
+**Example (good):**
+```markdown
+The parser reads and validates each record. It then normalizes, writes, and logs the result.
 ```

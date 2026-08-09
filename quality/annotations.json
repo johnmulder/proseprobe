@@ -1056,6 +1056,77 @@
         }
       ]
     },
+    "quality/corpus/clause-coordination-overload.md": {
+      "expected": [
+        {
+          "rule_id": "G031",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "rule_id": "G031",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "rule_id": "G031",
+          "line": 7,
+          "column": 3
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G031",
+          "line": 11,
+          "note": "Three explicit boundaries remain below the conservative trigger."
+        },
+        {
+          "rule_id": "G031",
+          "line": 13,
+          "note": "Because of is a prepositional phrase and is not counted as a clause boundary."
+        },
+        {
+          "rule_id": "G031",
+          "line": 15,
+          "note": "A comma-separated list has only one explicit coordinator."
+        },
+        {
+          "rule_id": "G031",
+          "line": 17,
+          "note": "Two paired terms remain below the sentence-complexity trigger."
+        },
+        {
+          "rule_id": "G031",
+          "line": 19,
+          "note": "Three repeated coordinators remain below the fixed trigger."
+        },
+        {
+          "rule_id": "G031",
+          "line": 21,
+          "note": "A coordinator after a semicolon represents one boundary, not two."
+        },
+        {
+          "rule_id": "G031",
+          "line": 23,
+          "note": "Grammar complexity checks do not apply to headings."
+        },
+        {
+          "rule_id": "G031",
+          "line": 25,
+          "note": "Inline code preserves literal sample text."
+        },
+        {
+          "rule_id": "G031",
+          "line": 28,
+          "note": "Fenced content is outside document prose."
+        },
+        {
+          "rule_id": "G031",
+          "line": 33,
+          "note": "Prose under an example heading demonstrates the rule."
+        }
+      ]
+    },
     "quality/corpus/bare-urls.md": {
       "expected": [
         {

@@ -51,10 +51,10 @@ speed remains a tracked metric until the benchmark corpus reflects real projects
 | `V` | Vocabulary | 14 | Overused and clichéd words and phrases |
 | `S` | Structure | 24 | Organizational patterns |
 | `T` | Style | 13 | Typographic issues |
-| `G` | Grammar | 22 | Grammatical patterns |
+| `G` | Grammar | 23 | Grammatical patterns |
 | `C` | Code | 4 | Python docstring/comment issues |
 | `M` | Markup | 10 | Markdown artifacts |
-| **Total** | | **87** | |
+| **Total** | | **88** | |
 
 <!-- rule-docs:categories:end -->
 
@@ -85,7 +85,7 @@ dependency.
 | Profile | Selected rules | Minimum severity | Minimum confidence |
 |---------|----------------|------------------|--------------------|
 | `general` | General prose rules | info | medium |
-| `technical-docs` | General plus C001-C004, G016-G017, G019, G022, G024-G025, G029, M001-M010, S022, S025, S028, T010, T012, T014-T016, V009-V011, V013-V014, and V016 | info | low |
+| `technical-docs` | General plus C001-C004, G016-G017, G019, G022, G024-G025, G029, G031, M001-M010, S022, S025, S028, T010, T012, T014-T016, V009-V011, V013-V014, and V016 | info | low |
 | `academic` | General plus G011-G013, S018, and T008 | info | medium |
 | `journalism` | General plus G010, S017, and V008 | info | medium |
 | `business` | General plus G014 and S019-S021 | info | low |
