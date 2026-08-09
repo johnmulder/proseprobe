@@ -69,6 +69,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `T006` | Elegant Variation | Style | info | medium | markdown, python / prose | — |
 | `T007` | Short Punchy Fragments | Style | info | medium | markdown, python / prose | `thresholds.short_punchy_fragments` |
 | `T008` | Sentence Length | Style | info | medium | markdown, python / prose | `thresholds.sentence_length_max` |
+| `T010` | Repeated or Mixed Punctuation | Style | info | high | markdown, python / prose | — |
 | `T015` | Nested Parenthetical | Style | info | high | markdown, python / prose | — |
 | `G001` | Copula Avoidance | Grammar | info | medium | markdown, python / prose | — |
 | `G002` | Excessive Hedging | Grammar | info | medium | markdown, python / prose | — |
@@ -1260,6 +1261,25 @@ In considering the implications of the findings which themselves arise from a co
 **Example (good):**
 ```markdown
 The findings arise from a complex interaction of factors. We must also consider the broader context and the methodological limitations that constrain our interpretations.
+```
+
+---
+
+### T010: Repeated or Mixed Punctuation
+
+At high confidence, detects repeated question or exclamation marks, mixed
+question/exclamation runs, and ASCII or Unicode ellipses followed by terminal
+punctuation. Code, link destinations, Python strings, and example prose are
+excluded.
+
+**Example (bad):**
+```markdown
+Did the final health check pass...?!
+```
+
+**Example (good):**
+```markdown
+Did the final health check pass?
 ```
 
 ---
