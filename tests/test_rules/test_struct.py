@@ -736,6 +736,78 @@ class TestContentDuplication:
         issues = rule.check(text, "test.md")
         assert len(issues) == 0
 
+    @pytest.mark.parametrize(
+        "marker", ["In conclusion", "To sum up", "As we've seen", "In closing"]
+    )
+    def test_detects_exact_signposted_repeated_conclusion(self, marker: str) -> None:
+        from proseprobe.rules.struct import ContentDuplicationRule
+
+        repeated = (
+            "The retry queue preserves requests during temporary failures in "
+            "production."
+        )
+        text = f"{repeated}\n\nA separate paragraph records delivery latency.\n\n{marker}, {repeated}"
+
+        [issue] = ContentDuplicationRule().check(text, "test.md")
+
+        assert issue.rule_id == "S016"
+        assert issue.message == "Repeated conclusion (first seen at line 1)"
+        assert (issue.line, issue.column, issue.end_line) == (5, 1, 5)
+        assert issue.end_column == len(f"{marker}, {repeated}") + 1
+        assert issue.severity is Severity.WARNING
+
+    @pytest.mark.parametrize("separator", [": ", "; ", " ", "—"])
+    def test_accepts_conclusion_marker_punctuation(self, separator: str) -> None:
+        from proseprobe.rules.struct import ContentDuplicationRule
+
+        repeated = (
+            "The parser rejects invalid tokens before state reaches the compiler."
+        )
+        text = f"{repeated}\n\nIn closing{separator}{repeated}"
+
+        [issue] = ContentDuplicationRule().check(text, "test.md")
+
+        assert issue.message.startswith("Repeated conclusion")
+
+    def test_preserves_verbatim_duplicate_diagnostic(self) -> None:
+        from proseprobe.rules.struct import ContentDuplicationRule
+
+        repeated = (
+            "The parser rejects invalid tokens before state reaches the compiler."
+        )
+        text = f"{repeated}\n\n{repeated}"
+
+        [issue] = ContentDuplicationRule().check(text, "test.md")
+
+        assert issue.message == "Duplicate paragraph (first seen at line 1)"
+
+    @pytest.mark.parametrize(
+        "conclusion",
+        [
+            (
+                "In conclusion, the retry queue protects production requests from "
+                "temporary failures."
+            ),
+            "In conclusion, caching reduces request latency.",
+            (
+                "The report says in conclusion, the retry queue preserves requests "
+                "during temporary failures in production."
+            ),
+        ],
+    )
+    def test_ignores_paraphrases_short_text_and_nonleading_markers(
+        self, conclusion: str
+    ) -> None:
+        from proseprobe.rules.struct import ContentDuplicationRule
+
+        earlier = (
+            "The retry queue preserves requests during temporary failures in "
+            "production."
+        )
+        text = f"{earlier}\n\nA separate paragraph records delivery latency.\n\n{conclusion}"
+
+        assert ContentDuplicationRule().check(text, "test.md") == []
+
     def test_rule_metadata(self) -> None:
         from proseprobe.rules.struct import ContentDuplicationRule
 

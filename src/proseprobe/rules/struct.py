@@ -734,7 +734,7 @@ class FractalSummaryRule(Rule):
 
 
 class ContentDuplicationRule(Rule):
-    """S016: Detect repeated paragraphs within the same document."""
+    """S016: Detect repeated paragraphs and exact signposted restatements."""
 
     id = "S016"
     name = "Content Duplication"
@@ -744,6 +744,11 @@ class ContentDuplicationRule(Rule):
     content_scope = "raw"
 
     _MIN_WORDS = 8  # Don't flag very short paragraphs
+    _CONCLUSION_PREFIX = re.compile(
+        rf"^(?:{'|'.join(re.escape(phrase) for phrase in SIGNPOSTED_CONCLUSION_PHRASES)})"
+        r"\b\s*[,;:—-]?\s*",
+        re.IGNORECASE,
+    )
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect repeated paragraphs within the same document."""
@@ -779,15 +784,24 @@ class ContentDuplicationRule(Rule):
         # Compare paragraphs by normalized word content
         seen: dict[str, int] = {}
         for line_num, column, end_line, end_column, text in paragraphs:
-            words = text.lower().split()
+            words = text.casefold().split()
             if len(words) < self._MIN_WORDS:
                 continue
             key = " ".join(words)
-            if key in seen:
+            first_line = seen.get(key)
+            repeated_conclusion = False
+            if first_line is None and (prefix := self._CONCLUSION_PREFIX.match(key)):
+                first_line = seen.get(key[prefix.end() :])
+                repeated_conclusion = first_line is not None
+            if first_line is not None:
                 issues.append(
                     Issue(
                         rule_id=self.id,
-                        message=f"Duplicate paragraph (first seen at line {seen[key]})",
+                        message=(
+                            f"Repeated conclusion (first seen at line {first_line})"
+                            if repeated_conclusion
+                            else f"Duplicate paragraph (first seen at line {first_line})"
+                        ),
                         line=line_num,
                         column=column,
                         end_line=end_line,
