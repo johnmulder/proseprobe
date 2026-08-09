@@ -1,4 +1,4 @@
-"""Style detection rules (T001-T010, T012, T014-T015)."""
+"""Style detection rules (T001-T010, T012, T014-T016)."""
 
 import re
 from itertools import groupby
@@ -581,3 +581,47 @@ class NestedParentheticalRule(Rule):
                     )
                 )
         return sorted(issues, key=lambda issue: (issue.line, issue.column))
+
+
+class SlashAlternativeRule(Rule):
+    """T016: Detect the ambiguous slash alternative 'and/or'."""
+
+    id = "T016"
+    name = "Slash Alternative"
+    description = "Detects ambiguous 'and/or' alternatives"
+    severity = Severity.INFO
+    default_confidence = Confidence.MEDIUM
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _AND_OR: ClassVar[re.Pattern[str]] = re.compile(
+        r"(?<![/\w])and/or(?![/\w])", re.IGNORECASE
+    )
+    _URL: ClassVar[re.Pattern[str]] = re.compile(r"https?://\S+", re.IGNORECASE)
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Report standalone and/or phrases in source-mapped prose."""
+        issues: list[Issue] = []
+        for sentence in iter_prose_sentences(content, filename):
+            if is_example_line(content, filename, sentence.start_line):
+                continue
+            urls = tuple(self._URL.finditer(sentence.text))
+            for match in self._AND_OR.finditer(sentence.text):
+                if any(url.start() <= match.start() < url.end() for url in urls):
+                    continue
+                line, column = sentence.source_position(match.start())
+                end_line, end_column = sentence.source_position(match.end())
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Slash alternative: '{match.group()}'",
+                        line=line,
+                        column=column,
+                        end_line=end_line,
+                        end_column=end_column,
+                        severity=self.severity,
+                        confidence=self.default_confidence,
+                        suggestion="Choose 'and', 'or', or 'both' explicitly",
+                    )
+                )
+        return issues

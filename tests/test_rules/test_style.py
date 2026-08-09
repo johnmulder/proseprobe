@@ -1,4 +1,4 @@
-"""Tests for style rules (T001-T010, T012, T014-T015)."""
+"""Tests for style rules (T001-T010, T012, T014-T016)."""
 
 import pytest
 
@@ -13,6 +13,7 @@ from proseprobe.rules.style import (
     QuoteInconsistencyRule,
     RepeatedOrMixedPunctuationRule,
     RhetoricalEllipsisRule,
+    SlashAlternativeRule,
     TitleCaseHeadingsRule,
 )
 
@@ -45,6 +46,7 @@ from proseprobe.rules.style import (
             "(after the first timeout) (while the replica recovers) "
             "(before client traffic resumes)",
         ),
+        (SlashAlternativeRule(), "Select the primary and/or standby.", "and/or"),
     ],
 )
 def test_style_rules_report_exact_source_spans(
@@ -758,5 +760,86 @@ class TestNestedParenthetical:
         assert rule.description == "Detects parentheses nested within prose parentheses"
         assert rule.severity is Severity.INFO
         assert rule.default_confidence is Confidence.HIGH
+        assert rule.applies_to == {"markdown", "python"}
+        assert rule.content_scope == "prose"
+
+
+class TestSlashAlternative:
+    """Tests for T016: Slash Alternative."""
+
+    def test_reports_exact_source_span_and_fields(self) -> None:
+        source = "Select the primary and/or standby node."
+        start = source.index("and/or")
+
+        [issue] = SlashAlternativeRule().check(source, "guide.md")
+
+        assert issue.rule_id == "T016"
+        assert issue.message == "Slash alternative: 'and/or'"
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            start + 1,
+            1,
+            start + len("and/or") + 1,
+        )
+        assert source[issue.column - 1 : issue.end_column - 1] == "and/or"
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == "Choose 'and', 'or', or 'both' explicitly"
+
+    def test_reports_multiple_casings_in_source_order(self) -> None:
+        source = "Select the owner and/or operator and the primary AND/OR standby."
+
+        issues = SlashAlternativeRule().check(source, "guide.markdown")
+
+        assert [
+            source[issue.column - 1 : issue.end_column - 1] for issue in issues
+        ] == ["and/or", "AND/OR"]
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "Select the owner and operator.",
+            "Select the owner or operator.",
+            "Select the owner and / or operator.",
+            "Select the owner and-or operator.",
+            "Select the owner or/and operator.",
+            "The command/oracle path is unrelated.",
+            "Read docs/and/or/guide.md for details.",
+            "Visit https://example.com/search?mode=and/or for details.",
+        ],
+    )
+    def test_ignores_near_misses_urls_and_paths(self, source: str) -> None:
+        assert SlashAlternativeRule().check(source, "guide.md") == []
+
+    def test_ignores_markdown_literal_and_example_contexts(self) -> None:
+        source = (
+            "Use `and/or` only when quoting legacy text.\n\n"
+            "[Legacy](https://example.com/search?mode=and/or) remains available.\n\n"
+            "```text\nand/or\n```\n\n"
+            "## Example\n\nSelect the primary and/or standby node."
+        )
+
+        assert SlashAlternativeRule().check(source, "guide.md") == []
+
+    def test_checks_python_comments_and_docstrings_but_not_strings(self) -> None:
+        source = (
+            'value = "Select the primary and/or standby node."\n'
+            "# Select the primary and/or standby node.\n\n"
+            "def select() -> None:\n"
+            '    """Select the owner and/or operator."""\n'
+            "    return None\n"
+        )
+
+        issues = SlashAlternativeRule().check(source, "guide.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_rule_metadata(self) -> None:
+        rule = SlashAlternativeRule()
+
+        assert rule.id == "T016"
+        assert rule.name == "Slash Alternative"
+        assert rule.config_key is None
+        assert rule.default_confidence is Confidence.MEDIUM
         assert rule.applies_to == {"markdown", "python"}
         assert rule.content_scope == "prose"
