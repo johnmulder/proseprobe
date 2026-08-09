@@ -1,4 +1,4 @@
-"""Tests for grammar rules (G001-G017, G019, G022, G024-G025, G029)."""
+"""Grammar-rule tests (G001-G017, G019, G022, G024-G025, G029, G031)."""
 
 import pytest
 
@@ -6,6 +6,7 @@ from proseprobe.rules.base import Confidence, Rule, Severity
 from proseprobe.rules.grammar import (
     AmbiguousThisRule,
     AssertedSimplicityRule,
+    ClauseCoordinationOverloadRule,
     CopulaAvoidanceRule,
     DoubleNegativeRule,
     EmptyItOpenerRule,
@@ -1611,5 +1612,157 @@ class TestDoubleNegativeRule:
         assert rule.description == "Detects fixed double-negative phrases"
         assert rule.severity is Severity.INFO
         assert rule.default_confidence is Confidence.HIGH
+        assert rule.applies_to == {"markdown", "python"}
+        assert rule.content_scope == "prose"
+
+
+class TestClauseCoordinationOverloadRule:
+    """Tests for G031: Clause/Coordination Overload."""
+
+    def test_reports_four_mixed_boundaries_with_sentence_span(self) -> None:
+        source = (
+            "Although the cache is warm, requests stall because the lock is held, "
+            "while workers wait, and retries accumulate."
+        )
+
+        [issue] = ClauseCoordinationOverloadRule().check(source, "test.md")
+
+        assert issue.rule_id == "G031"
+        assert issue.message == (
+            "Clause/coordination overload: 4 boundaries in one sentence"
+        )
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            1,
+            1,
+            len(source) + 1,
+        )
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == (
+            "Split the sentence or simplify its clause structure"
+        )
+
+    def test_counts_semicolon_boundaries(self) -> None:
+        source = (
+            "The parser reads input; the validator checks fields; the writer stores "
+            "output; the logger records status; the worker exits."
+        )
+
+        [issue] = ClauseCoordinationOverloadRule().check(source, "test.md")
+
+        assert "4 boundaries" in issue.message
+
+    def test_counts_repeated_coordinators_for_merged_g032_scope(self) -> None:
+        source = (
+            "The parser reads and validates and normalizes and writes and logs each "
+            "record."
+        )
+
+        [issue] = ClauseCoordinationOverloadRule().check(source, "test.md")
+
+        assert "4 boundaries" in issue.message
+
+    def test_does_not_double_count_semicolon_coordinators(self) -> None:
+        source = (
+            "The parser reads; and the validator checks; and the writer stores; and "
+            "the logger records; and the worker exits."
+        )
+
+        [issue] = ClauseCoordinationOverloadRule().check(source, "test.md")
+
+        assert "4 boundaries" in issue.message
+
+    def test_reports_wrapped_sentence_at_exact_source_span(self) -> None:
+        source = (
+            "Although the cache is warm,\n"
+            "requests stall because the lock is held, while workers wait, and retries "
+            "accumulate."
+        )
+
+        [issue] = ClauseCoordinationOverloadRule().check(source, "test.md")
+
+        assert (issue.line, issue.column) == (1, 1)
+        assert (issue.end_line, issue.end_column) == (
+            2,
+            len(source.splitlines()[1]) + 1,
+        )
+
+    def test_checks_each_sentence(self) -> None:
+        source = (
+            "Although the cache is warm, requests stall because workers wait. "
+            "The parser reads and validates and normalizes and writes and logs records."
+        )
+
+        [issue] = ClauseCoordinationOverloadRule().check(source, "test.md")
+
+        assert issue.column == source.index("The parser") + 1
+
+    @pytest.mark.parametrize("prefix", ["- ", "> "])
+    def test_checks_list_and_blockquote_sentences(self, prefix: str) -> None:
+        source = (
+            f"{prefix}The parser reads and validates and normalizes and writes and "
+            "logs records."
+        )
+
+        [issue] = ClauseCoordinationOverloadRule().check(source, "test.md")
+
+        assert issue.column == 3
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            (
+                "Although the cache is warm, requests stall because the lock is held, "
+                "while workers wait."
+            ),
+            (
+                "Although the cache is warm, requests stall because of a lock, while "
+                "workers wait, and retries stop."
+            ),
+            "The parser accepts JSON, YAML, TOML, XML, and plain text.",
+            "The parser compares names and values, then checks keys and records.",
+            "The command supports candy, orbital, and yeti labels.",
+        ],
+    )
+    def test_ignores_sentences_below_the_conservative_threshold(
+        self, source: str
+    ) -> None:
+        assert ClauseCoordinationOverloadRule().check(source, "test.md") == []
+
+    def test_ignores_markdown_non_prose_and_example_contexts(self) -> None:
+        overloaded = (
+            "The parser reads and validates and normalizes and writes and logs."
+        )
+        source = (
+            f"# {overloaded}\n\n"
+            "Use `reads and validates and normalizes and writes and logs` as text.\n\n"
+            f"```text\n{overloaded}\n```\n\n"
+            f"## Example\n\n{overloaded}"
+        )
+
+        assert ClauseCoordinationOverloadRule().check(source, "test.md") == []
+
+    def test_checks_python_comments_and_docstrings_only(self) -> None:
+        sentence = "The parser reads and validates and normalizes and writes and logs."
+        source = (
+            f'message = "{sentence}"\n'
+            f"# {sentence}\n"
+            "def explain():\n"
+            f'    """{sentence}"""\n'
+            "    return message"
+        )
+
+        issues = ClauseCoordinationOverloadRule().check(source, "test.py")
+
+        assert [issue.line for issue in issues] == [2, 4]
+
+    def test_rule_metadata(self) -> None:
+        rule = ClauseCoordinationOverloadRule()
+
+        assert rule.id == "G031"
+        assert rule.name == "Clause/Coordination Overload"
+        assert rule.config_key is None
+        assert rule.default_confidence is Confidence.MEDIUM
         assert rule.applies_to == {"markdown", "python"}
         assert rule.content_scope == "prose"
