@@ -11,6 +11,7 @@ from proseprobe.rules.style import (
     NestedParentheticalRule,
     QuoteInconsistencyRule,
     RepeatedOrMixedPunctuationRule,
+    RhetoricalEllipsisRule,
     TitleCaseHeadingsRule,
 )
 
@@ -35,6 +36,7 @@ from proseprobe.rules.style import (
             "stated",
         ),
         (RepeatedOrMixedPunctuationRule(), "Really?!", "?!"),
+        (RhetoricalEllipsisRule(), "The request may finish...", "..."),
     ],
 )
 def test_style_rules_report_exact_source_spans(
@@ -449,6 +451,88 @@ class TestRepeatedOrMixedPunctuation:
 
         assert rule.id == "T010"
         assert rule.name == "Repeated or Mixed Punctuation"
+        assert rule.config_key is None
+
+
+class TestRhetoricalEllipsis:
+    """Tests for T012: Rhetorical Ellipsis."""
+
+    def test_reports_terminal_ellipsis_fields(self) -> None:
+        source = "The request may finish..."
+        start = source.index("...")
+
+        [issue] = RhetoricalEllipsisRule().check(source, "guide.md")
+
+        assert issue.rule_id == "T012"
+        assert issue.message == "Rhetorical ellipsis: '...'"
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            start + 1,
+            1,
+            start + 4,
+        )
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == "Use direct punctuation or complete the thought"
+
+    def test_reports_multiple_ellipses_in_source_order(self) -> None:
+        source = "Perhaps... the retry works. Later... maybe."
+
+        issues = RhetoricalEllipsisRule().check(source, "guide.markdown")
+
+        assert [
+            source[issue.column - 1 : issue.end_column - 1] for issue in issues
+        ] == [
+            "...",
+            "...",
+        ]
+        assert [issue.column for issue in issues] == [8, 34]
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "Version 1.2.3 remains supported.",
+            "The numeric range 1...3 is literal.",
+            "Use e.g. the stable endpoint.",
+            "Wait....",
+            "Wait...?!",
+            "Pause…",
+            '"..."',
+            "The ellipsis ... marks omitted text.",
+            "Output: Loading...",
+        ],
+    )
+    def test_ignores_non_rhetorical_contexts(self, source: str) -> None:
+        assert RhetoricalEllipsisRule().check(source, "guide.md") == []
+
+    def test_ignores_markdown_literal_and_example_contexts(self) -> None:
+        source = (
+            "Use `wait...` as the token.\n\n"
+            "[Log](https://example.com/loading...)\n\n"
+            "```text\nLoading...\n```\n\n"
+            "## Example\n\nThe request may finish..."
+        )
+
+        assert RhetoricalEllipsisRule().check(source, "guide.md") == []
+
+    def test_checks_python_comments_and_docstrings_but_not_strings(self) -> None:
+        source = (
+            'value = "Wait..."\n'
+            "# The retry stalled...\n\n"
+            "def retry() -> None:\n"
+            '    """The request waits..."""\n'
+            "    return None\n"
+        )
+
+        issues = RhetoricalEllipsisRule().check(source, "guide.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_rule_metadata(self) -> None:
+        rule = RhetoricalEllipsisRule()
+
+        assert rule.id == "T012"
+        assert rule.name == "Rhetorical Ellipsis"
         assert rule.config_key is None
 
 

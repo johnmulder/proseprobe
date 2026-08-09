@@ -419,6 +419,56 @@ class RepeatedOrMixedPunctuationRule(Rule):
         return issues
 
 
+class RhetoricalEllipsisRule(Rule):
+    """T012: Detect rhetorical three-period ellipses in prose."""
+
+    id = "T012"
+    name = "Rhetorical Ellipsis"
+    description = "Detects rhetorical three-period ellipses in prose"
+    severity = Severity.INFO
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _ELLIPSIS: ClassVar[re.Pattern[str]] = re.compile(r"(?<![\d.])\.{3}(?![\d.!?])")
+    _EXPLICIT_CONTEXT: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:ellipsis|omission|omit(?:ted|s|ting)?|truncat(?:e|ed|es|ion))\b",
+        re.IGNORECASE,
+    )
+    _OUTPUT_PREFIX: ClassVar[re.Pattern[str]] = re.compile(
+        r"^\s*(?:console|log|message|output)\s*:", re.IGNORECASE
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Report rhetorical ellipses in source-mapped prose."""
+        issues: list[Issue] = []
+        for sentence in iter_prose_sentences(content, filename):
+            if (
+                is_example_line(content, filename, sentence.start_line)
+                or self._EXPLICIT_CONTEXT.search(sentence.text)
+                or self._OUTPUT_PREFIX.match(sentence.text)
+                or sentence.text.strip().strip("'\"\u201c\u201d\u2018\u2019`()[]{}")
+                == "..."
+            ):
+                continue
+            for match in self._ELLIPSIS.finditer(sentence.text):
+                line, column = sentence.source_position(match.start())
+                end_line, end_column = sentence.source_position(match.end())
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message="Rhetorical ellipsis: '...'",
+                        line=line,
+                        column=column,
+                        end_line=end_line,
+                        end_column=end_column,
+                        severity=self.severity,
+                        confidence=self.default_confidence,
+                        suggestion=("Use direct punctuation or complete the thought"),
+                    )
+                )
+        return issues
+
+
 class NestedParentheticalRule(Rule):
     """T015: Detect balanced parentheses nested inside other parentheses."""
 
