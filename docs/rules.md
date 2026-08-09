@@ -1309,7 +1309,7 @@ The background migration may eventually finish.
 
 At medium confidence, detects sentences with at least three balanced,
 top-level parentheticals whose contents each contain at least three words. The
-rule reports one source-mapped span from the first substantial parenthetical to
+rule reports one source-mapped span from the first qualifying parenthetical to
 the last. Headings, code, Markdown link destinations, Python strings, and
 example prose are excluded.
 
