@@ -1,9 +1,10 @@
-"""Tests for vocabulary rules (V001-V011 and V013-V016)."""
+"""Tests for vocabulary rules (V001-V011 and V013-V017)."""
 
 import pytest
 
 from proseprobe.config import Config
 from proseprobe.data.phrases import (
+    NEEDLESS_INTENSIFIER_REPLACEMENTS,
     REDUNDANT_MODIFIER_REPLACEMENTS,
     REDUNDANT_PAIR_REPLACEMENTS,
     VERBOSE_VERB_PHRASE_REPLACEMENTS,
@@ -19,6 +20,7 @@ from proseprobe.rules.vocab import (
     ImpreciseQuantityRule,
     InventedConceptLabelsRule,
     KnowledgeCutoffRule,
+    NeedlessIntensifierRule,
     PromotionalLanguageRule,
     RedundantModifierRule,
     RedundantPairRule,
@@ -1200,6 +1202,100 @@ def retry():
         assert rule.id == "V016"
         assert rule.name == "Absolute Reliability Claim"
         assert rule.default_confidence is Confidence.MEDIUM
+
+
+class TestNeedlessIntensifier:
+    """Tests for V017: Needless Intensifier."""
+
+    def test_curated_replacement_table(self) -> None:
+        assert NEEDLESS_INTENSIFIER_REPLACEMENTS == {
+            "completely unanimous": "unanimous",
+            "very unique": "unique",
+        }
+
+    @pytest.mark.parametrize(
+        ("phrase", "replacement"), NEEDLESS_INTENSIFIER_REPLACEMENTS.items()
+    )
+    def test_suggests_each_curated_replacement(
+        self, phrase: str, replacement: str
+    ) -> None:
+        [issue] = NeedlessIntensifierRule().check(
+            f"The report calls this {phrase}.", "guide.md"
+        )
+
+        assert issue.rule_id == "V017"
+        assert issue.suggestion == replacement
+        assert issue.confidence is Confidence.LOW
+
+    def test_reports_exact_metadata_and_source_span(self) -> None:
+        source = "The panel reached a completely unanimous decision."
+
+        [issue] = NeedlessIntensifierRule().check(source, "guide.md")
+
+        assert issue.message == "Needless intensifier: 'completely unanimous'"
+        assert source[issue.column - 1 : issue.end_column - 1] == (
+            "completely unanimous"
+        )
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.LOW
+        assert issue.suggestion == "unanimous"
+
+    def test_reports_repeated_phrases_in_source_order(self) -> None:
+        source = "A VERY UNIQUE fault followed a completely unanimous vote."
+
+        issues = NeedlessIntensifierRule().check(source, "guide.md")
+
+        assert [issue.message for issue in issues] == [
+            "Needless intensifier: 'VERY UNIQUE'",
+            "Needless intensifier: 'completely unanimous'",
+        ]
+
+    def test_ignores_markdown_headings_and_code(self) -> None:
+        source = """\
+# Very unique behavior
+
+Use `completely unanimous` as the legacy label.
+
+```text
+very unique
+```
+"""
+
+        assert NeedlessIntensifierRule().check(source, "guide.md") == []
+
+    def test_checks_python_documentation_but_not_code_strings(self) -> None:
+        source = '''\
+label = "very unique"
+# The panel reached a completely unanimous decision.
+
+def summarize():
+    """Describe the very unique failure mode."""
+'''
+
+        issues = NeedlessIntensifierRule().check(source, "client.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_ignores_near_misses(self) -> None:
+        source = (
+            "The reviewers were almost unanimous. The failure mode is unique to "
+            "this deployment. The shards are very different and completely empty."
+        )
+
+        assert NeedlessIntensifierRule().check(source, "guide.md") == []
+
+    def test_does_not_duplicate_redundant_modifier_rule(self) -> None:
+        source = "The vote was completely unanimous in a very unique case."
+
+        assert RedundantModifierRule().check(source, "guide.md") == []
+        assert len(NeedlessIntensifierRule().check(source, "guide.md")) == 2
+
+    def test_rule_metadata(self) -> None:
+        rule = NeedlessIntensifierRule()
+
+        assert rule.id == "V017"
+        assert rule.name == "Needless Intensifier"
+        assert rule.default_confidence is Confidence.LOW
 
 
 class TestAcademicVocabularyExpansions:

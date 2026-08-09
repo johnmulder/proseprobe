@@ -1,4 +1,4 @@
-"""Vocabulary detection rules (V001-V011 and V013-V016)."""
+"""Vocabulary detection rules (V001-V011 and V013-V017)."""
 
 import re
 from typing import ClassVar
@@ -8,6 +8,7 @@ from proseprobe.data.phrases import (
     GRANDIOSE_STAKES_PHRASES,
     INFLAMMATORY_CLICHE_PHRASES,
     KNOWLEDGE_CUTOFF_PATTERNS,
+    NEEDLESS_INTENSIFIER_REPLACEMENTS,
     PROMOTIONAL_PHRASES,
     REDUNDANT_MODIFIER_REPLACEMENTS,
     REDUNDANT_PAIR_REPLACEMENTS,
@@ -861,3 +862,21 @@ class AbsoluteReliabilityClaimRule(Rule):
                 )
 
         return issues
+
+
+class NeedlessIntensifierRule(Rule):
+    """V017: Detect a narrow set of debatable intensifier combinations."""
+
+    id = "V017"
+    name = "Needless Intensifier"
+    description = "Detects curated intensifier combinations with direct edits"
+    severity = Severity.INFO
+    default_confidence = Confidence.LOW
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose for curated needless intensifiers."""
+        return _replacement_phrase_issues(
+            self, content, filename, NEEDLESS_INTENSIFIER_REPLACEMENTS
+        )

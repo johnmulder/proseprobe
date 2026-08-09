@@ -71,6 +71,12 @@ REDUNDANT_MODIFIER_REPLACEMENTS = {
     "unexpected surprises": "surprises",
 }
 
+# Debatable but reviewable intensifier combinations (V017)
+NEEDLESS_INTENSIFIER_REPLACEMENTS = {
+    "completely unanimous": "unanimous",
+    "very unique": "unique",
+}
+
 # Fixed double-negative forms with direct positive replacements (G029)
 DOUBLE_NEGATIVE_REPLACEMENTS = {
     "not uncommon": "common",
