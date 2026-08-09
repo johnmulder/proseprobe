@@ -1126,8 +1126,9 @@ Caching improves performance by reducing database round-trips.
 
 ### S016: Content Duplication
 
-Detects repeated paragraphs within the same document using hash-based
-comparison.
+Detects repeated paragraphs within the same document using normalized exact
+comparison. S016 also detects a signposted conclusion when removing an existing
+S014 conclusion marker leaves an exact match for an earlier paragraph.
 
 **Example (bad):**
 ```markdown
@@ -1142,6 +1143,11 @@ The system processes data in real time for immediate insights.
 ```markdown
 State each idea once. Refer back with cross-references if needed.
 ```
+
+Paragraphs shorter than eight words are excluded. Comparison is
+case-insensitive and ignores whitespace differences, but it does not use token
+overlap, stemming, or semantic similarity. Paraphrased conclusions and concise
+synthesis therefore remain unflagged.
 
 ---
 

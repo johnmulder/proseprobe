@@ -738,7 +738,7 @@ class ContentDuplicationRule(Rule):
 
     id = "S016"
     name = "Content Duplication"
-    description = "Detects duplicate paragraphs in the same document"
+    description = "Detects duplicate paragraphs and exact repeated conclusions"
     severity = Severity.WARNING
     applies_to: ClassVar[set[str]] = {"markdown"}
     content_scope = "raw"
