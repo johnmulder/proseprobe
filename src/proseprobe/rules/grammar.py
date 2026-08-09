@@ -1,4 +1,4 @@
-"""Grammar pattern detection rules (G001-G017, G019, G022, G024, G029)."""
+"""Grammar pattern detection rules (G001-G017, G019, G022, G024-G025, G029)."""
 
 import re
 from typing import ClassVar
@@ -824,6 +824,49 @@ class UnclearActorRequirementRule(Rule):
                     suggestion="Name the actor responsible for the requirement",
                 )
             )
+        return issues
+
+
+class WeakInstructionVerbRule(Rule):
+    """G025: Detect exact weak procedural instruction phrases."""
+
+    id = "G025"
+    name = "Weak Instruction Verb"
+    description = "Detects 'You will need to' and 'You can proceed to'"
+    severity = Severity.INFO
+    default_confidence = Confidence.MEDIUM
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _pattern: ClassVar[re.Pattern[str]] = re.compile(
+        r"\bYou\s+(?:will\s+need|can\s+proceed)\s+to\b", re.IGNORECASE
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose sentences for the approved weak instruction phrases."""
+        issues: list[Issue] = []
+        for sentence in iter_prose_sentences(content, filename):
+            if sentence.context not in {"body", "list_item", "blockquote"}:
+                continue
+            if is_example_line(content, filename, sentence.start_line):
+                continue
+            for match in self._pattern.finditer(sentence.text):
+                line, column = sentence.source_position(match.start())
+                end_line, end_column = sentence.source_position(match.end())
+                phrase = " ".join(match.group().split())
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Weak instruction phrase: '{phrase}'",
+                        line=line,
+                        column=column,
+                        end_line=end_line,
+                        end_column=end_column,
+                        severity=self.severity,
+                        confidence=self.default_confidence,
+                        suggestion="Use a direct imperative",
+                    )
+                )
         return issues
 
 

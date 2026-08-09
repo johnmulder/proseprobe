@@ -1,4 +1,4 @@
-"""Tests for grammar rules (G001-G017, G019, G022, G024, G029)."""
+"""Tests for grammar rules (G001-G017, G019, G022, G024-G025, G029)."""
 
 import pytest
 
@@ -20,6 +20,7 @@ from proseprobe.rules.grammar import (
     PatronizingAnalogyRule,
     PedagogicalVoiceRule,
     UnclearActorRequirementRule,
+    WeakInstructionVerbRule,
 )
 
 
@@ -1427,6 +1428,109 @@ class TestUnclearActorRequirementRule:
             "Detects fixed impersonal requirement forms without a named actor"
         )
         assert rule.severity is Severity.INFO
+        assert rule.default_confidence is Confidence.MEDIUM
+        assert rule.applies_to == {"markdown", "python"}
+        assert rule.content_scope == "prose"
+
+
+class TestWeakInstructionVerbRule:
+    """Tests for G025: Weak Instruction Verb."""
+
+    @pytest.mark.parametrize("phrase", ["You will need to", "You can proceed to"])
+    def test_reports_exact_phrases(self, phrase: str) -> None:
+        source = f"Before release, {phrase} publish the archive."
+
+        [issue] = WeakInstructionVerbRule().check(source, "test.md")
+
+        start = source.index(phrase)
+        assert issue.rule_id == "G025"
+        assert issue.message == f"Weak instruction phrase: '{phrase}'"
+        assert (issue.line, issue.column) == (1, start + 1)
+        assert (issue.end_line, issue.end_column) == (
+            1,
+            start + len(phrase) + 1,
+        )
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == "Use a direct imperative"
+
+    def test_reports_each_phrase_and_preserves_casing(self) -> None:
+        source = "YOU WILL NEED TO restart. You can proceed to publish."
+
+        issues = WeakInstructionVerbRule().check(source, "test.md")
+
+        assert [issue.message for issue in issues] == [
+            "Weak instruction phrase: 'YOU WILL NEED TO'",
+            "Weak instruction phrase: 'You can proceed to'",
+        ]
+        assert [issue.column for issue in issues] == [1, 27]
+
+    def test_reports_wrapped_phrase_at_exact_source_span(self) -> None:
+        source = "You will\nneed to restart the worker."
+
+        [issue] = WeakInstructionVerbRule().check(source, "test.md")
+
+        assert issue.message == "Weak instruction phrase: 'You will need to'"
+        assert (issue.line, issue.column) == (1, 1)
+        assert (issue.end_line, issue.end_column) == (2, 8)
+
+    @pytest.mark.parametrize(
+        ("source", "column"),
+        [
+            ("- You will need to restart the worker.", 3),
+            ("> You can proceed to publish the archive.", 3),
+        ],
+    )
+    def test_checks_list_and_blockquote_sentences(
+        self, source: str, column: int
+    ) -> None:
+        [issue] = WeakInstructionVerbRule().check(source, "test.md")
+
+        assert issue.column == column
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "You need to restart the worker.",
+            "You will not need to restart the worker.",
+            "You may proceed to publish the archive.",
+            "You can proceed without publishing the archive.",
+            "Restart the worker after changing the token.",
+        ],
+    )
+    def test_ignores_nearby_non_matches(self, source: str) -> None:
+        assert WeakInstructionVerbRule().check(source, "test.md") == []
+
+    def test_ignores_markdown_non_prose_and_example_contexts(self) -> None:
+        source = (
+            "# You will need to restart the worker\n\n"
+            "Use `You can proceed to` as sample text.\n\n"
+            "```text\nYou will need to remove the lock.\n```\n\n"
+            "## Example\n\nYou can proceed to publish the archive."
+        )
+
+        assert WeakInstructionVerbRule().check(source, "test.md") == []
+
+    def test_checks_python_comments_and_docstrings_only(self) -> None:
+        sentence = "You will need to restart the worker."
+        source = (
+            f'message = "{sentence}"\n'
+            f"# {sentence}\n"
+            "def explain():\n"
+            f'    """{sentence}"""\n'
+            "    return message"
+        )
+
+        issues = WeakInstructionVerbRule().check(source, "test.py")
+
+        assert [issue.line for issue in issues] == [2, 4]
+
+    def test_rule_metadata(self) -> None:
+        rule = WeakInstructionVerbRule()
+
+        assert rule.id == "G025"
+        assert rule.name == "Weak Instruction Verb"
+        assert rule.config_key is None
         assert rule.default_confidence is Confidence.MEDIUM
         assert rule.applies_to == {"markdown", "python"}
         assert rule.content_scope == "prose"
