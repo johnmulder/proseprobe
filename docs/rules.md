@@ -73,6 +73,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `T012` | Rhetorical Ellipsis | Style | info | medium | markdown, python / prose | — |
 | `T014` | Parenthetical Overload | Style | info | medium | markdown, python / prose | — |
 | `T015` | Nested Parenthetical | Style | info | high | markdown, python / prose | — |
+| `T016` | Slash Alternative | Style | info | medium | markdown, python / prose | — |
 | `G001` | Copula Avoidance | Grammar | info | medium | markdown, python / prose | — |
 | `G002` | Excessive Hedging | Grammar | info | medium | markdown, python / prose | — |
 | `G003` | Participle Chains | Grammar | warning | medium | markdown, python / prose | — |
@@ -1339,6 +1340,25 @@ Configure the cache (for example (on Linux)) before startup.
 **Example (good):**
 ```markdown
 For example, configure the cache on Linux before startup.
+```
+
+---
+
+### T016: Slash Alternative
+
+At medium confidence, detects standalone `and/or` in rendered prose and
+reports each occurrence at its exact source span. Case variants are included;
+URLs, paths, code, Markdown link destinations, Python strings, and example
+prose are excluded. Other slash constructions remain outside this rule.
+
+**Example (bad):**
+```markdown
+Select the primary and/or standby node.
+```
+
+**Example (good):**
+```markdown
+Select the primary node, the standby node, or both.
 ```
 
 ---

@@ -1989,6 +1989,83 @@
         }
       ]
     },
+    "quality/corpus/slash-alternatives.md": {
+      "expected": [
+        {
+          "rule_id": "M009",
+          "line": 23,
+          "column": 7,
+          "note": "The bare URL remains a valid M009 finding while T016 ignores its path."
+        },
+        {
+          "rule_id": "T016",
+          "line": 3,
+          "column": 20
+        },
+        {
+          "rule_id": "T016",
+          "line": 5,
+          "column": 18
+        },
+        {
+          "rule_id": "T016",
+          "line": 7,
+          "column": 33
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "T016",
+          "line": 11,
+          "note": "An explicit conjunction does not use a slash alternative."
+        },
+        {
+          "rule_id": "T016",
+          "line": 13,
+          "note": "An explicit either-or construction does not use a slash alternative."
+        },
+        {
+          "rule_id": "T016",
+          "line": 15,
+          "note": "The initial rule is limited to the exact unspaced form."
+        },
+        {
+          "rule_id": "T016",
+          "line": 17,
+          "note": "The reversed form is outside the narrow initial scope."
+        },
+        {
+          "rule_id": "T016",
+          "line": 19,
+          "note": "Inline code preserves a literal legacy token."
+        },
+        {
+          "rule_id": "T016",
+          "line": 21,
+          "note": "A Markdown link destination is outside rendered prose."
+        },
+        {
+          "rule_id": "T016",
+          "line": 23,
+          "note": "A bare URL is not a prose alternative."
+        },
+        {
+          "rule_id": "T016",
+          "line": 25,
+          "note": "A slash-delimited file path is not a prose alternative."
+        },
+        {
+          "rule_id": "T016",
+          "line": 28,
+          "note": "Fenced content is outside document prose."
+        },
+        {
+          "rule_id": "T016",
+          "line": 33,
+          "note": "Prose under an example heading demonstrates the rule."
+        }
+      ]
+    },
     "quality/corpus/template-residue.md": {
       "expected": [
         {

@@ -83,6 +83,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         style.RhetoricalEllipsisRule(),
         style.ParentheticalOverloadRule(),
         style.NestedParentheticalRule(),
+        style.SlashAlternativeRule(),
         vocab.AIVocabularyRule(
             allowed,
             additional,
