@@ -1,4 +1,4 @@
-"""Grammar-rule tests (G001-G017, G019, G022, G024-G025, G029, G031)."""
+"""Grammar tests (G001-G017, G019, G022, G024-G025, G029, G031, G037)."""
 
 import pytest
 
@@ -17,6 +17,7 @@ from proseprobe.rules.grammar import (
     FormerLatterReferenceRule,
     FuturistInvitationRule,
     GenericSceneSettingOpenerRule,
+    HedgedRequirementRule,
     ParticipleChainsRule,
     PatronizingAnalogyRule,
     PedagogicalVoiceRule,
@@ -1762,6 +1763,143 @@ class TestClauseCoordinationOverloadRule:
 
         assert rule.id == "G031"
         assert rule.name == "Clause/Coordination Overload"
+        assert rule.config_key is None
+        assert rule.default_confidence is Confidence.MEDIUM
+        assert rule.applies_to == {"markdown", "python"}
+        assert rule.content_scope == "prose"
+
+
+class TestHedgedRequirementRule:
+    """Tests for G037: Hedged Requirement."""
+
+    @pytest.mark.parametrize("phrase", ["must normally", "should generally"])
+    def test_reports_exact_combinations(self, phrase: str) -> None:
+        source = f"The service {phrase} reject an unsigned archive."
+
+        [issue] = HedgedRequirementRule().check(source, "test.md")
+
+        start = source.index(phrase)
+        assert issue.rule_id == "G037"
+        assert issue.message == f"Hedged requirement: '{phrase}'"
+        assert (issue.line, issue.column) == (1, start + 1)
+        assert (issue.end_line, issue.end_column) == (
+            1,
+            start + len(phrase) + 1,
+        )
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == "Choose one requirement strength"
+
+    def test_reports_each_combination_and_preserves_casing(self) -> None:
+        source = (
+            "The service MUST NORMALLY reject unsigned input. "
+            "Operators should generally rotate tokens."
+        )
+
+        issues = HedgedRequirementRule().check(source, "test.md")
+
+        assert [issue.message for issue in issues] == [
+            "Hedged requirement: 'MUST NORMALLY'",
+            "Hedged requirement: 'should generally'",
+        ]
+        assert [issue.column for issue in issues] == [
+            source.index("MUST NORMALLY") + 1,
+            source.index("should generally") + 1,
+        ]
+
+    def test_reports_wrapped_combination_at_exact_source_span(self) -> None:
+        source = "The service must\nnormally reject an unsigned archive."
+
+        [issue] = HedgedRequirementRule().check(source, "test.md")
+
+        assert issue.message == "Hedged requirement: 'must normally'"
+        assert (issue.line, issue.column) == (1, 13)
+        assert (issue.end_line, issue.end_column) == (2, 9)
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            'In this standard, "must normally" means required by default.',
+            "The phrase “should generally” is defined as advisory guidance.",
+            "In this standard, **must normally** refers to ordinary requirements.",
+            "Should generally denotes advisory guidance in this specification.",
+        ],
+    )
+    def test_ignores_explicit_term_definitions(self, source: str) -> None:
+        assert HedgedRequirementRule().check(source, "test.md") == []
+
+    def test_definition_suppression_applies_only_to_that_match(self) -> None:
+        source = (
+            '"Must normally" means required by default. '
+            "Operators should generally rotate tokens."
+        )
+
+        [issue] = HedgedRequirementRule().check(source, "test.md")
+
+        assert issue.message == "Hedged requirement: 'should generally'"
+
+    def test_does_not_suppress_a_later_explanation(self) -> None:
+        source = (
+            "The service must normally reject unsigned input, which means clients "
+            "need a signature."
+        )
+
+        [issue] = HedgedRequirementRule().check(source, "test.md")
+
+        assert issue.rule_id == "G037"
+
+    @pytest.mark.parametrize("prefix", ["- ", "> "])
+    def test_checks_list_and_blockquote_sentences(self, prefix: str) -> None:
+        [issue] = HedgedRequirementRule().check(
+            f"{prefix}The service must normally reject unsigned input.",
+            "test.md",
+        )
+
+        assert issue.column == 15
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "The service must reject unsigned input.",
+            "The service normally rejects unsigned input.",
+            "The service must not normally reject unsigned input.",
+            "Operators should rotate tokens after each release.",
+            "Operators generally rotate tokens after each release.",
+            "Operators should usually rotate tokens after each release.",
+        ],
+    )
+    def test_ignores_nearby_non_matches(self, source: str) -> None:
+        assert HedgedRequirementRule().check(source, "test.md") == []
+
+    def test_ignores_markdown_non_prose_and_example_contexts(self) -> None:
+        source = (
+            "# The service must normally reject unsigned input\n\n"
+            "Use `should generally` as sample text.\n\n"
+            "```text\nThe service must normally reject input.\n```\n\n"
+            "## Example\n\nOperators should generally rotate tokens."
+        )
+
+        assert HedgedRequirementRule().check(source, "test.md") == []
+
+    def test_checks_python_comments_and_docstrings_only(self) -> None:
+        sentence = "The service must normally reject unsigned input."
+        source = (
+            f'message = "{sentence}"\n'
+            f"# {sentence}\n"
+            "def explain():\n"
+            f'    """{sentence}"""\n'
+            "    return message"
+        )
+
+        issues = HedgedRequirementRule().check(source, "test.py")
+
+        assert [issue.line for issue in issues] == [2, 4]
+
+    def test_rule_metadata(self) -> None:
+        rule = HedgedRequirementRule()
+
+        assert rule.id == "G037"
+        assert rule.name == "Hedged Requirement"
         assert rule.config_key is None
         assert rule.default_confidence is Confidence.MEDIUM
         assert rule.applies_to == {"markdown", "python"}

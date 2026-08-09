@@ -1,4 +1,4 @@
-"""Grammar rules (G001-G017, G019, G022, G024-G025, G029, G031)."""
+"""Grammar rules (G001-G017, G019, G022, G024-G025, G029, G031, G037)."""
 
 import re
 from typing import ClassVar
@@ -952,4 +952,54 @@ class ClauseCoordinationOverloadRule(Rule):
                     suggestion="Split the sentence or simplify its clause structure",
                 )
             )
+        return issues
+
+
+class HedgedRequirementRule(Rule):
+    """G037: Detect exact contradictory normative combinations."""
+
+    id = "G037"
+    name = "Hedged Requirement"
+    description = "Detects 'must normally' and 'should generally'"
+    severity = Severity.INFO
+    default_confidence = Confidence.MEDIUM
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _pattern: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:must\s+normally|should\s+generally)\b", re.IGNORECASE
+    )
+    _definition_suffix: ClassVar[re.Pattern[str]] = re.compile(
+        r"^[\"'\u2019\u201d)*_]*\s+"
+        r"(?:means|refers\s+to|is\s+defined\s+as|denotes)\b",
+        re.IGNORECASE,
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check prose sentences for exact hedged requirements."""
+        issues: list[Issue] = []
+        for sentence in iter_prose_sentences(content, filename):
+            if sentence.context not in {"body", "list_item", "blockquote"}:
+                continue
+            if is_example_line(content, filename, sentence.start_line):
+                continue
+            for match in self._pattern.finditer(sentence.text):
+                if self._definition_suffix.match(sentence.text[match.end() :]):
+                    continue
+                line, column = sentence.source_position(match.start())
+                end_line, end_column = sentence.source_position(match.end())
+                phrase = " ".join(match.group().split())
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Hedged requirement: '{phrase}'",
+                        line=line,
+                        column=column,
+                        end_line=end_line,
+                        end_column=end_column,
+                        severity=self.severity,
+                        confidence=self.default_confidence,
+                        suggestion="Choose one requirement strength",
+                    )
+                )
         return issues
