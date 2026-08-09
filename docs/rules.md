@@ -91,6 +91,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `G015` | Generic Scene-Setting Opener | Grammar | info | medium | markdown / prose | — |
 | `G016` | Existential Opener | Grammar | info | medium | markdown, python / prose | — |
 | `G017` | Empty "It" Opener | Grammar | info | high | markdown, python / prose | — |
+| `G019` | Ambiguous "This" | Grammar | info | medium | markdown, python / prose | — |
 | `G024` | Unclear Actor in Requirement | Grammar | info | medium | markdown, python / prose | — |
 | `G029` | Double Negative | Grammar | info | high | markdown, python / prose | — |
 | `C001` | Docstring-Only Vocabulary | Code | warning | medium | python / raw | — |
@@ -1941,6 +1942,25 @@ It is obvious that the cache is stale.
 **Example (good):**
 ```markdown
 The two failed lookups show that the cache is stale.
+```
+
+---
+
+### G019: Ambiguous "This"
+
+At medium confidence, detects only sentence-opening `This causes`,
+`This means`, and `This shows`. The rule checks body, list-item, and blockquote
+prose but excludes headings, code, Python strings, hyphenated near-misses, and
+example sections. It does not infer arbitrary verbs or resolve antecedents.
+
+**Example (bad):**
+```markdown
+This shows the timeout repeats under load.
+```
+
+**Example (good):**
+```markdown
+The load test shows the timeout repeats under load.
 ```
 
 ---

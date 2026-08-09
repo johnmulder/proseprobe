@@ -858,6 +858,77 @@
         }
       ]
     },
+    "quality/corpus/ambiguous-this-openers.md": {
+      "expected": [
+        {
+          "rule_id": "G019",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "rule_id": "G019",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "rule_id": "G019",
+          "line": 7,
+          "column": 3
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G019",
+          "line": 11,
+          "note": "This modifies a named noun instead of standing alone as a pronoun."
+        },
+        {
+          "rule_id": "G019",
+          "line": 13,
+          "note": "The initial allowlist does not include past-tense verbs."
+        },
+        {
+          "rule_id": "G019",
+          "line": 15,
+          "note": "The initial allowlist does not include arbitrary verbs."
+        },
+        {
+          "rule_id": "G019",
+          "line": 17,
+          "note": "The rule is limited to the pronoun This."
+        },
+        {
+          "rule_id": "G019",
+          "line": 19,
+          "note": "A matching phrase later in a sentence is not an opener."
+        },
+        {
+          "rule_id": "G019",
+          "line": 21,
+          "note": "A hyphenated adjective is not an allowlisted verb."
+        },
+        {
+          "rule_id": "G019",
+          "line": 23,
+          "note": "Grammar opener checks do not apply to headings."
+        },
+        {
+          "rule_id": "G019",
+          "line": 25,
+          "note": "Inline code preserves literal sample text."
+        },
+        {
+          "rule_id": "G019",
+          "line": 28,
+          "note": "Fenced content is outside document prose."
+        },
+        {
+          "rule_id": "G019",
+          "line": 33,
+          "note": "Prose under an example heading demonstrates the rule."
+        }
+      ]
+    },
     "quality/corpus/bare-urls.md": {
       "expected": [
         {

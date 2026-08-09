@@ -19,7 +19,7 @@ def test_metadata_covers_registry_in_rule_id_order() -> None:
     metadata_ids = tuple(item.id for item in metadata)
 
     assert metadata_ids == tuple(rule.id for rule in get_all_rules())
-    assert len(metadata) == 84
+    assert len(metadata) == 85
     assert len(set(metadata_ids)) == len(metadata_ids)
 
 
@@ -59,6 +59,7 @@ def test_metadata_reports_low_confidence_rule_defaults() -> None:
     assert get_rule_metadata_by_id("G015").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("G016").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("G017").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
+    assert get_rule_metadata_by_id("G019").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("G024").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("G029").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("T010").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
@@ -272,6 +273,19 @@ def test_g016_metadata_matches_the_existential_opener_contract() -> None:
 
     assert metadata is not None
     assert metadata.name == "Existential Opener"
+    assert metadata.default_severity is Severity.INFO
+    assert metadata.default_confidence is Confidence.MEDIUM
+    assert metadata.applies_to == ("markdown", "python")
+    assert metadata.content_scope == "prose"
+    assert metadata.profiles == ("technical-docs",)
+    assert metadata.config_key is None
+
+
+def test_g019_metadata_matches_the_ambiguous_this_contract() -> None:
+    metadata = get_rule_metadata_by_id("G019")
+
+    assert metadata is not None
+    assert metadata.name == 'Ambiguous "This"'
     assert metadata.default_severity is Severity.INFO
     assert metadata.default_confidence is Confidence.MEDIUM
     assert metadata.applies_to == ("markdown", "python")
