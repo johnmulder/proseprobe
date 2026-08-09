@@ -19,7 +19,7 @@ def test_metadata_covers_registry_in_rule_id_order() -> None:
     metadata_ids = tuple(item.id for item in metadata)
 
     assert metadata_ids == tuple(rule.id for rule in get_all_rules())
-    assert len(metadata) == 81
+    assert len(metadata) == 82
     assert len(set(metadata_ids)) == len(metadata_ids)
 
 
@@ -62,6 +62,7 @@ def test_metadata_reports_low_confidence_rule_defaults() -> None:
     assert get_rule_metadata_by_id("G029").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("T010").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("T012").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
+    assert get_rule_metadata_by_id("T014").default_confidence is Confidence.MEDIUM  # type: ignore[union-attr]
     assert get_rule_metadata_by_id("T015").default_confidence is Confidence.HIGH  # type: ignore[union-attr]
 
 
@@ -284,6 +285,19 @@ def test_t015_metadata_matches_the_nested_parenthetical_contract() -> None:
     assert metadata.name == "Nested Parenthetical"
     assert metadata.default_severity is Severity.INFO
     assert metadata.default_confidence is Confidence.HIGH
+    assert metadata.applies_to == ("markdown", "python")
+    assert metadata.content_scope == "prose"
+    assert metadata.profiles == ("technical-docs",)
+    assert metadata.config_key is None
+
+
+def test_t014_metadata_matches_the_parenthetical_overload_contract() -> None:
+    metadata = get_rule_metadata_by_id("T014")
+
+    assert metadata is not None
+    assert metadata.name == "Parenthetical Overload"
+    assert metadata.default_severity is Severity.INFO
+    assert metadata.default_confidence is Confidence.MEDIUM
     assert metadata.applies_to == ("markdown", "python")
     assert metadata.content_scope == "prose"
     assert metadata.profiles == ("technical-docs",)

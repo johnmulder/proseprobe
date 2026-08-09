@@ -631,6 +631,8 @@ class TestParentheticalOverload:
             "# Guide (with useful details) (for system operators) "
             "(during active recovery)\n\n"
             "Use `(one two three) (four five six) (seven eight nine)` as a token.\n\n"
+            "[Reference](https://example.com/(one.two.three)/(four.five.six)/"
+            "(seven.eight.nine)) remains current.\n\n"
             "```text\n"
             "Retry (after the first timeout) (while the replica recovers) "
             "(before client traffic resumes).\n"

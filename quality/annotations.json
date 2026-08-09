@@ -1336,6 +1336,57 @@
         }
       ]
     },
+    "quality/corpus/parenthetical-overload.md": {
+      "expected": [
+        {
+          "rule_id": "T014",
+          "line": 3,
+          "column": 30
+        },
+        {
+          "rule_id": "T014",
+          "line": 5,
+          "column": 31
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "T014",
+          "line": 9,
+          "note": "Two substantial parentheticals do not meet the overload threshold."
+        },
+        {
+          "rule_id": "T014",
+          "line": 11,
+          "note": "Short labels and version markers do not meet the minimum word count."
+        },
+        {
+          "rule_id": "T014",
+          "line": 13,
+          "note": "Parentheticals in separate sentences are counted independently."
+        },
+        {
+          "rule_id": "T014",
+          "line": 15,
+          "note": "Inline code is outside rendered prose."
+        },
+        {
+          "rule_id": "T014",
+          "line": 17,
+          "note": "Parentheses in a link destination are outside rendered prose."
+        },
+        {
+          "rule_id": "T014",
+          "line": 20,
+          "note": "Fenced content is outside document prose."
+        },
+        {
+          "rule_id": "T014",
+          "line": 25,
+          "note": "Prose under an example heading demonstrates the rule."
+        }
+      ]
+    },
     "quality/corpus/news-article.md": {
       "expected": [],
       "negative_cases": [
