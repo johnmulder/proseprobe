@@ -1,4 +1,4 @@
-"""Style detection rules (T001-T010, T015)."""
+"""Style detection rules (T001-T010, T012, T015)."""
 
 import re
 from itertools import groupby

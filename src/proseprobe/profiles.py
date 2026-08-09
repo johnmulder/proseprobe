@@ -39,6 +39,7 @@ _TECHNICAL_DOCS_RULES = frozenset(
         "S025",
         "S028",
         "T010",
+        "T012",
         "T015",
         "V009",
         "V010",

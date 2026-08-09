@@ -70,6 +70,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `T007` | Short Punchy Fragments | Style | info | medium | markdown, python / prose | `thresholds.short_punchy_fragments` |
 | `T008` | Sentence Length | Style | info | medium | markdown, python / prose | `thresholds.sentence_length_max` |
 | `T010` | Repeated or Mixed Punctuation | Style | info | high | markdown, python / prose | — |
+| `T012` | Rhetorical Ellipsis | Style | info | medium | markdown, python / prose | — |
 | `T015` | Nested Parenthetical | Style | info | high | markdown, python / prose | — |
 | `G001` | Copula Avoidance | Grammar | info | medium | markdown, python / prose | — |
 | `G002` | Excessive Hedging | Grammar | info | medium | markdown, python / prose | — |
@@ -1280,6 +1281,25 @@ Did the final health check pass...?!
 **Example (good):**
 ```markdown
 Did the final health check pass?
+```
+
+---
+
+### T012: Rhetorical Ellipsis
+
+At medium confidence, detects an exact three-period ellipsis used as a
+rhetorical pause. Numeric sequences, punctuation clusters owned by T010,
+explicit omission or truncation explanations, labeled output, code, link
+destinations, Python strings, and example prose are excluded.
+
+**Example (bad):**
+```markdown
+The background migration may eventually finish...
+```
+
+**Example (good):**
+```markdown
+The background migration may eventually finish.
 ```
 
 ---

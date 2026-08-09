@@ -80,6 +80,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         style.ShortPunchyFragmentsRule(thresholds.short_punchy_fragments),
         style.SentenceLengthRule(thresholds.sentence_length_max),
         style.RepeatedOrMixedPunctuationRule(),
+        style.RhetoricalEllipsisRule(),
         style.NestedParentheticalRule(),
         vocab.AIVocabularyRule(
             allowed,

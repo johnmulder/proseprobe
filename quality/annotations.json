@@ -1822,6 +1822,11 @@
           "rule_id": "T010",
           "line": 13,
           "column": 60
+        },
+        {
+          "rule_id": "T012",
+          "line": 21,
+          "column": 46
         }
       ],
       "negative_cases": [
@@ -1853,6 +1858,82 @@
         {
           "rule_id": "T010",
           "line": 31,
+          "note": "Prose under an example heading demonstrates the rule."
+        }
+      ]
+    },
+    "quality/corpus/rhetorical-ellipses.md": {
+      "expected": [
+        {
+          "rule_id": "T012",
+          "line": 3,
+          "column": 47
+        },
+        {
+          "rule_id": "T012",
+          "line": 5,
+          "column": 14
+        },
+        {
+          "rule_id": "T012",
+          "line": 7,
+          "column": 19
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "T012",
+          "line": 11,
+          "note": "Version punctuation is not an ellipsis."
+        },
+        {
+          "rule_id": "T012",
+          "line": 13,
+          "note": "A decimal point is ordinary numeric punctuation."
+        },
+        {
+          "rule_id": "T012",
+          "line": 15,
+          "note": "A three-dot numeric range is literal test data."
+        },
+        {
+          "rule_id": "T012",
+          "line": 17,
+          "note": "Periods in an abbreviation are not consecutive ellipsis punctuation."
+        },
+        {
+          "rule_id": "T012",
+          "line": 19,
+          "note": "Explicit omission terminology explains the literal ellipsis."
+        },
+        {
+          "rule_id": "T012",
+          "line": 21,
+          "note": "A labeled output excerpt preserves its terminal status marker."
+        },
+        {
+          "rule_id": "T012",
+          "line": 23,
+          "note": "Inline code preserves a literal status token."
+        },
+        {
+          "rule_id": "T012",
+          "line": 25,
+          "note": "A link destination is outside rendered prose."
+        },
+        {
+          "rule_id": "T012",
+          "line": 27,
+          "note": "A standalone quoted marker represents truncation rather than a rhetorical pause."
+        },
+        {
+          "rule_id": "T012",
+          "line": 30,
+          "note": "Fenced output is outside document prose."
+        },
+        {
+          "rule_id": "T012",
+          "line": 35,
           "note": "Prose under an example heading demonstrates the rule."
         }
       ]
