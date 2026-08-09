@@ -92,6 +92,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `G016` | Existential Opener | Grammar | info | medium | markdown, python / prose | — |
 | `G017` | Empty "It" Opener | Grammar | info | high | markdown, python / prose | — |
 | `G019` | Ambiguous "This" | Grammar | info | medium | markdown, python / prose | — |
+| `G022` | Former/Latter Reference | Grammar | info | medium | markdown, python / prose | — |
 | `G024` | Unclear Actor in Requirement | Grammar | info | medium | markdown, python / prose | — |
 | `G029` | Double Negative | Grammar | info | high | markdown, python / prose | — |
 | `C001` | Docstring-Only Vocabulary | Code | warning | medium | python / raw | — |
@@ -1961,6 +1962,25 @@ This shows the timeout repeats under load.
 **Example (good):**
 ```markdown
 The load test shows the timeout repeats under load.
+```
+
+---
+
+### G022: Former/Latter Reference
+
+At medium confidence and informational severity, detects exact uses of
+`the former` and `the latter` in body, list-item, and blockquote prose. The
+rule excludes headings, code, Python strings, and example sections. It does
+not resolve antecedents or decide whether a short comparison is already clear.
+
+**Example (bad):**
+```markdown
+The local and remote runners differ; the latter needs a token.
+```
+
+**Example (good):**
+```markdown
+The local and remote runners differ; the remote runner needs a token.
 ```
 
 ---

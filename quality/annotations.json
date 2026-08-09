@@ -929,6 +929,67 @@
         }
       ]
     },
+    "quality/corpus/former-latter-references.md": {
+      "expected": [
+        {
+          "rule_id": "G022",
+          "line": 3,
+          "column": 36
+        },
+        {
+          "rule_id": "G022",
+          "line": 5,
+          "column": 40
+        },
+        {
+          "rule_id": "G022",
+          "line": 7,
+          "column": 25
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G022",
+          "line": 11,
+          "note": "Former without the exact article-and-reference phrase is outside scope."
+        },
+        {
+          "rule_id": "G022",
+          "line": 13,
+          "note": "Formerly is a distinct adverb."
+        },
+        {
+          "rule_id": "G022",
+          "line": 15,
+          "note": "Lattermost does not end at the required word boundary."
+        },
+        {
+          "rule_id": "G022",
+          "line": 17,
+          "note": "Explicitly named alternatives need no former/latter finding."
+        },
+        {
+          "rule_id": "G022",
+          "line": 19,
+          "note": "Grammar reference checks do not apply to headings."
+        },
+        {
+          "rule_id": "G022",
+          "line": 21,
+          "note": "Inline code preserves literal sample text."
+        },
+        {
+          "rule_id": "G022",
+          "line": 24,
+          "note": "Fenced content is outside document prose."
+        },
+        {
+          "rule_id": "G022",
+          "line": 29,
+          "note": "Prose under an example heading demonstrates the rule."
+        }
+      ]
+    },
     "quality/corpus/bare-urls.md": {
       "expected": [
         {

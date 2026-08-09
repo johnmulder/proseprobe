@@ -37,6 +37,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         grammar.ExistentialOpenerRule(),
         grammar.EmptyItOpenerRule(),
         grammar.AmbiguousThisRule(),
+        grammar.FormerLatterReferenceRule(),
         grammar.UnclearActorRequirementRule(),
         grammar.DoubleNegativeRule(),
         markup.WrongMarkupRule(),
