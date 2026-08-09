@@ -38,6 +38,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `V014` | Imprecise Quantity | Vocabulary | info | medium | markdown, python / prose | — |
 | `V015` | Unbounded Superlative | Vocabulary | info | low | markdown, python / prose | — |
 | `V016` | Absolute Reliability Claim | Vocabulary | info | medium | markdown, python / prose | — |
+| `V017` | Needless Intensifier | Vocabulary | info | low | markdown, python / prose | — |
 | `S001` | Rule of Three | Structure | info | medium | markdown, python / prose | `thresholds.rule_of_three` |
 | `S002` | Negative Parallelism | Structure | info | medium | markdown, python / prose | — |
 | `S003` | Challenge Conclusions | Structure | warning | medium | markdown, python / prose | — |
@@ -1545,9 +1546,9 @@ with exact spans and direct deletion suggestions.
 - "true fact(s)" → "fact(s)"
 - "unexpected surprise(s)" → "surprise(s)"
 
-Debatable intensifiers and context-dependent combinations—including `very
-unique`, `completely unanimous`, `final outcome`, `future plans`, and `past
-experience`—are intentionally omitted.
+The debatable intensifiers `very unique` and `completely unanimous` belong to
+experimental V017. Other context-dependent combinations—including `final
+outcome`, `future plans`, and `past experience`—are intentionally omitted.
 
 **Example (bad):**
 ```markdown
@@ -1642,6 +1643,31 @@ prose scope states a numbered test population or an explicitly tested
 configuration. Code, demonstration sections, and sentences discussing the
 literal wording are also excluded. The rule applies to Markdown prose and
 Python comments and docstrings.
+
+---
+
+### V017: Needless Intensifier
+
+Detects the exact combinations `completely unanimous` and `very unique`.
+Findings are low-confidence informational diagnostics with direct suggestions
+to use `unanimous` or `unique`.
+
+**Example (flagged):**
+```markdown
+The review ended with a completely unanimous decision.
+```
+
+**Example (not flagged):**
+```markdown
+The reviewers were almost unanimous.
+```
+
+The rule intentionally does not flag intensifiers in general. Matching is
+case-insensitive and applies to Markdown prose plus Python comments and
+docstrings; headings and code are excluded.
+
+V017 is experimental and is not included in any built-in profile. Select it
+explicitly with informational severity and low confidence to evaluate it.
 
 ---
 

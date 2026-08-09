@@ -48,13 +48,13 @@ speed remains a tracked metric until the benchmark corpus reflects real projects
 
 | Prefix | Category | Rules | Description |
 |--------|----------|-------|-------------|
-| `V` | Vocabulary | 15 | Overused and clichéd words and phrases |
+| `V` | Vocabulary | 16 | Overused and clichéd words and phrases |
 | `S` | Structure | 24 | Organizational patterns |
 | `T` | Style | 13 | Typographic issues |
 | `G` | Grammar | 24 | Grammatical patterns |
 | `C` | Code | 6 | Python docstring/comment issues |
 | `M` | Markup | 10 | Markdown artifacts |
-| **Total** | | **92** | |
+| **Total** | | **93** | |
 
 <!-- rule-docs:categories:end -->
 

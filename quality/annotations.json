@@ -1676,6 +1676,103 @@
         }
       ]
     },
+    "quality/corpus/needless-intensifiers.md": {
+      "expected": [
+        {
+          "rule_id": "V017",
+          "line": 3,
+          "column": 25
+        },
+        {
+          "rule_id": "V017",
+          "line": 5,
+          "column": 25
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V017",
+          "line": 9,
+          "note": "Almost unanimous is a measured near miss, not a curated phrase."
+        },
+        {
+          "rule_id": "V017",
+          "line": 11,
+          "note": "Unique to a named scope uses no intensifier."
+        },
+        {
+          "rule_id": "V017",
+          "line": 13,
+          "note": "Very different is outside the narrow phrase table."
+        },
+        {
+          "rule_id": "V017",
+          "line": 15,
+          "note": "Completely empty is outside the narrow phrase table."
+        },
+        {
+          "rule_id": "V017",
+          "line": 17,
+          "note": "A heading is outside the rule's prose scope."
+        },
+        {
+          "rule_id": "V017",
+          "line": 19,
+          "note": "Inline code preserves a literal legacy label."
+        },
+        {
+          "rule_id": "V017",
+          "line": 22,
+          "note": "Fenced code preserves literal output."
+        },
+        {
+          "rule_id": "V017",
+          "line": 25,
+          "note": "Unanimous without an intensifier is already concise."
+        },
+        {
+          "rule_id": "V017",
+          "line": 27,
+          "note": "Unique without an intensifier is already concise."
+        }
+      ]
+    },
+    "quality/corpus/needless-intensifiers.py": {
+      "expected": [
+        {
+          "rule_id": "V017",
+          "line": 3,
+          "column": 23
+        },
+        {
+          "rule_id": "V017",
+          "line": 5,
+          "column": 24
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V017",
+          "line": 7,
+          "note": "A Python string value is code, not documentation prose."
+        },
+        {
+          "rule_id": "V017",
+          "line": 9,
+          "note": "Nearly unanimous is a deliberate near miss in a comment."
+        },
+        {
+          "rule_id": "V017",
+          "line": 13,
+          "note": "A scoped use of unique in a docstring has no intensifier."
+        },
+        {
+          "rule_id": "V017",
+          "line": 17,
+          "note": "Very different remains legitimate in a Python comment."
+        }
+      ]
+    },
     "quality/corpus/unbounded-superlatives.md": {
       "expected": [
         {
@@ -2440,6 +2537,16 @@
           "rule_id": "V013",
           "line": 15,
           "column": 24
+        },
+        {
+          "rule_id": "V017",
+          "line": 33,
+          "column": 21
+        },
+        {
+          "rule_id": "V017",
+          "line": 33,
+          "column": 54
         }
       ],
       "negative_cases": [

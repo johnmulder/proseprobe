@@ -481,7 +481,7 @@ class TestRulesCommand:
         assert data["schema_version"] == 1
         assert data["version"] == __version__
         rules = data["rules"]
-        assert len(rules) == 92
+        assert len(rules) == 93
         assert [rule["id"] for rule in rules] == sorted(rule["id"] for rule in rules)
         assert next(rule for rule in rules if rule["id"] == "S001") == {
             "id": "S001",
@@ -783,18 +783,25 @@ class TestProfiles:
         assert "V008" in journalism.stdout
         assert "G013" not in journalism.stdout
 
+    @pytest.mark.parametrize(
+        ("rule_id", "source"),
+        [
+            ("V015", "Atlas is fastest.\n"),
+            ("V017", "The vote was completely unanimous.\n"),
+        ],
+    )
     def test_experimental_rule_requires_explicit_selection(
-        self, tmp_path: Path
+        self, tmp_path: Path, rule_id: str, source: str
     ) -> None:
         test_file = tmp_path / "doc.md"
-        test_file.write_text("Atlas is fastest.\n")
+        test_file.write_text(source)
 
         profiled = run_cli("check", str(test_file), "--profile", "technical-docs")
         selected = run_cli(
             "check",
             str(test_file),
             "--select",
-            "V015",
+            rule_id,
             "--severity",
             "info",
             "--min-confidence",
@@ -802,9 +809,9 @@ class TestProfiles:
         )
 
         assert profiled.exit_code == 0
-        assert "V015" not in profiled.stdout
+        assert rule_id not in profiled.stdout
         assert selected.exit_code == 0
-        assert "V015" in selected.stdout
+        assert rule_id in selected.stdout
 
     def test_baseline_create_uses_profile_policy(self, tmp_path: Path) -> None:
         test_file = tmp_path / "doc.md"
@@ -1824,7 +1831,7 @@ class TestCliValidation:
         assert result.exit_code == 2
         assert result.stdout == ""
         assert "<command line>" in result.stderr
-        assert "did you mean 'V016'" in result.stderr
+        assert "did you mean 'V017'" in result.stderr
 
     @pytest.mark.parametrize("output_format", ["json", "sarif"])
     def test_invalid_config_rule_keeps_structured_stdout_empty(

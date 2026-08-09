@@ -111,6 +111,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         vocab.ImpreciseQuantityRule(),
         vocab.UnboundedSuperlativeRule(),
         vocab.AbsoluteReliabilityClaimRule(),
+        vocab.NeedlessIntensifierRule(),
     ]
     for rule in rules:
         override = config.severity_overrides.get(rule.id)
