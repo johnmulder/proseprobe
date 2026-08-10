@@ -1,4 +1,4 @@
-"""A robust module that can utilize adapters and exercise documentation checks."""
+"""A robust module that can utilize bespoke adapters and exercise documentation checks."""
 
 
 def total(values: list[int]) -> int:

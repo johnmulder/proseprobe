@@ -82,6 +82,7 @@ AI_VOCABULARY_TIER2 = {
     "praxis",
     # Latinate vocabulary (academic tropes)
     "facilitate",
+    "utilize",
     "demonstrate",
     "regarding",
     "implement",
@@ -192,6 +193,7 @@ VOCABULARY_SUGGESTIONS: dict[str, str] = {
     "praxis": "practice",
     # Latinate vocabulary (academic tropes)
     "facilitate": "help",
+    "utilize": "use",
     "demonstrate": "show",
     "regarding": "about",
     "implement": "carry out",

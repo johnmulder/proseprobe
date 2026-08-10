@@ -88,7 +88,8 @@ def process():
 '''
         rule = DocstringVocabularyRule()
         issues = rule.check(text, "test.py")
-        assert len(issues) == 2
+        assert len(issues) == 1
+        assert "bespoke" in issues[0].message
 
     def test_ignores_normal_docstrings(self) -> None:
         """Test ignoring normal docstrings."""

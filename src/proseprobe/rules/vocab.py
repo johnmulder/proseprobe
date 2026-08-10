@@ -179,6 +179,7 @@ class AIVocabularyRule(Rule):
         "instantiate": r"instantiat(?:e|es|ed|ing)",
         "reconceptualize": r"reconceptuali[zs](?:e|es|ed|ing)",
         "facilitate": r"facilitat(?:e|es|ed|ing)",
+        "utilize": r"utili[zs](?:e|es|ed|ing)",
         "demonstrate": r"demonstrat(?:e|es|ed|ing)",
         "implement": r"implement(?:s|ed|ing)?",
         # Narrow: only academic usage ("interrogate the assumptions"), not police/legal

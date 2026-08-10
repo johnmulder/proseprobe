@@ -177,6 +177,38 @@ class TestAIVocabularyRule:
         assert issues[0].confidence is confidence
         assert issues[0].suggestion == suggestion
 
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "utilize",
+            "utilizes",
+            "utilized",
+            "utilizing",
+            "utilise",
+            "utilises",
+            "utilised",
+            "utilising",
+        ],
+    )
+    def test_utilize_forms_have_one_canonical_finding(
+        self,
+        rule: AIVocabularyRule,
+        text: str,
+    ) -> None:
+        issues = rule.check(f"The adapter will {text} the parser.", "test.md")
+
+        assert len(issues) == 1
+        assert issues[0].confidence is Confidence.MEDIUM
+        assert issues[0].suggestion == "use"
+
+    def test_allowed_utilize_suppresses_every_supported_form(self) -> None:
+        rule = AIVocabularyRule(allowed={"utilize"})
+        content = (
+            "utilize utilizes utilized utilizing utilise utilises utilised utilising"
+        )
+
+        assert rule.check(content, "test.md") == []
+
     def test_tier2_word_has_medium_confidence(self, rule: AIVocabularyRule) -> None:
         content = "This is a crucial decision."
         issues = rule.check(content, "test.md")

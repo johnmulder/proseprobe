@@ -439,7 +439,7 @@ class TestCheckFile:
 
         assert [(issue.rule_id, issue.line) for issue in issues] == [
             ("C001", 1),
-            ("C001", 1),
+            ("V001", 1),
             ("V001", 1),
         ]
 

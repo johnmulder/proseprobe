@@ -2615,7 +2615,7 @@
         {
           "rule_id": "C001",
           "line": 1,
-          "column": 29
+          "column": 37
         },
         {
           "rule_id": "C002",
@@ -2656,6 +2656,11 @@
           "rule_id": "V001",
           "line": 1,
           "column": 6
+        },
+        {
+          "rule_id": "V001",
+          "line": 1,
+          "column": 29
         },
         {
           "rule_id": "V001",
