@@ -539,12 +539,55 @@ class ListicleInProseRule(Rule):
     content_scope = "prose"
 
     _ordinals: ClassVar[list[str]] = ["first", "second", "third", "fourth", "fifth"]
+    _sequential_opener = re.compile(r"^(first|second|third)(?:ly)?,", re.IGNORECASE)
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check content for detect 'The first... The second... The third...' in prose."""
         issues: list[Issue] = []
+        for _scope, group in groupby(
+            iter_prose_sentences(content, filename),
+            key=lambda sentence: sentence.scope_id,
+        ):
+            sentences = [
+                sentence
+                for sentence in group
+                if sentence.context in {"body", "blockquote"}
+            ]
+            for index in range(len(sentences) - 2):
+                sequence = sentences[index : index + 3]
+                matches = [
+                    self._sequential_opener.match(sentence.text)
+                    for sentence in sequence
+                ]
+                if [
+                    match.group(1).casefold() if match else None for match in matches
+                ] != ["first", "second", "third"]:
+                    continue
+                first_match = matches[0]
+                if first_match is None:  # pragma: no cover - narrowed above
+                    continue
+                line, column = sequence[0].source_position()
+                end_line, end_column = sequence[0].source_position(first_match.end())
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message="Listicle in prose: 'First... Second... Third...'",
+                        line=line,
+                        column=column,
+                        end_line=end_line,
+                        end_column=end_column,
+                        severity=self.severity,
+                        suggestion="Use an explicit numbered list",
+                    )
+                )
+                break
+
         for block in iter_prose_blocks(content, filename):
             if block.context not in {"body", "blockquote"}:
+                continue
+            if any(
+                block.start_line <= issue.line <= block.end_line for issue in issues
+            ):
                 continue
             lines = block.lines
             full_text = " ".join(line for _, line in lines).lower()

@@ -539,6 +539,62 @@ class TestListicleInProse:
         assert len(issues) == 1
         assert issues[0].rule_id == "S012"
 
+    @pytest.mark.parametrize("first", ["First,", "Firstly,"])
+    def test_detects_sequential_sentence_openers(self, first: str) -> None:
+        from proseprobe.rules.struct import ListicleInProseRule
+
+        text = f"{first} install the client. Secondly, configure it. Third, run it."
+
+        [issue] = ListicleInProseRule().check(text, "test.md")
+
+        assert issue.message == "Listicle in prose: 'First... Second... Third...'"
+        assert issue.suggestion == "Use an explicit numbered list"
+        assert text[issue.column - 1 : issue.end_column - 1] == first
+
+    def test_reports_wrapped_python_docstring_span(self) -> None:
+        from proseprobe.rules.struct import ListicleInProseRule
+
+        source = '''\
+def configure():
+    """First, install the client. Second, configure it.
+    Third, run it."""
+'''
+
+        [issue] = ListicleInProseRule().check(source, "test.py")
+
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            2,
+            8,
+            2,
+            14,
+        )
+
+    def test_reports_only_once_when_ordinal_forms_share_a_block(self) -> None:
+        from proseprobe.rules.struct import ListicleInProseRule
+
+        text = (
+            "First, install it. Second, configure it. Third, run it. "
+            "The first reason is cost. The second is speed. The third is safety."
+        )
+
+        assert len(ListicleInProseRule().check(text, "test.md")) == 1
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "First, install it. Second, configure it.",
+            "First, install it. Third, run it. Second, configure it.",
+            "First install completed. Second, configure it. Third, run it.",
+            "First, install it.\n\nSecond, configure it.\n\nThird, run it.",
+            "# First, install it.\n# Second, configure it.\n# Third, run it.",
+            "1. First, install it.\n2. Second, configure it.\n3. Third, run it.",
+        ],
+    )
+    def test_ignores_nonsequential_or_nonprose_blocks(self, text: str) -> None:
+        from proseprobe.rules.struct import ListicleInProseRule
+
+        assert ListicleInProseRule().check(text, "test.md") == []
+
     def test_detects_fallback_only_listicle_pattern_once(self) -> None:
         """A single named ordinal should retain fallback coverage."""
         from proseprobe.rules.struct import ListicleInProseRule
