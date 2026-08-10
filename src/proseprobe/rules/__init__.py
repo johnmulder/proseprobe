@@ -79,6 +79,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         struct.WallOfTextParagraphRule(thresholds.wall_of_text_sentences),
         struct.HeadingWithoutBodyRule(),
         struct.ExcessiveHeadingDepthRule(),
+        struct.TinySectionRule(),
         style.TitleCaseHeadingsRule(),
         style.BoldOveruseRule(thresholds.bold_overuse),
         style.EmDashOveruseRule(thresholds.em_dash_overuse),

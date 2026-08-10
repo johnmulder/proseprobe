@@ -19,7 +19,7 @@ def test_metadata_covers_registry_in_rule_id_order() -> None:
     metadata_ids = tuple(item.id for item in metadata)
 
     assert metadata_ids == tuple(rule.id for rule in get_all_rules())
-    assert len(metadata) == 93
+    assert len(metadata) == 94
     assert len(set(metadata_ids)) == len(metadata_ids)
 
 
@@ -174,6 +174,19 @@ def test_s028_metadata_matches_the_heading_depth_contract() -> None:
     assert metadata.applies_to == ("markdown",)
     assert metadata.content_scope == "raw"
     assert metadata.profiles == ("technical-docs",)
+    assert metadata.config_key is None
+
+
+def test_s029_metadata_matches_the_tiny_section_contract() -> None:
+    metadata = get_rule_metadata_by_id("S029")
+
+    assert metadata is not None
+    assert metadata.name == "Tiny Section"
+    assert metadata.default_severity is Severity.INFO
+    assert metadata.default_confidence is Confidence.LOW
+    assert metadata.applies_to == ("markdown",)
+    assert metadata.content_scope == "raw"
+    assert metadata.profiles == ()
     assert metadata.config_key is None
 
 

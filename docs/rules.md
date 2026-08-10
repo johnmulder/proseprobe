@@ -6,7 +6,7 @@ Most prose-scoped `V`, `S`, `T`, and `G` rules inspect Markdown prose and
 source-mapped Python docstrings and comments; `G015` examines only Markdown
 document openers. `C` rules handle Python-specific documentation issues.
 `M001` checks Markdown syntax in Python comments, while `M002`-`M010` and
-`S025` and `S028` are Markdown-only.
+`S025`, `S028`, and `S029` are Markdown-only.
 
 Wrapped Markdown and Python prose is segmented into cached, source-mapped
 sentences. Records retain exact start and end positions while conservative
@@ -63,6 +63,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `S022` | Wall-of-Text Paragraph | Structure | info | medium | markdown, python / prose | `thresholds.wall_of_text_sentences` |
 | `S025` | Heading Without Body | Structure | warning | high | markdown / raw | — |
 | `S028` | Excessive Heading Depth | Structure | info | medium | markdown / raw | — |
+| `S029` | Tiny Section | Structure | info | low | markdown / raw | — |
 | `T001` | Title Case Headings | Style | info | medium | markdown / raw | — |
 | `T002` | Bold Overuse | Style | info | medium | markdown / raw | `thresholds.bold_overuse` |
 | `T003` | Em Dash Overuse | Style | info | medium | markdown, python / prose | `thresholds.em_dash_overuse` |
@@ -1960,6 +1961,48 @@ Fenced code, HTML blocks, and front matter are excluded by the Markdown parser.
 **Example (good):**
 ```markdown
 #### Retry state details
+```
+
+---
+
+### S029: Tiny Section
+
+Detects runs of at least three consecutive sibling Markdown sections whose
+bodies are each a single plain paragraph of five words or fewer. The rule emits
+one informational, low-confidence issue on the first heading in the run.
+
+Lists, tables, blockquotes, links, inline or fenced code, raw HTML, multiple
+paragraphs, and longer prose break a run. Level-1 titles and question headings
+are excluded, as are sections under API/reference, changelog/release-note, FAQ,
+and example headings, where short sections are commonly intentional.
+
+This experimental rule is not enabled by a profile. Select it explicitly with
+`--select S029` while evaluating whether it fits the document type.
+
+**Example (bad):**
+```markdown
+## Start
+
+Starts the worker.
+
+## Stop
+
+Stops the worker.
+
+## Retry
+
+Retries failed work.
+```
+
+**Example (good):**
+```markdown
+## Start
+
+Start the worker with `worker start`.
+
+## Stop
+
+Stop the worker with `worker stop`.
 ```
 
 ---

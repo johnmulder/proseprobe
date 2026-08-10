@@ -1548,6 +1548,62 @@
         }
       ]
     },
+    "quality/corpus/tiny-sections.md": {
+      "expected": [
+        {
+          "rule_id": "S029",
+          "line": 5,
+          "column": 4
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "S029",
+          "line": 1,
+          "note": "A level-1 document title is not a candidate section."
+        },
+        {
+          "rule_id": "S029",
+          "line": 17,
+          "note": "A body longer than five words breaks a tiny-section run."
+        },
+        {
+          "rule_id": "S029",
+          "line": 21,
+          "note": "Two consecutive tiny sections remain below the run threshold."
+        },
+        {
+          "rule_id": "S029",
+          "line": 29,
+          "note": "Short API sections commonly document individual operations."
+        },
+        {
+          "rule_id": "S029",
+          "line": 43,
+          "note": "FAQ sections and question headings are intentionally concise."
+        },
+        {
+          "rule_id": "S029",
+          "line": 57,
+          "note": "Release-note sections commonly contain short entries."
+        },
+        {
+          "rule_id": "S029",
+          "line": 71,
+          "note": "Example sections may use short captions or descriptions."
+        },
+        {
+          "rule_id": "S029",
+          "line": 85,
+          "note": "Reference sections commonly document small units separately."
+        },
+        {
+          "rule_id": "S029",
+          "line": 99,
+          "note": "Lists, tables, and fenced code are structured content, not tiny prose."
+        }
+      ]
+    },
     "quality/corpus/generic-openers.md": {
       "expected": [
         {

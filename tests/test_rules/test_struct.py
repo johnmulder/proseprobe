@@ -1567,9 +1567,13 @@ Retries failed work.
         [
             "- one item",
             "| Key | Value |\n| --- | --- |\n| a | b |",
+            "Key | Value\n--- | ---\na | b",
             "> Quoted text.",
             "[Read more](https://example.com).",
+            "See [worker][docs].",
+            "See https://example.com.",
             "Use `run` now.",
+            "    worker start",
             "```text\noutput\n```",
             "<div>\nText.\n</div>",
             "First paragraph.\n\nSecond paragraph.",

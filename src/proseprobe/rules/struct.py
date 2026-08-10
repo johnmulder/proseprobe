@@ -1239,7 +1239,11 @@ class TinySectionRule(Rule):
     _MIN_RUN = 3
     _WORDS = re.compile(r"[\w'-]+")
     _STRUCTURED_LINE = re.compile(
-        r"^\s*(?:[-*+>]\s+|\d+[.)]\s+|\|.*\|\s*$|```|~~~|<[!/A-Za-z])",
+        r"^(?: {4}\S|\t\S|\s*(?:[-*+>]\s+|\d+[.)]\s+|.*\|.*|```|~~~|<[!/A-Za-z]))",
+        re.MULTILINE,
+    )
+    _LINK = re.compile(
+        r"https?://|!?\[[^]]+\](?:\([^)]+\)|\[[^]]*\])|^\s*\[[^]]+\]:\s*\S+",
         re.MULTILINE,
     )
     _EXCLUDED_TITLE_WORDS = frozenset(
@@ -1303,7 +1307,7 @@ class TinySectionRule(Rule):
                 and not re.search(r"\n\s*\n", raw_body)
                 and not self._STRUCTURED_LINE.search(raw_body)
                 and "`" not in raw_body
-                and not re.search(r"!?\[[^]]+\]\([^)]+\)", raw_body)
+                and not self._LINK.search(raw_body)
             )
             if tiny and (not run or run[-1].level == heading.level):
                 run.append(heading)

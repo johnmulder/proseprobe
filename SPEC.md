@@ -49,12 +49,12 @@ speed remains a tracked metric until the benchmark corpus reflects real projects
 | Prefix | Category | Rules | Description |
 |--------|----------|-------|-------------|
 | `V` | Vocabulary | 16 | Overused and clichéd words and phrases |
-| `S` | Structure | 24 | Organizational patterns |
+| `S` | Structure | 25 | Organizational patterns |
 | `T` | Style | 13 | Typographic issues |
 | `G` | Grammar | 24 | Grammatical patterns |
 | `C` | Code | 6 | Python docstring/comment issues |
 | `M` | Markup | 10 | Markdown artifacts |
-| **Total** | | **93** | |
+| **Total** | | **94** | |
 
 <!-- rule-docs:categories:end -->
 
@@ -63,7 +63,7 @@ source-mapped Python docstrings and comments; `G015` examines only Markdown
 document openers. Python blocks are evaluated independently so thresholds do
 not combine unrelated documentation. `C` rules cover Python-specific
 documentation issues. `M001` checks Markdown syntax in Python comments, while
-`M002`-`M010`, `S025`, and `S028` are Markdown-only.
+`M002`-`M010`, `S025`, `S028`, and `S029` are Markdown-only.
 
 Markdown and Python parsers cache source-mapped sentence records with exact
 start and end line and column positions. Sentence segmentation uses
