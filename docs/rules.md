@@ -1072,21 +1072,25 @@ The team focused on faster builds, shorter ship cycles, and constant iteration.
 
 ### S012: Listicle in Prose
 
-Detects ordinal progressions ("The first… The second… The third…")
-disguised as continuous prose.
+Detects ordinal progressions ("The first… The second… The third…" or
+"First, … Second, … Third, …") disguised as continuous prose.
 
 Ordinal sequences are evaluated within one body or block-quote paragraph, not
-across headings, lists, blank paragraphs, or skipped Markdown constructs.
+across headings, lists, blank paragraphs, or skipped Markdown constructs. The
+sequential-opener form requires three consecutive sentences in order and also
+accepts `Firstly`, `Secondly`, and `Thirdly`.
 
 **Example (bad):**
 ```markdown
-The first reason is cost. The second reason is speed.
-The third reason is reliability.
+First, install the client. Second, select its configuration.
+Third, run the validation command.
 ```
 
 **Example (good):**
 ```markdown
-The main reasons are cost, speed, and reliability.
+1. Install the client.
+2. Select its configuration.
+3. Run the validation command.
 ```
 
 ---

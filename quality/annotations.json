@@ -3264,6 +3264,73 @@
         }
       ]
     },
+    "quality/corpus/sequential-step-prose.md": {
+      "expected": [
+        {
+          "rule_id": "S012",
+          "line": 3,
+          "column": 1
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "S012",
+          "line": 5,
+          "note": "An explicit numbered list is not a listicle disguised as prose."
+        },
+        {
+          "rule_id": "S012",
+          "line": 9,
+          "note": "A partial two-step sequence is not reported."
+        },
+        {
+          "rule_id": "S012",
+          "line": 11,
+          "note": "Blank paragraphs separate otherwise ordered transitions."
+        },
+        {
+          "rule_id": "S012",
+          "line": 17,
+          "note": "Reordered transitions are not an exact sequential progression."
+        },
+        {
+          "rule_id": "S012",
+          "line": 19,
+          "note": "An ordinal noun without transition punctuation is excluded."
+        }
+      ]
+    },
+    "quality/corpus/sequential-step-prose.py": {
+      "expected": [
+        {
+          "rule_id": "S012",
+          "line": 5,
+          "column": 8
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "S012",
+          "line": 10,
+          "note": "A partial two-step docstring sequence is not reported."
+        },
+        {
+          "rule_id": "S012",
+          "line": 15,
+          "note": "Blank docstring paragraphs separate the transitions."
+        },
+        {
+          "rule_id": "S012",
+          "line": 25,
+          "note": "Reordered docstring transitions are excluded."
+        },
+        {
+          "rule_id": "S012",
+          "line": 30,
+          "note": "An ordinal noun without transition punctuation is excluded."
+        }
+      ]
+    },
     "quality/corpus/template-residue.md": {
       "expected": [
         {

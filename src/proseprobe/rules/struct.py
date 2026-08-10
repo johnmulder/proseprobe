@@ -566,14 +566,14 @@ class ListicleInProseRule(Rule):
                 first_match = matches[0]
                 if first_match is None:  # pragma: no cover - narrowed above
                     continue
-                line, column = sequence[0].source_position()
+                issue_line, issue_column = sequence[0].source_position()
                 end_line, end_column = sequence[0].source_position(first_match.end())
                 issues.append(
                     Issue(
                         rule_id=self.id,
                         message="Listicle in prose: 'First... Second... Third...'",
-                        line=line,
-                        column=column,
+                        line=issue_line,
+                        column=issue_column,
                         end_line=end_line,
                         end_column=end_column,
                         severity=self.severity,
