@@ -1,4 +1,4 @@
-"""Grammar tests (G001-G017, G019, G022, G024-G025, G029, G031, G037)."""
+"""Grammar tests (G001-G017, G019, G022, G024-G025, G029, G031, G037-G038)."""
 
 import pytest
 
@@ -22,6 +22,7 @@ from proseprobe.rules.grammar import (
     PatronizingAnalogyRule,
     PedagogicalVoiceRule,
     UnclearActorRequirementRule,
+    UndefinedComparativeRule,
     WeakInstructionVerbRule,
 )
 
@@ -1902,5 +1903,119 @@ class TestHedgedRequirementRule:
         assert rule.name == "Hedged Requirement"
         assert rule.config_key is None
         assert rule.default_confidence is Confidence.MEDIUM
+        assert rule.applies_to == {"markdown", "python"}
+        assert rule.content_scope == "prose"
+
+
+class TestUndefinedComparativeRule:
+    """Tests for G038: Undefined Comparative."""
+
+    @pytest.mark.parametrize(
+        ("source", "claim"),
+        [
+            ("Atlas is better.", "better"),
+            ("The legacy route was worse.", "worse"),
+            ("The new parser is much faster.", "much faster"),
+            ("The fallback remains less reliable.", "less reliable"),
+            ("These queues are more scalable.", "more scalable"),
+        ],
+    )
+    def test_reports_curated_predicate_claims(self, source: str, claim: str) -> None:
+        [issue] = UndefinedComparativeRule().check(source, "guide.md")
+
+        assert issue.rule_id == "G038"
+        assert issue.message == f"Undefined comparative: '{claim}'"
+        assert source[issue.column - 1 : issue.end_column - 1] == claim
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.LOW
+        assert issue.suggestion == "Name the comparison target"
+
+    def test_preserves_a_wrapped_source_span(self) -> None:
+        source = "The fallback remains more\nreliable."
+
+        [issue] = UndefinedComparativeRule().check(source, "guide.md")
+
+        assert issue.message == "Undefined comparative: 'more reliable'"
+        assert (issue.line, issue.column) == (1, 22)
+        assert (issue.end_line, issue.end_column) == (2, 9)
+
+    def test_reports_multiple_claims_in_source_order(self) -> None:
+        source = "Atlas is faster, but Boreal is slower."
+
+        issues = UndefinedComparativeRule().check(source, "guide.md")
+
+        assert [issue.message for issue in issues] == [
+            "Undefined comparative: 'faster'",
+            "Undefined comparative: 'slower'",
+        ]
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "Atlas is faster than Boreal.",
+            "Compared with Boreal, Atlas is faster.",
+            "Among the three parsers, Atlas is faster.",
+            "In our benchmark, Atlas is faster.",
+            "The first parser is faster.",
+            "Figure 2 shows Atlas is faster.",
+            "## Compared with Boreal\n\nAtlas is faster.",
+            "We compared Atlas and Boreal.\n\nAtlas is faster.",
+            "Atlas handled 100 requests in 12 ms.\n\nIt is faster.",
+            (
+                "| Parser | Latency |\n| --- | --- |\n| Atlas | 12 ms |\n\n"
+                "Atlas is faster."
+            ),
+        ],
+    )
+    def test_ignores_nearby_targets_and_evidence(self, source: str) -> None:
+        assert UndefinedComparativeRule().check(source, "guide.md") == []
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "Which parser is faster?",
+            "If Atlas is faster, deploy it.",
+            "Determine whether Atlas is faster.",
+            'Avoid claiming "Atlas is faster" in release notes.',
+            "Choose a faster parser.",
+            "Atlas runs faster under load.",
+            "> Atlas is faster.",
+            "# Atlas is faster",
+            "Use `Atlas is faster` as sample text.",
+            "```text\nAtlas is faster.\n```",
+            "## Example\n\nAtlas is faster.",
+        ],
+    )
+    def test_ignores_non_claim_and_markdown_contexts(self, source: str) -> None:
+        assert UndefinedComparativeRule().check(source, "guide.md") == []
+
+    def test_checks_list_prose(self) -> None:
+        source = "- The fallback is less secure."
+
+        [issue] = UndefinedComparativeRule().check(source, "guide.mdx")
+
+        assert (issue.line, issue.column) == (1, 19)
+        assert issue.message == "Undefined comparative: 'less secure'"
+
+    def test_checks_python_comments_and_docstrings_but_not_strings(self) -> None:
+        source = (
+            'message = "Atlas is faster."\n'
+            "# Atlas is faster.\n\n"
+            "def explain() -> None:\n"
+            '    """Boreal is less reliable."""\n'
+            "    return None\n"
+        )
+
+        issues = UndefinedComparativeRule().check(source, "guide.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_rule_metadata(self) -> None:
+        rule = UndefinedComparativeRule()
+
+        assert rule.id == "G038"
+        assert rule.name == "Undefined Comparative"
+        assert rule.config_key is None
+        assert rule.default_confidence is Confidence.LOW
         assert rule.applies_to == {"markdown", "python"}
         assert rule.content_scope == "prose"

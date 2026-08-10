@@ -1,4 +1,4 @@
-"""Grammar rules (G001-G017, G019, G022, G024-G025, G029, G031, G037)."""
+"""Grammar rules (G001-G017, G019, G022, G024-G025, G029, G031, G037-G038)."""
 
 import re
 from typing import ClassVar
@@ -1000,6 +1000,104 @@ class HedgedRequirementRule(Rule):
                         severity=self.severity,
                         confidence=self.default_confidence,
                         suggestion="Choose one requirement strength",
+                    )
+                )
+        return issues
+
+
+class UndefinedComparativeRule(Rule):
+    """G038: Detect curated predicate comparatives without nearby targets."""
+
+    id = "G038"
+    name = "Undefined Comparative"
+    description = "Detects predicate comparatives lacking nearby comparison context"
+    severity = Severity.INFO
+    default_confidence = Confidence.LOW
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _CLAIM: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:is|are|was|were|remain(?:s|ed)?)\s+"
+        r"(?P<claim>(?:(?:much|far|significantly|considerably|noticeably|"
+        r"substantially)\s+)?(?:better|worse|faster|slower|easier|harder|"
+        r"cheaper|safer|simpler|clearer|stronger|weaker|higher|lower|larger|"
+        r"smaller|(?:more|less)\s+(?:accurate|complex|efficient|expensive|"
+        r"maintainable|readable|reliable|scalable|secure|stable|verbose)))\b",
+        re.IGNORECASE,
+    )
+    _TARGET_CONTEXT: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:against|among|benchmark(?:ed|ing|s)?|between|compared\s+(?:to|with)|"
+        r"compar(?:e[ds]?|ing|ison)s?|differ(?:ed|ence|ences|ent|s)?|"
+        r"evaluat(?:e[ds]?|ing|ion)s?|instead\s+of|relative\s+to|than|"
+        r"versus|vs\.?)\b"
+        r"|\bof\s+(?:both|our|the\s+two|these|those)\b"
+        r"|\b(?:benchmark(?:ed|ing|s)?|chart|figure|table)\s+(?:\d+|[A-Z])\b"
+        r"|\b(?:both|first|former|latter|other|second|third)\b",
+        re.IGNORECASE,
+    )
+    _MEASUREMENT: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b\d+(?:,\d{3})*(?:\.\d+)?\s*"
+        r"(?:%|bytes?|gib|gigabytes?|hours?|kb|kib|mb|mib|milliseconds?|ms|"
+        r"operations?|points?|requests?|runs?|seconds?|times?|x)\b",
+        re.IGNORECASE,
+    )
+    _TABLE_ROW: ClassVar[re.Pattern[str]] = re.compile(
+        r"^\s*\|?.+\|.+\|?\s*$", re.MULTILINE
+    )
+    _LITERAL_CONTEXT: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:avoid|do not|don't)\s+(?:claim(?:ing)?|say(?:ing)?|writ(?:e|ing))\b"
+        r"|\bthe (?:label|phrase|wording)\b",
+        re.IGNORECASE,
+    )
+    _HYPOTHETICAL: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:if|whether)\b", re.IGNORECASE
+    )
+    _CONTEXT_LINES = 4
+
+    @classmethod
+    def _context_window(cls, content: str, start_line: int, end_line: int) -> str:
+        lines = content.splitlines()
+        start = max(0, start_line - cls._CONTEXT_LINES - 1)
+        return "\n".join(lines[start:end_line])
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Report curated comparatives without nearby comparison context."""
+        issues: list[Issue] = []
+        for sentence in iter_prose_sentences(content, filename):
+            if (
+                sentence.context not in {"body", "list_item"}
+                or is_example_line(content, filename, sentence.start_line)
+                or sentence.text.rstrip().endswith("?")
+                or self._LITERAL_CONTEXT.search(sentence.text)
+            ):
+                continue
+            context = self._context_window(
+                content, sentence.start_line, sentence.end_line
+            )
+            if (
+                self._TARGET_CONTEXT.search(context)
+                or self._MEASUREMENT.search(context)
+                or self._TABLE_ROW.search(context)
+            ):
+                continue
+            for match in self._CLAIM.finditer(sentence.text):
+                if self._HYPOTHETICAL.search(sentence.text[: match.start()]):
+                    continue
+                start, end = match.span("claim")
+                line, column = sentence.source_position(start)
+                end_line, end_column = sentence.source_position(end)
+                claim = " ".join(match.group("claim").split())
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Undefined comparative: '{claim}'",
+                        line=line,
+                        column=column,
+                        end_line=end_line,
+                        end_column=end_column,
+                        severity=self.severity,
+                        confidence=self.default_confidence,
+                        suggestion="Name the comparison target",
                     )
                 )
         return issues
