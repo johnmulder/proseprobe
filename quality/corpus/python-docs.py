@@ -26,3 +26,8 @@ def describe() -> str:
     word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word.
     """
     return "I hope this helps and may perhaps change everything while word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word repeats."
+
+
+def record_metrics() -> None:
+    """Record parser utilization for each request."""
+    pass

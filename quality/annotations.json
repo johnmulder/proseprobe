@@ -2720,6 +2720,11 @@
           "note": "The docstring uses plain general vocabulary."
         },
         {
+          "rule_id": "V001",
+          "line": 32,
+          "note": "The noun utilization is outside the targeted verb family."
+        },
+        {
           "rule_id": "V002",
           "line": 28,
           "note": "Collaborative wording inside an ordinary string is not documentation."
@@ -3411,6 +3416,37 @@
           "rule_id": "M007",
           "line": 3,
           "note": "A tilde fence closed by a longer tilde delimiter is valid."
+        }
+      ]
+    },
+    "quality/corpus/utilize-vocabulary.md": {
+      "expected": [
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 18
+        },
+        {
+          "rule_id": "V001",
+          "line": 5,
+          "column": 20
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V001",
+          "line": 7,
+          "note": "The noun utilization is outside the targeted verb family."
+        },
+        {
+          "rule_id": "V001",
+          "line": 9,
+          "note": "Inline code preserves a literal legacy command name."
+        },
+        {
+          "rule_id": "V001",
+          "line": 11,
+          "note": "The unrelated noun utility is a lexical near miss."
         }
       ]
     },

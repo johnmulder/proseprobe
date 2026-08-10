@@ -136,7 +136,7 @@ Detects overused and clichéd words that weaken writing.
 - showcase, foster, garner, pivotal, testament
 - interplay, vibrant, nuanced, embark, realm
 - unveil, streamline, landscape, paradigm, synergy
-- leverage, elevate, spearhead
+- leverage, utilize, elevate, spearhead
 
 **Example (bad):**
 ```markdown
@@ -550,13 +550,13 @@ The system uses modern techniques to deliver fast results.
 ### C001: Docstring-Only Vocabulary
 
 Detects Python docstring terms not covered by `V001`. Its built-in terms are
-`utilize`, `bespoke`, `holistic`, and `paradigm`; configured vocabulary
-additions belong to `V001` so the two rules do not report the same match.
+`bespoke`, `holistic`, and `paradigm`; configured vocabulary additions belong
+to `V001` so the two rules do not report the same match.
 
 **Example (bad):**
 ```python
 def process(data):
-    """Utilize a bespoke parser for the data."""
+    """Use a bespoke parser for the data."""
     pass
 ```
 
