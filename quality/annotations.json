@@ -712,6 +712,118 @@
         }
       ]
     },
+    "quality/corpus/all-caps-emphasis.md": {
+      "expected": [
+        {
+          "rule_id": "T013",
+          "line": 3,
+          "column": 25
+        },
+        {
+          "rule_id": "T013",
+          "line": 5,
+          "column": 11
+        },
+        {
+          "rule_id": "T013",
+          "line": 7,
+          "column": 19
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "T013",
+          "line": 11,
+          "note": "A technical acronym sequence has no strong emphasis cue."
+        },
+        {
+          "rule_id": "T013",
+          "line": 13,
+          "note": "Isolated acronyms are not a consecutive uppercase run."
+        },
+        {
+          "rule_id": "T013",
+          "line": 15,
+          "note": "An underscore-delimited identifier is one technical token."
+        },
+        {
+          "rule_id": "T013",
+          "line": 17,
+          "note": "Two uppercase normative keywords remain below the run threshold."
+        },
+        {
+          "rule_id": "T013",
+          "line": 19,
+          "note": "Uppercase HTTP methods joined by AND have no emphasis cue."
+        },
+        {
+          "rule_id": "T013",
+          "line": 21,
+          "note": "An uppercase schema term without an emphasis cue is excluded."
+        },
+        {
+          "rule_id": "T013",
+          "line": 23,
+          "note": "Blockquoted uppercase text may reproduce an external source."
+        },
+        {
+          "rule_id": "T013",
+          "line": 25,
+          "note": "Heading labels are outside the prose rule's scope."
+        },
+        {
+          "rule_id": "T013",
+          "line": 27,
+          "note": "Inline code preserves a literal uppercase phrase."
+        },
+        {
+          "rule_id": "T013",
+          "line": 29,
+          "note": "Markdown link destinations are masked from prose rules."
+        },
+        {
+          "rule_id": "T013",
+          "line": 32,
+          "note": "Fenced code is outside document prose."
+        },
+        {
+          "rule_id": "T013",
+          "line": 37,
+          "note": "Prose under an example heading demonstrates the rule."
+        }
+      ]
+    },
+    "quality/corpus/all-caps-emphasis.py": {
+      "expected": [
+        {
+          "rule_id": "T013",
+          "line": 3,
+          "column": 11
+        },
+        {
+          "rule_id": "T013",
+          "line": 12,
+          "column": 18
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "T013",
+          "line": 5,
+          "note": "Ordinary Python strings are not documentation prose."
+        },
+        {
+          "rule_id": "T013",
+          "line": 6,
+          "note": "A Python constant identifier is code, not prose."
+        },
+        {
+          "rule_id": "T013",
+          "line": 8,
+          "note": "A technical acronym sequence in a comment has no emphasis cue."
+        }
+      ]
+    },
     "quality/corpus/absolute-reliability-claims.md": {
       "expected": [
         {

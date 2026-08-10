@@ -90,6 +90,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         style.SentenceLengthRule(thresholds.sentence_length_max),
         style.RepeatedOrMixedPunctuationRule(),
         style.RhetoricalEllipsisRule(),
+        style.AllCapsEmphasisRule(),
         style.ParentheticalOverloadRule(),
         style.NestedParentheticalRule(),
         style.SlashAlternativeRule(),

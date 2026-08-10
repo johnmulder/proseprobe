@@ -74,6 +74,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `T008` | Sentence Length | Style | info | medium | markdown, python / prose | `thresholds.sentence_length_max` |
 | `T010` | Repeated or Mixed Punctuation | Style | info | high | markdown, python / prose | — |
 | `T012` | Rhetorical Ellipsis | Style | info | medium | markdown, python / prose | — |
+| `T013` | ALL-CAPS Emphasis | Style | info | low | markdown, python / prose | — |
 | `T014` | Parenthetical Overload | Style | info | medium | markdown, python / prose | — |
 | `T015` | Nested Parenthetical | Style | info | high | markdown, python / prose | — |
 | `T016` | Slash Alternative | Style | info | medium | markdown, python / prose | — |
@@ -1360,6 +1361,32 @@ The background migration may eventually finish...
 **Example (good):**
 ```markdown
 The background migration may eventually finish.
+```
+
+---
+
+### T013: ALL-CAPS Emphasis
+
+At low confidence, detects line-local runs of at least three uppercase prose
+words when the run contains a strong emphasis cue such as `MUST`, `NOT`,
+`NEVER`, `WARNING`, or `IMPORTANT`. The rule reports the exact uppercase run.
+
+Isolated acronyms, acronym sequences without an emphasis cue,
+identifier-shaped tokens, two-word normative keywords, headings, blockquotes,
+code, Markdown link destinations, Python strings, and example prose are
+excluded.
+
+This experimental rule is not enabled by a profile. Select it explicitly with
+`--select T013` while evaluating whether it fits the document type.
+
+**Example (bad):**
+```markdown
+You MUST NOT DELETE local state during recovery.
+```
+
+**Example (good):**
+```markdown
+You must not delete local state during recovery.
 ```
 
 ---

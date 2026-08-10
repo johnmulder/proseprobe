@@ -52,13 +52,13 @@ Each specialized profile includes the general set plus its listed rules.
 Running without a profile preserves the all-category selection, warning
 minimum severity, and low minimum confidence.
 
-`S029`, `V015`, and `V017` are experimental and are not included in any built-in
-profile. Enable an experimental rule explicitly, including its informational
-severity and low confidence:
+`S029`, `T013`, `V015`, and `V017` are experimental and are not included in any
+built-in profile. Enable an experimental rule explicitly, including its
+informational severity and low confidence:
 
 ```toml
 [tool.proseprobe]
-select = ["S029"]
+select = ["T013"]
 minimum_severity = "info"
 min_confidence = "low"
 ```

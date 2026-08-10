@@ -481,7 +481,7 @@ class TestRulesCommand:
         assert data["schema_version"] == 1
         assert data["version"] == __version__
         rules = data["rules"]
-        assert len(rules) == 94
+        assert len(rules) == 95
         assert [rule["id"] for rule in rules] == sorted(rule["id"] for rule in rules)
         assert next(rule for rule in rules if rule["id"] == "S001") == {
             "id": "S001",
@@ -790,6 +790,7 @@ class TestProfiles:
                 "S029",
                 "## One\n\nRuns.\n\n## Two\n\nStops.\n\n## Three\n\nRetries.\n",
             ),
+            ("T013", "You MUST NOT DELETE local state.\n"),
             ("V015", "Atlas is fastest.\n"),
             ("V017", "The vote was completely unanimous.\n"),
         ],

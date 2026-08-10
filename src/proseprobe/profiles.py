@@ -60,7 +60,7 @@ _TECHNICAL_DOCS_RULES = frozenset(
     }
 )
 
-EXPERIMENTAL_RULES = frozenset({"S029", "V015", "V017"})
+EXPERIMENTAL_RULES = frozenset({"S029", "T013", "V015", "V017"})
 
 PROFILES: Mapping[str, Profile] = MappingProxyType(
     {
