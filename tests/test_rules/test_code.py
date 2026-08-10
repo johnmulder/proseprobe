@@ -1,4 +1,4 @@
-"""Tests for code rules (C001-C004, C007-C008)."""
+"""Tests for code rules (C001-C008)."""
 
 import pytest
 
@@ -7,6 +7,7 @@ from proseprobe.rules.code import (
     AIPlaceholdersRule,
     CollaborativeCommentsRule,
     CommentedOutCodeRule,
+    CommentRestatesCodeRule,
     DocstringRepeatsSignatureRule,
     DocstringVocabularyRule,
     VerboseCommentsRule,
@@ -45,6 +46,11 @@ from proseprobe.rules.code import (
             AIPlaceholdersRule(),
             "raise NotImplementedError('later')",
             "raise NotImplementedError('later')",
+        ),
+        (
+            CommentRestatesCodeRule(),
+            "def load():\n    # Return cached value\n    return cached_value",
+            "Return cached value",
         ),
         (
             CommentedOutCodeRule(),
@@ -215,6 +221,97 @@ class TestAIPlaceholders:
         rule = AIPlaceholdersRule()
         issues = rule.check(text, "test.py")
         assert len(issues) == 0
+
+
+class TestCommentRestatesCode:
+    """Tests for C006: Comment Restates Code."""
+
+    @pytest.mark.parametrize(
+        ("source", "comment"),
+        [
+            (
+                "def load():\n    # Return cached value.\n    return cached_value",
+                "Return cached value.",
+            ),
+            (
+                "def load():\n    # Return cached value\n    return state.cachedValue",
+                "Return cached value",
+            ),
+            ("# Set retry count\nretry_count = 3", "Set retry count"),
+            (
+                "# Assign retry count\nretry_count: int = 3",
+                "Assign retry count",
+            ),
+            (
+                "# Call send request\nclient.sendRequest(payload)",
+                "Call send request",
+            ),
+        ],
+    )
+    def test_detects_exact_restatements(self, source: str, comment: str) -> None:
+        [issue] = CommentRestatesCodeRule().check(source, "test.py")
+
+        assert issue.rule_id == "C006"
+        assert issue.message == f"Comment restates code: '{comment}'"
+        assert issue.confidence is Confidence.LOW
+
+    def test_reports_multiple_comments_in_source_order(self) -> None:
+        source = """\
+def load():
+    # Set cached value
+    cached_value = fetch()
+    # Call record result
+    record_result(cached_value)
+    # Return cached value
+    return cached_value
+"""
+
+        issues = CommentRestatesCodeRule().check(source, "test.py")
+
+        assert [(issue.line, issue.column) for issue in issues] == [
+            (2, 7),
+            (4, 7),
+            (6, 7),
+        ]
+
+    def test_exact_fixture_does_not_duplicate_neighboring_code_rules(self) -> None:
+        source = "def load():\n    # Return cached value\n    return cached_value"
+        neighboring_rules = (
+            VerboseCommentsRule(),
+            CollaborativeCommentsRule(),
+            AIPlaceholdersRule(),
+            CommentedOutCodeRule(),
+        )
+
+        assert all(rule.check(source, "test.py") == [] for rule in neighboring_rules)
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "def load():\n    # Return cached value without copying\n    return cached_value",
+            "def load():\n    # Return result\n    return cached_value",
+            "def load():\n    # Return result\n\n    return result",
+            "def load():\n    return result  # Return result",
+            "def load():\n# Return result\n    return result",
+            "# Set values\nleft, right = pair",
+            "# Set retry count\nretry_count += 1",
+            "# Call send request\nresult = send_request()",
+            "# Call send request\nif ready: send_request()",
+            'message = "# Return result"',
+            "def broken(\n# Return result\nreturn result",
+        ],
+    )
+    def test_ignores_non_exact_or_unsupported_cases(self, source: str) -> None:
+        assert CommentRestatesCodeRule().check(source, "test.py") == []
+
+    def test_rule_metadata(self) -> None:
+        rule = CommentRestatesCodeRule()
+
+        assert rule.id == "C006"
+        assert rule.name == "Comment Restates Code"
+        assert rule.severity is Severity.INFO
+        assert rule.default_confidence is Confidence.LOW
+        assert rule.applies_to == {"python"}
 
 
 class TestDocstringRepeatsSignature:

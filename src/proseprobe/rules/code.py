@@ -1,4 +1,4 @@
-"""Code-specific detection rules (C001-C004, C007-C008)."""
+"""Code-specific detection rules (C001-C008)."""
 
 import ast
 import re
@@ -225,6 +225,91 @@ class AIPlaceholdersRule(Rule):
                     )
                     break
 
+        return issues
+
+
+class CommentRestatesCodeRule(Rule):
+    """C006: Detect exact comments that restate the next statement."""
+
+    id = "C006"
+    name = "Comment Restates Code"
+    description = "Detects exact comments that restate the next Python statement"
+    severity = Severity.INFO
+    default_confidence = Confidence.LOW
+    applies_to: ClassVar[set[str]] = {"python"}
+
+    @staticmethod
+    def _name(node: ast.expr) -> str | None:
+        if isinstance(node, ast.Name):
+            return node.id
+        if isinstance(node, ast.Attribute):
+            return node.attr
+        return None
+
+    @staticmethod
+    def _words(text: str) -> tuple[str, ...]:
+        return tuple(
+            match.group().casefold() for match in _IDENTIFIER_WORD.finditer(text)
+        )
+
+    @classmethod
+    def _expected_comments(cls, statement: ast.stmt) -> set[tuple[str, ...]]:
+        name: str | None = None
+        verbs: tuple[str, ...] = ()
+        if isinstance(statement, ast.Return) and statement.value is not None:
+            name = cls._name(statement.value)
+            verbs = ("return",)
+        elif isinstance(statement, ast.Assign) and len(statement.targets) == 1:
+            name = cls._name(statement.targets[0])
+            verbs = ("assign", "set")
+        elif isinstance(statement, ast.AnnAssign) and statement.value is not None:
+            name = cls._name(statement.target)
+            verbs = ("assign", "set")
+        elif isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call):
+            name = cls._name(statement.value.func)
+            verbs = ("call",)
+
+        words = cls._words(name or "")
+        return {(verb, *words) for verb in verbs} if words else set()
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check adjacent full-line comments against supported statements."""
+        try:
+            tree = ast.parse(content)
+        except SyntaxError:
+            return []
+
+        supported = (ast.Return, ast.Assign, ast.AnnAssign, ast.Expr)
+        statements = {
+            (node.lineno, node.col_offset): node
+            for node in ast.walk(tree)
+            if isinstance(node, supported)
+        }
+        lines = content.split("\n")
+        issues: list[Issue] = []
+        for comment in _get_cached_parser(content).get_comments():
+            if comment.is_inline:
+                continue
+            statement = statements.get((comment.line + 1, comment.column - 1))
+            if statement is None or self._words(comment.content) not in (
+                self._expected_comments(statement)
+            ):
+                continue
+            after_hash = lines[comment.line - 1][comment.column :]
+            leading_space = len(after_hash) - len(after_hash.lstrip())
+            column = comment.column + leading_space + 1
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=f"Comment restates code: '{comment.content}'",
+                    line=comment.line,
+                    column=column,
+                    end_column=column + len(comment.content),
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion="Delete it or explain why the code exists",
+                )
+            )
         return issues
 
 
