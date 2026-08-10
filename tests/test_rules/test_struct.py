@@ -1,4 +1,4 @@
-"""Tests for structural rules (S001-S022, S025, and S028)."""
+"""Tests for structural rules (S001-S022, S025, S028, and S029)."""
 
 import pytest
 
@@ -20,6 +20,7 @@ from proseprobe.rules.struct import (
     SignpostedConclusionRule,
     SlideDeckFragmentRule,
     SuperficialAnalysisRule,
+    TinySectionRule,
     WallOfTextParagraphRule,
 )
 
@@ -1519,3 +1520,134 @@ class TestExcessiveHeadingDepth:
         assert rule.id == "S028"
         assert rule.name == "Excessive Heading Depth"
         assert rule.config_key is None
+
+
+class TestTinySection:
+    """Tests for S029: Tiny Section."""
+
+    def test_reports_one_finding_for_a_tiny_sibling_run(self) -> None:
+        source = """\
+# Operations guide
+
+Substantive introduction for the operations guide.
+
+## Start
+
+Starts the worker.
+
+## Stop
+
+Stops the worker.
+
+## Retry
+
+Retries failed work.
+"""
+
+        [issue] = TinySectionRule().check(source, "guide.md")
+
+        assert issue.rule_id == "S029"
+        assert issue.message == "Tiny-section run: 3 consecutive level-2 sections"
+        assert (issue.line, issue.column, issue.end_column) == (5, 4, 9)
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.LOW
+        assert issue.suggestion == "Merge related sections or expand their content"
+
+    def test_reports_one_finding_for_a_longer_run(self) -> None:
+        sections = "\n\n".join(
+            f"## Part {number}\n\nRuns now." for number in range(1, 5)
+        )
+
+        [issue] = TinySectionRule().check(sections, "guide.mdx")
+
+        assert "4 consecutive" in issue.message
+
+    @pytest.mark.parametrize(
+        "body",
+        [
+            "- one item",
+            "| Key | Value |\n| --- | --- |\n| a | b |",
+            "> Quoted text.",
+            "[Read more](https://example.com).",
+            "Use `run` now.",
+            "```text\noutput\n```",
+            "<div>\nText.\n</div>",
+            "First paragraph.\n\nSecond paragraph.",
+        ],
+    )
+    def test_structured_or_multiple_bodies_break_a_run(self, body: str) -> None:
+        source = "\n\n".join(f"## Part {number}\n\n{body}" for number in range(1, 4))
+
+        assert TinySectionRule().check(source, "guide.md") == []
+
+    @pytest.mark.parametrize(
+        "title", ["API", "Reference", "Changelog", "Release notes", "FAQ", "Examples"]
+    )
+    def test_excluded_document_contexts_do_not_report(self, title: str) -> None:
+        source = f"""\
+# {title}
+
+## First
+
+Runs now.
+
+## Second
+
+Stops now.
+
+## Third
+
+Retries now.
+"""
+
+        assert TinySectionRule().check(source, "guide.md") == []
+
+    def test_question_headings_do_not_report(self) -> None:
+        source = """\
+# Guide
+
+## What starts it?
+
+The command.
+
+## What stops it?
+
+The signal.
+
+## What retries it?
+
+The worker.
+"""
+
+        assert TinySectionRule().check(source, "guide.md") == []
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "## One\n\nRuns.\n\n## Two\n\nStops.",
+            (
+                "## One\n\nRuns.\n\n## Two\n\nStops.\n\n"
+                "## Detailed\n\nSix words make this section body substantive.\n\n"
+                "## Three\n\nRetries.\n\n## Four\n\nWaits."
+            ),
+            "# One\n\nRuns.\n\n# Two\n\nStops.\n\n# Three\n\nRetries.",
+            (
+                "## Parent one\n\nRuns.\n\n### Child\n\nStops.\n\n"
+                "## Parent two\n\nRetries."
+            ),
+        ],
+    )
+    def test_run_boundaries_do_not_report(self, source: str) -> None:
+        assert TinySectionRule().check(source, "guide.md") == []
+
+    def test_applies_only_to_markdown(self) -> None:
+        source = "## One\n\nRuns.\n\n## Two\n\nStops.\n\n## Three\n\nRetries."
+
+        assert TinySectionRule().check(source, "guide.py") == []
+
+    def test_rule_metadata(self) -> None:
+        rule = TinySectionRule()
+
+        assert rule.id == "S029"
+        assert rule.name == "Tiny Section"
+        assert rule.default_confidence is Confidence.LOW

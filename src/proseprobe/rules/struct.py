@@ -1,4 +1,4 @@
-"""Structural detection rules (S001-S022, S025, and S028)."""
+"""Structural detection rules (S001-S022, S025, S028, and S029)."""
 
 import re
 from itertools import groupby, pairwise
@@ -23,6 +23,7 @@ from proseprobe.data.phrases import (
     SIGNPOSTED_CONCLUSION_PHRASES,
 )
 from proseprobe.parsers.markdown import (
+    MarkdownSection,
     _get_cached_parser,
     is_example_line,
     is_markdown_file,
@@ -1221,3 +1222,96 @@ class ExcessiveHeadingDepthRule(Rule):
             for heading in _get_cached_parser(content).get_headings()
             if heading.level >= 5
         ]
+
+
+class TinySectionRule(Rule):
+    """S029: Detect runs of sibling sections with tiny plain-text bodies."""
+
+    id = "S029"
+    name = "Tiny Section"
+    description = "Detects runs of tiny sibling Markdown sections"
+    severity = Severity.INFO
+    default_confidence = Confidence.LOW
+    applies_to: ClassVar[set[str]] = {"markdown"}
+    content_scope = "raw"
+
+    _MAX_WORDS = 5
+    _MIN_RUN = 3
+    _WORDS = re.compile(r"[\w'-]+")
+    _STRUCTURED_LINE = re.compile(
+        r"^\s*(?:[-*+>]\s+|\d+[.)]\s+|\|.*\|\s*$|```|~~~|<[!/A-Za-z])",
+        re.MULTILINE,
+    )
+    _EXCLUDED_TITLE_WORDS = frozenset(
+        {"api", "changelog", "example", "examples", "faq", "faqs", "reference"}
+    )
+
+    @classmethod
+    def _excluded_title(cls, title: str) -> bool:
+        words = set(re.findall(r"[a-z]+", title.casefold()))
+        return bool(
+            title.rstrip().endswith("?")
+            or words & cls._EXCLUDED_TITLE_WORDS
+            or {"release", "notes"} <= words
+            or {"frequently", "asked", "questions"} <= words
+        )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Report qualifying runs of tiny sibling sections."""
+        if not is_markdown_file(filename):
+            return []
+
+        lines = content.split("\n")
+        headings = _get_cached_parser(content).get_headings()
+        ancestors: list[tuple[int, bool]] = []
+        run: list[MarkdownSection] = []
+        issues: list[Issue] = []
+
+        def flush() -> None:
+            if len(run) >= self._MIN_RUN:
+                first = run[0]
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=(
+                            f"Tiny-section run: {len(run)} consecutive "
+                            f"level-{first.level} sections"
+                        ),
+                        line=first.start_line,
+                        column=first.column,
+                        end_column=first.end_column,
+                        severity=self.severity,
+                        confidence=self.default_confidence,
+                        suggestion="Merge related sections or expand their content",
+                    )
+                )
+            run.clear()
+
+        for heading in headings:
+            while ancestors and ancestors[-1][0] >= heading.level:
+                ancestors.pop()
+            excluded = self._excluded_title(heading.title) or any(
+                ancestor_excluded for _, ancestor_excluded in ancestors
+            )
+            raw_body = "\n".join(lines[heading.start_line : heading.end_line])
+            body = heading.content.strip()
+            tiny = bool(
+                heading.level > 1
+                and not excluded
+                and body
+                and len(self._WORDS.findall(body)) <= self._MAX_WORDS
+                and not re.search(r"\n\s*\n", raw_body)
+                and not self._STRUCTURED_LINE.search(raw_body)
+                and "`" not in raw_body
+                and not re.search(r"!?\[[^]]+\]\([^)]+\)", raw_body)
+            )
+            if tiny and (not run or run[-1].level == heading.level):
+                run.append(heading)
+            else:
+                flush()
+                if tiny:
+                    run.append(heading)
+            ancestors.append((heading.level, excluded))
+
+        flush()
+        return issues
