@@ -3592,6 +3592,52 @@
           "note": "Related words do not contain a complete curated phrase."
         }
       ]
+    },
+    "quality/corpus/wordy-phrases.py": {
+      "expected": [
+        {
+          "rule_id": "V009",
+          "line": 5,
+          "column": 8
+        },
+        {
+          "rule_id": "V009",
+          "line": 5,
+          "column": 37
+        },
+        {
+          "rule_id": "V009",
+          "line": 6,
+          "column": 13
+        },
+        {
+          "rule_id": "V009",
+          "line": 13,
+          "column": 8
+        },
+        {
+          "rule_id": "V009",
+          "line": 13,
+          "column": 50
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V009",
+          "line": 7,
+          "note": "Related words do not contain a complete curated phrase."
+        },
+        {
+          "rule_id": "V009",
+          "line": 8,
+          "note": "An ordinary string literal is executable data, not Python prose."
+        },
+        {
+          "rule_id": "V009",
+          "line": 18,
+          "note": "A near-miss event clause is not the exact wordy phrase."
+        }
+      ]
     }
   }
 }
