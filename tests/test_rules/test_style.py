@@ -1,9 +1,10 @@
-"""Tests for style rules (T001-T010, T012, T014-T016)."""
+"""Tests for style rules (T001-T010, T012-T016)."""
 
 import pytest
 
 from proseprobe.rules.base import Confidence, Rule, Severity
 from proseprobe.rules.style import (
+    AllCapsEmphasisRule,
     BoldOveruseRule,
     ElegantVariationRule,
     EmDashOveruseRule,
@@ -39,6 +40,11 @@ from proseprobe.rules.style import (
         ),
         (RepeatedOrMixedPunctuationRule(), "Really?!", "?!"),
         (RhetoricalEllipsisRule(), "The request may finish...", "..."),
+        (
+            AllCapsEmphasisRule(),
+            "You MUST NOT DELETE local state.",
+            "MUST NOT DELETE",
+        ),
         (
             ParentheticalOverloadRule(),
             "Use it (after the first timeout) (while the replica recovers) "
@@ -543,6 +549,103 @@ class TestRhetoricalEllipsis:
 
         assert rule.id == "T012"
         assert rule.name == "Rhetorical Ellipsis"
+        assert rule.config_key is None
+
+
+class TestAllCapsEmphasis:
+    """Tests for T013: ALL-CAPS Emphasis."""
+
+    def test_reports_an_emphatic_run_with_exact_fields(self) -> None:
+        source = "Never choose DO NOT DELETE NOW in the settings."
+        expected = "DO NOT DELETE NOW"
+        start = source.index(expected)
+
+        [issue] = AllCapsEmphasisRule().check(source, "guide.md")
+
+        assert issue.rule_id == "T013"
+        assert issue.message == f"ALL-CAPS emphasis: '{expected}'"
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            start + 1,
+            1,
+            start + len(expected) + 1,
+        )
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.LOW
+        assert issue.suggestion == (
+            "Use normal sentence casing unless uppercase is required"
+        )
+
+    def test_reports_multiple_runs_in_source_order(self) -> None:
+        source = (
+            "Do not print MUST NEVER RETRY after a timeout.\n"
+            "Keep NEVER DELETE THIS FILE elsewhere."
+        )
+
+        issues = AllCapsEmphasisRule().check(source, "guide.markdown")
+
+        assert [issue.line for issue in issues] == [1, 2]
+        assert [issue.message for issue in issues] == [
+            "ALL-CAPS emphasis: 'MUST NEVER RETRY'",
+            "ALL-CAPS emphasis: 'NEVER DELETE THIS FILE'",
+        ]
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "Use the HTTP GET API for status.",
+            "The API and CLI share JSON output.",
+            "Set MAX_RETRY_COUNT before startup.",
+            "The client MUST NOT retry.",
+            "Use POST AND DELETE methods.",
+            "YOUR CONTENT HERE",
+            "Use ordinary sentence casing here.",
+        ],
+    )
+    def test_ignores_acronyms_identifiers_and_short_runs(self, source: str) -> None:
+        assert AllCapsEmphasisRule().check(source, "guide.md") == []
+
+    def test_checks_list_prose(self) -> None:
+        source = "- You MUST NOT DELETE local state."
+
+        [issue] = AllCapsEmphasisRule().check(source, "guide.mdx")
+
+        assert (issue.line, issue.column) == (1, 7)
+        assert issue.message == "ALL-CAPS emphasis: 'MUST NOT DELETE'"
+
+    def test_ignores_markdown_literal_and_excluded_contexts(self) -> None:
+        source = (
+            "# DO NOT DELETE THIS\n\n"
+            "> You MUST NOT DELETE local state.\n\n"
+            "Use `MUST NOT DELETE` as sample text.\n\n"
+            "[Reference](DO NOT DELETE THIS) remains unresolved.\n\n"
+            "```text\nMUST NOT DELETE\n```\n\n"
+            "## Example\n\nYou MUST NOT DELETE local state."
+        )
+
+        assert AllCapsEmphasisRule().check(source, "guide.md") == []
+
+    def test_checks_python_comments_and_docstrings_but_not_strings(self) -> None:
+        source = (
+            'value = "You MUST NOT DELETE local state."\n'
+            "# You MUST NOT DELETE local state.\n\n"
+            "def retry() -> None:\n"
+            '    """You SHOULD NEVER DELETE local state."""\n'
+            "    return None\n"
+        )
+
+        issues = AllCapsEmphasisRule().check(source, "guide.py")
+
+        assert [issue.line for issue in issues] == [2, 5]
+
+    def test_rule_metadata(self) -> None:
+        rule = AllCapsEmphasisRule()
+
+        assert rule.id == "T013"
+        assert rule.name == "ALL-CAPS Emphasis"
+        assert rule.default_confidence is Confidence.LOW
+        assert rule.applies_to == {"markdown", "python"}
+        assert rule.content_scope == "prose"
         assert rule.config_key is None
 
 

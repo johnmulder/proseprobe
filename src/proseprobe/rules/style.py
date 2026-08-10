@@ -1,4 +1,4 @@
-"""Style detection rules (T001-T010, T012, T014-T016)."""
+"""Style detection rules (T001-T010, T012-T016)."""
 
 import re
 from itertools import groupby
@@ -464,6 +464,78 @@ class RhetoricalEllipsisRule(Rule):
                         severity=self.severity,
                         confidence=self.default_confidence,
                         suggestion=("Use direct punctuation or complete the thought"),
+                    )
+                )
+        return issues
+
+
+class AllCapsEmphasisRule(Rule):
+    """T013: Detect emphatic runs of uppercase prose words."""
+
+    id = "T013"
+    name = "ALL-CAPS Emphasis"
+    description = "Detects emphatic runs of uppercase words in prose"
+    severity = Severity.INFO
+    default_confidence = Confidence.LOW
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _RUN: ClassVar[re.Pattern[str]] = re.compile(
+        r"(?<![\w'-])[A-Z]+(?:'[A-Z]+)?"
+        r"(?:[ \t]+[A-Z]+(?:'[A-Z]+)?){2,}(?![\w'-])"
+    )
+    _WORD: ClassVar[re.Pattern[str]] = re.compile(r"[A-Z]+(?:'[A-Z]+)?")
+    _EMPHASIS_CUES = frozenset(
+        {
+            "ALWAYS",
+            "CANNOT",
+            "CAUTION",
+            "DANGER",
+            "DO",
+            "DOES",
+            "DON'T",
+            "IMPORTANT",
+            "MUST",
+            "NEVER",
+            "NOT",
+            "ONLY",
+            "REQUIRED",
+            "SHALL",
+            "SHOULD",
+            "THIS",
+            "URGENT",
+            "WARNING",
+            "WILL",
+            "YOU",
+        }
+    )
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Report uppercase prose runs with an emphasis cue."""
+        issues: list[Issue] = []
+        for sentence in iter_prose_sentences(content, filename):
+            if sentence.context not in {"body", "list_item"} or is_example_line(
+                content, filename, sentence.start_line
+            ):
+                continue
+            for match in self._RUN.finditer(sentence.text):
+                if self._EMPHASIS_CUES.isdisjoint(self._WORD.findall(match.group())):
+                    continue
+                line, column = sentence.source_position(match.start())
+                end_line, end_column = sentence.source_position(match.end())
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"ALL-CAPS emphasis: '{match.group()}'",
+                        line=line,
+                        column=column,
+                        end_line=end_line,
+                        end_column=end_column,
+                        severity=self.severity,
+                        confidence=self.default_confidence,
+                        suggestion=(
+                            "Use normal sentence casing unless uppercase is required"
+                        ),
                     )
                 )
         return issues
