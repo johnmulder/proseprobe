@@ -481,7 +481,7 @@ class TestRulesCommand:
         assert data["schema_version"] == 1
         assert data["version"] == __version__
         rules = data["rules"]
-        assert len(rules) == 95
+        assert len(rules) == 96
         assert [rule["id"] for rule in rules] == sorted(rule["id"] for rule in rules)
         assert next(rule for rule in rules if rule["id"] == "S001") == {
             "id": "S001",
@@ -786,6 +786,7 @@ class TestProfiles:
     @pytest.mark.parametrize(
         ("rule_id", "source"),
         [
+            ("G038", "Atlas is faster.\n"),
             (
                 "S029",
                 "## One\n\nRuns.\n\n## Two\n\nStops.\n\n## Three\n\nRetries.\n",

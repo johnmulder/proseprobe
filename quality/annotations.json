@@ -1941,6 +1941,133 @@
         }
       ]
     },
+    "quality/corpus/undefined-comparatives.md": {
+      "expected": [
+        {
+          "rule_id": "G038",
+          "line": 3,
+          "column": 10
+        },
+        {
+          "rule_id": "G038",
+          "line": 5,
+          "column": 22
+        },
+        {
+          "rule_id": "G038",
+          "line": 7,
+          "column": 20
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G038",
+          "line": 11,
+          "note": "Than introduces an explicit comparison target."
+        },
+        {
+          "rule_id": "G038",
+          "line": 13,
+          "note": "Compared with names the local target."
+        },
+        {
+          "rule_id": "G038",
+          "line": 15,
+          "note": "Among names a three-parser comparison set."
+        },
+        {
+          "rule_id": "G038",
+          "line": 17,
+          "note": "The ordinal subject identifies an option in a comparison set."
+        },
+        {
+          "rule_id": "G038",
+          "line": 19,
+          "note": "A numbered figure supplies external comparison context."
+        },
+        {
+          "rule_id": "G038",
+          "line": 23,
+          "note": "The nearby heading names the comparison target."
+        },
+        {
+          "rule_id": "G038",
+          "line": 29,
+          "note": "The preceding paragraph explicitly compares the parsers."
+        },
+        {
+          "rule_id": "G038",
+          "line": 37,
+          "note": "A nearby Markdown table provides comparison evidence."
+        },
+        {
+          "rule_id": "G038",
+          "line": 43,
+          "note": "The preceding measured result supplies local evidence."
+        },
+        {
+          "rule_id": "G038",
+          "line": 47,
+          "note": "A question does not assert a comparative claim."
+        },
+        {
+          "rule_id": "G038",
+          "line": 49,
+          "note": "A conditional does not assert the comparative."
+        },
+        {
+          "rule_id": "G038",
+          "line": 51,
+          "note": "Blockquoted prose may reproduce an external claim."
+        },
+        {
+          "rule_id": "G038",
+          "line": 53,
+          "note": "Inline code preserves a literal comparison."
+        },
+        {
+          "rule_id": "G038",
+          "line": 56,
+          "note": "Fenced code is outside document prose."
+        },
+        {
+          "rule_id": "G038",
+          "line": 61,
+          "note": "Prose under an example heading demonstrates the rule."
+        }
+      ]
+    },
+    "quality/corpus/undefined-comparatives.py": {
+      "expected": [
+        {
+          "rule_id": "G038",
+          "line": 1,
+          "column": 13
+        },
+        {
+          "rule_id": "G038",
+          "line": 3,
+          "column": 24
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G038",
+          "line": 5,
+          "note": "An ordinary Python string is not documentation prose."
+        },
+        {
+          "rule_id": "G038",
+          "line": 6,
+          "note": "A Python constant identifier is code, not prose."
+        },
+        {
+          "rule_id": "G038",
+          "line": 8,
+          "note": "Compared with names the target inside a Python comment."
+        }
+      ]
+    },
     "quality/corpus/unbounded-superlatives.md": {
       "expected": [
         {

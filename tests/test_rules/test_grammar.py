@@ -1982,6 +1982,7 @@ class TestUndefinedComparativeRule:
             "> Atlas is faster.",
             "# Atlas is faster",
             "Use `Atlas is faster` as sample text.",
+            "[Reference](Atlas is faster) remains unresolved.",
             "```text\nAtlas is faster.\n```",
             "## Example\n\nAtlas is faster.",
         ],

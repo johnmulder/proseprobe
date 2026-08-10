@@ -45,6 +45,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         grammar.DoubleNegativeRule(),
         grammar.ClauseCoordinationOverloadRule(),
         grammar.HedgedRequirementRule(),
+        grammar.UndefinedComparativeRule(),
         markup.WrongMarkupRule(),
         markup.ChatGPTMarkersRule(),
         markup.UTMParametersRule(),

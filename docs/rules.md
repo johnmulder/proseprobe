@@ -102,6 +102,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `G029` | Double Negative | Grammar | info | high | markdown, python / prose | — |
 | `G031` | Clause/Coordination Overload | Grammar | info | medium | markdown, python / prose | — |
 | `G037` | Hedged Requirement | Grammar | info | medium | markdown, python / prose | — |
+| `G038` | Undefined Comparative | Grammar | info | low | markdown, python / prose | — |
 | `C001` | Docstring-Only Vocabulary | Code | warning | medium | python / raw | — |
 | `C002` | Verbose Comments | Code | info | medium | python / raw | — |
 | `C003` | Collaborative Comments | Code | warning | medium | python / raw | — |
@@ -2260,4 +2261,31 @@ The service must normally reject an unsigned archive.
 **Example (good):**
 ```markdown
 The service must reject an unsigned archive.
+```
+
+---
+
+### G038: Undefined Comparative
+
+At low confidence, detects curated predicate comparatives such as `is faster`,
+`was worse`, and `remains more reliable` when the nearby source does not name a
+comparison target. The rule reports only the exact comparative phrase.
+
+Explicit `than`/`compared with` targets, comparison or evaluation language,
+option sets, benchmark/figure/table/chart references, nearby measurements, and
+Markdown tables suppress the diagnostic. Headings, blockquotes, questions,
+hypotheticals, literal discussions, code, Python strings, and example prose are
+excluded.
+
+This experimental rule is not enabled by a profile. Select it explicitly with
+`--select G038` while evaluating whether it fits the document type.
+
+**Example (bad):**
+```markdown
+The new parser is faster.
+```
+
+**Example (good):**
+```markdown
+The new parser is faster than the legacy parser.
 ```
