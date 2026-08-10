@@ -40,6 +40,32 @@ def test_sentence_boundaries_keep_abbreviations_and_trailing_quotes() -> None:
     ]
 
 
+@pytest.mark.parametrize(
+    ("source", "first_sentence"),
+    [
+        (
+            "Use a stable format, e.g. JSON. Continue.",
+            "Use a stable format, e.g. JSON.",
+        ),
+        (
+            "The format is text, i.e. UTF-8. Continue.",
+            "The format is text, i.e. UTF-8.",
+        ),
+        (
+            "Keep logs, metrics, etc. during rollout. Continue.",
+            "Keep logs, metrics, etc. during rollout.",
+        ),
+    ],
+)
+def test_sentence_boundaries_keep_conventional_latin_abbreviations(
+    source: str,
+    first_sentence: str,
+) -> None:
+    sentences = iter_prose_sentences(source, "notes.md")
+
+    assert [sentence.text for sentence in sentences] == [first_sentence, "Continue."]
+
+
 def test_prose_blocks_become_hard_sentence_scopes() -> None:
     content = "First fragment\n\n> Second sentence.\n\n- Third sentence."
 
