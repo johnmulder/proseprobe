@@ -107,6 +107,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `C002` | Verbose Comments | Code | info | medium | python / raw | — |
 | `C003` | Collaborative Comments | Code | warning | medium | python / raw | — |
 | `C004` | Formulaic Placeholders | Code | info | medium | python / raw | — |
+| `C006` | Comment Restates Code | Code | info | low | python / raw | — |
 | `C007` | Docstring Repeats Signature | Code | info | medium | python / raw | — |
 | `C008` | Commented-Out Code | Code | info | low | python / raw | — |
 | `M001` | Wrong Markup | Markup | warning | low | python / raw | — |
@@ -623,6 +624,29 @@ Detects formulaic TODO patterns.
 **Example (good):**
 ```python
 # TODO: Add retry logic for network failures (issue #42)
+```
+
+---
+
+### C006: Comment Restates Code
+
+Detects a few exact full-line comments that merely name the immediately
+following statement: `Return <name>`, `Set|Assign <name>`, or `Call <name>`.
+The comment and statement must be adjacent and have the same indentation;
+inline comments, compound targets, added explanations, and fuzzy matches are
+excluded. Findings start at low confidence, and the experimental rule is not
+enabled by any built-in profile.
+
+**Example (bad):**
+```python
+# Return cached value
+return cached_value
+```
+
+**Example (good):**
+```python
+# Preserve object identity for reference comparison.
+return cached_value
 ```
 
 ---

@@ -29,7 +29,7 @@ def test_profiles_cover_non_experimental_rules_without_unknown_rules() -> None:
     profiled = set().union(*(profile.rules for profile in PROFILES.values()))
     assert all(profile.rules <= registered for profile in PROFILES.values())
     assert all(profile.rules for profile in PROFILES.values())
-    assert {"G038", "S029", "T013", "V015", "V017"} == EXPERIMENTAL_RULES
+    assert {"C006", "G038", "S029", "T013", "V015", "V017"} == EXPERIMENTAL_RULES
     assert profiled == registered - EXPERIMENTAL_RULES
     assert EXPERIMENTAL_RULES.isdisjoint(profiled)
 
@@ -114,6 +114,7 @@ def test_reverse_profile_tags_are_sorted() -> None:
         "technical-docs",
     )
     assert profile_names_for_rule("G011") == ("academic",)
+    assert profile_names_for_rule("C006") == ()
     assert profile_names_for_rule("C007") == ("technical-docs",)
     assert profile_names_for_rule("C008") == ("technical-docs",)
     assert profile_names_for_rule("G016") == ("technical-docs",)

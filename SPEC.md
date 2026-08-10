@@ -52,9 +52,9 @@ speed remains a tracked metric until the benchmark corpus reflects real projects
 | `S` | Structure | 25 | Organizational patterns |
 | `T` | Style | 14 | Typographic issues |
 | `G` | Grammar | 25 | Grammatical patterns |
-| `C` | Code | 6 | Python docstring/comment issues |
+| `C` | Code | 7 | Python docstring/comment issues |
 | `M` | Markup | 10 | Markdown artifacts |
-| **Total** | | **96** | |
+| **Total** | | **97** | |
 
 <!-- rule-docs:categories:end -->
 

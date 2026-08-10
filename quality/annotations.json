@@ -2377,6 +2377,82 @@
         }
       ]
     },
+    "quality/corpus/comment-restates-code.py": {
+      "expected": [
+        {
+          "rule_id": "C006",
+          "line": 9,
+          "column": 7
+        },
+        {
+          "rule_id": "C006",
+          "line": 14,
+          "column": 7
+        },
+        {
+          "rule_id": "C006",
+          "line": 16,
+          "column": 7
+        },
+        {
+          "rule_id": "C006",
+          "line": 21,
+          "column": 3
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "C006",
+          "line": 26,
+          "note": "The comment explains why identity must be preserved."
+        },
+        {
+          "rule_id": "C006",
+          "line": 31,
+          "note": "The comment adds a copying constraint."
+        },
+        {
+          "rule_id": "C006",
+          "line": 36,
+          "note": "The named value differs from the returned value."
+        },
+        {
+          "rule_id": "C006",
+          "line": 41,
+          "note": "A blank line separates the comment from the statement."
+        },
+        {
+          "rule_id": "C006",
+          "line": 47,
+          "note": "Inline comments are outside the rule's scope."
+        },
+        {
+          "rule_id": "C006",
+          "line": 51,
+          "note": "Tuple assignment targets are outside the exact statement set."
+        },
+        {
+          "rule_id": "C006",
+          "line": 57,
+          "note": "Augmented assignments are outside the exact statement set."
+        },
+        {
+          "rule_id": "C006",
+          "line": 63,
+          "note": "An assigned call is not a standalone call statement."
+        },
+        {
+          "rule_id": "C006",
+          "line": 69,
+          "note": "A call nested in a conditional is not a standalone adjacent statement."
+        },
+        {
+          "rule_id": "C006",
+          "line": 73,
+          "note": "Comment-like text inside a string is not a comment."
+        }
+      ]
+    },
     "quality/corpus/commented-out-code.py": {
       "expected": [
         {
