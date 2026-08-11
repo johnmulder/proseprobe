@@ -274,6 +274,7 @@ PEDAGOGICAL_VOICE_PHRASES = [
 # Fractal summary phrases (S015)
 FRACTAL_SUMMARY_PHRASES = [
     r"in this section,? we('ll| will) (explore|examine|look at|discuss|cover)",
+    r"this section will cover\b",
     r"as we('ve| have) seen in this section",
     r"as we('ve| have) discussed",
     r"and so we return to where we began",

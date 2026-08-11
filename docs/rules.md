@@ -1141,7 +1141,6 @@ section" intro/outro framing.
 - "in this section, we'll explore"
 - "as we've seen in this section"
 - "this section will cover"
-- "let's now turn to"
 
 **Example (bad):**
 ```markdown

@@ -48,7 +48,7 @@ Like Google, Amazon, and Netflix before them, these companies follow the path bl
 
 In conclusion, the framework provides significant benefits.
 
-In this section, we'll explore how caching improves performance.
+This section will cover how caching improves performance.
 
 The system processes data in real time for immediate insights.
 

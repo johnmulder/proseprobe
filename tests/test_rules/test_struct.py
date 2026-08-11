@@ -728,6 +728,41 @@ class TestFractalSummary:
         assert len(issues) >= 1
         assert issues[0].rule_id == "S015"
 
+    @pytest.mark.parametrize(
+        ("text", "filename"),
+        [
+            ("This section will cover retry settings.", "test.md"),
+            ('"""This section will cover retry settings."""', "test.py"),
+        ],
+    )
+    def test_detects_exact_section_announcement(
+        self,
+        text: str,
+        filename: str,
+    ) -> None:
+        [issue] = FractalSummaryRule().check(text, filename)
+        source_line = text.splitlines()[issue.line - 1]
+
+        assert issue.rule_id == "S015"
+        assert source_line[issue.column - 1 : issue.end_column - 1] == (
+            "This section will cover"
+        )
+
+    @pytest.mark.parametrize(
+        ("text", "filename"),
+        [
+            ("This section covers retry settings.", "test.md"),
+            ("This section will coveralls retry settings.", "test.md"),
+            ('summary = "This section will cover retry settings."', "test.py"),
+        ],
+    )
+    def test_section_announcement_scope_stays_exact(
+        self,
+        text: str,
+        filename: str,
+    ) -> None:
+        assert FractalSummaryRule().check(text, filename) == []
+
     def test_detects_section_outro(self) -> None:
         """Detect 'As we've seen in this section' outro."""
         from proseprobe.rules.struct import FractalSummaryRule
