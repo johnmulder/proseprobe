@@ -82,6 +82,28 @@ def test_claim_evidence_downgrades_confidence(
     assert unsupported_issue.confidence is Confidence.MEDIUM
 
 
+@pytest.mark.parametrize(
+    ("phrase", "expected_rule_ids"),
+    [
+        ("robust", ("V001",)),
+        ("seamless", ("V001",)),
+        ("world-class", ("V004",)),
+        ("powerful", ()),
+        ("flexible", ()),
+        ("intuitive", ()),
+    ],
+)
+def test_quality_language_keeps_existing_rule_ownership(
+    phrase: str,
+    expected_rule_ids: tuple[str, ...],
+) -> None:
+    content = f"The adapter provides {phrase} defaults."
+    issues = AIVocabularyRule().check(content, "test.md")
+    issues += PromotionalLanguageRule().check(content, "test.md")
+
+    assert tuple(issue.rule_id for issue in issues) == expected_rule_ids
+
+
 class TestAIVocabularyRule:
     """Tests for V001: Overused Vocabulary."""
 
