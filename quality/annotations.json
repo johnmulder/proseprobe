@@ -1017,7 +1017,7 @@
         {
           "rule_id": "G019",
           "line": 17,
-          "note": "The rule is limited to the pronoun This."
+          "note": "The rule is limited to This and does not infer whether It has a clear antecedent."
         },
         {
           "rule_id": "G019",

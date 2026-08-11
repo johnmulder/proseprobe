@@ -14,7 +14,7 @@ This caused the retry storm during deployment.
 
 This indicates that the cache remains stale after restart.
 
-That shows the timeout remains repeatable under load.
+It shows the timeout remains repeatable under load.
 
 The report says this shows the timeout repeats under load.
 
