@@ -439,6 +439,17 @@ class TestRepeatedOrMixedPunctuation:
     def test_ignores_single_marks_and_bare_ellipses(self, source: str) -> None:
         assert RepeatedOrMixedPunctuationRule().check(source, "guide.md") == []
 
+    def test_single_exclamation_defers_to_phrase_owner(self) -> None:
+        from proseprobe.rules.vocab import CollaborativePhrasesRule
+
+        source = "I hope this helps!"
+
+        assert RepeatedOrMixedPunctuationRule().check(source, "guide.md") == []
+        assert [
+            issue.rule_id
+            for issue in CollaborativePhrasesRule().check(source, "guide.md")
+        ] == ["V002"]
+
     def test_ignores_markdown_literal_and_example_contexts(self) -> None:
         source = (
             "Use `?!` as the token.\n\n"
