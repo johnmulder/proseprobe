@@ -2190,7 +2190,7 @@
         {
           "rule_id": "S012",
           "line": 31,
-          "note": "Explicit Markdown list items are not a listicle disguised as prose."
+          "note": "An explicit Markdown list needs no inferred introduction and is not a prose listicle."
         },
         {
           "rule_id": "T007",
