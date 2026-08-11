@@ -123,3 +123,5 @@ See [retry guide][retry-reference].
 [retry-reference]: https://example.com/retries
 
 Let's now turn to cache invalidation.
+
+However, caching reduces latency. However, invalidation adds complexity. However, monitoring remains necessary.

@@ -269,6 +269,11 @@
           "column": 1
         },
         {
+          "rule_id": "S010",
+          "line": 127,
+          "column": 1
+        },
+        {
           "rule_id": "S011",
           "line": 43,
           "column": 1

@@ -371,6 +371,22 @@ class TestAnaphoraAbuse:
         issues = rule.check(text, "test.md")
         assert len(issues) >= 1
 
+    def test_owns_repeated_transition_run(self) -> None:
+        from proseprobe.rules.struct import AnaphoraAbuseRule
+
+        text = (
+            "However, caching reduces latency. "
+            "However, invalidation adds complexity. "
+            "However, monitoring remains necessary."
+        )
+
+        [issue] = AnaphoraAbuseRule().check(text, "test.md")
+
+        assert issue.rule_id == "S010"
+        assert issue.message == (
+            "Anaphora: 3 consecutive sentences starting with 'However,'"
+        )
+
     def test_ignores_varied_openings(self) -> None:
         """Don't flag sentences with different openings."""
         from proseprobe.rules.struct import AnaphoraAbuseRule
