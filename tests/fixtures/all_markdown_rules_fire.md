@@ -121,3 +121,5 @@ See the attached document [attached_file:1] and grok_card for details.
 See [installation guide][missing-install].
 See [retry guide][retry-reference].
 [retry-reference]: https://example.com/retries
+
+Let's now turn to cache invalidation.

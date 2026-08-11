@@ -729,34 +729,54 @@ class TestFractalSummary:
         assert issues[0].rule_id == "S015"
 
     @pytest.mark.parametrize(
-        ("text", "filename"),
+        ("text", "filename", "expected"),
         [
-            ("This section will cover retry settings.", "test.md"),
-            ('"""This section will cover retry settings."""', "test.py"),
+            (
+                "This section will cover retry settings.",
+                "test.md",
+                "This section will cover",
+            ),
+            (
+                '"""This section will cover retry settings."""',
+                "test.py",
+                "This section will cover",
+            ),
+            (
+                "Let's now turn to retry settings.",
+                "test.md",
+                "Let's now turn to",
+            ),
+            (
+                '"""Let\'s now turn to retry settings."""',
+                "test.py",
+                "Let's now turn to",
+            ),
         ],
     )
-    def test_detects_exact_section_announcement(
+    def test_detects_exact_section_opener(
         self,
         text: str,
         filename: str,
+        expected: str,
     ) -> None:
         [issue] = FractalSummaryRule().check(text, filename)
         source_line = text.splitlines()[issue.line - 1]
 
         assert issue.rule_id == "S015"
-        assert source_line[issue.column - 1 : issue.end_column - 1] == (
-            "This section will cover"
-        )
+        assert source_line[issue.column - 1 : issue.end_column - 1] == expected
 
     @pytest.mark.parametrize(
         ("text", "filename"),
         [
             ("This section covers retry settings.", "test.md"),
             ("This section will coveralls retry settings.", "test.md"),
+            ("Let's turn to retry settings.", "test.md"),
+            ("Let's now turn toward retry settings.", "test.md"),
             ('summary = "This section will cover retry settings."', "test.py"),
+            ('summary = "Let\'s now turn to retry settings."', "test.py"),
         ],
     )
-    def test_section_announcement_scope_stays_exact(
+    def test_section_opener_scope_stays_exact(
         self,
         text: str,
         filename: str,
