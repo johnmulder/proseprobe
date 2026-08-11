@@ -95,13 +95,14 @@ class TestCopulaAvoidance:
 class TestExcessiveHedging:
     """Tests for G002: Excessive Hedging."""
 
-    def test_detects_hedging_patterns(self) -> None:
-        """Test detecting hedging patterns."""
-        text = "This approach may help improve performance."
-        rule = ExcessiveHedgingRule()
-        issues = rule.check(text, "test.md")
-        # May or may not detect depending on patterns
-        assert isinstance(issues, list)
+    def test_owns_importance_metadiscourse(self) -> None:
+        source = "It is important to note that results vary."
+
+        [issue] = ExcessiveHedgingRule().check(source, "test.md")
+
+        assert issue.rule_id == "G002"
+        assert issue.message == "Hedging phrase: 'It is important to note that'"
+        assert (issue.line, issue.column, issue.end_column) == (1, 1, 29)
 
     def test_ignores_confident_language(self) -> None:
         """Test ignoring confident language."""
@@ -677,17 +678,6 @@ class TestHedgeStacking:
         assert same_start[0].message.startswith("Hedge stacking:")
         assert same_start[0].confidence is Confidence.HIGH
         assert any(issue.column > 1 for issue in issues)
-
-    def test_single_phrase_keeps_its_finding(self) -> None:
-        """A phrase without stacking should still be reported."""
-        rule = ExcessiveHedgingRule()
-        issues = rule.check(
-            "It is important to note that results vary.",
-            "test.md",
-        )
-
-        assert len(issues) == 1
-        assert issues[0].message.startswith("Hedging phrase:")
 
 
 class TestGapRitual:
