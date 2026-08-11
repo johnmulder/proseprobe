@@ -142,12 +142,10 @@ class TestEmDashOveruse:
 class TestQuoteInconsistency:
     """Tests for T004: Quote Inconsistency."""
 
-    def test_detects_quote_issues(self) -> None:
-        """Test detecting quote inconsistencies."""
-        text = "He said \"hello\" and 'goodbye'."
-        rule = QuoteInconsistencyRule()
-        issues = rule.check(text, "test.md")
-        assert isinstance(issues, list)
+    def test_ignores_consistent_terms_and_ui_labels(self) -> None:
+        source = 'Select "Save" to enable the "legacy" mode.'
+
+        assert QuoteInconsistencyRule().check(source, "test.md") == []
 
     def test_rule_metadata(self) -> None:
         """Test rule has correct metadata."""
