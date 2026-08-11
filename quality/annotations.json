@@ -2194,6 +2194,11 @@
         },
         {
           "rule_id": "T007",
+          "line": 19,
+          "note": "Full-length one-sentence paragraphs are not punchy fragments."
+        },
+        {
+          "rule_id": "T007",
           "line": 35,
           "note": "A fenced code block resets a short-paragraph run."
         },
