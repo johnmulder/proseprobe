@@ -105,9 +105,6 @@ COLLABORATIVE_PHRASES = [
     "In summary",
     "To conclude",
     "As you can see",
-    "As mentioned earlier",
-    "As noted above",
-    "As discussed",
     "As I mentioned",
     # Pedagogical/dive-in phrases (tropes.fyi)
     "Let's break this down",
@@ -277,9 +274,9 @@ FRACTAL_SUMMARY_PHRASES = [
     r"this section will cover\b",
     r"let's now turn to\b",
     r"as we('ve| have) seen in this section",
-    r"as we('ve| have) discussed",
+    r"as (we('ve| have) )?discussed\b",
     r"and so we return to where we began",
-    r"as (we )?noted (earlier|above|at the (start|beginning))",
+    r"as (we )?(noted|mentioned) (earlier|above|below|at the (start|beginning))\b",
 ]
 
 # Grandiose stakes phrases (V006)

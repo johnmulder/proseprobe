@@ -808,6 +808,37 @@ class TestFractalSummary:
         issues = rule.check(text, "test.md")
         assert len(issues) >= 1
 
+    @pytest.mark.parametrize(
+        "reference",
+        [
+            "As discussed",
+            "As mentioned earlier",
+            "As mentioned above",
+            "As mentioned below",
+            "As noted above",
+            "As noted below",
+        ],
+    )
+    def test_owns_exact_retrospective_references(self, reference: str) -> None:
+        from proseprobe.rules.vocab import CollaborativePhrasesRule
+
+        source = f"{reference}, the retry limit is three."
+
+        [issue] = FractalSummaryRule().check(source, "test.md")
+
+        assert issue.rule_id == "S015"
+        assert source[issue.column - 1 : issue.end_column - 1] == reference
+        assert CollaborativePhrasesRule().check(source, "test.md") == []
+
+    def test_leaves_first_person_reference_with_v002(self) -> None:
+        from proseprobe.rules.vocab import CollaborativePhrasesRule
+
+        source = "As I mentioned, the retry limit is three."
+
+        assert FractalSummaryRule().check(source, "test.md") == []
+        [issue] = CollaborativePhrasesRule().check(source, "test.md")
+        assert issue.rule_id == "V002"
+
     def test_ignores_normal_prose(self) -> None:
         """Don't flag prose without fractal summaries."""
         from proseprobe.rules.struct import FractalSummaryRule

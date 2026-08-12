@@ -122,6 +122,6 @@ See [installation guide][missing-install].
 See [retry guide][retry-reference].
 [retry-reference]: https://example.com/retries
 
-Let's now turn to cache invalidation.
+As noted below, cache invalidation requires explicit ownership.
 
 However, caching reduces latency. However, invalidation adds complexity. However, monitoring remains necessary.
