@@ -2801,6 +2801,11 @@
           "note": "A direct instruction is not pedagogical stage-setting."
         },
         {
+          "rule_id": "G019",
+          "line": 33,
+          "note": "They has a named plural antecedent; classifying other uses would require coreference resolution."
+        },
+        {
           "rule_id": "M002",
           "line": 24,
           "note": "A normal Markdown link is not a model reference marker."

@@ -30,7 +30,7 @@ client = Client(attempts=2, delay_ms=200)
 ```
 
 The words speed, memory, and cost name three independent measurements in the
-benchmark table; they are not a rhetorical list of benefits.
+benchmark table. They are not a rhetorical list of benefits.
 
 The first status message said the retry failed. The second stated that the retry
 did not succeed.
