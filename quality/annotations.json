@@ -1154,7 +1154,7 @@
         {
           "rule_id": "G025",
           "line": 19,
-          "note": "Proceed without does not contain the approved proceed-to phrase."
+          "note": "You can documents an optional capability rather than a required procedural step."
         },
         {
           "rule_id": "G025",
