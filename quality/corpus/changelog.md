@@ -19,3 +19,5 @@ As of August 2026, version 1.4.0 is the supported release in this example.
 
 The implementation of the parser now uses one pass instead of two. Here,
 “implementation” names a concrete code change rather than empty academic prose.
+
+The database connection pool timeout policy prevents stalled requests.

@@ -1455,6 +1455,11 @@
           "note": "One concrete implementation noun is not nominalization overload."
         },
         {
+          "rule_id": "G011",
+          "line": 23,
+          "note": "A technical compound is not nominalization overload; classifying noun modifiers would require part-of-speech data."
+        },
+        {
           "rule_id": "G015",
           "line": 3,
           "note": "A release-note introduction names its purpose."

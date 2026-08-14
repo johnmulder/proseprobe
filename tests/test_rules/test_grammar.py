@@ -537,7 +537,10 @@ class TestNominalizationOverload:
         """Don't flag normal prose with verb forms."""
         from proseprobe.rules.grammar import NominalizationOverloadRule
 
-        text = "The team implemented the analysis and identified patterns."
+        text = (
+            "The team implemented the analysis and identified patterns. "
+            "The database connection pool timeout policy prevents stalled requests."
+        )
         rule = NominalizationOverloadRule(threshold=3)
         issues = rule.check(text, "test.md")
         assert len(issues) == 0
