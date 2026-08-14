@@ -1571,6 +1571,9 @@ Detects a small set of verbose verb phrases with direct replacements. Findings
 are high-confidence informational diagnostics with exact spans and concise
 suggestions.
 
+V011 is the single owner for these curated weak-verb plus abstract-noun
+combinations; no separate grammar rule emits a duplicate finding.
+
 **Detected patterns:**
 - "make a decision" → "decide"
 - "conduct an analysis" → "analyze"

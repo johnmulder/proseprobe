@@ -633,7 +633,7 @@ class VerboseVerbPhraseRule(Rule):
 
     id = "V011"
     name = "Verbose Verb Phrase"
-    description = "Detects verbose verb phrases with direct replacements"
+    description = "Detects curated weak verbs with abstract-noun complements"
     severity = Severity.INFO
     default_confidence = Confidence.HIGH
     applies_to: ClassVar[set[str]] = {"markdown", "python"}

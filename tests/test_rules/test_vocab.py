@@ -774,6 +774,9 @@ class TestVerboseVerbPhrase:
 
         [issue] = VerboseVerbPhraseRule().check(source, "guide.md")
 
+        assert VerboseVerbPhraseRule.description == (
+            "Detects curated weak verbs with abstract-noun complements"
+        )
         assert issue.rule_id == "V011"
         assert issue.message == "Verbose verb phrase: 'make a decision'"
         assert (issue.line, issue.column, issue.end_column) == (1, 7, 22)
