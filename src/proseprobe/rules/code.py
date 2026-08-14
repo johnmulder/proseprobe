@@ -159,7 +159,7 @@ class AIPlaceholdersRule(Rule):
 
     id = "C004"
     name = "Formulaic Placeholders"
-    description = "Detects generic TODO patterns and boilerplate"
+    description = "Detects context-free markers, generic TODOs, and boilerplate"
     severity = Severity.INFO
     applies_to: ClassVar[set[str]] = {"python"}
 
@@ -174,6 +174,7 @@ class AIPlaceholdersRule(Rule):
         # Comment-only placeholders
         for comment in comments:
             source_comment = lines[comment.line - 1][comment.column - 1 :]
+            matched_comment = False
             for pattern, kind in AI_PLACEHOLDER_COMMENT_PATTERNS:
                 match = re.search(pattern, source_comment, re.IGNORECASE)
                 if match:
@@ -187,9 +188,12 @@ class AIPlaceholdersRule(Rule):
                             severity=self.severity,
                         )
                     )
+                    matched_comment = True
                     break
 
             # Inline code + comment placeholders
+            if matched_comment:
+                continue
             line_text = lines[comment.line - 1]
             before = line_text[: comment.column - 1]
             source_comment = line_text[comment.column - 1 :]

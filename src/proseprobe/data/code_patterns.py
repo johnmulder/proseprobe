@@ -31,6 +31,7 @@ COLLABORATIVE_COMMENT_PATTERNS: Final[list[tuple[str, str]]] = [
 # Formulaic placeholder patterns (C004)
 # Comment-only patterns: (regex_pattern, kind_description)
 AI_PLACEHOLDER_COMMENT_PATTERNS: Final[list[tuple[str, str]]] = [
+    (r"#\s*(?:TODO|FIXME|XXX)(?:\s*:)?(?=\s*$)", "marker without context"),
     (r"#\s*TODO:\s*Implement\s*$", "bare 'Implement'"),
     (r"#\s*TODO:\s*Add (?:logic|code) here", "generic placeholder"),
     (r"#\s*TODO:\s*Fill in", "generic placeholder"),

@@ -31,3 +31,14 @@ def describe() -> str:
 def record_metrics() -> None:
     """Record parser utilization for each request."""
     pass
+
+
+def pending_work() -> None:
+    """Exercise placeholder comment fixtures."""
+    # TODO
+    # FIXME:
+    # XXX
+    # TODO: Retry HTTP 503 after issue #42 defines the limit.
+    # FIXME: Remove the compatibility branch after Python 3.11 support ends.
+    # XXX: The protocol sends a zero-length keepalive frame.
+    pass

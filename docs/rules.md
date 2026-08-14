@@ -619,17 +619,21 @@ def helper():
 
 ### C004: Formulaic Placeholders
 
-Detects formulaic TODO patterns.
+Detects context-free `TODO`, `FIXME`, and `XXX` comments, formulaic TODO
+patterns, and placeholder code. Specific maintenance comments remain valid.
 
 **Example (bad):**
 ```python
 # TODO: Implement
 # TODO: Add logic here
+# FIXME:
+# XXX
 ```
 
 **Example (good):**
 ```python
 # TODO: Add retry logic for network failures (issue #42)
+# FIXME: Remove the compatibility path after issue #43 is resolved
 ```
 
 ---

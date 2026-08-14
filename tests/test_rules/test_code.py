@@ -203,13 +203,40 @@ def process():
 class TestAIPlaceholders:
     """Tests for C004: Formulaic Placeholders."""
 
-    def test_detects_placeholder_patterns(self) -> None:
-        """Test detecting placeholder patterns."""
-        text = "# TODO: Implement this function"
-        rule = AIPlaceholdersRule()
-        issues = rule.check(text, "test.py")
-        # May or may not detect depending on implementation
-        assert isinstance(issues, list)
+    @pytest.mark.parametrize("marker", ["TODO", "FIXME:", "xxx"])
+    def test_detects_context_free_comment_markers(self, marker: str) -> None:
+        source = f"    # {marker}"
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert issue.message == "Formulaic placeholder: marker without context"
+        assert issue.line == 1
+        assert issue.column == 5
+        assert issue.end_column == len(source) + 1
+        assert source[issue.column - 1 : issue.end_column - 1] == f"# {marker}"
+
+    def test_reports_one_finding_for_inline_bare_marker(self) -> None:
+        source = "def pending():\n    pass  # TODO"
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert issue.line == 2
+        assert (
+            source.splitlines()[1][issue.column - 1 : issue.end_column - 1] == "# TODO"
+        )
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "# TODO: Retry HTTP 503 after issue #42 defines the limit.",
+            "# FIXME: Remove the compatibility branch after Python 3.11 support ends.",
+            "# XXX: The protocol sends a zero-length keepalive frame.",
+            'value = "# TODO"',
+            'TODO = "assigned owner"',
+        ],
+    )
+    def test_ignores_contextual_markers_and_non_comments(self, source: str) -> None:
+        assert AIPlaceholdersRule().check(source, "test.py") == []
 
     def test_rule_metadata(self) -> None:
         """Test rule has correct metadata."""

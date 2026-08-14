@@ -2653,6 +2653,21 @@
           "column": 5
         },
         {
+          "rule_id": "C004",
+          "line": 38,
+          "column": 5
+        },
+        {
+          "rule_id": "C004",
+          "line": 39,
+          "column": 5
+        },
+        {
+          "rule_id": "C004",
+          "line": 40,
+          "column": 5
+        },
+        {
           "rule_id": "G002",
           "line": 24,
           "column": 8
@@ -2723,6 +2738,21 @@
           "rule_id": "C004",
           "line": 17,
           "note": "The TODO names a condition and tracking issue."
+        },
+        {
+          "rule_id": "C004",
+          "line": 41,
+          "note": "The TODO names a condition and tracking issue."
+        },
+        {
+          "rule_id": "C004",
+          "line": 42,
+          "note": "The FIXME names a removal condition."
+        },
+        {
+          "rule_id": "C004",
+          "line": 43,
+          "note": "The XXX comment documents concrete protocol behavior."
         },
         {
           "rule_id": "M001",
