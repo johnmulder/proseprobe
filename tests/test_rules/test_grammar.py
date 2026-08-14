@@ -1489,6 +1489,7 @@ class TestWeakInstructionVerbRule:
             "You may proceed to publish the archive.",
             "You can request a longer timeout through configuration.",
             "Please restart the worker after changing the token.",
+            "The command will create the archive.",
         ],
     )
     def test_ignores_nearby_non_matches(self, source: str) -> None:

@@ -1134,7 +1134,7 @@
         {
           "rule_id": "G025",
           "line": 11,
-          "note": "Please is a tone choice; the instruction remains a direct imperative."
+          "note": "Please remains a direct imperative, and a command's future behavior is precise documentation."
         },
         {
           "rule_id": "G025",
