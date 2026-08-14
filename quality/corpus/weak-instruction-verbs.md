@@ -8,7 +8,7 @@ After validation, you can proceed to publish the archive.
 
 ## Close non-matches and excluded contexts
 
-Restart the worker after changing the token.
+Please restart the worker after changing the token.
 
 You need to restart the worker after changing the token.
 
