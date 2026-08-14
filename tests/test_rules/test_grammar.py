@@ -545,6 +545,16 @@ class TestNominalizationOverload:
         issues = rule.check(text, "test.md")
         assert len(issues) == 0
 
+    def test_ignores_suffix_heavy_concrete_prose(self) -> None:
+        from proseprobe.rules.grammar import NominalizationOverloadRule
+
+        text = (
+            "Workers load configuration next. Validation checks required fields. "
+            "The client opens its connection. Requests begin after readiness."
+        )
+
+        assert NominalizationOverloadRule(threshold=3).check(text, "test.md") == []
+
     def test_rule_metadata(self) -> None:
         from proseprobe.rules.grammar import NominalizationOverloadRule
 

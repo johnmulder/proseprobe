@@ -3546,6 +3546,11 @@
       ],
       "negative_cases": [
         {
+          "rule_id": "G011",
+          "line": 3,
+          "note": "Suffix-heavy technical nouns describe concrete operations; suffixes alone do not establish nominalization overload."
+        },
+        {
           "rule_id": "S022",
           "line": 9,
           "note": "Five sentences remain below the default threshold."
