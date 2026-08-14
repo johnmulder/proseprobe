@@ -357,7 +357,7 @@ class TestCheckFile:
         locations = {(issue.rule_id, issue.line, issue.column) for issue in issues}
         assert ("V001", 1, 9) in locations
         assert ("V002", 2, 1) in locations
-        assert ("G002", 3, 8) in locations
+        assert ("G002", 3, 4) in locations
         assert ("V006", 4, 11) in locations
         assert ("T008", 5, 1) in locations
         assert ("V002", 8, 3) in locations

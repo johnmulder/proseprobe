@@ -104,6 +104,44 @@ class TestExcessiveHedging:
         assert issue.message == "Hedging phrase: 'It is important to note that'"
         assert (issue.line, issue.column, issue.end_column) == (1, 1, 29)
 
+    @pytest.mark.parametrize(
+        ("modal", "qualifier"),
+        [
+            (modal, qualifier)
+            for modal in ("may", "might", "could")
+            for qualifier in ("possibly", "potentially", "perhaps")
+        ],
+    )
+    def test_reports_exact_redundant_modal_pairs(
+        self, modal: str, qualifier: str
+    ) -> None:
+        phrase = f"{modal} {qualifier}"
+        source = f"The retry {phrase} fail."
+
+        [issue] = ExcessiveHedgingRule().check(source, "test.md")
+
+        start = source.index(phrase)
+        assert issue.rule_id == "G002"
+        assert issue.message == f"Redundant modal hedge: '{phrase}'"
+        assert (issue.line, issue.column) == (1, start + 1)
+        assert (issue.end_line, issue.end_column) == (1, start + len(phrase) + 1)
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == modal
+
+    def test_reports_wrapped_redundant_modal_at_exact_source_span(self) -> None:
+        source = "The retry MAY\nPOSSIBLY fail."
+
+        [issue] = ExcessiveHedgingRule().check(source, "test.md")
+
+        assert issue.message == "Redundant modal hedge: 'MAY POSSIBLY'"
+        assert (issue.line, issue.column) == (1, 11)
+        assert (issue.end_line, issue.end_column) == (2, 9)
+        assert issue.suggestion == "may"
+
+    @pytest.mark.parametrize("modal", ["may", "might", "could"])
+    def test_ignores_single_modal(self, modal: str) -> None:
+        assert ExcessiveHedgingRule().check(f"The retry {modal} fail.", "test.md") == []
+
     def test_ignores_confident_language(self) -> None:
         """Test ignoring confident language."""
         text = "This approach improves performance."
@@ -115,6 +153,10 @@ class TestExcessiveHedging:
         """Test rule has correct metadata."""
         rule = ExcessiveHedgingRule()
         assert rule.id == "G002"
+        assert rule.name == "Excessive Hedging"
+        assert rule.description == (
+            "Detects metadiscourse, redundant modals, and hedge stacking"
+        )
 
 
 class TestParticipleChainsRule:
@@ -643,7 +685,7 @@ class TestHedgeStacking:
         assert len(hedge_stack_issues) >= 1
 
     def test_detects_hedge_stacking_across_markdown_lines(self) -> None:
-        text = "The result may\npotentially perhaps fail."
+        text = "The result may\narguably perhaps fail."
 
         issues = ExcessiveHedgingRule().check(text, "test.md")
         stacking = [
@@ -682,7 +724,7 @@ class TestHedgeStacking:
         """The stronger stack issue should own a shared source start."""
         rule = ExcessiveHedgingRule()
         issues = rule.check(
-            "It is important to note that this may potentially fail.",
+            "It is important to note that this may arguably fail.",
             "test.md",
         )
 

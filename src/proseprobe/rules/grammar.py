@@ -65,7 +65,7 @@ class ExcessiveHedgingRule(Rule):
 
     id = "G002"
     name = "Excessive Hedging"
-    description = "Detects 'It is important to note that...' patterns"
+    description = "Detects metadiscourse, redundant modals, and hedge stacking"
     severity = Severity.INFO
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
     content_scope = "prose"
@@ -74,6 +74,10 @@ class ExcessiveHedgingRule(Rule):
     _HEDGE_WORDS = re.compile(
         r"\b(?:may|might|potentially|arguably|possibly|perhaps)\b"
         r"|(?:appears? to|suggests? that|could be(?: interpreted as)?)",
+        re.IGNORECASE,
+    )
+    _REDUNDANT_MODAL = re.compile(
+        r"\b(?P<modal>may|might|could)\s+(?:possibly|potentially|perhaps)\b",
         re.IGNORECASE,
     )
 
@@ -95,12 +99,36 @@ class ExcessiveHedgingRule(Rule):
                         )
                     )
 
+        redundant_issues: list[Issue] = []
+        redundant_ranges: list[tuple[tuple[int, int], tuple[int, int]]] = []
+        stacking_issues: list[Issue] = []
         for sentence in iter_prose_sentences(content, filename):
+            redundant_matches = list(self._REDUNDANT_MODAL.finditer(sentence.text))
+            for match in redundant_matches:
+                start = sentence.source_position(match.start())
+                end = sentence.source_position(match.end())
+                redundant_ranges.append((start, end))
+                phrase = " ".join(match.group().split())
+                redundant_issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Redundant modal hedge: '{phrase}'",
+                        line=start[0],
+                        column=start[1],
+                        end_line=end[0],
+                        end_column=end[1],
+                        severity=self.severity,
+                        confidence=Confidence.HIGH,
+                        suggestion=match.group("modal").casefold(),
+                    )
+                )
             hedge_matches = list(self._HEDGE_WORDS.finditer(sentence.text))
-            if len(hedge_matches) < 2:
+            if len(hedge_matches) < 2 or (
+                len(hedge_matches) == 2 and redundant_matches
+            ):
                 continue
             sentence_line, sentence_column = sentence.source_position()
-            issues.append(
+            stacking_issues.append(
                 Issue(
                     rule_id=self.id,
                     message=(
@@ -113,7 +141,25 @@ class ExcessiveHedgingRule(Rule):
                 )
             )
 
-        return list({(issue.line, issue.column): issue for issue in issues}.values())
+        issues.extend(stacking_issues)
+        issues = [
+            issue
+            for issue in issues
+            if not any(
+                start <= (issue.line, issue.column)
+                and (
+                    issue.end_line or issue.line,
+                    issue.end_column or issue.column,
+                )
+                <= end
+                for start, end in redundant_ranges
+            )
+        ]
+        issues.extend(redundant_issues)
+        return sorted(
+            {(issue.line, issue.column): issue for issue in issues}.values(),
+            key=lambda issue: (issue.line, issue.column),
+        )
 
 
 class ParticipleChainsRule(Rule):

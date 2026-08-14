@@ -506,15 +506,21 @@ This module is the main entry point.
 
 ### G002: Excessive Hedging
 
-Detects over-qualification phrases and hedge stacking (multiple hedges in one sentence).
+Detects over-qualification metadiscourse, exact redundant possibility modals,
+and broader hedge stacking.
 
 Hedge stacking uses wrapped, source-mapped sentence boundaries rather than
 physical source lines.
+
+Exact modal pairs emit one high-confidence G002 finding in place of overlapping
+generic adverb and two-hedge stack findings.
 
 **Detected patterns:**
 - "It is important to note that..."
 - "It's worth mentioning that..."
 - "It should be noted that..."
+- Redundant modal hedges: `may`, `might`, or `could` followed by `possibly`,
+  `potentially`, or `perhaps` → keep the modal
 - Hedge stacking: 2+ hedges (may, might, potentially, arguably, possibly, perhaps, appears to, suggests that, could be) in one sentence
 
 **Example (bad):**
