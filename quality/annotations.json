@@ -1518,7 +1518,7 @@
         {
           "rule_id": "G029",
           "line": 13,
-          "note": "Separate negation and positive wording are not a fixed double negative."
+          "note": "Separate negation is not a fixed double negative, and a conditional negative instruction can be clear safety guidance."
         }
       ]
     },

@@ -10,4 +10,4 @@ Use `not uncommon` when quoting the legacy phrase.
 not unlikely
 ```
 
-The outcome is not common, and recovery is possible.
+The outcome is not common, and recovery is possible. Do not restart the worker unless the health check fails.

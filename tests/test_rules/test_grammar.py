@@ -1593,7 +1593,10 @@ class TestDoubleNegativeRule:
         assert [issue.suggestion for issue in issues] == ["likely", "possible"]
 
     def test_ignores_nearby_non_matches(self) -> None:
-        text = "The outcome is not common. Failure is impossible."
+        text = (
+            "The outcome is not common. Failure is impossible. "
+            "Do not restart the worker unless the health check fails."
+        )
 
         assert DoubleNegativeRule().check(text, "test.md") == []
 
