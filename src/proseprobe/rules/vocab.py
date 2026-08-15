@@ -426,8 +426,7 @@ class GrandioseStakesRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect inflated importance claims."""
-        """Check content for detect inflated importance claims."""
+        """Check for inflated importance claims."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for pattern in GRANDIOSE_STAKES_PHRASES:
@@ -564,7 +563,7 @@ class TrendOverclaimRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect unsubstantiated trend claims."""
+        """Check for unsubstantiated trend claims."""
         issues: list[Issue] = []
         sentences = iter_prose_sentences(content, filename)
         for index, sentence in enumerate(sentences):

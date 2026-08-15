@@ -350,8 +350,7 @@ class DramaticCountdownRule(Rule):
     )
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect 'Not X. Not Y. Just Z.' countdown pattern."""
-        """Check content for detect 'Not X. Not Y. Just Z.' countdown pattern."""
+        """Check for dramatic countdown patterns."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             match = self._pattern.search(line)
@@ -385,7 +384,7 @@ class RhetoricalSelfAnswerRule(Rule):
     )
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect 'The X? A Y.' rhetorical self-answer."""
+        """Check for rhetorical self-answers."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for match in self._pattern.finditer(line):
@@ -421,7 +420,7 @@ class AnaphoraAbuseRule(Rule):
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect 3+ consecutive sentences with the same opening."""
+        """Check for three consecutive sentences with the same opening."""
         issues: list[Issue] = []
         records = iter_prose_sentences(content, filename)
         for _scope, group in groupby(records, key=lambda sentence: sentence.scope_id):
@@ -478,7 +477,7 @@ class GerundFragmentLitanyRule(Rule):
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect 3+ consecutive gerund-phrase fragments."""
+        """Check for three consecutive gerund-phrase fragments."""
         issues: list[Issue] = []
         records = iter_prose_sentences(content, filename)
         for _scope, group in groupby(records, key=lambda sentence: sentence.scope_id):
@@ -542,7 +541,7 @@ class ListicleInProseRule(Rule):
     _sequential_opener = re.compile(r"^(first|second|third)(?:ly)?,", re.IGNORECASE)
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect 'The first... The second... The third...' in prose."""
+        """Check for ordinal progressions in prose."""
         issues: list[Issue] = []
         for _scope, group in groupby(
             iter_prose_sentences(content, filename),
@@ -727,7 +726,7 @@ class SignpostedConclusionRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect 'In conclusion', 'To sum up' signposted conclusions."""
+        """Check for signposted conclusions."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             line_lower = line.casefold()
@@ -758,7 +757,7 @@ class FractalSummaryRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect 'In this section, we'll explore...' framing."""
+        """Check for section-summary framing."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for pattern in FRACTAL_SUMMARY_PHRASES:
@@ -795,7 +794,7 @@ class ContentDuplicationRule(Rule):
     )
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect repeated paragraphs within the same document."""
+        """Check for repeated paragraphs within a document."""
         issues: list[Issue] = []
         paragraphs: list[tuple[int, int, int, int, str]] = []
         current_lines: list[tuple[int, str]] = []
@@ -885,7 +884,7 @@ class AnecdoteAsEvidenceRule(Rule):
     )
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect single-anecdote generalizations."""
+        """Check for single-anecdote generalizations."""
         issues: list[Issue] = []
         sentences = iter_prose_sentences(content, filename)
         for index, sentence in enumerate(sentences):
@@ -934,7 +933,7 @@ class CitationNameDroppingRule(Rule):
         self.threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect consecutive 'Author (Year) verb' citation patterns."""
+        """Check for consecutive citation name-drops."""
         issues: list[Issue] = []
         records = iter_prose_sentences(content, filename)
 
@@ -990,7 +989,7 @@ class CorporateEuphemismRule(Rule):
     )
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect corporate euphemisms that obscure meaning."""
+        """Check for corporate euphemisms that obscure meaning."""
         issues: list[Issue] = []
         for sentence in iter_prose_sentences(content, filename):
             sentence_lower = sentence.text.casefold()
@@ -1029,7 +1028,7 @@ class AlignmentRitualRule(Rule):
     content_scope = "prose"
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect alignment-signaling without substance."""
+        """Check for alignment signaling without substance."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             for pattern in ALIGNMENT_RITUAL_PHRASES:
@@ -1075,7 +1074,7 @@ class SlideDeckFragmentRule(Rule):
     _GERUND_LED: ClassVar[re.Pattern[str]] = re.compile(r"^[a-z-]+ing\b", re.IGNORECASE)
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect verbless buzzword-heavy fragments from slide-deck writing."""
+        """Check for verbless, buzzword-heavy slide-deck fragments."""
         issues: list[Issue] = []
         for line_num, line in self.iter_lines(content, filename):
             stripped = line.strip()

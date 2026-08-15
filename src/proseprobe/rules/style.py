@@ -307,7 +307,7 @@ class ShortPunchyFragmentsRule(Rule):
         self._threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect 3+ consecutive short-sentence paragraphs."""
+        """Check for three consecutive short-sentence paragraphs."""
         issues: list[Issue] = []
         run: list[int] = []
 
@@ -356,7 +356,7 @@ class SentenceLengthRule(Rule):
         self.threshold = threshold
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Check content for detect excessively long sentences."""
+        """Check for excessively long sentences."""
         issues: list[Issue] = []
         for sentence in iter_prose_sentences(content, filename):
             if sentence.context not in {"body", "list_item", "blockquote"}:

@@ -256,7 +256,7 @@ class Linter:
             paths: Files or directories to check.
 
         Returns:
-            Mapping of file paths to issues.
+            Results containing issues by file and the number of files checked.
         """
         files = self.discover_files(paths)
         if not files:
