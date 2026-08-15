@@ -5,8 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
 ## 0.1.0 - Unreleased
 
 ### Added
@@ -73,5 +71,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The fixer module and `fixable` rule metadata.
 - All third-party runtime dependencies; ProseProbe uses the Python standard
   library at runtime.
-
-[Unreleased]: https://github.com/johnmulder/proseprobe/commits/master

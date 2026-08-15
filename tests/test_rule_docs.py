@@ -13,9 +13,47 @@ from proseprobe._rule_docs import (
     render_rule_inventory,
     synchronize_rule_docs,
 )
-from proseprobe.rules import get_rule_metadata
+from proseprobe.rules import get_all_rules, get_rule_metadata
+from proseprobe.rules.base import Confidence
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _documented_rule_examples() -> list[tuple[str, str, str, str]]:
+    reference = (ROOT / "docs" / "rules.md").read_text()
+    section_pattern = re.compile(
+        r"^### (?P<rule_id>[A-Z]\d{3}): .+?\n(?P<body>.*?)"
+        r"(?=^### [A-Z]\d{3}:|\Z)",
+        re.M | re.S,
+    )
+    example_pattern = re.compile(
+        r"\*\*Example \((?P<label>[^)]+)\):\*\*\s*\n"
+        r"(?P<fence>`{3,}|~{3,})(?P<language>[^\n]*)\n"
+        r"(?P<content>.*?)(?:\n(?P=fence)[ \t]*(?=\n|\Z))",
+        re.S,
+    )
+    pairs: list[tuple[str, str, str, str]] = []
+    for section in section_pattern.finditer(reference):
+        examples = list(example_pattern.finditer(section.group("body")))
+        assert len(examples) == 2, section.group("rule_id")
+        first, second = examples
+        assert (first.group("label"), second.group("label")) in {
+            ("bad", "good"),
+            ("flagged", "not flagged"),
+            ("unbounded", "bounded"),
+            ("unsupported", "supported"),
+        }
+        language = first.group("language").strip()
+        assert language == second.group("language").strip()
+        pairs.append(
+            (
+                section.group("rule_id"),
+                language,
+                first.group("content"),
+                second.group("content"),
+            )
+        )
+    return pairs
 
 
 def _seed_documents(root: Path) -> None:
@@ -291,6 +329,32 @@ def test_handwritten_rule_sections_match_registry_exactly() -> None:
 
     assert Counter(headings) == Counter(expected)
     assert len(headings) == len(expected)
+
+
+@pytest.mark.parametrize(
+    ("rule_id", "language", "bad_example", "good_example"),
+    _documented_rule_examples(),
+    ids=lambda value: value if re.fullmatch(r"[A-Z]\d{3}", value) else None,
+)
+def test_documented_examples_match_rule_behavior(
+    rule_id: str,
+    language: str,
+    bad_example: str,
+    good_example: str,
+) -> None:
+    """Each rule's examples should remain executable documentation."""
+    rule = next(rule for rule in get_all_rules() if rule.id == rule_id)
+    filename = "example.py" if language == "python" else "example.md"
+
+    bad_issues = rule.check(bad_example, filename)
+    good_issues = rule.check(good_example, filename)
+
+    assert bad_issues
+    if rule_id == "V014":
+        assert good_issues
+        assert all(issue.confidence is Confidence.LOW for issue in good_issues)
+    else:
+        assert good_issues == []
 
 
 def test_write_is_deterministic_and_check_detects_no_changes(tmp_path: Path) -> None:

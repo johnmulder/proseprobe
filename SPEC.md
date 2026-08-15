@@ -424,7 +424,7 @@ version changes only for incompatible contract changes.
 
 ### 7.2 Rule Protocol
 
-All rules must implement:
+All rules provide:
 
 ```python
 class Rule(Protocol):
@@ -504,6 +504,6 @@ scanning, ANSI formatting, file discovery, and concurrency.
 - Follows Semantic Versioning 2.0.0
 - Rule additions are minor version bumps
 - Rule behavior changes are noted in CHANGELOG.md
-- Configuration format changes require major version bump
+- Configuration format changes increment the first version component
 
 ---

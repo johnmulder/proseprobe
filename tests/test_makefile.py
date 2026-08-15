@@ -85,6 +85,28 @@ def test_standard_checks_reject_stale_rule_documentation() -> None:
     assert re.search(r"^doc-audit:.*\brule-docs-check\b", makefile, re.M)
 
 
+def test_dogfood_scans_public_documentation_only() -> None:
+    """Dogfood should cover shipped guidance without scanning test corpora."""
+    makefile = _makefile_text()
+    assignment = re.search(r"^PUBLIC_DOCS =.*?(?=^\S|\Z)", makefile, re.M | re.S)
+
+    assert assignment is not None
+    public_docs = assignment.group(0)
+    for path in (
+        "README.md",
+        "SPEC.md",
+        "CHANGELOG.md",
+        "RELEASE_BLOCKERS.md",
+        "docs/",
+        "quality/README.md",
+        "skills/proseprobe/SKILL.md",
+        ".agents/plugins/plugins/proseprobe/skills/proseprobe/SKILL.md",
+    ):
+        assert path in public_docs
+    for path in ("quality/corpus/", "tests/fixtures/", ".venv/"):
+        assert path not in public_docs
+
+
 def test_clean_dry_run_removes_known_generated_artifacts() -> None:
     """`make clean` should cover generated artifacts without touching the venv."""
     result = subprocess.run(

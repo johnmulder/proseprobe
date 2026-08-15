@@ -4,10 +4,46 @@ import json
 import re
 import tomllib
 from pathlib import Path
+from urllib.parse import unquote
 
-from proseprobe.profiles import PROFILES
+from proseprobe.profiles import EXPERIMENTAL_RULES, PROFILES
 
 ROOT = Path(__file__).resolve().parents[1]
+PUBLIC_MARKDOWN = (
+    ROOT / "README.md",
+    ROOT / "SPEC.md",
+    ROOT / "CHANGELOG.md",
+    ROOT / "RELEASE_BLOCKERS.md",
+    *(ROOT / "docs").glob("*.md"),
+    ROOT / "quality" / "README.md",
+    ROOT / "skills" / "proseprobe" / "SKILL.md",
+    ROOT
+    / ".agents"
+    / "plugins"
+    / "plugins"
+    / "proseprobe"
+    / "skills"
+    / "proseprobe"
+    / "SKILL.md",
+)
+
+
+def _markdown_without_fences(text: str) -> str:
+    lines: list[str] = []
+    fence: tuple[str, int] | None = None
+    for line in text.splitlines():
+        match = re.match(r"^\s{0,3}(`{3,}|~{3,})", line)
+        if match:
+            marker = match.group(1)
+            if fence is None:
+                fence = (marker[0], len(marker))
+            elif marker[0] == fence[0] and len(marker) >= fence[1]:
+                fence = None
+            continue
+        if fence is None:
+            lines.append(line)
+    visible_text = "\n".join(lines)
+    return re.sub(r"(?P<ticks>`+)[^\n]*?(?P=ticks)", "", visible_text)
 
 
 def test_ci_workflow_uses_proseprobe_names() -> None:
@@ -18,7 +54,7 @@ def test_ci_workflow_uses_proseprobe_names() -> None:
     assert "make coverage-analyze" in workflow
     assert "make dogfood" in workflow
     assert "--cov=src/proseprobe" in makefile
-    assert "proseprobe check README.md docs/" in makefile
+    assert "proseprobe check $(PUBLIC_DOCS)" in makefile
     assert "humanize" not in workflow
     assert "src/humanize" not in workflow
     assert "humanize" not in makefile
@@ -87,6 +123,37 @@ def test_public_docs_match_profile_catalog() -> None:
         assert profile in makefile
     assert "choices=tuple(PROFILES)" in cli
     assert '# profile = "technical-docs"' in cli
+
+
+def test_configuration_matches_experimental_rule_catalog() -> None:
+    """The documented experimental catalog should match the registry."""
+    configuration = (ROOT / "docs" / "configuration.md").read_text()
+    paragraph = next(
+        paragraph
+        for paragraph in configuration.split("\n\n")
+        if "are experimental" in paragraph
+    )
+
+    assert set(re.findall(r"`([A-Z]\d{3})`", paragraph)) == EXPERIMENTAL_RULES
+
+
+def test_public_markdown_local_links_resolve() -> None:
+    """Repository-relative links in public Markdown should target real files."""
+    link_pattern = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
+    definition_pattern = re.compile(r"^\[[^\]]+\]:\s+(\S+)", re.M)
+
+    for document in PUBLIC_MARKDOWN:
+        text = _markdown_without_fences(document.read_text())
+        destinations = link_pattern.findall(text) + definition_pattern.findall(text)
+        for raw_destination in destinations:
+            destination = raw_destination.split()[0].strip("<>")
+            if destination.startswith(("#", "/")) or "://" in destination:
+                continue
+            path_text = unquote(destination.split("#", 1)[0])
+            if not path_text or path_text.startswith("mailto:"):
+                continue
+            target = (document.parent / path_text).resolve()
+            assert target.is_file(), f"{document}: broken link to {destination}"
 
 
 def test_docs_explain_python_prose_rule_scope() -> None:

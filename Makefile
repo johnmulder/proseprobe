@@ -12,6 +12,10 @@ RUFF = $(VENV_BIN)/ruff
 MYPY = $(VENV_BIN)/mypy
 TIME = /usr/bin/time
 
+PUBLIC_DOCS = README.md SPEC.md CHANGELOG.md RELEASE_BLOCKERS.md docs/ \
+	quality/README.md skills/proseprobe/SKILL.md \
+	.agents/plugins/plugins/proseprobe/skills/proseprobe/SKILL.md
+
 PYTEST_ARGS ?= tests/
 
 ifeq ($(wildcard $(PYTHON)),)
@@ -118,7 +122,7 @@ build: clean ## Build package
 
 # Run proseprobe on itself (dogfooding)
 dogfood: ## Run proseprobe on its own docs
-	$(PYTHON) -m proseprobe check README.md docs/ --baseline .proseprobe-baseline.json
+	$(PYTHON) -m proseprobe check $(PUBLIC_DOCS) --baseline .proseprobe-baseline.json
 
 # Quick check for development
 quick: ## Run quick local fix-and-test loop
