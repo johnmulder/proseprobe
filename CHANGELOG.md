@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - Unreleased
+## 0.1.0 - Unreleased
 
 ### Added
 
@@ -74,5 +74,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All third-party runtime dependencies; ProseProbe uses the Python standard
   library at runtime.
 
-[Unreleased]: https://github.com/johnmulder/proseprobe/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/johnmulder/proseprobe/releases/tag/v0.1.0
+[Unreleased]: https://github.com/johnmulder/proseprobe/commits/master

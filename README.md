@@ -3,7 +3,6 @@
 A Unix-style linter for common prose, documentation, and Markdown problems.
 
 [![CI](https://github.com/johnmulder/proseprobe/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/johnmulder/proseprobe/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/proseprobe.svg)](https://pypi.org/project/proseprobe/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/johnmulder/proseprobe/blob/master/LICENSE)
 
 ## Overview
@@ -23,14 +22,11 @@ Overused vocabulary, structural clichés, promotional language, and careless mar
 
 ## Installation
 
-```bash
-pip install proseprobe
-```
-
-Or with [pipx](https://pipx.pypa.io/):
+ProseProbe has not been published to PyPI. Install the current source revision
+from GitHub:
 
 ```bash
-pipx install proseprobe
+python -m pip install "proseprobe @ git+https://github.com/johnmulder/proseprobe.git"
 ```
 
 ## Quick Start
@@ -96,7 +92,8 @@ grouped JSON and SARIF are complete `check` reports, while JSON Lines emits one
 diagnostic per line and no output for a clean run. Operational errors and
 verbose status messages go to stderr so redirected stdout remains valid
 structured data. The versioned JSON contracts and field semantics are
-documented in the [configuration guide](docs/configuration.md#output-formats).
+documented in the
+[configuration guide](https://github.com/johnmulder/proseprobe/blob/master/docs/configuration.md#output-formats).
 
 Standard input uses `-` with a required `--filename` virtual path. It cannot be
 mixed with filesystem paths or baselines; project configuration is still
@@ -228,7 +225,7 @@ steps:
   - uses: actions/checkout@v6
 
   - name: Install proseprobe
-    run: pip install proseprobe
+    run: python -m pip install "proseprobe @ git+https://github.com/johnmulder/proseprobe.git"
 
   - name: Check prose and documentation
     run: proseprobe check --format sarif . > results.sarif || test $? -eq 1
@@ -244,7 +241,7 @@ steps:
 ```yaml
 repos:
   - repo: https://github.com/johnmulder/proseprobe
-    rev: v0.1.0
+    rev: master  # Replace with a release tag when one is available.
     hooks:
       - id: proseprobe
 ```
@@ -278,11 +275,11 @@ membership, and run `make rule-docs`. Do not edit content between
 
 ## Documentation
 
-- [SPEC.md](SPEC.md) — Technical specification
-- [docs/rules.md](docs/rules.md) — Detailed rule documentation
-- [docs/configuration.md](docs/configuration.md) — Configuration reference
-- [Agent integration guide](docs/agent-integration.md) — Portable lint-and-repair workflow for coding agents
-- [Portable Agent Skill](skills/proseprobe/SKILL.md) — Installable workflow for skills-compatible agents
+- [Technical specification](https://github.com/johnmulder/proseprobe/blob/master/SPEC.md)
+- [Rule reference](https://github.com/johnmulder/proseprobe/blob/master/docs/rules.md)
+- [Configuration reference](https://github.com/johnmulder/proseprobe/blob/master/docs/configuration.md)
+- [Agent integration guide](https://github.com/johnmulder/proseprobe/blob/master/docs/agent-integration.md)
+- [Portable Agent Skill](https://github.com/johnmulder/proseprobe/blob/master/skills/proseprobe/SKILL.md)
 
 The `skills/proseprobe/` directory is the copyable distribution unit. Copy it
 into the skills location documented by your agent.
@@ -293,7 +290,7 @@ metadata.
 ### Codex plugin marketplace
 
 Codex users can install the same skill through the
-[Codex plugin marketplace](.agents/plugins/marketplace.json) checked into this
+[Codex plugin marketplace](https://github.com/johnmulder/proseprobe/blob/master/.agents/plugins/marketplace.json) checked into this
 repository. From the root of a cloned checkout, run:
 
 ```bash
@@ -313,4 +310,6 @@ documentation and code comments that are clear, direct, and worth reading.
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+MIT License. See the
+[license text](https://github.com/johnmulder/proseprobe/blob/master/LICENSE)
+for details.
