@@ -241,6 +241,305 @@ Martin Fowler recommends this approach in "Refactoring" (2018).
 
 ---
 
+### V006: Grandiose Stakes
+
+Detects inflated importance claims that overstate significance.
+
+**Detected patterns:**
+- "fundamentally reshape", "will define the next era"
+- "entirely new paradigm", "will change everything"
+
+**Example (bad):**
+```markdown
+AI will fundamentally reshape how society functions.
+```
+
+**Example (good):**
+```markdown
+AI is changing several industries, particularly customer service and logistics.
+```
+
+---
+
+### V007: Invented Concept Labels
+
+Detects compound pseudo-analytical labels ("the X paradox", "the Y trap")
+when 2+ appear in the same document.
+
+Determiner-led references such as "a gap", "that gap", or "the dilemma" do
+not count toward the threshold and are not reported after other labels cross it.
+
+**Detected suffixes:** paradox, trap, creep, divide, vacuum, inversion,
+deficit, gap, spiral, dilemma
+
+**Example (bad):**
+```markdown
+This creates the automation paradox. Teams also face the innovation trap.
+Meanwhile, the complexity creep threatens progress.
+```
+
+**Example (good):**
+```markdown
+Automating too aggressively can backfire when teams lose the skills to
+intervene manually. This experiment addresses a gap in the available data.
+```
+
+---
+
+### V008: Trend Overclaim
+
+Detects unsubstantiated trend claims without evidence.
+
+Trend language is downgraded to low confidence when a bounded neighboring
+sentence in the same prose block provides attribution, a date, a link, a
+percentage, or before-and-after figures.
+
+**Detected patterns:**
+- "more and more people", "a growing number of"
+- "the latest trend sweeping", "increasingly popular"
+- "everyone is talking about"
+
+**Example (bad):**
+```markdown
+More and more people are switching to this framework.
+```
+
+**Example (good):**
+```markdown
+According to the 2025 Stack Overflow survey, 34% of respondents use this framework, up from 21% in 2024.
+```
+
+---
+
+### V009: Wordy Phrase
+
+Detects fixed wordy phrases that have shorter, direct replacements. Matching is
+case-insensitive and applies to Markdown prose plus Python comments and
+docstrings; headings and code are excluded.
+
+**Detected patterns:**
+- "at this point in time" → "now"
+- "due to the fact that" → "because"
+- "during the course of" → "during"
+- "enable(s) the ability to" → "allow(s)"
+- "has/have the ability to" → "can"
+- "in close proximity to" → "near"
+- "in order to" → "to"
+- "in the event that" → "if"
+- "on the basis of" → "based on"
+- "with regard to" → "about"
+
+**Example (bad):**
+```markdown
+At this point in time, the service retries in order to recover.
+```
+
+**Example (good):**
+```markdown
+The service now retries to recover.
+```
+
+---
+
+### V010: Redundant Pair
+
+Detects fixed word pairs where removing one term preserves the meaning.
+Matching is case-insensitive and applies to Markdown prose plus Python comments
+and docstrings; headings and code are excluded.
+
+**Detected patterns:**
+- "each and every" → "each"
+- "past history" → "history"
+- "merge together" → "merge" (including inflected forms)
+- "repeat again" → "repeat" (including inflected forms)
+- "revert back" → "revert" (including inflected forms)
+
+**Example (bad):**
+```markdown
+Review each and every request before the client reverts back.
+```
+
+**Example (good):**
+```markdown
+Review each request before the client reverts.
+```
+
+---
+
+### V011: Verbose Verb Phrase
+
+Detects a small set of verbose verb phrases with direct replacements. Findings
+are high-confidence informational diagnostics with exact spans and concise
+suggestions.
+
+V011 is the single owner for these curated weak-verb plus abstract-noun
+combinations; no separate grammar rule emits a duplicate finding.
+
+**Detected patterns:**
+- "make a decision" → "decide"
+- "conduct an analysis" → "analyze"
+- "provide an explanation" → "explain"
+- "give consideration to" → "consider"
+
+Common present, past, and continuous inflections receive matching replacement
+forms. Decision compounds such as `decision tree`, `decision table`, and
+`decision boundary` are excluded.
+
+**Example (bad):**
+```markdown
+The team must make a decision after conducting an analysis.
+```
+
+**Example (good):**
+```markdown
+The team must decide after analyzing the results.
+```
+
+Matching is case-insensitive and applies to Markdown prose plus Python comments
+and docstrings; headings and code are excluded.
+
+---
+
+### V013: Redundant Modifier
+
+Detects modifier–noun combinations whose modifier repeats meaning already
+carried by the noun. Findings are high-confidence informational diagnostics
+with exact spans and direct deletion suggestions.
+
+**Detected patterns:**
+- "advance planning" → "planning"
+- "basic fundamental(s)" → "fundamental(s)"
+- "joint collaboration(s)" → "collaboration(s)"
+- "negative drawback(s)" → "drawback(s)"
+- "positive benefit(s)" → "benefit(s)"
+- "true fact(s)" → "fact(s)"
+- "unexpected surprise(s)" → "surprise(s)"
+
+The debatable intensifiers `very unique` and `completely unanimous` belong to
+experimental V017. Other context-dependent combinations—including `final
+outcome`, `future plans`, and `past experience`—are intentionally omitted.
+
+**Example (bad):**
+```markdown
+Advance planning produced a positive benefit for the rollout.
+```
+
+**Example (good):**
+```markdown
+Planning benefited the rollout.
+```
+
+Matching is case-insensitive and applies to Markdown prose plus Python comments
+and docstrings; headings and code are excluded.
+
+---
+
+### V014: Imprecise Quantity
+
+Detects four multiword phrases that state a quantity without measuring it:
+`a considerable number of`, `a large number of`, `a small number of`, and `a
+handful of`. Findings are medium-confidence informational diagnostics with
+exact spans and a suggestion to measure or cite the quantity.
+
+**Example (unsupported):**
+```markdown
+A large number of requests failed during deployment.
+```
+
+**Example (supported):**
+```markdown
+The benchmark found a large number of failures across 500 requests.
+```
+
+A number, benchmark/report term, date, named source, or link in the same or an
+adjacent sentence lowers confidence. Evidence does not cross prose scope
+boundaries. Headings, demonstration sections, and code are excluded.
+
+Noisy single-word quantifiers such as `many`, `some`, and `several` are omitted.
+`A significant number of` and `a substantial number of` remain under V001's
+existing vocabulary ownership rather than producing a second finding.
+
+The rule applies to Markdown prose and Python comments and docstrings.
+
+---
+
+### V015: Unbounded Superlative
+
+Detects curated superlative claims such as `is the best`, `was fastest`, and
+`remains the most reliable` when the local prose does not name a comparison
+set or supporting evidence. Findings are low-confidence informational
+diagnostics on the exact superlative phrase.
+
+**Example (unbounded):**
+```markdown
+Atlas is the fastest.
+```
+
+**Example (bounded):**
+```markdown
+Among the three parsers in our benchmark, Atlas is the fastest.
+```
+
+Questions, hypothetical and literal mentions, headings, examples, and
+`best-in-class` are excluded. Comparison markers, benchmark language, or
+quantitative evidence in the same or an adjacent sentence suppress a finding.
+The rule applies to Markdown prose and Python comments and docstrings.
+
+V015 is experimental and is not included in any built-in profile. Select it
+explicitly with informational severity and low confidence to evaluate it.
+
+---
+
+### V016: Absolute Reliability Claim
+
+Detects the absolute claims `never fails`, `always succeeds`, `eliminates all
+errors`, and `100% secure`. Findings are medium-confidence informational
+diagnostics on the exact claim and suggest stating the tested scope and
+observed result.
+
+**Example (bad):**
+```markdown
+The deployment always succeeds.
+```
+
+**Example (good):**
+```markdown
+Across 10,000 test runs, the deployment completed without a failure.
+```
+
+A claim is suppressed when its sentence or an adjacent sentence in the same
+prose scope states a numbered test population or an explicitly tested
+configuration. Code, demonstration sections, and sentences discussing the
+literal wording are also excluded. The rule applies to Markdown prose and
+Python comments and docstrings.
+
+---
+
+### V017: Needless Intensifier
+
+Detects the exact combinations `completely unanimous` and `very unique`.
+Findings are low-confidence informational diagnostics with direct suggestions
+to use `unanimous` or `unique`.
+
+**Example (flagged):**
+```markdown
+The review ended with a completely unanimous decision.
+```
+
+**Example (not flagged):**
+```markdown
+The reviewers were almost unanimous.
+```
+
+The rule intentionally does not flag intensifiers in general. Matching is
+case-insensitive and applies to Markdown prose plus Python comments and
+docstrings; headings and code are excluded.
+
+V017 is experimental and is not included in any built-in profile. Select it
+explicitly with informational severity and low confidence to evaluate it.
+
+---
+
 ## Structural Rules (S)
 
 ### S001: Rule of Three
@@ -375,6 +674,429 @@ Suitable for both new and experienced developers.
 
 ---
 
+### S008: Dramatic Countdown
+
+Detects "Not X. Not Y. Just/But Z." dramatic negation patterns.
+
+**Example (bad):**
+```markdown
+Not faster hardware. Not better algorithms. Just cleaner data.
+```
+
+**Example (good):**
+```markdown
+The improvement came from cleaning the data, not from hardware or algorithms.
+```
+
+---
+
+### S009: Rhetorical Self-Answer
+
+Detects "The X? A Y." patterns where a question is immediately answered
+with a short fragment.
+
+**Example (bad):**
+```markdown
+The result? A complete transformation of the industry.
+```
+
+**Example (good):**
+```markdown
+The result was a measurable improvement in delivery times.
+```
+
+---
+
+### S010: Anaphora Abuse
+
+Detects 3+ consecutive sentences starting with the same word.
+
+Runs stay within one body or block-quote paragraph; headings, lists, blank
+paragraphs, and skipped Markdown constructs reset them. Wrapped source lines
+remain part of the same sentence.
+
+**Example (bad):**
+```markdown
+Every team needs this. Every manager should know this. Every company benefits.
+```
+
+**Example (good):**
+```markdown
+Teams, managers, and companies all benefit from this approach.
+```
+
+---
+
+### S011: Gerund Fragment Litany
+
+Detects 3+ consecutive gerund-phrase fragments used for rhythmic effect.
+
+A run cannot cross a paragraph, heading, list, block quote, or skipped Markdown
+construct. Wrapped source lines remain part of the same sentence.
+
+**Example (bad):**
+```markdown
+Building faster. Shipping sooner. Iterating constantly.
+```
+
+**Example (good):**
+```markdown
+The team focused on faster builds, shorter ship cycles, and constant iteration.
+```
+
+---
+
+### S012: Listicle in Prose
+
+Detects ordinal progressions ("The first… The second… The third…" or
+"First, … Second, … Third, …") disguised as continuous prose.
+
+Ordinal sequences are evaluated within one body or block-quote paragraph, not
+across headings, lists, blank paragraphs, or skipped Markdown constructs. The
+sequential-opener form requires three consecutive sentences in order and also
+accepts `Firstly`, `Secondly`, and `Thirdly`.
+
+**Example (bad):**
+```markdown
+First, install the client. Second, select its configuration.
+Third, run the validation command.
+```
+
+**Example (good):**
+```markdown
+1. Install the client.
+2. Select its configuration.
+3. Run the validation command.
+```
+
+---
+
+### S013: Historical Analogy Stacking
+
+Detects 3+ tech company/product name-drops in rapid succession.
+
+**Example (bad):**
+```markdown
+Like Google, Amazon, and Netflix before them, these companies
+are following the path blazed by Apple and Microsoft.
+```
+
+**Example (good):**
+```markdown
+Several large tech companies have adopted this pattern.
+```
+
+---
+
+### S014: Signposted Conclusion
+
+Detects formulaic conclusion markers.
+
+**Detected patterns:**
+- "In conclusion", "To sum up", "As we've seen"
+- "In closing", "As we have seen"
+
+**Example (bad):**
+```markdown
+In conclusion, the framework provides significant benefits.
+```
+
+**Example (good):**
+```markdown
+The framework reduces build times by 40% and eliminates flaky tests.
+```
+
+---
+
+### S015: Fractal Summary
+
+Detects "In this section, we'll explore" / "As we've seen in this
+section" intro/outro framing.
+
+**Detected patterns:**
+- "in this section, we'll explore"
+- "as we've seen in this section"
+- "this section will cover"
+- "let's now turn to"
+- "as noted/mentioned earlier/above/below"
+- "as discussed"
+
+**Example (bad):**
+```markdown
+In this section, we'll explore how caching improves performance.
+```
+
+**Example (good):**
+```markdown
+Caching improves performance by reducing database round-trips.
+```
+
+---
+
+### S016: Content Duplication
+
+Detects repeated paragraphs within the same document using normalized exact
+comparison. S016 also detects a signposted conclusion when removing an existing
+S014 conclusion marker leaves an exact match for an earlier paragraph.
+
+**Example (bad):**
+```markdown
+The system processes data in real time for immediate insights.
+
+[several paragraphs later]
+
+The system processes data in real time for immediate insights.
+```
+
+**Example (good):**
+```markdown
+State each idea once. Refer back with cross-references if needed.
+```
+
+Paragraphs shorter than eight words are excluded. Comparison is
+case-insensitive and ignores whitespace differences, but it does not use token
+overlap, stemming, or semantic similarity. Paraphrased conclusions and concise
+synthesis therefore remain unflagged.
+
+---
+
+### S017: Anecdote As Evidence
+
+Detects single-anecdote openings used as evidence for broad claims.
+
+The rule requires a generalization in the anecdote sentence or the next
+sentence in the same prose block. Explicit examples, quoted-sentence
+discussion, and dateline-format discussion are ignored.
+
+**Detected patterns:**
+- "For [Name] of [Location], the…"
+- "Take [Name], a [descriptor]…"
+- "Meet [Name]"
+
+**Example (bad):**
+```markdown
+For Sarah of Ohio, the new policy meant losing her healthcare. Her case proves the policy harms every family.
+```
+
+**Example (good):**
+```markdown
+A 2024 Kaiser Family Foundation survey found that 12% of respondents in Ohio lost coverage after the policy change.
+```
+
+---
+
+### S018: Citation Name-Dropping
+
+Detects 3+ consecutive "Author (Year) verb" sentences that list citations
+without synthesizing them.
+
+Consecutive runs use wrapped, source-mapped sentences and reset when ordinary
+prose or a hard prose-block boundary interrupts the citations.
+
+**Detected patterns:**
+- "Smith (2012) argues that..."
+- "Jones (2014) claims that..."
+- "Patel (2018) suggests that..."
+
+**Example (bad):**
+```markdown
+Smith (2012) argues that technology reshapes communities. Jones (2014) claims that digital tools empower users. Patel (2018) suggests that platforms mediate interactions. Lee (2020) finds that algorithms reinforce bias.
+```
+
+**Example (good):**
+```markdown
+Several scholars have examined the impact of technology on communities. Smith (2012) and Jones (2014) both argue that digital tools reshape and empower communities, while Patel (2018) emphasizes the mediating role of platforms.
+```
+
+---
+
+### S019: Corporate Euphemism
+
+Detects corporate euphemisms that obscure plain meaning — language designed
+to soften layoffs, budget cuts, or organisational failure.
+
+The ambiguous terms "restructuring", "realignment", and "resource
+optimization" require company, workforce, staffing, or organizational context.
+Unambiguous phrases such as "right-sizing" and explicit headcount reductions
+remain findings without that extra gate.
+
+**Detected patterns:**
+- "restructuring", "right-sizing", "resource optimization"
+- "headcount reduction", "workforce reduction"
+- "sunsetting", "streamlining operations"
+- "exploring strategic alternatives", "transitioning out"
+
+**Example (bad):**
+```markdown
+The company is undergoing a strategic restructuring and right-sizing initiative.
+```
+
+**Example (good):**
+```markdown
+The database restructuring moves two indexes to the reporting tablespace.
+```
+
+---
+
+### S020: Alignment Ritual
+
+Detects phrases that signal performative consensus-seeking rather than
+substantive agreement.
+
+**Detected patterns:**
+- "fully aligned on", "on the same page"
+- "cross-functional alignment", "in lockstep"
+- "aligned around", "shared understanding"
+
+**Example (bad):**
+```markdown
+We need cross-functional alignment before we can move forward.
+```
+
+**Example (good):**
+```markdown
+We need the marketing and engineering teams to agree on the launch date before we proceed.
+```
+
+---
+
+### S021: Slide Deck Fragment
+
+Detects verbless, buzzword-heavy fragments that read like bullet points
+from a slide deck rather than prose.
+
+Lines with a finite auxiliary or an explicit pronoun-led predicate are complete
+clauses, even when they contain two or more buzzwords.
+
+**Detected patterns:**
+Lines that contain 2+ buzzwords (alignment, synergy, strategic, impact,
+scalable, etc.) plus lack a conjugated main verb.
+
+**Example (bad):**
+```markdown
+Driving alignment across strategic initiatives for scalable impact.
+```
+
+**Example (good):**
+```markdown
+The team will coordinate across three initiatives to improve scalability.
+```
+
+---
+
+### S022: Wall-of-Text Paragraph
+
+Detects body and blockquote paragraphs containing six or more sentences by
+default. The `thresholds.wall_of_text_sentences` setting changes the minimum
+sentence count.
+
+Separate paragraphs are counted independently. Headings, list items, example
+sections, code, tables, and other non-prose content are excluded.
+
+**Example (bad):**
+```markdown
+The cache warms at startup. Workers load configuration next. Validation checks required fields. The client opens its connection. Requests begin after readiness. Metrics record the completed startup.
+```
+
+**Example (good):**
+```markdown
+The cache warms at startup. Workers load configuration next. Validation checks required fields.
+
+The client then opens its connection. Requests begin after readiness. Metrics record the completed startup.
+```
+
+---
+
+### S025: Heading Without Body
+
+Detects a Markdown heading followed by a peer or ancestor heading with no body
+content between them. A parent heading followed immediately by a child heading
+is valid.
+
+Prose, lists, tables, blockquotes, raw HTML, and fenced code all count as body
+content. The final heading in a document is not flagged because there is no
+following boundary that proves the section is empty.
+
+**Example (bad):**
+```markdown
+## Installation
+
+## Configuration
+```
+
+**Example (good):**
+```markdown
+## Installation
+
+Choose the package for your operating system.
+
+## Configuration
+```
+
+---
+
+### S028: Excessive Heading Depth
+
+Reports level-5 and level-6 Markdown headings as informational maintainability
+signals. Deep heading trees are harder to scan and often indicate that the
+section hierarchy should be flattened.
+
+Fenced code, HTML blocks, and front matter are excluded by the Markdown parser.
+
+**Example (bad):**
+```markdown
+##### Retry state details
+```
+
+**Example (good):**
+```markdown
+#### Retry state details
+```
+
+---
+
+### S029: Tiny Section
+
+Detects runs of at least three consecutive sibling Markdown sections whose
+bodies are each a single plain paragraph of five words or fewer. The rule emits
+one informational, low-confidence issue on the first heading in the run.
+
+Lists, tables, blockquotes, links, inline or fenced code, raw HTML, multiple
+paragraphs, and longer prose break a run. Level-1 titles and question headings
+are excluded, as are sections under API/reference, changelog/release-note, FAQ,
+and example headings, where short sections are commonly intentional.
+
+This experimental rule is not enabled by a profile. Select it explicitly with
+`--select S029` while evaluating whether it fits the document type.
+
+**Example (bad):**
+```markdown
+## Start
+
+Starts the worker.
+
+## Stop
+
+Stops the worker.
+
+## Retry
+
+Retries failed work.
+```
+
+**Example (good):**
+```markdown
+## Start
+
+Start the worker with `worker start`.
+
+## Stop
+
+Stop the worker with `worker stop`.
+```
+
+---
+
 ## Style Rules (T)
 
 ### T001: Title Case Headings
@@ -480,6 +1202,173 @@ Use the parser for CSV and TSV files.
 
 ---
 
+### T007: Short Punchy Fragments
+
+Detects 3+ consecutive very short paragraphs (≤ 5 words each) used for
+manufactured dramatic emphasis.
+
+Only body paragraphs count. Headings, lists, block quotes, code, HTML, tables,
+front matter, and MDX/JSX barriers reset a run.
+
+**Example (bad):**
+```markdown
+It worked.
+
+Every single time.
+
+Without fail.
+
+No exceptions.
+```
+
+**Example (good):**
+```markdown
+It worked every single time without exception.
+```
+
+---
+
+### T008: Sentence Length
+
+Detects excessively long sentences that exceed a word count threshold.
+
+Checks apply to body text, list items, and block quotes. Headings and skipped
+Markdown constructs are excluded. Word counts use wrapped, source-mapped
+sentences rather than physical lines.
+
+**Example (bad):**
+```markdown
+In considering the implications of the findings which themselves arise from a complex interaction of factors that are not easily reducible to simple causal explanations we must also consider the broader context in which these results were obtained and the various methodological limitations that constrain our interpretations.
+```
+
+**Example (good):**
+```markdown
+The findings arise from a complex interaction of factors. We must also consider the broader context and the methodological limitations that constrain our interpretations.
+```
+
+---
+
+### T010: Repeated or Mixed Punctuation
+
+At high confidence, detects repeated question or exclamation marks, mixed
+question/exclamation runs, and ASCII or Unicode ellipses followed by terminal
+punctuation. Code, link destinations, Python strings, and example prose are
+excluded.
+
+**Example (bad):**
+```markdown
+Did the final health check pass...?!
+```
+
+**Example (good):**
+```markdown
+Did the final health check pass?
+```
+
+---
+
+### T012: Rhetorical Ellipsis
+
+At medium confidence, detects an exact three-period ellipsis used as a
+rhetorical pause. Numeric sequences, punctuation clusters owned by T010,
+explicit omission or truncation explanations, labeled output, code, link
+destinations, Python strings, and example prose are excluded.
+
+**Example (bad):**
+```markdown
+The background migration may eventually finish...
+```
+
+**Example (good):**
+```markdown
+The background migration may eventually finish.
+```
+
+---
+
+### T013: ALL-CAPS Emphasis
+
+At low confidence, detects line-local runs of at least three uppercase prose
+words when the run contains a strong emphasis cue such as `MUST`, `NOT`,
+`NEVER`, `WARNING`, or `IMPORTANT`. The rule reports the exact uppercase run.
+
+Isolated acronyms, acronym sequences without an emphasis cue,
+identifier-shaped tokens, two-word normative keywords, headings, blockquotes,
+code, Markdown link destinations, Python strings, and example prose are
+excluded.
+
+This experimental rule is not enabled by a profile. Select it explicitly with
+`--select T013` while evaluating whether it fits the document type.
+
+**Example (bad):**
+```markdown
+You MUST NOT DELETE local state during recovery.
+```
+
+**Example (good):**
+```markdown
+You must not delete local state during recovery.
+```
+
+---
+
+### T014: Parenthetical Overload
+
+At medium confidence, detects sentences with at least three balanced,
+top-level parentheticals whose contents each contain at least three words. The
+rule reports one source-mapped span from the first qualifying parenthetical to
+the last. Headings, code, Markdown link destinations, Python strings, and
+example prose are excluded.
+
+**Example (bad):**
+```markdown
+Retry (after the first timeout) (while the replica recovers) (before traffic resumes).
+```
+
+**Example (good):**
+```markdown
+Retry after the first timeout while the replica recovers, before traffic resumes.
+```
+
+---
+
+### T015: Nested Parenthetical
+
+At high confidence, detects a balanced parenthetical nested inside another
+balanced prose parenthetical. Wrapped parentheticals remain one source-mapped
+span; code and Markdown link destinations are excluded.
+
+**Example (bad):**
+```markdown
+Configure the cache (for example (on Linux)) before startup.
+```
+
+**Example (good):**
+```markdown
+For example, configure the cache on Linux before startup.
+```
+
+---
+
+### T016: Slash Alternative
+
+At medium confidence, detects standalone `and/or` in rendered prose and
+reports each occurrence at its exact source span. Case variants are included;
+URLs, paths, code, Markdown link destinations, Python strings, and example
+prose are excluded. Other slash constructions remain outside this rule.
+
+**Example (bad):**
+```markdown
+Select the primary and/or standby node.
+```
+
+**Example (good):**
+```markdown
+Select the primary node, the standby node, or both.
+```
+
+---
+
 ## Grammar Rules (G)
 
 ### G001: Copula Avoidance
@@ -545,6 +1434,483 @@ Leveraging modern techniques, enhancing performance, the system delivers results
 **Example (good):**
 ```markdown
 The system uses modern techniques to deliver fast results.
+```
+
+---
+
+### G004: False Suspense Transition
+
+Detects manufactured dramatic tension in transitions.
+
+**Detected patterns:**
+- "Here's the thing", "Here's the kicker"
+- "Here's where it gets interesting"
+- "Here's what most people miss"
+- "But here's the catch"
+
+**Example (bad):**
+```markdown
+Here's the thing: most teams don't need microservices.
+```
+
+**Example (good):**
+```markdown
+Most teams don't need microservices.
+```
+
+---
+
+### G005: Patronizing Analogy
+
+Detects condescending "think of it as" explanatory patterns.
+
+**Detected patterns:**
+- "Think of it as", "Think of it like"
+- "Imagine a world where", "Imagine a future where"
+- "Imagine a scenario where"
+
+**Example (bad):**
+```markdown
+Think of it as a digital librarian that organizes your data.
+```
+
+**Example (good):**
+```markdown
+The service indexes and organizes data automatically.
+```
+
+---
+
+### G006: Futurist Invitation
+
+Detects speculative "imagine a world" framing.
+
+**Detected patterns:**
+- "Imagine a world where"
+- "In that world,"
+- "Picture a world where"
+- "Imagine a future where"
+
+**Example (bad):**
+```markdown
+Imagine a world where deployments never fail.
+```
+
+**Example (good):**
+```markdown
+Zero-downtime deployments are achievable with blue-green strategies.
+```
+
+---
+
+### G007: False Vulnerability
+
+Detects performative honesty or faux-candid phrasing.
+
+**Detected patterns:**
+- "I'll be honest", "if I'm being honest"
+- "and yes, since we're being honest", "this is not a rant"
+- "let me be frank", "I'll be the first to admit"
+
+**Example (bad):**
+```markdown
+I'll be honest: most startups fail because of bad hiring.
+```
+
+**Example (good):**
+```markdown
+Most startups fail because of bad hiring.
+```
+
+---
+
+### G008: Asserted Simplicity
+
+Detects claims of simplicity that mask complexity or assert authority.
+
+**Detected patterns:**
+- "The reality is simpler", "The truth is"
+- "History is clear", "The answer is simple"
+- "Put simply", "It really is that simple"
+
+**Example (bad):**
+```markdown
+The reality is simpler than you think.
+```
+
+**Example (good):**
+```markdown
+The main factor is cache hit rate, which accounts for 80% of latency reduction.
+```
+
+---
+
+### G009: Pedagogical Voice
+
+Detects overly instructional "let's explore" tone.
+
+**Detected patterns:**
+- "Let's break this down", "Let's unpack this"
+- "Let's explore this", "Let's dive in"
+- "Let's take a closer look", "Let's step back"
+
+**Example (bad):**
+```markdown
+Let's break this down. First, we need to understand the basics.
+```
+
+**Example (good):**
+```markdown
+The system has three components: ingestion, processing, and storage.
+```
+
+---
+
+### G010: False Balance
+
+Detects false-balance framing that presents opposing views as equally
+valid without evidence.
+
+**Detected patterns:**
+- "Supporters say X. Critics say Y."
+- "the truth lies somewhere in the middle"
+- "both sides of the debate"
+- "on the other hand, opponents argue"
+
+**Example (bad):**
+```markdown
+Supporters say it will create jobs, but critics say it will destroy them.
+The truth likely lies somewhere in the middle.
+```
+
+**Example (good):**
+```markdown
+The Bureau of Labor Statistics projects a net gain of 12,000 jobs in the sector by 2028, though some roles will be displaced.
+```
+
+---
+
+### G011: Nominalization Overload
+
+Detects overuse of "the [nominalization] of" constructions that make prose
+unnecessarily abstract.
+
+**Detected patterns:**
+- "the implementation of", "the utilization of"
+- "the identification of", "the examination of"
+- "the establishment of", "the facilitation of"
+- "the conceptualization of", "the operationalization of"
+
+**Example (bad):**
+```markdown
+The implementation of the analysis led to the identification of patterns. The examination of the data confirmed the establishment of a baseline.
+```
+
+**Example (good):**
+```markdown
+We analyzed the data, identified patterns, and confirmed a baseline.
+```
+
+---
+
+### G012: Passive Voice Overuse
+
+Detects overuse of formulaic academic passive constructions.
+
+**Detected patterns:**
+- "It is/was/has been suggested/argued/noted that..."
+- "It can/could/may be argued/suggested that..."
+- "is/are/was/were considered/regarded/viewed/seen as/to be"
+
+**Example (bad):**
+```markdown
+It is suggested that the results indicate a trend. It was found that the method performs well. It has been shown that this approach works. It could be argued that alternatives exist. It should be noted that limitations apply.
+```
+
+**Example (good):**
+```markdown
+The results indicate a trend. The method performs well, and this approach works. However, alternatives exist and limitations apply.
+```
+
+---
+
+### G013: Gap Ritual
+
+Detects formulaic "gap in the literature" phrases common in academic writing.
+
+**Detected patterns:**
+- "the literature has overlooked"
+- "few scholars have examined/explored/addressed"
+- "this study fills that/the gap"
+- "has received little attention"
+- "remains under-explored/understudied"
+- "a gap in the literature/research"
+
+**Example (bad):**
+```markdown
+Few scholars have examined this intersection. This study fills that gap by exploring the overlooked variables.
+```
+
+**Example (good):**
+```markdown
+Prior work by Smith (2020) and Jones (2021) examined related aspects, but did not address variable X. We extend their analysis to include X.
+```
+
+---
+
+### G014: Impersonal Corporate Passive
+
+Detects impersonal passive constructions that erase the actor, creating a
+sense of corporate inevitability where no one is responsible.
+
+**Detected patterns:**
+- "It has been determined that…"
+- "A decision has been made…"
+- "Steps will be taken…"
+- "Changes will be implemented…"
+- "Adjustments will be made…"
+
+**Example (bad):**
+```markdown
+It has been determined that adjustments will be made to the compensation structure.
+```
+
+**Example (good):**
+```markdown
+The finance team decided to reduce bonuses by 10% starting in Q3.
+```
+
+---
+
+### G015: Generic Scene-Setting Opener
+
+At medium confidence, detects a generic scene-setting clause in the first
+substantive Markdown body sentence. Headings, block quotes, lists, code, and
+content under example-style headings do not become the document opener.
+
+**Detected patterns:**
+- `In today's rapidly evolving digital landscape…`
+- `In the modern world…`
+- `In a rapidly evolving landscape…`
+- `In an era defined by constant change…`
+
+Replace the generic opener with the concrete subject or change the document
+actually addresses.
+
+**Example (bad):**
+```markdown
+In today's rapidly evolving digital landscape, reliable payments matter more than ever.
+```
+
+**Example (good):**
+```markdown
+The payment API now retries one timed-out request after 200 milliseconds.
+```
+
+---
+
+### G016: Existential Opener
+
+At medium confidence, detects sentence-opening `There is`, `There are`,
+`There was`, and `There were` when at least five words follow the opener. The
+rule checks body, list-item, and blockquote prose but excludes headings, code,
+Python strings, short fragments, unsupported forms, and example sections.
+
+**Example (bad):**
+```markdown
+There are two retry queues for failed requests.
+```
+
+**Example (good):**
+```markdown
+Failed requests enter one of two retry queues.
+```
+
+---
+
+### G017: Empty "It" Opener
+
+At high confidence, detects three empty sentence openers: `It is clear that`,
+`It is obvious that`, and `It is evident that`. The rule checks body, list-item,
+and blockquote prose but excludes headings, code, and example sections. It does
+not infer other empty-pronoun constructions.
+
+**Example (bad):**
+```markdown
+It is obvious that the cache is stale.
+```
+
+**Example (good):**
+```markdown
+The two failed lookups show that the cache is stale.
+```
+
+---
+
+### G019: Ambiguous "This"
+
+At medium confidence, detects only sentence-opening `This causes`,
+`This means`, and `This shows`. The rule checks body, list-item, and blockquote
+prose but excludes headings, code, Python strings, hyphenated near-misses, and
+example sections. It does not infer arbitrary verbs or resolve antecedents.
+
+**Example (bad):**
+```markdown
+This shows the timeout repeats under load.
+```
+
+**Example (good):**
+```markdown
+The load test shows the timeout repeats under load.
+```
+
+---
+
+### G022: Former/Latter Reference
+
+At medium confidence and informational severity, detects exact uses of
+`the former` and `the latter` in body, list-item, and blockquote prose. The
+rule excludes headings, code, Python strings, and example sections. It does
+not resolve antecedents or decide whether a short comparison is already clear.
+
+**Example (bad):**
+```markdown
+The local and remote runners differ; the latter needs a token.
+```
+
+**Example (good):**
+```markdown
+The local and remote runners differ; the remote runner needs a token.
+```
+
+---
+
+### G024: Unclear Actor in Requirement
+
+At medium confidence, detects two fixed impersonal requirement openers:
+`It must be ensured that` and `Care should be taken to`. The rule asks the
+author to name who must act; it does not attempt general passive-voice or actor
+inference.
+
+**Example (bad):**
+```markdown
+It must be ensured that every archive has a checksum.
+```
+
+**Example (good):**
+```markdown
+The release operator must ensure that every archive has a checksum.
+```
+
+---
+
+### G025: Weak Instruction Verb
+
+At medium confidence and informational severity, detects only
+`You will need to` and `You can proceed to` in body, list-item, and blockquote
+prose. The rule excludes headings, code, Python strings, and example sections.
+It does not flag other second-person instructions or infer whether permission
+language is appropriate in context.
+
+**Example (bad):**
+```markdown
+You will need to restart the worker after changing the token.
+```
+
+**Example (good):**
+```markdown
+Restart the worker after changing the token.
+```
+
+---
+
+### G029: Double Negative
+
+At high confidence, detects three fixed double-negative forms with direct
+positive replacements. The rule does not attempt to infer arbitrary logical
+negation.
+
+**Detected patterns:**
+- `not uncommon` → `common`
+- `not unlikely` → `likely`
+- `not impossible` → `possible`
+
+**Example (bad):**
+```markdown
+A retry is not unlikely after a network timeout.
+```
+
+**Example (good):**
+```markdown
+A retry is likely after a network timeout.
+```
+
+---
+
+### G031: Clause/Coordination Overload
+
+At medium confidence and informational severity, reports a sentence with four
+or more conservative complexity boundaries. The rule counts semicolons,
+coordinators (`and`, `but`, `nor`, `or`, `so`, `yet`), and the explicit
+subordinators `although`, `because`, `even if`, `even though`, `if`, `unless`,
+`whereas`, and `while`. It excludes `because of`, avoids double-counting a
+coordinator after a semicolon, and does not attempt syntax parsing.
+
+**Example (bad):**
+```markdown
+The parser reads and validates and normalizes and writes and logs each record.
+```
+
+**Example (good):**
+```markdown
+The parser reads and validates each record. It then normalizes, writes, and logs the result.
+```
+
+---
+
+### G037: Hedged Requirement
+
+At medium confidence and informational severity, detects only `must normally`
+and `should generally`. The rule excludes headings, code, Python strings, and
+example sections. It also suppresses a quoted or emphasized term immediately
+followed by `means`, `refers to`, `is defined as`, or `denotes`, so standards
+can define their normative vocabulary without a finding.
+
+**Example (bad):**
+```markdown
+The service must normally reject an unsigned archive.
+```
+
+**Example (good):**
+```markdown
+The service must reject an unsigned archive.
+```
+
+---
+
+### G038: Undefined Comparative
+
+At low confidence, detects curated predicate comparatives such as `is faster`,
+`was worse`, and `remains more reliable` when the nearby source does not name a
+comparison target. The rule reports only the exact comparative phrase.
+
+Explicit `than`/`compared with` targets, comparison or evaluation language,
+option sets, benchmark/figure/table/chart references, nearby measurements, and
+Markdown tables suppress the diagnostic. Headings, blockquotes, questions,
+hypotheticals, literal discussions, code, Python strings, and example prose are
+excluded.
+
+This experimental rule is not enabled by a profile. Select it explicitly with
+`--select G038` while evaluating whether it fits the document type.
+
+**Example (bad):**
+```markdown
+The new parser is faster.
+```
+
+**Example (good):**
+```markdown
+The new parser is faster than the legacy parser.
 ```
 
 ---
@@ -950,1382 +2316,3 @@ visible label must match. Additional descriptive words are not reported.
 Autolinks, images, reference definitions, undefined references, code, HTML
 blocks, and demonstration sections are excluded. Inline and resolved reference
 links are checked through the shared Markdown parser.
-
----
-
-## Phase 10: AI Writing Tropes Rules
-
-The following rules were added based on the
-[AI Writing Tropes to Avoid](https://tropes.fyi) catalogue.
-
----
-
-### V006: Grandiose Stakes
-
-Detects inflated importance claims that overstate significance.
-
-**Detected patterns:**
-- "fundamentally reshape", "will define the next era"
-- "entirely new paradigm", "will change everything"
-
-**Example (bad):**
-```markdown
-AI will fundamentally reshape how society functions.
-```
-
-**Example (good):**
-```markdown
-AI is changing several industries, particularly customer service and logistics.
-```
-
----
-
-### V007: Invented Concept Labels
-
-Detects compound pseudo-analytical labels ("the X paradox", "the Y trap")
-when 2+ appear in the same document.
-
-Determiner-led references such as "a gap", "that gap", or "the dilemma" do
-not count toward the threshold and are not reported after other labels cross it.
-
-**Detected suffixes:** paradox, trap, creep, divide, vacuum, inversion,
-deficit, gap, spiral, dilemma
-
-**Example (bad):**
-```markdown
-This creates the automation paradox. Teams also face the innovation trap.
-Meanwhile, the complexity creep threatens progress.
-```
-
-**Example (good):**
-```markdown
-Automating too aggressively can backfire when teams lose the skills to
-intervene manually. This experiment addresses a gap in the available data.
-```
-
----
-
-### S008: Dramatic Countdown
-
-Detects "Not X. Not Y. Just/But Z." dramatic negation patterns.
-
-**Example (bad):**
-```markdown
-Not faster hardware. Not better algorithms. Just cleaner data.
-```
-
-**Example (good):**
-```markdown
-The improvement came from cleaning the data, not from hardware or algorithms.
-```
-
----
-
-### S009: Rhetorical Self-Answer
-
-Detects "The X? A Y." patterns where a question is immediately answered
-with a short fragment.
-
-**Example (bad):**
-```markdown
-The result? A complete transformation of the industry.
-```
-
-**Example (good):**
-```markdown
-The result was a measurable improvement in delivery times.
-```
-
----
-
-### S010: Anaphora Abuse
-
-Detects 3+ consecutive sentences starting with the same word.
-
-Runs stay within one body or block-quote paragraph; headings, lists, blank
-paragraphs, and skipped Markdown constructs reset them. Wrapped source lines
-remain part of the same sentence.
-
-**Example (bad):**
-```markdown
-Every team needs this. Every manager should know this. Every company benefits.
-```
-
-**Example (good):**
-```markdown
-Teams, managers, and companies all benefit from this approach.
-```
-
----
-
-### S011: Gerund Fragment Litany
-
-Detects 3+ consecutive gerund-phrase fragments used for rhythmic effect.
-
-A run cannot cross a paragraph, heading, list, block quote, or skipped Markdown
-construct. Wrapped source lines remain part of the same sentence.
-
-**Example (bad):**
-```markdown
-Building faster. Shipping sooner. Iterating constantly.
-```
-
-**Example (good):**
-```markdown
-The team focused on faster builds, shorter ship cycles, and constant iteration.
-```
-
----
-
-### S012: Listicle in Prose
-
-Detects ordinal progressions ("The first… The second… The third…" or
-"First, … Second, … Third, …") disguised as continuous prose.
-
-Ordinal sequences are evaluated within one body or block-quote paragraph, not
-across headings, lists, blank paragraphs, or skipped Markdown constructs. The
-sequential-opener form requires three consecutive sentences in order and also
-accepts `Firstly`, `Secondly`, and `Thirdly`.
-
-**Example (bad):**
-```markdown
-First, install the client. Second, select its configuration.
-Third, run the validation command.
-```
-
-**Example (good):**
-```markdown
-1. Install the client.
-2. Select its configuration.
-3. Run the validation command.
-```
-
----
-
-### S013: Historical Analogy Stacking
-
-Detects 3+ tech company/product name-drops in rapid succession.
-
-**Example (bad):**
-```markdown
-Like Google, Amazon, and Netflix before them, these companies
-are following the path blazed by Apple and Microsoft.
-```
-
-**Example (good):**
-```markdown
-Several large tech companies have adopted this pattern.
-```
-
----
-
-### S014: Signposted Conclusion
-
-Detects formulaic conclusion markers.
-
-**Detected patterns:**
-- "In conclusion", "To sum up", "As we've seen"
-- "In closing", "As we have seen"
-
-**Example (bad):**
-```markdown
-In conclusion, the framework provides significant benefits.
-```
-
-**Example (good):**
-```markdown
-The framework reduces build times by 40% and eliminates flaky tests.
-```
-
----
-
-### S015: Fractal Summary
-
-Detects "In this section, we'll explore" / "As we've seen in this
-section" intro/outro framing.
-
-**Detected patterns:**
-- "in this section, we'll explore"
-- "as we've seen in this section"
-- "this section will cover"
-- "let's now turn to"
-- "as noted/mentioned earlier/above/below"
-- "as discussed"
-
-**Example (bad):**
-```markdown
-In this section, we'll explore how caching improves performance.
-```
-
-**Example (good):**
-```markdown
-Caching improves performance by reducing database round-trips.
-```
-
----
-
-### S016: Content Duplication
-
-Detects repeated paragraphs within the same document using normalized exact
-comparison. S016 also detects a signposted conclusion when removing an existing
-S014 conclusion marker leaves an exact match for an earlier paragraph.
-
-**Example (bad):**
-```markdown
-The system processes data in real time for immediate insights.
-
-[several paragraphs later]
-
-The system processes data in real time for immediate insights.
-```
-
-**Example (good):**
-```markdown
-State each idea once. Refer back with cross-references if needed.
-```
-
-Paragraphs shorter than eight words are excluded. Comparison is
-case-insensitive and ignores whitespace differences, but it does not use token
-overlap, stemming, or semantic similarity. Paraphrased conclusions and concise
-synthesis therefore remain unflagged.
-
----
-
-### G004: False Suspense Transition
-
-Detects manufactured dramatic tension in transitions.
-
-**Detected patterns:**
-- "Here's the thing", "Here's the kicker"
-- "Here's where it gets interesting"
-- "Here's what most people miss"
-- "But here's the catch"
-
-**Example (bad):**
-```markdown
-Here's the thing: most teams don't need microservices.
-```
-
-**Example (good):**
-```markdown
-Most teams don't need microservices.
-```
-
----
-
-### G005: Patronizing Analogy
-
-Detects condescending "think of it as" explanatory patterns.
-
-**Detected patterns:**
-- "Think of it as", "Think of it like"
-- "Imagine a world where", "Imagine a future where"
-- "Imagine a scenario where"
-
-**Example (bad):**
-```markdown
-Think of it as a digital librarian that organizes your data.
-```
-
-**Example (good):**
-```markdown
-The service indexes and organizes data automatically.
-```
-
----
-
-### G006: Futurist Invitation
-
-Detects speculative "imagine a world" framing.
-
-**Detected patterns:**
-- "Imagine a world where"
-- "In that world,"
-- "Picture a world where"
-- "Imagine a future where"
-
-**Example (bad):**
-```markdown
-Imagine a world where deployments never fail.
-```
-
-**Example (good):**
-```markdown
-Zero-downtime deployments are achievable with blue-green strategies.
-```
-
----
-
-### G007: False Vulnerability
-
-Detects performative honesty or faux-candid phrasing.
-
-**Detected patterns:**
-- "I'll be honest", "if I'm being honest"
-- "and yes, since we're being honest", "this is not a rant"
-- "let me be frank", "I'll be the first to admit"
-
-**Example (bad):**
-```markdown
-I'll be honest: most startups fail because of bad hiring.
-```
-
-**Example (good):**
-```markdown
-Most startups fail because of bad hiring.
-```
-
----
-
-### G008: Asserted Simplicity
-
-Detects claims of simplicity that mask complexity or assert authority.
-
-**Detected patterns:**
-- "The reality is simpler", "The truth is"
-- "History is clear", "The answer is simple"
-- "Put simply", "It really is that simple"
-
-**Example (bad):**
-```markdown
-The reality is simpler than you think.
-```
-
-**Example (good):**
-```markdown
-The main factor is cache hit rate, which accounts for 80% of latency reduction.
-```
-
----
-
-### G009: Pedagogical Voice
-
-Detects overly instructional "let's explore" tone.
-
-**Detected patterns:**
-- "Let's break this down", "Let's unpack this"
-- "Let's explore this", "Let's dive in"
-- "Let's take a closer look", "Let's step back"
-
-**Example (bad):**
-```markdown
-Let's break this down. First, we need to understand the basics.
-```
-
-**Example (good):**
-```markdown
-The system has three components: ingestion, processing, and storage.
-```
-
----
-
-### T007: Short Punchy Fragments
-
-Detects 3+ consecutive very short paragraphs (≤ 5 words each) used for
-manufactured dramatic emphasis.
-
-Only body paragraphs count. Headings, lists, block quotes, code, HTML, tables,
-front matter, and MDX/JSX barriers reset a run.
-
-**Example (bad):**
-```markdown
-It worked.
-
-Every single time.
-
-Without fail.
-
-No exceptions.
-```
-
-**Example (good):**
-```markdown
-It worked every single time without exception.
-```
-
----
-
-### T008: Sentence Length
-
-Detects excessively long sentences that exceed a word count threshold.
-
-Checks apply to body text, list items, and block quotes. Headings and skipped
-Markdown constructs are excluded. Word counts use wrapped, source-mapped
-sentences rather than physical lines.
-
-**Example (bad):**
-```markdown
-In considering the implications of the findings which themselves arise from a complex interaction of factors that are not easily reducible to simple causal explanations we must also consider the broader context in which these results were obtained and the various methodological limitations that constrain our interpretations.
-```
-
-**Example (good):**
-```markdown
-The findings arise from a complex interaction of factors. We must also consider the broader context and the methodological limitations that constrain our interpretations.
-```
-
----
-
-### T010: Repeated or Mixed Punctuation
-
-At high confidence, detects repeated question or exclamation marks, mixed
-question/exclamation runs, and ASCII or Unicode ellipses followed by terminal
-punctuation. Code, link destinations, Python strings, and example prose are
-excluded.
-
-**Example (bad):**
-```markdown
-Did the final health check pass...?!
-```
-
-**Example (good):**
-```markdown
-Did the final health check pass?
-```
-
----
-
-### T012: Rhetorical Ellipsis
-
-At medium confidence, detects an exact three-period ellipsis used as a
-rhetorical pause. Numeric sequences, punctuation clusters owned by T010,
-explicit omission or truncation explanations, labeled output, code, link
-destinations, Python strings, and example prose are excluded.
-
-**Example (bad):**
-```markdown
-The background migration may eventually finish...
-```
-
-**Example (good):**
-```markdown
-The background migration may eventually finish.
-```
-
----
-
-### T013: ALL-CAPS Emphasis
-
-At low confidence, detects line-local runs of at least three uppercase prose
-words when the run contains a strong emphasis cue such as `MUST`, `NOT`,
-`NEVER`, `WARNING`, or `IMPORTANT`. The rule reports the exact uppercase run.
-
-Isolated acronyms, acronym sequences without an emphasis cue,
-identifier-shaped tokens, two-word normative keywords, headings, blockquotes,
-code, Markdown link destinations, Python strings, and example prose are
-excluded.
-
-This experimental rule is not enabled by a profile. Select it explicitly with
-`--select T013` while evaluating whether it fits the document type.
-
-**Example (bad):**
-```markdown
-You MUST NOT DELETE local state during recovery.
-```
-
-**Example (good):**
-```markdown
-You must not delete local state during recovery.
-```
-
----
-
-### T014: Parenthetical Overload
-
-At medium confidence, detects sentences with at least three balanced,
-top-level parentheticals whose contents each contain at least three words. The
-rule reports one source-mapped span from the first qualifying parenthetical to
-the last. Headings, code, Markdown link destinations, Python strings, and
-example prose are excluded.
-
-**Example (bad):**
-```markdown
-Retry (after the first timeout) (while the replica recovers) (before traffic resumes).
-```
-
-**Example (good):**
-```markdown
-Retry after the first timeout while the replica recovers, before traffic resumes.
-```
-
----
-
-### T015: Nested Parenthetical
-
-At high confidence, detects a balanced parenthetical nested inside another
-balanced prose parenthetical. Wrapped parentheticals remain one source-mapped
-span; code and Markdown link destinations are excluded.
-
-**Example (bad):**
-```markdown
-Configure the cache (for example (on Linux)) before startup.
-```
-
-**Example (good):**
-```markdown
-For example, configure the cache on Linux before startup.
-```
-
----
-
-### T016: Slash Alternative
-
-At medium confidence, detects standalone `and/or` in rendered prose and
-reports each occurrence at its exact source span. Case variants are included;
-URLs, paths, code, Markdown link destinations, Python strings, and example
-prose are excluded. Other slash constructions remain outside this rule.
-
-**Example (bad):**
-```markdown
-Select the primary and/or standby node.
-```
-
-**Example (good):**
-```markdown
-Select the primary node, the standby node, or both.
-```
-
----
-
-## Phase 1: Low-Quality Journalism Tropes Rules
-
-The following rules detect common low-quality journalism patterns.
-
----
-
-### V008: Trend Overclaim
-
-Detects unsubstantiated trend claims without evidence.
-
-Trend language is downgraded to low confidence when a bounded neighboring
-sentence in the same prose block provides attribution, a date, a link, a
-percentage, or before-and-after figures.
-
-**Detected patterns:**
-- "more and more people", "a growing number of"
-- "the latest trend sweeping", "increasingly popular"
-- "everyone is talking about"
-
-**Example (bad):**
-```markdown
-More and more people are switching to this framework.
-```
-
-**Example (good):**
-```markdown
-According to the 2025 Stack Overflow survey, 34% of respondents use this framework, up from 21% in 2024.
-```
-
----
-
-### V009: Wordy Phrase
-
-Detects fixed wordy phrases that have shorter, direct replacements. Matching is
-case-insensitive and applies to Markdown prose plus Python comments and
-docstrings; headings and code are excluded.
-
-**Detected patterns:**
-- "at this point in time" → "now"
-- "due to the fact that" → "because"
-- "during the course of" → "during"
-- "enable(s) the ability to" → "allow(s)"
-- "has/have the ability to" → "can"
-- "in close proximity to" → "near"
-- "in order to" → "to"
-- "in the event that" → "if"
-- "on the basis of" → "based on"
-- "with regard to" → "about"
-
-**Example (bad):**
-```markdown
-At this point in time, the service retries in order to recover.
-```
-
-**Example (good):**
-```markdown
-The service now retries to recover.
-```
-
----
-
-### V010: Redundant Pair
-
-Detects fixed word pairs where removing one term preserves the meaning.
-Matching is case-insensitive and applies to Markdown prose plus Python comments
-and docstrings; headings and code are excluded.
-
-**Detected patterns:**
-- "each and every" → "each"
-- "past history" → "history"
-- "merge together" → "merge" (including inflected forms)
-- "repeat again" → "repeat" (including inflected forms)
-- "revert back" → "revert" (including inflected forms)
-
-**Example (bad):**
-```markdown
-Review each and every request before the client reverts back.
-```
-
-**Example (good):**
-```markdown
-Review each request before the client reverts.
-```
-
----
-
-### V011: Verbose Verb Phrase
-
-Detects a small set of verbose verb phrases with direct replacements. Findings
-are high-confidence informational diagnostics with exact spans and concise
-suggestions.
-
-V011 is the single owner for these curated weak-verb plus abstract-noun
-combinations; no separate grammar rule emits a duplicate finding.
-
-**Detected patterns:**
-- "make a decision" → "decide"
-- "conduct an analysis" → "analyze"
-- "provide an explanation" → "explain"
-- "give consideration to" → "consider"
-
-Common present, past, and continuous inflections receive matching replacement
-forms. Decision compounds such as `decision tree`, `decision table`, and
-`decision boundary` are excluded.
-
-**Example (bad):**
-```markdown
-The team must make a decision after conducting an analysis.
-```
-
-**Example (good):**
-```markdown
-The team must decide after analyzing the results.
-```
-
-Matching is case-insensitive and applies to Markdown prose plus Python comments
-and docstrings; headings and code are excluded.
-
----
-
-### V013: Redundant Modifier
-
-Detects modifier–noun combinations whose modifier repeats meaning already
-carried by the noun. Findings are high-confidence informational diagnostics
-with exact spans and direct deletion suggestions.
-
-**Detected patterns:**
-- "advance planning" → "planning"
-- "basic fundamental(s)" → "fundamental(s)"
-- "joint collaboration(s)" → "collaboration(s)"
-- "negative drawback(s)" → "drawback(s)"
-- "positive benefit(s)" → "benefit(s)"
-- "true fact(s)" → "fact(s)"
-- "unexpected surprise(s)" → "surprise(s)"
-
-The debatable intensifiers `very unique` and `completely unanimous` belong to
-experimental V017. Other context-dependent combinations—including `final
-outcome`, `future plans`, and `past experience`—are intentionally omitted.
-
-**Example (bad):**
-```markdown
-Advance planning produced a positive benefit for the rollout.
-```
-
-**Example (good):**
-```markdown
-Planning benefited the rollout.
-```
-
-Matching is case-insensitive and applies to Markdown prose plus Python comments
-and docstrings; headings and code are excluded.
-
----
-
-### V014: Imprecise Quantity
-
-Detects four multiword phrases that state a quantity without measuring it:
-`a considerable number of`, `a large number of`, `a small number of`, and `a
-handful of`. Findings are medium-confidence informational diagnostics with
-exact spans and a suggestion to measure or cite the quantity.
-
-**Example (unsupported):**
-```markdown
-A large number of requests failed during deployment.
-```
-
-**Example (supported):**
-```markdown
-The benchmark found a large number of failures across 500 requests.
-```
-
-A number, benchmark/report term, date, named source, or link in the same or an
-adjacent sentence lowers confidence. Evidence does not cross prose scope
-boundaries. Headings, demonstration sections, and code are excluded.
-
-Noisy single-word quantifiers such as `many`, `some`, and `several` are omitted.
-`A significant number of` and `a substantial number of` remain under V001's
-existing vocabulary ownership rather than producing a second finding.
-
-The rule applies to Markdown prose and Python comments and docstrings.
-
----
-
-### V015: Unbounded Superlative
-
-Detects curated superlative claims such as `is the best`, `was fastest`, and
-`remains the most reliable` when the local prose does not name a comparison
-set or supporting evidence. Findings are low-confidence informational
-diagnostics on the exact superlative phrase.
-
-**Example (unbounded):**
-```markdown
-Atlas is the fastest.
-```
-
-**Example (bounded):**
-```markdown
-Among the three parsers in our benchmark, Atlas is the fastest.
-```
-
-Questions, hypothetical and literal mentions, headings, examples, and
-`best-in-class` are excluded. Comparison markers, benchmark language, or
-quantitative evidence in the same or an adjacent sentence suppress a finding.
-The rule applies to Markdown prose and Python comments and docstrings.
-
-V015 is experimental and is not included in any built-in profile. Select it
-explicitly with informational severity and low confidence to evaluate it.
-
----
-
-### V016: Absolute Reliability Claim
-
-Detects the absolute claims `never fails`, `always succeeds`, `eliminates all
-errors`, and `100% secure`. Findings are medium-confidence informational
-diagnostics on the exact claim and suggest stating the tested scope and
-observed result.
-
-**Example (bad):**
-```markdown
-The deployment always succeeds.
-```
-
-**Example (good):**
-```markdown
-Across 10,000 test runs, the deployment completed without a failure.
-```
-
-A claim is suppressed when its sentence or an adjacent sentence in the same
-prose scope states a numbered test population or an explicitly tested
-configuration. Code, demonstration sections, and sentences discussing the
-literal wording are also excluded. The rule applies to Markdown prose and
-Python comments and docstrings.
-
----
-
-### V017: Needless Intensifier
-
-Detects the exact combinations `completely unanimous` and `very unique`.
-Findings are low-confidence informational diagnostics with direct suggestions
-to use `unanimous` or `unique`.
-
-**Example (flagged):**
-```markdown
-The review ended with a completely unanimous decision.
-```
-
-**Example (not flagged):**
-```markdown
-The reviewers were almost unanimous.
-```
-
-The rule intentionally does not flag intensifiers in general. Matching is
-case-insensitive and applies to Markdown prose plus Python comments and
-docstrings; headings and code are excluded.
-
-V017 is experimental and is not included in any built-in profile. Select it
-explicitly with informational severity and low confidence to evaluate it.
-
----
-
-### G010: False Balance
-
-Detects false-balance framing that presents opposing views as equally
-valid without evidence.
-
-**Detected patterns:**
-- "Supporters say X. Critics say Y."
-- "the truth lies somewhere in the middle"
-- "both sides of the debate"
-- "on the other hand, opponents argue"
-
-**Example (bad):**
-```markdown
-Supporters say it will create jobs, but critics say it will destroy them.
-The truth likely lies somewhere in the middle.
-```
-
-**Example (good):**
-```markdown
-The Bureau of Labor Statistics projects a net gain of 12,000 jobs in the sector by 2028, though some roles will be displaced.
-```
-
----
-
-### G011: Nominalization Overload
-
-Detects overuse of "the [nominalization] of" constructions that make prose
-unnecessarily abstract.
-
-**Detected patterns:**
-- "the implementation of", "the utilization of"
-- "the identification of", "the examination of"
-- "the establishment of", "the facilitation of"
-- "the conceptualization of", "the operationalization of"
-
-**Example (bad):**
-```markdown
-The implementation of the analysis led to the identification of patterns. The examination of the data confirmed the establishment of a baseline.
-```
-
-**Example (good):**
-```markdown
-We analyzed the data, identified patterns, and confirmed a baseline.
-```
-
----
-
-### G012: Passive Voice Overuse
-
-Detects overuse of formulaic academic passive constructions.
-
-**Detected patterns:**
-- "It is/was/has been suggested/argued/noted that..."
-- "It can/could/may be argued/suggested that..."
-- "is/are/was/were considered/regarded/viewed/seen as/to be"
-
-**Example (bad):**
-```markdown
-It is suggested that the results indicate a trend. It was found that the method performs well. It has been shown that this approach works. It could be argued that alternatives exist. It should be noted that limitations apply.
-```
-
-**Example (good):**
-```markdown
-The results indicate a trend. The method performs well, and this approach works. However, alternatives exist and limitations apply.
-```
-
----
-
-### G013: Gap Ritual
-
-Detects formulaic "gap in the literature" phrases common in academic writing.
-
-**Detected patterns:**
-- "the literature has overlooked"
-- "few scholars have examined/explored/addressed"
-- "this study fills that/the gap"
-- "has received little attention"
-- "remains under-explored/understudied"
-- "a gap in the literature/research"
-
-**Example (bad):**
-```markdown
-Few scholars have examined this intersection. This study fills that gap by exploring the overlooked variables.
-```
-
-**Example (good):**
-```markdown
-Prior work by Smith (2020) and Jones (2021) examined related aspects, but did not address variable X. We extend their analysis to include X.
-```
-
----
-
-### S017: Anecdote As Evidence
-
-Detects single-anecdote openings used as evidence for broad claims.
-
-The rule requires a generalization in the anecdote sentence or the next
-sentence in the same prose block. Explicit examples, quoted-sentence
-discussion, and dateline-format discussion are ignored.
-
-**Detected patterns:**
-- "For [Name] of [Location], the…"
-- "Take [Name], a [descriptor]…"
-- "Meet [Name]"
-
-**Example (bad):**
-```markdown
-For Sarah of Ohio, the new policy meant losing her healthcare. Her case proves the policy harms every family.
-```
-
-**Example (good):**
-```markdown
-A 2024 Kaiser Family Foundation survey found that 12% of respondents in Ohio lost coverage after the policy change.
-```
-
----
-
-### S018: Citation Name-Dropping
-
-Detects 3+ consecutive "Author (Year) verb" sentences that list citations
-without synthesizing them.
-
-Consecutive runs use wrapped, source-mapped sentences and reset when ordinary
-prose or a hard prose-block boundary interrupts the citations.
-
-**Detected patterns:**
-- "Smith (2012) argues that..."
-- "Jones (2014) claims that..."
-- "Patel (2018) suggests that..."
-
-**Example (bad):**
-```markdown
-Smith (2012) argues that technology reshapes communities. Jones (2014) claims that digital tools empower users. Patel (2018) suggests that platforms mediate interactions. Lee (2020) finds that algorithms reinforce bias.
-```
-
-**Example (good):**
-```markdown
-Several scholars have examined the impact of technology on communities. Smith (2012) and Jones (2014) both argue that digital tools reshape and empower communities, while Patel (2018) emphasizes the mediating role of platforms.
-```
-
----
-
-### S019: Corporate Euphemism
-
-Detects corporate euphemisms that obscure plain meaning — language designed
-to soften layoffs, budget cuts, or organisational failure.
-
-The ambiguous terms "restructuring", "realignment", and "resource
-optimization" require company, workforce, staffing, or organizational context.
-Unambiguous phrases such as "right-sizing" and explicit headcount reductions
-remain findings without that extra gate.
-
-**Detected patterns:**
-- "restructuring", "right-sizing", "resource optimization"
-- "headcount reduction", "workforce reduction"
-- "sunsetting", "streamlining operations"
-- "exploring strategic alternatives", "transitioning out"
-
-**Example (bad):**
-```markdown
-The company is undergoing a strategic restructuring and right-sizing initiative.
-```
-
-**Example (good):**
-```markdown
-The database restructuring moves two indexes to the reporting tablespace.
-```
-
----
-
-### S020: Alignment Ritual
-
-Detects phrases that signal performative consensus-seeking rather than
-substantive agreement.
-
-**Detected patterns:**
-- "fully aligned on", "on the same page"
-- "cross-functional alignment", "in lockstep"
-- "aligned around", "shared understanding"
-
-**Example (bad):**
-```markdown
-We need cross-functional alignment before we can move forward.
-```
-
-**Example (good):**
-```markdown
-We need the marketing and engineering teams to agree on the launch date before we proceed.
-```
-
----
-
-### S021: Slide Deck Fragment
-
-Detects verbless, buzzword-heavy fragments that read like bullet points
-from a slide deck rather than prose.
-
-Lines with a finite auxiliary or an explicit pronoun-led predicate are complete
-clauses, even when they contain two or more buzzwords.
-
-**Detected patterns:**
-Lines that contain 2+ buzzwords (alignment, synergy, strategic, impact,
-scalable, etc.) plus lack a conjugated main verb.
-
-**Example (bad):**
-```markdown
-Driving alignment across strategic initiatives for scalable impact.
-```
-
-**Example (good):**
-```markdown
-The team will coordinate across three initiatives to improve scalability.
-```
-
----
-
-### S022: Wall-of-Text Paragraph
-
-Detects body and blockquote paragraphs containing six or more sentences by
-default. The `thresholds.wall_of_text_sentences` setting changes the minimum
-sentence count.
-
-Separate paragraphs are counted independently. Headings, list items, example
-sections, code, tables, and other non-prose content are excluded.
-
-**Example (bad):**
-```markdown
-The cache warms at startup. Workers load configuration next. Validation checks required fields. The client opens its connection. Requests begin after readiness. Metrics record the completed startup.
-```
-
-**Example (good):**
-```markdown
-The cache warms at startup. Workers load configuration next. Validation checks required fields.
-
-The client then opens its connection. Requests begin after readiness. Metrics record the completed startup.
-```
-
----
-
-### S025: Heading Without Body
-
-Detects a Markdown heading followed by a peer or ancestor heading with no body
-content between them. A parent heading followed immediately by a child heading
-is valid.
-
-Prose, lists, tables, blockquotes, raw HTML, and fenced code all count as body
-content. The final heading in a document is not flagged because there is no
-following boundary that proves the section is empty.
-
-**Example (bad):**
-```markdown
-## Installation
-
-## Configuration
-```
-
-**Example (good):**
-```markdown
-## Installation
-
-Choose the package for your operating system.
-
-## Configuration
-```
-
----
-
-### S028: Excessive Heading Depth
-
-Reports level-5 and level-6 Markdown headings as informational maintainability
-signals. Deep heading trees are harder to scan and often indicate that the
-section hierarchy should be flattened.
-
-Fenced code, HTML blocks, and front matter are excluded by the Markdown parser.
-
-**Example (bad):**
-```markdown
-##### Retry state details
-```
-
-**Example (good):**
-```markdown
-#### Retry state details
-```
-
----
-
-### S029: Tiny Section
-
-Detects runs of at least three consecutive sibling Markdown sections whose
-bodies are each a single plain paragraph of five words or fewer. The rule emits
-one informational, low-confidence issue on the first heading in the run.
-
-Lists, tables, blockquotes, links, inline or fenced code, raw HTML, multiple
-paragraphs, and longer prose break a run. Level-1 titles and question headings
-are excluded, as are sections under API/reference, changelog/release-note, FAQ,
-and example headings, where short sections are commonly intentional.
-
-This experimental rule is not enabled by a profile. Select it explicitly with
-`--select S029` while evaluating whether it fits the document type.
-
-**Example (bad):**
-```markdown
-## Start
-
-Starts the worker.
-
-## Stop
-
-Stops the worker.
-
-## Retry
-
-Retries failed work.
-```
-
-**Example (good):**
-```markdown
-## Start
-
-Start the worker with `worker start`.
-
-## Stop
-
-Stop the worker with `worker stop`.
-```
-
----
-
-### G014: Impersonal Corporate Passive
-
-Detects impersonal passive constructions that erase the actor, creating a
-sense of corporate inevitability where no one is responsible.
-
-**Detected patterns:**
-- "It has been determined that…"
-- "A decision has been made…"
-- "Steps will be taken…"
-- "Changes will be implemented…"
-- "Adjustments will be made…"
-
-**Example (bad):**
-```markdown
-It has been determined that adjustments will be made to the compensation structure.
-```
-
-**Example (good):**
-```markdown
-The finance team decided to reduce bonuses by 10% starting in Q3.
-```
-
----
-
-### G015: Generic Scene-Setting Opener
-
-At medium confidence, detects a generic scene-setting clause in the first
-substantive Markdown body sentence. Headings, block quotes, lists, code, and
-content under example-style headings do not become the document opener.
-
-**Detected patterns:**
-- `In today's rapidly evolving digital landscape…`
-- `In the modern world…`
-- `In a rapidly evolving landscape…`
-- `In an era defined by constant change…`
-
-Replace the generic opener with the concrete subject or change the document
-actually addresses.
-
-**Example (bad):**
-```markdown
-In today's rapidly evolving digital landscape, reliable payments matter more than ever.
-```
-
-**Example (good):**
-```markdown
-The payment API now retries one timed-out request after 200 milliseconds.
-```
-
----
-
-### G016: Existential Opener
-
-At medium confidence, detects sentence-opening `There is`, `There are`,
-`There was`, and `There were` when at least five words follow the opener. The
-rule checks body, list-item, and blockquote prose but excludes headings, code,
-Python strings, short fragments, unsupported forms, and example sections.
-
-**Example (bad):**
-```markdown
-There are two retry queues for failed requests.
-```
-
-**Example (good):**
-```markdown
-Failed requests enter one of two retry queues.
-```
-
----
-
-### G017: Empty "It" Opener
-
-At high confidence, detects three empty sentence openers: `It is clear that`,
-`It is obvious that`, and `It is evident that`. The rule checks body, list-item,
-and blockquote prose but excludes headings, code, and example sections. It does
-not infer other empty-pronoun constructions.
-
-**Example (bad):**
-```markdown
-It is obvious that the cache is stale.
-```
-
-**Example (good):**
-```markdown
-The two failed lookups show that the cache is stale.
-```
-
----
-
-### G019: Ambiguous "This"
-
-At medium confidence, detects only sentence-opening `This causes`,
-`This means`, and `This shows`. The rule checks body, list-item, and blockquote
-prose but excludes headings, code, Python strings, hyphenated near-misses, and
-example sections. It does not infer arbitrary verbs or resolve antecedents.
-
-**Example (bad):**
-```markdown
-This shows the timeout repeats under load.
-```
-
-**Example (good):**
-```markdown
-The load test shows the timeout repeats under load.
-```
-
----
-
-### G022: Former/Latter Reference
-
-At medium confidence and informational severity, detects exact uses of
-`the former` and `the latter` in body, list-item, and blockquote prose. The
-rule excludes headings, code, Python strings, and example sections. It does
-not resolve antecedents or decide whether a short comparison is already clear.
-
-**Example (bad):**
-```markdown
-The local and remote runners differ; the latter needs a token.
-```
-
-**Example (good):**
-```markdown
-The local and remote runners differ; the remote runner needs a token.
-```
-
----
-
-### G024: Unclear Actor in Requirement
-
-At medium confidence, detects two fixed impersonal requirement openers:
-`It must be ensured that` and `Care should be taken to`. The rule asks the
-author to name who must act; it does not attempt general passive-voice or actor
-inference.
-
-**Example (bad):**
-```markdown
-It must be ensured that every archive has a checksum.
-```
-
-**Example (good):**
-```markdown
-The release operator must ensure that every archive has a checksum.
-```
-
----
-
-### G025: Weak Instruction Verb
-
-At medium confidence and informational severity, detects only
-`You will need to` and `You can proceed to` in body, list-item, and blockquote
-prose. The rule excludes headings, code, Python strings, and example sections.
-It does not flag other second-person instructions or infer whether permission
-language is appropriate in context.
-
-**Example (bad):**
-```markdown
-You will need to restart the worker after changing the token.
-```
-
-**Example (good):**
-```markdown
-Restart the worker after changing the token.
-```
-
----
-
-### G029: Double Negative
-
-At high confidence, detects three fixed double-negative forms with direct
-positive replacements. The rule does not attempt to infer arbitrary logical
-negation.
-
-**Detected patterns:**
-- `not uncommon` → `common`
-- `not unlikely` → `likely`
-- `not impossible` → `possible`
-
-**Example (bad):**
-```markdown
-A retry is not unlikely after a network timeout.
-```
-
-**Example (good):**
-```markdown
-A retry is likely after a network timeout.
-```
-
----
-
-### G031: Clause/Coordination Overload
-
-At medium confidence and informational severity, reports a sentence with four
-or more conservative complexity boundaries. The rule counts semicolons,
-coordinators (`and`, `but`, `nor`, `or`, `so`, `yet`), and the explicit
-subordinators `although`, `because`, `even if`, `even though`, `if`, `unless`,
-`whereas`, and `while`. It excludes `because of`, avoids double-counting a
-coordinator after a semicolon, and does not attempt syntax parsing.
-
-**Example (bad):**
-```markdown
-The parser reads and validates and normalizes and writes and logs each record.
-```
-
-**Example (good):**
-```markdown
-The parser reads and validates each record. It then normalizes, writes, and logs the result.
-```
-
----
-
-### G037: Hedged Requirement
-
-At medium confidence and informational severity, detects only `must normally`
-and `should generally`. The rule excludes headings, code, Python strings, and
-example sections. It also suppresses a quoted or emphasized term immediately
-followed by `means`, `refers to`, `is defined as`, or `denotes`, so standards
-can define their normative vocabulary without a finding.
-
-**Example (bad):**
-```markdown
-The service must normally reject an unsigned archive.
-```
-
-**Example (good):**
-```markdown
-The service must reject an unsigned archive.
-```
-
----
-
-### G038: Undefined Comparative
-
-At low confidence, detects curated predicate comparatives such as `is faster`,
-`was worse`, and `remains more reliable` when the nearby source does not name a
-comparison target. The rule reports only the exact comparative phrase.
-
-Explicit `than`/`compared with` targets, comparison or evaluation language,
-option sets, benchmark/figure/table/chart references, nearby measurements, and
-Markdown tables suppress the diagnostic. Headings, blockquotes, questions,
-hypotheticals, literal discussions, code, Python strings, and example prose are
-excluded.
-
-This experimental rule is not enabled by a profile. Select it explicitly with
-`--select G038` while evaluating whether it fits the document type.
-
-**Example (bad):**
-```markdown
-The new parser is faster.
-```
-
-**Example (good):**
-```markdown
-The new parser is faster than the legacy parser.
-```

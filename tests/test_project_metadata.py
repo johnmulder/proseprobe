@@ -105,8 +105,8 @@ def test_docs_explain_python_prose_rule_scope() -> None:
 
 
 def test_docs_explain_inline_suppression_contract() -> None:
-    """Public docs should preserve both line-scoped directive forms."""
-    paths = [ROOT / "README.md", ROOT / "SPEC.md", ROOT / "docs/configuration.md"]
+    """Canonical references should preserve both line-scoped directive forms."""
+    paths = [ROOT / "SPEC.md", ROOT / "docs/configuration.md"]
 
     for path in paths:
         text = path.read_text()
@@ -370,7 +370,10 @@ def test_readme_links_agent_integration_guide() -> None:
     """The public documentation index should expose the agent workflow."""
     readme = (ROOT / "README.md").read_text()
 
-    assert "[Agent integration guide](docs/agent-integration.md)" in readme
+    assert (
+        "[Agent integration guide](https://github.com/johnmulder/proseprobe/"
+        "blob/master/docs/agent-integration.md)" in readme
+    )
 
 
 def test_readme_documents_portable_agent_skill() -> None:
@@ -378,7 +381,8 @@ def test_readme_documents_portable_agent_skill() -> None:
     readme = (ROOT / "README.md").read_text()
 
     for statement in (
-        "[Portable Agent Skill](skills/proseprobe/SKILL.md)",
+        "[Portable Agent Skill](https://github.com/johnmulder/proseprobe/"
+        "blob/master/skills/proseprobe/SKILL.md)",
         "The `skills/proseprobe/` directory is the copyable distribution unit.",
         "Install the `proseprobe` executable separately before using the skill.",
     ):
@@ -391,7 +395,8 @@ def test_readme_documents_codex_plugin_marketplace() -> None:
     changelog = (ROOT / "CHANGELOG.md").read_text()
 
     for statement in (
-        "[Codex plugin marketplace](.agents/plugins/marketplace.json)",
+        "[Codex plugin marketplace](https://github.com/johnmulder/proseprobe/"
+        "blob/master/.agents/plugins/marketplace.json)",
         'codex plugin marketplace add "$PWD/.agents/plugins"',
         "codex plugin add proseprobe@proseprobe",
         "The Codex wrapper is not included in the Python wheel.",

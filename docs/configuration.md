@@ -509,7 +509,7 @@ version changes only for incompatible contract changes.
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/johnmulder/proseprobe
-    rev: v0.1.0
+    rev: master  # Replace with a release tag when one is available.
     hooks:
       - id: proseprobe
         args: [--select, "V001,V002,M002,M003"]
@@ -533,7 +533,9 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - run: pip install proseprobe
+      - run: >-
+          python -m pip install
+          "proseprobe @ git+https://github.com/johnmulder/proseprobe.git"
       - run: proseprobe check --format sarif docs/ > results.sarif || test $? -eq 1
       - uses: github/codeql-action/upload-sarif@v4
         with:

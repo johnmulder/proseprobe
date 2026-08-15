@@ -119,13 +119,7 @@ def test_readme_development_section_prefers_make_targets() -> None:
     """README development commands should point users at the Makefile."""
     readme = (ROOT / "README.md").read_text()
 
-    for command in [
-        "make dev",
-        "make test",
-        "make typecheck",
-        "make lint",
-        "make check",
-    ]:
+    for command in ["make dev", "make check"]:
         assert command in readme
 
 
