@@ -131,12 +131,10 @@ block by hand. The examples and guidance below remain hand-maintained.
 
 Detects overused and clichéd words that weaken writing.
 
-**Detected words:**
-- delve, tapestry, multifaceted, intricate, underscore
-- showcase, foster, garner, pivotal, testament
-- interplay, vibrant, nuanced, embark, realm
-- unveil, streamline, landscape, paradigm, synergy
-- leverage, utilize, elevate, spearhead
+**Examples include:**
+- `delve`, `tapestry`, `multifaceted`, `nuanced`, `pivotal`, `testament`
+- `interplay`, `vibrant`, `embark`, `landscape`, `synergy`, `leverage`
+- `cutting-edge`, `facilitate`, `robust`, `streamline`, `utilize`
 
 **Example (bad):**
 ```markdown
@@ -202,9 +200,9 @@ As of August 2026, version 1.4.0 is the supported release.
 Detects puffery and marketing speak.
 
 **Detected patterns:**
-- "world-class", "cutting-edge", "groundbreaking"
+- "world-class", "state-of-the-art", "groundbreaking"
 - "boasts a", "nestled in", "in the heart of"
-- "renowned", "prestigious", "unparalleled"
+- "renowned", "industry-leading", "unparalleled"
 
 **Example (bad):**
 ```markdown
@@ -228,8 +226,8 @@ comparative figures.
 
 **Detected patterns:**
 - "Experts say...", "Studies show..."
-- "It is widely believed...", "Many argue..."
-- "Industry reports suggest..."
+- "It is widely believed...", "Many researchers argue..."
+- "Industry analysts suggest..."
 
 **Example (bad):**
 ```markdown
@@ -967,9 +965,8 @@ The following rules were added based on the
 Detects inflated importance claims that overstate significance.
 
 **Detected patterns:**
-- "fundamentally reshape", "define the next era"
-- "entirely new paradigm", "change everything"
-- "unprecedented opportunity", "reshape the future"
+- "fundamentally reshape", "will define the next era"
+- "entirely new paradigm", "will change everything"
 
 **Example (bad):**
 ```markdown
@@ -1128,7 +1125,7 @@ Detects formulaic conclusion markers.
 
 **Detected patterns:**
 - "In conclusion", "To sum up", "As we've seen"
-- "The bottom line is", "At the end of the day"
+- "In closing", "As we have seen"
 
 **Example (bad):**
 ```markdown
@@ -1223,7 +1220,7 @@ Detects condescending "think of it as" explanatory patterns.
 **Detected patterns:**
 - "Think of it as", "Think of it like"
 - "Imagine a world where", "Imagine a future where"
-- "Picture this"
+- "Imagine a scenario where"
 
 **Example (bad):**
 ```markdown
@@ -1243,8 +1240,8 @@ Detects speculative "imagine a world" framing.
 
 **Detected patterns:**
 - "Imagine a world where"
-- "In that world"
-- "What if you could"
+- "In that world,"
+- "Picture a world where"
 - "Imagine a future where"
 
 **Example (bad):**
@@ -1265,8 +1262,8 @@ Detects performative honesty or faux-candid phrasing.
 
 **Detected patterns:**
 - "I'll be honest", "if I'm being honest"
-- "since we're being honest", "this is not a rant"
-- "can we be real for a moment"
+- "and yes, since we're being honest", "this is not a rant"
+- "let me be frank", "I'll be the first to admit"
 
 **Example (bad):**
 ```markdown
@@ -1287,7 +1284,7 @@ Detects claims of simplicity that mask complexity or assert authority.
 **Detected patterns:**
 - "The reality is simpler", "The truth is"
 - "History is clear", "The answer is simple"
-- "It really comes down to"
+- "Put simply", "It really is that simple"
 
 **Example (bad):**
 ```markdown
@@ -1308,7 +1305,7 @@ Detects overly instructional "let's explore" tone.
 **Detected patterns:**
 - "Let's break this down", "Let's unpack this"
 - "Let's explore this", "Let's dive in"
-- "Let's take a closer look", "Let's examine"
+- "Let's take a closer look", "Let's step back"
 
 **Example (bad):**
 ```markdown
@@ -1903,9 +1900,9 @@ remain findings without that extra gate.
 
 **Detected patterns:**
 - "restructuring", "right-sizing", "resource optimization"
-- "headcount reduction", "workforce adjustment"
-- "sunsetting", "deprioritizing"
-- "strategic pivot", "rationalization"
+- "headcount reduction", "workforce reduction"
+- "sunsetting", "streamlining operations"
+- "exploring strategic alternatives", "transitioning out"
 
 **Example (bad):**
 ```markdown
@@ -1926,12 +1923,12 @@ substantive agreement.
 
 **Detected patterns:**
 - "fully aligned on", "on the same page"
-- "cross-functional alignment", "align on next steps"
-- "ensure alignment", "get buy-in"
+- "cross-functional alignment", "in lockstep"
+- "aligned around", "shared understanding"
 
 **Example (bad):**
 ```markdown
-We need to ensure cross-functional alignment and get buy-in from all stakeholders before we can move forward.
+We need cross-functional alignment before we can move forward.
 ```
 
 **Example (good):**

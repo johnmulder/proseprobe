@@ -40,24 +40,6 @@
     {
       "path": "docs/rules.md",
       "rule_id": "V001",
-      "match": "cutting-edge",
-      "context_hash": "d61ddbde23157574"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
-      "match": "delve",
-      "context_hash": "3123bb8187405f93"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
-      "match": "embark",
-      "context_hash": "b6642bc98dc22935"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
       "match": "fundamental",
       "context_hash": "12bffef17fbe05a7"
     },
@@ -65,13 +47,13 @@
       "path": "docs/rules.md",
       "rule_id": "V001",
       "match": "fundamentally",
-      "context_hash": "7566eb9a4dea5f38"
+      "context_hash": "32fa7ef04da97036"
     },
     {
       "path": "docs/rules.md",
       "rule_id": "V001",
       "match": "groundbreaking",
-      "context_hash": "adeb45f429b2f6c4"
+      "context_hash": "aaabf7115487cd63"
     },
     {
       "path": "docs/rules.md",
@@ -88,44 +70,8 @@
     {
       "path": "docs/rules.md",
       "rule_id": "V001",
-      "match": "interplay",
-      "context_hash": "779a1213455742b3"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
       "match": "key",
       "context_hash": "b98887c9e0e6412b"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
-      "match": "landscape",
-      "context_hash": "76c029cbd63f3f5b"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
-      "match": "leverage",
-      "context_hash": "167cfb38b8be1c29"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
-      "match": "multifaceted",
-      "context_hash": "f0204c4182d17c33"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
-      "match": "nuanced",
-      "context_hash": "b6642bc98dc22935"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
-      "match": "pivotal",
-      "context_hash": "40e6ea7dab92e935"
     },
     {
       "path": "docs/rules.md",
@@ -142,38 +88,14 @@
     {
       "path": "docs/rules.md",
       "rule_id": "V001",
-      "match": "streamline",
-      "context_hash": "76c029cbd63f3f5b"
+      "match": "streamlining",
+      "context_hash": "962220d8ccfb3d6e"
     },
     {
       "path": "docs/rules.md",
       "rule_id": "V001",
       "match": "synergy",
       "context_hash": "2f0ef9cc7f0ec1e9"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
-      "match": "synergy",
-      "context_hash": "ba824e2076d9a7f3"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
-      "match": "tapestry",
-      "context_hash": "ed51ebd2c87ad239"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
-      "match": "testament",
-      "context_hash": "8642fe65e05f2467"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V001",
-      "match": "vibrant",
-      "context_hash": "b6642bc98dc22935"
     },
     {
       "path": "docs/rules.md",
@@ -245,31 +167,37 @@
       "path": "docs/rules.md",
       "rule_id": "V004",
       "match": "define the next era",
-      "context_hash": "7566eb9a4dea5f38"
+      "context_hash": "7005001491a420be"
     },
     {
       "path": "docs/rules.md",
       "rule_id": "V004",
       "match": "entirely new paradigm",
-      "context_hash": "5012683057bfb06c"
+      "context_hash": "ef8637a81128c40b"
     },
     {
       "path": "docs/rules.md",
       "rule_id": "V004",
       "match": "fundamentally reshape",
-      "context_hash": "7566eb9a4dea5f38"
+      "context_hash": "e9b78e1ab72551ff"
     },
     {
       "path": "docs/rules.md",
       "rule_id": "V004",
       "match": "groundbreaking",
-      "context_hash": "adeb45f429b2f6c4"
+      "context_hash": "aaabf7115487cd63"
     },
     {
       "path": "docs/rules.md",
       "rule_id": "V004",
       "match": "in the heart of",
       "context_hash": "6404e41f28bb2fb0"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "industry-leading",
+      "context_hash": "b210d1cf80c2954f"
     },
     {
       "path": "docs/rules.md",
@@ -281,7 +209,13 @@
       "path": "docs/rules.md",
       "rule_id": "V004",
       "match": "renowned",
-      "context_hash": "cfa11fbe75c0b019"
+      "context_hash": "775778baecd3be38"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V004",
+      "match": "state-of-the-art",
+      "context_hash": "396412bf58946868"
     },
     {
       "path": "docs/rules.md",
@@ -292,38 +226,38 @@
     {
       "path": "docs/rules.md",
       "rule_id": "V004",
-      "match": "synergy",
-      "context_hash": "ba824e2076d9a7f3"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V004",
       "match": "unparalleled",
-      "context_hash": "cfa11fbe75c0b019"
-    },
-    {
-      "path": "docs/rules.md",
-      "rule_id": "V004",
-      "match": "unprecedented",
-      "context_hash": "ef04dbf39f7b07ce"
+      "context_hash": "79246e2cfbcf0d41"
     },
     {
       "path": "docs/rules.md",
       "rule_id": "V004",
       "match": "world-class",
-      "context_hash": "0427bde649d37ef1"
+      "context_hash": "07aad3c26c5646c0"
     },
     {
       "path": "docs/rules.md",
       "rule_id": "V006",
       "match": "entirely new paradigm",
-      "context_hash": "5012683057bfb06c"
+      "context_hash": "ef8637a81128c40b"
     },
     {
       "path": "docs/rules.md",
       "rule_id": "V006",
       "match": "fundamentally reshape",
-      "context_hash": "7566eb9a4dea5f38"
+      "context_hash": "e9b78e1ab72551ff"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V006",
+      "match": "will change everything",
+      "context_hash": "ef8637a81128c40b"
+    },
+    {
+      "path": "docs/rules.md",
+      "rule_id": "V006",
+      "match": "will define the next era",
+      "context_hash": "e9b78e1ab72551ff"
     }
   ]
 }
