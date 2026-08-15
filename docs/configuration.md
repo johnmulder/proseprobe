@@ -52,9 +52,9 @@ Each specialized profile includes the general set plus its listed rules.
 Running without a profile preserves the all-category selection, warning
 minimum severity, and low minimum confidence.
 
-`G038`, `S029`, `T013`, `V015`, and `V017` are experimental and are not included
-in any built-in profile. Enable an experimental rule explicitly, including its
-informational severity and low confidence:
+`C006`, `G038`, `S029`, `T013`, `V015`, and `V017` are experimental and are not
+included in any built-in profile. Enable an experimental rule explicitly,
+including its informational severity and low confidence:
 
 ```toml
 [tool.proseprobe]
@@ -121,7 +121,7 @@ from duplicating vocabulary findings owned by `V001`.
 ```toml
 [tool.proseprobe.vocabulary]
 # Additional words to flag
-additional = ["synergy", "utilize"]
+additional = ["actionable", "impactful"]
 
 # Domain-specific words to allow
 allowed = ["crucial", "comprehensive"]
@@ -237,11 +237,9 @@ minimum_severity = "warning"
 
 [tool.proseprobe.severity]
 V001 = "error"
-M002 = "error"
-M004 = "error"
 
 [tool.proseprobe.vocabulary]
-additional = ["leverage", "synergy"]
+additional = ["actionable", "impactful"]
 allowed = ["comprehensive"]
 allowed_phrases = ["All notable changes"]
 
