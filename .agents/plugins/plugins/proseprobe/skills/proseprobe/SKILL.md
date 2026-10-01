@@ -37,10 +37,17 @@ Do not add or switch to an `agent` profile.
 
 ## Interpret
 
-Read each complete JSON Lines record and edit the reported source span. A
-missing end position means the finding summarizes multiple matches or a wider
+Read each complete JSON Lines record and its surrounding prose before deciding
+whether to edit the reported source span. A missing end position means the
+finding summarizes multiple matches or a wider
 threshold.
 Handle high-confidence findings first, then medium, then low.
+
+Markdown blockquotes remain linted: a blockquote can be a draft callout rather
+than a literal quotation. Preserve exact quotations and named technical concepts
+even when findings have medium or high confidence. Suggestions are review prompts,
+not replacements that necessarily fit the sentence. Treat overlapping findings
+on one source span as one editing decision while retaining the rule IDs.
 
 Inspect unfamiliar or intentional findings through canonical rule metadata:
 

@@ -168,6 +168,8 @@ class AIVocabularyRule(Rule):
         "showcase": r"showcas(?:e|es|ed|ing)",
         "spearhead": r"spearhead(?:s|ed|ing)?",
         "streamline": r"streamlin(?:e|es|ed|ing)",
+        # Preserve the statistical method without exempting other words on the line.
+        "robust": r"robust(?!\s+regressions?\b)",
         "underscore": r"underscor(?:e|es|ed|ing)",
         "unravel": r"unravel(?:s|ed|ing)?",
         # Academic jargon (academic tropes)
@@ -226,6 +228,9 @@ class AIVocabularyRule(Rule):
                 for match in re.finditer(pattern, line_lower):
                     suggestion = VOCABULARY_SUGGESTIONS.get(word)
                     matched_word = match.group()
+                    if word == "implement" and matched_word != word:
+                        # A base-form replacement does not fit the inflected source.
+                        suggestion = None
                     message = f"Overused word: '{matched_word}'"
                     if suggestion:
                         message += f" → consider '{suggestion}'"

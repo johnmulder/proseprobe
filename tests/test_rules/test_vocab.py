@@ -120,6 +120,55 @@ class TestAIVocabularyRule:
         assert "delves" in issues[0].message.lower()
         assert issues[0].suggestion == "explore"
 
+    @pytest.mark.parametrize(
+        "content",
+        [
+            "The implementation uses robust regression to limit outlier effects.",
+            "Use ROBUST REGRESSION when fitting contaminated samples.",
+            "The tutorial describes robust regressions for contaminated data.",
+        ],
+    )
+    def test_preserves_named_regression_method(
+        self, rule: AIVocabularyRule, content: str
+    ) -> None:
+        assert rule.check(content, "methods.md") == []
+
+    def test_statistical_term_does_not_exempt_other_claims(
+        self, rule: AIVocabularyRule
+    ) -> None:
+        content = (
+            "A robust regression model and a robust platform serve different purposes."
+        )
+        [issue] = rule.check(content, "methods.md")
+
+        assert content[issue.column - 1 : issue.end_column - 1] == "robust"
+        assert content[issue.column - 1 :].startswith("robust platform")
+
+    @pytest.mark.parametrize(
+        "content",
+        [
+            "The kernel was implemented in C.",
+            "The module implements the buffer protocol.",
+            "The port is implementing the same interface.",
+        ],
+    )
+    def test_inflected_implement_keeps_review_without_invalid_replacement(
+        self, rule: AIVocabularyRule, content: str
+    ) -> None:
+        [issue] = rule.check(content, "interfaces.md")
+
+        assert issue.rule_id == "V001"
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion is None
+        assert "carry out" not in issue.message
+
+    def test_base_implement_retains_its_suggestion(
+        self, rule: AIVocabularyRule
+    ) -> None:
+        [issue] = rule.check("We will implement the migration plan.", "plan.md")
+
+        assert issue.suggestion == "carry out"
+
     def test_detects_multiple_words(self, rule: AIVocabularyRule) -> None:
         content = "The tapestry of modern development is multifaceted."
         issues = rule.check(content, "test.md")

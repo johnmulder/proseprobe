@@ -31,3 +31,30 @@ out-of-range positions, missing files, and paths outside the repository.
 
 Keep excerpts purpose-written or clearly licensed. Prefer a few realistic
 paragraphs over long generated documents.
+
+## Technical review sample
+
+The `technical-review*.md` excerpts reproduce a workspace evaluation's technical
+terms, draft prose, and literal quotations. The held-out file contains related
+examples written before changing the rules; it is a regression set, not an
+independent estimate of general precision. An agent reviewed the annotations
+against the declared author intent. They have not received independent human
+review.
+
+Run `make rule-quality` to include this sample under the evaluator's default
+configuration. It includes informational findings; the normal CLI reports
+warnings and errors unless another severity is requested. Intentional technical
+terms and exact quotations remain negative cases even when the linter reports
+them. Blockquote syntax alone cannot distinguish a quotation from a draft
+callout. The agent integration guide explains how callers preserve those uses.
+
+The sample keeps generic quality claims and administrative verb choices as
+positive cases. The rule now preserves the named statistical method while
+retaining generic claims, and omits the base-form suggestion for inflected
+forms of the administrative verb. These changes neither exclude all technical
+writing nor establish factual or grammatical correctness.
+
+At the default warning threshold, the sample retained all 10 intended findings
+and reduced intentional-use alerts from 14 to 10. The full evaluator also
+retained two intended informational findings. No pre-existing corpus findings
+changed. These counts describe this sample, not a population precision estimate.

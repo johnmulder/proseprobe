@@ -61,6 +61,13 @@ whether the scan fails: errors and warnings are failing findings, while info
 findings are advisory. Confidence estimates how likely the rule is to be useful;
 it does not replace repository policy.
 
+Read surrounding prose before editing. Markdown blockquotes remain linted
+because they can contain draft callouts rather than literal quotations. Preserve
+exact quotations and named technical concepts even at medium or high confidence.
+Suggestions are review prompts; they may not fit the sentence's grammar or
+meaning. Treat overlapping findings on one source span as one editing decision
+while retaining the rule IDs.
+
 Inspect canonical rule metadata instead of hard-coding the rule catalog:
 
 ```bash

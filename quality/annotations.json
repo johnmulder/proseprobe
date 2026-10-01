@@ -3693,6 +3693,184 @@
           "note": "A near-miss event clause is not the exact wordy phrase."
         }
       ]
+    },
+    "quality/corpus/technical-review.md": {
+      "expected": [],
+      "negative_cases": [
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "note": "Hash-table key is the technical identity, not an importance claim."
+        },
+        {
+          "rule_id": "V001",
+          "line": 5,
+          "note": "Statistical significance names the stated threshold comparison."
+        },
+        {
+          "rule_id": "V001",
+          "line": 7,
+          "note": "Robust regression is a named statistical method; strong regression changes meaning."
+        },
+        {
+          "rule_id": "V001",
+          "line": 9,
+          "note": "The fundamental theorem of calculus is a named mathematical result."
+        },
+        {
+          "rule_id": "V001",
+          "line": 11,
+          "note": "Implemented in C describes software construction; carry out is not a replacement."
+        }
+      ]
+    },
+    "quality/corpus/technical-review-style.md": {
+      "expected": [
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "column": 6,
+          "note": "The draft author wants unsupported promotional wording removed."
+        },
+        {
+          "rule_id": "V004",
+          "line": 3,
+          "column": 6,
+          "note": "Promotional and vocabulary rules overlap on one editing decision."
+        },
+        {
+          "rule_id": "V001",
+          "line": 5,
+          "column": 13,
+          "note": "The draft author prefers use to utilize."
+        },
+        {
+          "rule_id": "V001",
+          "line": 7,
+          "column": 4,
+          "note": "The draft author prefers direct description to delve."
+        },
+        {
+          "rule_id": "V001",
+          "line": 7,
+          "column": 29,
+          "note": "The draft author rejects a figurative tapestry of settings."
+        },
+        {
+          "rule_id": "V002",
+          "line": 9,
+          "column": 24,
+          "note": "The draft author does not want a conversational closing."
+        },
+        {
+          "rule_id": "V005",
+          "line": 9,
+          "column": 1,
+          "note": "The author wants the stock closing phrase removed; informational at default severity."
+        },
+        {
+          "rule_id": "V009",
+          "line": 5,
+          "column": 1,
+          "note": "To expresses the instruction without the extra words; informational at default severity."
+        }
+      ],
+      "negative_cases": []
+    },
+    "quality/corpus/technical-review-quotes.md": {
+      "expected": [],
+      "negative_cases": [
+        {
+          "rule_id": "V001",
+          "line": 5,
+          "note": "This is exact archival evidence; preserve the quotation."
+        },
+        {
+          "rule_id": "V004",
+          "line": 5,
+          "note": "This is exact archival evidence; preserve the quotation."
+        },
+        {
+          "rule_id": "V002",
+          "line": 6,
+          "note": "This is exact archival evidence; preserve the quotation."
+        },
+        {
+          "rule_id": "V001",
+          "line": 11,
+          "note": "Fenced string is literal input, not prose to rewrite."
+        },
+        {
+          "rule_id": "V002",
+          "line": 12,
+          "note": "Fenced string is literal input, not prose to rewrite."
+        },
+        {
+          "rule_id": "V001",
+          "line": 15,
+          "note": "Inline fixture value is literal input, not prose to rewrite."
+        }
+      ]
+    },
+    "quality/corpus/technical-review-heldout.md": {
+      "expected": [
+        {
+          "rule_id": "V001",
+          "line": 7,
+          "column": 33,
+          "note": "The second robust modifies a vague platform claim, not the statistical method."
+        },
+        {
+          "rule_id": "V001",
+          "line": 9,
+          "column": 22,
+          "note": "Generic quality claim remains eligible for vocabulary review."
+        },
+        {
+          "rule_id": "V001",
+          "line": 15,
+          "column": 9,
+          "note": "The author asks to simplify this administrative action to carry out."
+        },
+        {
+          "rule_id": "V001",
+          "line": 17,
+          "column": 22,
+          "note": "A draft callout in a blockquote is still prose; it is not a literal external quotation."
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V001",
+          "line": 3,
+          "note": "Case does not change the named statistical method."
+        },
+        {
+          "rule_id": "V001",
+          "line": 5,
+          "note": "Plural method references retain technical meaning."
+        },
+        {
+          "rule_id": "V001",
+          "line": 11,
+          "note": "Implements names protocol conformance, so preserve the term."
+        },
+        {
+          "rule_id": "V001",
+          "line": 13,
+          "note": "Implementing names interface construction, so preserve the term."
+        },
+        {
+          "rule_id": "V002",
+          "line": 21,
+          "note": "Preserve the literal customer statement."
+        },
+        {
+          "rule_id": "V001",
+          "line": 23,
+          "note": "The technical term in inline code is already excluded."
+        }
+      ]
     }
   }
 }

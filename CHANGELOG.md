@@ -56,6 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Preserved the statistical term `robust regression` in V001 and omitted
+  base-form replacement suggestions for inflected forms of `implement`.
 - Removed duplicate same-rule findings from overlapping patterns.
 - Reduced false positives for progressive verbs, technical gerunds, ordinary
   release dates, literal gap or dilemma references, restructuring terms, and
