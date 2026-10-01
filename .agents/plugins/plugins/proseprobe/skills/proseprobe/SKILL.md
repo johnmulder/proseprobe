@@ -35,6 +35,13 @@ Respect the project's selected rules, profile, severities, confidence policy,
 per-file ignores, suppressions, and baseline.
 Do not add or switch to an `agent` profile.
 
+When project policy is unfamiliar or has changed, add `--show-config` to the
+intended file-scan command to verify its config source and displayed settings.
+If the project uses a baseline, pass it explicitly with `--baseline PATH`;
+`--show-config` does not report baseline selection. Investigate legacy
+`.slop-lint.toml` and `.slop-lint-baseline.json` instead of assuming discovery.
+Stdin scans do not support baselines.
+
 ## Interpret
 
 Read each complete JSON Lines record and its surrounding prose before deciding
