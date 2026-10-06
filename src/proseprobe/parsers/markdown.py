@@ -126,6 +126,7 @@ class MarkdownParser:
         self._prose_sentences: list[ProseSentence] | None = None
         self._inline_suppressions: list[InlineSuppression] | None = None
         self._references: list[MarkdownReference] | None = None
+        self._example_lines: set[int] | None = None
         self._blockquote_re = re.compile(r"^(?:\s{0,3}>\s?)+")
         self._html_block_tags = {
             "div",
@@ -403,6 +404,18 @@ class MarkdownParser:
             )
 
         return sections
+
+    def is_example_line(self, line_num: int) -> bool:
+        """Return whether a source line belongs to an example section."""
+        if self._example_lines is None:
+            example_lines: set[int] = set()
+            for section in self.get_headings():
+                if _EXAMPLE_HEADING_RE.search(section.title):
+                    example_lines.update(
+                        range(section.start_line, section.end_line + 1)
+                    )
+            self._example_lines = example_lines
+        return line_num in self._example_lines
 
     def get_paragraphs(self) -> list[tuple[int, int, str]]:
         """Extract all paragraphs with line numbers.
@@ -1089,20 +1102,10 @@ def is_example_line(content: str, filename: str, line_num: int) -> bool:
 
     Example-style headings contain words like "example", "template", "bad",
     "detected", "demo", or "before".  Content under such headings is expected to
-    demonstrate the very patterns a rule flags, so matches should be
+    show the very patterns a rule flags, so matches should be
     downgraded to LOW confidence.
     """
     if not is_markdown_file(filename):
         return False
 
-    parser = _get_cached_parser(content)
-    headings = parser.get_headings()
-
-    # Walk headings in reverse to find the nearest heading *before* line_num.
-    for section in reversed(headings):
-        if (
-            section.start_line <= line_num <= section.end_line
-            and _EXAMPLE_HEADING_RE.search(section.title)
-        ):
-            return True
-    return False
+    return _get_cached_parser(content).is_example_line(line_num)

@@ -2,8 +2,15 @@
 
 import re
 from dataclasses import dataclass, field
+from functools import lru_cache
 
 InlineSuppression = tuple[int, int, str]
+
+
+@lru_cache(maxsize=32)
+def _source_lines(content: str) -> tuple[str, ...]:
+    """Split original source once per recently checked document."""
+    return tuple(content.split("\n"))
 
 
 @dataclass(frozen=True)
@@ -46,7 +53,7 @@ class ProseSentence:
 
     def source_text(self, content: str) -> str:
         """Return the unmasked original source covered by this sentence."""
-        source = content.split("\n")
+        source = _source_lines(content)
         parts: list[str] = []
         for index, line_num in enumerate(self.source_lines):
             line = source[line_num - 1]

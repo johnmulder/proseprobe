@@ -1100,14 +1100,14 @@ class UndefinedComparativeRule(Rule):
     _CONTEXT_LINES = 4
 
     @classmethod
-    def _context_window(cls, content: str, start_line: int, end_line: int) -> str:
-        lines = content.splitlines()
+    def _context_window(cls, lines: list[str], start_line: int, end_line: int) -> str:
         start = max(0, start_line - cls._CONTEXT_LINES - 1)
         return "\n".join(lines[start:end_line])
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Report curated comparatives without nearby comparison context."""
         issues: list[Issue] = []
+        source_lines = content.splitlines()
         for sentence in iter_prose_sentences(content, filename):
             if (
                 sentence.context not in {"body", "list_item"}
@@ -1117,7 +1117,7 @@ class UndefinedComparativeRule(Rule):
             ):
                 continue
             context = self._context_window(
-                content, sentence.start_line, sentence.end_line
+                source_lines, sentence.start_line, sentence.end_line
             )
             if (
                 self._TARGET_CONTEXT.search(context)

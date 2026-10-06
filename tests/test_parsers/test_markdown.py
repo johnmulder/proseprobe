@@ -34,6 +34,32 @@ def test_heading_records_preserve_exact_title_source_spans() -> None:
     ] == ["Reliable System Design", "Setext Title"]
 
 
+@pytest.mark.parametrize("heading", ["Example", "Reference"])
+def test_example_context_scans_headings_once_for_repeated_line_queries(
+    monkeypatch: pytest.MonkeyPatch, heading: str
+) -> None:
+    block = f"## {heading}\n\nRepeated phrase.\n\n### Details\n\nRegular prose.\n\n"
+    content = block * 25
+    clear_parser_cache()
+    parser = _get_cached_parser(content)
+    original = parser.get_headings
+    full_scans = 0
+
+    def counted_headings() -> list[MarkdownSection]:
+        nonlocal full_scans
+        full_scans += 1
+        return original()
+
+    monkeypatch.setattr(parser, "get_headings", counted_headings)
+    for _pass in range(3):
+        for line in range(1, len(content.splitlines()) + 1):
+            expected = heading == "Example" and (line - 1) % 8 < 4
+            assert is_example_line(content, "guide.md", line) == expected
+    assert not is_example_line(content, "guide.md", 0)
+    assert not is_example_line(content, "guide.md", len(content.splitlines()) + 2)
+    assert full_scans == 1
+
+
 class TestMarkdownParser:
     """Tests for MarkdownParser class."""
 

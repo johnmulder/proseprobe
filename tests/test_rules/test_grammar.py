@@ -1998,6 +1998,20 @@ class TestUndefinedComparativeRule:
             "Undefined comparative: 'slower'",
         ]
 
+    def test_context_windows_split_source_once_for_many_sentences(self) -> None:
+        class CountedSource(str):
+            split_calls = 0
+
+            def splitlines(self, keepends: bool = False) -> list[str]:
+                self.split_calls += 1
+                return super().splitlines(keepends)
+
+        source = CountedSource("Atlas is faster.\n\n" * 50)
+        issues = UndefinedComparativeRule().check(source, "contexts.md")
+        assert len(issues) == 50
+        assert [issue.line for issue in issues] == list(range(1, 100, 2))
+        assert source.split_calls == 1
+
     @pytest.mark.parametrize(
         "source",
         [

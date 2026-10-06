@@ -101,3 +101,24 @@ def test_source_position_rejects_out_of_range_offsets() -> None:
 
     with pytest.raises(ValueError, match="outside sentence"):
         sentence.source_position(len(sentence.text) + 1)
+
+
+def test_original_sentence_windows_share_one_source_split() -> None:
+    class CountedSource(str):
+        split_calls = 0
+
+        def split(self, sep: str | None = None, maxsplit: int = -1) -> list[str]:
+            self.split_calls += 1
+            return super().split(sep, maxsplit)
+
+    source = CountedSource(
+        "First `quoted` sentence.\nSecond [linked](https://example.test/path) sentence."
+    )
+    sentences = iter_prose_sentences(source, "source-windows.md")
+    parser_splits = source.split_calls
+    for _pass in range(5):
+        assert [sentence.source_text(source) for sentence in sentences] == [
+            "First `quoted` sentence.",
+            "Second [linked](https://example.test/path) sentence.",
+        ]
+    assert source.split_calls - parser_splits == 1
