@@ -229,37 +229,37 @@ remain available with an explicit label and unchanged legacy interpretation.
 Targets: `benchmarks/rule_quality.py`, `quality/annotations.json`,
 `quality/README.md`, `tests/test_rule_quality.py`.
 
-- [ ] P05.1 Add failing tests proving that supplied `end_line` and `end_column`
+- [x] P05.1 Add failing tests proving that supplied `end_line` and `end_column`
   survive loading and finding collection. Preserve legacy annotations without
   endpoints as start-only checks.
-- [ ] P05.2 Validate endpoint order, nonempty concrete spans, and bounds. Keep
+- [x] P05.2 Validate endpoint order, nonempty concrete spans, and bounds. Keep
   explicitly permitted zero-width findings distinct from malformed spans.
-- [ ] P05.3 Add a scoring case with a correct start and an incorrect end. Require
+- [x] P05.3 Add a scoring case with a correct start and an incorrect end. Require
   detection credit to remain separate from a failed span-accuracy check.
-- [ ] P05.4 Add cases for an incorrect start, a missing finding, and duplicate
+- [x] P05.4 Add cases for an incorrect start, a missing finding, and duplicate
   findings. Preserve strict exact-location scoring and one-to-one matching.
-- [ ] P05.5 Define separately reviewed semantic matches, using stable annotation
+- [x] P05.5 Define separately reviewed semantic matches, using stable annotation
   identities or explicit span correspondence. Do not turn arbitrary overlapping
   findings into correct detections.
-- [ ] P05.6 Define annotation coverage for external corpora by file, rule family,
+- [x] P05.6 Define annotation coverage for external corpora by file, rule family,
   and prose region. Introduce explicit unreviewed and unsupported outcomes for
   material outside that coverage.
-- [ ] P05.7 Test that an unmatched finding is a false positive only where
+- [x] P05.7 Test that an unmatched finding is a false positive only where
   annotations are exhaustive for the evaluated rule and region.
-- [ ] P05.8 Test recall denominators: exclude rules outside the declared policy
+- [x] P05.8 Test recall denominators: exclude rules outside the declared policy
   or annotation scope; count eligible positives removed by confidence filtering
   as missed detections. Never derive eligibility from whether a rule fired.
-- [ ] P05.9 Preserve strict every-rule positive/negative coverage for the current
+- [x] P05.9 Preserve strict every-rule positive/negative coverage for the current
   regression corpus. Permit sparse external coverage through a documented
   manifest extension or separate loader, with tests for legacy compatibility.
-- [ ] P05.9a Support narrow negative regions in external annotations. Test a valid
+- [x] P05.9a Support narrow negative regions in external annotations. Test a valid
   use and a genuine same-rule violation on one line so a line-wide negative
   cannot conceal the distinction. Preserve legacy line-wide negative cases.
-- [ ] P05.10 Keep context-dependent adjudications visible. Report how many cases
+- [x] P05.10 Keep context-dependent adjudications visible. Report how many cases
   are unresolved instead of omitting them from headline metrics.
-- [ ] P05.11 Add severity, confidence, file-type, and profile breakdowns with
+- [x] P05.11 Add severity, confidence, file-type, and profile breakdowns with
   denominators. Test empty groups and deterministic ordering.
-- [ ] P05.12 Document the schema and scoring definitions; rerun legacy scores and
+- [x] P05.12 Document the schema and scoring definitions; rerun legacy scores and
   explain any change before adopting the new report.
 
 Acceptance: detection quality, source-location accuracy, policy coverage, and
@@ -847,8 +847,25 @@ isolated production evaluation. Baselines are rejected, and confidence-filtered
 eligible positives remain missed detections.
 
 All 276 focused tests passed. JSON contains policy, version, revision, and
-manifest/source checksums. The integrated gate passed with 2,143 tests and
-unchanged 303/12/0 corpus counts. The source-only type gate passes; an extended
+manifest/source checksums. Core checks passed with 2,143 tests and the evaluator
+retained 303/12/0 corpus counts. Documentation checks exposed a previously
+accepted duplicate paragraph after the pending multiline baseline correction;
+its source explanation is updated with P08. Source-only type checking passes; an extended
 benchmark type check found the same 18 existing errors as the prior commit.
 
 Implementation commits so far: P01 `917973e`, P02 `38a20fb`, P03 `0f8bbed`.
+
+
+### P05 — Coverage and scoring separated
+
+Endpoint, semantic correspondence, coverage, and metric regressions failed
+before implementation. All 65 evaluator/scoring cases now pass. Version 1
+remains exhaustive and exact-start compatible; version 2 accepts sparse reviewed
+rules and regions. Invalid spans, duplicate assignments, and arbitrary overlap
+cannot receive credit. Confidence-filtered eligible issues remain misses.
+
+Detection, exact start, full span, reviewed negatives, and unknown coverage have
+separate denominators. Reports include policy/context/source breakdowns, sample
+uncertainty, and reviewed-prose warning density. Unreviewed material cannot
+supply a clean-negative or density denominator. Both evaluator modules pass
+strict type checking. The external pilot has not been scored or unblinded.

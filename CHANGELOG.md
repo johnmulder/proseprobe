@@ -39,6 +39,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Separated evaluation coverage, exact starts, full spans, and reviewed semantic
+  detection; added sparse external annotation regions and denominator-aware reports.
+
 - Shared explicit scan policy between the CLI and quality evaluation, with
   isolated production-policy measurements and JSON corpus provenance.
 

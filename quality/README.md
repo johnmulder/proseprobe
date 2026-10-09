@@ -24,9 +24,10 @@ excluded from effectiveness evaluation. Genuine eligible issues removed by a
 confidence filter still count as missed detections.
 
 JSON reports contain the effective policy, package version, Git revision,
-manifest and source checksums, counts, and mismatch details. They retain the
-exact-start scoring definition. Rule/severity/file-policy exclusions are
-reported separately from missed eligible findings.
+manifest and source checksums, counts, and mismatch details. They retain
+exact-start scores and report detection and complete-span accuracy separately.
+Rule/severity/file-policy exclusions are reported separately from missed
+eligible findings.
 
 `annotations.json` also references selected files under `tests/fixtures/` so
 existing examples remain the single source for those cases.
@@ -39,9 +40,58 @@ existing examples remain the single source for those cases.
 - Any expectation without an emitted finding is a false negative.
 - Do not turn a known false positive into an expectation to improve the score.
 
-Every registered rule must have at least one expected finding and one explicit
-negative case. The evaluator rejects unknown rules, duplicate locations,
-out-of-range positions, missing files, and paths outside the repository.
+The version 1 regression manifest requires every registered rule to have at
+least one expected finding and one explicit negative case. The evaluator rejects
+unknown rules, duplicate locations, invalid spans, missing files, and paths
+outside its declared root. Supplied endpoints are exclusive character positions;
+legacy expectations without endpoints remain start-only checks.
+
+## Sparse external annotations
+
+Version 2 manifests declare coverage rather than treating unseen material as
+clean. Each file contains `expected`, `negative_cases`, and `reviewed_rules`;
+optional `source_group` identifies a repository or other shared source. A rule
+in `reviewed_rules` has exhaustive whole-file coverage. Optional `regions`
+override that coverage for named rules and exact source spans, with status
+`reviewed`, `unreviewed`, `unsupported`, or `context-dependent`. The last two
+statuses require an explanatory `note`. Same-rule regions cannot overlap.
+
+Regions require `rules`, `status`, `line`, `column`, and `end_column`, with
+optional `end_line`. Expected issues may add exclusive endpoints. A narrow
+negative uses `column` and `end_column`; omitted columns preserve a legacy
+whole-line negative. Only the existing M004 empty-destination contract permits
+a zero-width expected issue.
+
+A separately reviewed semantic correspondence requires an expected issue's
+globally unique `id` and explicit `match_region`. That region must contain the
+expected span and stay within reviewed coverage. Matching remains one-to-one
+and rule-specific. Arbitrary overlap, duplicates, and findings crossing a
+review boundary receive no detection credit. Exact-start and complete-span
+checks remain available even when semantic detection receives credit.
+
+An unmatched finding is a false positive only within exhaustive reviewed
+coverage. Findings elsewhere remain unreviewed, unsupported, or unresolved.
+Eligible positives removed by a confidence threshold remain false negatives.
+Raw confidence-band precision is available; band recall is unavailable because
+missed issues have no detector-assigned confidence.
+
+```bash
+rtk proxy .venv/bin/python -m benchmarks.rule_quality --manifest /path/to/reviewed.json --root /path/to/originals --mode production --format json
+```
+
+The JSON schema version is 2. Reports include rule, policy, severity, confidence,
+format, Python-documentation context, and source-group counts, alongside exact
+locations and annotation statuses. False-warning density counts eligible
+extracted prose words in reviewed regions; masked code and unreviewed text do
+not enter its denominator. Empty coverage produces an unavailable density.
+Wilson intervals describe reviewed samples, with source-group variation shown
+separately; correlated findings are not independent population evidence.
+Macro averages include supported rules with defined denominators. Span accuracy
+uses matched expectations that actually supplied endpoints.
+
+The [external pilot guide](external/README.md) records frozen sources and the
+blind human-review workflow. Native revisions are supplementary evidence,
+not automatically assigned writing-quality labels.
 
 ## Updating the corpus
 

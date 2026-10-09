@@ -8,10 +8,28 @@ import hashlib
 import json
 import subprocess
 import sys
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, replace
 from pathlib import Path
-from typing import Any
 
+from benchmarks.quality_scoring import (
+    ActualFinding,
+    AnnotationError,
+    Annotations,
+    ExpectedFinding,
+    NegativeCase,
+    QualityScore,
+    ReviewScope,
+    RuleMetrics,
+    SourceSpan,
+    count_prose_words,
+    load_annotations,
+    metric_summary,
+    prose_context,
+    score_breakdowns,
+    score_findings,
+    total_metrics,
+    wilson_interval,
+)
 from proseprobe import __version__
 from proseprobe.config import Config, ConfigError
 from proseprobe.core.linter import Linter
@@ -22,304 +40,28 @@ from proseprobe.rules.base import Rule
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = REPO_ROOT / "quality" / "annotations.json"
-
-
-class AnnotationError(ValueError):
-    """Raised when quality-corpus annotations are invalid."""
-
-
-@dataclass(frozen=True, order=True)
-class ExpectedFinding:
-    """A finding expected at an exact source location."""
-
-    path: str
-    rule_id: str
-    line: int
-    column: int
-    note: str = field(default="", compare=False)
-
-
-@dataclass(frozen=True, order=True)
-class ActualFinding:
-    """A finding emitted by the linter."""
-
-    path: str
-    rule_id: str
-    line: int
-    column: int
-    message: str = field(default="", compare=False)
-
-
-@dataclass(frozen=True, order=True)
-class NegativeCase:
-    """A source line on which a rule must not emit a finding."""
-
-    path: str
-    rule_id: str
-    line: int
-    note: str = field(compare=False)
-
-
-@dataclass(frozen=True)
-class Annotations:
-    """Validated quality-corpus annotations."""
-
-    files: tuple[Path, ...]
-    expected: tuple[ExpectedFinding, ...]
-    negative_cases: tuple[NegativeCase, ...]
-
-
-@dataclass
-class RuleMetrics:
-    """Quality counts for one rule."""
-
-    true_positives: int = 0
-    false_positives: int = 0
-    false_negatives: int = 0
-    negatives_passed: int = 0
-    negatives_total: int = 0
-
-
-@dataclass(frozen=True)
-class FalsePositive:
-    """An unexpected finding, optionally tied to an explicit negative case."""
-
-    finding: ActualFinding
-    negative_note: str = ""
-
-
-@dataclass(frozen=True)
-class QualityScore:
-    """Per-rule metrics and mismatch details."""
-
-    metrics: dict[str, RuleMetrics]
-    false_positives: tuple[FalsePositive, ...]
-    false_negatives: tuple[ExpectedFinding, ...]
-
-
-def _mapping(value: Any, context: str) -> dict[str, Any]:
-    if not isinstance(value, dict) or not all(isinstance(key, str) for key in value):
-        raise AnnotationError(f"{context} must be an object")
-    return value
-
-
-def _keys(
-    value: dict[str, Any],
-    *,
-    required: set[str],
-    optional: set[str] = frozenset(),
-    context: str,
-) -> None:
-    missing = required - value.keys()
-    unknown = value.keys() - required - optional
-    if missing:
-        raise AnnotationError(f"{context} missing key(s): {', '.join(sorted(missing))}")
-    if unknown:
-        raise AnnotationError(f"{context} unknown key(s): {', '.join(sorted(unknown))}")
-
-
-def _positive_int(value: Any, context: str) -> int:
-    if not isinstance(value, int) or isinstance(value, bool) or value < 1:
-        raise AnnotationError(f"{context} must be a positive integer")
-    return value
-
-
-def _text(value: Any, context: str, *, allow_empty: bool = False) -> str:
-    if not isinstance(value, str) or (not allow_empty and not value.strip()):
-        raise AnnotationError(f"{context} must be a non-empty string")
-    return value
-
-
-def _location(
-    data: dict[str, Any],
-    lines: list[str],
-    context: str,
-    *,
-    column_required: bool,
-) -> tuple[int, int | None]:
-    line = _positive_int(data["line"], f"{context}.line")
-    if line > len(lines):
-        raise AnnotationError(f"{context}.line is outside the source file")
-
-    column: int | None = None
-    if column_required:
-        column = _positive_int(data["column"], f"{context}.column")
-        if column > len(lines[line - 1]) + 1:
-            raise AnnotationError(f"{context}.column is outside the source line")
-
-    if "end_line" in data:
-        end_line = _positive_int(data["end_line"], f"{context}.end_line")
-        if end_line < line or end_line > len(lines):
-            raise AnnotationError(f"{context}.end_line is outside the source span")
-    if "end_column" in data:
-        end_column = _positive_int(data["end_column"], f"{context}.end_column")
-        end_line = data.get("end_line", line)
-        if not isinstance(end_line, int) or end_column > len(lines[end_line - 1]) + 1:
-            raise AnnotationError(f"{context}.end_column is outside the source span")
-    return line, column
-
-
-def load_annotations(
-    manifest_path: Path,
-    repo_root: Path,
-    rule_ids: set[str],
-) -> Annotations:
-    """Load and validate a quality-corpus manifest."""
-    try:
-        raw = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except OSError as exc:
-        raise AnnotationError(f"{manifest_path}: {exc}") from exc
-    except json.JSONDecodeError as exc:
-        raise AnnotationError(f"{manifest_path}: invalid JSON: {exc}") from exc
-
-    root = _mapping(raw, "manifest")
-    _keys(root, required={"version", "files"}, context="manifest")
-    if root["version"] != 1:
-        raise AnnotationError("manifest.version must be 1")
-    files_data = _mapping(root["files"], "manifest.files")
-    if not files_data:
-        raise AnnotationError("manifest.files must not be empty")
-
-    resolved_root = repo_root.resolve()
-    files: list[Path] = []
-    expected: list[ExpectedFinding] = []
-    negative_cases: list[NegativeCase] = []
-    expected_keys: set[tuple[str, str, int, int]] = set()
-    negative_keys: set[tuple[str, str, int]] = set()
-
-    for relative_path, file_value in sorted(files_data.items()):
-        _text(relative_path, "manifest file path")
-        source_path = (resolved_root / relative_path).resolve()
-        try:
-            source_path.relative_to(resolved_root)
-        except ValueError as exc:
-            raise AnnotationError(
-                f"{relative_path}: path escapes the repository"
-            ) from exc
-        if not source_path.is_file():
-            raise AnnotationError(f"{relative_path}: source file does not exist")
-
-        entry = _mapping(file_value, relative_path)
-        _keys(
-            entry,
-            required={"expected", "negative_cases"},
-            context=relative_path,
-        )
-        if not isinstance(entry["expected"], list):
-            raise AnnotationError(f"{relative_path}.expected must be a list")
-        if not isinstance(entry["negative_cases"], list):
-            raise AnnotationError(f"{relative_path}.negative_cases must be a list")
-
-        lines = source_path.read_text(encoding="utf-8").splitlines()
-        files.append(source_path)
-
-        for index, item in enumerate(entry["expected"]):
-            context = f"{relative_path}.expected[{index}]"
-            data = _mapping(item, context)
-            _keys(
-                data,
-                required={"rule_id", "line", "column"},
-                optional={"note", "end_line", "end_column"},
-                context=context,
-            )
-            rule_id = _text(data["rule_id"], f"{context}.rule_id").upper()
-            if rule_id not in rule_ids:
-                raise AnnotationError(f"{context}.rule_id is unknown: {rule_id}")
-            line, column = _location(data, lines, context, column_required=True)
-            assert column is not None
-            key = (relative_path, rule_id, line, column)
-            if key in expected_keys:
-                raise AnnotationError(f"{context} duplicates an expected location")
-            expected_keys.add(key)
-            note = _text(data.get("note", ""), f"{context}.note", allow_empty=True)
-            expected.append(ExpectedFinding(relative_path, rule_id, line, column, note))
-
-        for index, item in enumerate(entry["negative_cases"]):
-            context = f"{relative_path}.negative_cases[{index}]"
-            data = _mapping(item, context)
-            _keys(
-                data,
-                required={"rule_id", "line", "note"},
-                context=context,
-            )
-            rule_id = _text(data["rule_id"], f"{context}.rule_id").upper()
-            if rule_id not in rule_ids:
-                raise AnnotationError(f"{context}.rule_id is unknown: {rule_id}")
-            line, _ = _location(data, lines, context, column_required=False)
-            note = _text(data["note"], f"{context}.note")
-            key = (relative_path, rule_id, line)
-            if key in negative_keys:
-                raise AnnotationError(f"{context} duplicates a negative case")
-            if any(
-                path == relative_path
-                and expected_rule == rule_id
-                and expected_line == line
-                for path, expected_rule, expected_line, _ in expected_keys
-            ):
-                raise AnnotationError(f"{context} conflicts with an expected finding")
-            negative_keys.add(key)
-            negative_cases.append(NegativeCase(relative_path, rule_id, line, note))
-
-    expected_rules = {item.rule_id for item in expected}
-    negative_rules = {item.rule_id for item in negative_cases}
-    missing_expected = sorted(rule_ids - expected_rules)
-    missing_negative = sorted(rule_ids - negative_rules)
-    if missing_expected:
-        raise AnnotationError(
-            "rules missing expected findings: " + ", ".join(missing_expected)
-        )
-    if missing_negative:
-        raise AnnotationError(
-            "rules missing negative cases: " + ", ".join(missing_negative)
-        )
-
-    return Annotations(
-        tuple(files),
-        tuple(sorted(expected)),
-        tuple(sorted(negative_cases)),
-    )
-
-
-def score_findings(
-    expected: tuple[ExpectedFinding, ...],
-    actual: tuple[ActualFinding, ...],
-    negative_cases: tuple[NegativeCase, ...],
-    rule_ids: set[str],
-) -> QualityScore:
-    """Score actual findings against reviewed expectations."""
-    metrics = {rule_id: RuleMetrics() for rule_id in sorted(rule_ids)}
-    remaining = {
-        (item.path, item.rule_id, item.line, item.column): item for item in expected
-    }
-    negative_by_line = {
-        (item.path, item.rule_id, item.line): item for item in negative_cases
-    }
-    actual_negative_lines = {(item.path, item.rule_id, item.line) for item in actual}
-    false_positives: list[FalsePositive] = []
-
-    for item in sorted(actual):
-        key = (item.path, item.rule_id, item.line, item.column)
-        if key in remaining:
-            metrics[item.rule_id].true_positives += 1
-            del remaining[key]
-            continue
-        metrics[item.rule_id].false_positives += 1
-        negative = negative_by_line.get((item.path, item.rule_id, item.line))
-        false_positives.append(
-            FalsePositive(item, negative.note if negative is not None else "")
-        )
-
-    false_negatives = tuple(sorted(remaining.values()))
-    for item in false_negatives:
-        metrics[item.rule_id].false_negatives += 1
-
-    for item in negative_cases:
-        rule_metrics = metrics[item.rule_id]
-        rule_metrics.negatives_total += 1
-        if (item.path, item.rule_id, item.line) not in actual_negative_lines:
-            rule_metrics.negatives_passed += 1
-
-    return QualityScore(metrics, tuple(false_positives), false_negatives)
+__all__ = [
+    "ActualFinding",
+    "AnnotationError",
+    "Annotations",
+    "ExpectedFinding",
+    "NegativeCase",
+    "QualityScore",
+    "ReviewScope",
+    "RuleMetrics",
+    "SourceSpan",
+    "collect_findings",
+    "count_prose_words",
+    "eligible_annotations",
+    "format_json_report",
+    "format_report",
+    "load_annotations",
+    "main",
+    "metric_summary",
+    "prepare_evaluation_scan",
+    "score_findings",
+    "wilson_interval",
+]
 
 
 def _percent(numerator: int, denominator: int) -> str:
@@ -375,22 +117,22 @@ def format_report(score: QualityScore) -> str:
     if score.false_positives:
         lines.append("\nFalse positives:")
         for mismatch in score.false_positives:
-            item = mismatch.finding
+            finding = mismatch.finding
             suffix = (
                 f"; negative case: {mismatch.negative_note}"
                 if mismatch.negative_note
                 else ""
             )
             lines.append(
-                f"  {item.path}:{item.line}:{item.column}: "
-                f"{item.rule_id} {item.message}{suffix}"
+                f"  {finding.path}:{finding.line}:{finding.column}: "
+                f"{finding.rule_id} {finding.message}{suffix}"
             )
     if score.false_negatives:
         lines.append("\nFalse negatives:")
-        for item in score.false_negatives:
-            suffix = f"; {item.note}" if item.note else ""
+        for missing in score.false_negatives:
+            suffix = f"; {missing.note}" if missing.note else ""
             lines.append(
-                f"  {item.path}:{item.line}:{item.column}: {item.rule_id}{suffix}"
+                f"  {missing.path}:{missing.line}:{missing.column}: {missing.rule_id}{suffix}"
             )
     return "\n".join(lines)
 
@@ -437,10 +179,40 @@ def eligible_annotations(
         rule = rules_by_id.get(item.rule_id)
         return rule is not None and linter._rule_enabled(rule, repo_root / item.path)
 
+    scopes = annotations.scopes
+    if scopes is None:
+        scopes = tuple(
+            ReviewScope(
+                path.resolve().relative_to(repo_root.resolve()).as_posix(),
+                tuple(rule.id for rule in rules if linter._rule_enabled(rule, path)),
+            )
+            for path in annotations.files
+        )
+    else:
+        scopes = tuple(
+            replace(
+                scope,
+                rules=tuple(
+                    rule_id
+                    for rule_id in scope.rules
+                    if rule_id in rules_by_id
+                    and linter._rule_enabled(
+                        rules_by_id[rule_id], repo_root / scope.path
+                    )
+                ),
+            )
+            for scope in scopes
+        )
     return Annotations(
         annotations.files,
-        tuple(item for item in annotations.expected if eligible(item)),
+        tuple(
+            replace(item, severity=rules_by_id[item.rule_id].severity.value)
+            for item in annotations.expected
+            if eligible(item)
+        ),
         tuple(item for item in annotations.negative_cases if eligible(item)),
+        scopes,
+        annotations.source_groups,
     )
 
 
@@ -461,6 +233,7 @@ def collect_findings(
     resolved_root = repo_root.resolve()
     for path, issues in results.items():
         relative_path = path.resolve().relative_to(resolved_root).as_posix()
+        source = path.read_text(encoding="utf-8")
         findings.extend(
             ActualFinding(
                 relative_path,
@@ -468,6 +241,11 @@ def collect_findings(
                 issue.line,
                 issue.column,
                 issue.message,
+                end_line=issue.end_line,
+                end_column=issue.end_column,
+                severity=issue.severity.value,
+                confidence=issue.confidence.value,
+                context=prose_context(source, str(path), issue.line, issue.column),
             )
             for issue in issues
         )
@@ -494,7 +272,7 @@ def format_json_report(
     }
     try:
         revision = subprocess.run(
-            ["git", "-C", str(root), "rev-parse", "HEAD"],  # noqa: S607 - installed Git
+            ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"],  # noqa: S607 - installed Git
             capture_output=True,
             text=True,
             check=False,
@@ -508,13 +286,37 @@ def format_json_report(
         name: sum(getattr(metrics, name) for metrics in score.metrics.values())
         for name in asdict(RuleMetrics())
     }
+    words = count_prose_words(eligible, repo_root, set(score.metrics))
+    false_warnings = sum(
+        item.finding.severity in {"warning", "error"} for item in score.false_positives
+    )
+    groups = set(annotations.source_groups.values())
+    breakdowns = score_breakdowns(score, eligible, config.profile or "default")
+    reviewed_groups = set(breakdowns["source_group"]) - {"unspecified"}
+    span_total = sum(item.span_total for item in score.locations.values())
+    exact_spans = sum(item.exact_spans for item in score.locations.values())
+    metric_rows = {
+        rule: metric_summary(metrics) for rule, metrics in score.metrics.items()
+    }
+    precision_values = [
+        metrics.true_positives / (metrics.true_positives + metrics.false_positives)
+        for metrics in score.metrics.values()
+        if metrics.true_positives + metrics.false_positives
+    ]
+    recall_values = [
+        metrics.true_positives / (metrics.true_positives + metrics.false_negatives)
+        for metrics in score.metrics.values()
+        if metrics.true_positives + metrics.false_negatives
+    ]
     return json.dumps(
         {
-            "schema_version": 1,
+            "schema_version": 2,
             "version": __version__,
             "revision": commit,
             "mode": mode,
-            "scoring": "exact-start",
+            "scoring": "reviewed-semantic"
+            if any(item.match_region is not None for item in eligible.expected)
+            else "exact-start",
             "policy": policy,
             "corpus": {
                 "manifest_sha256": hashlib.sha256(
@@ -525,6 +327,12 @@ def format_json_report(
                 "expected_count": len(annotations.expected),
                 "negative_count": len(annotations.negative_cases),
             },
+            "annotation_completeness": "legacy-exhaustive"
+            if annotations.scopes is None
+            else "explicit-scopes",
+            "annotation_scopes": [asdict(scope) for scope in annotations.scopes]
+            if annotations.scopes is not None
+            else None,
             "excluded_expected": len(annotations.expected) - len(eligible.expected),
             "excluded_negatives": len(annotations.negative_cases)
             - len(eligible.negative_cases),
@@ -533,6 +341,52 @@ def format_json_report(
                 for rule_id, metrics in sorted(score.metrics.items())
             },
             "totals": totals,
+            "metrics": metric_summary(
+                total_metrics(score.metrics),
+                prose_words=sum(words.values()),
+                false_warnings=false_warnings,
+            ),
+            "rule_metrics": metric_rows,
+            "macro_precision": sum(precision_values) / len(precision_values)
+            if precision_values
+            else None,
+            "precision_rules_count": len(precision_values),
+            "macro_recall": sum(recall_values) / len(recall_values)
+            if recall_values
+            else None,
+            "recall_rules_count": len(recall_values),
+            "exact_start_totals": asdict(total_metrics(score.exact_start_metrics)),
+            "exact_start_rules": {
+                rule: asdict(metrics)
+                for rule, metrics in score.exact_start_metrics.items()
+            },
+            "locations": {
+                rule: asdict(metrics) for rule, metrics in score.locations.items()
+            },
+            "span_accuracy": exact_spans / span_total if span_total else None,
+            "span_accuracy_denominator": span_total,
+            "prose_words_by_context": words,
+            "breakdowns": breakdowns,
+            "source_group_count": len(groups),
+            "reviewed_source_group_count": len(reviewed_groups),
+            "cluster_interval": None,
+            "cluster_interval_reason": "too few identified source groups; sample-only intervals"
+            if len(reviewed_groups) < 2
+            else "source-level counts provided; no cluster interval or generalization claim calculated",
+            "unreviewed_count": len(score.unreviewed),
+            "unsupported_count": len(score.unsupported),
+            "context_dependent_count": len(score.context_dependent),
+            "unreviewed": [asdict(item) for item in score.unreviewed],
+            "unsupported": [asdict(item) for item in score.unsupported],
+            "context_dependent": [asdict(item) for item in score.context_dependent],
+            "matches": [
+                {"expected": asdict(target), "actual": asdict(prediction)}
+                for target, prediction in score.matches
+            ],
+            "unscored_expected": [
+                {"finding": asdict(item), "reason": reason}
+                for item, reason in score.unscored_expected
+            ],
             "false_positives": [asdict(item) for item in score.false_positives],
             "false_negatives": [asdict(item) for item in score.false_negatives],
         },
@@ -549,6 +403,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--severity", choices=("info", "warning", "error"))
     parser.add_argument("--min-confidence", choices=("low", "medium", "high"))
     parser.add_argument("--format", choices=("text", "json"), default="text")
+    parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
+    parser.add_argument("--root", type=Path, default=REPO_ROOT)
     args = parser.parse_args(argv)
     mode = args.mode or (
         "production"
@@ -567,20 +423,30 @@ def main(argv: list[str] | None = None) -> int:
     rule_ids = {rule.id for rule in rules}
     try:
         registry_ids = {rule.id for rule in get_all_rules()}
-        annotations = load_annotations(DEFAULT_MANIFEST, REPO_ROOT, registry_ids)
+        annotations = load_annotations(args.manifest, args.root, registry_ids)
         eligible = (
-            eligible_annotations(annotations, REPO_ROOT, linter, rules)
+            eligible_annotations(annotations, args.root, linter, rules)
             if mode == "production"
             else annotations
         )
         actual = collect_findings(
-            annotations, REPO_ROOT, linter=linter, min_confidence=config.min_confidence
+            annotations, args.root, linter=linter, min_confidence=config.min_confidence
         )
+        if mode == "all-rules":
+            by_id = {rule.id: rule for rule in rules}
+            eligible = replace(
+                eligible,
+                expected=tuple(
+                    replace(item, severity=by_id[item.rule_id].severity.value)
+                    for item in eligible.expected
+                ),
+            )
         score = score_findings(
             eligible.expected,
             actual,
             eligible.negative_cases,
             rule_ids,
+            scopes=eligible.scopes,
         )
         output = (
             format_json_report(
@@ -589,8 +455,8 @@ def main(argv: list[str] | None = None) -> int:
                 config=config,
                 annotations=annotations,
                 eligible=eligible,
-                manifest_path=DEFAULT_MANIFEST,
-                repo_root=REPO_ROOT,
+                manifest_path=args.manifest,
+                repo_root=args.root,
             )
             if args.format == "json"
             else format_report(score)
@@ -601,6 +467,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.format == "text":
         print(
             f"Mode: {mode}; severity: {config.severity}; minimum confidence: {config.min_confidence}"
+        )
+        print(
+            f"Unscored findings: {len(score.unreviewed)} unreviewed, {len(score.unsupported)} unsupported, {len(score.context_dependent)} context-dependent; unscored expected labels: {len(score.unscored_expected)}"
         )
         print(
             f"Policy exclusions: {len(annotations.expected) - len(eligible.expected)} expected, {len(annotations.negative_cases) - len(eligible.negative_cases)} negatives"
