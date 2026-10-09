@@ -2561,3 +2561,111 @@ def test_fixed_grammar_phrase_gaps_do_not_manufacture_a_match(
     rule: Rule, before: str, after: str, gap: str
 ) -> None:
     assert rule.check(before + gap + after, "case.md") == []
+
+
+@pytest.mark.parametrize(
+    ("rule", "single", "wrapped", "start_column", "end_column"),
+    [
+        (
+            CopulaAvoidanceRule(),
+            "This serves as the cache.",
+            "This serves\nas the cache.",
+            6,
+            3,
+        ),
+        (
+            ExcessiveHedgingRule(),
+            "It is important to note that results vary.",
+            "It is important\nto note that results vary.",
+            1,
+            13,
+        ),
+    ],
+)
+@pytest.mark.parametrize("filename", ["case.md", "case.py"])
+def test_regex_grammar_phrase_wrapping_preserves_diagnostics_and_spans(
+    rule: Rule,
+    single: str,
+    wrapped: str,
+    start_column: int,
+    end_column: int,
+    filename: str,
+) -> None:
+    if filename.endswith(".py"):
+        single = f'"""{single}"""'
+        wrapped = f'"""{wrapped}"""'
+        start_column += 3
+
+    [original] = rule.check(single, filename)
+    [issue] = rule.check(wrapped, filename)
+
+    assert issue.message == original.message
+    assert issue.suggestion == original.suggestion
+    assert issue.severity is original.severity
+    assert issue.confidence is original.confidence
+    assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+        1,
+        start_column,
+        2,
+        end_column,
+    )
+
+
+@pytest.mark.parametrize(
+    ("rule", "before", "after"),
+    [
+        (CopulaAvoidanceRule(), "This serves", "as the cache."),
+        (ExcessiveHedgingRule(), "It is important", "to note that results vary."),
+    ],
+)
+@pytest.mark.parametrize("gap", [" `mode` ", " <code>mode</code> ", "\n\n", "\n\n# "])
+def test_regex_grammar_phrase_gaps_do_not_manufacture_a_match(
+    rule: Rule, before: str, after: str, gap: str
+) -> None:
+    assert rule.check(before + gap + after, "case.md") == []
+
+
+@pytest.mark.parametrize(
+    ("rule", "before", "after", "start_column", "end_column"),
+    [
+        (CopulaAvoidanceRule(), "This serves", "as the cache.", 8, 5),
+        (
+            ExcessiveHedgingRule(),
+            "It is important",
+            "to note that results vary.",
+            3,
+            15,
+        ),
+    ],
+)
+@pytest.mark.parametrize("prefix", ["# ", "> "])
+def test_regex_grammar_phrase_wrapping_retains_prefix_coordinates(
+    rule: Rule, before: str, after: str, start_column: int, end_column: int, prefix: str
+) -> None:
+    filename = "case.py" if prefix == "# " else "case.md"
+
+    [issue] = rule.check(f"{prefix}{before}\n{prefix}{after}", filename)
+
+    assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+        1,
+        start_column,
+        2,
+        end_column,
+    )
+
+
+def test_wrapped_multiword_hedges_preserve_clause_confidence() -> None:
+    single = "The result may change when the sensor appears to be ready."
+    wrapped = "The result may change when the sensor appears\nto be ready."
+
+    original = ExcessiveHedgingRule().check(single, "case.md")
+    issues = ExcessiveHedgingRule().check(wrapped, "case.md")
+
+    assert [issue.message for issue in issues] == [issue.message for issue in original]
+    assert all(issue.confidence is Confidence.MEDIUM for issue in issues)
+
+
+def test_masked_gap_does_not_create_a_multiword_hedge_count() -> None:
+    source = "The result may change when the sensor appears `mode` to be ready."
+
+    assert ExcessiveHedgingRule().check(source, "case.md") == []

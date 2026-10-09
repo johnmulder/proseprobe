@@ -4227,6 +4227,108 @@
           "note": "The catalog phrase is an exact fenced example and remains masked."
         }
       ]
+    },
+    "quality/corpus/wrapped-regex-phrases.md": {
+      "expected": [
+        {
+          "rule_id": "G001",
+          "line": 1,
+          "column": 12,
+          "end_line": 2,
+          "end_column": 3
+        },
+        {
+          "rule_id": "G002",
+          "line": 4,
+          "column": 1,
+          "end_line": 5,
+          "end_column": 13
+        },
+        {
+          "rule_id": "V001",
+          "line": 4,
+          "column": 7,
+          "end_line": 4,
+          "end_column": 16
+        },
+        {
+          "rule_id": "V003",
+          "line": 7,
+          "column": 1,
+          "end_line": 8,
+          "end_column": 7
+        },
+        {
+          "rule_id": "V005",
+          "line": 10,
+          "column": 1,
+          "end_line": 11,
+          "end_column": 5
+        },
+        {
+          "rule_id": "V001",
+          "line": 13,
+          "column": 15,
+          "end_line": 13,
+          "end_column": 28
+        },
+        {
+          "rule_id": "V004",
+          "line": 13,
+          "column": 15,
+          "end_line": 14,
+          "end_column": 8
+        },
+        {
+          "rule_id": "V006",
+          "line": 13,
+          "column": 15,
+          "end_line": 14,
+          "end_column": 8
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G001",
+          "line": 17,
+          "note": "The phrase is an exact fenced example rather than prose to revise."
+        },
+        {
+          "rule_id": "G002",
+          "line": 18,
+          "note": "The phrase is an exact fenced example rather than prose to revise."
+        },
+        {
+          "rule_id": "V001",
+          "line": 18,
+          "note": "The phrase is an exact fenced example rather than prose to revise."
+        },
+        {
+          "rule_id": "V003",
+          "line": 19,
+          "note": "The phrase is an exact fenced example rather than prose to revise."
+        },
+        {
+          "rule_id": "V005",
+          "line": 20,
+          "note": "The phrase is an exact fenced example rather than prose to revise."
+        },
+        {
+          "rule_id": "V001",
+          "line": 21,
+          "note": "The phrase is an exact fenced example rather than prose to revise."
+        },
+        {
+          "rule_id": "V004",
+          "line": 21,
+          "note": "The phrase is an exact fenced example rather than prose to revise."
+        },
+        {
+          "rule_id": "V006",
+          "line": 21,
+          "note": "The phrase is an exact fenced example rather than prose to revise."
+        }
+      ]
     }
   }
 }

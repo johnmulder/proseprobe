@@ -127,12 +127,12 @@ COLLABORATIVE_PHRASES = [
 
 # Knowledge cutoff patterns (V003)
 KNOWLEDGE_CUTOFF_PATTERNS = [
-    r"as of my (last |knowledge )?(?:update|cutoff|training)",
-    r"based on (my |available )?information",
-    r"my training (data )?(only )?(goes|extends|covers)",
-    r"I don't have (access to )?real-time",
-    r"I cannot (browse|access|search) the (internet|web)",
-    r"my knowledge (is limited to|ends at|was last updated)",
+    r"as\s+of\s+my\s+(last\s+|knowledge\s+)?(?:update|cutoff|training)",
+    r"based\s+on\s+(my\s+|available\s+)?information",
+    r"my\s+training\s+(data\s+)?(only\s+)?(goes|extends|covers)",
+    r"I\s+don't\s+have\s+(access\s+to\s+)?real-time",
+    r"I\s+cannot\s+(browse|access|search)\s+the\s+(internet|web)",
+    r"my\s+knowledge\s+(is\s+limited\s+to|ends\s+at|was\s+last\s+updated)",
 ]
 
 # Promotional/puffery language (V004)
@@ -175,29 +175,29 @@ PROMOTIONAL_PHRASES = [
 
 # Weasel words and vague attributions (V005)
 WEASEL_PHRASES = [
-    r"experts (say|argue|believe|suggest|claim|note)",
-    r"studies (show|suggest|indicate|have shown)",
-    r"research (shows|suggests|indicates|has shown)",
-    r"it is (widely )?(known|believed|thought|considered)",
-    r"many (people|experts|researchers|scientists) (believe|think|argue)",
-    r"some (people|experts|researchers|scientists) (say|argue|believe)",
-    r"industry (experts|analysts|observers) (say|note|suggest)",
-    r"(observers|analysts|critics) (have )?(noted|observed|pointed out)",
-    r"according to (some|many|various|numerous) (sources|reports|studies)",
-    r"(some|many) would argue",
-    r"it('s| is) (often|generally|commonly|widely) (said|believed|thought)",
-    r"there is (growing|increasing|mounting) (evidence|concern|interest)",
+    r"experts\s+(say|argue|believe|suggest|claim|note)",
+    r"studies\s+(show|suggest|indicate|have\s+shown)",
+    r"research\s+(shows|suggests|indicates|has\s+shown)",
+    r"it\s+is\s+(widely\s+)?(known|believed|thought|considered)",
+    r"many\s+(people|experts|researchers|scientists)\s+(believe|think|argue)",
+    r"some\s+(people|experts|researchers|scientists)\s+(say|argue|believe)",
+    r"industry\s+(experts|analysts|observers)\s+(say|note|suggest)",
+    r"(observers|analysts|critics)\s+(have\s+)?(noted|observed|pointed\s+out)",
+    r"according\s+to\s+(some|many|various|numerous)\s+(sources|reports|studies)",
+    r"(some|many)\s+would\s+argue",
+    r"it('s|\s+is)\s+(often|generally|commonly|widely)\s+(said|believed|thought)",
+    r"there\s+is\s+(growing|increasing|mounting)\s+(evidence|concern|interest)",
     # Anonymous source patterns
-    r"sources close to",
-    r"a person familiar with the matter",
-    r"officials speaking on condition of anonymity",
-    r"people briefed on the matter",
+    r"sources\s+close\s+to",
+    r"a\s+person\s+familiar\s+with\s+the\s+matter",
+    r"officials\s+speaking\s+on\s+condition\s+of\s+anonymity",
+    r"people\s+briefed\s+on\s+the\s+matter",
     # Strategic vagueness (business writing tropes)
-    r"explore opportunities to",
-    r"enhance (?:operational |)efficiency",
-    r"at the end of the day",
-    r"\bgoing forward\b",
-    r"\bmoving forward\b",
+    r"explore\s+opportunities\s+to",
+    r"enhance\s+(?:operational\s+|)efficiency",
+    r"at\s+the\s+end\s+of\s+the\s+day",
+    r"\bgoing\s+forward\b",
+    r"\bmoving\s+forward\b",
 ]
 
 # Patronizing analogy phrases (G005/G006)
@@ -281,13 +281,13 @@ FRACTAL_SUMMARY_PHRASES = [
 
 # Grandiose stakes phrases (V006)
 GRANDIOSE_STAKES_PHRASES = [
-    r"fundamentally reshape",
-    r"will (define|shape|determine) the next (era|decade|generation)",
-    r"something entirely new",
-    r"entirely new paradigm",
-    r"will reshape how we",
-    r"the most important.{1,30}(ever|in history|of our time)",
-    r"will change everything",
+    r"fundamentally\s+reshape",
+    r"will\s+(define|shape|determine)\s+the\s+next\s+(era|decade|generation)",
+    r"something\s+entirely\s+new",
+    r"entirely\s+new\s+paradigm",
+    r"will\s+reshape\s+how\s+we",
+    r"the\s+most\s+important.{1,30}(ever|in\s+history|of\s+our\s+time)",
+    r"will\s+change\s+everything",
 ]
 
 # Inflammatory cliché phrases (V004 sub-category)

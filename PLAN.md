@@ -414,7 +414,7 @@ Targets: `src/proseprobe/rules/vocab.py`, `src/proseprobe/parsers/prose.py`,
   the original source covered by a candidate match.
 - [x] P08.6 Cover the other helper consumers separately: V010, V011, V013, and
   V017. Adapt V011's decision-compound exception to complete multiline spans.
-- [ ] P08.7 Inventory older literal phrase matchers. Migrate each affected matcher
+- [x] P08.7 Inventory older literal phrase matchers. Migrate each affected matcher
   only after its own failing wrap-invariance test; do not rewrite unrelated rules.
 - [x] P08.8 Characterize inline suppression and baseline behavior for multiline
   matches. Verify that distinct matches cannot share an accidental identity.
@@ -1039,6 +1039,24 @@ meanings) and seven fenced negatives are added to the corpus.
 
 The inventory also confirms regex-family gaps: G001 copula patterns, G002
 metadiscourse, V003 cutoff patterns, V005 attribution patterns, and V006 stakes
-patterns. A second bounded test-first slice is underway for their literal
-whitespace. The seven catalog migrations are complete; no general regex
-wrap-invariance claim has been made.
+patterns. The second bounded slice corrects their explicit literal separators
+without rewriting alternatives, character classes, bounds, or wildcard meaning.
+No general regex wrap-invariance claim has been made.
+
+
+### P08.7 — Confirmed regex-family gaps completed
+
+Twenty-two wrap/confidence regressions and two first-match/source-line
+compatibility checks failed before correction. Forty-eight added cases and
+856 related grammar/vocabulary tests pass. G001/G002/V003/V005/V006 now map
+supported phrase whitespace to original source, including full endpoints.
+G002's multiword hedge count uses the same raw-source validation and preserves
+clause guards, precise-pair ownership, and medium-confidence ambiguity.
+
+V005 retains its evidence-confidence downgrade and first valid match per
+pattern/sentence. V003/V006 retain first-pattern/start-line count policy.
+Explicit fixed separators change; wildcard expressions keep their existing
+non-DOTALL meaning. Masked gaps and separate prose regions cannot manufacture
+fixed phrases. Eight reviewed corpus positives include the five primary rules
+and three existing vocabulary/promotional diagnoses on the same deliberate
+examples; eight fenced negatives preserve code masking.

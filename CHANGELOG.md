@@ -72,6 +72,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Preserved fixed separators in copula, hedge, cutoff, attribution, and stakes
+  regex phrases across wrapping while retaining evidence and clause policy.
+
 - Preserved supported literal catalog phrases across wrapping in grammar,
   promotional, conclusion, and corporate-context checks with complete spans.
 

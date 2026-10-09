@@ -16,7 +16,8 @@ trailing quotes, and hard prose-block boundaries without an NLP dependency.
 ## Rule Inventory
 
 Fixed phrase checks in V002/V004/V009/V010/V011/V013/V017,
-G004/G005/G006/G009/G029, and S014/S019 accept layout wrapping within one
+G001/G002 metadiscourse/G004/G005/G006/G009/G029, V003/V005/V006, and
+S014/S019 accept layout wrapping within one
 prose region. Source spans include the complete wrapped match. Code gaps,
 separate paragraphs, and other prose boundaries cannot create a phrase.
 Existing heading and organizational-context exclusions still apply.

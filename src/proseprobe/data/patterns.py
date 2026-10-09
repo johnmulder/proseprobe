@@ -45,26 +45,26 @@ PARTICIPLE_CHAIN_PATTERNS = [
 
 # Copula avoidance (G001)
 COPULA_AVOIDANCE_PATTERNS = [
-    r"\bserves as\b",
-    r"\bstands as\b",
+    r"\bserves\s+as\b",
+    r"\bstands\s+as\b",
     r"\brepresents\b",
     r"\bconstitutes\b",
-    r"\bfunctions as\b",
-    r"\boperates as\b",
-    r"\bacts as\b",
+    r"\bfunctions\s+as\b",
+    r"\boperates\s+as\b",
+    r"\bacts\s+as\b",
     # Slide-deck verb (business writing tropes)
-    r"\bdriving (?:alignment|impact|value|results|outcomes)\b",
+    r"\bdriving\s+(?:alignment|impact|value|results|outcomes)\b",
 ]
 
 # Excessive hedging (G002)
 HEDGING_PATTERNS = [
-    r"it is (important|worth|interesting|notable) to note that",
-    r"it('s| is) worth (noting|mentioning|pointing out)",
-    r"it should be (noted|mentioned|pointed out)",
-    r"one (might|could|may) (argue|say|note)",
+    r"it\s+is\s+(important|worth|interesting|notable)\s+to\s+note\s+that",
+    r"it('s|\s+is)\s+worth\s+(noting|mentioning|pointing\s+out)",
+    r"it\s+should\s+be\s+(noted|mentioned|pointed\s+out)",
+    r"one\s+(might|could|may)\s+(argue|say|note)",
     r"(arguably|perhaps|possibly|potentially)",
-    r"to some (extent|degree)",
-    r"in (some|many|most) (ways|respects|cases)",
+    r"to\s+some\s+(extent|degree)",
+    r"in\s+(some|many|most)\s+(ways|respects|cases)",
 ]
 
 # Dramatic countdown patterns (S008)

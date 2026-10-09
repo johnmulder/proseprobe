@@ -1,10 +1,27 @@
 """Source-mapped matching for fixed phrase catalogs."""
 
 import re
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 
-from proseprobe.parsers.prose import iter_prose_sentences
+from proseprobe.parsers.prose import ProseSentence, iter_prose_sentences
 from proseprobe.rules.base import Issue, Rule
+
+
+def iter_prose_regex_matches(
+    sentence: ProseSentence,
+    source: str,
+    filename: str,
+    pattern: re.Pattern[str],
+) -> Iterator[re.Match[str]]:
+    """Yield sentence matches whose original source also satisfies the pattern."""
+    for match in pattern.finditer(sentence.text):
+        original = source[match.start() : match.end()]
+        if filename.lower().endswith(".py"):
+            original = re.sub(r"(?m)^[ \t]*#[ \t]?", "", original)
+        elif sentence.context == "blockquote":
+            original = re.sub(r"(?m)^(?: {0,3}>[ \t]?)+", "", original)
+        if pattern.fullmatch(original):
+            yield match
 
 
 def longest_literal_phrase_issues(

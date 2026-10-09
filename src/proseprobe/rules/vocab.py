@@ -29,7 +29,10 @@ from proseprobe.parsers.prose import (
     ProseSentence,
     iter_prose_sentences,
 )
-from proseprobe.rules._phrases import longest_literal_phrase_issues
+from proseprobe.rules._phrases import (
+    iter_prose_regex_matches,
+    longest_literal_phrase_issues,
+)
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
 _MONTH = re.compile(
@@ -394,17 +397,31 @@ class KnowledgeCutoffRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for knowledge cutoff patterns."""
         issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
+        reported_line_patterns: set[tuple[int, str]] = set()
+        for sentence in iter_prose_sentences(content, filename):
+            source = sentence.source_text(content)
             for pattern in KNOWLEDGE_CUTOFF_PATTERNS:
-                match = re.search(pattern, line, re.IGNORECASE)
+                match = next(
+                    iter_prose_regex_matches(
+                        sentence, source, filename, re.compile(pattern, re.IGNORECASE)
+                    ),
+                    None,
+                )
                 if match:
+                    line, column = sentence.source_position(match.start())
+                    if (line, pattern) in reported_line_patterns:
+                        continue
+                    reported_line_patterns.add((line, pattern))
+                    end_line, end_column = sentence.source_position(match.end())
+                    phrase = " ".join(match.group().split())
                     issues.append(
                         Issue(
                             rule_id=self.id,
-                            message=f"Knowledge cutoff phrase: '{match.group()}'",
-                            line=line_num,
-                            column=match.start() + 1,
-                            end_column=match.end() + 1,
+                            message=f"Knowledge cutoff phrase: '{phrase}'",
+                            line=line,
+                            column=column,
+                            end_line=end_line if end_line != line else None,
+                            end_column=end_column,
                             severity=self.severity,
                         )
                     )
@@ -454,18 +471,25 @@ class WeaselWordsRule(Rule):
         issues: list[Issue] = []
         sentences = iter_prose_sentences(content, filename)
         for index, sentence in enumerate(sentences):
+            source = sentence.source_text(content)
             for pattern in WEASEL_PHRASES:
-                match = re.search(pattern, sentence.text, re.IGNORECASE)
+                match = next(
+                    iter_prose_regex_matches(
+                        sentence, source, filename, re.compile(pattern, re.IGNORECASE)
+                    ),
+                    None,
+                )
                 if match:
                     line, column = sentence.source_position(match.start())
                     end_line, end_column = sentence.source_position(match.end())
-                    assert line == end_line
+                    phrase = " ".join(match.group().split())
                     issues.append(
                         Issue(
                             rule_id=self.id,
-                            message=f"Weasel phrase: '{match.group()}'",
+                            message=f"Weasel phrase: '{phrase}'",
                             line=line,
                             column=column,
+                            end_line=end_line if end_line != line else None,
                             end_column=end_column,
                             severity=self.severity,
                             confidence=(
@@ -497,17 +521,31 @@ class GrandioseStakesRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for inflated importance claims."""
         issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
+        reported_line_patterns: set[tuple[int, str]] = set()
+        for sentence in iter_prose_sentences(content, filename):
+            source = sentence.source_text(content)
             for pattern in GRANDIOSE_STAKES_PHRASES:
-                match = re.search(pattern, line, re.IGNORECASE)
+                match = next(
+                    iter_prose_regex_matches(
+                        sentence, source, filename, re.compile(pattern, re.IGNORECASE)
+                    ),
+                    None,
+                )
                 if match:
+                    line, column = sentence.source_position(match.start())
+                    if (line, pattern) in reported_line_patterns:
+                        continue
+                    reported_line_patterns.add((line, pattern))
+                    end_line, end_column = sentence.source_position(match.end())
+                    phrase = " ".join(match.group().split())
                     issues.append(
                         Issue(
                             rule_id=self.id,
-                            message=f"Grandiose stakes: '{match.group()}'",
-                            line=line_num,
-                            column=match.start() + 1,
-                            end_column=match.end() + 1,
+                            message=f"Grandiose stakes: '{phrase}'",
+                            line=line,
+                            column=column,
+                            end_line=end_line if end_line != line else None,
+                            end_column=end_column,
                             severity=self.severity,
                         )
                     )

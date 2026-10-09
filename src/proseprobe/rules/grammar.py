@@ -24,7 +24,10 @@ from proseprobe.data.phrases import (
 )
 from proseprobe.parsers.markdown import is_example_line, is_markdown_file
 from proseprobe.parsers.prose import iter_prose_scopes, iter_prose_sentences
-from proseprobe.rules._phrases import longest_literal_phrase_issues
+from proseprobe.rules._phrases import (
+    iter_prose_regex_matches,
+    longest_literal_phrase_issues,
+)
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
 
@@ -41,16 +44,23 @@ class CopulaAvoidanceRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for copula avoidance."""
         issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
+        for sentence in iter_prose_sentences(content, filename):
+            source = sentence.source_text(content)
             for pattern in COPULA_AVOIDANCE_PATTERNS:
-                for match in re.finditer(pattern, line, re.IGNORECASE):
+                for match in iter_prose_regex_matches(
+                    sentence, source, filename, re.compile(pattern, re.IGNORECASE)
+                ):
+                    line, column = sentence.source_position(match.start())
+                    end_line, end_column = sentence.source_position(match.end())
+                    phrase = " ".join(match.group().split())
                     issues.append(
                         Issue(
                             rule_id=self.id,
-                            message=f"Copula avoidance: '{match.group()}' → consider 'is'",
-                            line=line_num,
-                            column=match.start() + 1,
-                            end_column=match.end() + 1,
+                            message=f"Copula avoidance: '{phrase}' → consider 'is'",
+                            line=line,
+                            column=column,
+                            end_line=end_line if end_line != line else None,
+                            end_column=end_column,
                             severity=self.severity,
                         )
                     )
@@ -71,7 +81,7 @@ class ExcessiveHedgingRule(Rule):
     # Individual hedge words for per-sentence stacking detection
     _HEDGE_WORDS = re.compile(
         r"\b(?:may|might|potentially|arguably|possibly|perhaps)\b"
-        r"|(?:appears? to|suggests? that|could be(?: interpreted as)?)",
+        r"|(?:appears?\s+to|suggests?\s+that|could\s+be(?:\s+interpreted\s+as)?)",
         re.IGNORECASE,
     )
     _REDUNDANT_MODAL = re.compile(
@@ -101,17 +111,24 @@ class ExcessiveHedgingRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for excessive hedging."""
         issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
-            # Existing phrase-level detection
+        sentences = iter_prose_sentences(content, filename)
+        for sentence in sentences:
+            source = sentence.source_text(content)
             for pattern in HEDGING_PATTERNS:
-                for match in re.finditer(pattern, line, re.IGNORECASE):
+                for match in iter_prose_regex_matches(
+                    sentence, source, filename, re.compile(pattern, re.IGNORECASE)
+                ):
+                    line, column = sentence.source_position(match.start())
+                    end_line, end_column = sentence.source_position(match.end())
+                    phrase = " ".join(match.group().split())
                     issues.append(
                         Issue(
                             rule_id=self.id,
-                            message=f"Hedging phrase: '{match.group()}'",
-                            line=line_num,
-                            column=match.start() + 1,
-                            end_column=match.end() + 1,
+                            message=f"Hedging phrase: '{phrase}'",
+                            line=line,
+                            column=column,
+                            end_line=end_line if end_line != line else None,
+                            end_column=end_column,
                             severity=self.severity,
                         )
                     )
@@ -119,7 +136,7 @@ class ExcessiveHedgingRule(Rule):
         redundant_issues: list[Issue] = []
         redundant_ranges: list[tuple[tuple[int, int], tuple[int, int]]] = []
         stacking_issues: list[Issue] = []
-        for sentence in iter_prose_sentences(content, filename):
+        for sentence in sentences:
             source = sentence.source_text(content)
             redundant_matches = [
                 match
@@ -150,7 +167,9 @@ class ExcessiveHedgingRule(Rule):
                 )
             hedge_matches = [
                 match
-                for match in self._HEDGE_WORDS.finditer(sentence.text)
+                for match in iter_prose_regex_matches(
+                    sentence, source, filename, self._HEDGE_WORDS
+                )
                 if not any(
                     redundant.start() <= match.start()
                     and match.end() <= redundant.end()

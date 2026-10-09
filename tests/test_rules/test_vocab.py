@@ -2115,3 +2115,151 @@ class TestPromotionalPhraseWrapping:
             PromotionalLanguageRule().check("second" + gap + "to none.", "case.md")
             == []
         )
+
+
+@pytest.mark.parametrize(
+    ("rule", "single", "wrapped", "start_column", "end_column"),
+    [
+        (
+            KnowledgeCutoffRule(),
+            "As of my last update, it was accurate.",
+            "As of my last\nupdate, it was accurate.",
+            1,
+            7,
+        ),
+        (
+            WeaselWordsRule(),
+            "Studies show this works.",
+            "Studies\nshow this works.",
+            1,
+            5,
+        ),
+        (
+            GrandioseStakesRule(),
+            "This will fundamentally reshape the field.",
+            "This will fundamentally\nreshape the field.",
+            11,
+            8,
+        ),
+    ],
+)
+@pytest.mark.parametrize("filename", ["case.md", "case.py"])
+def test_regex_vocabulary_phrase_wrapping_preserves_diagnostics_and_spans(
+    rule: Rule,
+    single: str,
+    wrapped: str,
+    start_column: int,
+    end_column: int,
+    filename: str,
+) -> None:
+    if filename.endswith(".py"):
+        single = f'"""{single}"""'
+        wrapped = f'"""{wrapped}"""'
+        start_column += 3
+
+    [original] = rule.check(single, filename)
+    [issue] = rule.check(wrapped, filename)
+
+    assert issue.message == original.message
+    assert issue.suggestion == original.suggestion
+    assert issue.severity is original.severity
+    assert issue.confidence is original.confidence
+    assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+        1,
+        start_column,
+        2,
+        end_column,
+    )
+
+
+@pytest.mark.parametrize(
+    ("rule", "before", "after"),
+    [
+        (KnowledgeCutoffRule(), "As of my last", "update, it was accurate."),
+        (WeaselWordsRule(), "Studies", "show this works."),
+        (GrandioseStakesRule(), "This will fundamentally", "reshape the field."),
+    ],
+)
+@pytest.mark.parametrize("gap", [" `mode` ", " <code>mode</code> ", "\n\n", "\n\n# "])
+def test_regex_vocabulary_phrase_gaps_do_not_manufacture_a_match(
+    rule: Rule, before: str, after: str, gap: str
+) -> None:
+    assert rule.check(before + gap + after, "case.md") == []
+
+
+@pytest.mark.parametrize(
+    ("rule", "before", "after", "start_column", "end_column"),
+    [
+        (KnowledgeCutoffRule(), "As of my last", "update, it was accurate.", 3, 9),
+        (WeaselWordsRule(), "Studies", "show this works.", 3, 7),
+        (
+            GrandioseStakesRule(),
+            "This will fundamentally",
+            "reshape the field.",
+            13,
+            10,
+        ),
+    ],
+)
+@pytest.mark.parametrize("prefix", ["# ", "> "])
+def test_regex_vocabulary_phrase_wrapping_retains_prefix_coordinates(
+    rule: Rule, before: str, after: str, start_column: int, end_column: int, prefix: str
+) -> None:
+    filename = "case.py" if prefix == "# " else "case.md"
+
+    [issue] = rule.check(f"{prefix}{before}\n{prefix}{after}", filename)
+
+    assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+        1,
+        start_column,
+        2,
+        end_column,
+    )
+
+
+def test_wrapped_weasel_phrase_keeps_following_evidence_confidence() -> None:
+    evidence = " A survey measured 12% and 34%."
+    [original] = WeaselWordsRule().check(
+        "Studies show this works." + evidence, "case.md"
+    )
+    [issue] = WeaselWordsRule().check("Studies\nshow this works." + evidence, "case.md")
+
+    assert original.confidence is issue.confidence is Confidence.LOW
+    assert (issue.line, issue.column, issue.end_line, issue.end_column) == (1, 1, 2, 5)
+
+
+@pytest.mark.parametrize(
+    ("rule", "before", "after"),
+    [
+        (KnowledgeCutoffRule(), "As of my last", "update"),
+        (WeaselWordsRule(), "Studies", "show"),
+        (GrandioseStakesRule(), "fundamentally", "reshape"),
+    ],
+)
+def test_invalid_masked_regex_candidate_does_not_hide_a_later_valid_match(
+    rule: Rule, before: str, after: str
+) -> None:
+    source = f"{before} `mode` {after}, then {before} {after}."
+
+    [issue] = rule.check(source, "case.md")
+
+    assert source[issue.column - 1 : issue.end_column - 1] == f"{before} {after}"
+
+
+@pytest.mark.parametrize(
+    ("rule", "source"),
+    [
+        (
+            KnowledgeCutoffRule(),
+            "As of my last update, A worked. As of my last update, B worked.",
+        ),
+        (
+            GrandioseStakesRule(),
+            "This will fundamentally reshape A. This will fundamentally reshape B.",
+        ),
+    ],
+)
+def test_regex_migration_preserves_first_per_pattern_on_a_source_line(
+    rule: Rule, source: str
+) -> None:
+    assert len(rule.check(source, "case.md")) == 1
