@@ -15,6 +15,7 @@ from proseprobe.parsers.python import (
     _get_cached_parser,
     clear_parser_cache,
 )
+from proseprobe.rules.vocab import AIVocabularyRule
 
 
 class TestPythonParser:
@@ -55,6 +56,71 @@ def build():
         ]
         assert matches == [(3, 5)]
         assert all("comment here" not in line for _, line in block.lines)
+
+    def test_unicode_owner_extracts_the_same_prose_as_ascii_owner(self) -> None:
+        source = 'def résumé(): """delve"""'
+        unicode_parser = PythonParser(source)
+        ascii_parser = PythonParser(source.replace("résumé", "resume"))
+        assert unicode_parser.parse()
+        assert ascii_parser.parse()
+
+        assert unicode_parser.get_docstring_prose_blocks() == (
+            ascii_parser.get_docstring_prose_blocks()
+        )
+        [block] = unicode_parser.get_docstring_prose_blocks()
+        assert block.lines == ((1, " " * source.index("delve") + "delve   "),)
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            'def résumé(): """delve"""',
+            'def build(café): """delve"""',
+            'async def résumé(café): """delve"""',
+            'class Résumé: """delve"""',
+            'def build(): """café 😀 delve"""',
+            'def résumé(): "café " "delve"',
+            'def résumé():\n    """café 😀\n    delve"""',
+        ],
+    )
+    def test_unicode_docstring_findings_use_original_character_spans(
+        self, source: str
+    ) -> None:
+        [issue] = AIVocabularyRule().check(source, "unicode.py")
+        source_line = source.splitlines()[issue.line - 1]
+        start = source_line.index("delve") + 1
+
+        assert issue.column == start
+        assert issue.end_line is None
+        assert issue.end_column == start + len("delve")
+        assert source_line[issue.column - 1 : issue.end_column - 1] == "delve"
+
+    def test_unicode_docstring_end_does_not_include_following_string(self) -> None:
+        source = 'def build(): """éééééééééééééééé"""; "delve"'
+        parser = PythonParser(source)
+        assert parser.parse()
+
+        [block] = parser.get_docstring_prose_blocks()
+
+        assert "éééé" in block.lines[0][1]
+        assert "delve" not in block.lines[0][1]
+        assert AIVocabularyRule().check(source, "unicode.py") == []
+
+    def test_adjacent_unicode_docstring_literals_preserve_each_token(self) -> None:
+        source = 'def résumé(): "café " "delve"'
+        parser = PythonParser(source)
+        assert parser.parse()
+
+        [block] = parser.get_docstring_prose_blocks()
+
+        assert block.lines == ((1, " " * source.index("café") + "café    delve "),)
+
+    def test_unicode_inline_comment_findings_keep_character_spans(self) -> None:
+        source = 'café = "😀"  # delve'
+
+        [issue] = AIVocabularyRule().check(source, "unicode.py")
+
+        assert issue.column == source.index("delve") + 1
+        assert issue.end_column == source.index("delve") + 1 + len("delve")
 
     def test_extract_docstrings(self) -> None:
         content = '''
@@ -135,6 +201,20 @@ y = 'another string'
         assert len(strings) >= 2
         assert any("hello world" in s[2] for s in strings)
         assert any("another string" in s[2] for s in strings)
+
+    def test_get_unicode_string_literals_uses_character_columns(self) -> None:
+        source = 'café = "😀"; message = "hello"\ntext = "café " "delve"'
+        parser = PythonParser(source)
+        assert parser.parse()
+
+        strings = parser.get_string_literals()
+        first_line, second_line = source.splitlines()
+
+        assert sorted(strings) == [
+            (1, first_line.index('"😀"') + 1, "😀"),
+            (1, first_line.index('"hello"') + 1, "hello"),
+            (2, second_line.index('"café "') + 1, "café delve"),
+        ]
 
     def test_get_string_literals_without_parse(self) -> None:
         """Test get_string_literals returns empty if not parsed."""

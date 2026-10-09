@@ -75,6 +75,57 @@ class TestCheckCommand:
         assert data["summary"]["files_checked"] == 1
         assert [entry["path"] for entry in data["files"]] == ["docs/kept.md"]
 
+    @pytest.mark.parametrize("output_format", ["jsonl", "sarif"])
+    def test_unicode_python_docstring_reports_character_coordinates(
+        self, output_format: str
+    ) -> None:
+        source = 'def résumé(): """delve"""\n'
+        result = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "case.py",
+            "--select",
+            "V001",
+            "--format",
+            output_format,
+            stdin=source,
+        )
+        assert result.exit_code == 1
+        data = json.loads(result.stdout)
+        column = source.index("delve") + 1
+        if output_format == "jsonl":
+            assert data["rule_id"] == "V001"
+            assert (data["line"], data["column"], data["end_column"]) == (
+                1,
+                column,
+                column + len("delve"),
+            )
+        else:
+            finding = data["runs"][0]["results"][0]
+            assert finding["ruleId"] == "V001"
+            assert finding["locations"][0]["physicalLocation"]["region"] == {
+                "startLine": 1,
+                "startColumn": column,
+                "endLine": 1,
+                "endColumn": column + len("delve"),
+            }
+
+    def test_unicode_docstring_obeys_inline_suppression(self) -> None:
+        result = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "case.py",
+            "--select",
+            "V001",
+            "--format",
+            "jsonl",
+            stdin='def résumé(): """delve"""  # proseprobe: ignore=V001\n',
+        )
+        assert result.exit_code == 0
+        assert result.stdout == ""
+
     def test_check_file_with_issues(self, tmp_path: Path) -> None:
         """Test checking a file with overused vocabulary."""
         test_file = tmp_path / "test.md"

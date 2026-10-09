@@ -56,6 +56,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Converted Python AST byte offsets to character positions for Unicode
+  docstrings and string-literal locations.
+
 - Applied Git ignores consistently to relative directory scans while preserving
   caller-facing paths and explicit-file overrides.
 

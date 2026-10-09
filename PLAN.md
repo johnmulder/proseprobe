@@ -132,22 +132,22 @@ changing explicit-file policy, path reporting, or failure handling.
 Targets: `src/proseprobe/parsers/python.py`, `tests/test_parsers/test_python.py`,
 `tests/test_linter.py`, existing reporter tests.
 
-- [ ] P02.1 Add a failing extraction test for `def résumé(): """delve"""` and
+- [x] P02.1 Add a failing extraction test for `def résumé(): """delve"""` and
   compare its extracted prose with the ASCII-name counterpart.
-- [ ] P02.2 Assert the V001 start and exclusive end columns against the original
+- [x] P02.2 Assert the V001 start and exclusive end columns against the original
   Unicode source, using character positions rather than UTF-8 byte positions.
-- [ ] P02.3 Add boundary cases with a non-ASCII parameter name, a multibyte string
+- [x] P02.3 Add boundary cases with a non-ASCII parameter name, a multibyte string
   character, and adjacent literal tokens in a docstring.
-- [ ] P02.4 Add the smallest conversion from AST byte offsets to character
+- [x] P02.4 Add the smallest conversion from AST byte offsets to character
   offsets. Apply it to both start and end boundaries used for token selection.
-- [ ] P02.5 Audit other AST-coordinate consumers, including string-literal
+- [x] P02.5 Audit other AST-coordinate consumers, including string-literal
   extraction. Add a regression and change a consumer only if it has the same
   mismatch or violates an existing source-position contract.
-- [ ] P02.6 Verify multiline docstrings, comments, async functions, and malformed
+- [x] P02.6 Verify multiline docstrings, comments, async functions, and malformed
   Python using existing cases plus any missing Unicode assertion.
-- [ ] P02.7 Exercise the corrected finding through JSON Lines and SARIF; assert
+- [x] P02.7 Exercise the corrected finding through JSON Lines and SARIF; assert
   valid original-source spans and unchanged field semantics.
-- [ ] P02.8 Add a corpus positive and a nearby Unicode negative case, then run the
+- [x] P02.8 Add a corpus positive and a nearby Unicode negative case, then run the
   parser, linter, reporter, and package checks.
 
 Acceptance: valid Unicode Python documentation is extracted, and every reported
@@ -813,3 +813,15 @@ checks its relative output path and one-file scan count.
 Focused discovery and CLI checks passed. The integrated workspace gate passed
 with 2,031 tests, documentation checks, and unchanged corpus counts. Existing
 literal examples reported by prose review remain unchanged.
+
+### P02 — Unicode Python coordinates corrected
+
+Eight of twelve new Unicode parser cases failed before correction. AST byte
+positions now convert to character positions for both docstring token bounds
+and string-literal columns. The parser audit found no other affected coordinate
+consumer requiring a change.
+
+All parser cases and JSON Lines/SARIF integrations pass. The inline suppression
+integration also passes. A corpus positive preserves the original source span,
+with a clean Unicode-named counterpart. The gate passed with 2,034 tests;
+corpus counts are 302 true positives, 12 false positives, and no missed cases.

@@ -180,7 +180,13 @@ class PythonParser:
 
         for node in ast.walk(self._tree):
             if isinstance(node, ast.Constant) and isinstance(node.value, str):
-                strings.append((node.lineno, node.col_offset + 1, node.value))
+                strings.append(
+                    (
+                        node.lineno,
+                        self._character_offset(node.lineno, node.col_offset) + 1,
+                        node.value,
+                    )
+                )
 
         return strings
 
@@ -303,11 +309,16 @@ class PythonParser:
         ]
         for _owner, node in self._docstring_nodes():
             end_line = node.end_lineno or node.lineno
-            end_column = node.end_col_offset or len(self._lines[end_line - 1])
+            start_column = self._character_offset(node.lineno, node.col_offset)
+            end_column = (
+                self._character_offset(end_line, node.end_col_offset)
+                if node.end_col_offset is not None
+                else len(self._lines[end_line - 1])
+            )
             tokens = [
                 token
                 for token in string_tokens
-                if token.start >= (node.lineno, node.col_offset)
+                if token.start >= (node.lineno, start_column)
                 and token.end <= (end_line, end_column)
             ]
             if not tokens:
@@ -329,6 +340,10 @@ class PythonParser:
                 )
             )
         return blocks
+
+    def _character_offset(self, line: int, byte_offset: int) -> int:
+        """Convert an AST UTF-8 byte offset to a source character offset."""
+        return len(self._lines[line - 1].encode("utf-8")[:byte_offset].decode("utf-8"))
 
     def _copy_string_token(
         self,

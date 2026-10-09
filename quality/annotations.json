@@ -3871,6 +3871,24 @@
           "note": "The technical term in inline code is already excluded."
         }
       ]
+    },
+    "tests/fixtures/unicode_docstrings.py": {
+      "expected": [
+        {
+          "rule_id": "V001",
+          "line": 2,
+          "column": 18,
+          "end_column": 23,
+          "note": "Unicode function names retain character-based docstring coordinates."
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V001",
+          "line": 4,
+          "note": "Ordinary prose in a Unicode-named function remains clean."
+        }
+      ]
     }
   }
 }
