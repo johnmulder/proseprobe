@@ -583,8 +583,73 @@ Visible prose.
         assert end_line == 4
         assert code.strip() == "code"
 
-    def test_unquoted_fence_preserves_blockquote_marker_in_content(self) -> None:
-        content = "```text\n> quoted-looking code\n```"
+    @pytest.mark.parametrize(
+        ("opening", "body", "closing", "language", "column"),
+        [
+            ('```python title="example.py"', 'x = "delve"', "```", "python", 1),
+            ('~~~python title="example.py"', 'x = "delve"', "~~~", "python", 1),
+            ('``` python linenums title="example.py"', "body", "```", "python", 1),
+            ('```\tpython\ttitle="example.py"', "body", "```", "python", 1),
+            ("```{.python #example}", "body", "```", "{.python", 1),
+            ('~~~text title="`example`"', "body", "~~~", "text", 1),
+            ('   ```python title="example.py"', "body", "   ```", "python", 4),
+            ('> ```python title="example.py"', "> body", "> ```", "python", 3),
+            ('> >   ~~~python title="example.py"', "> > body", "> > ~~~~", "python", 7),
+        ],
+    )
+    def test_code_fence_information_preserves_records_and_masks_prose(
+        self,
+        opening: str,
+        body: str,
+        closing: str,
+        language: str,
+        column: int,
+    ) -> None:
+        content = f"Intro.\n{opening}\n{body}\n{closing}\nAfter."
+        parser = MarkdownParser(content)
+
+        [block] = parser.get_code_block_records()
+
+        assert block == MarkdownCodeBlock(
+            start_line=2,
+            end_line=4,
+            language=language,
+            content=body.removeprefix("> > ").removeprefix("> "),
+            fence="~~~" if "~~~" in opening else "```",
+            column=column,
+            closed=True,
+        )
+        assert parser.get_code_blocks() == [(2, 4, language, block.content)]
+        assert [line for line, _ in parser.get_prose_lines()] == [1, 5]
+
+    def test_backtick_fence_rejects_backticks_in_information(self) -> None:
+        parser = MarkdownParser('```python title="`example`"\nbody')
+
+        assert parser.get_code_block_records() == []
+
+    def test_code_fence_information_preserves_indentation_limit(self) -> None:
+        parser = MarkdownParser('    ```python title="example.py"\nbody')
+
+        assert parser.get_code_block_records() == []
+
+    @pytest.mark.parametrize("closing", ["~~~", "```", "```` title=example"])
+    def test_code_fence_information_preserves_closing_restrictions(
+        self, closing: str
+    ) -> None:
+        content = f'````python title="example.py"\n{closing}\nbody\n`````'
+
+        [block] = MarkdownParser(content).get_code_block_records()
+
+        assert block.closed
+        assert block.fence == "````"
+        assert block.content == f"{closing}\nbody"
+        assert block.end_line == 4
+
+    @pytest.mark.parametrize("information", ["text", 'text title="example.md"'])
+    def test_unquoted_fence_preserves_blockquote_marker_in_content(
+        self, information: str
+    ) -> None:
+        content = f"```{information}\n> quoted-looking code\n```"
 
         [block] = MarkdownParser(content).get_code_blocks()
 

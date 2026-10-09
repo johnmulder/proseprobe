@@ -126,6 +126,24 @@ class TestCheckCommand:
         assert result.exit_code == 0
         assert result.stdout == ""
 
+    def test_attributed_fence_masks_code_and_keeps_surrounding_prose(self) -> None:
+        result = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "case.md",
+            "--select",
+            "V001,M007",
+            "--format",
+            "json",
+            stdin='```python title="example.py"\nx="delve"\n```\n\ndelve\n',
+        )
+        assert result.exit_code == 1
+        issues = json.loads(result.stdout)["files"][0]["issues"]
+        assert [(i["rule_id"], i["line"], i["column"]) for i in issues] == [
+            ("V001", 5, 1)
+        ]
+
     def test_check_file_with_issues(self, tmp_path: Path) -> None:
         """Test checking a file with overused vocabulary."""
         test_file = tmp_path / "test.md"

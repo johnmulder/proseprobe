@@ -467,6 +467,40 @@ class TestUnclosedCodeFence:
     @pytest.mark.parametrize(
         "text",
         [
+            '```python title="example.py"\nx = "delve"\n```',
+            '~~~python title="example.py"\nx = "delve"\n~~~',
+            '   ```python title="example.py"\nbody\n   ```',
+            '> ```python title="example.py"\n> body\n> ```',
+        ],
+    )
+    def test_accepts_closed_fences_with_information(self, text: str) -> None:
+        assert UnclosedCodeFenceRule().check(text, "guide.md") == []
+
+    @pytest.mark.parametrize(
+        ("opening", "column", "fence"),
+        [
+            ('  ````python title="example.py"', 3, "````"),
+            ('> ~~~python title="example.py"', 3, "~~~"),
+        ],
+    )
+    def test_reports_unclosed_information_fence_at_opening(
+        self, opening: str, column: int, fence: str
+    ) -> None:
+        text = f"Intro.\n{opening}\nbody"
+
+        [issue] = UnclosedCodeFenceRule().check(text, "guide.md")
+
+        assert issue.rule_id == "M007"
+        assert issue.line == 2
+        assert issue.column == column
+        assert issue.end_column == column + len(fence)
+        assert issue.message == f"Unclosed code fence: '{fence}'"
+        assert issue.severity is Severity.ERROR
+        assert issue.confidence is Confidence.HIGH
+
+    @pytest.mark.parametrize(
+        "text",
+        [
             "~~~text\nhidden\n```",
             "````\nhidden\n```",
         ],

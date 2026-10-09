@@ -3889,6 +3889,44 @@
           "note": "Ordinary prose in a Unicode-named function remains clean."
         }
       ]
+    },
+    "quality/corpus/fence-information.md": {
+      "expected": [],
+      "negative_cases": [
+        {
+          "rule_id": "M007",
+          "line": 1,
+          "note": "An attributed opener has a matching closer."
+        },
+        {
+          "rule_id": "M007",
+          "line": 3,
+          "note": "The closer is not an unclosed opening fence."
+        },
+        {
+          "rule_id": "V001",
+          "line": 2,
+          "note": "Code inside attributed fences remains masked."
+        }
+      ]
+    },
+    "quality/corpus/unclosed-fence-information.md": {
+      "expected": [
+        {
+          "rule_id": "M007",
+          "line": 1,
+          "column": 1,
+          "end_column": 4,
+          "note": "An unclosed attributed fence points to its opener."
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V001",
+          "line": 2,
+          "note": "Code remains masked to the end of an unclosed fence."
+        }
+      ]
     }
   }
 }

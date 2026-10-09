@@ -170,7 +170,7 @@ class MarkdownParser:
         start_line = 0
         content_lines: list[str] = []
 
-        fence_re = re.compile(r"^( {0,3})(`{3,}|~{3,})\s*([\w+-]+)?\s*$")
+        fence_re = re.compile(r"^( {0,3})(`{3,}|~{3,})(.*)$")
 
         for line_num, line in enumerate(self._lines, start=1):
             fence_line, blockquote_prefix_length = self._strip_blockquote_prefix(line)
@@ -179,10 +179,13 @@ class MarkdownParser:
                 if match:
                     opening_fence = match.group(2)
                     fence_char = opening_fence[0]
+                    information = match.group(3).strip()
+                    if fence_char == "`" and "`" in information:
+                        continue
                     fence_len = len(opening_fence)
                     opening_column = blockquote_prefix_length + match.start(2) + 1
                     blockquoted_fence = blockquote_prefix_length > 0
-                    language = match.group(3) or ""
+                    language = information.split(maxsplit=1)[0] if information else ""
                     start_line = line_num
                     content_lines = []
                     in_block = True

@@ -56,6 +56,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Parsed Markdown fence information strings with attributes while preserving
+  code masking and closing-delimiter validation.
+
 - Converted Python AST byte offsets to character positions for Unicode
   docstrings and string-literal locations.
 

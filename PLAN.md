@@ -167,23 +167,23 @@ x = "delve"
 ```
 ````
 
-- [ ] P03.1 Add a failing parser test asserting one closed block, language
+- [x] P03.1 Add a failing parser test asserting one closed block, language
   `python`, and the correct opening and closing lines for this fixture.
-- [ ] P03.2 Add a failing linter test asserting no V001 finding inside the block
+- [x] P03.2 Add a failing linter test asserting no V001 finding inside the block
   and no M007 unclosed-fence error.
-- [ ] P03.3 Separate opening delimiter recognition from the information string.
+- [x] P03.3 Separate opening delimiter recognition from the information string.
   Retain the first information token as the language where the existing API
   requires it; accept remaining information without interpreting attributes.
-- [ ] P03.4 Test backtick and tilde fences, multiple information tokens, empty
+- [x] P03.4 Test backtick and tilde fences, multiple information tokens, empty
   information, and attribute-only forms. Keep invalid backtick information
   strings distinct from valid tilde information strings.
-- [ ] P03.5 Preserve strict closing rules: matching delimiter character,
+- [x] P03.5 Preserve strict closing rules: matching delimiter character,
   sufficient delimiter length, and no trailing closing information.
-- [ ] P03.6 Verify indentation limits, blockquoted fences, shorter embedded
+- [x] P03.6 Verify indentation limits, blockquoted fences, shorter embedded
   delimiters, and source columns using the existing parser contracts.
-- [ ] P03.7 Retain a positive M007 test for a genuinely unclosed fence with
+- [x] P03.7 Retain a positive M007 test for a genuinely unclosed fence with
   attributes, reported at its opening delimiter.
-- [ ] P03.8 Add a quality-corpus negative for the valid fixture and run the parser,
+- [x] P03.8 Add a quality-corpus negative for the valid fixture and run the parser,
   markup, linter, and package checks.
 
 Acceptance: valid code remains masked from prose checks, while malformed or
@@ -825,3 +825,15 @@ All parser cases and JSON Lines/SARIF integrations pass. The inline suppression
 integration also passes. A corpus positive preserves the original source span,
 with a clean Unicode-named counterpart. The gate passed with 2,034 tests;
 corpus counts are 302 true positives, 12 false positives, and no missed cases.
+
+### P03 — Fence information strings corrected
+
+Eighteen attributed-fence regressions failed before correction. Opening
+information strings now parse separately from delimiters; the language remains
+its first token. Backtick-information restrictions and strict closers remain
+covered alongside indentation, tilde fences, and blockquotes.
+
+The CLI confirms code masking and retained surrounding prose. Valid and
+unclosed attributed fences are recorded in the corpus. The gate passed with
+2,035 tests; corpus counts are 303 true positives, 12 false positives, and no
+missed cases. No baseline entries were accepted.
