@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import io
 import json
+import subprocess
 import sys
 from contextlib import redirect_stderr, redirect_stdout
 from dataclasses import dataclass
@@ -55,6 +56,24 @@ class TestCheckCommand:
 
         assert result.exit_code == 0
         assert "No issues found" in result.stdout
+
+    def test_relative_directory_scan_preserves_gitignore_and_paths(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+        docs = tmp_path / "docs"
+        docs.mkdir()
+        (tmp_path / ".gitignore").write_text("/docs/ignored.md\n")
+        (docs / "ignored.md").write_text("delve\n")
+        (docs / "kept.md").write_text("delve\n")
+        monkeypatch.chdir(tmp_path)
+
+        result = run_cli("check", "docs", "--select", "V001", "--format", "json")
+
+        assert result.exit_code == 1
+        data = json.loads(result.stdout)
+        assert data["summary"]["files_checked"] == 1
+        assert [entry["path"] for entry in data["files"]] == ["docs/kept.md"]
 
     def test_check_file_with_issues(self, tmp_path: Path) -> None:
         """Test checking a file with overused vocabulary."""

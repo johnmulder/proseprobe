@@ -56,6 +56,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Applied Git ignores consistently to relative directory scans while preserving
+  caller-facing paths and explicit-file overrides.
+
 - Preserved the statistical term `robust regression` in V001 and omitted
   base-form replacement suggestions for inflected forms of `implement`.
 - Removed duplicate same-rule findings from overlapping patterns.

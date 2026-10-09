@@ -158,6 +158,103 @@ class TestDiscoverFiles:
         assert kept in files
         assert ignored not in files
 
+    def test_discover_relative_directory_respects_anchored_gitignore(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        self._init_git(tmp_path)
+        (tmp_path / ".gitignore").write_text("/docs/ignored.md\n")
+        docs = tmp_path / "docs"
+        docs.mkdir()
+        (docs / "ignored.md").write_text("content")
+        (docs / "kept.md").write_text("content")
+        monkeypatch.chdir(tmp_path)
+
+        files = Linter(Config()).discover_files([Path("docs")])
+
+        assert files == [Path("docs/kept.md")]
+
+    @pytest.mark.parametrize("overlapping_roots", [False, True])
+    def test_relative_and_absolute_scans_select_the_same_files(
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        overlapping_roots: bool,
+    ) -> None:
+        self._init_git(tmp_path)
+        (tmp_path / ".gitignore").write_text("/docs/nested/ignored file.md\n")
+        docs = tmp_path / "docs"
+        nested = docs / "nested"
+        nested.mkdir(parents=True)
+        (nested / "ignored file.md").write_text("content")
+        (nested / "kept file.md").write_text("content")
+        (docs / "kept file.md").write_text("content")
+        monkeypatch.chdir(tmp_path)
+        relative_roots = [Path("docs")]
+        if overlapping_roots:
+            relative_roots.append(Path("docs/nested"))
+
+        linter = Linter(Config())
+        relative_files = linter.discover_files(relative_roots)
+        absolute_files = linter.discover_files(
+            [tmp_path / root for root in relative_roots]
+        )
+
+        expected = {Path("docs/kept file.md"), Path("docs/nested/kept file.md")}
+        assert set(relative_files) == expected
+        assert len(relative_files) == len(expected)
+        assert set(absolute_files) == {tmp_path / file for file in expected}
+        assert len(absolute_files) == len(expected)
+        assert {tmp_path / file for file in relative_files} == set(absolute_files)
+
+    def test_relative_directory_scan_respects_nested_ignore_and_negation(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        self._init_git(tmp_path)
+        (tmp_path / ".gitignore").write_text("*.md\n")
+        docs = tmp_path / "docs"
+        docs.mkdir()
+        (docs / ".gitignore").write_text("!keep.md\n")
+        (docs / "keep.md").write_text("content")
+        (docs / "drop.md").write_text("content")
+        monkeypatch.chdir(tmp_path)
+
+        files = Linter(Config()).discover_files([Path("docs")])
+
+        assert files == [Path("docs/keep.md")]
+
+    @pytest.mark.parametrize("relative_path", [False, True])
+    def test_explicit_ignored_file_preserves_path_and_configured_exclusions(
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        relative_path: bool,
+    ) -> None:
+        self._init_git(tmp_path)
+        (tmp_path / ".gitignore").write_text("/docs/ignored file.md\n")
+        docs = tmp_path / "docs"
+        docs.mkdir()
+        (docs / "ignored file.md").write_text("content")
+        monkeypatch.chdir(tmp_path)
+        path = Path("docs/ignored file.md")
+        if not relative_path:
+            path = tmp_path / path
+
+        assert Linter(Config()).discover_files([path]) == [path]
+        assert Linter(Config(exclude=["ignored file.md"])).discover_files([path]) == []
+
+    def test_discover_without_git_keeps_candidates(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        test_file = tmp_path / "kept.md"
+        test_file.write_text("content")
+
+        def missing_git(*_args: object, **_kwargs: object) -> None:
+            raise FileNotFoundError("Git is unavailable")
+
+        monkeypatch.setattr(subprocess, "run", missing_git)
+
+        assert Linter(Config()).discover_files([tmp_path]) == [test_file]
+
     def test_discover_explicit_file_overrides_gitignore(self, tmp_path: Path) -> None:
         """Test explicit file paths are linted even when gitignored."""
         self._init_git(tmp_path)

@@ -106,23 +106,23 @@ annotation changes have been mixed into the measurement.
 Targets: `src/proseprobe/core/linter.py`, `tests/test_linter.py`,
 `tests/test_cli.py`.
 
-- [ ] P01.1 Add a failing discovery test in a temporary Git repository with
+- [x] P01.1 Add a failing discovery test in a temporary Git repository with
   `/docs/ignored.md` in `.gitignore`, invoking discovery with `Path("docs")`.
   Assert that the ignored file is absent and an ordinary sibling is present.
-- [ ] P01.2 Add a test comparing relative and absolute scans of the same directory.
+- [x] P01.2 Add a test comparing relative and absolute scans of the same directory.
   Compare selected file identities while retaining the documented output paths.
-- [ ] P01.3 Correct the coordinate system passed to `git check-ignore`: send
+- [x] P01.3 Correct the coordinate system passed to `git check-ignore`: send
   absolute candidates or paths relative to its working directory, then map the
   results back to discovery candidates.
-- [ ] P01.4 Cover overlapping roots and a filename containing spaces. Preserve
+- [x] P01.4 Cover overlapping roots and a filename containing spaces. Preserve
   NUL-delimited input and output handling.
-- [ ] P01.5 Verify the existing explicit-file override: an explicitly named file
+- [x] P01.5 Verify the existing explicit-file override: an explicitly named file
   retains its current Git-ignore behavior, and configured exclusions still apply.
-- [ ] P01.6 Preserve behavior outside Git repositories and when Git is unavailable.
+- [x] P01.6 Preserve behavior outside Git repositories and when Git is unavailable.
   Reuse existing tests unless one of these branches lacks coverage.
-- [ ] P01.7 Add a CLI regression for `check docs` that asserts findings and
+- [x] P01.7 Add a CLI regression for `check docs` that asserts findings and
   `files_checked`, rather than testing only the discovery helper.
-- [ ] P01.8 Run the focused discovery and CLI tests, then the package gate.
+- [x] P01.8 Run the focused discovery and CLI tests, then the package gate.
 
 Acceptance: relative and absolute directory scans select the same files without
 changing explicit-file policy, path reporting, or failure handling.
@@ -801,3 +801,15 @@ All three infrastructure reproductions failed as assessed:
 The test inventory confirms intentional expectations that need
 review for evidence association and technical vocabulary. Later work packages
 name the affected tests and retained contracts.
+
+### P01 — Relative discovery corrected
+
+Three discovery regressions failed before correction. Git now receives absolute
+NUL-delimited paths and its results map back to the original caller paths.
+Relative/absolute parity, overlapping roots, spaces, nested ignores, negation,
+explicit overrides, and configured exclusions are covered. The CLI regression
+checks its relative output path and one-file scan count.
+
+Focused discovery and CLI checks passed. The integrated workspace gate passed
+with 2,031 tests, documentation checks, and unchanged corpus counts. Existing
+literal examples reported by prose review remain unchanged.

@@ -134,6 +134,7 @@ class FileDiscovery:
             ]
             if not candidates:
                 continue
+            absolute_candidates = [file.absolute() for file in candidates]
             try:
                 result = subprocess.run(  # noqa: S603 - invoke installed Git
                     [  # noqa: S607 - resolve Git through PATH
@@ -145,14 +146,21 @@ class FileDiscovery:
                         "-z",
                         "--no-index",
                     ],
-                    input="\0".join(str(file) for file in candidates) + "\0",
+                    input="\0".join(str(file) for file in absolute_candidates) + "\0",
                     capture_output=True,
                     text=True,
                     check=False,
                 )
             except OSError:
                 continue
-            ignored.update(Path(path) for path in result.stdout.split("\0") if path)
+            absolute_ignored = {
+                Path(path) for path in result.stdout.split("\0") if path
+            }
+            ignored.update(
+                file
+                for file, absolute in zip(candidates, absolute_candidates, strict=True)
+                if absolute in absolute_ignored
+            )
         return ignored
 
 
