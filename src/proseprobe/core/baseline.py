@@ -258,7 +258,22 @@ class Baseline:
         line = _issue_line(content, issue.line)
         start = min(max(issue.column - 1, 0), len(line))
         end = start
-        if (
+        lines = content.splitlines()
+        multiline = (
+            issue.end_line is not None
+            and 1 <= issue.line < issue.end_line <= len(lines)
+            and issue.end_column is not None
+            and 1 <= issue.end_column <= len(lines[issue.end_line - 1]) + 1
+        )
+        if multiline:
+            assert issue.end_line is not None
+            assert issue.end_column is not None
+            pieces = lines[issue.line - 1 : issue.end_line]
+            pieces[0] = pieces[0][start:]
+            pieces[-1] = pieces[-1][: issue.end_column - 1]
+            raw_match = "\n".join(pieces)
+            end = len(line)
+        elif (
             issue.end_column is not None
             and issue.end_column - 1 > start
             and issue.end_line in {None, issue.line}
@@ -280,6 +295,8 @@ class Baseline:
                 max(0, start - _CONTEXT_RADIUS) : min(len(line), end + _CONTEXT_RADIUS)
             ]
         )
+        if multiline:
+            context += "\0" + _normalize(raw_match)
         context_hash = hashlib.sha256(context.encode()).hexdigest()[:16]
         path = _relative_path(file_path, workspace)
         return BaselineEntry(path, issue.rule_id.upper(), match, context_hash)

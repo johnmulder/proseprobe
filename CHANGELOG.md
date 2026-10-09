@@ -65,6 +65,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Matched supported replacement phrases across layout wrapping without joining
+  masked content, and included complete multiline matches in baseline identity.
+
 - Parsed Markdown fence information strings with attributes while preserving
   code masking and closing-delimiter validation.
 

@@ -401,27 +401,27 @@ before/after comparison. No optimization is required merely to finish this plan.
 Targets: `src/proseprobe/rules/vocab.py`, `src/proseprobe/parsers/prose.py`,
 `tests/test_rules/test_vocab.py`, `tests/test_linter.py`, baseline tests.
 
-- [ ] P08.1 Add a failing V009 pair for the same phrase on one line and wrapped:
+- [x] P08.1 Add a failing V009 pair for the same phrase on one line and wrapped:
   `due to the fact that` versus `due to the\nfact that`.
-- [ ] P08.2 Assert both source endpoints for the wrapped phrase in Markdown and
+- [x] P08.2 Assert both source endpoints for the wrapped phrase in Markdown and
   Python documentation. Preserve the single-line diagnostic contract.
-- [ ] P08.3 Add negative cases crossing a paragraph, heading, list item, separate
+- [x] P08.3 Add negative cases crossing a paragraph, heading, list item, separate
   docstring, or comment/prose boundary.
-- [ ] P08.4 Add a masked-gap negative such as `in \`sorted\` order to`. Matching
+- [x] P08.4 Add a masked-gap negative such as `in \`sorted\` order to`. Matching
   whitespace must not manufacture a phrase across hidden code or markup.
-- [ ] P08.5 Move the shared replacement-table matcher to source-mapped sentences.
+- [x] P08.5 Move the shared replacement-table matcher to source-mapped sentences.
   Accept layout whitespace only within one permitted prose region and verify
   the original source covered by a candidate match.
-- [ ] P08.6 Cover the other helper consumers separately: V010, V011, V013, and
+- [x] P08.6 Cover the other helper consumers separately: V010, V011, V013, and
   V017. Adapt V011's decision-compound exception to complete multiline spans.
 - [ ] P08.7 Inventory older literal phrase matchers. Migrate each affected matcher
   only after its own failing wrap-invariance test; do not rewrite unrelated rules.
-- [ ] P08.8 Characterize inline suppression and baseline behavior for multiline
+- [x] P08.8 Characterize inline suppression and baseline behavior for multiline
   matches. Verify that distinct matches cannot share an accidental identity.
-- [ ] P08.9 If those tests expose a baseline defect, design the smallest correction
+- [x] P08.9 If those tests expose a baseline defect, design the smallest correction
   with compatibility tests before changing stored identities. Preserve existing
   readable baseline versions and atomic writes.
-- [ ] P08.10 Add wrap variants to the corpus, compare all changed findings, and
+- [x] P08.10 Add wrap variants to the corpus, compare all changed findings, and
   run focused rule, mapping, baseline, and package checks.
 
 Acceptance: wrapping alone does not alter supported phrase detection, and spans
@@ -894,3 +894,23 @@ and revision usefulness judgments remain pending. The reviewer request is open.
 The integrated local gate passed with 2,361 tests and regression counts
 308 true positives, 12 false positives, and no misses. These counts include
 pending rule-wrap fixtures and describe the regression corpus, not the pilot.
+
+
+### P08 — Wrapped replacement phrases and baseline spans corrected
+
+Twelve wrap regressions failed before the source-mapped matcher correction.
+V009/V010/V011/V013/V017 now accept layout whitespace within one prose region
+and validate the covered original source. Code gaps and unrelated blocks remain
+separate. V011's decision-compound guard reads the complete wrapped suffix.
+JSON Lines, SARIF, suppression, comment prefixes, and blockquotes are covered.
+Five reviewed wrapped positives and two nearby negatives were added; the corpus
+changed from 303 to 308 true positives with the same 12 false positives and no
+misses. Older literal matchers are being addressed individually in P11/P12.
+
+Two failing baseline regressions exposed truncated multiline match identity.
+Concrete multiline spans now participate fully in identity while single-line
+identities and readable v1/v2 files remain compatible. Old first-token entries
+are readable but stale and need explicit review. No baseline file was refreshed.
+An exposed duplicate rule-document paragraph was replaced with the specific
+V011 wrapping explanation. The local integrated gate passed with 2,361 tests,
+including documentation and corpus checks; edited prose scans passed.

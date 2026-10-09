@@ -27,7 +27,6 @@ from proseprobe.data.vocabulary import (
 from proseprobe.parsers.markdown import is_example_line
 from proseprobe.parsers.prose import (
     ProseSentence,
-    iter_prose_blocks,
     iter_prose_sentences,
 )
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
@@ -121,26 +120,43 @@ def _replacement_phrase_issues(
 ) -> list[Issue]:
     """Return exact prose findings for a fixed replacement table."""
     issues: list[Issue] = []
-    for block in iter_prose_blocks(content, filename):
-        if block.context == "heading":
+    lines = content.split("\n")
+    for sentence in iter_prose_sentences(content, filename):
+        if sentence.context == "heading":
             continue
-        for line_num, line in block.lines:
-            for phrase, replacement in replacements.items():
-                for match in re.finditer(
-                    rf"\b{re.escape(phrase)}\b", line, re.IGNORECASE
-                ):
-                    issues.append(
-                        Issue(
-                            rule_id=rule.id,
-                            message=f"{rule.name.capitalize()}: '{match.group()}'",
-                            line=line_num,
-                            column=match.start() + 1,
-                            end_column=match.end() + 1,
-                            severity=rule.severity,
-                            confidence=rule.default_confidence,
-                            suggestion=replacement,
+        for phrase, replacement in replacements.items():
+            pattern = re.compile(
+                r"\b" + r"\s+".join(re.escape(word) for word in phrase.split()) + r"\b",
+                re.IGNORECASE,
+            )
+            for match in pattern.finditer(sentence.text):
+                start_line, start_column = sentence.source_position(match.start())
+                end_line, end_column = sentence.source_position(match.end())
+                pieces = lines[start_line - 1 : end_line]
+                pieces[-1] = pieces[-1][: end_column - 1]
+                pieces[0] = pieces[0][start_column - 1 :]
+                for index in range(1, len(pieces)):
+                    if filename.lower().endswith(".py"):
+                        pieces[index] = re.sub(r"^[ \t]*#[ \t]?", "", pieces[index])
+                    elif sentence.context == "blockquote":
+                        pieces[index] = re.sub(
+                            r"^(?: {0,3}>[ \t]?)+", "", pieces[index]
                         )
+                if pattern.fullmatch("\n".join(pieces)) is None:
+                    continue
+                issues.append(
+                    Issue(
+                        rule_id=rule.id,
+                        message=f"{rule.name.capitalize()}: '{' '.join(match.group().split())}'",
+                        line=start_line,
+                        column=start_column,
+                        end_line=end_line if end_line != start_line else None,
+                        end_column=end_column,
+                        severity=rule.severity,
+                        confidence=rule.default_confidence,
+                        suggestion=replacement,
                     )
+                )
 
     return sorted(issues, key=lambda issue: (issue.line, issue.column))
 
@@ -655,15 +671,31 @@ class VerboseVerbPhraseRule(Rule):
         issues = _replacement_phrase_issues(
             self, content, filename, VERBOSE_VERB_PHRASE_REPLACEMENTS
         )
-        lines = content.split("\n")
-        return [
-            issue
-            for issue in issues
-            if issue.suggestion not in self._DECISION_REPLACEMENTS
-            or not self._DECISION_COMPOUND.match(
-                lines[issue.line - 1][(issue.end_column or 1) - 1 :]
-            )
-        ]
+        retained: list[Issue] = []
+        sentences = iter_prose_sentences(content, filename)
+        for issue in issues:
+            compound = False
+            if issue.suggestion in self._DECISION_REPLACEMENTS:
+                endpoint = (issue.end_line or issue.line, issue.end_column or 1)
+                for sentence in sentences:
+                    if not (
+                        (sentence.start_line, sentence.start_column)
+                        <= (issue.line, issue.column)
+                        <= endpoint
+                        <= (sentence.end_line, sentence.end_column)
+                    ):
+                        continue
+                    index = sentence.source_lines.index(endpoint[0])
+                    parts = sentence.text.split("\n")
+                    offset = sum(len(part) + 1 for part in parts[:index])
+                    offset += endpoint[1] - (sentence.start_column if index == 0 else 1)
+                    compound = bool(
+                        self._DECISION_COMPOUND.match(sentence.text[offset:])
+                    )
+                    break
+            if not compound:
+                retained.append(issue)
+        return retained
 
 
 class RedundantModifierRule(Rule):

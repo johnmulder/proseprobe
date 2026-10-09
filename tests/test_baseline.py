@@ -13,6 +13,57 @@ from proseprobe.core.baseline import (
     resolve_workspace,
 )
 from proseprobe.rules.base import Confidence, Issue, Severity
+from proseprobe.rules.grammar import ExcessiveHedgingRule
+
+
+def test_multiline_baseline_tracks_complete_match_and_roundtrips(
+    tmp_path: Path,
+) -> None:
+    content = "may\npossibly fail."
+    [issue] = ExcessiveHedgingRule().check(content, "case.md")
+    path = tmp_path / "case.md"
+    baseline_path = tmp_path / "baseline.json"
+    baseline = Baseline(baseline_path)
+    baseline.add_issue(issue, path, content, tmp_path)
+    assert baseline.entries[0].match == "may possibly"
+    baseline.save()
+    loaded = Baseline(baseline_path)
+    assert loaded.load()
+    assert not loaded.is_new_issue(issue, path, content, tmp_path)
+
+
+def test_changed_multiline_continuation_is_a_new_baseline_match(tmp_path: Path) -> None:
+    content = "may\npossibly fail."
+    changed = "may\npotentially fail."
+    [issue] = ExcessiveHedgingRule().check(content, "case.md")
+    [changed_issue] = ExcessiveHedgingRule().check(changed, "case.md")
+    path = tmp_path / "case.md"
+    baseline = Baseline(tmp_path / "baseline.json")
+    baseline.add_issue(issue, path, content, tmp_path)
+    assert baseline.is_new_issue(changed_issue, path, changed, tmp_path)
+
+
+def test_legacy_multiline_token_identity_remains_readable_but_stale(
+    tmp_path: Path,
+) -> None:
+    content = "may\npossibly fail."
+    [issue] = ExcessiveHedgingRule().check(content, "case.md")
+    path = tmp_path / "case.md"
+    path.write_text(content)
+    baseline_path = tmp_path / "baseline.json"
+    baseline = Baseline(baseline_path)
+    baseline.add_issue(issue, path, content, tmp_path)
+    baseline.save()
+    data = json.loads(baseline_path.read_text())
+    data["entries"][0]["match"] = "may"
+    baseline_path.write_text(json.dumps(data))
+    loaded = Baseline(baseline_path)
+    assert loaded.load()
+    assert loaded.format_version == 2
+    comparison = loaded.compare({path: [issue]}, tmp_path)
+    assert comparison.active_count == 0
+    assert comparison.stale_count == 1
+    assert comparison.new_count == 1
 
 
 class TestBaseline:

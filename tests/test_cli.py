@@ -228,6 +228,63 @@ class TestCheckCommand:
             ("V001", 5, 1)
         ]
 
+    @pytest.mark.parametrize("output_format", ["jsonl", "sarif"])
+    def test_wrapped_phrase_reports_both_source_endpoints(
+        self, output_format: str
+    ) -> None:
+        result = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "case.md",
+            "--select",
+            "V009",
+            "--severity",
+            "info",
+            "--format",
+            output_format,
+            stdin="due to the\nfact that input changed.",
+        )
+        assert result.exit_code == 0
+        data = json.loads(result.stdout)
+        if output_format == "jsonl":
+            assert (
+                data["line"],
+                data["column"],
+                data["end_line"],
+                data["end_column"],
+            ) == (
+                1,
+                1,
+                2,
+                10,
+            )
+        else:
+            finding = data["runs"][0]["results"][0]
+            assert finding["locations"][0]["physicalLocation"]["region"] == {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 2,
+                "endColumn": 10,
+            }
+
+    def test_wrapped_phrase_suppression_targets_its_start_line(self) -> None:
+        result = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "case.md",
+            "--select",
+            "V009",
+            "--severity",
+            "info",
+            "--format",
+            "jsonl",
+            stdin="<!-- proseprobe-ignore-next-line V009 -->\ndue to the\nfact that input changed.",
+        )
+        assert result.exit_code == 0
+        assert result.stdout == ""
+
     def test_check_file_with_issues(self, tmp_path: Path) -> None:
         """Test checking a file with overused vocabulary."""
         test_file = tmp_path / "test.md"

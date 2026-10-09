@@ -32,6 +32,60 @@ from proseprobe.rules.vocab import (
 )
 
 
+@pytest.mark.parametrize(
+    ("rule", "phrase", "replacement"),
+    [
+        (WordyPhraseRule(), "due to the\nfact that", "because"),
+        (RedundantPairRule(), "each and\nevery", "each"),
+        (VerboseVerbPhraseRule(), "make a\ndecision", "decide"),
+        (RedundantModifierRule(), "basic\nfundamentals", "fundamentals"),
+        (NeedlessIntensifierRule(), "very\nunique", "unique"),
+    ],
+)
+@pytest.mark.parametrize("filename", ["case.md", "case.py"])
+def test_replacement_phrases_keep_wrapped_spans(
+    rule: Rule, phrase: str, replacement: str, filename: str
+) -> None:
+    source = phrase if filename.endswith(".md") else f'"""{phrase}"""'
+    [issue] = rule.check(source, filename)
+    assert (issue.line, issue.column) == (1, 1 if filename.endswith(".md") else 4)
+    assert (issue.end_line, issue.end_column) == (2, len(phrase.split("\n")[1]) + 1)
+    assert issue.suggestion == replacement
+    assert " ".join(phrase.split()) in issue.message
+
+
+@pytest.mark.parametrize(
+    ("source", "filename"),
+    [
+        ("# due to the\n# fact that", "case.py"),
+        ("> due to the\n> fact that", "case.md"),
+    ],
+)
+def test_wrapped_phrases_allow_structural_prefixes(source: str, filename: str) -> None:
+    [issue] = WordyPhraseRule().check(source, filename)
+    assert (issue.line, issue.column, issue.end_line, issue.end_column) == (1, 3, 2, 12)
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "due to the\n\nfact that",
+        "due to the\n# fact that",
+        "- due to the\n- fact that",
+        "in `sorted` order to",
+        "in <code>x</code> order to",
+        "```\ndue to the\nfact that\n```",
+    ],
+)
+def test_wrapped_phrases_do_not_cross_boundaries_or_masked_text(source: str) -> None:
+    assert WordyPhraseRule().check(source, "case.md") == []
+
+
+@pytest.mark.parametrize("source", ["make a\ndecision tree", "make a\ndecision\ntree"])
+def test_wrapped_decision_compound_remains_a_negative(source: str) -> None:
+    assert VerboseVerbPhraseRule().check(source, "case.md") == []
+
+
 def test_grandiose_stakes_has_exact_source_span() -> None:
     source = "This release will change everything."
     [issue] = GrandioseStakesRule().check(source, "test.md")

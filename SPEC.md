@@ -169,8 +169,11 @@ form for creating a version 2 file.
 
 Version 2 entries contain a workspace-relative path, rule ID, normalized
 matched source, and limited same-line context hash. Identity excludes line
-numbers, diagnostic messages, severity, confidence, suggestions, and adjacent
-lines. Input order does not affect workspace selection: a shared Git root wins,
+numbers, diagnostic messages, severity, confidence, suggestions, and lines
+outside the declared match and its same-line context. Concrete multiline spans
+include their complete normalized matched source in the hash. Old first-token
+multiline identities remain readable but become stale rather than hiding changed
+continuations. Input order does not affect workspace selection: a shared Git root wins,
 otherwise the common scan root is used. Writes are atomic and deterministically
 ordered.
 

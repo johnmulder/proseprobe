@@ -395,8 +395,9 @@ The team must make a decision after conducting an analysis.
 The team must decide after analyzing the results.
 ```
 
-Matching is case-insensitive and applies to Markdown prose plus Python comments
-and docstrings; headings and code are excluded.
+V011 matches across wrapped Markdown prose and Python documentation, and reports
+both source endpoints. Decision-compound exceptions follow the wrapped sentence;
+headings and code remain excluded.
 
 ---
 

@@ -314,9 +314,16 @@ All successful maintenance actions return 0 and print active, stale, new, and
 final entry counts.
 
 Version 2 stores deterministic entries containing a repository-relative path,
-rule ID, normalized matched source, and a hash of limited same-line context. It
-does not depend on line numbers, diagnostic messages, severity, confidence, or
-neighboring lines. A shared Git root is preferred as the workspace; non-Git
+rule ID, normalized matched source, and a hash of limited same-line context.
+Concrete multiline findings include their complete matched source in the hash,
+so a changed continuation cannot match an accepted first token alone. Earlier
+first-token identities for multiline findings remain readable but become stale;
+review those findings before accepting any replacement identity. Single-line
+identities and version 1 compatibility remain unchanged.
+
+Identity excludes line numbers, diagnostic messages, severity, confidence, and
+lines outside the declared match and same-line context. A shared Git root is
+preferred as the workspace; non-Git
 inputs use their common scan root, independent of argument order.
 
 Version 1 fingerprint files remain readable for one compatibility cycle.
