@@ -1397,8 +1397,10 @@ This module is the main entry point.
 Detects over-qualification metadiscourse, exact redundant possibility modals,
 and broader hedge stacking.
 
-Hedge stacking uses wrapped, source-mapped sentence boundaries rather than
-physical source lines.
+Hedge stacking uses wrapped, source-mapped clauses. Semicolons and recognized
+coordinated subjects separate independently qualified claims. Ambiguous counts
+remain medium-confidence review prompts; source-adjacent stacks and exact
+redundant pairs receive high confidence.
 
 Exact modal pairs emit one high-confidence G002 finding in place of overlapping
 generic adverb and two-hedge stack findings.
@@ -1409,7 +1411,7 @@ generic adverb and two-hedge stack findings.
 - "It should be noted that..."
 - Redundant modal hedges: `may`, `might`, or `could` followed by `possibly`,
   `potentially`, or `perhaps` → keep the modal
-- Hedge stacking: 2+ hedges (may, might, potentially, arguably, possibly, perhaps, appears to, suggests that, could be) in one sentence
+- Hedge stacking: 2+ hedges (may, might, potentially, arguably, possibly, perhaps, appears to, suggests that, could be) in one qualifying clause
 
 **Example (bad):**
 ```markdown

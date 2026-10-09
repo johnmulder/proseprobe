@@ -432,19 +432,19 @@ remain accurate without joining unrelated or masked content.
 Targets: `src/proseprobe/rules/grammar.py`,
 `tests/test_rules/test_grammar.py`, quality-corpus cases.
 
-- [ ] P09.1 Add a failing negative for `The cache may expire, or the server might
+- [x] P09.1 Add a failing negative for `The cache may expire, or the server might
   restart.` Assert that separate alternatives do not receive a high-confidence
   stacking diagnostic.
-- [ ] P09.2 Retain a positive for `may possibly`, with exact span, high confidence,
+- [x] P09.2 Retain a positive for `may possibly`, with exact span, high confidence,
   and the existing modal suggestion.
-- [ ] P09.3 Add coordinated independent clauses, distinct sentences, and a
+- [x] P09.3 Add coordinated independent clauses, distinct sentences, and a
   genuinely redundant stack, including wrapped variants.
-- [ ] P09.4 Add conservative clause guards for recognized separate propositions.
+- [x] P09.4 Add conservative clause guards for recognized separate propositions.
   Lower confidence where the sentence-wide count remains ambiguous rather than
   claiming certainty from the count alone.
-- [ ] P09.5 Preserve phrase-level metadiscourse checks and prevent duplicate
+- [x] P09.5 Preserve phrase-level metadiscourse checks and prevent duplicate
   diagnostics inside a confirmed redundant-modal span.
-- [ ] P09.6 Verify profile confidence filters and add corpus positives and
+- [x] P09.6 Verify profile confidence filters and add corpus positives and
   negatives for the distinctions above.
 
 Acceptance: redundant hedges remain detectable, while independently qualified
@@ -936,3 +936,16 @@ workload checksum `523df0c0d0b99a349bceea94135dc215f6fa11f042c42881c3334834258b4
 No holdout content was used. Synthetic distinct/repeated batches were measured
 separately. Reports are local timing evidence, not throughput release gates.
 The integrated gate passed with 2,361 tests before this documentation update.
+
+
+### P09 — Hedge stacks qualified by clause
+
+Fourteen regressions failed before correction. Recognized independent subjects
+and semicolons separate clauses; ambiguous distant counts remain medium
+confidence. Exact source-adjacent redundant modals and clear stacks remain high
+confidence. Masked gaps cannot invent a pair, and a confirmed pair owns its span
+without a duplicate broad-stack alert. Forty-two focused hedge cases passed,
+including profile confidence filtering. Two reviewed corpus positives distinguish
+wrapped exact pairs from ambiguous counts; an independent-alternative negative
+is retained. The prior integrated gate passed; the updated corpus has 310 true
+positives, the same 12 false positives, and no missed expectations.

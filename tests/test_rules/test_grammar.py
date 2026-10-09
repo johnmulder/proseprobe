@@ -734,6 +734,147 @@ class TestHedgeStacking:
         assert same_start[0].confidence is Confidence.HIGH
         assert any(issue.column > 1 for issue in issues)
 
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "The cache may expire, or the server might restart.",
+            "The cache may expire and the server might restart.",
+            "The cache may expire; the server might restart.",
+            "The cache may expire, but the server might restart.",
+            "The cache may expire, while the server might restart.",
+            "The cache may expire, the server might restart.",
+            "The cache may expire. The server might restart.",
+            "The cache may expire, or\nthe server might restart.",
+        ],
+    )
+    def test_independently_qualified_clauses_do_not_stack(self, source: str) -> None:
+        assert ExcessiveHedgingRule().check(source, "test.md") == []
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "The result may change when the sensor appears to be ready.",
+            "The result may, after the retry, arguably change.",
+            "Atlas may recover if Boreal might respond.",
+        ],
+    )
+    def test_ambiguous_sentence_counts_have_medium_confidence(
+        self, source: str
+    ) -> None:
+        issues = ExcessiveHedgingRule().check(source, "test.md")
+        stacking = [
+            issue for issue in issues if issue.message.startswith("Hedge stacking")
+        ]
+
+        assert len(stacking) == 1
+        assert stacking[0].confidence is Confidence.MEDIUM
+        assert not any(issue.confidence is Confidence.HIGH for issue in issues)
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "The result may arguably change.",
+            "The result may\narguably perhaps change.",
+            "The result may arguably change, recover, and restart.",
+        ],
+    )
+    def test_adjacent_stacks_remain_high_confidence(self, source: str) -> None:
+        stacking = [
+            issue
+            for issue in ExcessiveHedgingRule().check(source, "test.md")
+            if issue.message.startswith("Hedge stacking")
+        ]
+
+        assert len(stacking) == 1
+        assert stacking[0].confidence is Confidence.HIGH
+
+    @pytest.mark.parametrize(
+        ("source", "phrase", "end"),
+        [
+            (
+                "The cache may possibly expire, or the server might restart.",
+                "may possibly",
+                (1, 23),
+            ),
+            (
+                "The cache MAY\nPOSSIBLY expire and the server might restart.",
+                "MAY POSSIBLY",
+                (2, 9),
+            ),
+        ],
+    )
+    def test_redundant_pair_does_not_stack_with_an_independent_qualifier(
+        self, source: str, phrase: str, end: tuple[int, int]
+    ) -> None:
+        [issue] = ExcessiveHedgingRule().check(source, "test.md")
+
+        assert issue.message == f"Redundant modal hedge: '{phrase}'"
+        assert issue.confidence is Confidence.HIGH
+        assert (issue.line, issue.column) == (1, 11)
+        assert (issue.end_line, issue.end_column) == end
+
+    def test_two_independent_redundant_pairs_own_their_exact_spans(self) -> None:
+        source = (
+            "The cache may possibly expire, but the server might potentially restart."
+        )
+
+        issues = ExcessiveHedgingRule().check(source, "test.md")
+
+        assert [issue.message for issue in issues] == [
+            "Redundant modal hedge: 'may possibly'",
+            "Redundant modal hedge: 'might potentially'",
+        ]
+        assert all(issue.confidence is Confidence.HIGH for issue in issues)
+        assert [
+            source[issue.column - 1 : issue.end_column - 1] for issue in issues
+        ] == ["may possibly", "might potentially"]
+
+    def test_masked_code_does_not_create_a_high_confidence_pair(self) -> None:
+        issues = ExcessiveHedgingRule().check(
+            "The retry may `toggle` possibly fail.", "test.md"
+        )
+
+        assert not any(issue.confidence is Confidence.HIGH for issue in issues)
+        assert not any(
+            issue.message.startswith("Redundant modal hedge") for issue in issues
+        )
+
+    @pytest.mark.parametrize(
+        ("source", "filename", "start", "end"),
+        [
+            ("> The retry MAY\n> POSSIBLY fail.", "test.md", (1, 13), (2, 11)),
+            ("# The retry MAY\n# POSSIBLY fail.", "test.py", (1, 13), (2, 11)),
+        ],
+    )
+    def test_wrapped_pairs_preserve_prose_prefix_source_spans(
+        self, source: str, filename: str, start: tuple[int, int], end: tuple[int, int]
+    ) -> None:
+        [issue] = ExcessiveHedgingRule().check(source, filename)
+
+        assert issue.message == "Redundant modal hedge: 'MAY POSSIBLY'"
+        assert issue.confidence is Confidence.HIGH
+        assert (issue.line, issue.column) == start
+        assert (issue.end_line, issue.end_column) == end
+
+    def test_high_confidence_policy_keeps_only_the_precise_redundant_pair(self) -> None:
+        from pathlib import Path
+
+        from proseprobe.config import Config
+        from proseprobe.core.policy import filter_by_confidence, prepare_scan
+
+        config, linter, _ = prepare_scan(
+            Config(), select="G002", severity="info", min_confidence="high"
+        )
+        path = Path("test.md")
+        issues = linter.check_content(
+            "The cache may recover if the server might restart. The retry may possibly fail.",
+            path,
+        )
+
+        [issue] = filter_by_confidence({path: issues}, config.min_confidence)[path]
+
+        assert issue.message == "Redundant modal hedge: 'may possibly'"
+
 
 class TestGapRitual:
     """Tests for G013: Gap Ritual."""

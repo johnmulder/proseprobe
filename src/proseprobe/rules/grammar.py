@@ -1,6 +1,7 @@
 """Grammar rules (G001-G017, G019, G022, G024-G025, G029, G031, G037-G038)."""
 
 import re
+from itertools import pairwise
 from typing import ClassVar
 
 from proseprobe.data.patterns import (
@@ -80,6 +81,25 @@ class ExcessiveHedgingRule(Rule):
         r"\b(?P<modal>may|might|could)\s+(?:possibly|potentially|perhaps)\b",
         re.IGNORECASE,
     )
+    _QUALIFIED_SUBJECT = (
+        r"(?:(?:the|a|an|this|that|these|those|our|your|their|its)\s+"
+        r"[\w'-]+(?:\s+[\w'-]+){0,3}|it|they|we|you|he|she)\s+"
+        r"(?:may|might|could|appears?\s+to|suggests?\s+that)\b"
+    )
+    _CLAUSE_BOUNDARY = re.compile(
+        r";\s*|(?:,\s*(?:(?:and|or|but|while|whereas|although)\s+)?"
+        r"|\s+(?:and|or|but|while|whereas|although)\s+)"
+        rf"(?={_QUALIFIED_SUBJECT})",
+        re.IGNORECASE,
+    )
+
+    @staticmethod
+    def _remove_prose_prefixes(source: str, filename: str, context: str) -> str:
+        if filename.lower().endswith(".py"):
+            return re.sub(r"(?m)^[ \t]*#[ \t]?", "", source)
+        if context == "blockquote":
+            return re.sub(r"(?m)^(?: {0,3}>[ \t]?)+", "", source)
+        return source
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for excessive hedging."""
@@ -103,7 +123,16 @@ class ExcessiveHedgingRule(Rule):
         redundant_ranges: list[tuple[tuple[int, int], tuple[int, int]]] = []
         stacking_issues: list[Issue] = []
         for sentence in iter_prose_sentences(content, filename):
-            redundant_matches = list(self._REDUNDANT_MODAL.finditer(sentence.text))
+            source = sentence.source_text(content)
+            redundant_matches = [
+                match
+                for match in self._REDUNDANT_MODAL.finditer(sentence.text)
+                if self._REDUNDANT_MODAL.fullmatch(
+                    self._remove_prose_prefixes(
+                        source[match.start() : match.end()], filename, sentence.context
+                    )
+                )
+            ]
             for match in redundant_matches:
                 start = sentence.source_position(match.start())
                 end = sentence.source_position(match.end())
@@ -122,24 +151,54 @@ class ExcessiveHedgingRule(Rule):
                         suggestion=match.group("modal").casefold(),
                     )
                 )
-            hedge_matches = list(self._HEDGE_WORDS.finditer(sentence.text))
-            if len(hedge_matches) < 2 or (
-                len(hedge_matches) == 2 and redundant_matches
-            ):
-                continue
-            sentence_line, sentence_column = sentence.source_position()
-            stacking_issues.append(
-                Issue(
-                    rule_id=self.id,
-                    message=(
-                        f"Hedge stacking: {len(hedge_matches)} hedges in one sentence"
-                    ),
-                    line=sentence_line,
-                    column=sentence_column,
-                    severity=self.severity,
-                    confidence=Confidence.HIGH,
+            hedge_matches = [
+                match
+                for match in self._HEDGE_WORDS.finditer(sentence.text)
+                if not any(
+                    redundant.start() <= match.start()
+                    and match.end() <= redundant.end()
+                    for redundant in redundant_matches
                 )
-            )
+            ]
+            boundaries = [
+                0,
+                *(
+                    match.end()
+                    for match in self._CLAUSE_BOUNDARY.finditer(sentence.text)
+                ),
+                len(sentence.text),
+            ]
+            for clause_start, clause_end in pairwise(boundaries):
+                clause_matches = [
+                    match
+                    for match in hedge_matches
+                    if clause_start <= match.start() and match.end() <= clause_end
+                ]
+                if len(clause_matches) < 2:
+                    continue
+                adjacent = any(
+                    not self._remove_prose_prefixes(
+                        source[first.end() : second.start()], filename, sentence.context
+                    ).strip()
+                    for first, second in pairwise(clause_matches)
+                )
+                while (
+                    clause_start < clause_end and sentence.text[clause_start].isspace()
+                ):
+                    clause_start += 1
+                clause_line, clause_column = sentence.source_position(clause_start)
+                stacking_issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=(
+                            f"Hedge stacking: {len(clause_matches)} hedges in one clause"
+                        ),
+                        line=clause_line,
+                        column=clause_column,
+                        severity=self.severity,
+                        confidence=Confidence.HIGH if adjacent else Confidence.MEDIUM,
+                    )
+                )
 
         issues.extend(stacking_issues)
         issues = [

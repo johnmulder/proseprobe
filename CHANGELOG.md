@@ -68,6 +68,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Distinguished independent qualified clauses from hedge stacks, retaining
+  high confidence for precise redundant pairs and medium confidence for ambiguity.
+
 - Matched supported replacement phrases across layout wrapping without joining
   masked content, and included complete multiline matches in baseline identity.
 
