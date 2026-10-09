@@ -128,7 +128,10 @@ retaining generic claims, and omits the base-form suggestion for inflected
 forms of the administrative verb. These changes neither exclude all technical
 writing nor establish factual or grammatical correctness.
 
-At the default warning threshold, the sample retained all 10 intended findings
-and reduced intentional-use alerts from 14 to 10. The full evaluator also
-retained two intended informational findings. No pre-existing corpus findings
-changed. These counts describe this sample, not a population precision estimate.
+The original assessment retained all 10 intended warning findings and reduced
+intentional-use alerts from 14 to 10. P12 subsequently corrected six technical
+V001 uses without changing their negative annotations. Four raw quotation
+alerts and two low-confidence evidence-association alerts remain visible in
+the regression report. The [disposition ledger](assessment-disposition.md)
+records all twelve original cases and distinguishes caller handling from
+raw detection. These counts describe the sample, not a population estimate.

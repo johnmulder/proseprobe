@@ -222,8 +222,6 @@ class AIVocabularyRule(Rule):
         "showcase": r"showcas(?:e|es|ed|ing)",
         "spearhead": r"spearhead(?:s|ed|ing)?",
         "streamline": r"streamlin(?:e|es|ed|ing)",
-        # Preserve the statistical method without exempting other words on the line.
-        "robust": r"robust(?!\s+regressions?\b)",
         "underscore": r"underscor(?:e|es|ed|ing)",
         "unravel": r"unravel(?:s|ed|ing)?",
         # Academic jargon (academic tropes)
@@ -248,6 +246,48 @@ class AIVocabularyRule(Rule):
         "architect": r"architect(?:s|ed|ing)\s+(?:a|an|the|our|this|that|new|scalable|robust|modern|flexible)\s+\w+",
     }
 
+    _TECHNICAL_PATTERNS: ClassVar[tuple[re.Pattern[str], ...]] = tuple(
+        re.compile(pattern, re.IGNORECASE)
+        for pattern in (
+            r"\b(?P<term>robust)\s+regressions?\b",
+            r"\bstatistically\s+(?P<term>significant)\b",
+            r"\b(?P<term>fundamental)\s+theorem\s+of\s+(?:calculus|algebra|arithmetic)\b",
+            r"\b(?:hash[ -]table|dictionary|mapping|primary|foreign|cache|encryption|decryption|public|private|API|SSH)\s+(?P<term>key)\b(?!\s+(?:benefit|feature|factor|point|idea|element|step)\b)",
+            r"\bhash[ -]tables?\s+(?:stores?|maps?|indexes?|contains?)\s+(?:(?:each|the|a|its|these|those)\s+)?(?P<term>key)\b(?!\s+(?:benefit|feature|factor|point|idea|element|step)\b)",
+            r"\b(?P<term>key)[- ]value\b",
+            r"\b(?P<term>implement(?:s|ed|ing)?)\s+(?:in|using)\s+(?P<quote>`{1,2})?(?:C\+\+|C#|C|Python|Rust|JavaScript|TypeScript|Java|Go|Ruby|Swift|Kotlin|Julia|Haskell)(?(quote)(?P=quote)|(?=[\s.,;:!?)]|$))",
+            r"\b(?P<term>implement(?:s|ed|ing)?)\s+(?:(?:the|a|an|this|that|our)\s+)?(?:(?:same|buffer|iterator|iteration|mapping|sequence|network|binary|streaming)\s+)?(?:protocol|interface)\b",
+        )
+    )
+
+    @classmethod
+    def _technical_positions(
+        cls, content: str, filename: str
+    ) -> set[tuple[int, int, int]]:
+        """Return term spans supported by a named technical construction."""
+        positions: set[tuple[int, int, int]] = set()
+        for sentence in iter_prose_sentences(content, filename):
+            raw = sentence.source_text(content)
+            chars = list(raw)
+            for prefix in re.finditer(r"(?m)^[ \t]*(?:>[ \t]*)*(?:#[ \t]*)?", raw):
+                for index in range(prefix.start(), prefix.end()):
+                    if chars[index] in {"#", ">"} and sentence.text[index].isspace():
+                        chars[index] = " "
+            context = "".join(chars)
+            for pattern in cls._TECHNICAL_PATTERNS:
+                for match in pattern.finditer(context):
+                    start, end = match.span("term")
+                    if (
+                        sentence.text[start:end].casefold()
+                        != match.group("term").casefold()
+                    ):
+                        continue
+                    line, column = sentence.source_position(start)
+                    end_line, end_column = sentence.source_position(end)
+                    if line == end_line:
+                        positions.add((line, column, end_column))
+        return positions
+
     def __init__(
         self,
         allowed: set[str] | None = None,
@@ -263,6 +303,7 @@ class AIVocabularyRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for overused vocabulary words."""
         issues: list[Issue] = []
+        technical_positions = self._technical_positions(content, filename)
         for line_num, line in self.iter_lines(content, filename):
             line_lower = line.lower()
 
@@ -279,9 +320,15 @@ class AIVocabularyRule(Rule):
                 else:
                     pattern = rf"\b{re.escape(word)}\b"
 
-                for match in re.finditer(pattern, line_lower):
+                for match in re.finditer(pattern, line, re.IGNORECASE):
+                    if (
+                        line_num,
+                        match.start() + 1,
+                        match.end() + 1,
+                    ) in technical_positions:
+                        continue
                     suggestion = VOCABULARY_SUGGESTIONS.get(word)
-                    matched_word = match.group()
+                    matched_word = match.group().lower()
                     if word == "implement" and matched_word != word:
                         # A base-form replacement does not fit the inflected source.
                         suggestion = None

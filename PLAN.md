@@ -519,29 +519,29 @@ distinct diagnoses and explicit rule selections remain understandable.
 Targets: V001/V002/V004, vocabulary data, Python/Markdown context helpers,
 `tests/test_rules/test_vocab.py`, technical-review corpus, agent guidance.
 
-- [ ] P12.1 Inventory all 12 existing false positives and classify their causes:
+- [x] P12.1 Inventory all 12 existing false positives and classify their causes:
   technical sense, literal quotation, or evidence association.
-- [ ] P12.2 Add paired tests for technical constructions and generic uses of
+- [x] P12.2 Add paired tests for technical constructions and generic uses of
   `key`, `significant`, `fundamental`, and `implement` inflections. Include cases
   where a valid technical term shares a sentence with a separate prose violation.
-- [ ] P12.3 Add narrowly scoped context exceptions for reviewed constructions,
+- [x] P12.3 Add narrowly scoped context exceptions for reviewed constructions,
   covering case, inflection, wrapping, and Markdown/Python parity.
-- [ ] P12.4 Preserve the existing `robust regression` exception and reject
+- [x] P12.4 Preserve the existing `robust regression` exception and reject
   unrelated same-line exemptions. Do not silently change the documented
   whole-line `allowed_phrases` contract while adding built-in span checks.
-- [ ] P12.5 Deliberately revise tests that currently require warnings on recognized
+- [x] P12.5 Deliberately revise tests that currently require warnings on recognized
   technical uses. Keep generic administrative uses as positives and document
   the changed policy rather than deleting inconvenient tests.
-- [ ] P12.6 Test that suggestions fit the source form and meaning. Omit a
+- [x] P12.6 Test that suggestions fit the source form and meaning. Omit a
   suggestion when the rule cannot provide a valid replacement.
-- [ ] P12.7 Retain linting of ordinary blockquotes: a draft callout and an exact
+- [x] P12.7 Retain linting of ordinary blockquotes: a draft callout and an exact
   quotation can use the same Markdown syntax.
-- [ ] P12.8 Verify the existing narrow suppression mechanism for an explicitly
+- [x] P12.8 Verify the existing narrow suppression mechanism for an explicitly
   preserved quotation. Add only missing tests; do not infer quote intent from
   typography alone or add blanket quotation exemptions.
-- [ ] P12.9 Document residual raw-detector quotation findings and caller handling.
+- [x] P12.9 Document residual raw-detector quotation findings and caller handling.
   Keep raw-corpus false positives visible; report policy-handled cases separately.
-- [ ] P12.10 Add journalism contrasts for a named source and a quantified trend.
+- [x] P12.10 Add journalism contrasts for a named source and a quantified trend.
   Inspect V005/V008 association with following context; retain low confidence
   when support cannot be safely associated with the matched claim.
 - [ ] P12.11 Compare precision and retained generic positives on development
@@ -1008,3 +1008,20 @@ ignorable/suppressible; callers treat them as one editing decision. JSON
 Lines/SARIF integrations and baseline identities preserve both requested IDs and
 the same complete wrapped span. Two reviewed corpus positives and four negative
 checks cover the distinction.
+
+### P12 — Technical spans preserved, raw limitations retained
+
+Seventy technical-context regressions failed before implementation. The matched
+technical word alone is exempted in reviewed constructions; generic uses and
+other occurrences still warn. Case, inflection, wrapping, source masks, and
+Markdown/Python parity are covered. Whole-line configured allowed phrases and
+inflection-safe suggestions retain their established contracts.
+
+The original twelve false-positive inputs and negative annotations remain.
+Six technical alerts are corrected. Four quotation alerts remain raw false
+positives with explicit narrow caller handling; two following-evidence alerts
+remain low-confidence association limitations. Ordinary blockquotes still lint.
+The disposition ledger records each case. The development regression report at
+this checkpoint contains 320 true positives, six false positives, no misses,
+and 413/419 passed negative checks. This is not an independent population
+estimate. Frozen external holdout review remains pending and unused for tuning.

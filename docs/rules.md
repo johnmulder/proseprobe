@@ -134,6 +134,18 @@ block by hand. The examples and guidance below remain hand-maintained.
 
 Detects overused and clichéd words that weaken writing.
 
+Built-in technical exceptions preserve only the matched word in recognized
+constructions: statistical significance, named `fundamental theorem` forms, typed or
+hash-table keys, and implementation in a recognized language or of a protocol
+or interface. Case and wrapping preserve these exceptions. Other occurrences
+and generic claims in the same sentence still receive review prompts. The
+existing `robust regression` exception remains span-specific; configured
+`allowed_phrases` retains its documented whole-line exemption.
+
+Ordinary blockquotes remain linted. Preserve an exact quotation with an explicit
+line-scoped suppression when its wording must remain unchanged. Inflected
+administrative uses of `implement` have no base-form replacement suggestion.
+
 **Examples include:**
 - `delve`, `tapestry`, `multifaceted`, `nuanced`, `pivotal`, `testament`
 - `interplay`, `vibrant`, `embark`, `landscape`, `synergy`, `leverage`

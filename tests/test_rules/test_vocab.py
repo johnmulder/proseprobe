@@ -206,15 +206,160 @@ class TestAIVocabularyRule:
             "The port is implementing the same interface.",
         ],
     )
-    def test_inflected_implement_keeps_review_without_invalid_replacement(
+    def test_preserves_technical_implement_forms(
         self, rule: AIVocabularyRule, content: str
     ) -> None:
-        [issue] = rule.check(content, "interfaces.md")
+        assert rule.check(content, "interfaces.md") == []
+
+    @pytest.mark.parametrize(
+        "form", ["implement", "implements", "implemented", "implementing"]
+    )
+    def test_generic_implement_forms_keep_review_and_safe_suggestions(
+        self, rule: AIVocabularyRule, form: str
+    ) -> None:
+        source = {
+            "implement": "The team will implement the migration plan.",
+            "implements": "The team implements the migration plan.",
+            "implemented": "The team implemented the migration plan.",
+            "implementing": "The team is implementing the migration plan.",
+        }[form]
+        [issue] = rule.check(source, "plan.md")
+
+        assert issue.confidence is Confidence.MEDIUM
+        assert issue.suggestion == ("carry out" if form == "implement" else None)
+
+    @pytest.mark.parametrize("style", ["markdown", "docstring", "comment"])
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "The hash table stores each key with its value.",
+            "The dictionary key identifies the entry.",
+            "The foreign key references the row.",
+            "The cache key identifies this response.",
+            "The result is statistically significant at this threshold.",
+            "The fundamental theorem of calculus relates the operations.",
+            "The fundamental theorem of algebra describes the roots.",
+            "The adapter implements the buffer protocol.",
+            "The adapter implements the same interface.",
+            "The kernel was implemented in C.",
+            "The kernel was implemented in `C`.",
+            "The kernel was implemented in C++.",
+            "The kernel was implemented in Rust.",
+        ],
+    )
+    def test_named_technical_terms_are_preserved_in_prose_contexts(
+        self, rule: AIVocabularyRule, text: str, style: str
+    ) -> None:
+        if style == "markdown":
+            content, filename = text, "guide.md"
+        elif style == "docstring":
+            content, filename = f'"""{text}"""', "guide.py"
+        else:
+            content, filename = f"# {text}", "guide.py"
+
+        assert rule.check(content, filename) == []
+
+    @pytest.mark.parametrize(
+        "style", ["markdown", "docstring", "comment", "blockquote"]
+    )
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "Use ROBUST\nREGRESSION for this fit.",
+            "The result is statistically\nsignificant at this threshold.",
+            "The fundamental theorem\nof calculus describes this relation.",
+            "The adapter implements\nthe buffer protocol.",
+            "The hash table stores each\nkey with its value.",
+            "The kernel was implemented\nin C.",
+        ],
+    )
+    def test_technical_context_survives_layout_wrapping(
+        self, rule: AIVocabularyRule, text: str, style: str
+    ) -> None:
+        if style == "markdown":
+            content, filename = text, "guide.md"
+        elif style == "docstring":
+            content, filename = f'"""{text}"""', "guide.py"
+        else:
+            prefix = "# " if style == "comment" else "> "
+            content = "\n".join(prefix + line for line in text.splitlines())
+            filename = "guide.py" if style == "comment" else "guide.md"
+
+        assert rule.check(content, filename) == []
+
+    @pytest.mark.parametrize(
+        ("text", "word"),
+        [
+            ("A key benefit of the hash table is lookup speed.", "key"),
+            ("The hash table stores each key benefit for the slide.", "key"),
+            ("The result is a significant improvement.", "significant"),
+            ("This is a fundamental change.", "fundamental"),
+            ("The plan was implemented in C-suite priorities.", "implemented"),
+            ("The adapter implements the business protocol.", "implements"),
+            ("The procedure uses robust defaults.", "robust"),
+            ("A robust `hidden` regression model is discussed.", "robust"),
+            ("The result is statistically `hidden` significant.", "significant"),
+            ("The fundamental theorem\n\nof calculus is discussed.", "fundamental"),
+        ],
+    )
+    def test_generic_and_disconnected_near_misses_keep_their_findings(
+        self, rule: AIVocabularyRule, text: str, word: str
+    ) -> None:
+        issues = rule.check(text, "guide.md")
+
+        assert [issue.message.split("'")[1] for issue in issues] == [word]
+
+    @pytest.mark.parametrize(
+        ("text", "word"),
+        [
+            ("The dictionary key identifies a key benefit.", "key"),
+            (
+                "A statistically significant result differs from a significant improvement.",
+                "significant",
+            ),
+            (
+                "The fundamental theorem of calculus is fundamental to this result.",
+                "fundamental",
+            ),
+            (
+                "A robust regression model and robust defaults serve different purposes.",
+                "robust",
+            ),
+            (
+                "The module implements the buffer protocol and implements the migration plan.",
+                "implements",
+            ),
+        ],
+    )
+    def test_technical_occurrence_does_not_hide_a_generic_use_in_the_same_clause(
+        self, rule: AIVocabularyRule, text: str, word: str
+    ) -> None:
+        [issue] = rule.check(text, "guide.md")
+
+        assert issue.column == text.rindex(word) + 1
+        assert issue.end_column == issue.column + len(word)
+
+    def test_configured_allowed_phrase_still_exempts_its_entire_line(self) -> None:
+        rule = AIVocabularyRule(allowed_phrases={"robust regression"})
+
+        assert (
+            rule.check("Use robust regression and delve into the fit.", "guide.md")
+            == []
+        )
+
+    def test_plain_blockquotes_keep_generic_vocabulary_findings(self) -> None:
+        [issue] = AIVocabularyRule().check(
+            "> The team will delve into the topic.", "guide.md"
+        )
 
         assert issue.rule_id == "V001"
-        assert issue.confidence is Confidence.MEDIUM
-        assert issue.suggestion is None
-        assert "carry out" not in issue.message
+
+    def test_case_matching_keeps_original_unicode_source_columns(self) -> None:
+        content = "İ/O exposes a key benefit."
+
+        [issue] = AIVocabularyRule().check(content, "guide.md")
+
+        assert content[issue.column - 1 : issue.end_column - 1] == "key"
 
     def test_base_implement_retains_its_suggestion(
         self, rule: AIVocabularyRule
@@ -358,6 +503,61 @@ class TestAIVocabularyRule:
         content = "All notable changes to this project."
         issues = rule.check(content, "test.md")
         assert len(issues) == 0
+
+
+class TestVocabularyContextReview:
+    @pytest.mark.parametrize("rule", [AIVocabularyRule(), PromotionalLanguageRule()])
+    def test_quote_typography_keeps_raw_findings(self, rule: Rule) -> None:
+        content = '> The customer wrote, "A groundbreaking result."'
+
+        assert len(rule.check(content, "guide.md")) == 1
+
+    def test_explicit_quote_suppression_is_narrow_and_preserves_raw_findings(
+        self,
+    ) -> None:
+        from pathlib import Path
+
+        from proseprobe.core.linter import Linter
+
+        content = (
+            '<!-- proseprobe-ignore-next-line V001 -->\n> The customer wrote, "We will delve into the topic."\n\n'
+            "> We will delve into the topic.\n"
+        )
+        rule = AIVocabularyRule()
+        assert len(rule.check(content, "guide.md")) == 2
+        linter = Linter(Config(select=["V001"]))
+        linter.register_rule(rule)
+
+        [issue] = linter.check_content(content, Path("guide.md"))
+
+        assert issue.rule_id == "V001"
+        assert issue.line == 4
+
+    @pytest.mark.parametrize(
+        ("rule", "generic", "supported"),
+        [
+            (
+                WeaselWordsRule(),
+                "Experts say the bridge needs repairs.",
+                "Experts say the bridge needs repairs. Structural engineers Mina Ortiz and Paul Chen published their measurements on July 18.",
+            ),
+            (
+                TrendOverclaimRule(),
+                "A growing number of weekday trips use the eastern line.",
+                "A growing number of weekday trips use the eastern line. The share rose from 31.2% to 34.8% between January and July.",
+            ),
+        ],
+    )
+    def test_following_journalism_evidence_lowers_confidence_without_claiming_proof(
+        self, rule: Rule, generic: str, supported: str
+    ) -> None:
+        [generic_issue] = rule.check(generic, "report.md")
+        [supported_issue] = rule.check(supported, "report.md")
+
+        assert generic_issue.confidence is Confidence.MEDIUM
+        assert supported_issue.confidence is Confidence.LOW
+        assert supported_issue.line == generic_issue.line == 1
+        assert supported_issue.column == generic_issue.column
 
 
 class TestCollaborativePhrasesRule:
