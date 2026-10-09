@@ -370,27 +370,27 @@ Corpus download and adaptation remain development activities; scans stay offline
 Targets: `benchmarks/bench_rules.py`, existing performance probes,
 `tests/test_benchmarks.py`, `SPEC.md`.
 
-- [ ] P07.1 Retain the direct-rule benchmark and label what it measures.
-- [ ] P07.2 Characterize Markdown and Python parser construction counts in direct
+- [x] P07.1 Retain the direct-rule benchmark and label what it measures.
+- [x] P07.2 Characterize Markdown and Python parser construction counts in direct
   rule calls and in `Linter`. Distinguish warmed caches from cleared caches.
-- [ ] P07.3 Add a failing runner test that proves the full-scan measurement uses
+- [x] P07.3 Add a failing runner test that proves the full-scan measurement uses
   production policy, file discovery, reading, extraction, and result filtering.
-- [ ] P07.4 Add a small offline workspace with both file types, an ignored file,
+- [x] P07.4 Add a small offline workspace with both file types, an ignored file,
   and known findings; assert selected files and result equivalence.
-- [ ] P07.5 Measure cold-process CLI startup separately from warmed scan timing.
+- [x] P07.5 Measure cold-process CLI startup separately from warmed scan timing.
   Include serialization when reporting whole-CLI timing; identify the output
   format and keep it fixed across comparisons.
-- [ ] P07.6 Add representative corpus samples, then report median timing,
+- [x] P07.6 Add representative corpus samples, then report median timing,
   variation, bytes processed, files checked, active rule count, and environment.
-- [ ] P07.7 Test rate calculations with controlled durations. Use actual batch
+- [x] P07.7 Test rate calculations with controlled durations. Use actual batch
   bytes and elapsed time rather than deriving throughput from an unweighted
   average across differently sized synthetic files.
-- [ ] P07.7a Test Unicode workloads and compute byte throughput from UTF-8 byte
+- [x] P07.7a Test Unicode workloads and compute byte throughput from UTF-8 byte
   length. Include many distinct small files as well as repeated content, so cache
   pressure and cache-friendly measurements remain distinguishable.
-- [ ] P07.8 Keep wall-clock thresholds out of ordinary unit tests. Preserve the
+- [x] P07.8 Keep wall-clock thresholds out of ordinary unit tests. Preserve the
   repository's existing startup and memory gates.
-- [ ] P07.9 Profile only measured slow paths. Propose a separate measured
+- [x] P07.9 Profile only measured slow paths. Propose a separate measured
   correction if the evidence warrants a cache, traversal, or concurrency change.
 
 Acceptance: benchmark results describe the path measured and can support a
@@ -914,3 +914,25 @@ are readable but stale and need explicit review. No baseline file was refreshed.
 An exposed duplicate rule-document paragraph was replaced with the specific
 V011 wrapping explanation. The local integrated gate passed with 2,361 tests,
 including documentation and corpus checks; edited prose scans passed.
+
+
+### P07 — Full scan path measured
+
+Nineteen benchmark tests pass. Parser characterizations show shared prose rules
+already reuse one parser per content; some structural rules construct their own
+parser. No measured bottleneck justified an architectural optimization.
+Production measurements include discovery, reads, extraction, filtering, and
+cold-process JSON serialization as separately labeled paths. Rates use actual
+UTF-8 bytes and file counts; controlled clocks test calculations without unit
+wall-clock thresholds. Workloads include Unicode, distinct small files, repeated
+content, masks, ignores, and both source formats.
+
+A frozen development subset of ten GitHub Docs documents and ten Python
+functions contains 70,869 bytes. Three-iteration technical-docs measurements
+use the same 79-rule policy: warmed directory median 314.76 ms (313.54–314.92),
+cleared-parser median 340.10 ms (339.63–340.18), and new-process JSON CLI median
+452.71 ms (452.14–454.58). Python 3.13.16, macOS arm64, 16 logical CPUs;
+workload checksum `523df0c0d0b99a349bceea94135dc215f6fa11f042c42881c3334834258b46b2`.
+No holdout content was used. Synthetic distinct/repeated batches were measured
+separately. Reports are local timing evidence, not throughput release gates.
+The integrated gate passed with 2,361 tests before this documentation update.

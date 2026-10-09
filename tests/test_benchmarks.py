@@ -1,8 +1,20 @@
 """Benchmark harness regression tests."""
 
+import json
+import subprocess
+from pathlib import Path
+
+import pytest
+from benchmarks import bench_rules
 from benchmarks.bench_rules import BenchmarkResult, print_results
 from benchmarks.memory_probe import run_probe as run_memory_probe
 from benchmarks.startup_probe import run_probe as run_startup_probe
+
+from proseprobe.config import Config, PerFileIgnore
+from proseprobe.core.linter import Linter
+from proseprobe.parsers import markdown, python
+from proseprobe.rules.grammar import ExcessiveHedgingRule
+from proseprobe.rules.vocab import AIVocabularyRule, WordyPhraseRule
 
 
 def test_benchmark_output_uses_project_name(capsys) -> None:  # type: ignore[no-untyped-def]
@@ -21,7 +33,258 @@ def test_benchmark_output_uses_project_name(capsys) -> None:  # type: ignore[no-
     output = capsys.readouterr().out
     assert "PROSEPROBE BENCHMARK RESULTS" in output
     assert "HUMANIZE" not in output
-    assert "Files/sec estimate" in output
+    assert "files/s" in output
+
+
+@pytest.mark.parametrize("filename", ["sample.md", "sample.py"])
+@pytest.mark.parametrize("use_linter", [False, True])
+def test_shared_prose_rules_reuse_parsers_in_direct_and_linter_calls(
+    monkeypatch: pytest.MonkeyPatch, filename: str, use_linter: bool
+) -> None:
+    content = "The retry may possibly delve in order to recover."
+    if filename.endswith(".py"):
+        content = f'"""{content}"""'
+    parser_class = (
+        python.PythonParser if filename.endswith(".py") else markdown.MarkdownParser
+    )
+    original_init = parser_class.__init__
+    constructions = 0
+
+    def count_init(self: object, source: str) -> None:
+        nonlocal constructions
+        constructions += 1
+        original_init(self, source)
+
+    monkeypatch.setattr(parser_class, "__init__", count_init)
+    rules = [AIVocabularyRule(), WordyPhraseRule(), ExcessiveHedgingRule()]
+    linter = Linter(Config(select=["V001", "V009", "G002"]))
+    for rule in rules:
+        linter.register_rule(rule)
+
+    def check() -> None:
+        if use_linter:
+            linter.check_content(content, Path(filename))
+        else:
+            for rule in rules:
+                rule.check(content, filename)
+
+    markdown.clear_parser_cache()
+    python.clear_parser_cache()
+    check()
+    assert constructions == 1
+    check()
+    assert constructions == 1
+    markdown.clear_parser_cache()
+    python.clear_parser_cache()
+    check()
+    assert constructions == 2
+
+
+def test_scan_benchmark_uses_policy_and_actual_utf8_bytes(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    documents = {
+        Path("notes.md"): "Café operators delve in order to retry with a key.\n",
+        Path("client.py"): '"""This delves into retries."""\n',
+        Path("ignored.py"): '"""This delves into setup."""\n',
+    }
+    config = Config(
+        select=["V001", "V009", "V015"],
+        severity="warning",
+        min_confidence="high",
+        per_file_ignores=[PerFileIgnore(pattern="ignored.py", ignore=["V001"])],
+    )
+    monkeypatch.setattr(
+        bench_rules.time, "perf_counter", iter([0.0, 0.2, 1.0, 1.4, 2.0, 2.3]).__next__
+    )
+
+    result = bench_rules.run_scan_benchmark("unicode", documents, config, iterations=3)
+
+    assert result.measurement == "in-memory production scan"
+    assert result.content_size == sum(
+        len(text.encode("utf-8")) for text in documents.values()
+    )
+    assert result.files_checked == 3
+    assert result.num_rules == 1
+    assert result.issues_found == 2
+    assert result.duration_ms == pytest.approx(300.0)
+    assert result.min_duration_ms == pytest.approx(200.0)
+    assert result.max_duration_ms == pytest.approx(400.0)
+    assert result.throughput_kb_per_sec == pytest.approx(
+        result.content_size / 1024 / 0.3
+    )
+    assert result.files_per_sec == pytest.approx(10.0)
+    assert result.policy["min_confidence"] == "high"
+    assert len(result.workload_sha256) == 64
+    assert result.environment["python"]
+
+
+@pytest.mark.parametrize("cache_state", ["warm", "cleared"])
+def test_scan_benchmark_controls_parser_cache_state(
+    monkeypatch: pytest.MonkeyPatch, cache_state: str
+) -> None:
+    original_init = markdown.MarkdownParser.__init__
+    constructions = 0
+
+    def count_init(self: markdown.MarkdownParser, source: str) -> None:
+        nonlocal constructions
+        constructions += 1
+        original_init(self, source)
+
+    monkeypatch.setattr(markdown.MarkdownParser, "__init__", count_init)
+
+    result = bench_rules.run_scan_benchmark(
+        "cache",
+        {Path("notes.md"): "This delves into setup."},
+        Config(select=["V001"]),
+        iterations=2,
+        cache_state=cache_state,
+    )
+
+    assert result.cache_state == cache_state
+    assert constructions == (1 if cache_state == "warm" else 3)
+
+
+def test_directory_benchmark_includes_discovery_reading_and_filtering(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    (tmp_path / ".gitignore").write_text("/docs/ignored.md\n")
+    docs = tmp_path / "docs"
+    docs.mkdir()
+    (docs / "notes.md").write_text("Café operators delve into setup.\n")
+    (docs / "client.py").write_text('"""This delves into setup."""\n')
+    (docs / "clean.md").write_text("Read the setup guide.\n")
+    (docs / "ignored.md").write_text("This delves into setup.\n")
+    monkeypatch.chdir(tmp_path)
+    original_read = Linter.check_file
+    reads: list[Path] = []
+
+    def record_read(self: Linter, path: Path):  # type: ignore[no-untyped-def]
+        reads.append(path)
+        return original_read(self, path)
+
+    monkeypatch.setattr(Linter, "check_file", record_read)
+    config = Config(select=["V001"], min_confidence="high")
+    result = bench_rules.run_workspace_benchmark(
+        "directory", [Path("docs")], config, iterations=2
+    )
+    documents = {
+        file: file.read_text(encoding="utf-8")
+        for file in docs.iterdir()
+        if file.name != "ignored.md"
+    }
+    memory = bench_rules.run_scan_benchmark("memory", documents, config, iterations=2)
+
+    assert result.measurement == "directory discovery/read/production scan"
+    assert set(reads) == {
+        Path("docs/notes.md"),
+        Path("docs/client.py"),
+        Path("docs/clean.md"),
+    }
+    assert len(reads) == 9
+    assert result.files_checked == memory.files_checked == 3
+    assert result.issues_found == memory.issues_found == 2
+    assert result.content_size == memory.content_size
+    assert result.workload_sha256 == memory.workload_sha256
+
+
+def test_cold_cli_benchmark_includes_json_serialization(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = tmp_path / "docs"
+    root.mkdir()
+    (root / "notes.md").write_text("Café operators delve into setup.\n")
+    config = tmp_path / "benchmark.toml"
+    config.write_text('select = ["V001"]\nmin_confidence = "high"\n')
+    commands: list[list[str]] = []
+    original_run = subprocess.run
+
+    def fake_run(
+        command: list[str], **kwargs: object
+    ) -> subprocess.CompletedProcess[str]:
+        if "-m" not in command:
+            return original_run(command, **kwargs)
+        commands.append(command)
+        return subprocess.CompletedProcess(
+            command,
+            1,
+            stdout=json.dumps({"summary": {"files_checked": 1, "total_issues": 1}}),
+            stderr="",
+        )
+
+    monkeypatch.setattr(bench_rules.subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        bench_rules.time, "perf_counter", iter([0.0, 0.1, 1.0, 1.2]).__next__
+    )
+
+    result = bench_rules.run_cli_benchmark("cold", [root], config, iterations=2)
+
+    assert result.measurement == "cold subprocess CLI with JSON serialization"
+    assert result.cache_state == "new process"
+    assert result.duration_ms == pytest.approx(150.0)
+    assert result.files_checked == 1
+    assert result.issues_found == 1
+    assert len(commands) == 2
+    assert all(command[-2:] == ["--format", "json"] for command in commands)
+    assert all(str(config) in command and str(root) in command for command in commands)
+
+
+def test_direct_benchmark_labels_stress_and_counts_utf8_bytes() -> None:
+    result = bench_rules.run_benchmark(
+        "direct", "Café operators delve into setup.", "sample.md", iterations=1
+    )
+
+    assert result.measurement == "direct-rule stress"
+    assert result.content_size == len("Café operators delve into setup.".encode())
+
+
+def test_workspace_fixture_distinguishes_cache_pressure_and_repeated_content(
+    tmp_path: Path,
+) -> None:
+    distinct = tmp_path / "distinct"
+    repeated = tmp_path / "repeated"
+    bench_rules.write_workspace(distinct, small_files=40)
+    bench_rules.write_workspace(repeated, small_files=40, repeated=True)
+    distinct_texts = {file.read_text() for file in (distinct / "small").iterdir()}
+    repeated_texts = {file.read_text() for file in (repeated / "small").iterdir()}
+
+    assert len(distinct_texts) == 40
+    assert len(repeated_texts) == 2
+    assert (distinct / "code-heavy.md").stat().st_size > 1024
+    assert (distinct / "code-heavy.py").stat().st_size > 1024
+    assert (distinct / ".gitignore").read_text() == "/ignored/\n"
+
+
+def test_workload_checksum_does_not_depend_on_temporary_directory(
+    tmp_path: Path,
+) -> None:
+    first = bench_rules.run_scan_benchmark(
+        "first", {tmp_path / "a/notes.md": "Café."}, iterations=1
+    )
+    second = bench_rules.run_scan_benchmark(
+        "second", {tmp_path / "b/notes.md": "Café."}, iterations=1
+    )
+    changed = bench_rules.run_scan_benchmark(
+        "changed", {tmp_path / "b/notes.md": "Résumé."}, iterations=1
+    )
+
+    assert first.workload_sha256 == second.workload_sha256
+    assert first.workload_sha256 != changed.workload_sha256
+
+
+@pytest.mark.parametrize("iterations", [0, -1])
+def test_benchmark_rejects_nonpositive_iterations(iterations: int) -> None:
+    with pytest.raises(ValueError, match="iterations must be positive"):
+        bench_rules.run_scan_benchmark("invalid", {}, iterations=iterations)
+
+
+@pytest.mark.parametrize("cache_state", ["new process", "invalid"])
+def test_in_memory_benchmark_rejects_misleading_cache_labels(cache_state: str) -> None:
+    with pytest.raises(ValueError, match="cache_state must be warm or cleared"):
+        bench_rules.run_scan_benchmark(
+            "invalid", {}, iterations=1, cache_state=cache_state
+        )
 
 
 def test_memory_probe_accepts_small_workspace(capsys) -> None:  # type: ignore[no-untyped-def]

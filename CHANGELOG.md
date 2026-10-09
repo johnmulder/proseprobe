@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Production scan and cold-CLI benchmarks with cache/workload provenance,
+  measured byte/file rates, and deterministic timing-calculation tests.
+
 - Evaluation-only dataset adapters, pinned provenance and split validation,
   and a 300-unit external pilot prepared for blind human annotation.
 

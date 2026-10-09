@@ -40,6 +40,18 @@
 `make nfr-check` enforces the coverage, startup, and memory targets. Processing
 speed remains a tracked metric until the benchmark corpus reflects real projects.
 
+The benchmark labels direct-rule stress, production in-memory scans, directory
+discovery/read scans, and new-process CLI scans separately. CLI timing includes
+JSON serialization. Reports use UTF-8 bytes, actual file counts, median and
+minimum/maximum durations, effective policy, workload checksum, and environment.
+Warm and explicitly cleared parser-cache runs do not claim cold filesystem
+caches. Distinct small files and repeated-content workloads remain separate.
+
+```bash
+rtk proxy .venv/bin/python -m benchmarks.bench_rules --mode scan --iterations 5 --format json
+rtk proxy .venv/bin/python -m benchmarks.bench_rules --mode scan --profile technical-docs --workspace docs/ --format json
+```
+
 ## 3. Detection Rules
 
 ### 3.1 Rule Categories
