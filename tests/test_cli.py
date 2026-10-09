@@ -7,7 +7,7 @@ import json
 import subprocess
 import sys
 from contextlib import redirect_stderr, redirect_stdout
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from unittest.mock import patch
 
@@ -42,6 +42,90 @@ def run_cli(*args: str, stdin: str | None = None) -> Result:
     except SystemExit as exc:
         exit_code = exc.code if isinstance(exc.code, int) else 1
     return Result(exit_code=exit_code, stdout=out.getvalue(), stderr=err.getvalue())
+
+
+@pytest.mark.parametrize(
+    ("config_text", "overrides"),
+    [
+        ("", {}),
+        *[
+            ("", {"profile": name})
+            for name in (
+                "academic",
+                "business",
+                "general",
+                "journalism",
+                "technical-docs",
+            )
+        ],
+        ("", {"severity": "info"}),
+        ("", {"severity": "error"}),
+        ("", {"min_confidence": "high"}),
+        ("", {"hide_low": True}),
+        ("", {"hide_low": True, "min_confidence": "low"}),
+        ("", {"select": "V001,V015", "severity": "info"}),
+        ("", {"select": "V", "ignore": "V001"}),
+        ('ignore = ["V"]\n', {"select": "V001"}),
+        ('profile = "business"\n', {"profile": "general"}),
+        ('[severity]\nV001 = "error"\n', {"severity": "error"}),
+        ('[[per-file-ignores]]\npattern = "doc.md"\nignore = ["V001"]\n', {}),
+    ],
+)
+def test_explicit_policy_matches_cli_complete_issue_records(
+    tmp_path: Path, config_text: str, overrides: dict[str, str | bool]
+) -> None:
+    from proseprobe.core.policy import filter_by_confidence, prepare_scan
+
+    config_path = tmp_path / "config.toml"
+    config_path.write_text(config_text)
+    markdown = tmp_path / "doc.md"
+    markdown.write_text(
+        "# TITLE\n\nDelve into a notable topic.\n\nRelease 4 is the fastest parser.\n"
+        "\nThis is the fastest parser.\n"
+        "\n<!-- proseprobe: ignore=V001 -->\ndelve\n"
+    )
+    python = tmp_path / "doc.py"
+    python.write_text(
+        '"""Delve into a notable topic."""\n# proseprobe: ignore=V001\n# delve\n'
+    )
+    args = [
+        "check",
+        str(markdown),
+        str(python),
+        "--config",
+        str(config_path),
+        "--format",
+        "json",
+    ]
+    for name, value in overrides.items():
+        args.append(f"--{name.replace('_', '-')}")
+        if value is not True:
+            args.append(str(value))
+
+    cli = run_cli(*args)
+    config, linter, _rules = prepare_scan(load_config(config_path), **overrides)
+    raw = linter.check([markdown, python])
+    actual = filter_by_confidence(raw.issues_by_file, config.min_confidence)
+    expected_files = []
+    for path, issues in sorted(actual.items()):
+        records = []
+        for issue in issues:
+            record = asdict(issue)
+            record["severity"] = issue.severity.value
+            record["confidence"] = issue.confidence.value
+            records.append(record)
+        expected_files.append({"path": str(path), "issues": records})
+
+    assert cli.stderr == ""
+    assert json.loads(cli.stdout)["files"] == expected_files
+    assert json.loads(cli.stdout)["summary"]["files_checked"] == raw.files_checked == 2
+    assert cli.exit_code == int(
+        any(
+            issue.severity.value in {"warning", "error"}
+            for issues in actual.values()
+            for issue in issues
+        )
+    )
 
 
 class TestCheckCommand:

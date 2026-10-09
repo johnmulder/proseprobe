@@ -3,15 +3,22 @@
 
 from __future__ import annotations
 
+import argparse
+import hashlib
 import json
+import subprocess
 import sys
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
-from proseprobe.config import Config
+from proseprobe import __version__
+from proseprobe.config import Config, ConfigError
 from proseprobe.core.linter import Linter
+from proseprobe.core.policy import filter_by_confidence, prepare_scan
+from proseprobe.profiles import PROFILES
 from proseprobe.rules import get_all_rules
+from proseprobe.rules.base import Rule
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = REPO_ROOT / "quality" / "annotations.json"
@@ -388,15 +395,67 @@ def format_report(score: QualityScore) -> str:
     return "\n".join(lines)
 
 
+def prepare_evaluation_scan(
+    *,
+    mode: str | None = None,
+    config: Config | None = None,
+    profile: str | None = None,
+    select: str | None = None,
+    ignore: str | None = None,
+    severity: str | None = None,
+    min_confidence: str | None = None,
+) -> tuple[Config, Linter, list[Rule]]:
+    """Construct isolated legacy or production policy without config discovery."""
+    overrides = (config is not None, profile, select, ignore, severity, min_confidence)
+    mode = mode or ("production" if any(overrides) else "all-rules")
+    if mode == "all-rules":
+        if any(overrides):
+            raise ValueError("all-rules mode cannot be combined with policy overrides")
+        return prepare_scan(Config(), severity="info", min_confidence="low")
+    if mode != "production":
+        raise ValueError(f"unknown evaluation mode: {mode}")
+    return prepare_scan(
+        config if config is not None else Config(),
+        profile=profile,
+        select=select,
+        ignore=ignore,
+        severity=severity,
+        min_confidence=min_confidence,
+    )
+
+
+def eligible_annotations(
+    annotations: Annotations,
+    repo_root: Path,
+    linter: Linter,
+    rules: list[Rule],
+) -> Annotations:
+    """Keep labels enabled by rule, severity, and file policy before confidence."""
+    rules_by_id = {rule.id: rule for rule in rules}
+
+    def eligible(item: ExpectedFinding | NegativeCase) -> bool:
+        rule = rules_by_id.get(item.rule_id)
+        return rule is not None and linter._rule_enabled(rule, repo_root / item.path)
+
+    return Annotations(
+        annotations.files,
+        tuple(item for item in annotations.expected if eligible(item)),
+        tuple(item for item in annotations.negative_cases if eligible(item)),
+    )
+
+
 def collect_findings(
-    annotations: Annotations, repo_root: Path
+    annotations: Annotations,
+    repo_root: Path,
+    *,
+    linter: Linter | None = None,
+    min_confidence: str = "low",
 ) -> tuple[ActualFinding, ...]:
-    """Run all default rules against the annotated files."""
-    config = Config()
-    linter = Linter(config)
-    for rule in get_all_rules(config):
-        linter.register_rule(rule)
-    results = linter.check(list(annotations.files)).issues_by_file
+    """Collect findings under explicit policy or the legacy all-rules default."""
+    if linter is None:
+        _config, linter, _rules = prepare_evaluation_scan()
+    raw = linter.check(list(annotations.files))
+    results = filter_by_confidence(raw.issues_by_file, min_confidence)
 
     findings: list[ActualFinding] = []
     resolved_root = repo_root.resolve()
@@ -415,24 +474,138 @@ def collect_findings(
     return tuple(sorted(findings))
 
 
-def main() -> int:
-    """Run the quality benchmark."""
-    rules = get_all_rules(Config())
+def format_json_report(
+    score: QualityScore,
+    *,
+    mode: str,
+    config: Config,
+    annotations: Annotations,
+    eligible: Annotations,
+    manifest_path: Path,
+    repo_root: Path,
+) -> str:
+    """Report counts with explicit policy and reproducible corpus provenance."""
+    root = repo_root.resolve()
+    hashes = {
+        path.resolve().relative_to(root).as_posix(): hashlib.sha256(
+            path.read_bytes()
+        ).hexdigest()
+        for path in sorted(annotations.files)
+    }
+    try:
+        revision = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD"],  # noqa: S607 - installed Git
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        commit = revision.stdout.strip() if revision.returncode == 0 else None
+    except OSError:
+        commit = None
+    policy = asdict(config)
+    policy["source_path"] = str(config.source_path) if config.source_path else None
+    totals = {
+        name: sum(getattr(metrics, name) for metrics in score.metrics.values())
+        for name in asdict(RuleMetrics())
+    }
+    return json.dumps(
+        {
+            "schema_version": 1,
+            "version": __version__,
+            "revision": commit,
+            "mode": mode,
+            "scoring": "exact-start",
+            "policy": policy,
+            "corpus": {
+                "manifest_sha256": hashlib.sha256(
+                    manifest_path.read_bytes()
+                ).hexdigest(),
+                "files": hashes,
+                "files_count": len(annotations.files),
+                "expected_count": len(annotations.expected),
+                "negative_count": len(annotations.negative_cases),
+            },
+            "excluded_expected": len(annotations.expected) - len(eligible.expected),
+            "excluded_negatives": len(annotations.negative_cases)
+            - len(eligible.negative_cases),
+            "rules": {
+                rule_id: asdict(metrics)
+                for rule_id, metrics in sorted(score.metrics.items())
+            },
+            "totals": totals,
+            "false_positives": [asdict(item) for item in score.false_positives],
+            "false_negatives": [asdict(item) for item in score.false_negatives],
+        },
+        sort_keys=True,
+        indent=2,
+    )
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run legacy all-rules or isolated production-policy evaluation."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--mode", choices=("all-rules", "production"))
+    parser.add_argument("--profile", choices=sorted(PROFILES))
+    parser.add_argument("--severity", choices=("info", "warning", "error"))
+    parser.add_argument("--min-confidence", choices=("low", "medium", "high"))
+    parser.add_argument("--format", choices=("text", "json"), default="text")
+    args = parser.parse_args(argv)
+    mode = args.mode or (
+        "production"
+        if any((args.profile, args.severity, args.min_confidence))
+        else "all-rules"
+    )
+    try:
+        config, linter, rules = prepare_evaluation_scan(
+            mode=mode,
+            profile=args.profile,
+            severity=args.severity,
+            min_confidence=args.min_confidence,
+        )
+    except ValueError as exc:
+        parser.error(str(exc))
     rule_ids = {rule.id for rule in rules}
     try:
-        annotations = load_annotations(DEFAULT_MANIFEST, REPO_ROOT, rule_ids)
-        actual = collect_findings(annotations, REPO_ROOT)
-    except (AnnotationError, OSError, UnicodeDecodeError) as exc:
+        registry_ids = {rule.id for rule in get_all_rules()}
+        annotations = load_annotations(DEFAULT_MANIFEST, REPO_ROOT, registry_ids)
+        eligible = (
+            eligible_annotations(annotations, REPO_ROOT, linter, rules)
+            if mode == "production"
+            else annotations
+        )
+        actual = collect_findings(
+            annotations, REPO_ROOT, linter=linter, min_confidence=config.min_confidence
+        )
+        score = score_findings(
+            eligible.expected,
+            actual,
+            eligible.negative_cases,
+            rule_ids,
+        )
+        output = (
+            format_json_report(
+                score,
+                mode=mode,
+                config=config,
+                annotations=annotations,
+                eligible=eligible,
+                manifest_path=DEFAULT_MANIFEST,
+                repo_root=REPO_ROOT,
+            )
+            if args.format == "json"
+            else format_report(score)
+        )
+    except (AnnotationError, ConfigError, OSError, UnicodeDecodeError) as exc:
         print(f"Rule quality error: {exc}", file=sys.stderr)
         return 2
-
-    score = score_findings(
-        annotations.expected,
-        actual,
-        annotations.negative_cases,
-        rule_ids,
-    )
-    print(format_report(score))
+    if args.format == "text":
+        print(
+            f"Mode: {mode}; severity: {config.severity}; minimum confidence: {config.min_confidence}"
+        )
+        print(
+            f"Policy exclusions: {len(annotations.expected) - len(eligible.expected)} expected, {len(annotations.negative_cases) - len(eligible.negative_cases)} negatives"
+        )
+    print(output)
     return 0
 
 

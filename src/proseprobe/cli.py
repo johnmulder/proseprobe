@@ -11,45 +11,25 @@ from typing import TYPE_CHECKING
 
 from proseprobe import __version__
 from proseprobe._ansi import clear_screen, style, table
-from proseprobe.config import ConfigError, load_config, validate_rule_references
+from proseprobe.config import ConfigError, load_config
 from proseprobe.core.baseline import Baseline, filter_new_issues, resolve_workspace
 from proseprobe.core.linter import Linter, LintReadError, LintResults
+from proseprobe.core.policy import filter_by_confidence, prepare_scan
 from proseprobe.core.reporter import JSON_SCHEMA_VERSION
-from proseprobe.profiles import EXPERIMENTAL_RULES, PROFILES
+from proseprobe.profiles import PROFILES
 from proseprobe.rules import (
-    get_all_rules,
     get_rule_metadata,
     get_rule_metadata_by_id,
 )
 from proseprobe.rules.base import (
-    Confidence,
     Issue,
     Rule,
     RuleMetadata,
     Severity,
-    severity_from_str,
-    severity_rank,
 )
 
 if TYPE_CHECKING:
     from proseprobe.config import Config
-
-_CONFIDENCE_RANK = {Confidence.LOW: 0, Confidence.MEDIUM: 1, Confidence.HIGH: 2}
-
-
-def _confidence_rank(confidence: Confidence) -> int:
-    """Return numeric rank for confidence comparisons."""
-    return _CONFIDENCE_RANK.get(confidence, 0)
-
-
-def _parse_confidence(value: str) -> Confidence | None:
-    """Parse a confidence string into a Confidence enum."""
-    mapping = {
-        "high": Confidence.HIGH,
-        "medium": Confidence.MEDIUM,
-        "low": Confidence.LOW,
-    }
-    return mapping.get(value.lower())
 
 
 def _validate_existing_paths(paths: list[Path]) -> int | None:
@@ -61,52 +41,6 @@ def _validate_existing_paths(paths: list[Path]) -> int | None:
     for path in missing_paths:
         print(f"Path does not exist: {path}", file=sys.stderr)
     return 2
-
-
-def _split_rule_tokens(value: str) -> list[str]:
-    """Split a comma-separated rule list into normalized tokens."""
-    return [token.strip().upper() for token in value.split(",") if token.strip()]
-
-
-def _selection_overrides_ignore(ignored: str, selected: list[str]) -> bool:
-    """Return True when a selected rule or prefix should re-enable an ignore."""
-    ignored = ignored.upper()
-    return any(
-        ignored == token
-        or (len(ignored) == 1 and token.startswith(ignored))
-        or (len(token) == 1 and ignored.startswith(token))
-        for token in selected
-    )
-
-
-def _apply_rule_cli_overrides(config: Config, args: argparse.Namespace) -> None:
-    """Apply CLI rule selection flags on top of loaded config."""
-    if args.select:
-        selected = _split_rule_tokens(args.select)
-        config.select = selected
-        config.ignore = [
-            ignored
-            for ignored in config.ignore
-            if not _selection_overrides_ignore(ignored, selected)
-        ]
-
-    if args.ignore:
-        existing = {ignored.upper() for ignored in config.ignore}
-        for ignored in _split_rule_tokens(args.ignore):
-            if ignored not in existing:
-                config.ignore.append(ignored)
-                existing.add(ignored)
-
-
-def _apply_cli_profile(config: Config, profile_name: str | None) -> None:
-    """Replace lower-layer profile policy with a CLI profile."""
-    if profile_name is None:
-        return
-    profile = PROFILES[profile_name]
-    config.profile = profile_name
-    config.select = sorted(profile.rules)
-    config.severity = profile.minimum_severity
-    config.min_confidence = profile.min_confidence
 
 
 # ---------------------------------------------------------------------------
@@ -123,19 +57,7 @@ def _filter_by_confidence(
     effective_confidence = args.min_confidence or (
         "medium" if args.hide_low else config.min_confidence
     )
-    confidence_threshold = _parse_confidence(effective_confidence)
-    if not confidence_threshold or confidence_threshold == Confidence.LOW:
-        return results
-    filtered = {
-        path: [
-            issue
-            for issue in issues
-            if _confidence_rank(issue.confidence)
-            >= _confidence_rank(confidence_threshold)
-        ]
-        for path, issues in results.items()
-    }
-    return {path: issues for path, issues in filtered.items() if issues}
+    return filter_by_confidence(results, effective_confidence)
 
 
 def _load_requested_baseline(args: argparse.Namespace) -> Baseline | None:
@@ -192,41 +114,15 @@ def _apply_baseline(
 def _prepare_scan(args: argparse.Namespace) -> tuple[Config, Linter, list[Rule]]:
     """Load config and build a linter with the effective active rules."""
     config_path = Path(args.config) if args.config else None
-    config = load_config(config_path)
-    registry_rules = get_all_rules()
-    valid_rule_ids = {rule.id for rule in registry_rules}
-    profiled_rule_ids = set().union(*(profile.rules for profile in PROFILES.values()))
-    categorized_rule_ids = profiled_rule_ids | EXPERIMENTAL_RULES
-    if categorized_rule_ids != valid_rule_ids or profiled_rule_ids & EXPERIMENTAL_RULES:
-        unknown = sorted(categorized_rule_ids - valid_rule_ids)
-        missing = sorted(valid_rule_ids - categorized_rule_ids)
-        raise ConfigError(
-            Path("<profiles>"),
-            f"profile catalog mismatch (unknown={unknown}, untagged={missing})",
-        )
-    validate_rule_references(config, valid_rule_ids)
-    _apply_cli_profile(config, args.profile)
-    _apply_rule_cli_overrides(config, args)
-    if args.profile or args.select or args.ignore:
-        validate_rule_references(config, valid_rule_ids, Path("<command line>"))
-
-    min_severity = severity_from_str(
-        args.severity or config.severity,
-        Severity.WARNING,
+    return prepare_scan(
+        load_config(config_path),
+        profile=args.profile,
+        select=args.select,
+        ignore=args.ignore,
+        severity=args.severity,
+        min_confidence=args.min_confidence,
+        hide_low=args.hide_low,
     )
-    if min_severity is None:  # pragma: no cover
-        min_severity = Severity.WARNING
-
-    all_rules = get_all_rules(config)
-    linter = Linter(config, valid_rule_ids=valid_rule_ids)
-    active_rules = [
-        rule
-        for rule in all_rules
-        if severity_rank(rule.severity) >= severity_rank(min_severity)
-    ]
-    for rule in active_rules:
-        linter.register_rule(rule)
-    return config, linter, active_rules
 
 
 def _scan_paths(

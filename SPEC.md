@@ -414,6 +414,7 @@ version changes only for incompatible contract changes.
 | `cli` | Command parsing, argument validation |
 | `config` | Configuration loading and merging |
 | `core/linter` | File discovery, rule orchestration |
+| `core/policy` | Explicit scan policy construction and confidence filtering |
 | `core/reporter` | Output formatting (text/JSON/JSONL/SARIF) |
 | `rules/base` | Abstract rule interface |
 | `rules/__init__` | Rule registry and immutable metadata projection |

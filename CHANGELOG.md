@@ -39,6 +39,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Shared explicit scan policy between the CLI and quality evaluation, with
+  isolated production-policy measurements and JSON corpus provenance.
+
 - Renamed the project, distribution, import package, executable, configuration,
   directives, baseline, integrations, and metadata to ProseProbe/`proseprobe`.
 - Shared and bounded Python and Markdown parsing caches across applicable rules.

@@ -1,5 +1,6 @@
 """Tests for the reviewed-corpus quality evaluator."""
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -9,6 +10,7 @@ from benchmarks.rule_quality import (
     REPO_ROOT,
     ActualFinding,
     AnnotationError,
+    Annotations,
     ExpectedFinding,
     NegativeCase,
     collect_findings,
@@ -20,6 +22,166 @@ from benchmarks.rule_quality import (
 from proseprobe.config import Config
 from proseprobe.core.linter import Linter
 from proseprobe.rules import get_all_rules
+
+
+@pytest.mark.parametrize(
+    "profile", [None, "academic", "business", "general", "journalism", "technical-docs"]
+)
+def test_production_evaluation_matches_cli(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, profile: str | None
+) -> None:
+    from benchmarks.rule_quality import prepare_evaluation_scan
+
+    from tests.test_cli import run_cli
+
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".proseprobe.toml").write_text('select = ["M007"]\n')
+    config_path = tmp_path / "isolated.toml"
+    config_path.write_text("")
+    source = tmp_path / "doc.md"
+    source.write_text(
+        "# TITLE\n\nDelve into a notable topic.\n\nRelease 4 is the fastest parser.\n"
+    )
+    annotations = Annotations((source,), (), ())
+    config, linter, _rules = prepare_evaluation_scan(mode="production", profile=profile)
+    actual = collect_findings(
+        annotations, tmp_path, linter=linter, min_confidence=config.min_confidence
+    )
+    args = ["check", str(source), "--config", str(config_path), "--format", "json"]
+    if profile is not None:
+        args.extend(["--profile", profile])
+    cli = run_cli(*args)
+    records = [
+        issue for file in json.loads(cli.stdout)["files"] for issue in file["issues"]
+    ]
+
+    assert [
+        (item.rule_id, item.line, item.column, item.message) for item in actual
+    ] == sorted(
+        (item["rule_id"], item["line"], item["column"], item["message"])
+        for item in records
+    )
+    assert config.source_path is None
+
+
+def test_policy_eligibility_excludes_disabled_severity_and_file_context_but_not_confidence(
+    tmp_path: Path,
+) -> None:
+    from benchmarks.rule_quality import eligible_annotations, prepare_evaluation_scan
+
+    source = tmp_path / "doc.md"
+    source.write_text("notable\nplain\n")
+    expected = (
+        ExpectedFinding("doc.md", "V001", 1, 1),
+        ExpectedFinding("doc.md", "T001", 1, 1),
+        ExpectedFinding("doc.md", "C001", 1, 1),
+        ExpectedFinding("doc.md", "V004", 1, 1),
+        ExpectedFinding("doc.md", "V015", 1, 1),
+    )
+    negatives = (NegativeCase("doc.md", "V001", 2, "plain"),)
+    annotations = Annotations((source,), expected, negatives)
+    config, linter, rules = prepare_evaluation_scan(
+        mode="production", select="V001,T001,C001", min_confidence="high"
+    )
+    eligible = eligible_annotations(annotations, tmp_path, linter, rules)
+    actual = collect_findings(
+        annotations, tmp_path, linter=linter, min_confidence=config.min_confidence
+    )
+    score = score_findings(
+        eligible.expected, actual, eligible.negative_cases, {rule.id for rule in rules}
+    )
+
+    assert eligible.expected == (expected[0],)
+    assert actual == ()
+    assert score.metrics["V001"].false_negatives == 1
+
+
+def test_legacy_mode_retains_all_rules_and_is_explicit() -> None:
+    from benchmarks.rule_quality import prepare_evaluation_scan
+
+    implicit = prepare_evaluation_scan()
+    explicit = prepare_evaluation_scan(mode="all-rules")
+    assert implicit[0].severity == explicit[0].severity == "info"
+    assert implicit[0].min_confidence == explicit[0].min_confidence == "low"
+    assert {rule.id for rule in explicit[2]} == {rule.id for rule in get_all_rules()}
+    assert prepare_evaluation_scan(profile="general")[0].profile == "general"
+    with pytest.raises(ValueError, match="all-rules"):
+        prepare_evaluation_scan(mode="all-rules", profile="general")
+
+
+def test_quality_json_reports_deterministic_policy_counts_and_corpus_identity(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    import benchmarks.rule_quality as evaluator
+
+    source = tmp_path / "doc.md"
+    source.write_text("delve\nplain\n")
+    manifest = _write_manifest(tmp_path, _valid_manifest())
+    monkeypatch.setattr(evaluator, "DEFAULT_MANIFEST", manifest)
+    monkeypatch.setattr(evaluator, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(
+        evaluator,
+        "load_annotations",
+        lambda _manifest, _root, _ids: evaluator.Annotations(
+            (source,),
+            (ExpectedFinding("doc.md", "V001", 1, 1),),
+            (NegativeCase("doc.md", "V001", 2, "plain"),),
+        ),
+    )
+
+    args = [
+        "--mode",
+        "production",
+        "--profile",
+        "general",
+        "--severity",
+        "warning",
+        "--min-confidence",
+        "high",
+        "--format",
+        "json",
+    ]
+    assert evaluator.main(args) == 0
+    first = capsys.readouterr().out
+    assert evaluator.main(args) == 0
+    assert capsys.readouterr().out == first
+    report = json.loads(first)
+    assert report["mode"] == "production"
+    assert report["policy"]["profile"] == "general"
+    assert report["policy"]["severity"] == "warning"
+    assert report["policy"]["min_confidence"] == "high"
+    assert report["totals"]["true_positives"] == 1
+    assert report["totals"]["false_negatives"] == 0
+    assert (
+        report["corpus"]["manifest_sha256"]
+        == hashlib.sha256(manifest.read_bytes()).hexdigest()
+    )
+    assert (
+        report["corpus"]["files"]["doc.md"]
+        == hashlib.sha256(source.read_bytes()).hexdigest()
+    )
+    assert report["corpus"]["files_count"] == 1
+    assert report["version"]
+    assert report["revision"] is None
+
+
+@pytest.mark.parametrize(
+    "args",
+    [
+        ["--profile", "unknown"],
+        ["--severity", "unknown"],
+        ["--min-confidence", "unknown"],
+        ["--mode", "all-rules", "--profile", "general"],
+        ["--baseline", "anything"],
+    ],
+)
+def test_quality_rejects_invalid_policy_and_baseline_options(args: list[str]) -> None:
+    import benchmarks.rule_quality as evaluator
+
+    with pytest.raises(SystemExit) as exc:
+        evaluator.main(args)
+    assert exc.value.code == 2
+
 
 _EXACT_SPAN_RULE_IDS = frozenset(
     {

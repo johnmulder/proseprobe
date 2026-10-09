@@ -5,6 +5,29 @@ precision and recall. It complements unit tests: unit tests prove that a pattern
 can fire, while this corpus records whether findings are correct in surrounding
 technical, academic, business, journalistic, changelog, and Python content.
 
+## Evaluation policy
+
+`make rule-quality` retains the historical all-rules measurement with
+informational findings and low minimum confidence. It uses explicit defaults
+without discovering repository or user configuration. Production-policy
+measurements use the same construction and confidence filters as the CLI:
+
+```bash
+rtk proxy .venv/bin/python -m benchmarks.rule_quality --mode production --format json
+rtk proxy .venv/bin/python -m benchmarks.rule_quality --profile technical-docs --format json
+rtk proxy .venv/bin/python -m benchmarks.rule_quality --severity warning --min-confidence high --format json
+```
+
+Policy options imply production mode. Explicit all-rules mode rejects those
+options so its name continues to describe the measured policy. Baselines are
+excluded from effectiveness evaluation. Genuine eligible issues removed by a
+confidence filter still count as missed detections.
+
+JSON reports contain the effective policy, package version, Git revision,
+manifest and source checksums, counts, and mismatch details. They retain the
+exact-start scoring definition. Rule/severity/file-policy exclusions are
+reported separately from missed eligible findings.
+
 `annotations.json` also references selected files under `tests/fixtures/` so
 existing examples remain the single source for those cases.
 

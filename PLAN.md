@@ -194,32 +194,32 @@ unclosed fences still produce accurate diagnostics.
 Targets: `src/proseprobe/cli.py`, `src/proseprobe/core/`, `src/proseprobe/config.py`,
 `benchmarks/rule_quality.py`, `tests/test_cli.py`, `tests/test_rule_quality.py`.
 
-- [ ] P04.1 Characterize policy precedence for configured profiles, CLI profiles,
+- [x] P04.1 Characterize policy precedence for configured profiles, CLI profiles,
   explicit selections, ignores, severity overrides, and confidence filtering.
   Reuse the existing CLI tests as the reference behavior.
-- [ ] P04.2 Add an evaluator-to-CLI parity test on one controlled Markdown file
+- [x] P04.2 Add an evaluator-to-CLI parity test on one controlled Markdown file
   and one Python file. Compare complete issue records after normalizing only
   path presentation and output envelopes.
-- [ ] P04.3 Extract only reusable policy construction and result filtering into
+- [x] P04.3 Extract only reusable policy construction and result filtering into
   core. Keep argument parsing, configuration discovery, and operational output
   in their existing layers; do not create a new framework.
-- [ ] P04.4 Add evaluator options for profile, minimum severity, and minimum
+- [x] P04.4 Add evaluator options for profile, minimum severity, and minimum
   confidence, and test their parsing and invalid-value diagnostics.
-- [ ] P04.5 Preserve a named all-rules measurement mode for the existing corpus,
+- [x] P04.5 Preserve a named all-rules measurement mode for the existing corpus,
   including experimental rules. Label it separately from default CLI behavior.
-- [ ] P04.6 Add parity cases for every built-in profile, no-profile behavior,
+- [x] P04.6 Add parity cases for every built-in profile, no-profile behavior,
   experimental-rule selection, per-file ignores, and inline suppressions.
-- [ ] P04.7 Keep baseline filtering out of raw effectiveness measurements.
+- [x] P04.7 Keep baseline filtering out of raw effectiveness measurements.
   Test baselined adoption behavior separately so accepted debt cannot inflate
   reported precision or recall.
-- [ ] P04.8 Report effective policy, package version, corpus identity, and metric
+- [x] P04.8 Report effective policy, package version, corpus identity, and metric
   counts in a deterministic machine-readable evaluation result.
-- [ ] P04.8a Test that ambient repository or user configuration cannot change a
+- [x] P04.8a Test that ambient repository or user configuration cannot change a
   frozen evaluation run. Use explicit isolated evaluation configuration, while
   preserving the CLI's ordinary configuration discovery.
-- [ ] P04.9 Verify that `check`, stdin, `watch`, and baseline maintenance retain
+- [x] P04.9 Verify that `check`, stdin, `watch`, and baseline maintenance retain
   their existing policy and exit-code contracts after extraction.
-- [ ] P04.10 Run CLI, configuration, profile, evaluator, and package checks.
+- [x] P04.10 Run CLI, configuration, profile, evaluator, and package checks.
 
 Acceptance: production-policy evaluation matches the CLI, and all-rules results
 remain available with an explicit label and unchanged legacy interpretation.
@@ -837,3 +837,18 @@ The CLI confirms code masking and retained surrounding prose. Valid and
 unclosed attributed fences are recorded in the corpus. The gate passed with
 2,035 tests; corpus counts are 303 true positives, 12 false positives, and no
 missed cases. No baseline entries were accepted.
+
+### P04 — Production-policy evaluation shared
+
+Thirty-one new policy/evaluator cases failed before implementation. The CLI and
+quality evaluator now share explicit scan construction and confidence filters.
+Legacy all-rules/info/low results remain the default; policy options select
+isolated production evaluation. Baselines are rejected, and confidence-filtered
+eligible positives remain missed detections.
+
+All 276 focused tests passed. JSON contains policy, version, revision, and
+manifest/source checksums. The integrated gate passed with 2,143 tests and
+unchanged 303/12/0 corpus counts. The source-only type gate passes; an extended
+benchmark type check found the same 18 existing errors as the prior commit.
+
+Implementation commits so far: P01 `917973e`, P02 `38a20fb`, P03 `0f8bbed`.
