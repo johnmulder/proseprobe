@@ -28,6 +28,7 @@ from proseprobe.parsers.prose import (
     iter_prose_scopes,
     iter_prose_sentences,
 )
+from proseprobe.rules._phrases import longest_literal_phrase_issues
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
 
@@ -432,23 +433,9 @@ class PedagogicalVoiceRule(Rule):
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for pedagogical voice."""
-        issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
-            line_lower = line.lower()
-            for phrase in PEDAGOGICAL_VOICE_PHRASES:
-                if phrase in line_lower:
-                    col = line_lower.find(phrase)
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Pedagogical voice: '{phrase}'",
-                            line=line_num,
-                            column=col + 1,
-                            end_column=col + len(phrase) + 1,
-                            severity=self.severity,
-                        )
-                    )
-        return issues
+        return longest_literal_phrase_issues(
+            self, content, filename, PEDAGOGICAL_VOICE_PHRASES, "Pedagogical voice"
+        )
 
 
 # ---------- Phase 1 (Journalism Tropes): G010 ----------

@@ -454,6 +454,66 @@ class TestPedagogicalVoice:
         issues = rule.check(text, "test.md")
         assert len(issues) >= 1
 
+    def test_dive_into_has_one_longest_match(self) -> None:
+        source = "Let's dive into the API."
+
+        [issue] = PedagogicalVoiceRule().check(source, "test.md")
+
+        assert issue.message == "Pedagogical voice: 'let's dive into'"
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            1,
+            None,
+            16,
+        )
+
+    def test_repeated_nonoverlapping_phrases_follow_source_order(self) -> None:
+        source = "Let's dive into A; let's dive into B; let's step back."
+
+        issues = PedagogicalVoiceRule().check(source, "test.md")
+
+        assert [
+            source[issue.column - 1 : issue.end_column - 1] for issue in issues
+        ] == ["Let's dive into", "let's dive into", "let's step back"]
+
+    @pytest.mark.parametrize(
+        ("source", "filename", "start", "end"),
+        [
+            ("Let's dive\ninto the API.", "test.md", (1, 1), (2, 5)),
+            ("> Let's dive\n> into the API.", "test.md", (1, 3), (2, 7)),
+            ('"""Let\'s dive\ninto the API."""', "test.py", (1, 4), (2, 5)),
+            ("# Let's dive\n# into the API.", "test.py", (1, 3), (2, 7)),
+        ],
+    )
+    def test_wrapped_phrase_has_exact_source_endpoints(
+        self, source: str, filename: str, start: tuple[int, int], end: tuple[int, int]
+    ) -> None:
+        [issue] = PedagogicalVoiceRule().check(source, filename)
+
+        assert issue.message == "Pedagogical voice: 'let's dive into'"
+        assert (issue.line, issue.column) == start
+        assert (issue.end_line, issue.end_column) == end
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "Let's dive inside the API.",
+            "Let's dive intoits details.",
+            "Mallet's dive into the API.",
+            "Let's dive `mode` into the API.",
+            "Let's dive <code>mode</code> into the API.",
+            "Let's dive\n\ninto the API.",
+            "- Let's dive\n- into the API.",
+            "Let's dive\n\n# into the API",
+            "Use `Let's dive into` as the label.",
+            "```text\nLet's dive into the API.\n```",
+        ],
+    )
+    def test_phrase_boundaries_and_masked_gaps_do_not_create_matches(
+        self, source: str
+    ) -> None:
+        assert PedagogicalVoiceRule().check(source, "test.md") == []
+
     def test_ignores_normal_prose(self) -> None:
         """Don't flag normal prose."""
         from proseprobe.rules.grammar import PedagogicalVoiceRule

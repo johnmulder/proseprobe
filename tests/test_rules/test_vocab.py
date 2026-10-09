@@ -380,6 +380,153 @@ class TestCollaborativePhrasesRule:
 
         assert len(issues) == 1
 
+    def test_dive_into_has_one_longest_match(
+        self, rule: CollaborativePhrasesRule
+    ) -> None:
+        source = "Let's dive into the API."
+
+        [issue] = rule.check(source, "test.md")
+
+        assert issue.message == "Collaborative phrase: 'Let's dive into'"
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            1,
+            None,
+            16,
+        )
+        assert issue.severity is Severity.WARNING
+        assert issue.confidence is Confidence.MEDIUM
+
+    def test_partly_overlapping_phrases_have_one_longest_owner(
+        self, rule: CollaborativePhrasesRule
+    ) -> None:
+        [issue] = rule.check("Just circling back on the proposal.", "test.md")
+
+        assert issue.message == "Collaborative phrase: 'just circling back'"
+        assert (issue.column, issue.end_column) == (1, 19)
+
+    def test_wrapping_does_not_change_overlapping_phrase_ownership(
+        self, rule: CollaborativePhrasesRule
+    ) -> None:
+        [issue] = rule.check("Just circling back\n    on the proposal.", "test.md")
+
+        assert issue.message == "Collaborative phrase: 'just circling back'"
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            1,
+            None,
+            19,
+        )
+
+    def test_repeated_nonoverlapping_phrases_follow_source_order(
+        self, rule: CollaborativePhrasesRule
+    ) -> None:
+        source = "Let's dive into A; let's dive into B; I hope this helps."
+
+        issues = rule.check(source, "test.md")
+
+        assert [
+            source[issue.column - 1 : issue.end_column - 1] for issue in issues
+        ] == ["Let's dive into", "let's dive into", "I hope this helps"]
+
+    @pytest.mark.parametrize(
+        ("source", "filename", "start", "end"),
+        [
+            ("Let's dive\ninto the API.", "test.md", (1, 1), (2, 5)),
+            ("> Let's dive\n> into the API.", "test.md", (1, 3), (2, 7)),
+            ('"""Let\'s dive\ninto the API."""', "test.py", (1, 4), (2, 5)),
+            ("# Let's dive\n# into the API.", "test.py", (1, 3), (2, 7)),
+        ],
+    )
+    def test_wrapped_phrase_has_exact_source_endpoints(
+        self,
+        rule: CollaborativePhrasesRule,
+        source: str,
+        filename: str,
+        start: tuple[int, int],
+        end: tuple[int, int],
+    ) -> None:
+        [issue] = rule.check(source, filename)
+
+        assert issue.message == "Collaborative phrase: 'Let's dive into'"
+        assert (issue.line, issue.column) == start
+        assert (issue.end_line, issue.end_column) == end
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "Let's dive inside the API.",
+            "Let's dive intoits details.",
+            "Mallet's dive into the API.",
+            "Let's dive `mode` into the API.",
+            "Let's dive <code>mode</code> into the API.",
+            "Let's dive\n\ninto the API.",
+            "- Let's dive\n- into the API.",
+            "Let's dive\n\n# into the API",
+            "Use `Let's dive into` as the label.",
+            "```text\nLet's dive into the API.\n```",
+        ],
+    )
+    def test_phrase_boundaries_and_masked_gaps_do_not_create_matches(
+        self, rule: CollaborativePhrasesRule, source: str
+    ) -> None:
+        assert rule.check(source, "test.md") == []
+
+    def test_punctuation_ending_callouts_keep_their_original_messages(
+        self, rule: CollaborativePhrasesRule
+    ) -> None:
+        issues = rule.check("Certainly! Absolutely!", "test.md")
+
+        assert [issue.message for issue in issues] == [
+            "Collaborative phrase: 'Certainly!'",
+            "Collaborative phrase: 'Absolutely!'",
+        ]
+
+    @pytest.mark.parametrize(
+        ("selected", "ignored", "expected"),
+        [
+            ("V002", None, ["V002"]),
+            ("G009", None, ["G009"]),
+            ("V002,G009", None, ["G009", "V002"]),
+            ("V002,G009", "V002", ["G009"]),
+        ],
+    )
+    def test_explicit_selections_preserve_each_diagnostic_id(
+        self, selected: str, ignored: str | None, expected: list[str]
+    ) -> None:
+        from pathlib import Path
+
+        from proseprobe.core.policy import prepare_scan
+
+        _, linter, _ = prepare_scan(
+            Config(), select=selected, ignore=ignored, severity="info"
+        )
+
+        issues = linter.check_content("Let's dive into the API.", Path("test.md"))
+
+        assert [issue.rule_id for issue in issues] == expected
+        assert all((issue.column, issue.end_column) == (1, 16) for issue in issues)
+
+    def test_suppression_preserves_the_other_selected_rule_on_a_wrapped_phrase(
+        self,
+    ) -> None:
+        from pathlib import Path
+
+        from proseprobe.core.policy import prepare_scan
+
+        _, linter, _ = prepare_scan(Config(), select="V002,G009", severity="info")
+        source = "<!-- proseprobe-ignore-next-line V002 -->\nLet's dive\ninto the API."
+
+        [issue] = linter.check_content(source, Path("test.md"))
+
+        assert issue.rule_id == "G009"
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            2,
+            1,
+            3,
+            5,
+        )
+
 
 class TestKnowledgeCutoffRule:
     """Tests for V003: Knowledge Cutoff."""

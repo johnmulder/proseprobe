@@ -208,3 +208,53 @@ def test_precision_rule_inline_suppression(
         Config(select=[rule_id], severity="info", markdown_anchor_style="github")
     )
     assert linter.check_content(content, Path(filename)) == []
+
+
+@pytest.mark.parametrize("output_format", ["jsonl", "sarif"])
+def test_shared_phrase_preserves_both_requested_rule_records(
+    tmp_path: Path,
+    output_format: str,
+) -> None:
+    path = tmp_path / "phrase.md"
+    path.write_text("Let's dive\ninto the API.")
+    config = tmp_path / "config.toml"
+    config.write_text("")
+    result = run_cli(
+        "check",
+        str(path),
+        "--config",
+        str(config),
+        "--select",
+        "V002,G009",
+        "--severity",
+        "info",
+        "--format",
+        output_format,
+    )
+    assert result.exit_code == 1
+    assert result.stderr == ""
+    if output_format == "jsonl":
+        records = [json.loads(line) for line in result.stdout.splitlines()]
+        assert {record["rule_id"] for record in records} == {"V002", "G009"}
+        assert len(records) == 2
+        assert {
+            (record["line"], record["column"], record["end_line"], record["end_column"])
+            for record in records
+        } == {(1, 1, 2, 5)}
+    else:
+        records = json.loads(result.stdout)["runs"][0]["results"]
+        assert {record["ruleId"] for record in records} == {"V002", "G009"}
+        assert len(records) == 2
+        assert all(
+            record["locations"][0]["physicalLocation"]["region"]
+            == {"startLine": 1, "startColumn": 1, "endLine": 2, "endColumn": 5}
+            for record in records
+        )
+    _, linter, _ = prepare_scan(Config(select=["V002", "G009"], severity="info"))
+    issues = linter.check_content(path.read_text(), path)
+    baseline = Baseline(tmp_path / "baseline.json")
+    for issue in issues:
+        baseline.add_issue(issue, path, path.read_text(), tmp_path)
+    assert len(baseline.entries) == 2
+    assert {entry.rule_id for entry in baseline.entries} == {"V002", "G009"}
+    assert len({entry.match for entry in baseline.entries}) == 1

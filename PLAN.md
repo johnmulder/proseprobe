@@ -495,20 +495,20 @@ than asserting whether a claim is factually true.
 Targets: `src/proseprobe/data/phrases.py`, V002/G009, corresponding rule tests,
 metadata, output, and quality tests.
 
-- [ ] P11.1 Add a failing test for `Let's dive into the API.` asserting one
+- [x] P11.1 Add a failing test for `Let's dive into the API.` asserting one
   longest phrase match per rule, rather than both prefix matches.
-- [ ] P11.2 Test repeated nonoverlapping occurrences so deduplication does not
+- [x] P11.2 Test repeated nonoverlapping occurrences so deduplication does not
   hide a second occurrence elsewhere in the sentence or document.
-- [ ] P11.3 Resolve contained matches locally within each affected rule. Preserve
+- [x] P11.3 Resolve contained matches locally within each affected rule. Preserve
   accurate spans, ordering, and independently meaningful overlapping rules.
-- [ ] P11.4 Inventory phrases owned by both V002 and G009. Define which rule
+- [x] P11.4 Inventory phrases owned by both V002 and G009. Define which rule
   owns each identical diagnosis and record the reason.
-- [ ] P11.5 Add tests for selecting V002 alone, G009 alone, and both rules before
+- [x] P11.5 Add tests for selecting V002 alone, G009 alone, and both rules before
   changing shared-pattern ownership. Preserve useful explicit-selection behavior.
-- [ ] P11.6 If ownership would break that contract, specify grouping that retains
+- [x] P11.6 If ownership would break that contract, specify grouping that retains
   each rule ID and machine-output meaning before changing presentation. Do not
   add an undocumented JSON/SARIF shape or suppress findings globally.
-- [ ] P11.7 Verify inline suppression, baseline matching, metadata descriptions,
+- [x] P11.7 Verify inline suppression, baseline matching, metadata descriptions,
   and corpus expectations for the chosen ownership or grouping behavior.
 
 Acceptance: one phrase does not produce repeated copies of the same diagnosis;
@@ -992,3 +992,19 @@ revised contract: V015 and V016 each gain one expectation and lose one obsolete
 negative judgment. Additional corpus cases distinguish an unrelated Release 4,
 a scoped comparison, a universal claim after finite testing, and directly bounded
 observations. V015 stays experimental, with no profile promotion.
+
+### P11 — Local phrase duplicates removed
+
+Sixteen regressions failed before the mapped literal matcher. Fifty-one focused
+cases pass for longest complete-word matches, repeated occurrences, wrapping,
+source order, and masked gaps. Explicit V002/G009 selection now yields two
+records instead of four on a shared phrase: one warning about chat language and
+one informational teaching-tone diagnosis. Their catalog overlap contains five
+phrases, documented in the reference. Normal warning scans retain one record.
+
+Local catalog duplicates are removed without changing renderer counts or
+machine schemas. Both distinct rule IDs remain selectable and independently
+ignorable/suppressible; callers treat them as one editing decision. JSON
+Lines/SARIF integrations and baseline identities preserve both requested IDs and
+the same complete wrapped span. Two reviewed corpus positives and four negative
+checks cover the distinction.

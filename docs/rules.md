@@ -155,6 +155,16 @@ This article explores the complex structure of modern software architecture.
 
 Detects chat-like communication patterns that don't belong in documentation.
 
+Overlapping catalog entries produce one longest phrase per occurrence, including
+wrapped prose. Repeated nonoverlapping occurrences remain separate findings.
+Masked code gaps cannot supply layout whitespace. Five phrases also belong to
+G009: `let's break this down`, `let's dive in`, `let's dive into`,
+`let's explore this`, and `let's unpack this`. V002 diagnoses chat language
+with warning severity; G009 diagnoses teaching tone with informational severity.
+When both are selected, their two rule records describe one editing decision.
+Selecting, ignoring, or suppressing either preserves the other's contract.
+Text, JSON Lines, and SARIF retain their existing issue representation.
+
 **Detected patterns:**
 - "I hope this helps!"
 - "Let me know if..."

@@ -29,6 +29,7 @@ from proseprobe.parsers.prose import (
     ProseSentence,
     iter_prose_sentences,
 )
+from proseprobe.rules._phrases import longest_literal_phrase_issues
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
 _MONTH = re.compile(
@@ -332,24 +333,9 @@ class CollaborativePhrasesRule(Rule):
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for collaborative phrases."""
-        issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
-            line_lower = line.lower()
-            for phrase in COLLABORATIVE_PHRASES:
-                if phrase.lower() in line_lower:
-                    col = line_lower.find(phrase.lower())
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Collaborative phrase: '{phrase}'",
-                            line=line_num,
-                            column=col + 1,
-                            end_column=col + len(phrase) + 1,
-                            severity=self.severity,
-                        )
-                    )
-
-        return issues
+        return longest_literal_phrase_issues(
+            self, content, filename, COLLABORATIVE_PHRASES, "Collaborative phrase"
+        )
 
 
 class KnowledgeCutoffRule(Rule):
