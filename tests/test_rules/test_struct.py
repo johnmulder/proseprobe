@@ -1813,3 +1813,120 @@ The worker.
         assert rule.id == "S029"
         assert rule.name == "Tiny Section"
         assert rule.default_confidence is Confidence.LOW
+
+
+class TestFixedStructurePhraseWrapping:
+    """Wrap-invariant fixed phrase tests for S014 and S019."""
+
+    @pytest.mark.parametrize("filename", ["case.md", "case.py"])
+    @pytest.mark.parametrize("rule_id", ["S014", "S019"])
+    def test_wrapping_preserves_metadata_and_endpoints(
+        self, filename: str, rule_id: str
+    ) -> None:
+        from proseprobe.rules.struct import (
+            CorporateEuphemismRule,
+            SignpostedConclusionRule,
+        )
+
+        if rule_id == "S014":
+            rule = SignpostedConclusionRule()
+            single = "In conclusion, retries fail."
+            wrapped = "In\nconclusion, retries fail."
+            start_column, end_column = 1, 11
+        else:
+            rule = CorporateEuphemismRule()
+            single = "The company uses resource optimization."
+            wrapped = "The company uses resource\noptimization."
+            start_column, end_column = 18, 13
+        if filename.endswith(".py"):
+            single = f'"""{single}"""'
+            wrapped = f'"""{wrapped}"""'
+            start_column += 3
+
+        [original] = rule.check(single, filename)
+        [issue] = rule.check(wrapped, filename)
+
+        assert issue.message == original.message
+        assert issue.severity is original.severity
+        assert issue.confidence is original.confidence
+        assert issue.suggestion == original.suggestion
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            start_column,
+            2,
+            end_column,
+        )
+
+    @pytest.mark.parametrize("prefix", ["# ", "> "])
+    @pytest.mark.parametrize("rule_id", ["S014", "S019"])
+    def test_continuation_prefixes_keep_original_source_spans(
+        self, prefix: str, rule_id: str
+    ) -> None:
+        from proseprobe.rules.struct import (
+            CorporateEuphemismRule,
+            SignpostedConclusionRule,
+        )
+
+        filename = "case.py" if prefix == "# " else "case.md"
+        if rule_id == "S014":
+            rule = SignpostedConclusionRule()
+            before, after = "In", "conclusion, retries fail."
+            start_column, end_column = 3, 13
+        else:
+            rule = CorporateEuphemismRule()
+            before, after = "The company uses resource", "optimization."
+            start_column, end_column = 20, 15
+
+        [issue] = rule.check(f"{prefix}{before}\n{prefix}{after}", filename)
+
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            start_column,
+            2,
+            end_column,
+        )
+
+    @pytest.mark.parametrize(
+        "gap", [" `mode` ", " <code>mode</code> ", "\n\n", "\n\n# "]
+    )
+    @pytest.mark.parametrize("rule_id", ["S014", "S019"])
+    def test_masked_or_separate_regions_do_not_join(
+        self, gap: str, rule_id: str
+    ) -> None:
+        from proseprobe.rules.struct import (
+            CorporateEuphemismRule,
+            SignpostedConclusionRule,
+        )
+
+        if rule_id == "S014":
+            rule = SignpostedConclusionRule()
+            before, after = "In", "conclusion, retries fail."
+        else:
+            rule = CorporateEuphemismRule()
+            before, after = "The company uses resource", "optimization."
+
+        assert rule.check(before + gap + after, "case.md") == []
+
+    def test_wrapped_euphemism_preserves_the_organizational_context_guard(self) -> None:
+        from proseprobe.rules.struct import CorporateEuphemismRule
+
+        assert (
+            CorporateEuphemismRule().check(
+                "The compiler uses resource\noptimization.", "case.md"
+            )
+            == []
+        )
+
+    def test_masked_gap_does_not_hide_a_later_valid_euphemism(self) -> None:
+        from proseprobe.rules.struct import CorporateEuphemismRule
+
+        source = (
+            "The company uses resource `mode` optimization, then resource optimization."
+        )
+
+        [issue] = CorporateEuphemismRule().check(source, "case.md")
+
+        assert (
+            source[issue.column - 1 : issue.end_column - 1] == "resource optimization"
+        )
+        assert issue.column == source.index("then resource") + len("then ") + 1

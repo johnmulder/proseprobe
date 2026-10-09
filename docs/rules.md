@@ -15,6 +15,12 @@ trailing quotes, and hard prose-block boundaries without an NLP dependency.
 
 ## Rule Inventory
 
+Fixed phrase checks in V002/V004/V009/V010/V011/V013/V017,
+G004/G005/G006/G009/G029, and S014/S019 accept layout wrapping within one
+prose region. Source spans include the complete wrapped match. Code gaps,
+separate paragraphs, and other prose boundaries cannot create a phrase.
+Existing heading and organizational-context exclusions still apply.
+
 This inventory is generated from rule classes and the registry. Update the
 implementation metadata, then run `make rule-docs`; do not edit the marked
 block by hand. The examples and guidance below remain hand-maintained.

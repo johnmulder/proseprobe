@@ -2474,3 +2474,90 @@ class TestRepeatedFunctionWord:
         assert rule.default_confidence is Confidence.HIGH
         assert rule.applies_to == {"markdown", "python"}
         assert rule.content_scope == "prose"
+
+
+@pytest.mark.parametrize(
+    ("rule", "single", "wrapped", "end_column"),
+    [
+        (
+            FalseSuspenseTransitionRule(),
+            "Here's the kicker: retries fail.",
+            "Here's the\nkicker: retries fail.",
+            7,
+        ),
+        (
+            PatronizingAnalogyRule(),
+            "Think of it as a cache.",
+            "Think of it\nas a cache.",
+            3,
+        ),
+        (
+            FuturistInvitationRule(),
+            "Imagine a world where retries succeed.",
+            "Imagine a world\nwhere retries succeed.",
+            6,
+        ),
+        (
+            DoubleNegativeRule(),
+            "NOT UNCOMMON outcomes happen.",
+            "NOT\nUNCOMMON outcomes happen.",
+            9,
+        ),
+    ],
+)
+@pytest.mark.parametrize("filename", ["case.md", "case.py"])
+def test_fixed_grammar_phrase_wrapping_preserves_diagnostics_and_spans(
+    rule: Rule, single: str, wrapped: str, end_column: int, filename: str
+) -> None:
+    if filename.endswith(".py"):
+        single = f'"""{single}"""'
+        wrapped = f'"""{wrapped}"""'
+
+    [original] = rule.check(single, filename)
+    [issue] = rule.check(wrapped, filename)
+
+    assert issue.message == original.message
+    assert issue.suggestion == original.suggestion
+    assert issue.severity is original.severity
+    assert issue.confidence is original.confidence
+    assert (issue.line, issue.column) == (1, 4 if filename.endswith(".py") else 1)
+    assert (issue.end_line, issue.end_column) == (2, end_column)
+    if rule.id == "G029":
+        assert issue.suggestion == "common"
+
+
+@pytest.mark.parametrize(
+    ("rule", "before", "after"),
+    [
+        (FalseSuspenseTransitionRule(), "Here's the", "kicker: retries fail."),
+        (PatronizingAnalogyRule(), "Think of it", "as a cache."),
+        (FuturistInvitationRule(), "Imagine a world", "where retries succeed."),
+        (DoubleNegativeRule(), "not", "uncommon outcomes happen."),
+    ],
+)
+@pytest.mark.parametrize("prefix", ["# ", "> "])
+def test_fixed_grammar_phrase_wrapping_preserves_continuation_prefix_spans(
+    rule: Rule, before: str, after: str, prefix: str
+) -> None:
+    filename = "case.py" if prefix == "# " else "case.md"
+    [issue] = rule.check(f"{prefix}{before}\n{prefix}{after}", filename)
+
+    assert (issue.line, issue.column) == (1, 3)
+    assert issue.end_line == 2
+    assert issue.end_column == len(prefix) + len(after.split()[0].rstrip(":")) + 1
+
+
+@pytest.mark.parametrize(
+    ("rule", "before", "after"),
+    [
+        (FalseSuspenseTransitionRule(), "Here's the", "kicker: retries fail."),
+        (PatronizingAnalogyRule(), "Think of it", "as a cache."),
+        (FuturistInvitationRule(), "Imagine a world", "where retries succeed."),
+        (DoubleNegativeRule(), "not", "uncommon outcomes happen."),
+    ],
+)
+@pytest.mark.parametrize("gap", [" `mode` ", " <code>mode</code> ", "\n\n", "\n\n# "])
+def test_fixed_grammar_phrase_gaps_do_not_manufacture_a_match(
+    rule: Rule, before: str, after: str, gap: str
+) -> None:
+    assert rule.check(before + gap + after, "case.md") == []

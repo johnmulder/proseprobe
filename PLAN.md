@@ -1025,3 +1025,20 @@ The disposition ledger records each case. The development regression report at
 this checkpoint contains 320 true positives, six false positives, no misses,
 and 413/419 passed negative checks. This is not an independent population
 estimate. Frozen external holdout review remains pending and unused for tuning.
+
+### P08.7 — Older literal catalogs migrated after individual regressions
+
+Twenty-four wrapped-span tests and one masked-first/valid-later S019 test failed
+before correction. Fifty-eight new cases and 1,047 related rule tests pass.
+G004/G005/G006/V004/S014 use the narrow literal matcher; G029 retains its source
+case, exact suggestions, and heading exclusion. S019 retains its organizational
+context guard and first valid occurrence per catalog entry. Source prefixes,
+masked gaps, unrelated blocks, single-line behavior, and exact endpoints remain
+covered. Eight reviewed wrapped detections (one phrase has two existing rule
+meanings) and seven fenced negatives are added to the corpus.
+
+The inventory also confirms regex-family gaps: G001 copula patterns, G002
+metadiscourse, V003 cutoff patterns, V005 attribution patterns, and V006 stakes
+patterns. A second bounded test-first slice is underway for their literal
+whitespace. The seven catalog migrations are complete; no general regex
+wrap-invariance claim has been made.

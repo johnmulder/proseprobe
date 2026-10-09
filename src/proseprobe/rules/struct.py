@@ -34,6 +34,7 @@ from proseprobe.parsers.prose import (
     iter_prose_scopes,
     iter_prose_sentences,
 )
+from proseprobe.rules._phrases import longest_literal_phrase_issues
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
 
@@ -727,23 +728,13 @@ class SignpostedConclusionRule(Rule):
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for signposted conclusions."""
-        issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
-            line_lower = line.casefold()
-            for phrase in SIGNPOSTED_CONCLUSION_PHRASES:
-                if phrase in line_lower:
-                    col = line_lower.find(phrase)
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Signposted conclusion: '{phrase}'",
-                            line=line_num,
-                            column=col + 1,
-                            end_column=col + len(phrase) + 1,
-                            severity=self.severity,
-                        )
-                    )
-        return issues
+        return longest_literal_phrase_issues(
+            self,
+            content,
+            filename,
+            SIGNPOSTED_CONCLUSION_PHRASES,
+            "Signposted conclusion",
+        )
 
 
 class FractalSummaryRule(Rule):
@@ -993,27 +984,39 @@ class CorporateEuphemismRule(Rule):
         issues: list[Issue] = []
         for sentence in iter_prose_sentences(content, filename):
             sentence_lower = sentence.text.casefold()
+            source = sentence.source_text(content)
             for phrase in CORPORATE_EUPHEMISM_PHRASES:
-                match = re.search(re.escape(phrase), sentence.text, re.IGNORECASE)
-                if match is None:
-                    continue
                 if (
                     phrase in self._AMBIGUOUS_PHRASES
                     and not self._ORGANIZATIONAL_CONTEXT.search(sentence_lower)
                 ):
                     continue
-                line_num, column = sentence.source_position(match.start())
-                _, end_column = sentence.source_position(match.end())
-                issues.append(
-                    Issue(
-                        rule_id=self.id,
-                        message=f"Corporate euphemism: '{phrase}' \u2014 consider stating the action directly",
-                        line=line_num,
-                        column=column,
-                        end_column=end_column,
-                        severity=self.severity,
-                    )
+                pattern = re.compile(
+                    r"\s+".join(re.escape(word) for word in phrase.split()),
+                    re.IGNORECASE,
                 )
+                for match in pattern.finditer(sentence.text):
+                    original = source[match.start() : match.end()]
+                    if filename.lower().endswith(".py"):
+                        original = re.sub(r"(?m)^[ \t]*#[ \t]?", "", original)
+                    elif sentence.context == "blockquote":
+                        original = re.sub(r"(?m)^(?: {0,3}>[ \t]?)+", "", original)
+                    if pattern.fullmatch(original) is None:
+                        continue
+                    line_num, column = sentence.source_position(match.start())
+                    end_line, end_column = sentence.source_position(match.end())
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Corporate euphemism: '{phrase}' \u2014 consider stating the action directly",
+                            line=line_num,
+                            column=column,
+                            end_line=end_line if end_line != line_num else None,
+                            end_column=end_column,
+                            severity=self.severity,
+                        )
+                    )
+                    break
         return issues
 
 

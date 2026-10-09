@@ -23,11 +23,7 @@ from proseprobe.data.phrases import (
     PEDAGOGICAL_VOICE_PHRASES,
 )
 from proseprobe.parsers.markdown import is_example_line, is_markdown_file
-from proseprobe.parsers.prose import (
-    iter_prose_blocks,
-    iter_prose_scopes,
-    iter_prose_sentences,
-)
+from proseprobe.parsers.prose import iter_prose_scopes, iter_prose_sentences
 from proseprobe.rules._phrases import longest_literal_phrase_issues
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
@@ -280,23 +276,9 @@ class FalseSuspenseTransitionRule(Rule):
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for false-suspense transitions."""
-        issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
-            line_lower = line.lower()
-            for phrase in FALSE_SUSPENSE_PHRASES:
-                if phrase in line_lower:
-                    col = line_lower.find(phrase)
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"False suspense: '{phrase}'",
-                            line=line_num,
-                            column=col + 1,
-                            end_column=col + len(phrase) + 1,
-                            severity=self.severity,
-                        )
-                    )
-        return issues
+        return longest_literal_phrase_issues(
+            self, content, filename, FALSE_SUSPENSE_PHRASES, "False suspense"
+        )
 
 
 class PatronizingAnalogyRule(Rule):
@@ -311,23 +293,9 @@ class PatronizingAnalogyRule(Rule):
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for patronizing analogies."""
-        issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
-            line_lower = line.lower()
-            for phrase in PATRONIZING_ANALOGY_PHRASES:
-                if phrase in line_lower:
-                    col = line_lower.find(phrase)
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Patronizing analogy: '{phrase}'",
-                            line=line_num,
-                            column=col + 1,
-                            end_column=col + len(phrase) + 1,
-                            severity=self.severity,
-                        )
-                    )
-        return issues
+        return longest_literal_phrase_issues(
+            self, content, filename, PATRONIZING_ANALOGY_PHRASES, "Patronizing analogy"
+        )
 
 
 class FuturistInvitationRule(Rule):
@@ -342,23 +310,9 @@ class FuturistInvitationRule(Rule):
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for futurist invitations."""
-        issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
-            line_lower = line.lower()
-            for phrase in FUTURIST_INVITATION_PHRASES:
-                if phrase in line_lower:
-                    col = line_lower.find(phrase)
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Futurist invitation: '{phrase}'",
-                            line=line_num,
-                            column=col + 1,
-                            end_column=col + len(phrase) + 1,
-                            severity=self.severity,
-                        )
-                    )
-        return issues
+        return longest_literal_phrase_issues(
+            self, content, filename, FUTURIST_INVITATION_PHRASES, "Futurist invitation"
+        )
 
 
 class FalseVulnerabilityRule(Rule):
@@ -975,25 +929,43 @@ class DoubleNegativeRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check prose for fixed double-negative phrases."""
         issues: list[Issue] = []
-        for block in iter_prose_blocks(content, filename):
-            if block.context == "heading":
+        for sentence in iter_prose_sentences(content, filename):
+            if sentence.context == "heading":
                 continue
-            for line_num, line in block.lines:
-                for phrase, replacement in DOUBLE_NEGATIVE_REPLACEMENTS.items():
-                    pattern = rf"\b{re.escape(phrase)}\b"
-                    for match in re.finditer(pattern, line, re.IGNORECASE):
-                        issues.append(
-                            Issue(
-                                rule_id=self.id,
-                                message=f"Double negative: '{match.group()}'",
-                                line=line_num,
-                                column=match.start() + 1,
-                                end_column=match.end() + 1,
-                                severity=self.severity,
-                                confidence=self.default_confidence,
-                                suggestion=replacement,
-                            )
+            source = sentence.source_text(content)
+            for phrase in DOUBLE_NEGATIVE_REPLACEMENTS:
+                pattern = re.compile(
+                    r"\b"
+                    + r"\s+".join(re.escape(word) for word in phrase.split())
+                    + r"\b",
+                    re.IGNORECASE,
+                )
+                for match in pattern.finditer(sentence.text):
+                    original = source[match.start() : match.end()]
+                    if filename.lower().endswith(".py"):
+                        original = re.sub(r"(?m)^[ \t]*#[ \t]?", "", original)
+                    elif sentence.context == "blockquote":
+                        original = re.sub(r"(?m)^(?: {0,3}>[ \t]?)+", "", original)
+                    if pattern.fullmatch(original) is None:
+                        continue
+                    line, column = sentence.source_position(match.start())
+                    end_line, end_column = sentence.source_position(match.end())
+                    normalized = " ".join(match.group().split())
+                    issues.append(
+                        Issue(
+                            rule_id=self.id,
+                            message=f"Double negative: '{normalized}'",
+                            line=line,
+                            column=column,
+                            end_line=end_line if end_line != line else None,
+                            end_column=end_column,
+                            severity=self.severity,
+                            confidence=self.default_confidence,
+                            suggestion=DOUBLE_NEGATIVE_REPLACEMENTS[
+                                normalized.casefold()
+                            ],
                         )
+                    )
         return sorted(issues, key=lambda issue: (issue.line, issue.column))
 
 

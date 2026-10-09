@@ -2064,3 +2064,54 @@ class TestPolitenessFogPhrases:
         rule = CollaborativePhrasesRule()
         issues = rule.check("Per our last conversation, here is the update.", "test.md")
         assert len(issues) >= 1
+
+
+class TestPromotionalPhraseWrapping:
+    """Wrap-invariant literal catalog tests for V004."""
+
+    @pytest.mark.parametrize("filename", ["case.md", "case.py"])
+    def test_wrapping_preserves_promotional_metadata_and_endpoints(
+        self, filename: str
+    ) -> None:
+        single = "The product is second to none."
+        wrapped = "The product is second\nto none."
+        if filename.endswith(".py"):
+            single = f'"""{single}"""'
+            wrapped = f'"""{wrapped}"""'
+
+        [original] = PromotionalLanguageRule().check(single, filename)
+        [issue] = PromotionalLanguageRule().check(wrapped, filename)
+
+        assert (
+            issue.message
+            == original.message
+            == "Promotional language: 'second to none'"
+        )
+        assert issue.severity is original.severity
+        assert issue.confidence is original.confidence
+        assert (issue.line, issue.column) == (1, 19 if filename.endswith(".py") else 16)
+        assert (issue.end_line, issue.end_column) == (2, 8)
+
+    @pytest.mark.parametrize("prefix", ["# ", "> "])
+    def test_wrapping_keeps_documentation_prefix_columns(self, prefix: str) -> None:
+        filename = "case.py" if prefix == "# " else "case.md"
+
+        [issue] = PromotionalLanguageRule().check(
+            f"{prefix}second\n{prefix}to none", filename
+        )
+
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            3,
+            2,
+            10,
+        )
+
+    @pytest.mark.parametrize(
+        "gap", [" `mode` ", " <code>mode</code> ", "\n\n", "\n\n# "]
+    )
+    def test_masked_or_separate_regions_do_not_join(self, gap: str) -> None:
+        assert (
+            PromotionalLanguageRule().check("second" + gap + "to none.", "case.md")
+            == []
+        )

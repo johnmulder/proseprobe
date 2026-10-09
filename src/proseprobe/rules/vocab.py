@@ -51,18 +51,14 @@ _TESTED_BOUND = re.compile(
     r"(?:conditions?|configuration|environment|setup)\b)",
     re.IGNORECASE,
 )
-
-
 _CLAUSE_BOUNDARY = re.compile(
     r";|(?<!\d),|,(?!\d)|\b(?:and|or|but|yet|whereas|while)\b", re.IGNORECASE
 )
-
 _FINITE_CLAUSE = re.compile(
     r"\b(?:is|are|was|were|has|have|had|remains?|never|always|eliminates?)\b"
     r"|\b(?:we|they|I)\s+(?:tested|observed|compared|processed|reported|measured)\b",
     re.IGNORECASE,
 )
-
 _UNCERTAIN_TEST_SCOPE = re.compile(
     r"\b(?:benchmarks?|tests?|tested|trials?|observed|conditions?)\b", re.IGNORECASE
 )
@@ -428,37 +424,19 @@ class PromotionalLanguageRule(Rule):
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for promotional language."""
-        issues: list[Issue] = []
-        for line_num, line in self.iter_lines(content, filename):
-            line_lower = line.lower()
-            for phrase in PROMOTIONAL_PHRASES:
-                if phrase.lower() in line_lower:
-                    col = line_lower.find(phrase.lower())
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Promotional language: '{phrase}'",
-                            line=line_num,
-                            column=col + 1,
-                            end_column=col + len(phrase) + 1,
-                            severity=self.severity,
-                        )
-                    )
-            for phrase in INFLAMMATORY_CLICHE_PHRASES:
-                if phrase.lower() in line_lower:
-                    col = line_lower.find(phrase.lower())
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Inflammatory cliché: '{phrase}'",
-                            line=line_num,
-                            column=col + 1,
-                            end_column=col + len(phrase) + 1,
-                            severity=self.severity,
-                        )
-                    )
-
-        return issues
+        issues = longest_literal_phrase_issues(
+            self, content, filename, PROMOTIONAL_PHRASES, "Promotional language"
+        )
+        issues.extend(
+            longest_literal_phrase_issues(
+                self,
+                content,
+                filename,
+                INFLAMMATORY_CLICHE_PHRASES,
+                "Inflammatory cliché",
+            )
+        )
+        return sorted(issues, key=lambda issue: (issue.line, issue.column))
 
 
 class WeaselWordsRule(Rule):

@@ -72,6 +72,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Preserved supported literal catalog phrases across wrapping in grammar,
+  promotional, conclusion, and corporate-context checks with complete spans.
+
+- Required claim-local comparisons and tested bounds for V015/V016 exemptions.
+- Preserved reviewed technical vocabulary spans while retaining generic uses,
+  literal-quotation alerts, and explicit whole-line vocabulary configuration.
+- Selected longest V002/G009 phrases per occurrence across wrapping while
+  preserving independently selected rule IDs and structured output contracts.
+
 - Distinguished independent qualified clauses from hedge stacks, retaining
   high confidence for precise redundant pairs and medium confidence for ambiguity.
 
