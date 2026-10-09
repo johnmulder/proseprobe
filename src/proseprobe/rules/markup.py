@@ -1,10 +1,18 @@
-"""Markup detection rules (M001-M010)."""
+"""Markup detection rules (M001-M011)."""
 
+import html
 import re
+import string
+import unicodedata
+from collections.abc import Iterator
+from dataclasses import dataclass
+from html.parser import HTMLParser
 from itertools import pairwise
 from typing import ClassVar
+from urllib.parse import unquote
 
 from proseprobe.parsers.markdown import (
+    MarkdownParser,
     MarkdownReference,
     is_example_line,
     is_markdown_file,
@@ -582,4 +590,356 @@ class NonDescriptiveLinkTextRule(Rule):
                 )
             )
 
+        return sorted(issues, key=lambda issue: (issue.line, issue.column))
+
+
+@dataclass(frozen=True)
+class _InlineLink:
+    start: int
+    end: int
+    text: str
+    destination: str
+    destination_start: int
+    destination_end: int
+    is_image: bool
+
+
+class _ExplicitAnchors(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.targets: set[str] = set()
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag in {"script", "style", "textarea"}:
+            return
+        attributes = dict(attrs)
+        if value := attributes.get("id"):
+            self.targets.add(value)
+        if tag == "a" and (value := attributes.get("name")):
+            self.targets.add(value)
+
+
+class SameDocumentFragmentRule(Rule):
+    """M011: Validate fragments under an explicitly selected GitHub anchor policy."""
+
+    id = "M011"
+    name = "Unresolved Same-Document Fragment"
+    description = (
+        "Detects unresolved same-document links under the GitHub anchor policy"
+    )
+    severity = Severity.INFO
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown"}
+    content_scope = "non_code"
+    config_key = "markdown_anchor_style"
+
+    def __init__(self, markdown_anchor_style: str = "off") -> None:
+        super().__init__()
+        if markdown_anchor_style not in {"off", "github"}:
+            raise ValueError("markdown_anchor_style must be off or github")
+        self._style = markdown_anchor_style
+        if self._style == "off":
+            self.severity = Severity.OFF
+
+    @staticmethod
+    def _escaped(text: str, index: int) -> bool:
+        backslashes = 0
+        while index > 0 and text[index - 1] == "\\":
+            backslashes += 1
+            index -= 1
+        return backslashes % 2 == 1
+
+    @classmethod
+    def _destination(cls, text: str, start: int) -> tuple[str, int, int, int] | None:
+        while start < len(text) and text[start] in " \t":
+            start += 1
+        if start >= len(text):
+            return None
+        if text[start] == "<":
+            index = start + 1
+            while index < len(text):
+                if text[index] == ">" and not cls._escaped(text, index):
+                    return text[start + 1 : index], start + 1, index, index + 1
+                if text[index] in "<\n\r" and not cls._escaped(text, index):
+                    return None
+                index += 1
+            return None
+        depth = 0
+        index = start
+        while index < len(text):
+            char = text[index]
+            if (
+                char == "\\"
+                and index + 1 < len(text)
+                and text[index + 1] in string.punctuation
+            ):
+                index += 2
+                continue
+            if char in " \t\n\r" or (char == ")" and depth == 0):
+                break
+            if char == "<" or ord(char) < 32:
+                return None
+            if char == "(":
+                depth += 1
+            elif char == ")":
+                depth -= 1
+            index += 1
+        if depth != 0:
+            return None
+        return text[start:index], start, index, index
+
+    @classmethod
+    def _link_end(cls, text: str, index: int) -> int | None:
+        had_space = index < len(text) and text[index] in " \t"
+        while index < len(text) and text[index] in " \t":
+            index += 1
+        if index < len(text) and text[index] == ")":
+            return index + 1
+        if not had_space or index >= len(text) or text[index] not in "\"'(":
+            return None
+        closing = ")" if text[index] == "(" else text[index]
+        index += 1
+        while index < len(text) and (
+            text[index] != closing or cls._escaped(text, index)
+        ):
+            index += 1
+        if index == len(text):
+            return None
+        index += 1
+        while index < len(text) and text[index] in " \t":
+            index += 1
+        return index + 1 if index < len(text) and text[index] == ")" else None
+
+    @classmethod
+    def _links(cls, text: str) -> Iterator[_InlineLink]:
+        index = 0
+        while index < len(text):
+            if text[index] != "[" or cls._escaped(text, index):
+                index += 1
+                continue
+            start = index
+            depth = 1
+            index += 1
+            while index < len(text) and depth:
+                if text[index] == "\\" and index + 1 < len(text):
+                    index += 2
+                    continue
+                depth += (text[index] == "[") - (text[index] == "]")
+                index += 1
+            if depth or index >= len(text) or text[index] != "(":
+                continue
+            parsed = cls._destination(text, index + 1)
+            if parsed is None:
+                continue
+            destination, value_start, value_end, after = parsed
+            end = cls._link_end(text, after)
+            if end is None:
+                continue
+            yield _InlineLink(
+                start,
+                end,
+                text[start + 1 : index - 1],
+                destination,
+                value_start,
+                value_end,
+                start > 0
+                and text[start - 1] == "!"
+                and not cls._escaped(text, start - 1),
+            )
+            index = end
+
+    @staticmethod
+    def _unescape(text: str) -> str:
+        return re.sub(r"\\([" + re.escape(string.punctuation) + r"])", r"\1", text)
+
+    @classmethod
+    def _heading_text(cls, title: str, parser: MarkdownParser) -> str:
+        code: dict[str, str] = {}
+        for index, (start, end) in reversed(
+            list(enumerate(parser._find_inline_code_spans(title)))
+        ):
+            raw = title[start:end]
+            delimiter = len(raw) - len(raw.lstrip("`"))
+            value = raw[delimiter:-delimiter].replace("\n", " ")
+            if value.startswith(" ") and value.endswith(" ") and value.strip():
+                value = value[1:-1]
+            marker = f"\x00{index}\x00"
+            code[marker] = value
+            title = title[:start] + marker + title[end:]
+        for link in reversed(list(cls._links(title))):
+            title = title[: link.start] + link.text + title[link.end :]
+        definitions = {
+            reference.label
+            for reference in parser.get_references()
+            if reference.is_definition
+        }
+        title = re.sub(
+            r"\[([^\]]+)\]\[([^\]]*)\]",
+            lambda match: (
+                match.group(1)
+                if parser._normalize_reference_label(match.group(2) or match.group(1))
+                in definitions
+                else match.group()
+            ),
+            title,
+        )
+        title = re.sub(r"<!--.*?-->", "", title)
+        title = re.sub(r"</?[A-Za-z][\w-]*(?:\s+[^<>]*?)?\s*/?>", "", title)
+        title = re.sub(r"(?<!\\)(\*{1,2})(?=\S)(.+?)(?<=\S)\1", r"\2", title)
+        title = re.sub(r"(?<![\w\\])(_{1,2})(?=\S)(.+?)(?<=\S)\1(?!\w)", r"\2", title)
+        title = html.unescape(cls._unescape(title))
+        for marker, value in code.items():
+            title = title.replace(marker, value)
+        return title
+
+    @classmethod
+    def _targets(cls, parser: MarkdownParser, anchor_source: str) -> set[str]:
+        headings: set[str] = set()
+        for heading in parser.get_headings():
+            text = cls._heading_text(heading.title, parser).lower()
+            base = "".join(
+                "-" if char == " " else char
+                for char in text
+                if char == " " or char in "_-" or unicodedata.category(char)[0] in "LNM"
+            )
+            candidate = base
+            suffix = 0
+            while candidate in headings:
+                suffix += 1
+                candidate = f"{base}-{suffix}"
+            headings.add(candidate)
+        custom = _ExplicitAnchors()
+        custom.feed(anchor_source)
+        return headings | custom.targets
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check supported static fragments while preserving destination spans."""
+        if self._style == "off" or not is_markdown_file(filename):
+            return []
+        parser = _get_cached_markdown_parser(content)
+        excluded = parser._code_lines() | parser._front_matter_lines()
+        masked_lines = [
+            " " * len(line) if number in excluded else parser._mask_inline_code(line)
+            for number, line in enumerate(content.split("\n"), 1)
+        ]
+        masked_source = "\n".join(masked_lines)
+        chars = list(masked_source)
+        for comment in re.finditer(r"<!--.*?(?:-->|$)", masked_source, re.DOTALL):
+            for index in range(comment.start(), comment.end()):
+                if chars[index] != "\n":
+                    chars[index] = " "
+        masked_lines = "".join(chars).split("\n")
+        anchor_lines = list(enumerate(masked_lines, 1))
+        active = {number for number, line in anchor_lines if line.strip()}
+        if parser._mdx_block_lines() & active or any(
+            "{%" in line or "{{" in line for _, line in anchor_lines
+        ):
+            return []
+        references = parser.get_references()
+        definition_lines = {
+            reference.line for reference in references if reference.is_definition
+        }
+        reference_uses: dict[int, list[MarkdownReference]] = {}
+        for reference in references:
+            if not reference.is_definition:
+                reference_uses.setdefault(reference.line, []).append(reference)
+        html_lines: list[str] = []
+        for number, line in anchor_lines:
+            if number in definition_lines:
+                html_lines.append("")
+                continue
+            chars = list(line)
+            for link in self._links(line):
+                start = (
+                    link.start - 1 if link.is_image else link.start + len(link.text) + 2
+                )
+                chars[start : link.end] = " " * (link.end - start)
+            for reference in reference_uses.get(number, []):
+                start = reference.column - 1
+                if (
+                    reference.line == number
+                    and not reference.is_definition
+                    and line[start : start + 2] == "!["
+                    and not self._escaped(line, start)
+                ):
+                    end = reference.end_column - 1
+                    chars[start:end] = " " * (end - start)
+            html_lines.append("".join(chars))
+        anchor_source = "\n".join(
+            "".join(
+                "&lt;" if char == "<" and self._escaped(line, index) else char
+                for index, char in enumerate(line)
+            )
+            for line in html_lines
+        )
+        targets = self._targets(parser, anchor_source)
+        visible = {number for number, _ in parser.get_lines()} - excluded
+        source_lines = content.split("\n")
+        destinations: list[tuple[str, int, int, int]] = []
+        for line_num, line in anchor_lines:
+            if line_num not in visible or line_num in definition_lines:
+                continue
+            for link in self._links(line):
+                if not link.is_image:
+                    destinations.append(
+                        (
+                            link.destination,
+                            line_num,
+                            link.destination_start + 1,
+                            link.destination_end + 1,
+                        )
+                    )
+        used = {
+            reference.label
+            for reference in references
+            if not reference.is_definition
+            and reference.line in visible
+            and masked_lines[reference.line - 1][
+                reference.column - 1 : reference.column
+            ]
+            in {"[", "!"}
+            and (
+                not source_lines[reference.line - 1][reference.column - 1 :].startswith(
+                    "!["
+                )
+                or self._escaped(source_lines[reference.line - 1], reference.column - 1)
+            )
+        }
+        seen: set[str] = set()
+        for reference in references:
+            if not reference.is_definition or reference.label in seen:
+                continue
+            seen.add(reference.label)
+            if reference.label not in used or reference.line not in visible:
+                continue
+            parsed = self._destination(
+                source_lines[reference.line - 1], reference.destination_start - 1
+            )
+            if parsed is not None:
+                destination, start, end, after = parsed
+                source = source_lines[reference.line - 1]
+                if self._link_end(source + ")", after) == len(source) + 1:
+                    destinations.append(
+                        (destination, reference.line, start + 1, end + 1)
+                    )
+        issues: list[Issue] = []
+        for destination, line_num, column, end_column in destinations:
+            resolved = html.unescape(self._unescape(destination))
+            if not resolved.startswith("#") or resolved == "#":
+                continue
+            fragment = unquote(resolved[1:])
+            if fragment in targets:
+                continue
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=f"No same-document target for '{destination}'",
+                    line=line_num,
+                    column=column,
+                    end_column=end_column,
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion="Use an existing heading fragment or explicit anchor",
+                )
+            )
         return sorted(issues, key=lambda issue: (issue.line, issue.column))

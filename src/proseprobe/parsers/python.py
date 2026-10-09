@@ -26,6 +26,13 @@ class Docstring:
     node_type: str  # "module", "class", "function"
     owner_name: str | None
     parameters: tuple[str, ...]
+    signature_parameters: tuple[tuple[str, str], ...] = ()
+    has_dynamic_decorators: bool = False
+
+    @property
+    def accepts_kwargs(self) -> bool:
+        """Whether the source signature accepts delegated keyword arguments."""
+        return any(kind == "var_keyword" for _, kind in self.signature_parameters)
 
 
 @dataclass
@@ -113,6 +120,15 @@ class PythonParser:
                     node_type=node_type,
                     owner_name=owner_name,
                     parameters=parameters,
+                    signature_parameters=self._signature_parameters(node),
+                    has_dynamic_decorators=isinstance(
+                        node, (ast.FunctionDef, ast.AsyncFunctionDef)
+                    )
+                    and any(
+                        not isinstance(decorator, ast.Name)
+                        or decorator.id not in {"classmethod", "staticmethod"}
+                        for decorator in node.decorator_list
+                    ),
                 )
             )
 
@@ -138,6 +154,21 @@ class PythonParser:
         )
         return node.name, tuple(
             name for name in parameters if name not in {"self", "cls"}
+        )
+
+    @staticmethod
+    def _signature_parameters(
+        node: ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef,
+    ) -> tuple[tuple[str, str], ...]:
+        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            return ()
+        arguments = node.args
+        return (
+            *((argument.arg, "positional_only") for argument in arguments.posonlyargs),
+            *((argument.arg, "positional") for argument in arguments.args),
+            *(((arguments.vararg.arg, "var_positional"),) if arguments.vararg else ()),
+            *((argument.arg, "keyword_only") for argument in arguments.kwonlyargs),
+            *(((arguments.kwarg.arg, "var_keyword"),) if arguments.kwarg else ()),
         )
 
     def get_comments(self) -> list[Comment]:

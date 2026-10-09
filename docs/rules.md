@@ -103,6 +103,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `G031` | Clause/Coordination Overload | Grammar | info | medium | markdown, python / prose | — |
 | `G037` | Hedged Requirement | Grammar | info | medium | markdown, python / prose | — |
 | `G038` | Undefined Comparative | Grammar | info | low | markdown, python / prose | — |
+| `G039` | Repeated Function Word | Grammar | info | high | markdown, python / prose | — |
 | `C001` | Docstring-Only Vocabulary | Code | warning | medium | python / raw | — |
 | `C002` | Verbose Comments | Code | info | medium | python / raw | — |
 | `C003` | Collaborative Comments | Code | warning | medium | python / raw | — |
@@ -110,6 +111,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `C006` | Comment Restates Code | Code | info | low | python / raw | — |
 | `C007` | Docstring Repeats Signature | Code | info | medium | python / raw | — |
 | `C008` | Commented-Out Code | Code | info | low | python / raw | — |
+| `C009` | Stale Docstring Parameter | Code | info | high | python / raw | — |
 | `M001` | Wrong Markup | Markup | warning | low | python / raw | — |
 | `M002` | ChatGPT Markers | Markup | error | medium | markdown / prose | — |
 | `M003` | UTM Parameters | Markup | warning | medium | markdown / raw | — |
@@ -120,6 +122,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `M008` | Skipped Heading Level | Markup | warning | high | markdown / raw | — |
 | `M009` | Bare URL in Prose | Markup | info | high | markdown / prose | — |
 | `M010` | Non-Descriptive Link Text | Markup | warning | high | markdown / non_code | — |
+| `M011` | Unresolved Same-Document Fragment | Markup | info | high | markdown / non_code | `markdown_anchor_style` |
 
 <!-- rule-docs:inventory:end -->
 
@@ -1918,6 +1921,32 @@ The new parser is faster than the legacy parser.
 
 ---
 
+### G039: Repeated Function Word
+
+Flags adjacent repeated words from this closed set: `a`, `an`, `the`, `and`,
+`or`, `but`, `for`, `to`, `of`, `in`, `on`, `at`, `by`, `from`, and `with`.
+Each run produces one high-confidence informational finding on its duplicated
+tail. Case and layout wrapping do not change detection; punctuation, prose
+boundaries, and masked source gaps separate runs. Legitimate `had had` and
+`that that` constructions remain outside this vocabulary.
+
+The rule is experimental and has no named profile membership. Normal
+informational category scans include it. Preserve intentional names and exact
+quotations through the existing narrow suppression policy; typography alone
+does not establish intent.
+
+**Example (bad):**
+```markdown
+Read the the configuration before starting the service.
+```
+
+**Example (good):**
+```markdown
+Read the configuration before starting the service.
+```
+
+---
+
 ## Code Rules (C)
 
 ### C001: Docstring-Only Vocabulary
@@ -2065,6 +2094,41 @@ at low confidence.
 ```python
 # Cache loading is deferred until the first request.
 result = load_cache()
+```
+
+---
+
+### C009: Stale Docstring Parameter
+
+Reports a Sphinx `:param name:` declaration when that name is absent from its
+owning function's source signature. Simple typed fields and variadic names are
+supported, with the finding on the declared name. Source parameter kinds are
+preserved separately from C007's existing normalized tuple. A normal parameter
+named `self` or `cls` is valid.
+
+This experimental rule uses informational severity and high confidence.
+Delegated keywords through `**kwargs`, unknown decorators, module/class
+documentation, and unsupported fields are handled conservatively. Recognized
+literal examples, fences, and doctests are masked. Google and NumPy sections
+remain deferred until their own boundaries and independent samples are tested.
+The rule checks stale declarations; it does not require missing documentation.
+
+**Example (bad):**
+```python
+def read(path):
+    """Read a file.
+
+    :param retries: Number of attempts.
+    """
+```
+
+**Example (good):**
+```python
+def read(path):
+    """Read a file.
+
+    :param path: File to read.
+    """
 ```
 
 ---
@@ -2319,3 +2383,41 @@ visible label must match. Additional descriptive words are not reported.
 Autolinks, images, reference definitions, undefined references, code, HTML
 blocks, and demonstration sections are excluded. Inline and resolved reference
 links are checked through the shared Markdown parser.
+
+
+---
+
+### M011: Unresolved Same-Document Fragment
+
+Enabled only with `markdown_anchor_style = "github"`, this experimental
+informational rule reports a static same-document destination without a matching
+heading or supported explicit HTML anchor. Findings have high confidence and
+cover the original destination. A used broken reference definition produces one
+finding at its destination, regardless of the number of uses.
+
+The policy follows [GitHub's section-link documentation](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax):
+heading display text is lowercased, spaces become hyphens, punctuation is removed,
+and duplicate heading slugs receive numeric suffixes. Custom HTML `id` and legacy
+`a name` anchors remain case-sensitive and do not consume heading suffixes.
+Percent-encoded fragments are decoded before comparison. Supported destinations
+and titles follow the static single-line boundaries in
+[CommonMark](https://spec.commonmark.org/0.31.2/#link-destination).
+
+Images, empty fragments, external URLs, and cross-file fragments are excluded.
+Code examples cannot create targets. Liquid/MDX documents with generated-content cues are
+skipped conservatively; this is not a general Markdown renderer. The shared
+parser's supported ATX, setext, and blockquote heading syntax is reused. Default
+scans keep the renderer off, including when M011 has a severity override.
+The all-rules evaluation track explicitly records the GitHub renderer policy.
+
+**Example (bad):**
+```markdown
+Read [installation](#install) before starting the service.
+```
+
+**Example (good):**
+```markdown
+# Install
+
+Read [installation](#install) before starting the service.
+```

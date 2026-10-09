@@ -11,7 +11,7 @@ Overused vocabulary, structural clichés, promotional language, and careless mar
 
 ## Features
 
-- 🔍 **97 detection rules** across 6 categories
+- 🔍 **100 detection rules** across 6 categories
 - 📝 Scans Markdown prose and source-mapped Python docstrings and comments
 - 🎯 **Confidence levels** (high/medium/low) to reduce noise
 - 🗂️ Built-in profiles for general, technical, academic, journalism, and business prose
@@ -51,10 +51,10 @@ integrations.
 | `V` | Vocabulary | 16 | Overused and clichéd words and phrases |
 | `S` | Structure | 25 | Organizational patterns |
 | `T` | Style | 14 | Typographic issues |
-| `G` | Grammar | 25 | Grammatical patterns |
-| `C` | Code | 7 | Python docstring/comment issues |
-| `M` | Markup | 10 | Markdown artifacts |
-| **Total** | | **97** | |
+| `G` | Grammar | 26 | Grammatical patterns |
+| `C` | Code | 8 | Python docstring/comment issues |
+| `M` | Markup | 11 | Markdown artifacts |
+| **Total** | | **100** | |
 
 <!-- rule-docs:categories:end -->
 

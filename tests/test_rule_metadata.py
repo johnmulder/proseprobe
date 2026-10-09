@@ -19,7 +19,7 @@ def test_metadata_covers_registry_in_rule_id_order() -> None:
     metadata_ids = tuple(item.id for item in metadata)
 
     assert metadata_ids == tuple(rule.id for rule in get_all_rules())
-    assert len(metadata) == 97
+    assert len(metadata) == 100
     assert len(set(metadata_ids)) == len(metadata_ids)
 
 
@@ -85,7 +85,7 @@ def test_metadata_config_keys_match_threshold_fields() -> None:
     configured = {
         item.config_key.removeprefix("thresholds.")
         for item in get_rule_metadata()
-        if item.config_key is not None
+        if item.config_key is not None and item.config_key.startswith("thresholds.")
     }
 
     assert configured == threshold_fields
@@ -537,3 +537,15 @@ def test_t013_metadata_matches_the_all_caps_contract() -> None:
     assert metadata.content_scope == "prose"
     assert metadata.profiles == ()
     assert metadata.config_key is None
+
+
+def test_metadata_renderer_setting_is_a_real_config_field() -> None:
+    metadata = get_rule_metadata_by_id("M011")
+    assert metadata is not None
+    assert metadata.config_key == "markdown_anchor_style"
+    assert metadata.config_key in {field.name for field in fields(Config)}
+    assert {
+        item.config_key
+        for item in get_rule_metadata()
+        if item.config_key and not item.config_key.startswith("thresholds.")
+    } == {"markdown_anchor_style"}

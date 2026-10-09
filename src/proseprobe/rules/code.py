@@ -1,7 +1,9 @@
-"""Code-specific detection rules (C001-C008)."""
+"""Code-specific detection rules (C001-C009)."""
 
 import ast
 import re
+import unicodedata
+from collections.abc import Iterator
 from typing import ClassVar
 
 from proseprobe.data.code_patterns import (
@@ -12,6 +14,7 @@ from proseprobe.data.code_patterns import (
     VERBOSE_COMMENT_PATTERNS,
 )
 from proseprobe.data.vocabulary import AI_VOCABULARY, DOCSTRING_AI_VOCABULARY
+from proseprobe.parsers.prose import ProseBlock
 from proseprobe.parsers.python import Docstring, _get_cached_parser
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
@@ -376,6 +379,110 @@ class DocstringRepeatsSignatureRule(Rule):
                     suggestion="Describe behavior, results, or constraints",
                 )
             )
+        return issues
+
+
+class StaleDocstringParameterRule(Rule):
+    """C009: Detect explicit docstring fields absent from a source signature."""
+
+    id = "C009"
+    name = "Stale Docstring Parameter"
+    description = (
+        "Detects Sphinx parameter declarations absent from the function signature"
+    )
+    severity = Severity.INFO
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"python"}
+    _field = re.compile(
+        r"^[ \t]*:param[ \t]+(?:[\w.]+[ \t]+)?(?P<name>\*{0,2}[^\s:]+)[ \t]*:"
+    )
+    _literal_directive = re.compile(
+        r"^\.\.[ \t]+(?:code(?:-block)?|parsed-literal|doctest)::(?:\s|$)"
+    )
+
+    @classmethod
+    def _declaration_lines(
+        cls, block: ProseBlock, source_lines: list[str]
+    ) -> Iterator[tuple[int, str]]:
+        fence = ""
+        literal_indent: int | None = None
+        doctest = False
+        for index, (line_num, line) in enumerate(block.lines):
+            stripped = line.strip()
+            if fence:
+                if re.fullmatch(
+                    re.escape(fence[0]) + "{" + str(len(fence)) + r",}", stripped
+                ):
+                    fence = ""
+                continue
+            if opener := re.match(r"(`{3,}|~{3,})", stripped):
+                fence = opener.group(1)
+                continue
+            if not stripped:
+                doctest = False
+                continue
+            if doctest or stripped.startswith(">>>"):
+                doctest = True
+                continue
+            source = source_lines[line_num - 1] if index == 0 else line
+            indent = len(source) - len(source.lstrip())
+            if literal_indent is not None:
+                if indent > literal_indent:
+                    continue
+                literal_indent = None
+            if cls._literal_directive.match(stripped):
+                literal_indent = indent
+                continue
+            yield line_num, line
+            if stripped.endswith("::"):
+                literal_indent = indent
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Compare physical Sphinx fields against their own source signatures."""
+        parser = _get_cached_parser(content)
+        if not parser.parse():
+            return []
+        blocks = {
+            block.start_line: block for block in parser.get_docstring_prose_blocks()
+        }
+        source_lines = content.split("\n")
+        issues: list[Issue] = []
+        for docstring in parser.get_docstrings():
+            if docstring.node_type != "function" or docstring.has_dynamic_decorators:
+                continue
+            block = blocks.get(docstring.line)
+            if block is None:
+                continue
+            parameters = {name for name, _ in docstring.signature_parameters}
+            for line_num, line in self._declaration_lines(block, source_lines):
+                match = self._field.match(line)
+                if match is None:
+                    continue
+                raw_name = match.group("name")
+                name = raw_name.lstrip("*")
+                if not name.isidentifier():
+                    continue
+                field_start = line.index(":param", match.start(), match.end())
+                raw_field = source_lines[line_num - 1][field_start : match.end()]
+                if '"' in raw_field or "'" in raw_field:
+                    continue
+                if unicodedata.normalize("NFKC", name) in parameters or (
+                    docstring.accepts_kwargs and not raw_name.startswith("*")
+                ):
+                    continue
+                start = match.start("name") + len(raw_name) - len(name)
+                issues.append(
+                    Issue(
+                        rule_id=self.id,
+                        message=f"Docstring parameter '{name}' is absent from the function signature",
+                        line=line_num,
+                        column=start + 1,
+                        end_column=match.end("name") + 1,
+                        severity=self.severity,
+                        confidence=self.default_confidence,
+                        suggestion="Update the field to match the parameter name, or remove it",
+                    )
+                )
         return issues
 
 

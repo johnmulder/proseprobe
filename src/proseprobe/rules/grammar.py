@@ -1205,3 +1205,83 @@ class UndefinedComparativeRule(Rule):
                     )
                 )
         return issues
+
+
+class RepeatedFunctionWordRule(Rule):
+    """G039: Detect adjacent repetitions from a closed function-word list."""
+
+    id = "G039"
+    name = "Repeated Function Word"
+    description = "Detects repeated adjacent function words"
+    severity = Severity.INFO
+    default_confidence = Confidence.HIGH
+    applies_to: ClassVar[set[str]] = {"markdown", "python"}
+    content_scope = "prose"
+
+    _FUNCTION_WORDS: ClassVar[frozenset[str]] = frozenset(
+        {
+            "a",
+            "an",
+            "the",
+            "and",
+            "or",
+            "but",
+            "for",
+            "to",
+            "of",
+            "in",
+            "on",
+            "at",
+            "by",
+            "from",
+            "with",
+        }
+    )
+    _WORD = re.compile(r"\b[a-z]+\b", re.IGNORECASE)
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Report one duplicated tail for each accidental repetition run."""
+        issues: list[Issue] = []
+        for sentence in iter_prose_sentences(content, filename):
+            source = sentence.source_text(content)
+            previous: re.Match[str] | None = None
+            run_issue: Issue | None = None
+            for match in self._WORD.finditer(sentence.text):
+                word = match.group().casefold()
+                repeated = False
+                if (
+                    previous
+                    and word in self._FUNCTION_WORDS
+                    and word == previous.group().casefold()
+                ):
+                    gap = source[previous.end() : match.start()]
+                    if filename.lower().endswith(".py"):
+                        gap = re.sub(r"(?m)^[ \t]*#[ \t]?", "", gap)
+                    elif sentence.context == "blockquote":
+                        gap = re.sub(r"(?m)^(?: {0,3}>[ \t]?)+", "", gap)
+                    repeated = (
+                        not sentence.text[previous.end() : match.start()].strip()
+                        and not gap.strip()
+                    )
+                if repeated:
+                    end_line, end_column = sentence.source_position(match.end())
+                    if run_issue is None:
+                        line, column = sentence.source_position(match.start())
+                        run_issue = Issue(
+                            rule_id=self.id,
+                            message=f"Repeated function word: '{word}'",
+                            line=line,
+                            column=column,
+                            severity=self.severity,
+                            confidence=self.default_confidence,
+                            suggestion="Keep one occurrence",
+                        )
+                        issues.append(run_issue)
+                    run_issue.end_line = (
+                        end_line if end_line != run_issue.line else None
+                    )
+                    run_issue.end_column = end_column
+                else:
+                    run_issue = None
+                previous = match
+        return issues

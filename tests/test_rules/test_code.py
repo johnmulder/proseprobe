@@ -1,7 +1,8 @@
-"""Tests for code rules (C001-C008)."""
+"""Tests for code rules (C001-C009)."""
 
 import pytest
 
+from proseprobe.rules import code
 from proseprobe.rules.base import Confidence, Rule, Severity
 from proseprobe.rules.code import (
     AIPlaceholdersRule,
@@ -460,6 +461,217 @@ async def fetch(item):
         assert rule.name == "Docstring Repeats Signature"
         assert rule.severity is Severity.INFO
         assert rule.applies_to == {"python"}
+
+
+class TestStaleDocstringParameter:
+    """Tests for C009 explicit stale Sphinx parameter declarations."""
+
+    def test_reports_stale_parameter_name_with_exact_source_span(self) -> None:
+        source = '''\
+def fetch(url, timeout):
+    """Fetch a response.
+
+    :param retries: The retry budget.
+    """
+'''
+
+        [issue] = code.StaleDocstringParameterRule().check(source, "test.py")
+
+        assert issue.rule_id == "C009"
+        assert (issue.line, issue.column, issue.end_column) == (4, 12, 19)
+        assert (
+            source.splitlines()[3][issue.column - 1 : issue.end_column - 1] == "retries"
+        )
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.HIGH
+
+    @pytest.mark.parametrize("field", [":param retries:", ":param timeot:"])
+    def test_reports_renamed_or_misspelled_parameters(self, field: str) -> None:
+        source = f'def fetch(url, timeout):\n    """{field} Value."""'
+
+        [issue] = code.StaleDocstringParameterRule().check(source, "test.py")
+
+        assert issue.rule_id == "C009"
+
+    def test_typed_field_reports_only_the_name(self) -> None:
+        source = 'def fetch(url):\n    """:param int retries: Retry budget."""'
+
+        [issue] = code.StaleDocstringParameterRule().check(source, "test.py")
+
+        assert (
+            source.splitlines()[1][issue.column - 1 : issue.end_column - 1] == "retries"
+        )
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            'def fetch(url, /, timeout=3, *, active=True):\n    """:param url: Target.\n    :param int timeout: Budget.\n    :param active: Flag."""',
+            'def fetch(url):\n    """Fetch a response."""',
+            "def fetch(url):\n    return None",
+            'def fetch(self, cls):\n    """:param self: Input.\n    :param cls: Input."""',
+            'def fetch(*args, **kwargs):\n    """:param *args: Values.\n    :param **kwargs: Options."""',
+            'def fetch(url, **options):\n    """:param retries: Delegated option."""',
+            'def fetch(url, **options):\n    """:param int retries: Delegated option."""',
+            '""":param retries: A module description."""',
+            'class Fetch:\n    """:param retries: Constructor documentation."""',
+            'message = ":param retries: ordinary data"',
+            "# :param retries: comment\ndef fetch(url):\n    pass",
+            'def fetch(url):\n    """Prose mentions :param retries: fields."""',
+            'def fetch(url):\n    """`:param retries:` is literal syntax."""',
+            'def fetch(url):\n    """Args:\n        retries: Google format."""',
+            'def fetch(url):\n    """Parameters\n    ----------\n    retries : int\n        NumPy format."""',
+            'def fetch(url):\n    r"""\\:param retries: Escaped field."""',
+            'def fetch(url):\n    """:param \\u0072etries: Escaped name."""',
+            'def fetch(url): ":param retr" "ies: Split name."',
+            'def fetch(url): ":param " "retries: Split field."',
+            '@wrap_signature\ndef fetch(url):\n    """:param retries: Runtime interface."""',
+            '@wrap_signature()\nasync def fetch(url):\n    """:param retries: Runtime interface."""',
+            'def broken(\n    """:param retries: Invalid syntax."""',
+            'def fetch(\u00b5):\n    """:param \u00b5: Input."""',
+            'def fetch(\u00b5):\n    """:param \u03bc: Input."""',
+            'def fetch(n\u0303):\n    """:param n\u0303: Input."""',
+        ],
+    )
+    def test_preserves_valid_declarations_and_unsupported_contexts(
+        self, source: str
+    ) -> None:
+        assert code.StaleDocstringParameterRule().check(source, "test.py") == []
+
+    def test_multiline_description_does_not_change_field_name(self) -> None:
+        source = '''\
+def fetch(url):
+    """Fetch a response.
+
+    :param retries: Retry budget, which is described
+        on another physical line.
+    :param url: Target URL.
+    """
+'''
+
+        [issue] = code.StaleDocstringParameterRule().check(source, "test.py")
+
+        assert issue.line == 4
+        assert (
+            source.splitlines()[3][issue.column - 1 : issue.end_column - 1] == "retries"
+        )
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            'def fetch(*args):\n    """:param retries: Named option."""',
+            'def fetch(**options):\n    """:param **optionz: Misspelled catch-all."""',
+            'async def résumé(entrée):\n    """:param retríes: Missing."""',
+            'def résumé(url): "" ":param retríes: Missing."',
+            'def résumé(url): ":param retríes: Missing." " Extra text."',
+            'class Client:\n    def fetch(self, url):\n        """:param retries: Missing."""',
+            'class Client:\n    @classmethod\n    def fetch(cls, url):\n        """:param retries: Missing."""',
+            'class Client:\n    @staticmethod\n    def fetch(url):\n        """:param retries: Missing."""',
+        ],
+    )
+    def test_preserves_unicode_method_and_variadic_source_spans(
+        self, source: str
+    ) -> None:
+        [issue] = code.StaleDocstringParameterRule().check(source, "test.py")
+        line = source.splitlines()[issue.line - 1]
+
+        assert line[issue.column - 1 : issue.end_column - 1] in {
+            "retries",
+            "retríes",
+            "optionz",
+        }
+        assert issue.end_line is None
+
+    def test_nested_declarations_use_only_their_own_signature(self) -> None:
+        source = '''\
+def outer(url, **options):
+    """:param retries: Delegated option."""
+    def inner(timeout):
+        """:param retries: Missing.
+        :param timeout: Budget.
+        """
+    return inner
+'''
+
+        [issue] = code.StaleDocstringParameterRule().check(source, "test.py")
+
+        assert issue.line == 4
+
+    @pytest.mark.parametrize(
+        "example",
+        [
+            "Example::\n\n        :param retries: Literal field.\n",
+            ".. code-block:: python\n\n        :param retries: Literal field.\n",
+            ".. code:: text\n\n        :param retries: Literal field.\n",
+            ".. parsed-literal::\n\n        :param retries: Literal field.\n",
+            ".. doctest::\n\n        :param retries: Literal field.\n",
+            "```text\n    :param retries: Literal field.\n    ```\n",
+            "~~~text\n    :param retries: Literal field.\n    ~~~\n",
+            ">>> print('field')\n    :param retries: Literal output.\n",
+        ],
+    )
+    def test_recognized_literal_examples_are_excluded(self, example: str) -> None:
+        source = f'def fetch(url):\n    """{example}\n    :param url: Target.\n    """'
+
+        assert code.StaleDocstringParameterRule().check(source, "test.py") == []
+
+    def test_field_after_literal_example_remains_checked(self) -> None:
+        source = '''\
+def fetch(url):
+    """Example::
+
+        :param url: Literal field.
+
+    :param retries: Missing.
+    """
+'''
+
+        [issue] = code.StaleDocstringParameterRule().check(source, "test.py")
+
+        assert issue.line == 6
+
+    @pytest.mark.parametrize("closing", ["```", "````"])
+    def test_field_after_fenced_example_remains_checked(self, closing: str) -> None:
+        source = f'''\
+def fetch(url):
+    """```text title="example"
+    :param retries: Literal field.
+    {closing}
+    :param timeot: Missing.
+    """
+'''
+
+        [issue] = code.StaleDocstringParameterRule().check(source, "test.py")
+
+        assert issue.line == 5
+        assert (
+            source.splitlines()[4][issue.column - 1 : issue.end_column - 1] == "timeot"
+        )
+
+    def test_wrong_fence_delimiter_does_not_end_literal_context(self) -> None:
+        source = '''\
+def fetch(url):
+    """```text
+    ~~~
+    :param retries: Literal field.
+    ```
+    :param timeot: Missing.
+    """
+'''
+
+        [issue] = code.StaleDocstringParameterRule().check(source, "test.py")
+
+        assert issue.line == 6
+
+    def test_rule_metadata(self) -> None:
+        rule = code.StaleDocstringParameterRule()
+
+        assert rule.id == "C009"
+        assert rule.name == "Stale Docstring Parameter"
+        assert rule.severity is Severity.INFO
+        assert rule.default_confidence is Confidence.HIGH
+        assert rule.applies_to == {"python"}
+        assert rule.content_scope == "raw"
+        assert rule.config_key is None
 
 
 class TestCommentedOutCode:

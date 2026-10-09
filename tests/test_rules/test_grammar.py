@@ -2224,3 +2224,193 @@ class TestUndefinedComparativeRule:
         assert rule.default_confidence is Confidence.LOW
         assert rule.applies_to == {"markdown", "python"}
         assert rule.content_scope == "prose"
+
+
+class TestRepeatedFunctionWord:
+    """Tests for G039: Repeated Function Word."""
+
+    @pytest.fixture
+    def rule(self) -> Rule:
+        from proseprobe.rules.grammar import RepeatedFunctionWordRule
+
+        return RepeatedFunctionWordRule()
+
+    def test_reports_the_duplicated_word_at_its_exact_span(self, rule: Rule) -> None:
+        source = "Read the the configuration."
+
+        [issue] = rule.check(source, "guide.md")
+
+        assert issue.rule_id == "G039"
+        assert issue.message == "Repeated function word: 'the'"
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            10,
+            None,
+            13,
+        )
+        assert source[issue.column - 1 : issue.end_column - 1] == "the"
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.HIGH
+        assert issue.suggestion == "Keep one occurrence"
+
+    @pytest.mark.parametrize(
+        "word",
+        [
+            "a",
+            "an",
+            "the",
+            "and",
+            "or",
+            "but",
+            "for",
+            "to",
+            "of",
+            "in",
+            "on",
+            "at",
+            "by",
+            "from",
+            "with",
+        ],
+    )
+    def test_detects_only_the_reviewed_function_words(
+        self, rule: Rule, word: str
+    ) -> None:
+        source = f"Read {word} {word} configuration."
+
+        [issue] = rule.check(source, "guide.md")
+
+        assert source[issue.column - 1 : issue.end_column - 1] == word
+
+    @pytest.mark.parametrize(
+        ("source", "start", "end", "word"),
+        [
+            ("Read THE the configuration.", (1, 10), (1, 13), "the"),
+            ("Read the THE the configuration.", (1, 10), (1, 17), "the"),
+            ("Read with\nWITH the configuration.", (2, 1), (2, 5), "with"),
+            ("Read with WITH\nwith the configuration.", (1, 11), (2, 5), "with"),
+        ],
+    )
+    def test_repeated_runs_report_one_duplicated_tail(
+        self,
+        rule: Rule,
+        source: str,
+        start: tuple[int, int],
+        end: tuple[int, int],
+        word: str,
+    ) -> None:
+        [issue] = rule.check(source, "guide.md")
+
+        assert issue.message == f"Repeated function word: '{word}'"
+        assert (issue.line, issue.column) == start
+        assert (issue.end_line or issue.line, issue.end_column) == end
+
+    def test_reports_separate_runs_in_source_order(self, rule: Rule) -> None:
+        source = "Read the the configuration with with care."
+
+        issues = rule.check(source, "guide.md")
+
+        assert [issue.message for issue in issues] == [
+            "Repeated function word: 'the'",
+            "Repeated function word: 'with'",
+        ]
+        assert [
+            source[issue.column - 1 : issue.end_column - 1] for issue in issues
+        ] == ["the", "with"]
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "They had had enough time.",
+            "We know that that condition holds.",
+            "Bora Bora has clear skies.",
+            "Alice Alice is the display name.",
+            "Read the, the configuration.",
+            "Read with; with care.",
+            "Read the. The configuration follows.",
+            "Read the\n\nthe configuration.",
+            "- Read with\n- with care.",
+            "Read the\n\n# the configuration",
+            "Read the parser the configuration.",
+            "Read the `mode` the configuration.",
+            "Read the <code>mode</code> the configuration.",
+            "Read `the the` as the legacy label.",
+            "```text\nRead the the configuration.\n```",
+        ],
+    )
+    def test_preserves_legitimate_repetition_and_prose_boundaries(
+        self, rule: Rule, source: str
+    ) -> None:
+        assert rule.check(source, "guide.md") == []
+
+    def test_masked_gap_does_not_hide_valid_runs_on_either_side(
+        self, rule: Rule
+    ) -> None:
+        source = "Read the the `mode` the the configuration."
+
+        issues = rule.check(source, "guide.md")
+
+        assert [(issue.line, issue.column, issue.end_column) for issue in issues] == [
+            (1, 10, 13),
+            (1, 25, 28),
+        ]
+        assert [
+            source[issue.column - 1 : issue.end_column - 1] for issue in issues
+        ] == ["the", "the"]
+
+    @pytest.mark.parametrize(
+        ("source", "filename", "start", "end"),
+        [
+            ('"""Read with\nwith care."""', "guide.py", (2, 1), (2, 5)),
+            ("# Read with\n# with care.", "guide.py", (2, 3), (2, 7)),
+            ("> Read with\n> with care.", "guide.md", (2, 3), (2, 7)),
+        ],
+    )
+    def test_wrapped_documentation_retains_original_source_columns(
+        self,
+        rule: Rule,
+        source: str,
+        filename: str,
+        start: tuple[int, int],
+        end: tuple[int, int],
+    ) -> None:
+        [issue] = rule.check(source, filename)
+
+        assert (issue.line, issue.column) == start
+        assert (issue.end_line or issue.line, issue.end_column) == end
+
+    def test_python_code_strings_and_distinct_comment_blocks_do_not_join(
+        self, rule: Rule
+    ) -> None:
+        source = 'label = "the the"\n# Read with\nvalue = 1\n# with care.\n'
+
+        assert rule.check(source, "guide.py") == []
+
+    def test_docstring_punctuation_does_not_become_a_comment_prefix(
+        self, rule: Rule
+    ) -> None:
+        assert rule.check('"""Read with\n# with care."""', "guide.py") == []
+
+    def test_explicit_suppression_preserves_quoted_function_word_name(
+        self, rule: Rule
+    ) -> None:
+        from pathlib import Path
+
+        from proseprobe.config import Config
+        from proseprobe.core.linter import Linter
+
+        source = '<!-- proseprobe-ignore-next-line G039 -->\nThe band "The The" released an album.\n'
+        assert len(rule.check(source, "guide.md")) == 1
+        linter = Linter(Config(select=["G039"]))
+        linter.register_rule(rule)
+
+        assert linter.check_content(source, Path("guide.md")) == []
+
+    def test_rule_metadata(self, rule: Rule) -> None:
+        assert rule.id == "G039"
+        assert rule.name == "Repeated Function Word"
+        assert rule.config_key is None
+        assert rule.severity is Severity.INFO
+        assert rule.default_confidence is Confidence.HIGH
+        assert rule.applies_to == {"markdown", "python"}
+        assert rule.content_scope == "prose"

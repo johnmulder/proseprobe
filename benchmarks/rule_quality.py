@@ -153,7 +153,11 @@ def prepare_evaluation_scan(
     if mode == "all-rules":
         if any(overrides):
             raise ValueError("all-rules mode cannot be combined with policy overrides")
-        return prepare_scan(Config(), severity="info", min_confidence="low")
+        return prepare_scan(
+            Config(markdown_anchor_style="github"),
+            severity="info",
+            min_confidence="low",
+        )
     if mode != "production":
         raise ValueError(f"unknown evaluation mode: {mode}")
     return prepare_scan(

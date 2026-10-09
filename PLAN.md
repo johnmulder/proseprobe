@@ -555,21 +555,21 @@ limitations remain visible in evaluation.
 
 Targets: grammar rules, registry, profiles, rule tests, metadata/docs, corpus.
 
-- [ ] P13.1 Define a small reviewed vocabulary of likely accidental function-word
+- [x] P13.1 Define a small reviewed vocabulary of likely accidental function-word
   repetitions and choose a new unused rule ID from canonical metadata.
-- [ ] P13.2 Add a failing positive for `Read the the configuration.` Assert the
+- [x] P13.2 Add a failing positive for `Read the the configuration.` Assert the
   repetition span and a conservative suggestion.
-- [ ] P13.3 Add a positive for `with with`, including a wrapped occurrence and
+- [x] P13.3 Add a positive for `with with`, including a wrapped occurrence and
   Python docstring/comment cases.
-- [ ] P13.4 Add negatives for `had had`, `that that`, punctuation-separated words,
+- [x] P13.4 Add negatives for `had had`, `that that`, punctuation-separated words,
   proper names, inline code, fenced examples, and separate prose blocks.
-- [ ] P13.4a Define which word span a repeated run reports. Test case variation
+- [x] P13.4a Define which word span a repeated run reports. Test case variation
   and a three-word run, requiring one finding for its duplicated tail.
-- [ ] P13.5 Detect only the declared vocabulary in source-mapped prose. Do not
+- [x] P13.5 Detect only the declared vocabulary in source-mapped prose. Do not
   generalize to arbitrary repeated words or infer intentional quoted examples.
-- [ ] P13.6 Verify explicitly preserved quotations through the established
+- [x] P13.6 Verify explicitly preserved quotations through the established
   suppression policy, with raw findings reported honestly where intent is absent.
-- [ ] P13.7 Register the rule as experimental first and specify initial severity
+- [x] P13.7 Register the rule as experimental first and specify initial severity
   and confidence. Test normal default scans as well as profiles: experimental
   classification alone does not exclude a rule from legacy all-category scans.
 - [ ] P13.8 Complete the new-rule checklist in P17, then measure independent
@@ -583,31 +583,31 @@ repetition and masked content alone, without making authorship claims.
 Targets: `src/proseprobe/parsers/python.py`, `src/proseprobe/rules/code.py`,
 parser/code tests, registry, metadata/docs, corpus.
 
-- [ ] P14.1 Add a failing test for a function accepting `url` and `timeout` whose
+- [x] P14.1 Add a failing test for a function accepting `url` and `timeout` whose
   docstring declares `:param retries:`. Assert a span on the stale declaration.
-- [ ] P14.2 Characterize parser parameter metadata for positional-only,
+- [x] P14.2 Characterize parser parameter metadata for positional-only,
   positional, keyword-only, variadic, and bound-method parameters.
-- [ ] P14.3 Preserve parameter kinds and `**kwargs` presence in the smallest
+- [x] P14.3 Preserve parameter kinds and `**kwargs` presence in the smallest
   metadata extension needed by the rule. Test a normal function parameter named
   `self` or `cls` separately from actual bound-method conventions. Leave C007's
   existing normalized parameter tuple unchanged.
-- [ ] P14.4 Add positives for a renamed parameter and a misspelled declared name;
+- [x] P14.4 Add positives for a renamed parameter and a misspelled declared name;
   add negatives for valid declarations and absent documentation.
-- [ ] P14.5 Start with explicit Sphinx `:param` fields. Test typed forms,
+- [x] P14.5 Start with explicit Sphinx `:param` fields. Test typed forms,
   indentation, multiline descriptions, and source mapping; reject prose that
   merely mentions the same text without a supported field declaration.
-- [ ] P14.5a Mask recognized docstring examples before extracting declarations.
+- [x] P14.5a Mask recognized docstring examples before extracting declarations.
   Test literal field examples, escaped content, and concatenated source strings
   so diagnostic coordinates come from source-aligned documentation.
-- [ ] P14.6 Skip module/class documentation and unsupported runtime signatures.
+- [x] P14.6 Skip module/class documentation and unsupported runtime signatures.
   With delegated `**kwargs`, retain conservative behavior instead of declaring
   every extra documented keyword stale.
-- [ ] P14.7 Compare declared names against the owning function's signature.
+- [x] P14.7 Compare declared names against the owning function's signature.
   Keep this distinct from C007's opening-sentence/signature repetition check.
-- [ ] P14.8 Test nested functions, methods, async functions, and Unicode names.
+- [x] P14.8 Test nested functions, methods, async functions, and Unicode names.
   Assert that a declaration is paired with the correct owner.
-- [ ] P14.9 Add the rule as experimental with explicit defaults and complete P17.
-- [ ] P14.10 Defer Google/NumPy sections until each format has tested boundaries
+- [x] P14.9 Add the rule as experimental with explicit defaults and complete P17.
+- [x] P14.10 Defer Google/NumPy sections until each format has tested boundaries
   and independent samples. Treat each added format as a separate later slice.
 
 Acceptance: explicit stale declarations are actionable; missing documentation,
@@ -618,31 +618,31 @@ delegated keywords, and unsupported formats do not become new violations.
 Targets: Markdown parser/markup rules, configuration, registry, metadata/docs,
 parser/configuration/markup tests.
 
-- [ ] P15.1 Choose and document one supported renderer's anchor policy using its
+- [x] P15.1 Choose and document one supported renderer's anchor policy using its
   primary specification. Record heading slug rules, duplicate headings, explicit
   anchors, URL encoding, and supported Markdown extensions.
-- [ ] P15.2 Keep fragment validation disabled by default through an explicit,
+- [x] P15.2 Keep fragment validation disabled by default through an explicit,
   validated renderer/anchor setting. Add a failing default-off test before
   registering the rule; experimental classification alone is insufficient.
-- [ ] P15.3 Add a failing enabled-rule positive for `[installation](#install)`
+- [x] P15.3 Add a failing enabled-rule positive for `[installation](#install)`
   without a matching heading or supported explicit anchor.
-- [ ] P15.4 Add negatives for a matching heading, supported explicit anchor,
+- [x] P15.4 Add negatives for a matching heading, supported explicit anchor,
   duplicate-heading suffix, and encoded destination under the declared policy.
-- [ ] P15.4a Establish direct-link destination extraction with titles and
+- [x] P15.4a Establish direct-link destination extraction with titles and
   delimiters before comparing fragments. Test explicit HTML anchors in non-code
   source separately from heading extraction; do not infer them from heading text.
-- [ ] P15.5 Test that external URLs and cross-file fragments are outside this
+- [x] P15.5 Test that external URLs and cross-file fragments are outside this
   rule's scope. Skip empty fragments and images. Do not fetch pages or add
   cross-repository link checking.
-- [ ] P15.6 Handle reference-style links at their definition destination span.
+- [x] P15.6 Handle reference-style links at their definition destination span.
   Test several uses of one broken definition and require one finding there.
-- [ ] P15.7 Preserve direct-link destination spans and mask code examples. Mark
+- [x] P15.7 Preserve direct-link destination spans and mask code examples. Mark
   generated Liquid/MDX anchors as unsupported where the policy cannot resolve them.
-- [ ] P15.8 Test invalid configuration, explicit enablement, renderer configuration
+- [x] P15.8 Test invalid configuration, explicit enablement, renderer configuration
   in metadata, profile interaction, and disabled-default behavior.
 - [ ] P15.9 Complete P17 and evaluate against documents using the chosen renderer.
   Record unsupported dialects as such rather than as false positives.
-- [ ] P15.9a Add an explicitly enabled renderer policy to the all-rule corpus
+- [x] P15.9a Add an explicitly enabled renderer policy to the all-rule corpus
   track and its provenance. Test corpus coverage for the optional rule without
   changing production defaults or pretending disabled rules emitted findings.
 
@@ -949,3 +949,31 @@ including profile confidence filtering. Two reviewed corpus positives distinguis
 wrapped exact pairs from ambiguous counts; an independent-alternative negative
 is retained. The prior integrated gate passed; the updated corpus has 310 true
 positives, the same 12 false positives, and no missed expectations.
+
+
+### P13–P15 — Experimental rule implementation and integration
+
+G039 has 44 focused cases for its closed function-word vocabulary, exact
+single/multiline duplicated tails, case, masks, legitimate repetition, and
+explicit preserved-name suppression. C009 has 52 field/signature cases, including
+parameter kinds, owning function boundaries, Unicode normalization, variadics,
+unknown decorators, masked examples, and conservative concatenated-literal
+mapping. C007 retains its existing parameter tuple. Google/NumPy formats are
+explicitly deferred pending their own evidence.
+
+M011 has 60 cases under GitHub's documented static anchor policy: headings,
+suffix collisions, explicit anchors, encoded fragments, balanced destinations,
+titles, images, references, examples, and generated-content exclusions. The
+renderer setting is validated and off by default; severity overrides cannot
+reenable an off renderer. All-rules evaluation explicitly records GitHub policy;
+production eligibility excludes labels when the renderer is off.
+
+Sixteen integration cases failed before registry/policy wiring. Seventeen now
+pass for JSON Lines/SARIF endpoints, selection, ignores, severity overrides,
+baseline round trips, suppressions, metadata, profile classification, and renderer
+eligibility. Registry and executable documentation tests pass with 100 rules.
+New corpus positives/negatives include all three rules. Existing placeholder
+corpus text also contains a missing Install target: its new M011 expectation
+records a reviewed defect under enabled GitHub policy while retaining the M004
+negative. Independent precision and renderer-corpus human review remain pending;
+no profile promotion has been made.

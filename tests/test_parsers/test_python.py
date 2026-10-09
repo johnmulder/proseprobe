@@ -168,6 +168,46 @@ class Client:
             ("create", ("name", "active")),
         ]
 
+    def test_docstrings_keep_full_source_signature_without_changing_c007(self) -> None:
+        source = '''\
+def send(self, cls, /, request=None, *tags, verify=True, **options):
+    """Send a request."""
+
+class Client:
+    @classmethod
+    async def create(cls, name, *, active=True):
+        """Create a client."""
+
+@signature_wrapper
+def wrapped(value):
+    """Wrapped interface."""
+'''
+        parser = PythonParser(source)
+        assert parser.parse()
+
+        send, create, wrapped = parser.get_docstrings()
+
+        assert send.parameters == ("request", "tags", "verify", "options")
+        assert send.signature_parameters == (
+            ("self", "positional_only"),
+            ("cls", "positional_only"),
+            ("request", "positional"),
+            ("tags", "var_positional"),
+            ("verify", "keyword_only"),
+            ("options", "var_keyword"),
+        )
+        assert send.accepts_kwargs
+        assert not send.has_dynamic_decorators
+        assert create.parameters == ("name", "active")
+        assert create.signature_parameters == (
+            ("cls", "positional"),
+            ("name", "positional"),
+            ("active", "keyword_only"),
+        )
+        assert not create.accepts_kwargs
+        assert not create.has_dynamic_decorators
+        assert wrapped.has_dynamic_decorators
+
     def test_extract_comments(self) -> None:
         content = """
 # This is a comment

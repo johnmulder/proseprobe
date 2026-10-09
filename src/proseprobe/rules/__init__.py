@@ -3,7 +3,7 @@
 from proseprobe.config import Config
 from proseprobe.profiles import profile_names_for_rule
 from proseprobe.rules import code, grammar, markup, struct, style, vocab
-from proseprobe.rules.base import Rule, RuleMetadata, severity_from_str
+from proseprobe.rules.base import Rule, RuleMetadata, Severity, severity_from_str
 
 __all__ = ["get_all_rules", "get_rule_metadata", "get_rule_metadata_by_id"]
 
@@ -22,6 +22,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         code.CommentRestatesCodeRule(),
         code.DocstringRepeatsSignatureRule(),
         code.CommentedOutCodeRule(),
+        code.StaleDocstringParameterRule(),
         grammar.CopulaAvoidanceRule(),
         grammar.ExcessiveHedgingRule(),
         grammar.ParticipleChainsRule(),
@@ -47,6 +48,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         grammar.ClauseCoordinationOverloadRule(),
         grammar.HedgedRequirementRule(),
         grammar.UndefinedComparativeRule(),
+        grammar.RepeatedFunctionWordRule(),
         markup.WrongMarkupRule(),
         markup.ChatGPTMarkersRule(),
         markup.UTMParametersRule(),
@@ -57,6 +59,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         markup.SkippedHeadingLevelRule(),
         markup.BareURLInProseRule(),
         markup.NonDescriptiveLinkTextRule(),
+        markup.SameDocumentFragmentRule(config.markdown_anchor_style),
         struct.RuleOfThreeRule(thresholds.rule_of_three),
         struct.NegativeParallelismRule(),
         struct.ChallengeConclusionsRule(),
@@ -121,6 +124,8 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         override = config.severity_overrides.get(rule.id)
         if override:
             rule.severity = severity_from_str(override, rule.severity) or rule.severity
+        if rule.id == "M011" and config.markdown_anchor_style == "off":
+            rule.severity = Severity.OFF
     return sorted(rules, key=lambda rule: rule.id)
 
 

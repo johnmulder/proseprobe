@@ -52,7 +52,8 @@ Each specialized profile includes the general set plus its listed rules.
 Running without a profile preserves the all-category selection, warning
 minimum severity, and low minimum confidence.
 
-`C006`, `G038`, `S029`, `T013`, `V015`, and `V017` are experimental and are not
+`C006`, `C009`, `G038`, `G039`, `M011`, `S029`, `T013`, `V015`, and `V017`
+are experimental and are not
 included in any built-in profile. Enable an experimental rule explicitly,
 including its informational severity and low confidence:
 
@@ -62,6 +63,23 @@ select = ["G038"]
 minimum_severity = "info"
 min_confidence = "low"
 ```
+
+### Markdown fragment policy
+
+`markdown_anchor_style` defaults to `"off"`. Set it to `"github"` to enable
+experimental M011 same-document fragment checks, and include informational
+findings or select M011 with an appropriate severity override. A severity
+override alone cannot enable a renderer that remains off.
+
+```toml
+markdown_anchor_style = "github"
+minimum_severity = "info"
+select = ["M011"]
+```
+
+Only the declared static GitHub anchor policy is supported. Generated Liquid
+or MDX anchors and other renderer dialects require separate review. The rule
+does not fetch destinations. `--show-config` displays the effective anchor style.
 
 ### File Patterns
 

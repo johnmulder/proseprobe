@@ -220,6 +220,7 @@ def _cmd_check(args: argparse.Namespace) -> int:
         print(style("Configuration:", bold=True))
         print(f"  Config file: {config.source_path or 'default'}")
         print(f"  Profile: {config.profile or 'default'}")
+        print(f"  Markdown anchor style: {config.markdown_anchor_style}")
         print(f"  Select: {config.select}")
         print(f"  Ignore: {config.ignore}")
         print(f"  Include patterns: {config.include}")

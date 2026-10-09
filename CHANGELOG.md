@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Experimental G039 repeated function-word and C009 stale Sphinx parameter
+  checks, plus optional M011 same-document fragment checks under an explicit
+  GitHub anchor policy that remains disabled by default.
+
 - Production scan and cold-CLI benchmarks with cache/workload provenance,
   measured byte/file rates, and deterministic timing-calculation tests.
 
@@ -17,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The ProseProbe CLI with `check`, `watch`, `rules`, `explain`, `init`, `version`,
   and `baseline` commands.
-- 97 detection rules across vocabulary, structure, style, grammar, Python code,
+- 100 detection rules across vocabulary, structure, style, grammar, Python code,
   and Markdown markup categories.
 - Markdown, MDX, and Python scanning with source-mapped prose blocks, sentences,
   docstrings, comments, and exact diagnostic spans.

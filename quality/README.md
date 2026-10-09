@@ -8,7 +8,8 @@ technical, academic, business, journalistic, changelog, and Python content.
 ## Evaluation policy
 
 `make rule-quality` retains the historical all-rules measurement with
-informational findings and low minimum confidence. It uses explicit defaults
+informational findings and low minimum confidence. Optional M011 is explicitly
+enabled with the reported GitHub anchor policy. It uses explicit defaults
 without discovering repository or user configuration. Production-policy
 measurements use the same construction and confidence filters as the CLI:
 

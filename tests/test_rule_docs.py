@@ -13,6 +13,7 @@ from proseprobe._rule_docs import (
     render_rule_inventory,
     synchronize_rule_docs,
 )
+from proseprobe.config import Config
 from proseprobe.rules import get_all_rules, get_rule_metadata
 from proseprobe.rules.base import Confidence
 
@@ -78,19 +79,19 @@ def test_category_table_is_derived_from_registry() -> None:
     assert "| `V` | Vocabulary | 16 |" in rendered
     assert "| `S` | Structure | 25 |" in rendered
     assert "| `T` | Style | 14 |" in rendered
-    assert "| `M` | Markup | 10 |" in rendered
-    assert "| `G` | Grammar | 25 |" in rendered
-    assert "| `C` | Code | 7 |" in rendered
-    assert "| **Total** | | **97** | |" in rendered
+    assert "| `M` | Markup | 11 |" in rendered
+    assert "| `G` | Grammar | 26 |" in rendered
+    assert "| `C` | Code | 8 |" in rendered
+    assert "| **Total** | | **100** | |" in rendered
 
 
 def test_rule_inventory_contains_canonical_metadata() -> None:
     rendered = render_rule_inventory()
     rule_rows = [line for line in rendered.splitlines() if line.startswith("| `")]
 
-    assert len(rule_rows) == 97
+    assert len(rule_rows) == 100
     assert rule_rows[0].startswith("| `V001`")
-    assert rule_rows[-1].startswith("| `M010`")
+    assert rule_rows[-1].startswith("| `M011`")
     assert any(
         "`S001`" in row
         and "info" in row
@@ -343,7 +344,8 @@ def test_documented_examples_match_rule_behavior(
     good_example: str,
 ) -> None:
     """Each rule's examples should remain executable documentation."""
-    rule = next(rule for rule in get_all_rules() if rule.id == rule_id)
+    config = Config(markdown_anchor_style="github") if rule_id == "M011" else Config()
+    rule = next(rule for rule in get_all_rules(config) if rule.id == rule_id)
     filename = "example.py" if language == "python" else "example.md"
 
     bad_issues = rule.check(bad_example, filename)

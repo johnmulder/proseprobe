@@ -99,6 +99,7 @@ class Config:
     ignore: list[str] = field(default_factory=list)
     severity: str = "warning"
     min_confidence: str = "low"
+    markdown_anchor_style: str = "off"
     severity_overrides: dict[str, str] = field(default_factory=dict)
     vocabulary: VocabularyConfig = field(default_factory=VocabularyConfig)
     thresholds: ThresholdsConfig = field(default_factory=ThresholdsConfig)
@@ -112,6 +113,7 @@ _CONFIG_KEYS = frozenset(
         "ignore",
         "include",
         "min_confidence",
+        "markdown_anchor_style",
         "minimum_severity",
         "per-file-ignores",
         "profile",
@@ -532,6 +534,11 @@ def _parse_config(data: dict[str, Any]) -> Config:
             data.get("min_confidence", profile_confidence),
             "min_confidence",
             {"high", "low", "medium"},
+        ),
+        markdown_anchor_style=_require_choice(
+            data.get("markdown_anchor_style", "off"),
+            "markdown_anchor_style",
+            {"github", "off"},
         ),
         severity_overrides=severity_overrides,
         vocabulary=vocabulary,

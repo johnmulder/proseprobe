@@ -152,6 +152,7 @@ select = ["G001"]
         assert isinstance(config, Config)
         assert config.profile is None
         assert config.severity == "warning"
+        assert config.markdown_anchor_style == "off"
         assert config.source_path is None
 
     def test_profile_supplies_policy_defaults(self, tmp_path: Path) -> None:

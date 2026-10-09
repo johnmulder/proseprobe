@@ -63,10 +63,10 @@ rtk proxy .venv/bin/python -m benchmarks.bench_rules --mode scan --profile techn
 | `V` | Vocabulary | 16 | Overused and clichéd words and phrases |
 | `S` | Structure | 25 | Organizational patterns |
 | `T` | Style | 14 | Typographic issues |
-| `G` | Grammar | 25 | Grammatical patterns |
-| `C` | Code | 7 | Python docstring/comment issues |
-| `M` | Markup | 10 | Markdown artifacts |
-| **Total** | | **97** | |
+| `G` | Grammar | 26 | Grammatical patterns |
+| `C` | Code | 8 | Python docstring/comment issues |
+| `M` | Markup | 11 | Markdown artifacts |
+| **Total** | | **100** | |
 
 <!-- rule-docs:categories:end -->
 
@@ -283,6 +283,13 @@ cycle. It cannot be combined with `minimum_severity`; the latter can coexist
 with the `[tool.proseprobe.severity]` override table. `--show-config` displays
 the normalized effective policy and the explicit or discovered source file,
 or `default` when no file was loaded.
+
+`markdown_anchor_style = "off"` disables optional M011 fragment validation.
+The only enabled policy is `"github"`, covering supported static headings,
+explicit HTML anchors, and same-document direct/reference destinations.
+Renderer-off takes precedence over a rule severity override. Liquid/MDX anchors generated at render time are unsupported and skipped conservatively. No network lookup occurs.
+The three new precision rules C009, G039, and M011 remain experimental without
+named profile promotion; C009/G039 can run in informational category scans.
 
 ### 5.3 Inline Suppressions
 
