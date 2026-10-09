@@ -272,25 +272,25 @@ Targets: `quality/`, evaluation-only adapters under `benchmarks/`,
 
 ### P06A — Provenance, sampling, and annotation
 
-- [ ] P06A.1 Define a source manifest with URL, revision, checksum, license,
+- [x] P06A.1 Define a source manifest with URL, revision, checksum, license,
   attribution, source identity, format, and evaluation split.
-- [ ] P06A.2 Test rejection of missing provenance, duplicate sample identities,
+- [x] P06A.2 Test rejection of missing provenance, duplicate sample identities,
   invalid splits, and paths escaping the permitted corpus location.
-- [ ] P06A.2a Test a corrupted cached sample and validate its checksum before
+- [x] P06A.2a Test a corrupted cached sample and validate its checksum before
   conversion. Keep downloads outside unit tests and external datasets outside
   the published package unless their inclusion is deliberate and licensed.
-- [ ] P06A.3 Establish a few-hundred-sample pilot across complete Markdown
+- [x] P06A.3 Establish a few-hundred-sample pilot across complete Markdown
   documents, Python docstrings, and comments. Record format and genre counts;
   size alone does not establish representativeness.
-- [ ] P06A.4 Freeze development and holdout source identities before rule tuning.
+- [x] P06A.4 Freeze development and holdout source identities before rule tuning.
   Split by repository, document, or author as appropriate; keep related revisions
   and before/after pairs in the same split.
-- [ ] P06A.5 Test split isolation, including duplicates and near-identical
+- [x] P06A.5 Test split isolation, including duplicates and near-identical
   excerpts when their source identities are available.
-- [ ] P06A.5a Assign GitHub Docs to one split because it is one repository. Obtain
+- [x] P06A.5a Assign GitHub Docs to one split because it is one repository. Obtain
   additional verified, licensed documentation sources for the other splits;
   keep the GitHub Docs revision and its excerpts together.
-- [ ] P06A.6 Write annotation guidance for useful findings, false positives,
+- [x] P06A.6 Write annotation guidance for useful findings, false positives,
   context-dependent cases, missed issues, and correct source spans.
 - [ ] P06A.7 Sample random prose as well as triggered findings. Fully annotate
   eligible regions when measuring recall; a warning-only review cannot supply
@@ -308,19 +308,19 @@ Targets: `quality/`, evaluation-only adapters under `benchmarks/`,
 
 ### P06B — Technical Markdown and Python
 
-- [ ] P06B.1 Pin a [GitHub Docs](https://github.com/github/docs) revision and select
+- [x] P06B.1 Pin a [GitHub Docs](https://github.com/github/docs) revision and select
   full Markdown files with headings, links, frontmatter, tables, fences, and
   Liquid markup. Record its CC BY 4.0 content license and attribution.
-- [ ] P06B.2 Add a tiny offline fixture and a failing loader test that preserves
+- [x] P06B.2 Add a tiny offline fixture and a failing loader test that preserves
   source text and source identity. Load samples without running templates or
   treating repository content as instructions.
 - [ ] P06B.3 Annotate the selected files. Treat published documentation as
   candidate negative material, never as guaranteed error-free ground truth.
-- [ ] P06B.4 Select the Python subset of
+- [x] P06B.4 Select the Python subset of
   [CodeSearchNet](https://github.com/github/CodeSearchNet). Record upstream
   repository and license metadata; its project MIT license does not replace
   the data's upstream licenses.
-- [ ] P06B.5 Test a tiny CodeSearchNet JSON Lines adapter for function source,
+- [x] P06B.5 Test a tiny CodeSearchNet JSON Lines adapter for function source,
   docstring text, repository identity, and missing fields. Preserve source
   offsets where available and declare missing surrounding module context.
 - [ ] P06B.6 Annotate writing quality independently. Keep code-search relevance
@@ -328,18 +328,18 @@ Targets: `quality/`, evaluation-only adapters under `benchmarks/`,
 
 ### P06C — Grammar and fluency
 
-- [ ] P06C.1 Select the development material from
+- [x] P06C.1 Select the development material from
   [W&I+LOCNESS / BEA-2019](https://www.cl.cam.ac.uk/research/nl/bea2019st/),
   recording its non-commercial restriction and archive checksum.
-- [ ] P06C.2 Test a tiny M2 reader for token spans, insertions, deletions, no-op
+- [x] P06C.2 Test a tiny M2 reader for token spans, insertions, deletions, no-op
   annotations, and multiple annotators. Do not merge incompatible annotator edits.
 - [ ] P06C.3 Map only supported error types to relevant rules. Record unsupported
   categories and automatically assigned ERRANT types separately.
-- [ ] P06C.4 Test token-to-source mapping and detokenization around punctuation
+- [x] P06C.4 Test token-to-source mapping and detokenization around punctuation
   and contractions. Report preprocessing artifacts separately from rule errors.
-- [ ] P06C.5 Load [JFLEG](https://github.com/keisks/jfleg) source sentences and all
+- [x] P06C.5 Load [JFLEG](https://github.com/keisks/jfleg) source sentences and all
   four human corrections. Record its CC BY-NC-SA 4.0 license.
-- [ ] P06C.6 Test pair identity, missing references, and split preservation on
+- [x] P06C.6 Test pair identity, missing references, and split preservation on
   small offline files before loading the full selected subset.
 - [ ] P06C.7 Review relevant warning changes across source and corrected variants.
   Use detection and actionability metrics; generated-text GLEU scores do not
@@ -347,14 +347,14 @@ Targets: `quality/`, evaluation-only adapters under `benchmarks/`,
 
 ### P06D — Simplification and software revisions
 
-- [ ] P06D.1 Load [ASSET](https://github.com/facebookresearch/asset) originals and
+- [x] P06D.1 Load [ASSET](https://github.com/facebookresearch/asset) originals and
   ten human simplifications, recording its CC BY-NC 4.0 license.
-- [ ] P06D.2 Test pair identity and references on a tiny offline fixture. Restrict
+- [x] P06D.2 Test pair identity and references on a tiny offline fixture. Restrict
   interpretation to sentence-level clarity and complexity rules.
 - [ ] P06D.3 Review whether relevant warnings disappear after a human revision,
   remain useful, or appear incorrectly. Never treat fewer warnings as sufficient
   evidence of a better revision.
-- [ ] P06D.4 Recheck access and licensing for the replication package linked by
+- [x] P06D.4 Recheck access and licensing for the replication package linked by
   the [GitHub README simplification study](https://arxiv.org/abs/2308.09940).
   Record an unresolved-access outcome if its package remains unavailable.
 - [ ] P06D.5 If access and terms permit use, test a revision-pair adapter and
@@ -869,3 +869,28 @@ separate denominators. Reports include policy/context/source breakdowns, sample
 uncertainty, and reviewed-prose warning density. Unreviewed material cannot
 supply a clean-negative or density denominator. Both evaluator modules pass
 strict type checking. The external pilot has not been scored or unblinded.
+
+
+### P06 — Pilot frozen and blind review prepared
+
+The manifest freezes 300 unreviewed units: 100 complete Markdown documents,
+80 Python functions with docstrings and comments, and 120 grammar/simplification
+originals with native references. Development contains 170 units; holdout
+contains 130. GitHub Docs, Rust book, and upstream Python licenses are pinned;
+restricted grammar datasets remain in the ignored local cache. The README
+revision package is accessible but its reuse terms remain unresolved and it is
+excluded. The primary CodeSearchNet archive returned 403; a bounded named mirror
+was checked against pinned upstream modules without changing native text.
+
+Forty-one offline adapter/provenance tests pass, including checksum-before-
+conversion, path containment, exact text, native coordinates, and split/pair
+isolation. The frozen manifest checksum is
+`2dcadd8fb3bb278ee09a9ff2685b00c7a7c6efde3f0221ae69efcccc825d3ade`.
+Blind originals and an empty-coverage annotation packet are ready. No detector
+predictions or human labels were assigned to this pilot, and holdout prose has
+not been read for tuning. Human annotation, double review, native error mapping,
+and revision usefulness judgments remain pending. The reviewer request is open.
+
+The integrated local gate passed with 2,361 tests and regression counts
+308 true positives, 12 false positives, and no misses. These counts include
+pending rule-wrap fixtures and describe the regression corpus, not the pilot.

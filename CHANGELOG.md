@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Evaluation-only dataset adapters, pinned provenance and split validation,
+  and a 300-unit external pilot prepared for blind human annotation.
+
 - The ProseProbe CLI with `check`, `watch`, `rules`, `explain`, `init`, `version`,
   and `baseline` commands.
 - 97 detection rules across vocabulary, structure, style, grammar, Python code,

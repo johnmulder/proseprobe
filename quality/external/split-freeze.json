@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "frozen_on": "2026-10-09",
+  "sampling_seed": "proseprobe-p06-2026-10-09",
+  "holdout_policy": "Holdout source text and detector outputs remain unopened by heuristic developers until human annotation is frozen.",
+  "groups": [
+    {
+      "source_group": "github/docs",
+      "revision": "be38ec5d78e24172587e61b3c6ff40ace1865c71",
+      "split": "development",
+      "target_samples": 50
+    },
+    {
+      "source_group": "rust-lang/book",
+      "revision": "1500248d8f230566e4ec9f27fcbb8fe9e2898ab1",
+      "split": "holdout",
+      "target_samples": 50
+    },
+    {
+      "source_group": "CodeSearchNet/all-upstream-repositories",
+      "revision": "v2/python.zip",
+      "split": "development",
+      "target_samples": 80
+    },
+    {
+      "source_group": "keisks/jfleg",
+      "revision": "ee06ff806a208aba815ac45313f4e750a48330a5",
+      "split": "holdout",
+      "target_samples": 40
+    },
+    {
+      "source_group": "facebookresearch/asset",
+      "revision": "9d659040d0d8942dbc4cd65cf357563b43fd9ab4",
+      "split": "holdout",
+      "target_samples": 40
+    },
+    {
+      "source_group": "W&I+LOCNESS/v2.1/development",
+      "revision": "v2.1",
+      "split": "development",
+      "target_samples": 40
+    }
+  ],
+  "related_content_policy": "Every repository, source document, author where known, and all original/reference variants stay in one split. All CodeSearchNet native partitions are development here. Unknown authors are grouped conservatively by dataset.",
+  "acquired_samples": 300,
+  "sample_identity_sha256": "0d23948cdcd32d86afbbc7cce99d89e6e9c81241eac9c09bff3719e9d5b4ffa1",
+  "source_manifest_sha256": "2dcadd8fb3bb278ee09a9ff2685b00c7a7c6efde3f0221ae69efcccc825d3ade",
+  "acquisition_status": "complete; 300 unreviewed units; LOCNESS excluded; CodeSearchNet primary unavailable and verified bounded mirror used"
+}
