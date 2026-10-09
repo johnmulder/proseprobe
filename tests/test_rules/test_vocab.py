@@ -1203,11 +1203,52 @@ class TestUnboundedSuperlative:
             "We compared three parsers. Atlas is the fastest among them.",
             "In our benchmark, Atlas is fastest.",
             "Of the three options, Atlas is best.",
-            "Atlas processed 100 requests in 12 ms. It is the fastest.",
-            "Mina Ortiz reported that Atlas is the most reliable.",
         ],
     )
-    def test_suppresses_local_comparison_or_evidence(self, source: str) -> None:
+    def test_suppresses_explicit_local_comparisons(self, source: str) -> None:
+        assert UnboundedSuperlativeRule().check(source, "guide.md") == []
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "Release 4 is the fastest parser.",
+            "The server listens on port 443. Atlas is the fastest parser.",
+            "The release shipped in June 2026. Atlas is the fastest parser.",
+            "John Smith reviewed the release. Atlas is the fastest parser.",
+            "Read [the report](https://example.com). Atlas is the fastest parser.",
+            "Atlas is the fastest parser. Boreal processed 100 requests in 12 ms.",
+            "Atlas processed 100 requests in 12 ms. It is the fastest.",
+            "Mina Ortiz reported that Atlas is the most reliable.",
+            "Atlas is fastest when the port is between 443 and 444.",
+            "When the port is between 443 and 444, Atlas is fastest.",
+            "Atlas is fastest among.",
+            "Of the, Atlas is fastest.",
+        ],
+    )
+    def test_unrelated_metadata_or_evidence_does_not_bound_the_claim(
+        self, source: str
+    ) -> None:
+        [issue] = UnboundedSuperlativeRule().check(source, "guide.md")
+
+        assert issue.confidence is Confidence.LOW
+
+    def test_comparison_set_applies_only_to_its_own_claim(self) -> None:
+        source = (
+            "Atlas is fastest among the three parsers, but Boreal is the most reliable."
+        )
+
+        [issue] = UnboundedSuperlativeRule().check(source, "guide.md")
+
+        assert source[issue.column - 1 : issue.end_column - 1] == "the most reliable"
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "In this benchmark, Atlas was fastest among the three tested parsers.",
+            "Among the parsers and compilers, Atlas is the most reliable.",
+        ],
+    )
+    def test_direct_scope_and_metric_qualify_the_comparison(self, source: str) -> None:
         assert UnboundedSuperlativeRule().check(source, "guide.md") == []
 
     def test_comparison_evidence_does_not_cross_scope_boundaries(self) -> None:
@@ -1303,14 +1344,66 @@ class TestAbsoluteReliabilityClaim:
         [
             "Across 10,000 test runs, the migration always succeeds.",
             "Under the tested configuration, the retry loop never fails.",
-            (
-                "We observed no failures in 5,000 requests. "
-                "The parser eliminates all errors."
-            ),
         ],
     )
     def test_suppresses_concrete_test_bounds(self, source: str) -> None:
         assert AbsoluteReliabilityClaimRule().check(source, "guide.md") == []
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "The parser was tested over 100 runs. The parser never fails.",
+            "We observed no failures in 5,000 requests. The parser eliminates all errors.",
+            "The parser never fails. The server was tested over 100 runs.",
+            "The parser never fails; the server was tested over 100 runs.",
+            "The parser never fails, while the server was tested over 100 runs.",
+            "The parser never failed during those 100 runs, but the parser never fails.",
+        ],
+    )
+    def test_finite_or_unrelated_testing_does_not_validate_a_universal_claim(
+        self, source: str
+    ) -> None:
+        [issue] = AbsoluteReliabilityClaimRule().check(source, "guide.md")
+
+        assert issue.confidence is Confidence.MEDIUM
+
+    def test_mixed_bounded_and_unbounded_claims_keep_the_unbounded_finding(
+        self,
+    ) -> None:
+        source = "The parser never fails during 100 test runs, but the gateway is 100% secure."
+
+        [issue] = AbsoluteReliabilityClaimRule().check(source, "guide.md")
+
+        assert source[issue.column - 1 : issue.end_column - 1] == "100% secure"
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "The parser never failed during those 100 runs.",
+            "The parser never fails during those 100 runs.",
+            "Across 100 tests and 50 trials, the parser never fails.",
+            "The parser never fails under the tested configuration.",
+            "The parser never fails during 10,000 runs.",
+        ],
+    )
+    def test_bound_qualifies_the_same_observation(self, source: str) -> None:
+        assert AbsoluteReliabilityClaimRule().check(source, "guide.md") == []
+
+    def test_unclear_testing_scope_remains_a_lower_confidence_prompt(self) -> None:
+        [issue] = AbsoluteReliabilityClaimRule().check(
+            "The parser never fails in our tests.", "guide.md"
+        )
+
+        assert issue.confidence is Confidence.LOW
+
+    def test_neighboring_testing_does_not_shift_wrapped_claim_coordinates(self) -> None:
+        source = "The parser was tested over 100 runs.\nThe parser never\nfails."
+
+        [issue] = AbsoluteReliabilityClaimRule().check(source, "guide.md")
+
+        assert (issue.line, issue.column) == (2, 12)
+        assert (issue.end_line, issue.end_column) == (3, 6)
+        assert issue.message == "Absolute reliability claim: 'never fails'"
 
     def test_test_evidence_does_not_cross_scope_boundaries(self) -> None:
         source = (

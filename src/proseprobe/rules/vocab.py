@@ -43,15 +43,47 @@ _QUANTITY_EVIDENCE = re.compile(
     r"\b(?:benchmark|measurement|report|study|survey)s?\b", re.IGNORECASE
 )
 _TESTED_BOUND = re.compile(
-    r"(?:\b(?:across|during|for|in|over)\s+\d[\d,]*(?:\.\d+)?\s+"
+    r"(?:\b(?:across|during|for|in|over)\s+(?:(?:the|these|those)\s+)?"
+    r"\d[\d,]*(?:\.\d+)?\s+"
     r"(?:tests?|trials?|test runs?|runs?|requests?|operations?|cases?|hours?|days?)\b"
     r"|\bunder\s+(?:our|the|these|this)\s+tested\s+"
-    r"(?:conditions?|configuration|environment|setup)\b"
-    r"|\b(?:benchmarked|measured|observed|tested)\b[^.!?\n]{0,80}"
-    r"\b\d[\d,]*(?:\.\d+)?\s+"
-    r"(?:tests?|trials?|test runs?|runs?|requests?|operations?|cases?|hours?|days?)\b)",
+    r"(?:conditions?|configuration|environment|setup)\b)",
     re.IGNORECASE,
 )
+
+
+_CLAUSE_BOUNDARY = re.compile(
+    r";|(?<!\d),|,(?!\d)|\b(?:and|or|but|yet|whereas|while)\b", re.IGNORECASE
+)
+
+_FINITE_CLAUSE = re.compile(
+    r"\b(?:is|are|was|were|has|have|had|remains?|never|always|eliminates?)\b"
+    r"|\b(?:we|they|I)\s+(?:tested|observed|compared|processed|reported|measured)\b",
+    re.IGNORECASE,
+)
+
+_UNCERTAIN_TEST_SCOPE = re.compile(
+    r"\b(?:benchmarks?|tests?|tested|trials?|observed|conditions?)\b", re.IGNORECASE
+)
+
+
+def _claim_scope(text: str, start: int, end: int) -> tuple[int, int]:
+    """Keep a claim's clause and its leading modifiers together."""
+    left = 0
+    right = len(text)
+    previous = 0
+    for boundary in _CLAUSE_BOUNDARY.finditer(text):
+        if boundary.group().casefold() in {",", "and", "or"} and not (
+            _FINITE_CLAUSE.search(text[previous : boundary.start()])
+        ):
+            continue
+        previous = boundary.end()
+        if boundary.end() <= start:
+            left = boundary.end()
+        elif boundary.start() >= end:
+            right = boundary.start()
+            break
+    return left, right
 
 
 def _sentence_window_source(
@@ -86,14 +118,19 @@ def _has_sentence_evidence(
 
 
 def _has_tested_bound(
-    content: str,
-    sentences: list[ProseSentence],
-    index: int,
+    source: str,
+    start: int,
+    end: int,
 ) -> bool:
-    """Return whether the local source states a concrete tested scope."""
-    return bool(
-        _TESTED_BOUND.search(_sentence_window_source(content, sentences, index))
-    )
+    """Require an explicit bound to modify this particular observation."""
+    for bound in _TESTED_BOUND.finditer(source):
+        if bound.end() <= start and not source[: bound.start()].strip(" \t\r\n,"):
+            return True
+        if bound.start() >= end and not _FINITE_CLAUSE.search(
+            source[end : bound.start()]
+        ):
+            return True
+    return False
 
 
 def _has_quantity_evidence(
@@ -789,8 +826,9 @@ class UnboundedSuperlativeRule(Rule):
     )
     _COMPARISON_SET: ClassVar[re.Pattern[str]] = re.compile(
         r"\b(?:among|between|compared\s+(?:to|with)|out\s+of|within)\b"
+        r"(?=\s+\w)"
         r"|\bof\s+(?:all|our|the|these|those|\d+|one|two|three|four|five|"
-        r"six|seven|eight|nine|ten)\b"
+        r"six|seven|eight|nine|ten)\b(?=\s+\w)"
         r"|\bin\s+(?:our|the|this)\s+"
         r"(?:benchmark|comparison|evaluation|test)s?\b",
         re.IGNORECASE,
@@ -805,24 +843,41 @@ class UnboundedSuperlativeRule(Rule):
         r"\b(?:if|whether)\b", re.IGNORECASE
     )
 
+    @classmethod
+    def _has_comparison(cls, source: str, start: int, end: int) -> bool:
+        for comparison in cls._COMPARISON_SET.finditer(source):
+            if comparison.end() <= start and not _FINITE_CLAUSE.search(
+                source[: comparison.start()]
+            ):
+                return True
+            if comparison.start() >= end and not _FINITE_CLAUSE.search(
+                source[end : comparison.start()]
+            ):
+                return True
+        return False
+
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check prose for curated superlatives without a local comparison."""
         issues: list[Issue] = []
         sentences = iter_prose_sentences(content, filename)
-        for index, sentence in enumerate(sentences):
-            window = _sentence_window_source(content, sentences, index)
+        for sentence in sentences:
             if (
                 sentence.context == "heading"
                 or is_example_line(content, filename, sentence.start_line)
                 or sentence.text.rstrip().endswith("?")
                 or self._LITERAL_CONTEXT.search(sentence.text)
-                or self._COMPARISON_SET.search(window)
-                or _has_quantity_evidence(content, sentences, index)
             ):
                 continue
 
             for match in self._CLAIM.finditer(sentence.text):
                 if self._HYPOTHETICAL.search(sentence.text[: match.start()]):
+                    continue
+                first, last = _claim_scope(sentence.text, match.start(), match.end())
+                if self._has_comparison(
+                    sentence.text[first:last],
+                    match.start() - first,
+                    match.end() - first,
+                ):
                     continue
                 claim_match = match.span("claim")
                 line, column = sentence.source_position(claim_match[0])
@@ -872,15 +927,17 @@ class AbsoluteReliabilityClaimRule(Rule):
         """Check prose for unbounded absolute reliability claims."""
         issues: list[Issue] = []
         sentences = iter_prose_sentences(content, filename)
-        for index, sentence in enumerate(sentences):
-            if (
-                is_example_line(content, filename, sentence.start_line)
-                or self._LITERAL_CONTEXT.search(sentence.text)
-                or _has_tested_bound(content, sentences, index)
-            ):
+        for sentence in sentences:
+            if is_example_line(
+                content, filename, sentence.start_line
+            ) or self._LITERAL_CONTEXT.search(sentence.text):
                 continue
 
             for match in self._CLAIM.finditer(sentence.text):
+                first, last = _claim_scope(sentence.text, match.start(), match.end())
+                scope = sentence.text[first:last]
+                if _has_tested_bound(scope, match.start() - first, match.end() - first):
+                    continue
                 line, column = sentence.source_position(match.start())
                 end_line, end_column = sentence.source_position(match.end())
                 claim = " ".join(match.group().split())
@@ -893,7 +950,12 @@ class AbsoluteReliabilityClaimRule(Rule):
                         end_line=end_line,
                         end_column=end_column,
                         severity=self.severity,
-                        confidence=self.default_confidence,
+                        confidence=(
+                            Confidence.LOW
+                            if _TESTED_BOUND.search(scope)
+                            or _UNCERTAIN_TEST_SCOPE.search(scope)
+                            else self.default_confidence
+                        ),
                         suggestion="State the tested scope and observed result",
                     )
                 )

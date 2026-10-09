@@ -470,8 +470,8 @@ The rule applies to Markdown prose and Python comments and docstrings.
 ### V015: Unbounded Superlative
 
 Detects curated superlative claims such as `is the best`, `was fastest`, and
-`remains the most reliable` when the local prose does not name a comparison
-set or supporting evidence. Findings are low-confidence informational
+`remains the most reliable` when the matched claim does not name a comparison
+set or scope. Findings are low-confidence informational
 diagnostics on the exact superlative phrase.
 
 **Example (unbounded):**
@@ -485,8 +485,9 @@ Among the three parsers in our benchmark, Atlas is the fastest.
 ```
 
 Questions, hypothetical and literal mentions, headings, examples, and
-`best-in-class` are excluded. Comparison markers, benchmark language, or
-quantitative evidence in the same or an adjacent sentence suppress a finding.
+`best-in-class` are excluded. Recognized comparison markers must qualify that
+claim. A release number, date, named person, link, or nearby measurement alone
+does not establish a comparison set and retains a review prompt.
 The rule applies to Markdown prose and Python comments and docstrings.
 
 V015 is experimental and is not included in any built-in profile. Select it
@@ -511,9 +512,11 @@ The deployment always succeeds.
 Across 10,000 test runs, the deployment completed without a failure.
 ```
 
-A claim is suppressed when its sentence or an adjacent sentence in the same
-prose scope states a numbered test population or an explicitly tested
-configuration. Code, demonstration sections, and sentences discussing the
+A claim is suppressed only when its own leading or trailing modifier states
+a numbered test population or explicitly tested configuration. Finite testing
+in a neighboring sentence or independent clause cannot qualify a universal
+assertion. Vague local testing scope retains a low-confidence review prompt.
+Code, demonstration sections, and sentences discussing the
 literal wording are also excluded. The rule applies to Markdown prose and
 Python comments and docstrings.
 

@@ -457,33 +457,33 @@ Targets: evidence helpers and V015/V016 in `src/proseprobe/rules/vocab.py`,
 
 ### P10A — Comparatives and superlatives
 
-- [ ] P10A.1 Add a failing positive for `Release 4 is the fastest parser.` An
+- [x] P10A.1 Add a failing positive for `Release 4 is the fastest parser.` An
   unrelated version number must not exempt the superlative.
-- [ ] P10A.2 Add negatives for a directly stated comparison with metric and scope,
+- [x] P10A.2 Add negatives for a directly stated comparison with metric and scope,
   such as `In this benchmark, A was fastest among the three tested parsers.`
-- [ ] P10A.3 Test unrelated dates, ports, people, links, and numbers in adjacent
+- [x] P10A.3 Test unrelated dates, ports, people, links, and numbers in adjacent
   sentences, including a different subject in the same paragraph.
-- [ ] P10A.4 Replace presence-only evidence checks with narrow claim-local
+- [x] P10A.4 Replace presence-only evidence checks with narrow claim-local
   qualification. For uncertain association, retain a lower-confidence review
   prompt instead of treating the claim as proven.
-- [ ] P10A.5 Keep V015 experimental until P16 supplies sufficient independent
+- [x] P10A.5 Keep V015 experimental until P16 supplies sufficient independent
   precision evidence. Preserve current profile membership unless deliberately
   changed after review.
 
 ### P10B — Reliability assertions
 
-- [ ] P10B.1 Add a failing positive for `The parser was tested over 100 runs.
+- [x] P10B.1 Add a failing positive for `The parser was tested over 100 runs.
   The parser never fails.` Finite testing must not exempt the universal assertion.
-- [ ] P10B.2 Add a negative for the bounded observation `The parser never failed
+- [x] P10B.2 Add a negative for the bounded observation `The parser never failed
   during those 100 runs.` Assert that the bound qualifies the same observation.
-- [ ] P10B.3 Replace any current test that exempts an unbounded assertion merely
+- [x] P10B.3 Replace any current test that exempts an unbounded assertion merely
   because a neighboring sentence reports testing. Retain its old input as a
   positive regression with a documented expectation change.
-- [ ] P10B.4 Test tense changes, unrelated subjects, explicit tested conditions,
+- [x] P10B.4 Test tense changes, unrelated subjects, explicit tested conditions,
   and a sentence containing both a bounded observation and an unbounded claim.
-- [ ] P10B.5 Narrow the bound association without attempting general factual
+- [x] P10B.5 Narrow the bound association without attempting general factual
   verification. Preserve findings where the qualification is unresolved.
-- [ ] P10B.6 Verify V016 profile behavior and source spans, then review all corpus
+- [x] P10B.6 Verify V016 profile behavior and source spans, then review all corpus
   mismatches introduced by the new evidence policy.
 
 Acceptance: evidence of an observation cannot silently validate an unrelated
@@ -977,3 +977,18 @@ corpus text also contains a missing Install target: its new M011 expectation
 records a reviewed defect under enabled GitHub policy while retaining the M004
 negative. Independent precision and renderer-corpus human review remain pending;
 no profile promotion has been made.
+
+### P10 — Evidence narrowed to the matched claim
+
+Seventeen initial regressions plus four boundary refinements failed before the
+claim-scope correction. All 71 focused cases pass. Unrelated releases, dates,
+names, links, finite neighboring tests, and independent clauses cannot silently
+qualify an assertion. Explicit comparison sets and observation bounds must
+modify the matched claim. Unresolved testing scope keeps a low-confidence
+finding; broad evidence helpers used by other rules remain unchanged.
+
+The original adjacent-evidence inputs remain as reviewed positives under the
+revised contract: V015 and V016 each gain one expectation and lose one obsolete
+negative judgment. Additional corpus cases distinguish an unrelated Release 4,
+a scoped comparison, a universal claim after finite testing, and directly bounded
+observations. V015 stays experimental, with no profile promotion.

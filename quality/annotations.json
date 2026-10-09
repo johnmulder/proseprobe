@@ -855,6 +855,13 @@
           "rule_id": "V016",
           "line": 9,
           "column": 23
+        },
+        {
+          "rule_id": "V016",
+          "line": 17,
+          "column": 55,
+          "end_column": 76,
+          "note": "Neighboring measurements do not qualify this unbounded assertion; the old input is retained under the revised claim-local contract."
         }
       ],
       "negative_cases": [
@@ -867,11 +874,6 @@
           "rule_id": "V016",
           "line": 15,
           "note": "An explicitly tested configuration bounds the claim."
-        },
-        {
-          "rule_id": "V016",
-          "line": 17,
-          "note": "An adjacent measured request population supplies the bound."
         },
         {
           "rule_id": "V016",
@@ -2104,6 +2106,13 @@
           "rule_id": "V015",
           "line": 9,
           "column": 21
+        },
+        {
+          "rule_id": "V015",
+          "line": 17,
+          "column": 44,
+          "end_column": 55,
+          "note": "Neighboring measurements do not qualify this unbounded assertion; the old input is retained under the revised claim-local contract."
         }
       ],
       "negative_cases": [
@@ -2116,11 +2125,6 @@
           "rule_id": "V015",
           "line": 15,
           "note": "A named benchmark supplies the comparison context."
-        },
-        {
-          "rule_id": "V015",
-          "line": 17,
-          "note": "Adjacent quantitative evidence supports the claim."
         },
         {
           "rule_id": "V015",
@@ -4051,6 +4055,39 @@
           "rule_id": "C009",
           "line": 14,
           "note": "The documented field matches the owning function signature."
+        }
+      ]
+    },
+    "quality/corpus/claim-local-evidence.md": {
+      "expected": [
+        {
+          "rule_id": "V015",
+          "line": 1,
+          "column": 14,
+          "end_column": 25
+        },
+        {
+          "rule_id": "V016",
+          "line": 5,
+          "column": 49,
+          "end_column": 60
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "V015",
+          "line": 3,
+          "note": "The explicit benchmark and comparison set qualify this matched claim."
+        },
+        {
+          "rule_id": "V016",
+          "line": 7,
+          "note": "The tested population directly qualifies this observation."
+        },
+        {
+          "rule_id": "V016",
+          "line": 9,
+          "note": "This is a bounded past observation, not a universal present claim."
         }
       ]
     }
