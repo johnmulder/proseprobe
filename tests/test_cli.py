@@ -2107,6 +2107,24 @@ class TestCliValidation:
         assert str(config_file) in result.stderr
         assert "Traceback" not in result.stderr
 
+    def test_invalid_discovered_pyproject_returns_config_error(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        config_file = tmp_path / "pyproject.toml"
+        config_file.write_text("[tool.proseprobe]\nselect = [\n")
+        test_file = tmp_path / "doc.md"
+        test_file.write_text("delve\n")
+        monkeypatch.chdir(tmp_path)
+
+        result = run_cli("check", str(test_file), "--format", "jsonl")
+
+        assert result.exit_code == 2
+        assert result.stdout == ""
+        assert "Configuration error" in result.stderr
+        assert str(config_file) in result.stderr
+        assert "Invalid value" in result.stderr
+        assert "Traceback" not in result.stderr
+
     @pytest.mark.parametrize("option", ["--select", "--ignore"])
     def test_invalid_cli_rule_reference_returns_config_error(
         self, tmp_path: Path, option: str

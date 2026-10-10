@@ -1,7 +1,7 @@
 # ProseProbe improvement plan
 
 Status: original engineering packages and their local verification complete.
-Reassessment packages P18–P33 are planned and remain open.
+Reassessment packages P18–P33 are in progress; their checks and records appear below.
 Independent human evaluation and the listed external gates remain pending.
 Assessment date: 2026-10-09.
 
@@ -1222,7 +1222,8 @@ contracts). Earlier package commits are recorded above.
 
 ## Reassessment continuation
 
-Planning date: 2026-10-09. Status: all new tasks below are open.
+Planning date: 2026-10-09. Execution started: 2026-10-10.
+Status: checked actions are complete; other actions retain their prerequisites.
 Baseline revision: `bf53d0adfed8bd04884cbdfc542f365c026ee796`.
 
 This continuation covers every issue from the second assessment. The previous
@@ -1307,9 +1308,9 @@ frozen source assignments; new coverage belongs to a separately frozen extension
 - Run the P33 slice gate before each implementation commit. Repeat broader
   checks when new changes, failures, or unresolved concerns justify them.
 
-No implementation is performed by this planning revision. Existing runtime
-dependencies, profiles, baselines, corpus annotations, and source freezes are
-unchanged. The package-specific acceptance criteria below control completion.
+The planning revision changed documentation only. Execution preserves runtime
+dependencies, named profiles, baseline contents, and frozen pilot assignments.
+The package-specific acceptance criteria below control completion.
 
 ## P18 — Validate complete phrase predicates against original source
 
@@ -1411,18 +1412,18 @@ Targets: `src/proseprobe/config.py`, `tests/test_config.py`,
 `tests/test_cli.py`, configuration documentation.
 Prerequisites: reassessment baseline; independent of rule changes.
 
-- [ ] P19.1 Characterize the current precedence with temporary fixtures:
+- [x] P19.1 Characterize the current precedence with temporary fixtures:
   current `.proseprobe.toml`, current `pyproject.toml` with
   `[tool.proseprobe]`, parent `.proseprobe.toml` through the Git root, user
   configuration, then defaults. Reuse passing tests where available.
-- [ ] P19.2 Add a failing unit test for an automatically discovered malformed
+- [x] P19.2 Add a failing unit test for an automatically discovered malformed
   current-directory `pyproject.toml`. Require `ConfigError` containing its path
   and parse diagnostic. A malformed file without a readable tool table also
   fails clearly; discovery must not silently guess that it is unrelated.
-- [ ] P19.3 Add a failing CLI regression for automatic discovery. Assert exit
+- [x] P19.3 Add a failing CLI regression for automatic discovery. Assert exit
   code 2, a configuration diagnostic on stderr, and no traceback or findings.
   Reuse the existing explicit-path malformed-TOML test as the comparison.
-- [ ] P19.4 Wrap discovery's TOML read/parse errors in the existing `ConfigError`
+- [x] P19.4 Wrap discovery's TOML read/parse errors in the existing `ConfigError`
   contract. Add one deterministic read-error test using a patched file reader;
   avoid permission-mode tests that depend on the executing account.
 - [ ] P19.5 Add a failing boundary test with the starting directory itself as a
@@ -2406,3 +2407,24 @@ commits and current evidence. Independent evaluation, unavailable remote checks,
 conditional datasets, and publication remain accurately distinguished.
 
 Suggested one-line commit: `Record continuation verification and remaining evaluation gates`.
+
+
+## Continuation execution record
+
+### Baseline — 2026-10-10
+
+Starting commit: `d3cb7a1`. The worktree was clean. `make check dogfood
+rule-quality` passed with 2,665 tests and the recorded 336 TP/6 FP/0 FN
+all-rules corpus results. Independent human review remains pending; a reviewer
+request is open. The frozen external holdout is unopened.
+
+### P19 — Automatic configuration errors
+
+Four regressions failed before correction: malformed tool/project TOML, a
+deterministic read denial, and CLI error handling. Discovery now raises the
+existing `ConfigError` with its source path and diagnostic; CLI exit 2 writes
+no findings or traceback. Existing precedence is preserved. All 259 focused
+configuration/CLI tests pass. An isolated snapshot containing only this slice
+passed `make check dogfood rule-quality`; raw quality results are unchanged.
+The snapshot excludes unrelated parallel edits and uses its own source tree.
+Git-root boundary work remains open.

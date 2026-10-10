@@ -176,10 +176,13 @@ def find_config_file(start_dir: Path | None = None) -> Path | None:
     # 2) Current directory pyproject.toml [tool.proseprobe]
     pyproject = current / "pyproject.toml"
     if pyproject.exists():
-        with open(pyproject, "rb") as f:
-            data = tomllib.load(f)
-            if "tool" in data and "proseprobe" in data["tool"]:
-                return pyproject
+        try:
+            with open(pyproject, "rb") as f:
+                data = tomllib.load(f)
+        except (OSError, tomllib.TOMLDecodeError) as exc:
+            raise ConfigError(pyproject, str(exc)) from exc
+        if "tool" in data and "proseprobe" in data["tool"]:
+            return pyproject
 
     # 3) Parent directories .proseprobe.toml (up to git root)
     parent = current.parent

@@ -69,6 +69,37 @@ class TestFindConfigFile:
 
         assert result is None
 
+    @pytest.mark.parametrize("table", ["tool.proseprobe", "project"])
+    def test_malformed_discovered_pyproject_has_config_error(
+        self, tmp_path: Path, table: str
+    ) -> None:
+        pyproject = tmp_path / "pyproject.toml"
+        pyproject.write_text(f"[{table}]\nname = [\n")
+
+        with pytest.raises(ConfigError) as error:
+            find_config_file(tmp_path)
+
+        assert error.value.path == pyproject
+        assert str(pyproject) in str(error.value)
+        assert "Invalid value" in error.value.message
+
+    def test_unreadable_discovered_pyproject_has_config_error(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        pyproject = tmp_path / "pyproject.toml"
+        pyproject.write_text("[tool.proseprobe]\n")
+
+        def denied_reader(_path: Path, _mode: str) -> None:
+            raise PermissionError("read denied")
+
+        monkeypatch.setattr("proseprobe.config.open", denied_reader, raising=False)
+
+        with pytest.raises(ConfigError) as error:
+            find_config_file(tmp_path)
+
+        assert error.value.path == pyproject
+        assert "read denied" in error.value.message
+
     def test_searches_parent_directories(self, tmp_path: Path) -> None:
         """Test that config is found in parent directories."""
         config_file = tmp_path / ".proseprobe.toml"
