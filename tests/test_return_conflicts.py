@@ -301,3 +301,27 @@ def test_return_conflict_suppression_confidence_severity_and_baseline(
     explained = run_cli("explain", "C010")
     assert explained.exit_code == 0
     assert "Explicit Return Type Conflict" in explained.stdout
+
+
+@pytest.mark.parametrize("wrapper", ["classmethod", "staticmethod"])
+def test_return_conflict_skips_rebound_builtin_decorator_names(wrapper: str) -> None:
+    from proseprobe.rules.code import ExplicitReturnTypeConflictRule
+
+    source = (
+        f"{wrapper} = transform_contract\n"
+        f"class Reader:\n    @{wrapper}\n    def read() -> None:\n"
+        '        """:rtype: int"""\n'
+    )
+    assert ExplicitReturnTypeConflictRule().check(source, "doc.py") == []
+
+
+@pytest.mark.parametrize("wrapper", ["classmethod", "staticmethod"])
+def test_return_conflict_retains_unshadowed_builtin_decorators(wrapper: str) -> None:
+    from proseprobe.rules.code import ExplicitReturnTypeConflictRule
+
+    source = (
+        f"class Reader:\n    @{wrapper}\n    def read() -> None:\n"
+        '        """:rtype: int"""\n'
+    )
+    [issue] = ExplicitReturnTypeConflictRule().check(source, "doc.py")
+    assert issue.line == 4

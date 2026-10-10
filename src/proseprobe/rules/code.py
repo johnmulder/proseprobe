@@ -718,10 +718,11 @@ class ExplicitReturnTypeConflictRule(Rule):
     _field = re.compile(r"^[ \t]*:rtype:[ \t]*(?P<type>\S.*?)[ \t]*$")
 
     @staticmethod
-    def _int_is_builtin(tree: ast.Module) -> bool:
+    def _supported_bindings(tree: ast.Module) -> bool:
+        names = {"int", "classmethod", "staticmethod"}
         for node in ast.walk(tree):
             if isinstance(node, ast.Name) and (
-                (node.id == "int" and isinstance(node.ctx, (ast.Store, ast.Del)))
+                (node.id in names and isinstance(node.ctx, (ast.Store, ast.Del)))
                 or node.id
                 in {
                     "globals",
@@ -738,17 +739,17 @@ class ExplicitReturnTypeConflictRule(Rule):
                 return False
             if (
                 isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-                and node.name == "int"
+                and node.name in names
             ):
                 return False
-            if isinstance(node, ast.arg) and node.arg == "int":
+            if isinstance(node, ast.arg) and node.arg in names:
                 return False
             if (
                 isinstance(node, (ast.ExceptHandler, ast.MatchAs, ast.MatchStar))
-                and node.name == "int"
+                and node.name in names
             ):
                 return False
-            if isinstance(node, ast.MatchMapping) and node.rest == "int":
+            if isinstance(node, ast.MatchMapping) and node.rest in names:
                 return False
             if isinstance(node, ast.ImportFrom) and (
                 node.module == "builtins"
@@ -756,7 +757,7 @@ class ExplicitReturnTypeConflictRule(Rule):
             ):
                 return False
             if isinstance(node, (ast.Import, ast.ImportFrom)) and any(
-                (alias.asname or alias.name.split(".")[0]) == "int"
+                (alias.asname or alias.name.split(".")[0]) in names
                 or alias.name == "builtins"
                 for alias in node.names
             ):
@@ -767,7 +768,7 @@ class ExplicitReturnTypeConflictRule(Rule):
         """Compare physical fields without inferring intended runtime returns."""
         parser = _get_cached_parser(content)
         tree = parser.get_syntax_tree()
-        if tree is None or not self._int_is_builtin(tree):
+        if tree is None or not self._supported_bindings(tree):
             return []
         blocks = {
             block.start_line: block for block in parser.get_docstring_prose_blocks()
