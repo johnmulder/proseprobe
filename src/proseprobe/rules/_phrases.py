@@ -7,6 +7,22 @@ from proseprobe.parsers.prose import ProseSentence, iter_prose_sentences
 from proseprobe.rules.base import Issue, Rule
 
 
+def original_prose_slice(
+    sentence: ProseSentence,
+    source: str,
+    filename: str,
+    start: int,
+    end: int,
+) -> str:
+    """Return literal source, removing only supported continuation prefixes."""
+    original = source[start:end]
+    if filename.lower().endswith(".py"):
+        return re.sub(r"(?m)^[ \t]*#[ \t]?", "", original)
+    if sentence.context == "blockquote":
+        return re.sub(r"(?m)^(?: {0,3}>[ \t]?)+", "", original)
+    return original
+
+
 def iter_prose_regex_matches(
     sentence: ProseSentence,
     source: str,
@@ -15,11 +31,9 @@ def iter_prose_regex_matches(
 ) -> Iterator[re.Match[str]]:
     """Yield sentence matches whose original source also satisfies the pattern."""
     for match in pattern.finditer(sentence.text):
-        original = source[match.start() : match.end()]
-        if filename.lower().endswith(".py"):
-            original = re.sub(r"(?m)^[ \t]*#[ \t]?", "", original)
-        elif sentence.context == "blockquote":
-            original = re.sub(r"(?m)^(?: {0,3}>[ \t]?)+", "", original)
+        original = original_prose_slice(
+            sentence, source, filename, match.start(), match.end()
+        )
         if pattern.fullmatch(original):
             yield match
 

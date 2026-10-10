@@ -2,7 +2,7 @@
 
 import pytest
 
-from proseprobe.rules.base import Confidence, Rule, Severity
+from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 from proseprobe.rules.grammar import (
     AmbiguousThisRule,
     AssertedSimplicityRule,
@@ -2669,3 +2669,158 @@ def test_masked_gap_does_not_create_a_multiword_hedge_count() -> None:
     source = "The result may change when the sensor appears `mode` to be ready."
 
     assert ExcessiveHedgingRule().check(source, "case.md") == []
+
+
+@pytest.mark.parametrize(
+    ("rule", "text", "phrase", "message", "suggestion"),
+    [
+        (
+            HedgedRequirementRule(),
+            "Clients must normally restart.",
+            "must normally",
+            "Hedged requirement: 'must normally'",
+            "Choose one requirement strength",
+        ),
+        (
+            UnclearActorRequirementRule(),
+            "It must be ensured that clients restart.",
+            "It must be ensured that",
+            "Unclear actor in requirement: 'It must be ensured that'",
+            "Name the actor responsible for the requirement",
+        ),
+        (
+            WeakInstructionVerbRule(),
+            "You will need to restart.",
+            "You will need to",
+            "Weak instruction phrase: 'You will need to'",
+            "Use a direct imperative",
+        ),
+        (
+            ExistentialOpenerRule(),
+            "There is an archive with multiple files and checksums.",
+            "There is",
+            "Existential opener: 'There is'",
+            "Start with the sentence's subject",
+        ),
+        (
+            EmptyItOpenerRule(),
+            "It is clear that clients reconnect.",
+            "It is clear that",
+            "Empty 'It' opener: 'It is clear that'",
+            "State the evidence or conclusion directly",
+        ),
+        (
+            AmbiguousThisRule(),
+            "This causes every client to reconnect.",
+            "This causes",
+            "Ambiguous 'This' opener: 'This causes'",
+            "Name what 'This' refers to",
+        ),
+        (
+            FormerLatterReferenceRule(),
+            "The former protocol remains available.",
+            "The former",
+            "Former/latter reference: 'The former'",
+            "Name the referenced item directly",
+        ),
+    ],
+)
+@pytest.mark.parametrize(
+    "form", ["body", "list", "quote", "nested_quote", "comment", "docstring"]
+)
+@pytest.mark.parametrize("wrapped", [False, True])
+def test_phrase_predicates_preserve_complete_records(
+    rule: Rule,
+    text: str,
+    phrase: str,
+    message: str,
+    suggestion: str,
+    form: str,
+    wrapped: bool,
+) -> None:
+    if wrapped:
+        first, rest = phrase.split(" ", 1)
+        text = text.replace(phrase, first + "\n" + rest, 1)
+    prefix = {
+        "body": "",
+        "list": "- ",
+        "quote": "> ",
+        "nested_quote": "> > ",
+        "comment": "# ",
+        "docstring": "",
+    }[form]
+    continuation = "  " if form == "list" else prefix
+    source = prefix + text.replace("\n", "\n" + continuation)
+    filename = "guide.py" if form in {"comment", "docstring"} else "guide.md"
+    if form == "docstring":
+        source = 'def explain():\n    """' + text.replace("\n", "\n    ") + '"""'
+    start = source.index(phrase.split()[0])
+    last = phrase.split()[-1]
+    end = source.index(last, start + len(phrase.split()[0])) + len(last)
+    start_line = source[:start].count("\n") + 1
+    end_line = source[:end].count("\n") + 1
+    assert rule.check(source, filename) == [
+        Issue(
+            rule_id=rule.id,
+            message=message,
+            line=start_line,
+            column=len(source[:start].rsplit("\n", 1)[-1]) + 1,
+            end_line=end_line,
+            end_column=len(source[:end].rsplit("\n", 1)[-1]) + 1,
+            severity=rule.severity,
+            confidence=rule.default_confidence,
+            suggestion=suggestion,
+        )
+    ]
+
+
+@pytest.mark.parametrize(
+    ("rule", "source"),
+    [
+        (HedgedRequirementRule(), "Clients must `not` normally restart."),
+        (HedgedRequirementRule(), "Clients must <span></span> normally restart."),
+        (HedgedRequirementRule(), "Clients should `not` generally restart."),
+        (
+            UnclearActorRequirementRule(),
+            "It must `not` be ensured that clients restart.",
+        ),
+        (
+            UnclearActorRequirementRule(),
+            "Care should be <span></span> taken to restart.",
+        ),
+        (WeakInstructionVerbRule(), "You `should reconsider` will need to restart."),
+        (WeakInstructionVerbRule(), "You can `not` proceed to restart."),
+        (WeakInstructionVerbRule(), "You will <span></span> need to restart."),
+        (
+            ExistentialOpenerRule(),
+            "There `already` is an existing archive with several files.",
+        ),
+        (EmptyItOpenerRule(), "It is `not` clear that this works."),
+        (AmbiguousThisRule(), "This `rarely` causes a crash."),
+        (FormerLatterReferenceRule(), "The `more recent` former result is available."),
+    ],
+)
+def test_grammar_predicates_cannot_bridge_masked_content(
+    rule: Rule, source: str
+) -> None:
+    assert rule.check(source, "guide.md") == []
+
+
+def test_weak_instruction_retains_later_valid_candidate_after_masked_one() -> None:
+    source = "You can `not` proceed to restart, but You will need to reconnect."
+    [issue] = WeakInstructionVerbRule().check(source, "guide.md")
+    assert issue.message == "Weak instruction phrase: 'You will need to'"
+    assert issue.column == source.index("You will need to") + 1
+
+
+@pytest.mark.parametrize("interruption", ["`not`", "<span></span>"])
+def test_requirement_definition_suffix_needs_literal_source(interruption: str) -> None:
+    source = f'"Must normally" {interruption} means required by default.'
+    [issue] = HedgedRequirementRule().check(source, "guide.md")
+    assert issue.message == "Hedged requirement: 'Must normally'"
+    assert (
+        HedgedRequirementRule().check(
+            '"Must normally" means required by default.', "guide.md"
+        )
+        == []
+    )

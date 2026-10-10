@@ -1328,33 +1328,33 @@ V015 validates `is ... best` before reporting only `best`. Context used for
 exceptions, definition suffixes, or confidence changes also needs original-source
 evidence. Keep exact phrase catalogs, rule IDs, severities and ordering stable.
 
-- [ ] P18.1 Inventory the six assessed rules: G024, G025, G037, V014, V015 and
+- [x] P18.1 Inventory the six assessed rules: G024, G025, G037, V014, V015 and
   V016. Record each candidate pattern, diagnostic subgroup, exception predicate,
   confidence predicate and existing focused tests. Audit direct sentence-regex
   consumers for the same defect; add another rule only after reproducing it.
-- [ ] P18.2 Add a passing characterization matrix for ordinary and wrapped
+- [x] P18.2 Add a passing characterization matrix for ordinary and wrapped
   positives in Markdown body/list/blockquote and Python docstring/comment prose.
   Assert complete issue records, including original-source exclusive endpoints.
-- [ ] P18.3 Add failing G037 negatives for
+- [x] P18.3 Add failing G037 negatives for
   ``Clients must `not` normally restart.`` and the HTML-masked equivalent. Confirm
   that the current false match is `must normally` before changing the rule.
-- [ ] P18.4 Route G037 candidates through the existing source-validation helper.
+- [x] P18.4 Route G037 candidates through the existing source-validation helper.
   Validate the modal and hedge together; retain legitimate whitespace and
   continuation prefixes. Run the G037 matrix before continuing.
-- [ ] P18.5 Add a failing G037 definition-suffix case where an intervening masked
+- [x] P18.5 Add a failing G037 definition-suffix case where an intervening masked
   token makes an apparent `means` exemption. Assert that masking does not remove
   a genuine finding. Add an uninterrupted definition negative alongside it.
-- [ ] P18.6 Make that exemption validate its complete original-source suffix.
+- [x] P18.6 Make that exemption validate its complete original-source suffix.
   Run G037 positives, negatives and source-span checks.
-- [ ] P18.7 Add failing G024 tests with inline code or HTML interrupting each
+- [x] P18.7 Add failing G024 tests with inline code or HTML interrupting each
   fixed opener, including ``It must `not` be ensured that the file is closed.``
   Preserve a valid sentence-start opener and a wrapped positive.
-- [ ] P18.8 Validate G024's full anchored opener against the corresponding source
+- [x] P18.8 Validate G024's full anchored opener against the corresponding source
   slice without removing its sentence-start requirement. Run focused G024 tests.
-- [ ] P18.9 Add failing G025 tests with a masked interruption in both
+- [x] P18.9 Add failing G025 tests with a masked interruption in both
   `You will need to` and `You can proceed to`. Include
   ``You `should reconsider` will need to restart.`` Retain ordinary repeated matches.
-- [ ] P18.10 Validate each complete G025 instruction phrase and rerun its focused
+- [x] P18.10 Validate each complete G025 instruction phrase and rerun its focused
   tests, including a later valid candidate after an invalid interrupted one.
 - [ ] P18.11 Add failing V014 tests for ``a large `unexpected` number of`` and
   ``a handful `unexpected` of``. Include
@@ -2428,3 +2428,22 @@ configuration/CLI tests pass. An isolated snapshot containing only this slice
 passed `make check dogfood rule-quality`; raw quality results are unchanged.
 The snapshot excludes unrelated parallel edits and uses its own source tree.
 Git-root boundary work remains open.
+
+### P18 — Requirement predicates use original source
+
+Eleven regressions failed before correction. G024/G025/G037 and four additional
+reproduced consumers (G016/G017/G019/G022) now validate their full source
+predicates. G037 definition suffixes also require literal evidence. Eighty-four
+complete-record characterizations preserve ordinary and wrapped positives across
+Markdown and Python contexts. HTML equivalents were already clean and remain
+paired characterizations. Existing continuation-prefix handling was extracted
+for guard reuse; markup stripping did not expand. The isolated slice passed
+`make check dogfood rule-quality`, preserving all 336 TP and six known FPs.
+Quantity/reliability predicates and remaining helper/integration checks are open.
+
+### Independent claims — user decision
+
+On 2026-10-10 the user requested deferral of independent effectiveness claims.
+P32 human annotation, semantic usefulness judgments, calibration, holdout scoring
+and profile promotion remain deferred. Engineering and blind-packet preparation
+continue. No independent human labels or population claims will be inferred.

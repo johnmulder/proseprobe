@@ -27,6 +27,7 @@ from proseprobe.parsers.prose import iter_prose_scopes, iter_prose_sentences
 from proseprobe.rules._phrases import (
     iter_prose_regex_matches,
     longest_literal_phrase_issues,
+    original_prose_slice,
 )
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
@@ -685,7 +686,12 @@ class ExistentialOpenerRule(Rule):
                 continue
             if is_example_line(content, filename, sentence.start_line):
                 continue
-            match = self._pattern.match(sentence.text)
+            match = next(
+                iter_prose_regex_matches(
+                    sentence, sentence.source_text(content), filename, self._pattern
+                ),
+                None,
+            )
             if (
                 match is None
                 or len(self._word.findall(sentence.text[match.end() :]))
@@ -735,7 +741,12 @@ class EmptyItOpenerRule(Rule):
                 continue
             if is_example_line(content, filename, sentence.start_line):
                 continue
-            match = self._pattern.match(sentence.text)
+            match = next(
+                iter_prose_regex_matches(
+                    sentence, sentence.source_text(content), filename, self._pattern
+                ),
+                None,
+            )
             if match is None:
                 continue
             line, column = sentence.source_position(match.start())
@@ -780,7 +791,12 @@ class AmbiguousThisRule(Rule):
                 continue
             if is_example_line(content, filename, sentence.start_line):
                 continue
-            match = self._pattern.match(sentence.text)
+            match = next(
+                iter_prose_regex_matches(
+                    sentence, sentence.source_text(content), filename, self._pattern
+                ),
+                None,
+            )
             if match is None:
                 continue
             line, column = sentence.source_position(match.start())
@@ -825,7 +841,10 @@ class FormerLatterReferenceRule(Rule):
                 continue
             if is_example_line(content, filename, sentence.start_line):
                 continue
-            for match in self._pattern.finditer(sentence.text):
+            source = sentence.source_text(content)
+            for match in iter_prose_regex_matches(
+                sentence, source, filename, self._pattern
+            ):
                 line, column = sentence.source_position(match.start())
                 end_line, end_column = sentence.source_position(match.end())
                 reference = " ".join(match.group().split())
@@ -869,7 +888,12 @@ class UnclearActorRequirementRule(Rule):
                 continue
             if is_example_line(content, filename, sentence.start_line):
                 continue
-            match = self._pattern.match(sentence.text)
+            match = next(
+                iter_prose_regex_matches(
+                    sentence, sentence.source_text(content), filename, self._pattern
+                ),
+                None,
+            )
             if match is None:
                 continue
             line, column = sentence.source_position(match.start())
@@ -914,7 +938,10 @@ class WeakInstructionVerbRule(Rule):
                 continue
             if is_example_line(content, filename, sentence.start_line):
                 continue
-            for match in self._pattern.finditer(sentence.text):
+            source = sentence.source_text(content)
+            for match in iter_prose_regex_matches(
+                sentence, source, filename, self._pattern
+            ):
                 line, column = sentence.source_position(match.start())
                 end_line, end_column = sentence.source_position(match.end())
                 phrase = " ".join(match.group().split())
@@ -1065,8 +1092,20 @@ class HedgedRequirementRule(Rule):
                 continue
             if is_example_line(content, filename, sentence.start_line):
                 continue
-            for match in self._pattern.finditer(sentence.text):
-                if self._definition_suffix.match(sentence.text[match.end() :]):
+            source = sentence.source_text(content)
+            for match in iter_prose_regex_matches(
+                sentence, source, filename, self._pattern
+            ):
+                definition = self._definition_suffix.match(sentence.text[match.end() :])
+                if definition is not None and self._definition_suffix.fullmatch(
+                    original_prose_slice(
+                        sentence,
+                        source,
+                        filename,
+                        match.end(),
+                        match.end() + definition.end(),
+                    )
+                ):
                     continue
                 line, column = sentence.source_position(match.start())
                 end_line, end_column = sentence.source_position(match.end())
