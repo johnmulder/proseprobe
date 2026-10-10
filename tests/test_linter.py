@@ -85,6 +85,23 @@ class TestDiscoverFiles:
         assert mdx_file in files
         assert markdown_file in files
 
+    def test_python_discovery_glob_casing_and_explicit_override(
+        self, tmp_path: Path
+    ) -> None:
+        lower = tmp_path / "lower.py"
+        upper = tmp_path / "upper.PY"
+        lower.write_text("# documented\n")
+        upper.write_text("# documented\n")
+
+        default = Linter(Config())
+        uppercase = Linter(Config(include=["*.PY"]))
+        excluded = Linter(Config(exclude=["*.PY"]))
+
+        assert default.discover_files([tmp_path]) == [lower]
+        assert uppercase.discover_files([tmp_path]) == [upper]
+        assert default.discover_files([upper]) == [upper]
+        assert excluded.discover_files([upper]) == []
+
     def test_discover_nested_directory(self, tmp_path: Path) -> None:
         """Test discovering files in nested directories."""
         subdir = tmp_path / "subdir"
@@ -427,6 +444,60 @@ class TestCheckFile:
         issues = linter.check_file(test_file)
 
         assert len(issues) > 0
+
+    def test_explicit_python_suffix_casing_preserves_complete_findings(
+        self, tmp_path: Path
+    ) -> None:
+        source = '"""bespoke delve"""\nmessage = "bespoke delve"\n'
+        lower = tmp_path / "lower.py"
+        upper = tmp_path / "upper.PY"
+        lower.write_text(source)
+        upper.write_text(source)
+        linter = Linter(Config(select=["C001", "V001"]))
+        for rule in get_all_rules():
+            linter.register_rule(rule)
+
+        lower_findings = linter.check_file(lower)
+        upper_findings = linter.check_file(upper)
+
+        assert {issue.rule_id for issue in lower_findings} == {"C001", "V001"}
+        assert upper_findings == lower_findings
+
+    @pytest.mark.parametrize("suffix", [".py", ".PY"])
+    def test_python_parser_dispatch_preserves_documentation_only(
+        self, suffix: str
+    ) -> None:
+        from proseprobe.parsers.prose import (
+            iter_inline_suppressions,
+            iter_prose_lines,
+        )
+
+        source = (
+            '"""bespoke delve"""\n'
+            'message = "bespoke delve"\n'
+            "# delve  # proseprobe: ignore=V001\n"
+        )
+
+        lines = iter_prose_lines(source, f"case{suffix}")
+        assert [line for line, text in lines if "delve" in text] == [1, 3]
+        assert iter_inline_suppressions(source, f"case{suffix}") == [(3, 3, "V001")]
+
+    @pytest.mark.parametrize("suffix", [".md", ".MD", ".mdx", ".markdown", ".txt"])
+    def test_existing_markdown_and_unsupported_filename_classification(
+        self, suffix: str
+    ) -> None:
+        linter = Linter(Config(select=["V001"]))
+        linter.register_rule(AIVocabularyRule())
+        source = "```\ndelve\n```\n\ndelve\n"
+
+        issues = linter.check_content(source, Path(f"case{suffix}"))
+
+        if suffix == ".txt":
+            assert issues == []
+        else:
+            assert [(issue.rule_id, issue.line, issue.column) for issue in issues] == [
+                ("V001", 5, 1)
+            ]
 
     def test_general_prose_rules_scan_python_documentation(
         self, tmp_path: Path

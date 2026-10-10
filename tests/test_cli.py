@@ -210,6 +210,32 @@ class TestCheckCommand:
         assert result.exit_code == 0
         assert result.stdout == ""
 
+    def test_uppercase_python_file_and_stdin_share_documentation_policy(
+        self, tmp_path: Path
+    ) -> None:
+        source = (
+            '"""bespoke delve"""\n'
+            'message = "bespoke delve"\n'
+            "# delve  # proseprobe: ignore=V001\n"
+        )
+        file = tmp_path / "example.PY"
+        file.write_text(source)
+        options = ("--select", "C001,V001", "--format", "json")
+
+        checked = run_cli("check", str(file), *options)
+        streamed = run_cli(
+            "check", "-", "--filename", str(file), *options, stdin=source
+        )
+
+        assert checked.exit_code == streamed.exit_code == 1
+        assert checked.stderr == streamed.stderr == ""
+        data = json.loads(checked.stdout)
+        assert data == json.loads(streamed.stdout)
+        assert data["files"][0]["path"] == str(file)
+        issues = data["files"][0]["issues"]
+        assert {issue["rule_id"] for issue in issues} == {"C001", "V001"}
+        assert {issue["line"] for issue in issues} == {1}
+
     @pytest.mark.parametrize(
         ("filename", "source"),
         [("case.md", "😀 delve\n"), ("case.py", '"""😀 delve"""\n')],

@@ -1481,23 +1481,23 @@ Targets: `src/proseprobe/core/linter.py`,
 `tests/test_linter.py`, `tests/test_cli.py`, parser dispatch tests.
 Prerequisites: reassessment baseline; independent of P19/P20.
 
-- [ ] P21.1 Add a failing linter test that explicitly supplied `example.PY`
+- [x] P21.1 Add a failing linter test that explicitly supplied `example.PY`
   produces the same Python-only rule finding as `example.py`. Compare full
   finding records after normalizing only the filename.
-- [ ] P21.2 Add a failing CLI comparison between an explicit `.PY` file and
+- [x] P21.2 Add a failing CLI comparison between an explicit `.PY` file and
   stdin with `--filename example.PY`. Assert Python documentation extraction,
   Python-only rule eligibility, suppression handling, and virtual path output.
-- [ ] P21.3 Inventory existing suffix checks used for rule eligibility and
+- [x] P21.3 Inventory existing suffix checks used for rule eligibility and
   prose extraction. Characterize `.py`, `.PY`, Markdown suffixes, and an
   unsupported suffix; preserve any intentional fallback behavior.
-- [ ] P21.4 Make file classification consistent using a small shared predicate
+- [x] P21.4 Make file classification consistent using a small shared predicate
   or the existing helper location. Keep the registry and parser interfaces;
   introduce no file-type plugin framework.
-- [ ] P21.5 Add a discovery contract test with `.py` and `.PY` siblings:
+- [x] P21.5 Add a discovery contract test with `.py` and `.PY` siblings:
   configured directory include globs retain their existing case behavior.
   A caller-supplied `*.PY` glob selects the uppercase file; explicit-file
   overrides and configured exclusions retain their current behavior.
-- [ ] P21.6 Verify production/evaluator eligibility uses the same classification.
+- [x] P21.6 Verify production/evaluator eligibility uses the same classification.
   Run focused linter/parser/CLI tests and the package gate. Document explicit
   filename classification only if the existing documentation is ambiguous.
 
@@ -2501,3 +2501,14 @@ package gate pass. Documentation includes a checked agent-authored offline
 example, which is not independent human evidence. Runtime/benchmark identities
 and reviewed-clean-group accounting remain for P24B/C and P25. Frozen pilot
 files and holdout content remain untouched.
+
+### P21 — Explicit Python filename casing
+
+Two regression cases failed before correction; eight classification/discovery
+characterizations already passed. The existing Python routing predicate now
+normalizes suffix casing. No helper framework was needed: parser dispatch was
+already consistent. Complete filesystem/stdin records, source mapping, literal
+masking and same-line suppression match for `.py` and `.PY`. Directory include
+globs, exclusions and per-file policy retain their established behavior. All
+240 focused tests and the isolated package gate pass. Configuration docs record
+explicit-file casing and unchanged directory matching.

@@ -18,7 +18,7 @@ __all__ = ["LintReadError", "LintResults", "Linter"]
 # To support a new file type, append a (tag, checker) tuple here.
 _FILE_TYPE_CHECKERS: list[tuple[str, Callable[[Path], bool]]] = [
     ("markdown", lambda p: p.name.lower().endswith((".md", ".mdx", ".markdown"))),
-    ("python", lambda p: p.suffix == ".py"),
+    ("python", lambda p: p.suffix.lower() == ".py"),
 ]
 
 

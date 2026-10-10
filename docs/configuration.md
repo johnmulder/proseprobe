@@ -25,6 +25,11 @@ earlier matches.
 
 ## Configuration Options
 
+Explicit Python paths and stdin virtual filenames recognize `.py` suffixes
+regardless of casing. Directory discovery retains the configured glob behavior;
+use an include pattern such as `*.PY` when that pattern is needed. Exclusions
+and per-file ignore patterns keep their existing matching semantics.
+
 ### Built-in Profiles
 
 Profiles are fixed presets for rule selection, minimum severity, and minimum
