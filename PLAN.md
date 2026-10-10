@@ -1,6 +1,6 @@
 # ProseProbe improvement plan
 
-Status: engineering implemented; final local verification in progress.
+Status: engineering changes and final local verification complete.
 Independent human evaluation and the listed external gates remain pending.
 Assessment date: 2026-10-09.
 
@@ -730,7 +730,7 @@ written decision and its unmet prerequisite; it must not appear as completed.
 
 ### Final integration
 
-- [ ] P17C.1 Run `make check`, `make dogfood`, `make rule-quality`, and
+- [x] P17C.1 Run `make check`, `make dogfood`, `make rule-quality`, and
   `make nfr-check` on the final implementation commit.
 - [ ] P17C.2 Require the Python 3.11, 3.12, and 3.13 CI matrix for that commit.
   Report any unavailable remote check explicitly.
@@ -1160,7 +1160,7 @@ different wrapped phrases with identical first lines retain separate identities.
 | P12 | Technical and explicit quotation policy complete | Independent development/holdout usefulness review |
 | P13–P15 | Rules, renderer setting, metadata, docs, and integrations complete | Independent precision and renderer-corpus review before promotion |
 | P16 | Metric/report engineering and legacy disposition complete | Human usefulness, paired revisions, calibration, and predeclared quality targets |
-| P17 | Local acceptance checks and publication boundary implemented | Final committed-state local run; remote Ubuntu CI remains unverified |
+| P17 | Local acceptance checks complete | Remote Ubuntu CI remains unverified |
 
 The human reviewer request remains unanswered. No agent supplied human labels,
 read external holdout prose for tuning, or inferred correctness from native
@@ -1179,3 +1179,38 @@ passed negative checks. Warning density is 0.681 per 1,000 reviewed prose words
 (4/5,872). Wilson intervals are sample-only; identified independent source groups
 are absent, so cluster intervals are unavailable. These figures describe the
 purpose-written regression corpus, not the 300-unit natural-text pilot.
+
+
+### Final local verification — 2026-10-09
+
+Final implementation/test commit: `91eb4ea`; runtime code matches `802be72`.
+`make check dogfood rule-quality nfr-check` passed in the final state. Python
+3.13.16 passed 2,665 tests; isolated Python 3.11.15 and 3.12.15 each passed the
+same 2,665-test suite. Generated documentation, Ruff, source mypy, and all edited
+prose scans passed. Baseline contents, runtime dependency declarations, and the
+existing CI workflow are unchanged from the starting commit.
+
+Coverage: 96.01% against the unchanged 90% gate. Startup: 50.0 ms against
+100 ms. Memory: 23.8 MB for 10,000 discovered/checked files against 100 MB.
+The final reviewed-directory benchmark used 64 files, 39.1 KiB, 79 selected
+technical-docs rules, and JSON for cold CLI output: cleared-cache median
+234.01 ms (233.83–235.75); cold CLI 317.85 ms (313.19–329.82), five samples.
+Workload checksum:
+`9606166de20c4b172fa79b88eccdc2b5f79af3e9168467ff0d58081b21f48c4a`.
+The controlled frozen-development comparison above is the supported performance
+comparison; different corpus sizes and historical resource conditions are not
+interchangeable timing baselines.
+
+The regression manifest contains 69 files, 336 expected findings, and 434
+negative checks. Its checksum is
+`23f03d7ec7b3720ed683c63c4a244c18505e0d85c9bb13f1d58ac4ee2f05e972`.
+All six remaining raw false positives are listed in the disposition ledger.
+The external pilot stays frozen, blind, and unreviewed. Remaining unchecked
+steps require human judgments, clear third-party reuse terms, or remote CI;
+they are not marked complete. This final record changes documentation only.
+
+Change commits include `ca2fd6d` (new experimental rules), `a58441e`
+(claim-local evidence), `07646ee` (phrase overlap), `192bba2` (technical senses),
+`f8f8f52` (literal wrapping), `a0cbd3a` (regex wrapping), `2de7cc2` (deferred
+imports), `802be72` (measured pattern construction), and `91eb4ea` (integration
+contracts). Earlier package commits are recorded above.
