@@ -32,6 +32,12 @@ from benchmarks.quality_scoring import (
     validate_source_bindings,
     wilson_interval,
 )
+from benchmarks.regression_gate import (
+    bind_gate_sources,
+    compare_gate,
+    load_gate_record,
+    require_complete_review,
+)
 from proseprobe import __version__
 from proseprobe.config import Config, ConfigError
 from proseprobe.core.linter import Linter
@@ -235,7 +241,7 @@ def collect_findings(
         _config, linter, _rules = prepare_evaluation_scan()
     validate_source_bindings(annotations, repo_root)
     verified = dict(annotations.verified_sources)
-    if annotations.source_binding == "sha256-utf8":
+    if annotations.verified_sources:
         issues_by_file = {}
         for path in linter.discover_files(list(annotations.files)):
             relative = path.resolve().relative_to(repo_root.resolve()).as_posix()
@@ -292,6 +298,7 @@ def format_json_report(
     eligible: Annotations,
     manifest_path: Path,
     repo_root: Path,
+    gate: dict[str, object] | None = None,
 ) -> str:
     """Report counts with explicit policy and reproducible corpus provenance."""
     root = repo_root.resolve()
@@ -355,6 +362,7 @@ def format_json_report(
             "revision": runtime["git"]["head"],
             "runtime": runtime,
             "mode": mode,
+            "gate": gate,
             "scoring": "reviewed-semantic"
             if any(item.match_region is not None for item in eligible.expected)
             else "exact-start",
@@ -456,6 +464,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--root", type=Path, default=REPO_ROOT)
     parser.add_argument(
+        "--gate",
+        type=Path,
+        help="check an explicitly reviewed exact-mismatch regression ledger",
+    )
+    parser.add_argument(
         "--require-bound",
         action="store_true",
         help="require version-three source-bound annotations",
@@ -483,6 +496,19 @@ def main(argv: list[str] | None = None) -> int:
             raise AnnotationError(
                 "strict independent evaluation requires source-bound version-three annotations"
             )
+        gate_record = None
+        if args.gate:
+            gate_record = load_gate_record(
+                args.gate, annotations, args.manifest, args.root, mode, config, rules
+            )
+            require_complete_review(
+                annotations,
+                args.root,
+                linter,
+                rules,
+                gate_record["annotation_contract"],
+            )
+            annotations = bind_gate_sources(annotations, gate_record, args.root)
         eligible = eligible_annotations(annotations, args.root, linter, rules)
         actual = collect_findings(
             annotations, args.root, linter=linter, min_confidence=config.min_confidence
@@ -503,6 +529,13 @@ def main(argv: list[str] | None = None) -> int:
             rule_ids,
             scopes=eligible.scopes,
         )
+        gate_result = (
+            compare_gate(gate_record, score) if gate_record is not None else None
+        )
+        if args.gate:
+            load_gate_record(
+                args.gate, annotations, args.manifest, args.root, mode, config, rules
+            )
         output = (
             format_json_report(
                 score,
@@ -512,6 +545,7 @@ def main(argv: list[str] | None = None) -> int:
                 eligible=eligible,
                 manifest_path=args.manifest,
                 repo_root=args.root,
+                gate=gate_result,
             )
             if args.format == "json"
             else format_report(score)
@@ -530,7 +564,15 @@ def main(argv: list[str] | None = None) -> int:
             f"Policy exclusions: {len(annotations.expected) - len(eligible.expected)} expected, {len(annotations.negative_cases) - len(eligible.negative_cases)} negatives"
         )
     print(output)
-    return 0
+    if args.format == "text" and gate_result is not None:
+        print(
+            f"\nRegression gate: {'PASS' if gate_result['passed'] else 'FAIL'}; exact known mismatches: {gate_result['known_mismatches_count']}; resolved: {len(gate_result['resolved_mismatches'])}"
+        )
+        for mismatch in gate_result["new_mismatches"]:
+            print(
+                f"  New {mismatch['kind'].upper()}: {mismatch['path']}:{mismatch['line']}:{mismatch['column']} {mismatch['rule_id']}"
+            )
+    return 0 if gate_result is None or gate_result["passed"] else 1
 
 
 if __name__ == "__main__":

@@ -1557,31 +1557,31 @@ The existing `rule-quality` command remains a report-only measurement. The new
 gate compares reviewed mismatches, never a count allowance or a population
 precision target. All raw mismatches stay visible in both modes.
 
-- [ ] P23.1 Characterize current report-only behavior with an in-memory or
+- [x] P23.1 Characterize current report-only behavior with an in-memory or
   temporary reviewed corpus containing one false positive and one false
   negative. Assert successful evaluation still returns 0 and prints both.
-- [ ] P23.2 Define a versioned known-mismatch record for a named effective
+- [x] P23.2 Define a versioned known-mismatch record for a named effective
   policy. Bind each item to mismatch kind, rule ID, source identity/hash, and
   source span or stable expected-label identity. Record the review reason,
   annotation/rule contract identifiers, effective policy, and evaluation code
   provenance from P24. Runtime identity records the ledger's creation; it
   does not require unchanged runtime code, because the gate evaluates new code.
   Do not bind acceptance to a fixed FP/FN total.
-- [ ] P23.3 Add failing validator tests for duplicate identities, invalid spans,
+- [x] P23.3 Add failing validator tests for duplicate identities, invalid spans,
   unknown rules, changed source hashes, a mismatched policy, and unsupported
   record versions. Invalid gate input returns a clear error, not success.
-- [ ] P23.4 Add record validation and deterministic mismatch identities.
+- [x] P23.4 Add record validation and deterministic mismatch identities.
   Preserve raw scoring, one-to-one matching, and full findings; an allowlisted
   mismatch is still an FP or FN in the report.
-- [ ] P23.5 Add failing comparator tests: an exact known FP is allowed; a new
+- [x] P23.5 Add failing comparator tests: an exact known FP is allowed; a new
   FP fails even when another known FP disappears; a new FN or lost expected
   positive fails; moving a mismatch to a different source span fails. Distinct
   mismatches sharing a rule and line must remain distinguishable.
-- [ ] P23.6 Add the comparator. A corrected known mismatch passes and is
+- [x] P23.6 Add the comparator. A corrected known mismatch passes and is
   listed as resolved; require review before deleting its record, rather than
   reintroducing the finding to match a frozen count. Explain every newly
   failing identity in deterministic output.
-- [ ] P23.7 Add failing coverage tests for explicit unreviewed, unsupported, and
+- [x] P23.7 Add failing coverage tests for explicit unreviewed, unsupported, and
   context-dependent regions, including a corpus with zero emitted findings.
   Strict gating must refuse unknown eligible review coverage from annotations,
   not infer completeness from the absence of detections. Permit out-of-policy
@@ -1589,15 +1589,15 @@ precision target. All raw mismatches stay visible in both modes.
   exhaustive curated regression manifest under its existing contract. Its
   frozen gate record must bind the evaluated sources and annotation snapshot;
   this does not convert legacy judgments into independent human annotations.
-- [ ] P23.8 Enforce the coverage precondition before accepting the comparison.
+- [x] P23.8 Enforce the coverage precondition before accepting the comparison.
   Keep ordinary external evaluation available as report-only; refuse strict
   gating of the frozen unreviewed pilot without changing its labels or scope.
-- [ ] P23.9 Add failing CLI tests for the explicit gate option: exit 0 for only
+- [x] P23.9 Add failing CLI tests for the explicit gate option: exit 0 for only
   reviewed known mismatches, 1 for a new reviewed regression, and 2 for invalid
   gate inputs or insufficient review coverage. Preserve complete text/JSON
   raw metrics and attach a separate gate result; ordinary invocation remains
   report-only and returns its existing code.
-- [ ] P23.10 Add the CLI option and output contract. Require the requested
+- [x] P23.10 Add the CLI option and output contract. Require the requested
   policy to match the reviewed gate record; do not silently switch policies,
   discover project configuration, apply suppression baselines, or hide issues.
 - [ ] P23.11 Review and freeze the current six all-rules FP identities and the
@@ -2717,3 +2717,20 @@ The isolated conformance snapshot passed `make check dogfood rule-quality` with
 366 TP/6 unchanged FP/0 FN and 64/64 supplied spans. Its overlay included only
 the M008 correction from the shared markup file, excluding unfinished local-link
 work; this preserves each commit's independent verification evidence.
+
+### P23 — Reviewed regression comparison
+
+The dedicated validator/comparator/CLI slice has 39 focused red-to-green cases.
+It binds reviewed mismatch identities to source bytes, annotation/contracts and
+policy, preserves raw metrics, and rejects new FP/FN identities even when totals
+stay equal. Corrected known mismatches are resolved without deleting evidence.
+Strict unknown coverage fails before comparison, including zero findings and
+empty sources; explicit reviewed empty files retain unavailable density.
+Gate-bound legacy scans consume immutable verified bytes while still declaring
+legacy annotation binding. CLI 0/1/2 outcomes and root relocation are tested.
+Final six/four mismatch ledgers and Make/CI wiring await M012's stable registry
+and fixtures. Independent human claims remain deferred.
+
+The isolated P23 comparator snapshot passes `make check dogfood rule-quality`.
+All raw results remain 366 TP/6 FP/0 FN and 64/64 supplied spans. Review caught
+and fixed empty-source unknown coverage and string-root relocation before commit.

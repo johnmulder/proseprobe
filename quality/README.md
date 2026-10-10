@@ -193,3 +193,28 @@ module locations. Compare timing results only with equal workload, effective
 policy and diagnostic identities under comparable environments and cache
 states. An implementation change may alter the runtime digest; that identity
 must be recorded for each side of the comparison. Ordinary CLI output is unchanged.
+
+## Reviewed regression gate
+
+`--gate /path/to/reviewed-regression.json` enables strict regression comparison;
+ordinary invocations remain report-only. A version 1 gate ledger records each
+known FP/FN by source path, exact full span or expected label identity, and
+review reason. It binds the annotation snapshot, source bytes, declared rule
+contracts and named effective policy. Creation-time runtime identity records
+the reviewed snapshot; changed implementations can be evaluated against it.
+
+Known mismatches remain raw FP/FN observations in the report. An exact known
+mismatch passes; a corrected one is listed as resolved. A new mismatch fails
+even if the total stays equal. Duplicate identities and occurrence changes
+cannot use a count allowance. JSON adds a separate `gate` result; text keeps
+raw metrics and prints the comparison outcome. Exit codes are 0 for passing
+comparison, 1 for a new reviewed regression, and 2 for invalid/stale provenance
+or insufficient eligible review coverage.
+
+Strict independent gating requires source-bound version 3 annotations and
+explicit complete reviewed coverage, even when no finding is emitted or a
+source is empty. The legacy version 1 curated corpus has a separate exhaustive
+regression contract and ledger-bound immutable scan bytes. That exception does
+not create independent annotation-time provenance. Gate records need manual
+review before source/contract migration or removal of a resolved mismatch;
+there is no automatic acceptance or refresh option.
