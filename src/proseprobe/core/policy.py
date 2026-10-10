@@ -2,7 +2,12 @@
 
 from pathlib import Path
 
-from proseprobe.config import Config, ConfigError, validate_rule_references
+from proseprobe.config import (
+    Config,
+    ConfigError,
+    validate_project_context,
+    validate_rule_references,
+)
 from proseprobe.core.linter import Linter
 from proseprobe.profiles import EXPERIMENTAL_RULES, PROFILES
 from proseprobe.rules import get_all_rules
@@ -46,6 +51,7 @@ def prepare_scan(
     the CLI's severity-filtered registry; the linter applies selection and
     file-specific policy when scanning.
     """
+    validate_project_context(config)
     valid_rule_ids = {rule.id for rule in get_all_rules()}
     profiled_rule_ids = set().union(*(item.rules for item in PROFILES.values()))
     categorized_rule_ids = profiled_rule_ids | EXPERIMENTAL_RULES

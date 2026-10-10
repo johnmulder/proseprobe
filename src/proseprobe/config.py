@@ -16,6 +16,7 @@ __all__ = [
     "VocabularyConfig",
     "find_config_file",
     "load_config",
+    "validate_project_context",
     "validate_rule_references",
 ]
 
@@ -100,6 +101,9 @@ class Config:
     severity: str = "warning"
     min_confidence: str = "low"
     markdown_anchor_style: str = "off"
+    local_links: bool = False
+    project_root: str | None = None
+    local_link_exclude: list[str] = field(default_factory=list)
     severity_overrides: dict[str, str] = field(default_factory=dict)
     vocabulary: VocabularyConfig = field(default_factory=VocabularyConfig)
     thresholds: ThresholdsConfig = field(default_factory=ThresholdsConfig)
@@ -114,6 +118,9 @@ _CONFIG_KEYS = frozenset(
         "include",
         "min_confidence",
         "markdown_anchor_style",
+        "local_links",
+        "project_root",
+        "local_link_exclude",
         "minimum_severity",
         "per-file-ignores",
         "profile",
@@ -234,7 +241,37 @@ def load_config(config_path: Path | None = None) -> Config:
     except ValueError as exc:
         raise ConfigError(config_path, str(exc)) from exc
     config.source_path = config_path
+    validate_project_context(config)
     return config
+
+
+def validate_project_context(config: Config) -> None:
+    """Validate explicit local-link context without deriving a root from cwd."""
+    source = config.source_path or Path("<configuration>")
+    if not isinstance(config.local_links, bool):
+        raise ConfigError(source, "local_links must be a boolean")
+    if config.project_root is None:
+        if config.local_links:
+            raise ConfigError(source, "local_links requires an explicit project_root")
+        return
+    if not isinstance(config.project_root, str) or not config.project_root.strip():
+        raise ConfigError(source, "project_root must be a nonempty path string")
+    root = Path(config.project_root)
+    if not root.is_absolute():
+        if config.source_path is None:
+            raise ConfigError(
+                source, "project_root must be absolute without a config source"
+            )
+        root = config.source_path.resolve().parent / root
+    try:
+        root = root.resolve(strict=True)
+        if not root.is_dir():
+            raise ConfigError(
+                source, "project_root must identify an existing directory"
+            )
+    except (OSError, RuntimeError) as exc:
+        raise ConfigError(source, f"project_root cannot be resolved: {exc}") from exc
+    config.project_root = str(root)
 
 
 def _reject_unknown_keys(
@@ -538,6 +575,11 @@ def _parse_config(data: dict[str, Any]) -> Config:
             data.get("markdown_anchor_style", "off"),
             "markdown_anchor_style",
             {"github", "off"},
+        ),
+        local_links=data.get("local_links", False),
+        project_root=data.get("project_root"),
+        local_link_exclude=_require_list(
+            data.get("local_link_exclude", []), "local_link_exclude"
         ),
         severity_overrides=severity_overrides,
         vocabulary=vocabulary,

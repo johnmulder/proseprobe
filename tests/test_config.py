@@ -266,6 +266,88 @@ select = ["G001"]
         assert config.markdown_anchor_style == "off"
         assert config.source_path is None
 
+    def test_local_link_context_is_off_by_default(self) -> None:
+        config = Config()
+
+        assert config.local_links is False
+        assert config.project_root is None
+        assert config.local_link_exclude == []
+
+    def test_local_link_root_is_resolved_against_config_source(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        config_dir = tmp_path / "settings"
+        config_dir.mkdir()
+        project = tmp_path / "project"
+        project.mkdir()
+        config_path = config_dir / "config.toml"
+        config_path.write_text(
+            'local_links = true\nproject_root = "../project"\n'
+            'local_link_exclude = ["generated/**"]\n'
+        )
+        unrelated = tmp_path / "unrelated"
+        unrelated.mkdir()
+        monkeypatch.chdir(unrelated)
+
+        config = load_config(config_path)
+
+        assert config.local_links is True
+        assert config.project_root == str(project.resolve())
+        assert config.local_link_exclude == ["generated/**"]
+
+    @pytest.mark.parametrize(
+        "settings",
+        [
+            "local_links = true\n",
+            'local_links = "true"\n',
+            "project_root = 1\n",
+            'project_root = ""\n',
+            'project_root = "missing"\n',
+            "local_link_exclude = true\n",
+            "local_link_exclude = [1]\n",
+        ],
+    )
+    def test_invalid_local_link_context_has_config_error(
+        self, tmp_path: Path, settings: str
+    ) -> None:
+        config_path = tmp_path / "config.toml"
+        config_path.write_text(settings)
+
+        with pytest.raises(
+            ConfigError, match=r"local_links|project_root|local_link_exclude"
+        ) as error:
+            load_config(config_path)
+
+        assert "unknown configuration key" not in error.value.message
+
+    def test_project_root_must_be_directory(self, tmp_path: Path) -> None:
+        root_file = tmp_path / "file.md"
+        root_file.write_text("Content.\n")
+        config_path = tmp_path / "config.toml"
+        config_path.write_text('project_root = "file.md"\n')
+
+        with pytest.raises(ConfigError, match=r"project_root.*directory"):
+            load_config(config_path)
+
+    def test_unknown_local_link_option_keeps_key_validation(
+        self, tmp_path: Path
+    ) -> None:
+        config_path = tmp_path / "config.toml"
+        config_path.write_text('local_link_excludes = ["generated/**"]\n')
+
+        with pytest.raises(
+            ConfigError, match=r"unknown configuration key.*local_link_excludes"
+        ):
+            load_config(config_path)
+
+    def test_direct_config_rejects_relative_project_root(self) -> None:
+        from proseprobe.core.linter import Linter
+
+        config = Config(local_links=True, project_root="relative")
+
+        with pytest.raises(ConfigError, match=r"project_root.*absolute"):
+            Linter(config)
+
     def test_profile_supplies_policy_defaults(self, tmp_path: Path) -> None:
         """A profile should fill policy keys omitted from configuration."""
         config_file = tmp_path / ".proseprobe.toml"

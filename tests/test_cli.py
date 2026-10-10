@@ -2667,3 +2667,23 @@ def test_explicit_docstring_parameter_kind_conflict_cli() -> None:
     assert "variadic positional" in record["message"]
     line = source.splitlines()[1]
     assert line[record["column"] - 1 : record["end_column"] - 1] == "args"
+
+
+def test_show_config_reports_explicit_local_link_context(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    project.mkdir()
+    config_path = tmp_path / "config.toml"
+    config_path.write_text(
+        'local_links = true\nproject_root = "project"\n'
+        'local_link_exclude = ["generated/**"]\n'
+    )
+    file = project / "index.md"
+    file.write_text("Documentation.\n")
+
+    result = run_cli("check", str(file), "--config", str(config_path), "--show-config")
+
+    assert result.exit_code == 0
+    assert result.stderr == ""
+    assert "Local links: True" in result.stdout
+    assert f"Project root: {project.resolve()}" in result.stdout
+    assert "Local link exclude: ['generated/**']" in result.stdout

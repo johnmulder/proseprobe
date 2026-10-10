@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 
-from proseprobe.config import Config, ConfigError
+from proseprobe.config import Config, ConfigError, validate_project_context
 from proseprobe.parsers.prose import iter_inline_suppressions
 from proseprobe.rules.base import Issue, Rule
 
@@ -179,6 +179,7 @@ class Linter:
             config: Linter configuration.
             valid_rule_ids: Complete rule registry for directive validation.
         """
+        validate_project_context(config)
         self.config = config
         self._rules: list[Rule] = []
         self._valid_rule_ids = {

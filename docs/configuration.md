@@ -75,6 +75,17 @@ minimum_severity = "info"
 min_confidence = "low"
 ```
 
+### Explicit local-link context
+
+`local_links` defaults to `false`; `project_root` defaults to absent and
+`local_link_exclude` defaults to an empty path-pattern list. Enabling local
+checks requires an explicit existing project directory. A relative root in a
+configuration file resolves against that file's directory. Direct Python
+`Config` construction requires an absolute root; no root is derived from cwd.
+The declared root is validated even while the feature is off. `--show-config`
+prints the effective flag, normalized root and exclusions. These settings are
+the context prerequisite for the experimental local-file rule.
+
 ### Markdown fragment policy
 
 `markdown_anchor_style` defaults to `"off"`. Set it to `"github"` to enable

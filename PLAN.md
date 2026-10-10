@@ -2026,10 +2026,10 @@ for same-document fragments; do not duplicate M005's duplicate-reference check.
   optional fragments under the existing GitHub anchor policy, and reference
   destinations. Define root-relative path behavior, query handling, generated
   route exclusions, unreadable targets and unsupported renderer outcomes.
-- [ ] P30.2 Add a failing config test showing the capability off by default,
+- [x] P30.2 Add a failing config test showing the capability off by default,
   invalid roots rejected and explicit roots resolved relative to the declared
   configuration source. Add unknown-option and show-config assertions.
-- [ ] P30.3 Add the smallest explicit root/enable configuration supported
+- [x] P30.3 Add the smallest explicit root/enable configuration supported
   by that contract. Run focused config tests before adding filesystem reads.
 - [ ] P30.4 Add a failing linter test proving a scan context supplies the
   project root independently of cwd and independently of source-file discovery.
@@ -2671,3 +2671,14 @@ an immutable supported return declaration and a physical character span while
 preserving existing signature tuples and ownership. Nested/async functions,
 Unicode columns, absent/unresolved declarations and owned versus nested yields
 are covered. All 286 focused parser/code tests pass; rule wiring is next.
+
+### P30 — Explicit local-link configuration
+
+Eleven invalid/default/root configuration regressions and a show-config regression
+failed before correction; an unknown-option characterization remains valid.
+The off-by-default capability requires an explicit existing directory, resolves
+file-declared relative roots against their configuration, and rejects relative
+roots in direct Config construction. The normalized root stays JSON-safe.
+Direct linter and effective-policy construction validate the same context.
+All 351 focused config/linter/CLI tests pass. Target resolution and reads remain
+for the next slice; ordinary scans still perform no local-link checking.
