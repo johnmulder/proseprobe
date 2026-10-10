@@ -505,6 +505,13 @@ registered rule. Its first version validates corpus integrity and reports
 metrics without enforcing a numeric threshold; thresholds will be added only
 after the corpus contains enough reviewed examples to represent real usage.
 
+`make rule-quality-regression` separately checks exact reviewed mismatch
+identities under explicit all-rules and default production policies. Its ledgers
+bind source bytes, annotations and declared contracts. Known mismatches stay
+visible in raw metrics; new false positives or missed expectations fail the
+gate. Invalid bindings or incomplete review coverage also fail. This curated
+contract does not establish independent natural-text effectiveness.
+
 ### 8.2 Fixtures
 
 - `tests/fixtures/ai_generated/` — Samples with known bad practices

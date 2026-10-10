@@ -2,6 +2,9 @@
 
 import hashlib
 import json
+import shlex
+import subprocess
+import sys
 from dataclasses import replace
 from pathlib import Path
 
@@ -565,3 +568,123 @@ def test_gate_refuses_an_annotation_snapshot_changed_during_scanning(
     monkeypatch.setattr(evaluator, "collect_findings", changed)
     assert evaluator.main(args) == 2
     assert "annotation snapshot SHA-256 differs" in capsys.readouterr().err
+
+
+_CURATED_WARNING_FPS = {
+    ("quality/corpus/technical-review-heldout.md", "V002", 21, 3, 21, 20),
+    ("quality/corpus/technical-review-quotes.md", "V001", 5, 7, 5, 21),
+    ("quality/corpus/technical-review-quotes.md", "V002", 6, 3, 6, 20),
+    ("quality/corpus/technical-review-quotes.md", "V004", 5, 7, 5, 21),
+}
+
+
+@pytest.mark.parametrize("mode", ["all-rules", "production"])
+def test_frozen_curated_ledgers_bind_only_the_reviewed_exact_false_positives(
+    mode: str,
+) -> None:
+    from benchmarks.regression_gate import load_gate_record, require_complete_review
+    from benchmarks.rule_quality import DEFAULT_MANIFEST, REPO_ROOT
+
+    from proseprobe.rules import get_all_rules
+
+    annotations = load_annotations(
+        DEFAULT_MANIFEST, REPO_ROOT, {rule.id for rule in get_all_rules()}
+    )
+    config, linter, rules = prepare_evaluation_scan(mode=mode)
+    record = load_gate_record(
+        REPO_ROOT / "quality" / "regression-gates" / f"{mode}.json",
+        annotations,
+        DEFAULT_MANIFEST,
+        REPO_ROOT,
+        mode,
+        config,
+        rules,
+    )
+    require_complete_review(
+        annotations, REPO_ROOT, linter, rules, record["annotation_contract"]
+    )
+    expected = _CURATED_WARNING_FPS.copy()
+    if mode == "all-rules":
+        expected |= {
+            ("quality/corpus/news-article.md", "V005", 10, 1, 10, 12),
+            ("quality/corpus/news-article.md", "V008", 6, 1, 6, 20),
+        }
+    assert {
+        tuple(
+            row[key]
+            for key in ("path", "rule_id", "line", "column", "end_line", "end_column")
+        )
+        for row in record["mismatches"]
+    } == expected
+    assert all(
+        row["kind"] == "fp" and not row["label_id"] for row in record["mismatches"]
+    )
+    assert config.local_links is False
+    assert record["annotation_contract"] == "legacy-exhaustive-v1"
+
+
+def test_make_regression_target_checks_both_policies() -> None:
+    from benchmarks.rule_quality import REPO_ROOT
+
+    result = subprocess.run(
+        [
+            "make",
+            "--no-print-directory",
+            "rule-quality-regression",
+            f"PYTHON={shlex.quote(sys.executable)}",
+        ],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert result.stdout.count("Regression gate: PASS") == 2
+    assert "Mode: all-rules; severity: info; minimum confidence: low" in result.stdout
+    assert (
+        "Mode: production; severity: warning; minimum confidence: low" in result.stdout
+    )
+
+
+def test_make_regression_target_fails_a_disposable_lost_positive_without_source_edits(
+    tmp_path: Path,
+) -> None:
+    from benchmarks.rule_quality import DEFAULT_MANIFEST, REPO_ROOT
+
+    paths = [DEFAULT_MANIFEST] + [
+        REPO_ROOT / name for name in json.loads(DEFAULT_MANIFEST.read_text())["files"]
+    ]
+    before = {path: hashlib.sha256(path.read_bytes()).hexdigest() for path in paths}
+    wrapper = tmp_path / "miss_positive.py"
+    wrapper.write_text(
+        "import sys\n"
+        f"sys.path.insert(0, {str(REPO_ROOT)!r})\n"
+        "import benchmarks.rule_quality as evaluator\n"
+        "original = evaluator.collect_findings\n"
+        "def miss_one(annotations, *args, **kwargs):\n"
+        "    findings = original(annotations, *args, **kwargs)\n"
+        "    targets = {(item.path, item.rule_id, item.line, item.column) for item in annotations.expected}\n"
+        "    victim = next(item for item in findings if (item.path, item.rule_id, item.line, item.column) in targets)\n"
+        "    return tuple(item for item in findings if item is not victim)\n"
+        "evaluator.collect_findings = miss_one\n"
+        "assert sys.argv[1:3] == ['-m', 'benchmarks.rule_quality']\n"
+        "raise SystemExit(evaluator.main(sys.argv[3:]))\n"
+    )
+    result = subprocess.run(
+        [
+            "make",
+            "--no-print-directory",
+            "rule-quality-regression",
+            f"PYTHON={shlex.join([sys.executable, str(wrapper)])}",
+        ],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode != 0
+    assert "Regression gate: FAIL" in result.stdout
+    assert "New FN:" in result.stdout
+    assert {
+        path: hashlib.sha256(path.read_bytes()).hexdigest() for path in paths
+    } == before

@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help install dev test test-tdd test-spec test-cov lint typecheck format check all clean build dogfood quick benchmark rule-quality rule-docs rule-docs-check test-tropes test-tropes-integration doc-audit spec-verify coverage-analyze startup-check perf-check memory-check nfr-check
+.PHONY: help install dev test test-tdd test-spec test-cov lint typecheck format check all clean build dogfood quick benchmark rule-quality rule-quality-regression rule-docs rule-docs-check test-tropes test-tropes-integration doc-audit spec-verify coverage-analyze startup-check perf-check memory-check nfr-check
 
 VENV ?= .venv
 VENV_BIN = $(VENV)/bin
@@ -54,6 +54,7 @@ help: ## Show available development commands
 	@echo "  coverage-analyze     Enforce the coverage threshold"
 	@echo "  benchmark            Run throughput benchmarks"
 	@echo "  rule-quality         Measure rule precision and recall"
+	@echo "  rule-quality-regression  Check reviewed curated regression policies"
 	@echo "  nfr-check            Run coverage, startup, performance, and memory probes"
 
 # Install production dependencies
@@ -136,6 +137,10 @@ benchmark: ## Run benchmarks
 # Measure rule precision and recall on the reviewed corpus
 rule-quality: ## Measure rule precision and recall
 	$(PYTHON) -m benchmarks.rule_quality
+
+rule-quality-regression: ## Check exact reviewed mismatches under both policies
+	$(PYTHON) -m benchmarks.rule_quality --mode all-rules --gate quality/regression-gates/all-rules.json
+	$(PYTHON) -m benchmarks.rule_quality --mode production --gate quality/regression-gates/production.json
 
 # Generate repetitive rule reference content from canonical metadata
 rule-docs: ## Update generated rule documentation

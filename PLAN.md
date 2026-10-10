@@ -1401,7 +1401,7 @@ evidence. Keep exact phrase catalogs, rule IDs, severities and ordering stable.
 - [x] P18.23 Add one CLI/source-map integration assertion for G037 and V016, and
   one V015 assertion showing that the validated predicate and reported subgroup
   intentionally have different spans. Run focused linter/reporter tests.
-- [ ] P18.24 Add purpose-written positive/negative corpus annotations for the
+- [x] P18.24 Add purpose-written positive/negative corpus annotations for the
   corrected behaviors, retaining the old raw false-positive dispositions.
   Run the P23 regression gate and P33 package checks. Keep external holdout text
   unopened during this work.
@@ -1607,14 +1607,14 @@ precision target. All raw mismatches stay visible in both modes.
 - [x] P23.10 Add the CLI option and output contract. Require the requested
   policy to match the reviewed gate record; do not silently switch policies,
   discover project configuration, apply suppression baselines, or hide issues.
-- [ ] P23.11 Review and freeze the current six all-rules FP identities and the
+- [x] P23.11 Review and freeze the current six all-rules FP identities and the
   default-production subset of four using the disposition ledger. Keep all
   six negative annotations and original input text. Store each policy's
   records explicitly; confirm there are currently no known FNs.
-- [ ] P23.12 Add an explicit Make target that checks both reviewed regression
+- [x] P23.12 Add an explicit Make target that checks both reviewed regression
   policies. Document creation, intentional contract migration, correction, and
   manual review of gate records; provide no automatic acceptance/refresh path.
-- [ ] P23.13 Add the new target to CI after its focused tests and package gate
+- [x] P23.13 Add the new target to CI after its focused tests and package gate
   pass. Keep ordinary `rule-quality` available for measurements. Verify a
   disposable newly missed positive makes the Make target fail without editing
   the committed annotations. Remote execution is tracked under P33.
@@ -1851,7 +1851,7 @@ placeholder code. Preserve C004's existing comment-marker behavior. Use only
 - [x] P26.13 Add invalid-Python/tokenization tests. Assert that actual comments
   remain available but C004 does not guess executable raises from malformed
   source. Add only the fallback needed by the documented contract.
-- [ ] P26.14 Add focused CLI and corpus regressions for the string false positive
+- [x] P26.14 Add focused CLI and corpus regressions for the string false positive
   and a real placeholder. Run P23 and P33 checks; update C004 documentation to
   describe syntax-backed scope and conservative guards.
 
@@ -1944,7 +1944,7 @@ conservative unstarred forwarded-keyword behavior for `**kwargs`.
 - [x] P28.6 Verify NFKC names, typed Sphinx fields, async/nested functions,
   decorators marked `has_dynamic_decorators`, literal examples and malformed Python using existing
   cases plus missing explicit-kind assertions.
-- [ ] P28.7 Add a focused CLI/corpus mismatch and its legitimate counterpart.
+- [x] P28.7 Add a focused CLI/corpus mismatch and its legitimate counterpart.
   Update C009's description only as needed; keep its ID and experimental
   metadata stable. Run P23 and P33 checks.
 
@@ -2000,7 +2000,7 @@ do not change named profiles.
 - [x] P29.10 Check registry IDs and add the rule through the existing factory,
   metadata and experimental selection mechanisms. Add failing registration,
   `explain`, explicit-select and unchanged-profile assertions before wiring it.
-- [ ] P29.11 Add corpus positives/negatives, suppression, confidence-policy,
+- [x] P29.11 Add corpus positives/negatives, suppression, confidence-policy,
   JSONL/SARIF and UTF-8 span assertions. Generate documentation with the existing
   generator; run P23/P33.
 - [ ] P29.12 Evaluate precision and usefulness through P32's blind development
@@ -2138,7 +2138,7 @@ Neither a lower total finding count nor a passing rescan proves semantic quality
 - [x] P31.8 Add valid near-miss tests where a literal replacement would alter
   technical meaning or grammatical agreement. Withhold only the unsupported
   suggestion, preserving the finding when its review prompt remains justified.
-- [ ] P31.9 Run complete V001 and replacement-rule tests plus an effective-policy
+- [x] P31.9 Run complete V001 and replacement-rule tests plus an effective-policy
   linter integration test. Document intentional suggestion changes and omissions;
   run P23/P33 before committing the catalog correction.
 - [x] P31.10 Define P32's usefulness questions separately: was the original
@@ -2276,7 +2276,7 @@ Suggested one-line commits: `Document blind review and adjudication protocol`;
 - [x] P32C.1 Write a small W&I error-type mapping table linking only supported
   native edit categories to specific rule contracts. Record unsupported categories,
   annotator identity, and automatically assigned ERRANT types separately.
-- [ ] P32C.2 Add failing offline tests for supported edits, unsupported edits,
+- [x] P32C.2 Add failing offline tests for supported edits, unsupported edits,
   insertions/deletions, alternate annotators whose edits overlap, and artifacts
   caused by preprocessing. Preserve the tokenized-source coordinates already established in P06C.4.
 - [x] P32C.3 Add only the reviewed mapping; ambiguous native labels require
@@ -2858,3 +2858,31 @@ checks independently derived percentile endpoints rather than repeating the
 implementation. All 258 related evaluator tests, Ruff and baseline prose scans
 pass. Reports expose each metric's counts, support and dominant share; no natural
 source scoring, independent labels or population claim was added.
+
+
+### P23 — Frozen ledgers and acceptance wiring
+
+Four missing-ledger/Make-wiring regressions failed before implementation. Both
+manually reviewed records bind the complete current source/annotation snapshots,
+declared contracts and explicit policy to clean committed runtime `41cbc64`
+(source SHA-256 `e00ba5895315e1164b8ca161d6c294086e0c0175d5e4aa92d39d4c0b9fdcccd2`).
+All-rules records six exact known FP identities; production records four; neither
+records a false negative. Reasons preserve the existing negative judgments and
+raw findings. Native local-link context remains disabled in both policies.
+
+`make rule-quality-regression` and its CI step check both ledgers. The focused
+262-test evaluation suite passes; an isolated composed snapshot also passed
+`make check dogfood rule-quality`. The target passes current 366 TP/6 FP/0 FN
+and 106 TP/4 FP/0 FN results. A disposable in-memory missing V016 positive made
+the actual Make target fail with a new FN at
+`quality/corpus/absolute-reliability-claims.md:3:22` and raw 365 TP/6 FP/1 FN.
+Every annotation/corpus checksum stayed unchanged. Future corrected known
+mismatches may resolve successfully; these current counts are observations,
+not fixed acceptance totals. No automatic ledger refresh was added.
+
+The completed strict gate closes P18/P26/P28/P29/P31's engineering integration
+steps. P30.18's corpus/documentation and local strict checks are complete; its
+independent Markdown review and promotion remain deferred. P32C.2 reuses the
+existing native insertion/deletion, token-coordinate and alternate-annotator
+checks plus the unsupported-label export characterization. With no supported
+category-to-rule mapping, its supported-mapping branch is inapplicable.

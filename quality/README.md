@@ -219,6 +219,13 @@ not create independent annotation-time provenance. Gate records need manual
 review before source/contract migration or removal of a resolved mismatch;
 there is no automatic acceptance or refresh option.
 
+`make rule-quality-regression` checks the two reviewed default ledgers under
+their explicit all-rules and production policies. The ledgers retain the six
+all-rules and four production false positives documented in the
+[disposition ledger](assessment-disposition.md), with no known false negatives.
+The original inputs and negative judgments remain unchanged. CI runs this
+target separately from the report-only measurement.
+
 ## Explicit project context
 
 M012 stays off in default production and the historical all-rules track; its

@@ -1,0 +1,660 @@
+{
+  "annotation_contract": "legacy-exhaustive-v1",
+  "corpus": {
+    "files": {
+      "quality/corpus/absolute-reliability-claims.md": "160b043c8f0a0c2255eda554372f0c09753599bf86cc61a2a4e892e6c6d31f14",
+      "quality/corpus/academic-excerpt.md": "3523c6e7b8dd69954c457c8efd55da60242b59ef73ebe9d615cb15ed98fbd20b",
+      "quality/corpus/all-caps-emphasis.md": "28fb7de77d54e59b8134d109c867fcc39c87a1504e579efd564edd1d1b996ec0",
+      "quality/corpus/all-caps-emphasis.py": "c2e283195ed71131b1eb1ba7e13134fb8f71440a4ea3d17f9b77b7d59bcebbe6",
+      "quality/corpus/ambiguous-this-openers.md": "7772c284a8d093758c0d19e2f862139b19db4d3cbddd15edd4ba7ec8e8dfccce",
+      "quality/corpus/bare-urls.md": "c4041c37f6ccc252b98bb039fd10246e3aab3bfb1f67f558080a32eddccd89d7",
+      "quality/corpus/business-memo.md": "13ddac30a57cfcd5ca9008eb2850f805d6d25d045e5e1496232fbd9b6dc8dece",
+      "quality/corpus/changelog.md": "4eb6d24d5d7a53c6305ff4e27ca5815f2f7d68b2e810907d5ca51e2a830fa2d7",
+      "quality/corpus/claim-attached-comparisons.md": "0613eeb598f589dbd9053d9aca95a634ff0c05c3f6e3580edb73ace35e9a62f0",
+      "quality/corpus/claim-local-evidence.md": "0b22c44f45876235db6eb1318eab25f1398827b0fe1743afd3d45479540e467d",
+      "quality/corpus/clause-coordination-overload.md": "b92ea22bdc490792844fbe930e97ecaed8d78f52a1f56163e0d8029a388f8e7c",
+      "quality/corpus/comment-restates-code.py": "336beac8bae164a2065fadba00c26a26973b883eb09a5526b859806ed9d5f1a7",
+      "quality/corpus/commented-out-code.py": "3c81700395563e0f2db19e091f3cda60b5d00d7dbfac301977f805129d00ab8e",
+      "quality/corpus/docstring-signatures.py": "5c8ab18d06b1a6753a1ee171dc11931b0b22cf3d4fd92880d2940b68e871c869",
+      "quality/corpus/double-negatives.md": "2ed77c10427cb027c1f4069b264c31ec9a6ee26cb1a4e32b75ebaa9cb1925d86",
+      "quality/corpus/empty-it-openers.md": "9ea1542f32ee01fc8ab212c7d687c9d384ea8f57aeb23c36e74cda9f512af0b7",
+      "quality/corpus/excessive-heading-depth.md": "dc31e7b598a840e447f703cfa2360502b287989181a80ddc83a9e5bb9cb293b5",
+      "quality/corpus/existential-openers.md": "dca4d94c6afbc6a73a6e91e6f2bc914e91bafe90e10f1412c6cb651649e6e9f6",
+      "quality/corpus/fence-information.md": "cd91d5d79ca5c5311a7f68481fd40e5680f506a7187092a0d600fb01d75eed1d",
+      "quality/corpus/former-latter-references.md": "fda82264ceace5ac28d3e8703618dbe06da1ad72a0a2cf1776626163a5a33ccd",
+      "quality/corpus/generic-openers.md": "b854fb849e0e02a7c2ba15dbef56e053408559efdb8278d3bd8103feaa1dce63",
+      "quality/corpus/heading-levels.md": "69e76fad9a9c30335d8ca7e9d525f112b14ff6a4c225f822d8ff3b45cae66536",
+      "quality/corpus/hedge-clauses.md": "96e725dba7e2ce6c071492aed4b1533f11c0dcfdbfd5225b922d5c3a2698771d",
+      "quality/corpus/hedged-requirements.md": "0967747fdd735348b28d23bba4b894650b9fafe3be6f273d91e712993a791070",
+      "quality/corpus/imprecise-quantities.md": "fde7adc33532e9ad2a70b71bf9789032f853fcbd46f9a8e226014514714d0ea3",
+      "quality/corpus/local-links/README.md": "0af41a226f596ae766e832c9373a525c8aecd9efc8b7d54d490cfd7083343721",
+      "quality/corpus/local-links/setup.md": "b846e6b2a0507de90243c31ca2939cf53bf0e300d10a1ffc7e94cf511ff317d2",
+      "quality/corpus/markdown-context.md": "7cbb11b7db3d5930551e26d007260269ab1c83d4fa769e66f520349e05969e42",
+      "quality/corpus/needless-intensifiers.md": "234d63bc2ef74d27f4af3c4ff63cf735107526937478e17462b0b5dcdd07153f",
+      "quality/corpus/needless-intensifiers.py": "7abaebc429693bf0d52819bfdf19a7edd8435307921d5fbbf126b6d10bcc04dc",
+      "quality/corpus/nested-parentheticals.md": "f360b68efd908e56583c44711ff1eb80916b76211ad3d4f5bf3a041350bd2d36",
+      "quality/corpus/news-article.md": "55fd8928e092ec1b0860ed423c81fd789f47cf5c8bb0190efba3b70d471baf70",
+      "quality/corpus/parenthetical-overload.md": "7092589fc63fdf0305a295f29ed0500e8fb85d50b2a499d6231810428ddedb22",
+      "quality/corpus/phrase-overlap.md": "7d06343a958bd38b2096b1e71505b5c326187fd25d6bf9526b02ad66748e25fd",
+      "quality/corpus/placeholder-links.md": "52370c6e5d1f34c1ded805d28520b7c4a43000c7cb64869ea22adecea0456a74",
+      "quality/corpus/precision-rules.md": "8bbdba9625b258140272d51aa43a4e5071d7c816b56a4d29d8160389bd46d5b6",
+      "quality/corpus/python-docs.py": "af67578bc7deed33971709e9389124935c59a8d4fdebd6a838c689639df22b94",
+      "quality/corpus/redundant-modifiers.md": "6e256ada70cde1b95703da2417a3ed803557ffb609e5edbbcb7966413b77ac4b",
+      "quality/corpus/redundant-pairs.md": "80092762b367624060b7bcb33eacf90dfddc6a23f4af0ed489b927c4896058e7",
+      "quality/corpus/repeated-conclusions.md": "095a9323e6911e52011431ce5d65f29a0d5cd737f72ea06365ee47ea98799b25",
+      "quality/corpus/repeated-punctuation.md": "1726e7d840cbd7dd67e25ffdcba1d12ce9cf4778bfb4d6342f12ccd3154c211a",
+      "quality/corpus/return-documentation.py": "72dd1cbaf6e11e7aa55e38fe47a51ed4399a9e947ce2e7192e41f687a70e6a8b",
+      "quality/corpus/rhetorical-ellipses.md": "18483cca8b1c800cfafc8a1da39f0032b880102e4abf696844116615cb8a63f9",
+      "quality/corpus/sequential-step-prose.md": "7bc8436b0d7ad803962f1e0d904af96f04c09342a6cf4d370cbc4e6de6856869",
+      "quality/corpus/sequential-step-prose.py": "8dc560b5c688012a5278e57f71e414e608b0c2aa7de24c4045f6382829a64dff",
+      "quality/corpus/slash-alternatives.md": "6b3c877604fa45d22f05e34503dae72b50aeb85482c71ca89dc005327d31c5a7",
+      "quality/corpus/source-backed-predicates.md": "3c7fe492543f059f53e5a4175036a92ed3ed9344fab1c655841c9d09cbcdec81",
+      "quality/corpus/syntax-placeholders.py": "1122d57653d6a5fd769d92572fa5802029e8dfbe22e8ab9986c54835f53fbfe2",
+      "quality/corpus/technical-guide.md": "c5abe33bb502eec5dc9125601e14ee7344a16b7a0dd552dc660f3267b57c880b",
+      "quality/corpus/technical-review-heldout.md": "05780e9ee6da58512da29cca7da454c83f412d265fdb62d8d5410aa98caa82a9",
+      "quality/corpus/technical-review-quotes.md": "8baba0315baa4c0de6547b154e7ab939ae702aedeb19972055c04025a1975761",
+      "quality/corpus/technical-review-style.md": "843b0ff89d862cb992fdb8a5b3ded8759968ad171799c4cec2dc37d532876829",
+      "quality/corpus/technical-review.md": "204c15cf76a35a8d40573a31c6c841ef31ae6b240cba1c9e78e69d5bc38d60c6",
+      "quality/corpus/template-residue.md": "466c777dc6d706cdb9f10cf5e4060e1ddd03c6a1db4538275b0074e1f58ee434",
+      "quality/corpus/tiny-sections.md": "50dd99929925a0d6a4948db6e5b8e0492494df258c68ccfd1edf296905db1285",
+      "quality/corpus/unbounded-superlatives.md": "a62cf623f35c3ef3b08ebc70497421b1dc940ccd953312d56c367bf4ff201daf",
+      "quality/corpus/unclear-actor-requirements.md": "2b12a5aa592bc4ff82c64ba50377d2c870fe03b8774e565228853b7a394d722f",
+      "quality/corpus/unclosed-fence-information.md": "00dea89a51e6dc80db22608d927305113bd47fbf929b675034093d8114f0a9d4",
+      "quality/corpus/unclosed-fences.md": "f529d101ea494856bf03e38b3f33d089ec3b14d983d10ce716f774791dcc2209",
+      "quality/corpus/undefined-comparatives.md": "645e2f5958f45db6bc9427a213df08e83ac00bf88e5747ccaeed942fdc36ff0b",
+      "quality/corpus/undefined-comparatives.py": "54aca73cfb988cf8c5a5f652b66f8b1523e24d38c8faa06083b5111b42e0000c",
+      "quality/corpus/utilize-vocabulary.md": "bba6d7fe45b8bc2388d6ea1cb30a99921d6a3eac4665c42a4b8c174718d5a64e",
+      "quality/corpus/variadic-documentation.py": "613a318862d648ba36859caf10bb017bb3d67f917e5d5e849a388d60db8f03ae",
+      "quality/corpus/verbose-verb-phrases.md": "237afedc0a8a3a7289939a39bfdcaed03dc60a530f5c554c54ac31af41b3c99c",
+      "quality/corpus/wall-of-text-paragraphs.md": "48c92977cf5a90f7f24cd850ad0ade263a4270d74795a2d5b6886537db196bd2",
+      "quality/corpus/weak-instruction-verbs.md": "539eedccbb805397707116e4dd5c001ad9be7426a8e662ced6b89370ac2f739c",
+      "quality/corpus/wordy-phrases.md": "16396f3dbf0d9cdf7220f6a8726ad712c988191550189b9970be989de2cb66ff",
+      "quality/corpus/wordy-phrases.py": "eb09d6f5c999d8f3e1e6b241e84fb6419bf453b7dca1f6ad8225d2d6a70fbac7",
+      "quality/corpus/wrapped-literal-catalogs.md": "50d82f66cd153ca34b39f34bf92b6b6a465648f22de5e7f0947f143bd063f4be",
+      "quality/corpus/wrapped-regex-phrases.md": "7ad71be240da25dc505ba84c27f33f733269d99d2b921a9f278c476e912c2c87",
+      "quality/corpus/wrapped-replacement-phrases.md": "52f8c1848db72eb9d661fda30fc623bbf25cb35653f72f2c5a4ef89c9ab8400f",
+      "tests/fixtures/ai_generated/sample1.md": "84f6c62e6415d3225e7dbf8da1aa2fb46cbb080d955b394f7d9554b1cf1069e9",
+      "tests/fixtures/all_markdown_rules_fire.md": "e6578b27f33e6198c9f8989bac69fefc89e0f5881cbf41f9f1b20a79daf7b9c5",
+      "tests/fixtures/human_written/sample2.md": "11e5a59e920e49a1e4be619cc1f0704310130bc7f3f0f1be1fb35f51f56bda65",
+      "tests/fixtures/stale_docstring_parameters.py": "dcf479307c47ebb4d6606f646340d8211160867ce6a5f6d9f1a33107bdcc38bb",
+      "tests/fixtures/unicode_docstrings.py": "14ba1e2389d2f873b6adf7d3537b43b9a8ec55f4bf51f7961b3e94463fad8a3d"
+    },
+    "manifest_sha256": "d4dd393c6219a0782689860a0ce55eae03c26955e6e95c56fdaff6f6e361eeb3"
+  },
+  "created_runtime": {
+    "git": {
+      "head": "41cbc64df769c61ef5794028fd48a1d598d6fd48",
+      "scope": [
+        "benchmarks",
+        "src/proseprobe"
+      ],
+      "staged_dirty": false,
+      "tracked_worktree_dirty": false,
+      "untracked_python_files": []
+    },
+    "identity_scope": "package and evaluator Python source names and exact bytes; caches, corpora and documents excluded",
+    "package_version": "0.1.0",
+    "source_files": [
+      "evaluator/__init__.py",
+      "evaluator/bench_rules.py",
+      "evaluator/corpora.py",
+      "evaluator/evaluation_identity.py",
+      "evaluator/memory_probe.py",
+      "evaluator/paired_quality.py",
+      "evaluator/quality_scoring.py",
+      "evaluator/regression_gate.py",
+      "evaluator/rule_quality.py",
+      "evaluator/source_intervals.py",
+      "evaluator/startup_probe.py",
+      "evaluator/usefulness.py",
+      "package/__init__.py",
+      "package/__main__.py",
+      "package/_ansi.py",
+      "package/_rule_docs.py",
+      "package/cli.py",
+      "package/config.py",
+      "package/core/__init__.py",
+      "package/core/baseline.py",
+      "package/core/linter.py",
+      "package/core/policy.py",
+      "package/core/reporter.py",
+      "package/data/__init__.py",
+      "package/data/code_patterns.py",
+      "package/data/patterns.py",
+      "package/data/phrases.py",
+      "package/data/style_patterns.py",
+      "package/data/vocabulary.py",
+      "package/parsers/__init__.py",
+      "package/parsers/markdown.py",
+      "package/parsers/prose.py",
+      "package/parsers/python.py",
+      "package/profiles.py",
+      "package/rules/__init__.py",
+      "package/rules/_phrases.py",
+      "package/rules/base.py",
+      "package/rules/code.py",
+      "package/rules/grammar.py",
+      "package/rules/markup.py",
+      "package/rules/struct.py",
+      "package/rules/style.py",
+      "package/rules/vocab.py"
+    ],
+    "source_files_count": 43,
+    "source_roots": {
+      "evaluator": "/Users/johnmulder/Experiments/proseprobe/benchmarks",
+      "package": "/Users/johnmulder/Experiments/proseprobe/src/proseprobe"
+    },
+    "source_sha256": "e00ba5895315e1164b8ca161d6c294086e0c0175d5e4aa92d39d4c0b9fdcccd2"
+  },
+  "mismatches": [
+    {
+      "column": 3,
+      "end_column": 20,
+      "end_line": 21,
+      "kind": "fp",
+      "label_id": "",
+      "line": 21,
+      "path": "quality/corpus/technical-review-heldout.md",
+      "reason": "Preserve the literal customer statement declared by this purpose-written regression fixture. Blockquote syntax alone does not prove quotation intent; the raw false positive remains visible.",
+      "rule_id": "V002"
+    },
+    {
+      "column": 7,
+      "end_column": 21,
+      "end_line": 5,
+      "kind": "fp",
+      "label_id": "",
+      "line": 5,
+      "path": "quality/corpus/technical-review-quotes.md",
+      "reason": "Preserve the exact archival advertisement quotation declared by this regression fixture. Quote intent is not inferred from blockquote syntax; caller preservation through a narrow directive is separate from the raw finding.",
+      "rule_id": "V001"
+    },
+    {
+      "column": 3,
+      "end_column": 20,
+      "end_line": 6,
+      "kind": "fp",
+      "label_id": "",
+      "line": 6,
+      "path": "quality/corpus/technical-review-quotes.md",
+      "reason": "Preserve the exact archival statement declared by this regression fixture. Explicit caller preservation is supported separately; the raw false positive remains visible.",
+      "rule_id": "V002"
+    },
+    {
+      "column": 7,
+      "end_column": 21,
+      "end_line": 5,
+      "kind": "fp",
+      "label_id": "",
+      "line": 5,
+      "path": "quality/corpus/technical-review-quotes.md",
+      "reason": "Preserve the exact archival advertisement quotation declared by this regression fixture. The inflated-language detector does not infer archival intent from blockquote syntax; the raw false positive remains visible.",
+      "rule_id": "V004"
+    }
+  ],
+  "mode": "production",
+  "name": "curated-default-production",
+  "policy": {
+    "exclude": [
+      "venv/**",
+      ".venv/**",
+      "node_modules/**",
+      ".git/**"
+    ],
+    "ignore": [],
+    "include": [
+      "*.md",
+      "*.mdx",
+      "*.markdown",
+      "*.py"
+    ],
+    "local_link_exclude": [],
+    "local_links": false,
+    "markdown_anchor_style": "off",
+    "min_confidence": "low",
+    "per_file_ignores": [],
+    "profile": null,
+    "project_root": null,
+    "select": [
+      "V",
+      "S",
+      "T",
+      "G",
+      "C",
+      "M"
+    ],
+    "severity": "warning",
+    "severity_overrides": {},
+    "thresholds": {
+      "anaphora_abuse": 3,
+      "bold_overuse": 3,
+      "citation_name_drop": 3,
+      "em_dash_overuse": 5,
+      "gerund_fragment_litany": 3,
+      "historical_analogy_stacking": 3,
+      "inline_header_lists": 3,
+      "invented_concept_labels": 2,
+      "nominalization_overload": 3,
+      "passive_voice_overuse": 5,
+      "rule_of_three": 3,
+      "sentence_length_max": 40,
+      "short_punchy_fragments": 3,
+      "wall_of_text_sentences": 6
+    },
+    "vocabulary": {
+      "additional": [],
+      "allowed": [],
+      "allowed_phrases": [
+        "All notable changes",
+        "Critical issue"
+      ]
+    }
+  },
+  "rule_contracts": {
+    "rules": {
+      "C001": {
+        "applies_to": [
+          "python"
+        ],
+        "category": "Code",
+        "config_key": null,
+        "content_scope": "raw",
+        "default_confidence": "medium",
+        "default_severity": "warning",
+        "description": "Detects Python docstring terms not covered by V001",
+        "id": "C001",
+        "name": "Docstring-Only Vocabulary",
+        "profiles": [
+          "technical-docs"
+        ]
+      },
+      "C003": {
+        "applies_to": [
+          "python"
+        ],
+        "category": "Code",
+        "config_key": null,
+        "content_scope": "raw",
+        "default_confidence": "medium",
+        "default_severity": "warning",
+        "description": "Detects 'I hope this helps' in # comments",
+        "id": "C003",
+        "name": "Collaborative Comments",
+        "profiles": [
+          "technical-docs"
+        ]
+      },
+      "G003": {
+        "applies_to": [
+          "markdown",
+          "python"
+        ],
+        "category": "Grammar",
+        "config_key": null,
+        "content_scope": "prose",
+        "default_confidence": "medium",
+        "default_severity": "warning",
+        "description": "Detects 'highlighting..., emphasizing..., fostering...' chains",
+        "id": "G003",
+        "name": "Participle Chains",
+        "profiles": [
+          "academic",
+          "business",
+          "general",
+          "journalism",
+          "technical-docs"
+        ]
+      },
+      "M001": {
+        "applies_to": [
+          "python"
+        ],
+        "category": "Markup",
+        "config_key": null,
+        "content_scope": "raw",
+        "default_confidence": "low",
+        "default_severity": "warning",
+        "description": "Detects **bold** in Python comments",
+        "id": "M001",
+        "name": "Wrong Markup",
+        "profiles": [
+          "technical-docs"
+        ]
+      },
+      "M002": {
+        "applies_to": [
+          "markdown"
+        ],
+        "category": "Markup",
+        "config_key": null,
+        "content_scope": "prose",
+        "default_confidence": "medium",
+        "default_severity": "error",
+        "description": "Detects turn0search0, oai_citation, contentReference",
+        "id": "M002",
+        "name": "ChatGPT Markers",
+        "profiles": [
+          "technical-docs"
+        ]
+      },
+      "M003": {
+        "applies_to": [
+          "markdown"
+        ],
+        "category": "Markup",
+        "config_key": null,
+        "content_scope": "raw",
+        "default_confidence": "medium",
+        "default_severity": "warning",
+        "description": "Detects utm_source=chatgpt.com or openai",
+        "id": "M003",
+        "name": "UTM Parameters",
+        "profiles": [
+          "technical-docs"
+        ]
+      },
+      "M004": {
+        "applies_to": [
+          "markdown"
+        ],
+        "category": "Markup",
+        "config_key": null,
+        "content_scope": "prose",
+        "default_confidence": "medium",
+        "default_severity": "error",
+        "description": "Detects broken markers and placeholder link destinations",
+        "id": "M004",
+        "name": "Broken References",
+        "profiles": [
+          "technical-docs"
+        ]
+      },
+      "M005": {
+        "applies_to": [
+          "markdown"
+        ],
+        "category": "Markup",
+        "config_key": null,
+        "content_scope": "non_code",
+        "default_confidence": "high",
+        "default_severity": "error",
+        "description": "Detects undefined reference labels and conflicting definitions",
+        "id": "M005",
+        "name": "Unresolved Markdown References",
+        "profiles": [
+          "technical-docs"
+        ]
+      },
+      "M006": {
+        "applies_to": [
+          "markdown"
+        ],
+        "category": "Markup",
+        "config_key": null,
+        "content_scope": "prose",
+        "default_confidence": "high",
+        "default_severity": "warning",
+        "description": "Detects unfinished placeholder content in Markdown",
+        "id": "M006",
+        "name": "Template Residue",
+        "profiles": [
+          "technical-docs"
+        ]
+      },
+      "M007": {
+        "applies_to": [
+          "markdown"
+        ],
+        "category": "Markup",
+        "config_key": null,
+        "content_scope": "raw",
+        "default_confidence": "high",
+        "default_severity": "error",
+        "description": "Detects fenced code blocks without a matching closing delimiter",
+        "id": "M007",
+        "name": "Unclosed Code Fence",
+        "profiles": [
+          "technical-docs"
+        ]
+      },
+      "M008": {
+        "applies_to": [
+          "markdown"
+        ],
+        "category": "Markup",
+        "config_key": null,
+        "content_scope": "raw",
+        "default_confidence": "high",
+        "default_severity": "warning",
+        "description": "Detects Markdown headings that skip an intermediate level",
+        "id": "M008",
+        "name": "Skipped Heading Level",
+        "profiles": [
+          "technical-docs"
+        ]
+      },
+      "M010": {
+        "applies_to": [
+          "markdown"
+        ],
+        "category": "Markup",
+        "config_key": null,
+        "content_scope": "non_code",
+        "default_confidence": "high",
+        "default_severity": "warning",
+        "description": "Detects vague Markdown link labels",
+        "id": "M010",
+        "name": "Non-Descriptive Link Text",
+        "profiles": [
+          "technical-docs"
+        ]
+      },
+      "S003": {
+        "applies_to": [
+          "markdown",
+          "python"
+        ],
+        "category": "Structure",
+        "config_key": null,
+        "content_scope": "prose",
+        "default_confidence": "medium",
+        "default_severity": "warning",
+        "description": "Detects 'Despite its... faces challenges...' patterns",
+        "id": "S003",
+        "name": "Challenge Conclusions",
+        "profiles": [
+          "academic",
+          "business",
+          "general",
+          "journalism",
+          "technical-docs"
+        ]
+      },
+      "S005": {
+        "applies_to": [
+          "markdown",
+          "python"
+        ],
+        "category": "Structure",
+        "config_key": null,
+        "content_scope": "prose",
+        "default_confidence": "medium",
+        "default_severity": "warning",
+        "description": "Detects 'pivotal moment', 'key turning point' patterns",
+        "id": "S005",
+        "name": "Significance Emphasis",
+        "profiles": [
+          "academic",
+          "business",
+          "general",
+          "journalism",
+          "technical-docs"
+        ]
+      },
+      "S006": {
+        "applies_to": [
+          "markdown",
+          "python"
+        ],
+        "category": "Structure",
+        "config_key": null,
+        "content_scope": "prose",
+        "default_confidence": "medium",
+        "default_severity": "warning",
+        "description": "Detects 'highlighting...underscoring...' chains",
+        "id": "S006",
+        "name": "Superficial Analysis",
+        "profiles": [
+          "academic",
+          "business",
+          "general",
+          "journalism",
+          "technical-docs"
+        ]
+      },
+      "S010": {
+        "applies_to": [
+          "markdown",
+          "python"
+        ],
+        "category": "Structure",
+        "config_key": "thresholds.anaphora_abuse",
+        "content_scope": "prose",
+        "default_confidence": "medium",
+        "default_severity": "warning",
+        "description": "Detects repeated sentence openings (anaphora)",
+        "id": "S010",
+        "name": "Anaphora Abuse",
+        "profiles": [
+          "academic",
+          "business",
+          "general",
+          "journalism",
+          "technical-docs"
+        ]
+      },
+      "S016": {
+        "applies_to": [
+          "markdown"
+        ],
+        "category": "Structure",
+        "config_key": null,
+        "content_scope": "raw",
+        "default_confidence": "medium",
+        "default_severity": "warning",
+        "description": "Detects duplicate paragraphs and exact repeated conclusions",
+        "id": "S016",
+        "name": "Content Duplication",
+        "profiles": [
+          "academic",
+          "business",
+          "general",
+          "journalism",
+          "technical-docs"
+        ]
+      },
+      "S025": {
+        "applies_to": [
+          "markdown"
+        ],
+        "category": "Structure",
+        "config_key": null,
+        "content_scope": "raw",
+        "default_confidence": "high",
+        "default_severity": "warning",
+        "description": "Detects headings without body content",
+        "id": "S025",
+        "name": "Heading Without Body",
+        "profiles": [
+          "technical-docs"
+        ]
+      },
+      "V001": {
+        "applies_to": [
+          "markdown",
+          "python"
+        ],
+        "category": "Vocabulary",
+        "config_key": null,
+        "content_scope": "prose",
+        "default_confidence": "medium",
+        "default_severity": "warning",
+        "description": "Detects overused and clichéd words",
+        "id": "V001",
+        "name": "Overused Vocabulary",
+        "profiles": [
+          "academic",
+          "business",
+          "general",
+          "journalism",
+          "technical-docs"
+        ]
+      },
+      "V002": {
+        "applies_to": [
+          "markdown",
+          "python"
+        ],
+        "category": "Vocabulary",
+        "config_key": null,
+        "content_scope": "prose",
+        "default_confidence": "medium",
+        "default_severity": "warning",
+        "description": "Detects chat-like communication patterns",
+        "id": "V002",
+        "name": "Collaborative Phrases",
+        "profiles": [
+          "academic",
+          "business",
+          "general",
+          "journalism",
+          "technical-docs"
+        ]
+      },
+      "V004": {
+        "applies_to": [
+          "markdown",
+          "python"
+        ],
+        "category": "Vocabulary",
+        "config_key": null,
+        "content_scope": "prose",
+        "default_confidence": "medium",
+        "default_severity": "warning",
+        "description": "Detects puffery and marketing speak",
+        "id": "V004",
+        "name": "Promotional Language",
+        "profiles": [
+          "academic",
+          "business",
+          "general",
+          "journalism",
+          "technical-docs"
+        ]
+      },
+      "V006": {
+        "applies_to": [
+          "markdown",
+          "python"
+        ],
+        "category": "Vocabulary",
+        "config_key": null,
+        "content_scope": "prose",
+        "default_confidence": "medium",
+        "default_severity": "warning",
+        "description": "Detects inflated stakes ('fundamentally reshape', 'define the next era')",
+        "id": "V006",
+        "name": "Grandiose Stakes",
+        "profiles": [
+          "academic",
+          "business",
+          "general",
+          "journalism",
+          "technical-docs"
+        ]
+      }
+    },
+    "version": 1
+  },
+  "version": 1
+}

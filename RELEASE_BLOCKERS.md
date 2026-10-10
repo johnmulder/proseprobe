@@ -22,6 +22,7 @@ that release starts the PyPI workflow.
   make check
   make dogfood
   make rule-quality
+  make rule-quality-regression
   make nfr-check
   ```
 

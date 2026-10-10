@@ -101,6 +101,9 @@ make dev
 
 # Full local check
 make check
+
+# Reject new curated quality mismatches under both reviewed policies
+make rule-quality-regression
 ```
 
 Rule classes are the source of truth for IDs, names, descriptions, default
