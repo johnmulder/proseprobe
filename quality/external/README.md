@@ -192,3 +192,22 @@ excluded. Renderer checks require their explicit renderer; Liquid, mdBook and
 other unsupported extensions need unsupported coverage declarations. CommonMark
 conformance is reported separately from writing-quality evidence. Human review
 and independent effectiveness claims remain deferred by user request.
+
+## CommonMark parser conformance
+
+The offline fixture selects 44 supported extraction/masking projections and
+records 15 unsupported projections from
+[CommonMark 0.31.2](https://spec.commonmark.org/0.31.2/). It tests literal source
+headings, fences, single-line code spans, simple link/reference destinations,
+and supported raw-code/comment HTML boundaries. It does not render HTML or
+establish useful-finding labels. Unsupported multiline constructs, destination
+metadata and full HTML-block precedence remain explicit in the fixture.
+
+Selected examples retain John MacFarlane's attribution and
+[CC BY-SA 4.0 specification/example license](https://github.com/commonmark/commonmark-spec/blob/0.31.2/LICENSE).
+The licensed examples are separate from the project's test logic in
+`tests/fixtures/commonmark-0.31.2-selected.json`; copied Markdown is unchanged.
+The complete upstream specification has 652 examples and SHA-256
+`257c41ad946f7a1414a499aca402a1aa8fdac3678532266611348c1cf54f4b80`.
+Example IDs, selection contracts and unsupported reasons accompany the fixture.
+Reported conformance support applies to these source projections alone.

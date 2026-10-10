@@ -174,6 +174,19 @@ class MarkdownParser:
 
         for line_num, line in enumerate(self._lines, start=1):
             fence_line, blockquote_prefix_length = self._strip_blockquote_prefix(line)
+            if in_block and blockquoted_fence and not blockquote_prefix_length:
+                blocks.append(
+                    MarkdownCodeBlock(
+                        start_line=start_line,
+                        end_line=line_num - 1,
+                        language=language,
+                        content="\n".join(content_lines),
+                        fence=opening_fence,
+                        column=opening_column,
+                        closed=False,
+                    )
+                )
+                in_block = False
             if not in_block:
                 match = fence_re.match(fence_line)
                 if match:
@@ -242,12 +255,16 @@ class MarkdownParser:
         html_lines: set[int] = set()
 
         comment_start_re = re.compile(r"^\s*<!--")
-        comment_end_re = re.compile(r".*-->\s*$")
+        comment_end_re = re.compile(r"-->")
+        raw_start_re = re.compile(
+            r"^ {0,3}<(script|pre|style|textarea)(?=[ \t>]|$)", re.IGNORECASE
+        )
         tag_start_re = re.compile(r"^\s*<([a-zA-Z][\w:-]*)\b[^>]*>\s*$")
         tag_end_template = r"^\s*</{tag}>\s*$"
 
         in_comment = False
         open_tag: str | None = None
+        raw_end_re: re.Pattern[str] | None = None
 
         for line_num, line in enumerate(self._lines, start=1):
             if line_num in code_lines:
@@ -255,14 +272,30 @@ class MarkdownParser:
 
             if in_comment:
                 html_lines.add(line_num)
-                if comment_end_re.match(line):
+                if comment_end_re.search(line):
                     in_comment = False
+                continue
+
+            if raw_end_re is not None:
+                html_lines.add(line_num)
+                if raw_end_re.search(line):
+                    raw_end_re = None
                 continue
 
             if comment_start_re.match(line):
                 html_lines.add(line_num)
-                if not comment_end_re.match(line):
+                if not comment_end_re.search(line):
                     in_comment = True
+                continue
+
+            raw_start = raw_start_re.match(line)
+            if raw_start is not None:
+                html_lines.add(line_num)
+                closing = re.compile(
+                    rf"</{re.escape(raw_start.group(1))}>", re.IGNORECASE
+                )
+                if closing.search(line) is None:
+                    raw_end_re = closing
                 continue
 
             if open_tag:
@@ -337,7 +370,7 @@ class MarkdownParser:
         html_lines = self._html_lines()
         front_matter_lines = self._front_matter_lines()
         headings: list[tuple[int, int, str, int, int]] = []
-        heading_re = re.compile(r"^ {0,3}(#{1,6})\s+(.+?)\s*$")
+        heading_re = re.compile(r"^ {0,3}(#{1,6})(?:[ \t]+(.*?))?\s*$")
         setext_re = re.compile(r"^ {0,3}(=+|-+)\s*$")
         idx = 0
         while idx < len(self._lines):
@@ -354,9 +387,12 @@ class MarkdownParser:
             match = heading_re.match(stripped_line)
             if match:
                 level = len(match.group(1))
-                title = match.group(2).strip()
-                title = re.sub(r"\s+#+\s*$", "", title).strip()
-                column = prefix_len + match.start(2) + 1
+                title = (match.group(2) or "").strip()
+                title = re.sub(r"(?:^|[ \t]+)#+\s*$", "", title).strip()
+                title_start = (
+                    match.start(2) if match.group(2) is not None else match.end(1)
+                )
+                column = prefix_len + title_start + 1
                 headings.append((line_num, level, title, column, column + len(title)))
                 idx += 1
                 continue
@@ -407,6 +443,18 @@ class MarkdownParser:
             )
 
         return sections
+
+    def heading_diagnostic_span(self, heading: MarkdownSection) -> tuple[int, int]:
+        """Return the title span, or opening ATX markers when the title is empty."""
+        if heading.title:
+            return heading.column, heading.end_column
+        line, prefix = self._strip_blockquote_prefix(
+            self._lines[heading.start_line - 1]
+        )
+        markers = re.match(r"^ {0,3}(#{1,6})(?:[ \t]+|$)", line)
+        if markers is not None:
+            return prefix + markers.start(1) + 1, prefix + markers.end(1) + 1
+        return heading.column, heading.end_column
 
     def is_example_line(self, line_num: int) -> bool:
         """Return whether a source line belongs to an example section."""
@@ -831,7 +879,7 @@ class MarkdownParser:
             | self._front_matter_lines()
             | self._mdx_block_lines()
         )
-        heading_re = re.compile(r"^ {0,3}#{1,6}[ \t]+")
+        heading_re = re.compile(r"^ {0,3}#{1,6}(?:[ \t]+|$)")
         trailing_heading_re = re.compile(r"[ \t]+#+[ \t]*$")
         list_re = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
 
@@ -908,6 +956,8 @@ class MarkdownParser:
 
             prose = self._mask_inline_code_and_links("".join(chars))
             if not prose.strip():
+                flush()
+                pending_break = True
                 continue
             if force_new or (current_context and context != current_context):
                 flush()
@@ -981,7 +1031,7 @@ class MarkdownParser:
                 mdx_lines.add(line_num)
                 continue
             match = open_re.match(line)
-            if match:
+            if match and match.group(1).lower() not in self._html_block_tags:
                 mdx_lines.add(line_num)
                 open_tag = match.group(1)
         return mdx_lines

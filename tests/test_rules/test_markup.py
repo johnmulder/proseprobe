@@ -766,3 +766,18 @@ class TestNonDescriptiveLinkText:
         assert (
             NonDescriptiveLinkTextRule().check("Read [here](/guide).", "guide.py") == []
         )
+
+
+@pytest.mark.parametrize("prefix", ["", "  ", "> ", "> > "])
+@pytest.mark.parametrize("suffix", ["", " ###"])
+def test_empty_heading_jump_reports_opening_markers(prefix: str, suffix: str) -> None:
+    source = f"{prefix}# Parent\n\n{prefix}###{suffix}"
+    [issue] = SkippedHeadingLevelRule().check(source, "guide.md")
+    assert (issue.line, issue.column, issue.end_column) == (
+        3,
+        len(prefix) + 1,
+        len(prefix) + 4,
+    )
+    assert source.splitlines()[2][issue.column - 1 : issue.end_column - 1] == "###"
+    assert issue.message == "Heading level jumps from 1 to 3"
+    assert issue.confidence is Confidence.HIGH

@@ -448,26 +448,30 @@ class SkippedHeadingLevelRule(Rule):
         if not is_markdown_file(filename):
             return []
 
-        headings = _get_cached_markdown_parser(content).get_headings()
-        return [
-            Issue(
-                rule_id=self.id,
-                message=(
-                    f"Heading level jumps from {previous.level} to {current.level}"
-                ),
-                line=current.start_line,
-                column=current.column,
-                end_column=current.end_column,
-                severity=self.severity,
-                confidence=self.default_confidence,
-                suggestion=(
-                    f"Add a level-{previous.level + 1} heading before this "
-                    f"level-{current.level} heading"
-                ),
+        parser = _get_cached_markdown_parser(content)
+        issues: list[Issue] = []
+        for previous, current in pairwise(parser.get_headings()):
+            if current.level <= previous.level + 1:
+                continue
+            column, end_column = parser.heading_diagnostic_span(current)
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=(
+                        f"Heading level jumps from {previous.level} to {current.level}"
+                    ),
+                    line=current.start_line,
+                    column=column,
+                    end_column=end_column,
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion=(
+                        f"Add a level-{previous.level + 1} heading before this "
+                        f"level-{current.level} heading"
+                    ),
+                )
             )
-            for previous, current in pairwise(headings)
-            if current.level > previous.level + 1
-        ]
+        return issues
 
 
 class BareURLInProseRule(Rule):

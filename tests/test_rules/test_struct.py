@@ -1930,3 +1930,39 @@ class TestFixedStructurePhraseWrapping:
             source[issue.column - 1 : issue.end_column - 1] == "resource optimization"
         )
         assert issue.column == source.index("then resource") + len("then ") + 1
+
+
+@pytest.mark.parametrize("prefix", ["", "  ", "> ", "> > "])
+@pytest.mark.parametrize("suffix", ["", " ###"])
+def test_empty_heading_without_body_reports_opening_markers(
+    prefix: str, suffix: str
+) -> None:
+    source = f"{prefix}##{suffix}\n\n{prefix}# Parent"
+    [issue] = HeadingWithoutBodyRule().check(source, "guide.md")
+    assert (issue.line, issue.column, issue.end_column) == (
+        1,
+        len(prefix) + 1,
+        len(prefix) + 3,
+    )
+    assert source.splitlines()[0][issue.column - 1 : issue.end_column - 1] == "##"
+    assert issue.message == "Heading without body: ''"
+    assert issue.confidence is Confidence.HIGH
+
+
+@pytest.mark.parametrize("prefix", ["", "  ", "> ", "> > "])
+@pytest.mark.parametrize("suffix", ["", " ###"])
+def test_empty_deep_heading_reports_opening_markers(prefix: str, suffix: str) -> None:
+    source = f"{prefix}######{suffix}"
+    [issue] = ExcessiveHeadingDepthRule().check(source, "guide.md")
+    assert (issue.line, issue.column, issue.end_column) == (
+        1,
+        len(prefix) + 1,
+        len(prefix) + 7,
+    )
+    assert source[issue.column - 1 : issue.end_column - 1] == "######"
+    assert issue.message == "Excessive heading depth: level 6 heading ''"
+
+
+def test_empty_atx_heading_counts_following_thematic_break_as_body() -> None:
+    source = "#\n---\n# Next"
+    assert HeadingWithoutBodyRule().check(source, "guide.md") == []

@@ -2209,16 +2209,16 @@ acceptance evidence exists. P06D.5 remains conditional on clarified reuse terms.
   detector-based selection. Freeze identities and assignments before further tuning.
 - [x] P32A.13 Export the new blind packet using P24 and verify its index and source
   identities. Holdout contents stay hidden from implementers during development.
-- [ ] P32A.14 Pin the [CommonMark 0.31.2 examples](https://spec.commonmark.org/0.31.2/)
+- [x] P32A.14 Pin the [CommonMark 0.31.2 examples](https://spec.commonmark.org/0.31.2/)
   and verify their reuse terms before copying fixtures. Record version, source
   checksum and the supported parser features selected for conformance checks.
-- [ ] P32A.15 Map selected fence, inline-code, link/reference, heading and HTML
+- [x] P32A.15 Map selected fence, inline-code, link/reference, heading and HTML
   examples to the existing extraction/masking contracts. Keep unsupported
   syntax and renderer extensions explicit; do not require a full HTML renderer.
-- [ ] P32A.16 Add offline conformance cases using the current parser test files.
+- [x] P32A.16 Add offline conformance cases using the current parser test files.
   For each reproduced mismatch, record a failing extraction/span assertion,
   apply the smallest correction, and run the affected parser/rule tests.
-- [ ] P32A.17 Report conformance results separately from human writing-quality
+- [x] P32A.17 Report conformance results separately from human writing-quality
   metrics. These examples supply syntax contracts, not useful-finding labels.
 
 Acceptance: extension material adds independent projects and missing Python
@@ -2700,3 +2700,20 @@ C010's isolated `make check dogfood rule-quality` snapshot passes. Results are
 366 TP/6 unchanged FP/0 FN, 452/458 negative checks and 64/64 supplied spans.
 The registry now has 101 rules; generated inventories and explicit count tests
 were updated without changing named-profile membership.
+
+### P32A — Pinned CommonMark source projections
+
+The licensed, separately attributed fixture records 44 supported projections and
+15 explicit unsupported projections, selected before implementation. Six upstream
+and eighteen boundary/ownership regressions failed before correction. Fixes
+preserve empty headings, quote-container fence boundaries, raw HTML end tokens
+and case handling, and nonblank fully masked source-line scope barriers.
+Twenty-four downstream span regressions and a thematic-break case protect
+M008/S025/S028: empty heading findings now cover opening markers while parser
+empty-title insertion points remain intact. Other title spans stay unchanged.
+Conformance supplies syntax evidence only; human effectiveness is deferred.
+
+The isolated conformance snapshot passed `make check dogfood rule-quality` with
+366 TP/6 unchanged FP/0 FN and 64/64 supplied spans. Its overlay included only
+the M008 correction from the shared markup file, excluding unfinished local-link
+work; this preserves each commit's independent verification evidence.

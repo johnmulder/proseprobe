@@ -1,0 +1,978 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "version": "0.31.2",
+    "source_url": "https://raw.githubusercontent.com/commonmark/commonmark-spec/0.31.2/spec.txt",
+    "spec_url": "https://spec.commonmark.org/0.31.2/",
+    "source_sha256": "257c41ad946f7a1414a499aca402a1aa8fdac3678532266611348c1cf54f4b80",
+    "source_bytes": 205025,
+    "upstream_example_count": 652,
+    "license": "CC-BY-SA-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "upstream_license_url": "https://raw.githubusercontent.com/commonmark/commonmark-spec/0.31.2/LICENSE",
+    "copyright": "Copyright (C) 2014-16 John MacFarlane",
+    "modifications": "Markdown examples copied from spec.txt; visible tab arrows converted to tabs; ProseProbe extraction and masking projections added."
+  },
+  "selection": {
+    "date": "2026-10-10",
+    "selected_before_implementation": true,
+    "purpose": "Offline extraction and masking conformance, separate from human writing-quality labels. No HTML rendering or rendered code normalization is asserted.",
+    "source_line_units": "One-based location of the opening example marker in upstream spec.txt."
+  },
+  "supported": [
+    {
+      "example": 62,
+      "section": "ATX headings",
+      "source_line": 1112,
+      "markdown": "# foo\n## foo\n### foo\n#### foo\n##### foo\n###### foo\n",
+      "markdown_sha256": "53936cfe4b0b5dee48451ea91ea972baa7b554d1a320fbec28961f62a0a39022",
+      "contract": "heading_source_records",
+      "expected": [
+        [
+          1,
+          "foo",
+          1,
+          3,
+          6
+        ],
+        [
+          2,
+          "foo",
+          2,
+          4,
+          7
+        ],
+        [
+          3,
+          "foo",
+          3,
+          5,
+          8
+        ],
+        [
+          4,
+          "foo",
+          4,
+          6,
+          9
+        ],
+        [
+          5,
+          "foo",
+          5,
+          7,
+          10
+        ],
+        [
+          6,
+          "foo",
+          6,
+          8,
+          11
+        ]
+      ]
+    },
+    {
+      "example": 63,
+      "section": "ATX headings",
+      "source_line": 1131,
+      "markdown": "####### foo\n",
+      "markdown_sha256": "db32373f493760ce16a64b19a0e9c90c4db55124e9da22774406627f19f1b81e",
+      "contract": "heading_source_records",
+      "expected": []
+    },
+    {
+      "example": 64,
+      "section": "ATX headings",
+      "source_line": 1146,
+      "markdown": "#5 bolt\n\n#hashtag\n",
+      "markdown_sha256": "3beac40ab06aa633422ef99854ead1b24780b10035e2129fbf443d76d5cd37e2",
+      "contract": "heading_source_records",
+      "expected": []
+    },
+    {
+      "example": 65,
+      "section": "ATX headings",
+      "source_line": 1158,
+      "markdown": "\\## foo\n",
+      "markdown_sha256": "666236de1f72fd4e2c918d48b8e007a366eb4079440c14ac9f837ef60e422d0c",
+      "contract": "heading_source_records",
+      "expected": []
+    },
+    {
+      "example": 68,
+      "section": "ATX headings",
+      "source_line": 1185,
+      "markdown": " ### foo\n  ## foo\n   # foo\n",
+      "markdown_sha256": "32591a41006b01367af45c91b6349dd647f71c17b2559b0766de21e29aff037a",
+      "contract": "heading_source_records",
+      "expected": [
+        [
+          3,
+          "foo",
+          1,
+          6,
+          9
+        ],
+        [
+          2,
+          "foo",
+          2,
+          6,
+          9
+        ],
+        [
+          1,
+          "foo",
+          3,
+          6,
+          9
+        ]
+      ]
+    },
+    {
+      "example": 71,
+      "section": "ATX headings",
+      "source_line": 1217,
+      "markdown": "## foo ##\n  ###   bar    ###\n",
+      "markdown_sha256": "0d89b7d1c673b93eb08f8ce512711a9318d1898051c5ce0f3f7e714190d2e950",
+      "contract": "heading_source_records",
+      "expected": [
+        [
+          2,
+          "foo",
+          1,
+          4,
+          7
+        ],
+        [
+          3,
+          "bar",
+          2,
+          9,
+          12
+        ]
+      ]
+    },
+    {
+      "example": 74,
+      "section": "ATX headings",
+      "source_line": 1250,
+      "markdown": "### foo ### b\n",
+      "markdown_sha256": "7e15f5461623818085367dd669a3ee1c93bd9476bb3c0f27c9386c5846e8d16c",
+      "contract": "heading_source_records",
+      "expected": [
+        [
+          3,
+          "foo ### b",
+          1,
+          5,
+          14
+        ]
+      ]
+    },
+    {
+      "example": 75,
+      "section": "ATX headings",
+      "source_line": 1259,
+      "markdown": "# foo#\n",
+      "markdown_sha256": "17653144875d30686e0bd286145b018066d9439e2c0291abbbfd8f6935d8293a",
+      "contract": "heading_source_records",
+      "expected": [
+        [
+          1,
+          "foo#",
+          1,
+          3,
+          7
+        ]
+      ]
+    },
+    {
+      "example": 78,
+      "section": "ATX headings",
+      "source_line": 1294,
+      "markdown": "Foo bar\n# baz\nBar foo\n",
+      "markdown_sha256": "e6c01e29ee10a2fca16609293467946119ca18d00f04d7f6c659ab91547a2d03",
+      "contract": "heading_source_records",
+      "expected": [
+        [
+          1,
+          "baz",
+          2,
+          3,
+          6
+        ]
+      ]
+    },
+    {
+      "example": 79,
+      "section": "ATX headings",
+      "source_line": 1307,
+      "markdown": "## \n#\n### ###\n",
+      "markdown_sha256": "d74a73b604bbeed06bec59419df9fcd96825368ccb9d12a195320a940f463a7e",
+      "contract": "heading_source_records",
+      "expected": [
+        [
+          2,
+          "",
+          1,
+          4,
+          4
+        ],
+        [
+          1,
+          "",
+          2,
+          2,
+          2
+        ],
+        [
+          3,
+          "",
+          3,
+          5,
+          5
+        ]
+      ]
+    },
+    {
+      "example": 80,
+      "section": "Setext headings",
+      "source_line": 1347,
+      "markdown": "Foo *bar*\n=========\n\nFoo *bar*\n---------\n",
+      "markdown_sha256": "09fa2289b6f4be11fe1ca33f85b4c418c3b4b04445a23ddab988f6a9ddc2ddbe",
+      "contract": "heading_source_records",
+      "expected": [
+        [
+          1,
+          "Foo *bar*",
+          1,
+          1,
+          10
+        ],
+        [
+          2,
+          "Foo *bar*",
+          4,
+          1,
+          10
+        ]
+      ]
+    },
+    {
+      "example": 83,
+      "section": "Setext headings",
+      "source_line": 1387,
+      "markdown": "Foo\n-------------------------\n\nFoo\n=\n",
+      "markdown_sha256": "a53f1dfb6bf9e7703c8451ea4cfe300988f3189bfd26e07884a345612da84983",
+      "contract": "heading_source_records",
+      "expected": [
+        [
+          2,
+          "Foo",
+          1,
+          1,
+          4
+        ],
+        [
+          1,
+          "Foo",
+          4,
+          1,
+          4
+        ]
+      ]
+    },
+    {
+      "example": 87,
+      "section": "Setext headings",
+      "source_line": 1449,
+      "markdown": "Foo\n    ---\n",
+      "markdown_sha256": "5a8caf7d528ca1d10777ca77b7c14c049938bd31b8ea9b92f52d0405b87ae83b",
+      "contract": "heading_source_records",
+      "expected": []
+    },
+    {
+      "example": 119,
+      "section": "Fenced code blocks",
+      "source_line": 1980,
+      "markdown": "```\n<\n >\n```\n",
+      "markdown_sha256": "0a5b7a82e9bf2d3f4352cfc5e4789986636477cae6412a2e3ad308e1f520118e",
+      "contract": "fenced_code_records",
+      "expected": {
+        "blocks": [
+          [
+            1,
+            4,
+            "",
+            "<\n >",
+            "```",
+            1,
+            true
+          ]
+        ],
+        "visible_prose": []
+      }
+    },
+    {
+      "example": 120,
+      "section": "Fenced code blocks",
+      "source_line": 1994,
+      "markdown": "~~~\n<\n >\n~~~\n",
+      "markdown_sha256": "d23f954696cdca8beeec27259546c12384f6181617fd69a7f41183bff17d887f",
+      "contract": "fenced_code_records",
+      "expected": {
+        "blocks": [
+          [
+            1,
+            4,
+            "",
+            "<\n >",
+            "~~~",
+            1,
+            true
+          ]
+        ],
+        "visible_prose": []
+      }
+    },
+    {
+      "example": 122,
+      "section": "Fenced code blocks",
+      "source_line": 2018,
+      "markdown": "```\naaa\n~~~\n```\n",
+      "markdown_sha256": "c9c302340460b7c26f0d12efec13e16f9734105b36afa264255cacdf2bda7035",
+      "contract": "fenced_code_records",
+      "expected": {
+        "blocks": [
+          [
+            1,
+            4,
+            "",
+            "aaa\n~~~",
+            "```",
+            1,
+            true
+          ]
+        ],
+        "visible_prose": []
+      }
+    },
+    {
+      "example": 124,
+      "section": "Fenced code blocks",
+      "source_line": 2044,
+      "markdown": "````\naaa\n```\n``````\n",
+      "markdown_sha256": "59af27f1e30492693c9f20ed639d69f6118e6d6a378e813d8ceb832858b73a81",
+      "contract": "fenced_code_records",
+      "expected": {
+        "blocks": [
+          [
+            1,
+            4,
+            "",
+            "aaa\n```",
+            "````",
+            1,
+            true
+          ]
+        ],
+        "visible_prose": []
+      }
+    },
+    {
+      "example": 126,
+      "section": "Fenced code blocks",
+      "source_line": 2071,
+      "markdown": "```\n",
+      "markdown_sha256": "47c06c561d5c327343685268a46b3391f3998eee890d2be51f0d21cc4a53ae6d",
+      "contract": "fenced_code_records",
+      "expected": {
+        "blocks": [
+          [
+            1,
+            2,
+            "",
+            "",
+            "```",
+            1,
+            false
+          ]
+        ],
+        "visible_prose": []
+      }
+    },
+    {
+      "example": 128,
+      "section": "Fenced code blocks",
+      "source_line": 2091,
+      "markdown": "> ```\n> aaa\n\nbbb\n",
+      "markdown_sha256": "3777bf90548597ab4c386141740959aa1130017d52bf61c6a0a61c8a6ce48ad2",
+      "contract": "fenced_code_records",
+      "expected": {
+        "blocks": [
+          [
+            1,
+            2,
+            "",
+            "aaa",
+            "```",
+            3,
+            false
+          ]
+        ],
+        "visible_prose": [
+          [
+            4,
+            "bbb"
+          ]
+        ]
+      }
+    },
+    {
+      "example": 131,
+      "section": "Fenced code blocks",
+      "source_line": 2133,
+      "markdown": " ```\n aaa\naaa\n```\n",
+      "markdown_sha256": "ba4002c6465ab9bc9076e188e340e5eed8032d1a2554b70322273ca7e196348e",
+      "contract": "fenced_code_records",
+      "expected": {
+        "blocks": [
+          [
+            1,
+            4,
+            "",
+            " aaa\naaa",
+            "```",
+            2,
+            true
+          ]
+        ],
+        "visible_prose": []
+      }
+    },
+    {
+      "example": 135,
+      "section": "Fenced code blocks",
+      "source_line": 2190,
+      "markdown": "```\naaa\n  ```\n",
+      "markdown_sha256": "3da240f0c037559ffda44102b2889d3ab4e85f586855e96fd0e4a21da450caee",
+      "contract": "fenced_code_records",
+      "expected": {
+        "blocks": [
+          [
+            1,
+            3,
+            "",
+            "aaa",
+            "```",
+            1,
+            true
+          ]
+        ],
+        "visible_prose": []
+      }
+    },
+    {
+      "example": 139,
+      "section": "Fenced code blocks",
+      "source_line": 2235,
+      "markdown": "~~~~~~\naaa\n~~~ ~~\n",
+      "markdown_sha256": "92928b72663c8f012745d2f13fecb5d5c5660b53498100dffbb2764406690fce",
+      "contract": "fenced_code_records",
+      "expected": {
+        "blocks": [
+          [
+            1,
+            4,
+            "",
+            "aaa\n~~~ ~~\n",
+            "~~~~~~",
+            1,
+            false
+          ]
+        ],
+        "visible_prose": []
+      }
+    },
+    {
+      "example": 141,
+      "section": "Fenced code blocks",
+      "source_line": 2266,
+      "markdown": "foo\n---\n~~~\nbar\n~~~\n# baz\n",
+      "markdown_sha256": "275c634b8bdf764b983ca2f99ef46ee306528432cece0566f1b6154ba966baca",
+      "contract": "fenced_code_records",
+      "expected": {
+        "blocks": [
+          [
+            3,
+            5,
+            "",
+            "bar",
+            "~~~",
+            1,
+            true
+          ]
+        ],
+        "visible_prose": [
+          [
+            1,
+            "foo"
+          ],
+          [
+            6,
+            "  baz"
+          ]
+        ]
+      }
+    },
+    {
+      "example": 142,
+      "section": "Fenced code blocks",
+      "source_line": 2288,
+      "markdown": "```ruby\ndef foo(x)\n  return 3\nend\n```\n",
+      "markdown_sha256": "87aa4442031a68f83c499da656a1275df847727c96c0a71a246b382a227dfc3b",
+      "contract": "fenced_code_records",
+      "expected": {
+        "blocks": [
+          [
+            1,
+            5,
+            "ruby",
+            "def foo(x)\n  return 3\nend",
+            "```",
+            1,
+            true
+          ]
+        ],
+        "visible_prose": []
+      }
+    },
+    {
+      "example": 143,
+      "section": "Fenced code blocks",
+      "source_line": 2302,
+      "markdown": "~~~~    ruby startline=3 $%@#$\ndef foo(x)\n  return 3\nend\n~~~~~~~\n",
+      "markdown_sha256": "2431d13c246cb434aa2ab4a96bf62ce3f3e99e1df7551627b5c7122948e2e1e6",
+      "contract": "fenced_code_records",
+      "expected": {
+        "blocks": [
+          [
+            1,
+            5,
+            "ruby",
+            "def foo(x)\n  return 3\nend",
+            "~~~~",
+            1,
+            true
+          ]
+        ],
+        "visible_prose": []
+      }
+    },
+    {
+      "example": 149,
+      "section": "HTML blocks",
+      "source_line": 2457,
+      "markdown": "<table>\n  <tr>\n    <td>\n           hi\n    </td>\n  </tr>\n</table>\n\nokay.\n",
+      "markdown_sha256": "f4b69d8dac46e2a060827a280534def06b75882f547597300440b9fba2f15a40",
+      "contract": "raw_html_body_exclusion",
+      "expected": [
+        [
+          9,
+          "okay."
+        ]
+      ]
+    },
+    {
+      "example": 169,
+      "section": "HTML blocks",
+      "source_line": 2731,
+      "markdown": "<pre language=\"haskell\"><code>\nimport Text.HTML.TagSoup\n\nmain :: IO ()\nmain = print $ parseTags tags\n</code></pre>\nokay\n",
+      "markdown_sha256": "2fe521293352135a27437ab7bb327a759e17b847b1c12373ba1c0ecff8b30526",
+      "contract": "raw_html_body_exclusion",
+      "expected": [
+        [
+          7,
+          "okay"
+        ]
+      ]
+    },
+    {
+      "example": 170,
+      "section": "HTML blocks",
+      "source_line": 2752,
+      "markdown": "<script type=\"text/javascript\">\n// JavaScript example\n\ndocument.getElementById(\"demo\").innerHTML = \"Hello JavaScript!\";\n</script>\nokay\n",
+      "markdown_sha256": "338042e5bb36e14116bb288cdfd8d326b0e13547d6cf20bbb463a9a4fe539288",
+      "contract": "raw_html_body_exclusion",
+      "expected": [
+        [
+          6,
+          "okay"
+        ]
+      ]
+    },
+    {
+      "example": 171,
+      "section": "HTML blocks",
+      "source_line": 2771,
+      "markdown": "<textarea>\n\n*foo*\n\n_bar_\n\n</textarea>\n",
+      "markdown_sha256": "4768a7e1e1f63875238865a49dc3f414a839b7944637c2dc7c2eaf5a20241af0",
+      "contract": "raw_html_body_exclusion",
+      "expected": []
+    },
+    {
+      "example": 172,
+      "section": "HTML blocks",
+      "source_line": 2791,
+      "markdown": "<style\n  type=\"text/css\">\nh1 {color:red;}\n\np {color:blue;}\n</style>\nokay\n",
+      "markdown_sha256": "d01aa0aa4bc083f75d075b43c6b3df17674065d45c99caf3dba4192d8a3a18a4",
+      "contract": "raw_html_body_exclusion",
+      "expected": [
+        [
+          7,
+          "okay"
+        ]
+      ]
+    },
+    {
+      "example": 176,
+      "section": "HTML blocks",
+      "source_line": 2856,
+      "markdown": "<style>p{color:red;}</style>\n*foo*\n",
+      "markdown_sha256": "5f7af7116db2e1940e92664e6b24a66386a855f2667cc73a4bdd252b33a0e1c9",
+      "contract": "raw_html_body_exclusion",
+      "expected": [
+        [
+          2,
+          "*foo*"
+        ]
+      ]
+    },
+    {
+      "example": 177,
+      "section": "HTML blocks",
+      "source_line": 2865,
+      "markdown": "<!-- foo -->*bar*\n*baz*\n",
+      "markdown_sha256": "7d1e913c6f4e9dad0ef4a24268bf7925511d199ea8e29aa8bd12fd7ccd5f7492",
+      "contract": "raw_html_body_exclusion",
+      "expected": [
+        [
+          2,
+          "*baz*"
+        ]
+      ]
+    },
+    {
+      "example": 179,
+      "section": "HTML blocks",
+      "source_line": 2890,
+      "markdown": "<!-- Foo\n\nbar\n   baz -->\nokay\n",
+      "markdown_sha256": "ee2c6164ea84063487e973311bc61c47e005cc62ba29a1e605d7ea4790cb88ec",
+      "contract": "raw_html_body_exclusion",
+      "expected": [
+        [
+          5,
+          "okay"
+        ]
+      ]
+    },
+    {
+      "example": 192,
+      "section": "Link reference definitions",
+      "source_line": 3179,
+      "markdown": "[foo]: /url \"title\"\n\n[foo]\n",
+      "markdown_sha256": "56c36a082a89d1e9475811807d727a19a0c22b43155f524b9e582ae63aa9fd54",
+      "contract": "single_line_reference_resolution",
+      "expected": [
+        [
+          "foo",
+          "/url",
+          3,
+          1,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "example": 204,
+      "section": "Link reference definitions",
+      "source_line": 3326,
+      "markdown": "[foo]\n\n[foo]: first\n[foo]: second\n",
+      "markdown_sha256": "a39691dad427f7db057bdf41a6a1c184ccaf6da0f96aaaaf0f9e4b80675eb096",
+      "contract": "single_line_reference_resolution",
+      "expected": [
+        [
+          "foo",
+          "first",
+          1,
+          1,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "example": 205,
+      "section": "Link reference definitions",
+      "source_line": 3339,
+      "markdown": "[FOO]: /url\n\n[Foo]\n",
+      "markdown_sha256": "526f3a0142868ff2bb773f2e54fcf3b61e11d6266e19fd7f9a68549807897f99",
+      "contract": "single_line_reference_resolution",
+      "expected": [
+        [
+          "Foo",
+          "/url",
+          3,
+          1,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "example": 328,
+      "section": "Code spans",
+      "source_line": 5886,
+      "markdown": "`foo`\n",
+      "markdown_sha256": "bd5d66d0e5b2ff81c6b16fa5d0daf220146f689a56ac2d4f369a747bb7ce254d",
+      "contract": "single_line_code_mask",
+      "expected": [
+        [
+          0,
+          5
+        ]
+      ]
+    },
+    {
+      "example": 329,
+      "section": "Code spans",
+      "source_line": 5897,
+      "markdown": "`` foo ` bar ``\n",
+      "markdown_sha256": "3117aabde0306ce288dc0afcac17b31d883f6d1c59c342374a84fb48524570cd",
+      "contract": "single_line_code_mask",
+      "expected": [
+        [
+          0,
+          15
+        ]
+      ]
+    },
+    {
+      "example": 338,
+      "section": "Code spans",
+      "source_line": 5990,
+      "markdown": "`foo\\`bar`\n",
+      "markdown_sha256": "8568ee30e78494c7c65cffe4c0ca3029e5291c19108505ab79be5c532fbb5801",
+      "contract": "single_line_code_mask",
+      "expected": [
+        [
+          0,
+          6
+        ]
+      ]
+    },
+    {
+      "example": 342,
+      "section": "Code spans",
+      "source_line": 6028,
+      "markdown": "[not a `link](/foo`)\n",
+      "markdown_sha256": "523ba5c384d3f0fc8e96af4f50368b8a676695a2b46155fed8c08949b261e318",
+      "contract": "single_line_code_mask",
+      "expected": [
+        [
+          7,
+          19
+        ]
+      ]
+    },
+    {
+      "example": 482,
+      "section": "Links",
+      "source_line": 7539,
+      "markdown": "[link](/uri \"title\")\n",
+      "markdown_sha256": "ee038fcd4d83e49a9011eea2d4eebe96fff2cdb8019c69219a7a293f91e765f5",
+      "contract": "balanced_link_destination_mask",
+      "expected": [
+        [
+          6,
+          20
+        ]
+      ]
+    },
+    {
+      "example": 483,
+      "section": "Links",
+      "source_line": 7549,
+      "markdown": "[link](/uri)\n",
+      "markdown_sha256": "4dcee3c15bab18b1ec05872da73663bfab3542aab210fb9fe94e82c2f7d91bde",
+      "contract": "simple_link_source_records",
+      "expected": [
+        [
+          "link",
+          "/uri",
+          1,
+          1,
+          8,
+          12
+        ]
+      ]
+    },
+    {
+      "example": 485,
+      "section": "Links",
+      "source_line": 7562,
+      "markdown": "[link]()\n",
+      "markdown_sha256": "f7230e4a03150a4bbaec82a2c703abdeef69c83eb3b7f58b38d4eb88835fbb3c",
+      "contract": "simple_link_source_records",
+      "expected": [
+        [
+          "link",
+          "",
+          1,
+          1,
+          8,
+          8
+        ]
+      ]
+    },
+    {
+      "example": 496,
+      "section": "Links",
+      "source_line": 7657,
+      "markdown": "[link](foo(and(bar)))\n",
+      "markdown_sha256": "c40bf8557eec6d3a5f32a009942873158d692469683cc1847a38c1e75b62d7a6",
+      "contract": "balanced_link_destination_mask",
+      "expected": [
+        [
+          6,
+          21
+        ]
+      ]
+    }
+  ],
+  "unsupported": [
+    {
+      "example": 81,
+      "section": "Setext headings",
+      "source_line": 1361,
+      "markdown": "Foo *bar\nbaz*\n====\n",
+      "markdown_sha256": "21aa799f5a34d226fa706d1bfc5898d1837b4430139d034fe277ca9b2f195ac9",
+      "reason": "Multiline Setext title records are not supported by the single-line title-span interface."
+    },
+    {
+      "example": 151,
+      "section": "HTML blocks",
+      "source_line": 2492,
+      "markdown": "</div>\n*foo*\n",
+      "markdown_sha256": "a0fcb52da22f3ba700bc197ae1e0fe2cd0fef17e1554d8d687a41e1f26e52d2d",
+      "reason": "Type-six HTML starts from a closing tag are not part of the current recognized element block contract."
+    },
+    {
+      "example": 155,
+      "section": "HTML blocks",
+      "source_line": 2542,
+      "markdown": "<div>\n*foo*\n\n*bar*\n",
+      "markdown_sha256": "759db666ec7882a3b76e999ace3a7c000fbcd57c5f7b7c7a2aa5945985300421",
+      "reason": "Blank-line-terminated type-six HTML differs from the current element-close exclusion policy."
+    },
+    {
+      "example": 161,
+      "section": "HTML blocks",
+      "source_line": 2615,
+      "markdown": "<div></div>\n``` c\nint x = 33;\n```\n",
+      "markdown_sha256": "68cd4c6586494af13ed998919dcf8818fc940bf560d0bb3745a81901ade41df8",
+      "reason": "Type-six HTML and fenced-code block precedence is not implemented as a full CommonMark block parser."
+    },
+    {
+      "example": 174,
+      "section": "HTML blocks",
+      "source_line": 2827,
+      "markdown": "> <div>\n> foo\n\nbar\n",
+      "markdown_sha256": "acafe8ecaf11f7b9f2cfc83576619dc810cd443be74e18f55cb69fbebf99ba00",
+      "reason": "HTML container-block boundaries are outside the current raw top-level HTML contract."
+    },
+    {
+      "example": 180,
+      "section": "HTML blocks",
+      "source_line": 2908,
+      "markdown": "<?php\n\n  echo '>';\n\n?>\nokay\n",
+      "markdown_sha256": "20712ec4d47b21d7df2aedcd04ccabb2ba5daa3434031a7e934a621aca21151d",
+      "reason": "Processing-instruction HTML blocks are outside the recognized HTML tag/comment contract."
+    },
+    {
+      "example": 182,
+      "section": "HTML blocks",
+      "source_line": 2936,
+      "markdown": "<![CDATA[\nfunction matchwo(a,b)\n{\n  if (a < b && a < 0) then {\n    return 1;\n\n  } else {\n\n    return 0;\n  }\n}\n]]>\nokay\n",
+      "markdown_sha256": "95d6f4c4909585f4c4261e07b821ddd29c2cb5553c2df760bfe762fa3cf993f6",
+      "reason": "CDATA blocks are outside the recognized HTML tag/comment contract."
+    },
+    {
+      "example": 186,
+      "section": "HTML blocks",
+      "source_line": 3012,
+      "markdown": "<div>\nbar\n</div>\n*foo*\n",
+      "markdown_sha256": "fcb0c7f9796718ed67a0e6b114454248c2bce75f6e6bfaead54f910a8cd77b3d",
+      "reason": "Type-six HTML termination differs from the current element-close exclusion policy."
+    },
+    {
+      "example": 193,
+      "section": "Link reference definitions",
+      "source_line": 3188,
+      "markdown": "   [foo]: \n      /url  \n           'the title'  \n\n[foo]\n",
+      "markdown_sha256": "301738ee3066da2b57eb22fe991aa18ef1fb6668a20a21c42385db2451297db8",
+      "reason": "Multiline reference definition destinations and titles are outside the physical single-line reference contract."
+    },
+    {
+      "example": 208,
+      "section": "Link reference definitions",
+      "source_line": 3371,
+      "markdown": "[\nfoo\n]: /url\nbar\n",
+      "markdown_sha256": "ca265f7803ed2cbf493c585f4e2191a70834910a1ab396b814e1214595cbd2c6",
+      "reason": "Multiline reference labels are outside the physical single-line reference contract."
+    },
+    {
+      "example": 335,
+      "section": "Code spans",
+      "source_line": 5952,
+      "markdown": "``\nfoo\nbar  \nbaz\n``\n",
+      "markdown_sha256": "ebd629bf53a88c8ab43d5e3924059a89319b88c30077caf03c0da5c7b5a686da",
+      "reason": "Multiline code-span masking is not supported by the current line-based inline mask."
+    },
+    {
+      "example": 337,
+      "section": "Code spans",
+      "source_line": 5973,
+      "markdown": "`foo   bar \nbaz`\n",
+      "markdown_sha256": "0a7eb39dce34585dde40ec829e03b4f0f46a9dc9a491d0af8c122d39f9df80ea",
+      "reason": "Multiline code-span masking is not supported by the current line-based inline mask."
+    },
+    {
+      "example": 484,
+      "section": "Links",
+      "source_line": 7555,
+      "markdown": "[](./target.md)\n",
+      "markdown_sha256": "196b256e142bcc53ff6a22d4bfc1dc1c40edf9b5a7fd7bcfb7895a56458e6fef",
+      "reason": "Empty link-label extraction is outside the current nonempty-label link record contract."
+    },
+    {
+      "example": 489,
+      "section": "Links",
+      "source_line": 7591,
+      "markdown": "[link](</my uri>)\n",
+      "markdown_sha256": "b72ac3f1c8077c418e83ace2ea50f0a19971f13b1349c292d707239c8c6603cf",
+      "reason": "Angle-bracket destination decoding is outside the legacy simple-link URL record contract."
+    },
+    {
+      "example": 495,
+      "section": "Links",
+      "source_line": 7648,
+      "markdown": "[link](\\(foo\\))\n",
+      "markdown_sha256": "61267f5511c4c799b7ef241dd1af6a1a63bff32de72672cf5640df19ff2a0129",
+      "reason": "Escaped destination decoding is outside the legacy simple-link URL record contract."
+    }
+  ]
+}

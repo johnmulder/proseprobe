@@ -2373,6 +2373,10 @@ opening delimiter and suggest adding the matching fence.
 - Closers that use the wrong fence character
 - Closers that are shorter than the opening delimiter
 
+A quoted fence without an explicit closing marker ends when its quote container
+ends; following body prose remains available. The missing close remains a
+finding, just as it does at end of file.
+
 **Example (bad):**
 `````markdown
 ```python
@@ -2393,6 +2397,9 @@ findings after the syntax error.
 ---
 
 ### M008: Skipped Heading Level
+
+An empty ATX heading reports its opening hash markers, preserving a nonempty
+source span. S025 and S028 use the same marker span for empty headings.
 
 Detects visible Markdown headings that jump upward by more than one level. The
 finding is a high-confidence warning on the later heading and suggests the next

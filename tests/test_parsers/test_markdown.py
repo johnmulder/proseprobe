@@ -1,5 +1,9 @@
 """Tests for Markdown parser."""
 
+import hashlib
+import json
+from pathlib import Path
+
 import pytest
 
 from proseprobe.parsers.markdown import (
@@ -1043,3 +1047,152 @@ def test_prose_sentences_are_cached_on_markdown_parser() -> None:
 
     assert first is parser.get_prose_sentences()
     assert first[0].source_position(first[0].text.index("sentence")) == (2, 1)
+
+
+_COMMONMARK_FIXTURE = (
+    Path(__file__).parents[1] / "fixtures" / "commonmark-0.31.2-selected.json"
+)
+_COMMONMARK_CASES = json.loads(_COMMONMARK_FIXTURE.read_text(encoding="utf-8"))
+
+
+def test_commonmark_fixture_preserves_pinned_provenance_and_separate_scope() -> None:
+    upstream = _COMMONMARK_CASES["upstream"]
+    assert upstream["version"] == "0.31.2"
+    assert (
+        upstream["source_sha256"]
+        == "257c41ad946f7a1414a499aca402a1aa8fdac3678532266611348c1cf54f4b80"
+    )
+    assert upstream["source_bytes"] == 205025
+    assert upstream["upstream_example_count"] == 652
+    assert upstream["license"] == "CC-BY-SA-4.0"
+    assert _COMMONMARK_CASES["selection"]["selected_before_implementation"] is True
+    supported = _COMMONMARK_CASES["supported"]
+    unsupported = _COMMONMARK_CASES["unsupported"]
+    assert len(supported) == 44
+    assert len(unsupported) == 15
+    assert {case["example"] for case in supported}.isdisjoint(
+        {case["example"] for case in unsupported}
+    )
+    for case in supported + unsupported:
+        assert (
+            hashlib.sha256(case["markdown"].encode()).hexdigest()
+            == case["markdown_sha256"]
+        )
+    assert all(case["reason"] for case in unsupported)
+
+
+@pytest.mark.parametrize(
+    "case",
+    _COMMONMARK_CASES["supported"],
+    ids=lambda case: f"commonmark-{case['example']}-{case['contract']}",
+)
+def test_selected_commonmark_extraction_and_masking_contracts(case: dict) -> None:
+    source = case["markdown"]
+    parser = MarkdownParser(source)
+    expected = case["expected"]
+    contract = case["contract"]
+    if contract == "heading_source_records":
+        headings = parser.get_headings()
+        assert [
+            [h.level, h.title, h.start_line, h.column, h.end_column] for h in headings
+        ] == expected
+        for heading in headings:
+            assert (
+                source.splitlines()[heading.start_line - 1][
+                    heading.column - 1 : heading.end_column - 1
+                ]
+                == heading.title
+            )
+    elif contract == "fenced_code_records":
+        assert [
+            [
+                b.start_line,
+                b.end_line,
+                b.language,
+                b.content,
+                b.fence,
+                b.column,
+                b.closed,
+            ]
+            for b in parser.get_code_block_records()
+        ] == expected["blocks"]
+        assert [[line, text] for line, text in parser.get_prose_lines()] == expected[
+            "visible_prose"
+        ]
+    elif contract == "single_line_code_mask":
+        line = source.rstrip("\n")
+        assert [list(span) for span in parser._find_inline_code_spans(line)] == expected
+        chars = list(line)
+        for start, end in expected:
+            chars[start:end] = " " * (end - start)
+        assert parser._mask_inline_code(line) == "".join(chars)
+        assert len(parser._mask_inline_code(line)) == len(line)
+    elif contract in {"simple_link_source_records", "single_line_reference_resolution"}:
+        assert [
+            [link.text, link.url, link.line, link.column, link.url_start, link.url_end]
+            for link in parser.get_links()
+        ] == expected
+        for link in parser.get_links():
+            if link.url_start:
+                assert (
+                    source.splitlines()[link.line - 1][
+                        link.url_start - 1 : link.url_end - 1
+                    ]
+                    == link.url
+                )
+    elif contract == "balanced_link_destination_mask":
+        line = source.rstrip("\n")
+        chars = list(line)
+        for start, end in expected:
+            chars[start:end] = " " * (end - start)
+        assert parser._mask_inline_code_and_links(line) == "".join(chars)
+        assert len(parser._mask_inline_code_and_links(line)) == len(line)
+    elif contract == "raw_html_body_exclusion":
+        assert [[line, text] for line, text in parser.get_prose_lines()] == expected
+    else:
+        pytest.fail(f"Unknown CommonMark extraction contract: {contract}")
+
+
+@pytest.mark.parametrize("middle", ["`not`", "#", "### ###"])
+def test_invisible_code_or_empty_heading_preserves_source_scope_barrier(
+    middle: str,
+) -> None:
+    from proseprobe.rules.grammar import HedgedRequirementRule
+
+    source = f"Clients must\n{middle}\nnormally restart."
+    parser = MarkdownParser(source)
+    blocks = parser.get_prose_blocks()
+    assert [block.lines for block in blocks] == [
+        ((1, "Clients must"),),
+        ((3, "normally restart."),),
+    ]
+    assert blocks[1].break_before is True
+    sentences = parser.get_prose_sentences()
+    assert [sentence.source_lines for sentence in sentences] == [(1,), (3,)]
+    assert [sentence.source_text(source) for sentence in sentences] == [
+        "Clients must",
+        "normally restart.",
+    ]
+    assert HedgedRequirementRule().check(source, "guide.md") == []
+
+
+@pytest.mark.parametrize("tag", ["SCRIPT", "STYLE", "PRE", "TEXTAREA"])
+def test_raw_html_mixed_case_close_does_not_hide_following_prose(tag: str) -> None:
+    source = f"<{tag}>\nOpaque source.\n</{tag.lower()}>\nVisible."
+    assert MarkdownParser(source).get_prose_lines() == [(4, "Visible.")]
+
+
+def test_raw_html_end_token_with_suffix_does_not_hide_following_prose() -> None:
+    source = "<script>\nOpaque source.\n</script>1. *bar*\nVisible."
+    assert MarkdownParser(source).get_prose_lines() == [(4, "Visible.")]
+
+
+def test_unknown_mdx_component_keeps_existing_exclusion() -> None:
+    source = "<Widget>\nOpaque source.\n</Widget>\nVisible."
+    assert MarkdownParser(source).get_prose_lines() == [(4, "Visible.")]
+
+
+@pytest.mark.parametrize("tag", ["script", "pre", "style", "textarea"])
+def test_raw_html_close_remains_authoritative_after_comment_like_text(tag: str) -> None:
+    source = f"<{tag}>\n<!--\n</{tag}>\nVisible."
+    assert MarkdownParser(source).get_prose_lines() == [(4, "Visible.")]

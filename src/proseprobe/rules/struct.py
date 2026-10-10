@@ -1187,7 +1187,7 @@ class HeadingWithoutBodyRule(Rule):
     content_scope = "raw"
 
     _BLOCKQUOTE_PREFIX = re.compile(r"^(?:\s{0,3}>\s?)+")
-    _ATX_HEADING = re.compile(r"^ {0,3}#{1,6}\s+")
+    _ATX_HEADING = re.compile(r"^ {0,3}#{1,6}(?:[ \t]+|$)")
     _SETEXT_UNDERLINE = re.compile(r"^ {0,3}(?:=+|-+)\s*$")
 
     def check(self, content: str, filename: str) -> list[Issue]:
@@ -1196,7 +1196,8 @@ class HeadingWithoutBodyRule(Rule):
             return []
 
         lines = content.split("\n")
-        headings = _get_cached_parser(content).get_headings()
+        parser = _get_cached_parser(content)
+        headings = parser.get_headings()
         issues: list[Issue] = []
 
         for current, following in pairwise(headings):
@@ -1219,13 +1220,14 @@ class HeadingWithoutBodyRule(Rule):
             ):
                 continue
 
+            column, end_column = parser.heading_diagnostic_span(current)
             issues.append(
                 Issue(
                     rule_id=self.id,
                     message=f"Heading without body: '{current.title}'",
                     line=current.start_line,
-                    column=current.column,
-                    end_column=current.end_column,
+                    column=column,
+                    end_column=end_column,
                     severity=self.severity,
                     confidence=self.default_confidence,
                     suggestion="Add content under this heading or remove it",
@@ -1249,24 +1251,28 @@ class ExcessiveHeadingDepthRule(Rule):
         """Report visible Markdown headings deeper than level four."""
         if not is_markdown_file(filename):
             return []
-
-        return [
-            Issue(
-                rule_id=self.id,
-                message=(
-                    f"Excessive heading depth: level {heading.level} "
-                    f"heading '{heading.title}'"
-                ),
-                line=heading.start_line,
-                column=heading.column,
-                end_column=heading.end_column,
-                severity=self.severity,
-                confidence=self.default_confidence,
-                suggestion="Use a level-4 or shallower heading",
+        parser = _get_cached_parser(content)
+        issues: list[Issue] = []
+        for heading in parser.get_headings():
+            if heading.level <= 4:
+                continue
+            column, end_column = parser.heading_diagnostic_span(heading)
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=(
+                        f"Excessive heading depth: level {heading.level} "
+                        f"heading '{heading.title}'"
+                    ),
+                    line=heading.start_line,
+                    column=column,
+                    end_column=end_column,
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion="Use a level-4 or shallower heading",
+                )
             )
-            for heading in _get_cached_parser(content).get_headings()
-            if heading.level >= 5
-        ]
+        return issues
 
 
 class TinySectionRule(Rule):
