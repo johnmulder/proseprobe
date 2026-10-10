@@ -1226,6 +1226,13 @@ Planning date: 2026-10-09. Execution started: 2026-10-10.
 Status: checked actions are complete; other actions retain their prerequisites.
 Baseline revision: `bf53d0adfed8bd04884cbdfc542f365c026ee796`.
 
+User direction on 2026-10-10: defer independent effectiveness claims. Finish
+engineering, blind review preparation and offline evaluation validation. Human
+annotation, semantic usefulness judgments, natural development/holdout scoring,
+calibration and profile promotion remain deferred until independent reviewers
+and their evidence are available. No missing judgment becomes a successful
+finding or suggestion, and the reserved holdout remains unopened for tuning.
+
 This continuation covers every issue from the second assessment. The previous
 implementation improved source mapping, policy consistency, matching, and
 measurement. The next work corrects remaining defects, tests useful additions,
@@ -2309,10 +2316,10 @@ Suggested one-line commit: `Report independently judged revision-pair usefulness
 - [x] P32D.2 Define a source-correlated uncertainty method and minimum contributing
   groups before implementation. Use repositories/authors or appropriate independent
   source groups, keeping every paired revision within its group.
-- [ ] P32D.3 Add deterministic toy-group tests with unequal group sizes, clean
+- [x] P32D.3 Add deterministic toy-group tests with unequal group sizes, clean
   reviewed groups, zero denominators, a dominant repository, and too few groups.
   If resampling is used, fix its seed and report its procedure and support.
-- [ ] P32D.4 Calculate the justified interval in evaluation-only code without a
+- [x] P32D.4 Calculate the justified interval in evaluation-only code without a
   runtime dependency. Return unavailable intervals with reasons when group support
   is inadequate; retain Wilson intervals as explicitly sample-only where useful.
 - [ ] P32D.5 Publish per-rule/profile/format/context/source-group results with
@@ -2840,3 +2847,14 @@ failed before implementation. Review caught five production-coordinate/zero-span
 failures: single-line Issue fields remain unchanged and M004's exception stays
 narrow. All 75 focused tests, Ruff, typing and prose checks pass. No heuristic
 alignment, native-label conversion or actual human evidence was introduced.
+
+
+### P32D — Conditional source-group intervals
+
+Eleven offline count fixtures validate the predeclared whole-group bootstrap,
+unequal group sizes, shared variants, clean density-only support, unknown groups,
+missing denominators and a dominant repository. The seeded unequal-size fixture
+checks independently derived percentile endpoints rather than repeating the
+implementation. All 258 related evaluator tests, Ruff and baseline prose scans
+pass. Reports expose each metric's counts, support and dominant share; no natural
+source scoring, independent labels or population claim was added.

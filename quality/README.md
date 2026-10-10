@@ -297,3 +297,19 @@ IDs. Missing correspondence or meaning judgments remain unavailable. No native
 edit type, eliminated warning or reference text automatically supplies a useful
 finding or preserved meaning. The offline tests use synthetic review outcomes;
 actual independent paired evidence remains deferred.
+
+## Source-group uncertainty
+
+JSON reports retain separate precision, recall and warning/error false-positive
+density counts for each identified source group. Variants in one group remain
+together. Whole groups are sampled uniformly with replacement; each replicate
+uses the ratio of summed counts. The predeclared procedure uses seed 20261010,
+2,000 replicates and interpolated 2.5/97.5 percentiles, with at least five
+contributing identified groups for each metric.
+
+Reports show contribution sizes, the dominant denominator share and the exact
+reason an interval is unavailable. Clean reviewed groups can support density
+without supplying precision or recall observations. Unknown groups, inadequate
+support and missing denominators cannot produce an interval. These intervals
+are conditional on observed pilot source groups; they provide no proof of a
+representative population. They do not replace independent human annotation.

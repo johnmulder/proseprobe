@@ -7,8 +7,10 @@ import argparse
 import hashlib
 import json
 import sys
+from collections import defaultdict
 from dataclasses import asdict, replace
 from pathlib import Path
+from typing import Any
 
 from benchmarks.evaluation_identity import runtime_identity
 from benchmarks.quality_scoring import (
@@ -38,6 +40,7 @@ from benchmarks.regression_gate import (
     load_gate_record,
     require_complete_review,
 )
+from benchmarks.source_intervals import source_group_interval
 from benchmarks.usefulness import usefulness_report
 from proseprobe import __version__
 from proseprobe.config import Config, ConfigError
@@ -302,6 +305,39 @@ def collect_findings(
     return tuple(sorted(findings))
 
 
+def _source_group_intervals(
+    score: QualityScore, eligible: Annotations, coverage: dict[str, Any]
+) -> dict[str, dict[str, Any]]:
+    counts: dict[str, defaultdict[str, list[int]]] = {
+        metric: defaultdict(lambda: [0, 0])
+        for metric in ("precision", "recall", "density")
+    }
+    for group, row in coverage.items():
+        for metric in counts:
+            counts[metric][group]
+        counts["density"][group][1] = row["prose_words"]
+    for expected, actual in score.matches:
+        for metric, finding in (("precision", actual), ("recall", expected)):
+            group = eligible.source_groups.get(finding.path, "unspecified")
+            counts[metric][group][0] += 1
+            counts[metric][group][1] += 1
+    for item in score.false_positives:
+        group = eligible.source_groups.get(item.finding.path, "unspecified")
+        counts["precision"][group][1] += 1
+        if item.finding.severity in {"warning", "error"}:
+            counts["density"][group][0] += 1
+    for item in score.false_negatives:
+        group = eligible.source_groups.get(item.path, "unspecified")
+        counts["recall"][group][1] += 1
+    return {
+        metric: source_group_interval(
+            {group: (row[0], row[1]) for group, row in rows.items()},
+            scale=1000 if metric == "density" else 1,
+        )
+        for metric, rows in counts.items()
+    }
+
+
 def format_json_report(
     score: QualityScore,
     *,
@@ -337,21 +373,9 @@ def format_json_report(
     breakdowns = score_breakdowns(score, eligible, config.profile or "default")
     coverage = reviewed_coverage(eligible, repo_root, set(score.metrics))
     reviewed_groups = set(coverage) - {"unspecified"}
-    precision_groups = {
-        eligible.source_groups[item.path]
-        for item in (
-            *[prediction for _expected, prediction in score.matches],
-            *[fp.finding for fp in score.false_positives],
-        )
-        if item.path in eligible.source_groups
-    }
-    recall_groups = {
-        eligible.source_groups[item.path]
-        for item in (
-            *[target for target, _prediction in score.matches],
-            *score.false_negatives,
-        )
-        if item.path in eligible.source_groups
+    intervals = _source_group_intervals(score, eligible, coverage)
+    available_intervals = {
+        metric: result["interval_95"] for metric, result in intervals.items()
     }
     span_total = sum(item.span_total for item in score.locations.values())
     exact_spans = sum(item.exact_spans for item in score.locations.values())
@@ -452,14 +476,19 @@ def format_json_report(
             "reviewed_source_group_count": len(reviewed_groups),
             "reviewed_coverage": coverage,
             "metric_source_group_counts": {
-                "precision": len(precision_groups),
-                "recall": len(recall_groups),
-                "density": len(reviewed_groups),
+                metric: result["contributing_groups_count"]
+                for metric, result in intervals.items()
             },
-            "cluster_interval": None,
-            "cluster_interval_reason": "too few contributing precision or recall source groups; sample-only intervals"
-            if len(precision_groups) < 2 or len(recall_groups) < 2
-            else "source-level counts provided; no cluster interval or generalization claim calculated",
+            "source_group_intervals": intervals,
+            "cluster_interval": available_intervals
+            if any(value is not None for value in available_intervals.values())
+            else None,
+            "cluster_interval_reason": "; ".join(
+                f"{metric}: {result['unavailable_reason']}"
+                for metric, result in intervals.items()
+                if result["unavailable_reason"] is not None
+            )
+            or None,
             "unreviewed_count": len(score.unreviewed),
             "unsupported_count": len(score.unsupported),
             "context_dependent_count": len(score.context_dependent),
