@@ -1513,27 +1513,27 @@ Targets: `src/proseprobe/cli.py::_changed_files`, watch state initialization,
 `tests/test_cli.py`, watch documentation.
 Prerequisites: P21 before the integration comparison; helper work independent.
 
-- [ ] P22.1 Add a failing helper test that scans a temporary file, changes its
+- [x] P22.1 Add a failing helper test that scans a temporary file, changes its
   bytes, sets an earlier timestamp with `os.utime(ns=...)`, and scans again.
   Assert that the second version is returned exactly once.
-- [ ] P22.2 Add deterministic tests for an unchanged stamp, a newer stamp, and
+- [x] P22.2 Add deterministic tests for an unchanged stamp, a newer stamp, and
   equal `mtime_ns` with changed size. Assert first discovery always schedules
   the file. Use controlled stat values where filesystem precision differs.
-- [ ] P22.3 Replace the increasing float-time comparison with inequality of
+- [x] P22.3 Replace the increasing float-time comparison with inequality of
   `(st_mtime_ns, st_size)` stamps. Rename local state to describe the stamp,
   keeping the helper private and avoiding content hashing or a new watcher.
-- [ ] P22.4 Add a failing deletion/recreation sequence: discover the file,
+- [x] P22.4 Add a failing deletion/recreation sequence: discover the file,
   delete it for one iteration, then recreate it with its old timestamp and
   size. Require removal of the departed path's cached stamp and scheduling
   upon rediscovery.
-- [ ] P22.5 Prune state for paths no longer returned by successful discovery.
+- [x] P22.5 Prune state for paths no longer returned by successful discovery.
   Add a file-removal-between-discovery-and-stat case; skip its failed stat
   without terminating the loop. Confirm surviving paths retain their stamps.
-- [ ] P22.6 Exercise two watch iterations through the CLI with a controlled
+- [x] P22.6 Exercise two watch iterations through the CLI with a controlled
   sleep callback: the initial file has no finding, the backward-stamped edit
   adds one, and the next batch reports it. Stop with `KeyboardInterrupt`;
   avoid elapsed-time assertions or real waiting.
-- [ ] P22.7 Reuse check/watch parity tests for configuration, profile, baseline,
+- [x] P22.7 Reuse check/watch parity tests for configuration, profile, baseline,
   confidence, suppressions, quiet output, and read errors. Document that this
   polling scheme cannot detect changed bytes when both stamp fields remain
   identical and no deletion is observed. Run focused tests and the package gate.
@@ -2512,3 +2512,14 @@ masking and same-line suppression match for `.py` and `.PY`. Directory include
 globs, exclusions and per-file policy retain their established behavior. All
 240 focused tests and the isolated package gate pass. Configuration docs record
 explicit-file casing and unchanged directory matching.
+
+### P22 — Watch detects changed stamps
+
+Four regressions failed before correction and two existing characterizations
+already passed. Watch compares nanosecond modification time and size by
+inequality and prunes paths absent from successful discovery. Tests cover
+backward/forward times, equal-time size changes, unchanged versions, observed
+deletion/recreation, a stat race and two controlled CLI iterations. All 363
+related CLI/linter/configuration/baseline tests and the isolated full gate pass.
+The unchanged polling limitation for identical stamps without observed deletion
+is documented. No content hashing, watcher dependency or timing assertion was added.

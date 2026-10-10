@@ -391,6 +391,11 @@ Watch is text-only because its output is a continuous stream. For `check`,
 grouped JSON and SARIF reports and JSON Lines records are written to stdout,
 while operational errors and verbose status messages are written to stderr.
 
+Watch compares each file's nanosecond modification time and size for changes,
+including backward timestamps. Observed deletion clears its cached stamp so
+recreated files are reconsidered. Changes that preserve both stamp fields and
+occur without an observed deletion remain outside this polling contract.
+
 ## Standard Input
 
 Lint one generated document without creating a temporary file:

@@ -457,17 +457,21 @@ def _cmd_version(_args: argparse.Namespace) -> int:
 def _changed_files(
     linter: Linter,
     paths: list[Path],
-    file_mtimes: dict[Path, float],
+    file_stamps: dict[Path, tuple[int, int]],
 ) -> list[Path]:
     """Return discovered files changed since the previous watch iteration."""
     changed: list[Path] = []
-    for file in linter.discover_files(paths):
+    discovered = linter.discover_files(paths)
+    for departed in file_stamps.keys() - set(discovered):
+        del file_stamps[departed]
+    for file in discovered:
         try:
-            mtime = file.stat().st_mtime
+            stat = file.stat()
         except OSError:
             continue
-        if file not in file_mtimes or file_mtimes[file] < mtime:
-            file_mtimes[file] = mtime
+        stamp = (stat.st_mtime_ns, stat.st_size)
+        if file_stamps.get(file) != stamp:
+            file_stamps[file] = stamp
             changed.append(file)
     return changed
 
@@ -487,7 +491,7 @@ def _cmd_watch(args: argparse.Namespace) -> int:
         print(f"Configuration error: {exc}", file=sys.stderr)
         return 2
 
-    file_mtimes: dict[Path, float] = {}
+    file_stamps: dict[Path, tuple[int, int]] = {}
     if not args.quiet:
         print(
             style(f"Watching {len(paths)} path(s)...", bold=True)
@@ -496,7 +500,7 @@ def _cmd_watch(args: argparse.Namespace) -> int:
 
     try:
         while True:
-            changed_files = _changed_files(linter, paths, file_mtimes)
+            changed_files = _changed_files(linter, paths, file_stamps)
             if changed_files:
                 if not args.quiet and not args.no_clear:
                     clear_screen()

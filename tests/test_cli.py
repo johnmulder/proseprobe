@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import io
 import json
+import os
 import subprocess
 import sys
 from contextlib import redirect_stderr, redirect_stdout
@@ -14,8 +15,9 @@ from unittest.mock import patch
 import pytest
 
 from proseprobe import __version__
-from proseprobe.cli import main
-from proseprobe.config import load_config
+from proseprobe.cli import _changed_files, main
+from proseprobe.config import Config, load_config
+from proseprobe.core.linter import Linter
 
 
 @dataclass
@@ -1760,6 +1762,72 @@ class TestBaselineCommand:
         assert json.loads(baseline.read_text())["entries"] == []
 
 
+class TestChangedFiles:
+    @pytest.mark.parametrize(
+        ("timestamp_delta", "new_content"),
+        [(-1_000_000_000, "new"), (1_000_000_000, "new"), (0, "longer")],
+    )
+    def test_schedules_changed_stamp_once(
+        self, tmp_path: Path, timestamp_delta: int, new_content: str
+    ) -> None:
+        file = tmp_path / "doc.md"
+        file.write_text("old")
+        initial_timestamp = 1_800_000_000_000_000_000
+        os.utime(file, ns=(initial_timestamp, initial_timestamp))
+        linter = Linter(Config())
+        stamps: dict[Path, tuple[int, int]] = {}
+
+        assert _changed_files(linter, [tmp_path], stamps) == [file]
+        assert _changed_files(linter, [tmp_path], stamps) == []
+        file.write_text(new_content)
+        changed_timestamp = initial_timestamp + timestamp_delta
+        os.utime(file, ns=(changed_timestamp, changed_timestamp))
+
+        assert _changed_files(linter, [tmp_path], stamps) == [file]
+        assert _changed_files(linter, [tmp_path], stamps) == []
+
+    def test_observed_deletion_prunes_stamp_and_recreation_is_changed(
+        self, tmp_path: Path
+    ) -> None:
+        file = tmp_path / "doc.md"
+        file.write_text("text")
+        original_stat = file.stat()
+        linter = Linter(Config())
+        stamps: dict[Path, tuple[int, int]] = {}
+        assert _changed_files(linter, [tmp_path], stamps) == [file]
+
+        file.unlink()
+        assert _changed_files(linter, [tmp_path], stamps) == []
+        departed_stamps = dict(stamps)
+        file.write_text("text")
+        os.utime(file, ns=(original_stat.st_atime_ns, original_stat.st_mtime_ns))
+        rediscovered = _changed_files(linter, [tmp_path], stamps)
+
+        assert (departed_stamps, rediscovered) == ({}, [file])
+        assert _changed_files(linter, [tmp_path], stamps) == []
+
+    def test_file_removed_after_discovery_skips_failed_stat(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        removed = tmp_path / "removed.md"
+        survivor = tmp_path / "survivor.md"
+        removed.write_text("text")
+        survivor.write_text("text")
+        linter = Linter(Config())
+        stamps: dict[Path, tuple[int, int]] = {}
+        assert set(_changed_files(linter, [tmp_path], stamps)) == {removed, survivor}
+        surviving_stamp = stamps[survivor]
+
+        def discover_then_remove(_paths: list[Path]) -> list[Path]:
+            removed.unlink()
+            return [removed, survivor]
+
+        monkeypatch.setattr(linter, "discover_files", discover_then_remove)
+
+        assert _changed_files(linter, [tmp_path], stamps) == []
+        assert stamps[survivor] == surviving_stamp
+
+
 class TestWatchCommand:
     """Tests for the watch command."""
 
@@ -1793,6 +1861,36 @@ class TestWatchCommand:
             assert option in result.stdout
         assert "--format" not in result.stdout
         assert "--generate-baseline" not in result.stdout
+
+    def test_watch_reports_backward_timestamp_edit_on_second_iteration(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        file = tmp_path / "doc.md"
+        file.write_text("Plain.")
+        initial_timestamp = file.stat().st_mtime_ns
+        sleeps = 0
+
+        def edit_then_stop(_interval: float) -> None:
+            nonlocal sleeps
+            sleeps += 1
+            if sleeps == 1:
+                file.write_text("delve.")
+                earlier_timestamp = initial_timestamp - 1_000_000_000
+                os.utime(file, ns=(earlier_timestamp, earlier_timestamp))
+                return
+            raise KeyboardInterrupt
+
+        monkeypatch.setattr("proseprobe.cli.time.sleep", edit_then_stop)
+
+        result = run_cli("watch", str(file), "--no-clear", "--select", "V001")
+
+        assert result.exit_code == 0
+        assert result.stderr == ""
+        assert sleeps == 2
+        assert "No issues found!" in result.stdout
+        findings = self._finding_lines(result.stdout, file)
+        assert len(findings) == 1
+        assert "V001 [high] [warning] Overused word: 'delve'" in findings[0]
 
     def test_watch_and_check_share_scan_filters(
         self, tmp_path: Path, monkeypatch: object
