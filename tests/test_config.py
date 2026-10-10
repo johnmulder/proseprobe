@@ -100,6 +100,86 @@ class TestFindConfigFile:
         assert error.value.path == pyproject
         assert "read denied" in error.value.message
 
+    @pytest.mark.parametrize("git_marker", ["directory", "file"])
+    def test_starting_git_root_stops_before_parent_config(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, git_marker: str
+    ) -> None:
+        home = tmp_path / "home"
+        user_config = home / ".config" / "proseprobe" / "config.toml"
+        user_config.parent.mkdir(parents=True)
+        user_config.write_text("select = ['G001']\n")
+        monkeypatch.setattr(Path, "home", classmethod(lambda _cls: home))
+        parent_config = tmp_path / ".proseprobe.toml"
+        parent_config.write_text("select = ['V001']\n")
+        root = tmp_path / "repo"
+        root.mkdir()
+        if git_marker == "directory":
+            (root / ".git").mkdir()
+        else:
+            (root / ".git").write_text("gitdir: /unused/worktree\n")
+
+        assert find_config_file(root) == user_config
+
+    @pytest.mark.parametrize("git_marker", ["directory", "file"])
+    @pytest.mark.parametrize("config_name", [".proseprobe.toml", "pyproject.toml"])
+    def test_current_config_precedes_git_boundary_and_user_config(
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        git_marker: str,
+        config_name: str,
+    ) -> None:
+        home = tmp_path / "home"
+        user_config = home / ".config" / "proseprobe" / "config.toml"
+        user_config.parent.mkdir(parents=True)
+        user_config.write_text("select = ['G001']\n")
+        monkeypatch.setattr(Path, "home", classmethod(lambda _cls: home))
+        (tmp_path / ".proseprobe.toml").write_text("select = ['V001']\n")
+        root = tmp_path / "repo"
+        root.mkdir()
+        if git_marker == "directory":
+            (root / ".git").mkdir()
+        else:
+            (root / ".git").write_text("gitdir: /unused/worktree\n")
+        current_config = root / config_name
+        current_config.write_text("[tool.proseprobe]\nselect = ['C001']\n")
+
+        assert find_config_file(root) == current_config
+
+    @pytest.mark.parametrize("git_marker", ["directory", "file"])
+    def test_nested_discovery_includes_root_but_not_parent(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, git_marker: str
+    ) -> None:
+        home = tmp_path / "home"
+        monkeypatch.setattr(Path, "home", classmethod(lambda _cls: home))
+        (tmp_path / ".proseprobe.toml").write_text("select = ['V001']\n")
+        root = tmp_path / "repo"
+        nested = root / "docs" / "nested"
+        nested.mkdir(parents=True)
+        if git_marker == "directory":
+            (root / ".git").mkdir()
+        else:
+            (root / ".git").write_text("gitdir: /unused/worktree\n")
+        root_config = root / ".proseprobe.toml"
+        root_config.write_text("select = ['G001']\n")
+
+        assert find_config_file(nested) == root_config
+        root_config.unlink()
+        assert find_config_file(nested) is None
+
+    def test_explicit_config_can_cross_discovery_boundary(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        config_path = tmp_path / "outside.toml"
+        config_path.write_text("select = ['V001']\n")
+        root = tmp_path / "repo"
+        root.mkdir()
+        (root / ".git").mkdir()
+        monkeypatch.chdir(root)
+
+        assert load_config(config_path).source_path == config_path
+        assert load_config(config_path).select == ["V001"]
+
     def test_searches_parent_directories(self, tmp_path: Path) -> None:
         """Test that config is found in parent directories."""
         config_file = tmp_path / ".proseprobe.toml"

@@ -185,16 +185,12 @@ def find_config_file(start_dir: Path | None = None) -> Path | None:
             return pyproject
 
     # 3) Parent directories .proseprobe.toml (up to git root)
-    parent = current.parent
-    while parent != parent.parent:
+    parent = current
+    while parent != parent.parent and not (parent / ".git").exists():
+        parent = parent.parent
         parent_config = parent / ".proseprobe.toml"
         if parent_config.exists():
             return parent_config
-
-        if (parent / ".git").exists():
-            break
-
-        parent = parent.parent
 
     # Check user config
     user_config = Path.home() / ".config" / "proseprobe" / "config.toml"

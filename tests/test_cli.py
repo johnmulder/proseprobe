@@ -2125,6 +2125,24 @@ class TestCliValidation:
         assert "Invalid value" in result.stderr
         assert "Traceback" not in result.stderr
 
+    def test_explicit_config_can_be_outside_git_root(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        config_file = tmp_path / "outside.toml"
+        config_file.write_text("select = ['V001']\n")
+        root = tmp_path / "repo"
+        root.mkdir()
+        (root / ".git").write_text("gitdir: /unused/worktree\n")
+        test_file = root / "doc.md"
+        test_file.write_text("delve\n")
+        monkeypatch.chdir(root)
+
+        result = run_cli("check", "doc.md", "--config", str(config_file))
+
+        assert result.exit_code == 1
+        assert "V001" in result.stdout
+        assert result.stderr == ""
+
     @pytest.mark.parametrize("option", ["--select", "--ignore"])
     def test_invalid_cli_rule_reference_returns_config_error(
         self, tmp_path: Path, option: str

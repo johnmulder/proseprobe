@@ -1426,20 +1426,20 @@ Prerequisites: reassessment baseline; independent of rule changes.
 - [x] P19.4 Wrap discovery's TOML read/parse errors in the existing `ConfigError`
   contract. Add one deterministic read-error test using a patched file reader;
   avoid permission-mode tests that depend on the executing account.
-- [ ] P19.5 Add a failing boundary test with the starting directory itself as a
+- [x] P19.5 Add a failing boundary test with the starting directory itself as a
   Git root and a conflicting `.proseprobe.toml` above it. Parameterize a `.git`
   directory and a `.git` worktree file. Neither may inherit that parent file.
-- [ ] P19.6 Add the paired nested-directory test: a root-local
+- [x] P19.6 Add the paired nested-directory test: a root-local
   `.proseprobe.toml` is eligible, but configuration above that root is not.
   Preserve current-directory precedence even when the directory is the root.
-- [ ] P19.7 Correct the upward-search stopping condition. Detect the marker in
+- [x] P19.7 Correct the upward-search stopping condition. Detect the marker in
   the starting directory as well as each parent; do not parse Git internals or
   add a Git subprocess to configuration discovery.
-- [ ] P19.8 Verify user fallback with `Path.home()` redirected to a temporary
+- [x] P19.8 Verify user fallback with `Path.home()` redirected to a temporary
   location. Reuse the existing parent-`pyproject.toml` exclusion test; keep that
   documented exclusion intact. Assert that an explicit `--config` still works
   outside the discovery boundary.
-- [ ] P19.9 Update the configuration documentation if its description needs
+- [x] P19.9 Update the configuration documentation if its description needs
   clarification. Run focused configuration/CLI tests and the package gate.
 
 Acceptance: automatic and explicit parsing failures share the documented CLI
@@ -2447,3 +2447,13 @@ On 2026-10-10 the user requested deferral of independent effectiveness claims.
 P32 human annotation, semantic usefulness judgments, calibration, holdout scoring
 and profile promotion remain deferred. Engineering and blind-packet preparation
 continue. No independent human labels or population claims will be inferred.
+
+### P19 — Git-root discovery boundary
+
+Two directory/worktree-marker regressions failed before correction. The upward
+search now checks the starting directory's Git marker before climbing and still
+includes a root-local configuration. Ten added tests preserve nested precedence,
+user fallback and explicit paths beyond the automatic boundary. All 269 focused
+configuration/CLI tests and the isolated `make check dogfood rule-quality`
+snapshot pass. Configuration documentation now states both error and boundary
+contracts. P19 is complete; raw corpus detections remain unchanged.

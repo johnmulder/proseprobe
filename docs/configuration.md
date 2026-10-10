@@ -12,6 +12,12 @@ Config files are discovered in this order:
 4. `.proseprobe.toml` in parent directories (up to git root)
 5. `~/.config/proseprobe/config.toml`
 
+Search includes the Git root and stops there, including when launched at that
+root. A `.git` directory or worktree marker file defines the boundary. Explicit
+`--config` paths remain independent of automatic discovery. An unreadable or
+malformed current-directory `pyproject.toml` produces a configuration error
+with exit code 2, even if its tool section cannot be determined.
+
 Directory scanning in Git worktrees also respects `.gitignore` patterns, including nested
 `.gitignore` files in subdirectories. Patterns are applied in parent-to-child
 order, and negation (`!pattern`) can re-include files that were ignored by
