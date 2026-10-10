@@ -238,6 +238,45 @@ class TestCheckCommand:
         assert {issue["rule_id"] for issue in issues} == {"C001", "V001"}
         assert {issue["line"] for issue in issues} == {1}
 
+    def test_placeholder_syntax_and_contracts_preserve_real_incomplete_code(
+        self,
+    ) -> None:
+        source = (
+            "from abc import abstractmethod\n"
+            "example = \"raise NotImplementedError('example')\"\n"
+            "class Contract:\n    @abstractmethod\n"
+            '    def declared(self):\n        raise NotImplementedError("contract")\n'
+            '    def concrete(self):\n        raise NotImplementedError("unfinished")\n'
+        )
+
+        result = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "example.py",
+            "--select",
+            "C004",
+            "--severity",
+            "info",
+            "--format",
+            "jsonl",
+            stdin=source,
+        )
+
+        assert result.exit_code == 0
+        assert result.stderr == ""
+        record = json.loads(result.stdout)
+        assert record["rule_id"] == "C004"
+        assert record["path"] == "example.py"
+        assert record["severity"] == "info"
+        assert record["confidence"] == "medium"
+        assert record["message"] == "Formulaic placeholder: template error"
+        assert record["line"] == 8
+        line = source.splitlines()[record["line"] - 1]
+        assert line[record["column"] - 1 : record["end_column"] - 1] == (
+            'raise NotImplementedError("unfinished")'
+        )
+
     @pytest.mark.parametrize(
         ("filename", "source"),
         [("case.md", "😀 delve\n"), ("case.py", '"""😀 delve"""\n')],

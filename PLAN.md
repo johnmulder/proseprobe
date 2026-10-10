@@ -1829,16 +1829,16 @@ placeholder code. Preserve C004's existing comment-marker behavior. Use only
 - [x] P26.8 Require the corresponding executable statement before classifying
   its inline comment. Keep comment-only marker recognition unchanged. Run this
   slice's positives and negatives.
-- [ ] P26.9 Add paired tests for statically recognizable `abc.abstractmethod`
+- [x] P26.9 Add paired tests for statically recognizable `abc.abstractmethod`
   declarations versus concrete incomplete methods. Cover recognized imported
   aliases only if their source bindings can be proved without imports.
-- [ ] P26.10 Add the narrow abstract-contract guard supported by those tests.
+- [x] P26.10 Add the narrow abstract-contract guard supported by those tests.
   Unknown decorators must not imply that a declaration is abstract. Run C004
   tests and verify unchanged concrete-placeholder behavior.
-- [ ] P26.11 Add paired overload/Protocol stub tests only for forms statically
+- [x] P26.11 Add paired overload/Protocol stub tests only for forms statically
   recognized from source imports/decorators/base classes. Preserve concrete
   method bodies that coexist with overload declarations.
-- [ ] P26.12 Add the supported stub guard without broad name-based
+- [x] P26.12 Add the supported stub guard without broad name-based
   exclusions; leave unresolved aliases and class bases computed at runtime unsupported.
   Run the stub and ordinary-placeholder matrix.
 - [x] P26.13 Add invalid-Python/tokenization tests. Assert that actual comments
@@ -2590,3 +2590,15 @@ Tests prove hashing stays outside timed scan intervals. An untimed child probe
 verifies new-process imports and policy without changing production output.
 All 132 related benchmark/evaluation tests and the isolated full gate pass.
 The existing JSON list remains readable, with a per-result schema version.
+
+### P26 — Recognized abstract and typing contracts
+
+Fifty added guard/CLI cases cover source-proved imported aliases, abstract,
+overload and Protocol stub bodies, concrete implementations, rebinding, runtime
+namespace mutation and wrapper/decorator ambiguity. Paired defects failed before
+correction; legitimate unshadowed built-in wrappers remain valid. The exemption
+requires a recognized static contract and an otherwise empty supported body.
+Generic comment markers keep their normal behavior. The isolated package gate
+passes. The new CLI matrix and a two-line purpose-written corpus distinguish a
+literal raise example from an executable incomplete statement. Corpus results
+are 364 TP/6 unchanged FP/0 FN; P26.14's strict gate awaits P23.

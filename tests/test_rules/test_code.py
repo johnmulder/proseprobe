@@ -322,6 +322,253 @@ class TestAIPlaceholders:
         assert issue.message == "Formulaic placeholder: marker without context"
         assert issue.line == 3
 
+    @pytest.mark.parametrize(
+        ("imports", "decorator"),
+        [
+            ("from abc import abstractmethod", "abstractmethod"),
+            ("from abc import abstractmethod as abstract", "abstract"),
+            ("import abc", "abc.abstractmethod"),
+            ("import abc as contracts", "contracts.abstractmethod"),
+        ],
+    )
+    def test_recognized_abstract_contract_keeps_concrete_method_finding(
+        self, imports: str, decorator: str
+    ) -> None:
+        source = (
+            f"{imports}\nclass Contract:\n"
+            f"    @{decorator}\n"
+            "    def declared(self):\n"
+            '        raise NotImplementedError("contract")\n'
+            "    def concrete(self):\n"
+            '        raise NotImplementedError("unfinished")\n'
+        )
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert issue.line == 7
+        assert issue.message == "Formulaic placeholder: template error"
+
+    @pytest.mark.parametrize(
+        ("prefix", "decorator"),
+        [
+            ("", "abstractmethod"),
+            ("from elsewhere import abstractmethod\n", "abstractmethod"),
+            (
+                "from abc import abstractmethod\nabstractmethod = replacement\n",
+                "abstractmethod",
+            ),
+            ("import abc\nabc.abstractmethod = replacement\n", "abc.abstractmethod"),
+            (
+                'import abc\nabc.__dict__["abstractmethod"] = replacement\n',
+                "abc.abstractmethod",
+            ),
+            ("from abc import abstractmethod\n", "abstractmethod()"),
+            ("from abc import abstractmethod\n", "wrapper\n    @abstractmethod"),
+            ("from abc import abstractmethod\nexec(source)\n", "abstractmethod"),
+            ("if available:\n    from abc import abstractmethod\n", "abstractmethod"),
+        ],
+    )
+    def test_unproven_abstract_decorator_keeps_placeholder_finding(
+        self, prefix: str, decorator: str
+    ) -> None:
+        source = (
+            f"{prefix}class Contract:\n    @{decorator}\n"
+            '    def declared(self):\n        raise NotImplementedError("later")\n'
+        )
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert issue.message == "Formulaic placeholder: template error"
+
+    def test_abstract_contract_does_not_hide_generic_comment_marker(self) -> None:
+        source = (
+            "from abc import abstractmethod\nclass Contract:\n"
+            "    @abstractmethod\n    async def declared(self):\n"
+            '        # TODO: Implement\n        raise NotImplementedError("contract")\n'
+        )
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert issue.line == 5
+        assert issue.message == "Formulaic placeholder: bare 'Implement'"
+
+    @pytest.mark.parametrize(
+        ("imports", "decorator"),
+        [
+            ("from typing import overload", "overload"),
+            ("from typing import overload as stub", "stub"),
+            ("import typing as types", "types.overload"),
+        ],
+    )
+    def test_recognized_overload_preserves_concrete_implementation(
+        self, imports: str, decorator: str
+    ) -> None:
+        source = (
+            f"{imports}\n@{decorator}\n"
+            'def load(value: str):\n    raise NotImplementedError("stub")\n'
+            'def load(value):\n    raise NotImplementedError("unfinished")\n'
+        )
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert issue.line == 6
+
+    @pytest.mark.parametrize(
+        ("prefix", "decorator"),
+        [
+            ("", "overload"),
+            ("from elsewhere import overload\n", "overload"),
+            ("from typing import overload\noverload = replacement\n", "overload"),
+            ("import typing\ntyping.overload = replacement\n", "typing.overload"),
+            ("from typing import overload\n", "overload()"),
+            ("from typing import overload\nfrom elsewhere import *\n", "overload"),
+        ],
+    )
+    def test_unproven_overload_keeps_placeholder_finding(
+        self, prefix: str, decorator: str
+    ) -> None:
+        source = (
+            f"{prefix}@{decorator}\n"
+            'def declared(value):\n    raise NotImplementedError("unfinished")\n'
+        )
+
+        assert len(AIPlaceholdersRule().check(source, "test.py")) == 1
+
+    def test_class_local_shadow_does_not_prove_abstract_decorator(self) -> None:
+        source = (
+            "from abc import abstractmethod\nclass Contract:\n"
+            "    abstractmethod = replacement\n    @abstractmethod\n"
+            '    def declared(self):\n        raise NotImplementedError("later")\n'
+        )
+
+        assert len(AIPlaceholdersRule().check(source, "test.py")) == 1
+
+    @pytest.mark.parametrize(
+        ("imports", "base"),
+        [
+            ("from typing import Protocol", "Protocol"),
+            ("from typing import Protocol as Interface", "Interface"),
+            ("import typing", "typing.Protocol"),
+        ],
+    )
+    def test_recognized_protocol_preserves_concrete_method_body(
+        self, imports: str, base: str
+    ) -> None:
+        source = (
+            f"{imports}\nclass Contract({base}):\n"
+            '    def declared(self):\n        raise NotImplementedError("stub")\n'
+            "    def concrete(self):\n        value = 1\n"
+            '        raise NotImplementedError("unfinished")\n'
+        )
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert issue.line == 7
+
+    @pytest.mark.parametrize(
+        ("prefix", "base"),
+        [
+            ("", "Protocol"),
+            ("from elsewhere import Protocol\n", "Protocol"),
+            ("from typing import Protocol\nProtocol = replacement\n", "Protocol"),
+            ("import typing\ntyping.Protocol = replacement\n", "typing.Protocol"),
+            ("from typing import Protocol\n", "factory(Protocol)"),
+            ("from typing import Protocol\n", "Protocol[Value]"),
+            ("from typing import Protocol\n", "Mixin, Protocol"),
+        ],
+    )
+    def test_unproven_protocol_base_keeps_placeholder_finding(
+        self, prefix: str, base: str
+    ) -> None:
+        source = (
+            f"{prefix}class Contract({base}):\n"
+            '    def declared(self):\n        raise NotImplementedError("unfinished")\n'
+        )
+
+        assert len(AIPlaceholdersRule().check(source, "test.py")) == 1
+
+    def test_contract_does_not_hide_nested_concrete_function(self) -> None:
+        source = (
+            "from abc import abstractmethod\nclass Contract:\n"
+            "    @abstractmethod\n    def declared(self):\n"
+            '        def concrete():\n            raise NotImplementedError("later")\n'
+            "        return concrete\n"
+        )
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert issue.line == 6
+
+    @pytest.mark.parametrize("statement", ["pass", "..."])
+    def test_recognized_stub_skips_code_attached_placeholder_hint(
+        self, statement: str
+    ) -> None:
+        source = (
+            "from typing import overload\n@overload\ndef declared(value):\n"
+            f"    {statement}  # TODO: finish\n"
+        )
+
+        assert AIPlaceholdersRule().check(source, "test.py") == []
+
+    def test_protocol_base_with_unrecognized_decorator_keeps_finding(self) -> None:
+        source = (
+            "from typing import Protocol\nclass Contract(Protocol):\n"
+            "    @Protocol\n"
+            '    def declared(self):\n        raise NotImplementedError("later")\n'
+        )
+
+        assert len(AIPlaceholdersRule().check(source, "test.py")) == 1
+
+    @pytest.mark.parametrize("wrapper", ["classmethod", "staticmethod"])
+    @pytest.mark.parametrize(
+        ("imports", "marker"),
+        [
+            ("from abc import abstractmethod", "abstractmethod"),
+            ("from typing import overload", "overload"),
+        ],
+    )
+    def test_unshadowed_builtin_wrappers_preserve_recognized_stub(
+        self, wrapper: str, imports: str, marker: str
+    ) -> None:
+        source = (
+            f"{imports}\nclass Contract:\n    @{wrapper}\n    @{marker}\n"
+            '    def declared(value):\n        raise NotImplementedError("contract")\n'
+        )
+
+        assert AIPlaceholdersRule().check(source, "test.py") == []
+
+    @pytest.mark.parametrize("wrapper", ["classmethod", "staticmethod"])
+    def test_shadowed_builtin_wrapper_does_not_prove_stub(self, wrapper: str) -> None:
+        source = (
+            f"from abc import abstractmethod\n{wrapper} = replacement\n"
+            f"class Contract:\n    @{wrapper}\n    @abstractmethod\n"
+            '    def declared(value):\n        raise NotImplementedError("unfinished")\n'
+        )
+
+        assert len(AIPlaceholdersRule().check(source, "test.py")) == 1
+
+    @pytest.mark.parametrize("module_alias", ["builtins", "factories"])
+    @pytest.mark.parametrize("wrapper", ["classmethod", "staticmethod"])
+    def test_mutated_builtin_namespace_does_not_prove_wrapper(
+        self, module_alias: str, wrapper: str
+    ) -> None:
+        source = (
+            f"from abc import abstractmethod\nimport builtins as {module_alias}\n"
+            f"{module_alias}.{wrapper} = replacement\n"
+            f"class Contract:\n    @{wrapper}\n    @abstractmethod\n"
+            '    def declared(value):\n        raise NotImplementedError("unfinished")\n'
+        )
+
+        assert len(AIPlaceholdersRule().check(source, "test.py")) == 1
+
+    def test_protocol_owner_unknown_decorator_does_not_prove_stub(self) -> None:
+        source = (
+            "from typing import Protocol\n@transform\nclass Contract(Protocol):\n"
+            '    def declared(self):\n        raise NotImplementedError("unfinished")\n'
+        )
+
+        assert len(AIPlaceholdersRule().check(source, "test.py")) == 1
+
 
 class TestCommentRestatesCode:
     """Tests for C006: Comment Restates Code."""

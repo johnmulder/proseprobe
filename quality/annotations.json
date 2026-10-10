@@ -4635,6 +4635,24 @@
           "note": "A literal target is directly attached or supplied by an immediate source-backed named heading/pair; interrupted full predicates remain clean."
         }
       ]
+    },
+    "quality/corpus/syntax-placeholders.py": {
+      "expected": [
+        {
+          "rule_id": "C004",
+          "line": 4,
+          "column": 1,
+          "end_line": 4,
+          "end_column": 40
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "C004",
+          "line": 3,
+          "note": "This is literal source text, without an executable raise statement."
+        }
+      ]
     }
   }
 }

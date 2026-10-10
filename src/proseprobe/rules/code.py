@@ -3,6 +3,7 @@
 import ast
 import re
 import unicodedata
+from collections import Counter
 from collections.abc import Iterator
 from typing import ClassVar
 
@@ -165,6 +166,152 @@ class AIPlaceholdersRule(Rule):
     severity = Severity.INFO
     applies_to: ClassVar[set[str]] = {"python"}
 
+    @staticmethod
+    def _contract_statements(tree: ast.Module | None) -> set[ast.stmt]:
+        """Recognize simple contract stubs with unambiguous source imports."""
+        if tree is None:
+            return set()
+        imported: dict[str, str] = {}
+        supported = {"abc.abstractmethod", "typing.overload", "typing.Protocol"}
+        for statement in tree.body:
+            if isinstance(statement, ast.Import):
+                for alias in statement.names:
+                    if alias.name in {"abc", "typing", "builtins"}:
+                        imported[alias.asname or alias.name] = alias.name
+            elif isinstance(statement, ast.ImportFrom) and statement.level == 0:
+                for alias in statement.names:
+                    name = f"{statement.module}.{alias.name}"
+                    if name in supported:
+                        imported[alias.asname or alias.name] = name
+        if not imported:
+            return set()
+
+        bindings: Counter[str] = Counter()
+        mutated: set[str] = set()
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.Import, ast.ImportFrom)):
+                for alias in node.names:
+                    if alias.name == "*":
+                        return set()
+                    name = alias.asname or (
+                        alias.name.split(".")[0]
+                        if isinstance(node, ast.Import)
+                        else alias.name
+                    )
+                    bindings[name] += 1
+            elif isinstance(node, ast.Name) and isinstance(
+                node.ctx, (ast.Store, ast.Del)
+            ):
+                bindings[node.id] += 1
+            elif isinstance(
+                node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
+            ):
+                bindings[node.name] += 1
+            elif isinstance(node, ast.arg):
+                bindings[node.arg] += 1
+            elif isinstance(node, (ast.ExceptHandler, ast.MatchAs, ast.MatchStar)):
+                if node.name is not None:
+                    bindings[node.name] += 1
+            elif isinstance(node, ast.MatchMapping) and node.rest is not None:
+                bindings[node.rest] += 1
+            elif isinstance(node, (ast.Attribute, ast.Subscript)) and isinstance(
+                node.ctx, (ast.Store, ast.Del)
+            ):
+                root = node.value
+                while isinstance(root, (ast.Attribute, ast.Subscript)):
+                    root = root.value
+                if isinstance(root, ast.Name):
+                    mutated.add(root.id)
+            elif (
+                isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Name)
+                and node.func.id
+                in {"exec", "eval", "globals", "locals", "vars", "setattr", "delattr"}
+            ):
+                return set()
+        proven = {
+            name: symbol
+            for name, symbol in imported.items()
+            if bindings[name] == 1 and name not in mutated
+        }
+        builtin_namespace_mutated = any(
+            symbol == "builtins" and name in mutated
+            for name, symbol in imported.items()
+        )
+
+        def resolve(expression: ast.expr) -> str | None:
+            if isinstance(expression, ast.Name):
+                if (
+                    expression.id in {"classmethod", "staticmethod"}
+                    and (bindings[expression.id] == 0)
+                    and not builtin_namespace_mutated
+                ):
+                    return f"builtins.{expression.id}"
+                return proven.get(expression.id)
+            if isinstance(expression, ast.Attribute) and isinstance(
+                expression.value, ast.Name
+            ):
+                module = proven.get(expression.value.id)
+                symbol = f"{module}.{expression.attr}"
+                return symbol if symbol in supported else None
+            return None
+
+        protocol_methods = {
+            method
+            for owner in ast.walk(tree)
+            if isinstance(owner, ast.ClassDef)
+            and len(owner.bases) == 1
+            and resolve(owner.bases[0]) == "typing.Protocol"
+            and not owner.keywords
+            and not owner.decorator_list
+            for method in owner.body
+            if isinstance(method, (ast.FunctionDef, ast.AsyncFunctionDef))
+        }
+        protected: set[ast.stmt] = set()
+        decorator_contracts = {"abc.abstractmethod", "typing.overload"}
+        allowed_decorators = decorator_contracts | {
+            "builtins.classmethod",
+            "builtins.staticmethod",
+        }
+        for function in ast.walk(tree):
+            if not isinstance(function, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            decorators = [resolve(decorator) for decorator in function.decorator_list]
+            if any(decorator not in allowed_decorators for decorator in decorators):
+                continue
+            if not (
+                decorator_contracts.intersection(decorators)
+                or function in protocol_methods
+            ):
+                continue
+            body = function.body
+            if (
+                body
+                and isinstance(body[0], ast.Expr)
+                and isinstance(body[0].value, ast.Constant)
+                and isinstance(body[0].value.value, str)
+            ):
+                body = body[1:]
+            if len(body) != 1:
+                continue
+            statement = body[0]
+            if (
+                isinstance(statement, ast.Pass)
+                or (
+                    isinstance(statement, ast.Expr)
+                    and isinstance(statement.value, ast.Constant)
+                    and statement.value.value is Ellipsis
+                )
+                or (
+                    isinstance(statement, ast.Raise)
+                    and isinstance(statement.exc, ast.Call)
+                    and isinstance(statement.exc.func, ast.Name)
+                    and statement.exc.func.id == "NotImplementedError"
+                )
+            ):
+                protected.add(statement)
+        return protected
+
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for formulaic placeholders."""
         issues: list[Issue] = []
@@ -175,6 +322,7 @@ class AIPlaceholdersRule(Rule):
 
         # Comment-only placeholders
         tree = parser.get_syntax_tree()
+        contract_statements = self._contract_statements(tree)
         statements = (
             [node for node in ast.walk(tree) if isinstance(node, ast.stmt)]
             if tree is not None
@@ -218,6 +366,7 @@ class AIPlaceholdersRule(Rule):
             code = ""
             if (
                 statement is not None
+                and statement not in contract_statements
                 and parser.get_node_span(statement)[3] <= comment.column
                 and (
                     isinstance(statement, ast.Pass)
@@ -249,6 +398,7 @@ class AIPlaceholdersRule(Rule):
         for node in sorted(statements, key=lambda item: (item.lineno, item.col_offset)):
             if (
                 not isinstance(node, ast.Raise)
+                or node in contract_statements
                 or not isinstance(node.exc, ast.Call)
                 or not isinstance(node.exc.func, ast.Name)
                 or node.exc.func.id != "NotImplementedError"
