@@ -162,7 +162,7 @@ def test_quality_json_reports_deterministic_policy_counts_and_corpus_identity(
     )
     assert report["corpus"]["files_count"] == 1
     assert report["version"]
-    assert report["revision"] is None
+    assert report["revision"] == report["runtime"]["git"]["head"]
 
 
 @pytest.mark.parametrize(

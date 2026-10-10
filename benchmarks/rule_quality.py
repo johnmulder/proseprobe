@@ -6,11 +6,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import subprocess
 import sys
 from dataclasses import asdict, replace
 from pathlib import Path
 
+from benchmarks.evaluation_identity import runtime_identity
 from benchmarks.quality_scoring import (
     ActualFinding,
     AnnotationError,
@@ -301,16 +301,7 @@ def format_json_report(
         ).hexdigest()
         for path in sorted(annotations.files)
     }
-    try:
-        revision = subprocess.run(
-            ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"],  # noqa: S607 - installed Git
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        commit = revision.stdout.strip() if revision.returncode == 0 else None
-    except OSError:
-        commit = None
+    runtime = runtime_identity()
     policy = asdict(config)
     policy["source_path"] = str(config.source_path) if config.source_path else None
     totals = {
@@ -341,9 +332,10 @@ def format_json_report(
     ]
     return json.dumps(
         {
-            "schema_version": 2,
+            "schema_version": 3,
             "version": __version__,
-            "revision": commit,
+            "revision": runtime["git"]["head"],
+            "runtime": runtime,
             "mode": mode,
             "scoring": "reviewed-semantic"
             if any(item.match_region is not None for item in eligible.expected)
@@ -357,6 +349,7 @@ def format_json_report(
                 "files_count": len(annotations.files),
                 "expected_count": len(annotations.expected),
                 "negative_count": len(annotations.negative_cases),
+                "reviewed_source_identities": annotations.source_identities or None,
             },
             "annotation_completeness": "legacy-exhaustive"
             if annotations.scopes is None

@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -283,6 +284,170 @@ def test_bound_manifest_strict_cli_success_preserves_review_identity(
     report = json.loads(capsys.readouterr().out)
     assert report["source_binding"] == "sha256-utf8"
     assert report["review_provenance"]["reviewers"] == []
+
+
+def _identity_repository(root: Path) -> tuple[Path, Path]:
+    package = root / "src/proseprobe"
+    evaluator = root / "benchmarks"
+    package.mkdir(parents=True)
+    evaluator.mkdir()
+    (package / "__init__.py").write_text("VALUE = 1\n")
+    (evaluator / "evaluate.py").write_text("VALUE = 2\n")
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    subprocess.run(["git", "-C", str(root), "add", "."], check=True)
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(root),
+            "-c",
+            "user.name=Fixture",
+            "-c",
+            "user.email=fixture@example.invalid",
+            "commit",
+            "-qm",
+            "Create fixture",
+        ],
+        check=True,
+    )
+    return package, evaluator
+
+
+@pytest.mark.parametrize(
+    "state", ["modified", "staged", "untracked", "ignored-untracked"]
+)
+def test_runtime_identity_distinguishes_dirty_source_states(
+    tmp_path: Path, state: str
+) -> None:
+    from benchmarks.evaluation_identity import runtime_identity
+
+    package, evaluator = _identity_repository(tmp_path)
+    clean = runtime_identity(package, evaluator)
+    assert clean["git"]["tracked_worktree_dirty"] is False
+    assert clean["git"]["staged_dirty"] is False
+    is_untracked = state in {"untracked", "ignored-untracked"}
+    if state == "ignored-untracked":
+        (tmp_path / ".gitignore").write_text("new.py\n")
+    path = package / ("new.py" if is_untracked else "__init__.py")
+    path.write_text("VALUE = 3\n")
+    if state == "staged":
+        subprocess.run(["git", "-C", str(tmp_path), "add", str(path)], check=True)
+    dirty = runtime_identity(package, evaluator)
+    assert dirty["git"]["head"] == clean["git"]["head"]
+    assert dirty["source_sha256"] != clean["source_sha256"]
+    assert dirty["git"]["tracked_worktree_dirty"] is (state == "modified")
+    assert dirty["git"]["staged_dirty"] is (state == "staged")
+    assert bool(dirty["git"]["untracked_python_files"]) is is_untracked
+
+
+def test_runtime_digest_is_relocatable_and_excludes_unrelated_material(
+    tmp_path: Path,
+) -> None:
+    from benchmarks.evaluation_identity import runtime_identity
+
+    first = tmp_path / "first"
+    first.mkdir()
+    package, evaluator = _identity_repository(first)
+    clean = runtime_identity(package, evaluator)
+    (first / "README.md").write_text("Unrelated document\n")
+    (package / "__pycache__").mkdir()
+    (package / "__pycache__/ignored.py").write_text("CACHE = 3\n")
+    assert (
+        runtime_identity(package, evaluator)["source_sha256"] == clean["source_sha256"]
+    )
+    copied = tmp_path / "copy"
+    import shutil
+
+    shutil.copytree(first, copied, ignore=shutil.ignore_patterns(".git", "__pycache__"))
+    relocated = runtime_identity(copied / "src/proseprobe", copied / "benchmarks")
+    assert relocated["source_sha256"] == clean["source_sha256"]
+    assert relocated["git"]["head"] is None
+    assert relocated["source_files_count"] == 2
+    (copied / "benchmarks/evaluate.py").rename(copied / "benchmarks/renamed.py")
+    assert (
+        runtime_identity(copied / "src/proseprobe", copied / "benchmarks")[
+            "source_sha256"
+        ]
+        != clean["source_sha256"]
+    )
+
+
+def test_runtime_identity_retains_digest_when_git_is_unavailable(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from benchmarks import evaluation_identity
+
+    package = tmp_path / "installed"
+    package.mkdir()
+    (package / "__init__.py").write_text("VALUE = 1\n")
+
+    def unavailable(*_args: object, **_kwargs: object):
+        raise FileNotFoundError("git unavailable")
+
+    monkeypatch.setattr(evaluation_identity.subprocess, "run", unavailable)
+    identity = evaluation_identity.runtime_identity(
+        package, tmp_path / "missing-evaluator"
+    )
+    assert len(identity["source_sha256"]) == 64
+    assert identity["git"]["head"] is None
+    assert identity["git"]["tracked_worktree_dirty"] is None
+    assert identity["package_version"]
+
+
+def test_runtime_identity_excludes_tracked_document_edits(tmp_path: Path) -> None:
+    from benchmarks.evaluation_identity import runtime_identity
+
+    package, evaluator = _identity_repository(tmp_path)
+    document = package / "notes.md"
+    document.write_text("Original document\n")
+    subprocess.run(["git", "-C", str(tmp_path), "add", str(document)], check=True)
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(tmp_path),
+            "-c",
+            "user.name=Fixture",
+            "-c",
+            "user.email=fixture@example.invalid",
+            "commit",
+            "-qm",
+            "Add fixture document",
+        ],
+        check=True,
+    )
+    clean = runtime_identity(package, evaluator)
+    document.write_text("Changed document\n")
+    changed = runtime_identity(package, evaluator)
+    assert changed["source_sha256"] == clean["source_sha256"]
+    assert changed["git"]["tracked_worktree_dirty"] is False
+
+
+def test_runtime_identity_names_unavailable_source_explicitly(tmp_path: Path) -> None:
+    from benchmarks.evaluation_identity import runtime_identity
+
+    identity = runtime_identity(
+        tmp_path / "missing-package", tmp_path / "missing-evaluator"
+    )
+    assert identity["source_sha256"] is None
+    assert identity["source_files_count"] == 0
+
+
+def test_quality_report_records_runtime_identity_and_schema(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    from benchmarks.rule_quality import main
+
+    (tmp_path / "doc.md").write_text("plain\n")
+    manifest = _manifest(tmp_path, _entry())
+    assert (
+        main(["--manifest", str(manifest), "--root", str(tmp_path), "--format", "json"])
+        == 0
+    )
+    report = json.loads(capsys.readouterr().out)
+    assert report["schema_version"] == 3
+    assert report["runtime"]["git"]["head"] == report["revision"]
+    assert len(report["runtime"]["source_sha256"]) == 64
 
 
 def test_expected_and_actual_endpoints_survive_collection(tmp_path: Path) -> None:

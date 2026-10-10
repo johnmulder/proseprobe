@@ -80,7 +80,7 @@ missed issues have no detector-assigned confidence.
 rtk proxy .venv/bin/python -m benchmarks.rule_quality --manifest /path/to/reviewed.json --root /path/to/originals --mode production --format json
 ```
 
-The JSON schema version is 2. Reports include rule, policy, severity, confidence,
+The evaluation JSON schema version is 3. Reports include rule, policy, severity, confidence,
 format, Python-documentation context, and source-group counts, alongside exact
 locations and annotation statuses. False-warning density counts eligible
 extracted prose words in reviewed regions; masked code and unreviewed text do
@@ -102,6 +102,13 @@ the packet index, declared rule-contract snapshot, protocol, policy and reviewer
 Both referenced artifacts have locally verified checksums. The snapshot covers
 declared rule metadata; implementation identity is reported separately.
 Initially unreviewed templates have no reviewer identifiers or clean judgments.
+
+Runtime identity includes the imported package/evaluator source digest, package
+version, source scope, and available Git revision and staged/unstaged/untracked
+state. Relevant ignored Python files also enter the digest and untracked state;
+caches and unrelated prose do not. Identical source bytes at another location
+have the same digest. Unavailable Git fields are null. The retained `revision`
+field is an alias for the available runtime revision, not proof of clean code.
 
 Bound scans consume verified immutable bytes through the normal file policy.
 A changed source, packet or declared contract requires review before reuse.

@@ -1691,25 +1691,25 @@ Suggested one-line commits: `Bind new annotations to reviewed source bytes`;
 
 ### P24B — Runtime identity in quality reports
 
-- [ ] P24B.1 Define the report identity: HEAD when available, tracked working-tree
+- [x] P24B.1 Define the report identity: HEAD when available, tracked working-tree
   state, and a deterministic digest of the package/evaluator source actually used.
   Include relevant untracked Python implementation files; omit caches, downloaded
   corpora, outputs, and unrelated documents. Record the identity scope explicitly.
-- [ ] P24B.2 Add failing tests in disposable repositories for clean HEAD, modified
+- [x] P24B.2 Add failing tests in disposable repositories for clean HEAD, modified
   runtime code, staged changes, and an untracked implementation module.
-- [ ] P24B.3 Build deterministic source identity within an existing
+- [x] P24B.3 Build deterministic source identity within an existing
   utility boundary shared by evaluation and benchmarks. Avoid a provenance framework.
-- [ ] P24B.4 Add tests for Git unavailable and an installed package outside a
+- [x] P24B.4 Add tests for Git unavailable and an installed package outside a
   checkout. Report unavailable Git fields explicitly; retain a source digest and
   package version when their material is available.
-- [ ] P24B.5 Add a relocation test: copying identical sources to a different
+- [x] P24B.5 Add a relocation test: copying identical sources to a different
   temporary directory leaves their digest unchanged. Include relative names and
   bytes so renaming or editing runtime code changes the digest.
-- [ ] P24B.6 Add a report test showing that the same HEAD with different runtime
+- [x] P24B.6 Add a report test showing that the same HEAD with different runtime
   source bytes produces different identity and an explicit dirty-state indication.
-- [ ] P24B.7 Add the identity to quality JSON with an intentional schema-version
+- [x] P24B.7 Add the identity to quality JSON with an intentional schema-version
   update and document compatibility. Keep existing `revision` readable if retained.
-- [ ] P24B.8 Record the input manifest, bound source identities, annotation protocol,
+- [x] P24B.8 Record the input manifest, bound source identities, annotation protocol,
   contracts, and effective policy in the same report. Test that these identities
   do not disappear under production-mode exclusions or confidence filtering.
 
@@ -2539,3 +2539,15 @@ All 207 focused code/parser tests and the isolated `make check dogfood
 rule-quality` snapshot pass, with unchanged corpus detections. Literal examples,
 Unicode, multiline calls, semicolons and source endpoints are covered. Narrow
 abstract/stub guards and final CLI/corpus integration remain open.
+
+### P24B — Runtime source identity
+
+Six initial missing-identity/schema regressions and an ignored-module dirty-state
+regression failed before correction. Evaluation JSON schema 3 identifies actual
+imported package/evaluator Python sources with a relocatable digest and scoped
+Git revision, staged, unstaged and untracked state. Relevant ignored source
+modules participate; caches and unrelated prose do not. Git/source unavailability
+is explicit and the existing revision alias remains readable. Annotation source,
+contract, reviewer and policy identities survive production filtering.
+All 142 focused tests and the isolated full gate pass; ordinary CLI schemas are
+unchanged. Benchmark identities are the next slice.
