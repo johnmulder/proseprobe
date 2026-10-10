@@ -1,5 +1,7 @@
 """Grammar tests (G001-G017, G019, G022, G024-G025, G029, G031, G037-G038)."""
 
+import re
+
 import pytest
 
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
@@ -2824,3 +2826,59 @@ def test_requirement_definition_suffix_needs_literal_source(interruption: str) -
         )
         == []
     )
+
+
+def test_source_regex_validation_retains_lookahead_context() -> None:
+    from proseprobe.parsers.prose import iter_prose_sentences
+    from proseprobe.rules._phrases import iter_prose_regex_matches
+
+    pattern = re.compile(r"\bcompared\s+with\b(?=\s+\w)")
+    source = "Atlas is best compared with Boreal."
+    [sentence] = iter_prose_sentences(source, "guide.md")
+    matches = list(
+        iter_prose_regex_matches(
+            sentence, sentence.source_text(source), "guide.md", pattern
+        )
+    )
+    assert [match.group() for match in matches] == ["compared with"]
+    interrupted = "Atlas is best compared `not` with Boreal."
+    [sentence] = iter_prose_sentences(interrupted, "guide.md")
+    assert (
+        list(
+            iter_prose_regex_matches(
+                sentence, sentence.source_text(interrupted), "guide.md", pattern
+            )
+        )
+        == []
+    )
+
+
+@pytest.mark.parametrize(
+    ("source", "filename", "span"),
+    [
+        ("Équipe must\r\nnormally restart.", "guide.md", (1, 8, 2, 9)),
+        ("> > Clients must\n> > normally restart.", "guide.md", (1, 13, 2, 13)),
+        ("# Clients must\n# normally restart.", "guide.py", (1, 11, 2, 11)),
+        ("Clients **must normally** restart.", "guide.md", (1, 11, 1, 24)),
+    ],
+)
+def test_source_validation_preserves_supported_formatting(
+    source: str,
+    filename: str,
+    span: tuple[int, int, int, int],
+) -> None:
+    [issue] = HedgedRequirementRule().check(source, filename)
+    assert (issue.line, issue.column, issue.end_line, issue.end_column) == span
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "Clients must, normally restart.",
+        "Clients must\n\nnormally restart.",
+        "Clients must **normally** restart.",
+        "Clients must <br> normally restart.",
+    ],
+)
+def test_source_validation_does_not_strip_predicate_interruption(source: str) -> None:
+    assert HedgedRequirementRule().check(source, "guide.md") == []

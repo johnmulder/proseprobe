@@ -34,7 +34,10 @@ def iter_prose_regex_matches(
         original = original_prose_slice(
             sentence, source, filename, match.start(), match.end()
         )
-        if pattern.fullmatch(original):
+        candidate = pattern.match(
+            original_prose_slice(sentence, source, filename, match.start(), len(source))
+        )
+        if candidate is not None and candidate.end() == len(original):
             yield match
 
 

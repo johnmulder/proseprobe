@@ -2347,3 +2347,156 @@ def test_regex_migration_preserves_first_per_pattern_on_a_source_line(
     rule: Rule, source: str
 ) -> None:
     assert len(rule.check(source, "case.md")) == 1
+
+
+@pytest.mark.parametrize(
+    ("rule", "text", "phrase", "message", "suggestion"),
+    [
+        (
+            ImpreciseQuantityRule(),
+            "A large number of requests failed.",
+            "A large number of",
+            "Imprecise quantity: 'A large number of'",
+            "Use a measured quantity or cite the source",
+        ),
+        (
+            UnboundedSuperlativeRule(),
+            "Atlas is the most reliable parser.",
+            "the most reliable",
+            "Unbounded superlative: 'the most reliable'",
+            "Name the comparison set and supporting evidence",
+        ),
+        (
+            AbsoluteReliabilityClaimRule(),
+            "The system never fails.",
+            "never fails",
+            "Absolute reliability claim: 'never fails'",
+            "State the tested scope and observed result",
+        ),
+    ],
+)
+@pytest.mark.parametrize(
+    "form", ["body", "list", "quote", "nested_quote", "comment", "docstring"]
+)
+@pytest.mark.parametrize("wrapped", [False, True])
+def test_claim_predicates_preserve_complete_records(
+    rule: Rule,
+    text: str,
+    phrase: str,
+    message: str,
+    suggestion: str,
+    form: str,
+    wrapped: bool,
+) -> None:
+    from proseprobe.rules.base import Issue
+
+    if wrapped:
+        first, rest = phrase.split(" ", 1)
+        text = text.replace(phrase, first + "\n" + rest, 1)
+    prefix = {
+        "body": "",
+        "list": "- ",
+        "quote": "> ",
+        "nested_quote": "> > ",
+        "comment": "# ",
+        "docstring": "",
+    }[form]
+    source = prefix + text.replace("\n", "\n" + ("  " if form == "list" else prefix))
+    filename = "guide.py" if form in {"comment", "docstring"} else "guide.md"
+    if form == "docstring":
+        source = 'def explain():\n    """' + text.replace("\n", "\n    ") + '"""'
+    start = source.index(phrase.split()[0])
+    last = phrase.split()[-1]
+    end = source.index(last, start + len(phrase.split()[0])) + len(last)
+    assert rule.check(source, filename) == [
+        Issue(
+            rule_id=rule.id,
+            message=message,
+            line=source[:start].count("\n") + 1,
+            column=len(source[:start].rsplit("\n", 1)[-1]) + 1,
+            end_line=source[:end].count("\n") + 1,
+            end_column=len(source[:end].rsplit("\n", 1)[-1]) + 1,
+            severity=rule.severity,
+            confidence=rule.default_confidence,
+            suggestion=suggestion,
+        )
+    ]
+
+
+@pytest.mark.parametrize(
+    ("rule", "source"),
+    [
+        (ImpreciseQuantityRule(), "A large `unexpected` number of requests failed."),
+        (ImpreciseQuantityRule(), "A handful `unexpected` of clients retried."),
+        (
+            ImpreciseQuantityRule(),
+            "A small `but measurable` number of errors occurred.",
+        ),
+        (UnboundedSuperlativeRule(), "The parser is `not` the best."),
+        (UnboundedSuperlativeRule(), "The parser is the most `not` reliable."),
+        (UnboundedSuperlativeRule(), "The parser is <span></span> the best."),
+        (AbsoluteReliabilityClaimRule(), "The system never `not` fails."),
+        (AbsoluteReliabilityClaimRule(), "The system always `not` succeeds."),
+        (AbsoluteReliabilityClaimRule(), "The system eliminates `not` all errors."),
+        (AbsoluteReliabilityClaimRule(), "The system is 100% `not` secure."),
+    ],
+)
+def test_claim_predicates_cannot_bridge_masked_content(rule: Rule, source: str) -> None:
+    assert rule.check(source, "guide.md") == []
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "The parser is best compared `not` with Boreal.",
+        "The parser is best in our `unrelated` benchmark.",
+        "The parser is best among `not` the tested parsers.",
+        "Among `not` the tested parsers, Atlas is best.",
+        "Avoid `not` claiming Atlas is best.",
+    ],
+)
+def test_superlative_exemptions_need_literal_source(source: str) -> None:
+    [issue] = UnboundedSuperlativeRule().check(source, "guide.md")
+    assert issue.rule_id == "V015"
+    assert issue.confidence is Confidence.LOW
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "The system never fails in `only` 100 tests.",
+        "The system never fails under our `untested` tested conditions.",
+        "The system never fails `is` during 100 tests.",
+        "Avoid `not` saying the system never fails.",
+    ],
+)
+def test_reliability_exemptions_need_literal_source(source: str) -> None:
+    [issue] = AbsoluteReliabilityClaimRule().check(source, "guide.md")
+    assert issue.rule_id == "V016"
+
+
+def test_masked_testing_cannot_change_reliability_confidence() -> None:
+    [issue] = AbsoluteReliabilityClaimRule().check(
+        "The system never fails `tests`.", "guide.md"
+    )
+    assert issue.confidence is Confidence.MEDIUM
+    [uncertain] = AbsoluteReliabilityClaimRule().check(
+        "The system never fails in our tests.", "guide.md"
+    )
+    assert uncertain.confidence is Confidence.LOW
+
+
+def test_masked_hypothetical_word_cannot_exempt_superlative() -> None:
+    [issue] = UnboundedSuperlativeRule().check("`If` Atlas is best.", "guide.md")
+    assert issue.rule_id == "V015"
+    assert (
+        UnboundedSuperlativeRule().check("If Atlas is best, deploy it.", "guide.md")
+        == []
+    )
+
+
+def test_decision_compound_exemption_needs_literal_source() -> None:
+    source = "We make a decision `unrelated` tree."
+    [issue] = VerboseVerbPhraseRule().check(source, "guide.md")
+    assert issue.suggestion == "decide"
+    assert VerboseVerbPhraseRule().check("We make a decision tree.", "guide.md") == []

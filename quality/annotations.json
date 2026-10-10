@@ -4329,6 +4329,231 @@
           "note": "The phrase is an exact fenced example rather than prose to revise."
         }
       ]
+    },
+    "quality/corpus/source-backed-predicates.md": {
+      "expected": [
+        {
+          "rule_id": "G024",
+          "line": 1,
+          "column": 1,
+          "end_line": 1,
+          "end_column": 24
+        },
+        {
+          "rule_id": "G025",
+          "line": 3,
+          "column": 1,
+          "end_line": 3,
+          "end_column": 17
+        },
+        {
+          "rule_id": "G037",
+          "line": 5,
+          "column": 9,
+          "end_line": 6,
+          "end_column": 9
+        },
+        {
+          "rule_id": "G016",
+          "line": 8,
+          "column": 1,
+          "end_line": 8,
+          "end_column": 9
+        },
+        {
+          "rule_id": "G017",
+          "line": 10,
+          "column": 1,
+          "end_line": 10,
+          "end_column": 17
+        },
+        {
+          "rule_id": "G019",
+          "line": 12,
+          "column": 1,
+          "end_line": 12,
+          "end_column": 12
+        },
+        {
+          "rule_id": "G022",
+          "line": 14,
+          "column": 1,
+          "end_line": 14,
+          "end_column": 11
+        },
+        {
+          "rule_id": "V014",
+          "line": 16,
+          "column": 1,
+          "end_line": 17,
+          "end_column": 3
+        },
+        {
+          "rule_id": "V015",
+          "line": 19,
+          "column": 10,
+          "end_line": 20,
+          "end_column": 9
+        },
+        {
+          "rule_id": "V016",
+          "line": 22,
+          "column": 12,
+          "end_line": 23,
+          "end_column": 6
+        },
+        {
+          "rule_id": "G037",
+          "line": 25,
+          "column": 2,
+          "end_line": 25,
+          "end_column": 15
+        },
+        {
+          "rule_id": "V015",
+          "line": 27,
+          "column": 15,
+          "end_line": 27,
+          "end_column": 19
+        },
+        {
+          "rule_id": "V015",
+          "line": 29,
+          "column": 31,
+          "end_line": 29,
+          "end_column": 35
+        },
+        {
+          "rule_id": "V016",
+          "line": 31,
+          "column": 12,
+          "end_line": 31,
+          "end_column": 23
+        },
+        {
+          "rule_id": "V016",
+          "line": 33,
+          "column": 12,
+          "end_line": 33,
+          "end_column": 23
+        },
+        {
+          "rule_id": "V016",
+          "line": 35,
+          "column": 31,
+          "end_line": 35,
+          "end_column": 42
+        },
+        {
+          "rule_id": "V011",
+          "line": 37,
+          "column": 4,
+          "end_line": 37,
+          "end_column": 19
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "G037",
+          "line": 39,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "G024",
+          "line": 41,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "G025",
+          "line": 43,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "G016",
+          "line": 45,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "G017",
+          "line": 47,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "G019",
+          "line": 49,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "G022",
+          "line": 51,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "V014",
+          "line": 53,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "V014",
+          "line": 55,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "V014",
+          "line": 57,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "V015",
+          "line": 59,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "V015",
+          "line": 61,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "V016",
+          "line": 63,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "V016",
+          "line": 65,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "V016",
+          "line": 67,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "V016",
+          "line": 69,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "G037",
+          "line": 71,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "V015",
+          "line": 73,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "V016",
+          "line": 75,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        },
+        {
+          "rule_id": "V011",
+          "line": 77,
+          "note": "The original source interrupts the predicate or provides an explicit supported exemption."
+        }
+      ]
     }
   }
 }

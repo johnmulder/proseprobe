@@ -1356,39 +1356,39 @@ evidence. Keep exact phrase catalogs, rule IDs, severities and ordering stable.
   ``You `should reconsider` will need to restart.`` Retain ordinary repeated matches.
 - [x] P18.10 Validate each complete G025 instruction phrase and rerun its focused
   tests, including a later valid candidate after an invalid interrupted one.
-- [ ] P18.11 Add failing V014 tests for ``a large `unexpected` number of`` and
+- [x] P18.11 Add failing V014 tests for ``a large `unexpected` number of`` and
   ``a handful `unexpected` of``. Include
   ``A small `but measurable` number of errors occurred.`` Add a wrapped positive
   with exact endpoints.
-- [ ] P18.12 Validate each full V014 quantity phrase. Keep its documented evidence
+- [x] P18.12 Validate each full V014 quantity phrase. Keep its documented evidence
   policy and confidence behavior intact; run V014 tests.
-- [ ] P18.13 Add failing V015 negatives for ``The parser is `not` the best.`` and
+- [x] P18.13 Add failing V015 negatives for ``The parser is `not` the best.`` and
   interruptions within a multiword superlative. Assert no diagnostic from a
   fabricated copula/claim pair, even when the adjective span itself is literal.
-- [ ] P18.14 Validate V015's whole `_CLAIM` match before selecting the `claim`
+- [x] P18.14 Validate V015's whole `_CLAIM` match before selecting the `claim`
   subgroup for its diagnostic. Run the V015 detection and full-span matrix.
-- [ ] P18.15 Add failing V015 guard tests where masked code/HTML invents a local
+- [x] P18.15 Add failing V015 guard tests where masked code/HTML invents a local
   comparison set, a hypothetical qualifier, or literal-discussion context.
   Pair each with a genuine explicit comparison or qualifier negative.
-- [ ] P18.16 Use original-source bounded prose for each reproduced exemption.
+- [x] P18.16 Use original-source bounded prose for each reproduced exemption.
   Preserve existing clause attachment and refrain from treating all nearby
   comparison vocabulary as evidence. Run V015 guard tests.
-- [ ] P18.17 Add failing V016 negatives for ``The system never `not` fails.`` and
+- [x] P18.17 Add failing V016 negatives for ``The system never `not` fails.`` and
   interruptions within `always succeeds`, `eliminates all errors`, and
   `100% secure`. Add corresponding unmasked and wrapped positives.
-- [ ] P18.18 Validate each whole V016 reliability predicate and run its focused
+- [x] P18.18 Validate each whole V016 reliability predicate and run its focused
   detection/source-span tests.
-- [ ] P18.19 Add failing V016 tests where masking fabricates a tested bound or
+- [x] P18.19 Add failing V016 tests where masking fabricates a tested bound or
   changes its attachment, plus a case where masked text incorrectly changes
   confidence. Assert genuine attached bounds still qualify the observation.
-- [ ] P18.20 Validate only the reproduced context predicates against original
+- [x] P18.20 Validate only the reproduced context predicates against original
   source, preserving the existing clause boundary and tested-scope policy.
   Run V016 confidence and bound tests.
-- [ ] P18.21 Add a shared helper regression for Markdown markup, punctuation,
+- [x] P18.21 Add a shared helper regression for Markdown markup, punctuation,
   block boundaries, CRLF, Unicode, Python comment prefixes and nested
   blockquote prefixes. Characterize legitimate formatting that each caller
   supports; do not globally strip markup to manufacture phrase adjacency.
-- [ ] P18.22 Make the smallest helper correction justified by those tests.
+- [x] P18.22 Make the smallest helper correction justified by those tests.
   Avoid broadening matching for already validated rules. Run every current
   helper caller's tests and compare complete prior positive records.
 - [ ] P18.23 Add one CLI/source-map integration assertion for G037 and V016, and
@@ -2466,3 +2466,19 @@ Markdown and Python astral-character fixtures recover the exact exclusive-end
 source slices without coordinate conversion. All 190 focused reporter/CLI tests
 and the isolated package gate pass. The specification records the convention;
 other output schemas and existing positions are preserved.
+
+### P18 — Quantity and reliability predicates
+
+Twenty-one regressions failed before correction, with 36 prior complete-record
+positives retained. V014/V015/V016 now validate full original-source predicates;
+V015 still reports the narrower claim span. Comparison/test-bound/literal guards
+require source evidence, and masked finite clauses cannot disappear from bound
+attachment. The reproduced V011 decision-compound exemption is also corrected.
+Hypothetical and single-token uncertainty cases did not reproduce an exemption
+defect and retain their characterized behavior. Prefix, Unicode, CRLF, markup,
+punctuation and boundary cases pass. The isolated full gate passes.
+
+Seventeen full-span positives and twenty negatives were added as purpose-written
+regressions. Results are 353 TP/6 FP/0 FN and 448/454 negative checks; all 51
+supplied full spans match. The six original FP inputs and judgments remain.
+P18.23 integration and P18.24 strict regression gating await their prerequisites.

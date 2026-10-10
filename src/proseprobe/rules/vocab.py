@@ -32,6 +32,7 @@ from proseprobe.parsers.prose import (
 from proseprobe.rules._phrases import (
     iter_prose_regex_matches,
     longest_literal_phrase_issues,
+    original_prose_slice,
 )
 from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 
@@ -118,13 +119,20 @@ def _has_sentence_evidence(
 
 
 def _has_tested_bound(
+    sentence: ProseSentence,
     source: str,
+    filename: str,
     start: int,
     end: int,
 ) -> bool:
-    """Require an explicit bound to modify this particular observation."""
-    for bound in _TESTED_BOUND.finditer(source):
-        if bound.end() <= start and not source[: bound.start()].strip(" \t\r\n,"):
+    """Require a source-backed bound to modify this particular observation."""
+    first, last = _claim_scope(source, start, end)
+    for bound in iter_prose_regex_matches(sentence, source, filename, _TESTED_BOUND):
+        if not first <= bound.start() < bound.end() <= last:
+            continue
+        if bound.end() <= start and not original_prose_slice(
+            sentence, source, filename, first, bound.start()
+        ).strip(" \t\r\n,"):
             return True
         if bound.start() >= end and not _FINITE_CLAUSE.search(
             source[end : bound.start()]
@@ -780,9 +788,19 @@ class VerboseVerbPhraseRule(Rule):
                     parts = sentence.text.split("\n")
                     offset = sum(len(part) + 1 for part in parts[:index])
                     offset += endpoint[1] - (sentence.start_column if index == 0 else 1)
-                    compound = bool(
-                        self._DECISION_COMPOUND.match(sentence.text[offset:])
-                    )
+                    suffix = self._DECISION_COMPOUND.match(sentence.text[offset:])
+                    if suffix is not None:
+                        compound = bool(
+                            self._DECISION_COMPOUND.fullmatch(
+                                original_prose_slice(
+                                    sentence,
+                                    sentence.source_text(content),
+                                    filename,
+                                    offset,
+                                    offset + suffix.end(),
+                                )
+                            )
+                        )
                     break
             if not compound:
                 retained.append(issue)
@@ -839,7 +857,9 @@ class ImpreciseQuantityRule(Rule):
                 if _has_quantity_evidence(content, sentences, index)
                 else self.default_confidence
             )
-            for match in self._QUANTITY.finditer(sentence.text):
+            for match in iter_prose_regex_matches(
+                sentence, sentence.source_text(content), filename, self._QUANTITY
+            ):
                 line, column = sentence.source_position(match.start())
                 end_line, end_column = sentence.source_position(match.end())
                 quantity = " ".join(match.group().split())
@@ -898,10 +918,17 @@ class UnboundedSuperlativeRule(Rule):
     )
 
     @classmethod
-    def _has_comparison(cls, source: str, start: int, end: int) -> bool:
-        for comparison in cls._COMPARISON_SET.finditer(source):
+    def _has_comparison(
+        cls, sentence: ProseSentence, source: str, filename: str, start: int, end: int
+    ) -> bool:
+        first, last = _claim_scope(source, start, end)
+        for comparison in iter_prose_regex_matches(
+            sentence, source, filename, cls._COMPARISON_SET
+        ):
+            if not first <= comparison.start() < comparison.end() <= last:
+                continue
             if comparison.end() <= start and not _FINITE_CLAUSE.search(
-                source[: comparison.start()]
+                source[first : comparison.start()]
             ):
                 return True
             if comparison.start() >= end and not _FINITE_CLAUSE.search(
@@ -919,18 +946,23 @@ class UnboundedSuperlativeRule(Rule):
                 sentence.context == "heading"
                 or is_example_line(content, filename, sentence.start_line)
                 or sentence.text.rstrip().endswith("?")
-                or self._LITERAL_CONTEXT.search(sentence.text)
             ):
                 continue
 
-            for match in self._CLAIM.finditer(sentence.text):
+            source = sentence.source_text(content)
+            if any(
+                iter_prose_regex_matches(
+                    sentence, source, filename, self._LITERAL_CONTEXT
+                )
+            ):
+                continue
+            for match in iter_prose_regex_matches(
+                sentence, source, filename, self._CLAIM
+            ):
                 if self._HYPOTHETICAL.search(sentence.text[: match.start()]):
                     continue
-                first, last = _claim_scope(sentence.text, match.start(), match.end())
                 if self._has_comparison(
-                    sentence.text[first:last],
-                    match.start() - first,
-                    match.end() - first,
+                    sentence, source, filename, match.start(), match.end()
                 ):
                     continue
                 claim_match = match.span("claim")
@@ -982,15 +1014,23 @@ class AbsoluteReliabilityClaimRule(Rule):
         issues: list[Issue] = []
         sentences = iter_prose_sentences(content, filename)
         for sentence in sentences:
-            if is_example_line(
-                content, filename, sentence.start_line
-            ) or self._LITERAL_CONTEXT.search(sentence.text):
+            if is_example_line(content, filename, sentence.start_line):
+                continue
+            source = sentence.source_text(content)
+            if any(
+                iter_prose_regex_matches(
+                    sentence, source, filename, self._LITERAL_CONTEXT
+                )
+            ):
                 continue
 
-            for match in self._CLAIM.finditer(sentence.text):
-                first, last = _claim_scope(sentence.text, match.start(), match.end())
-                scope = sentence.text[first:last]
-                if _has_tested_bound(scope, match.start() - first, match.end() - first):
+            for match in iter_prose_regex_matches(
+                sentence, source, filename, self._CLAIM
+            ):
+                first, last = _claim_scope(source, match.start(), match.end())
+                if _has_tested_bound(
+                    sentence, source, filename, match.start(), match.end()
+                ):
                     continue
                 line, column = sentence.source_position(match.start())
                 end_line, end_column = sentence.source_position(match.end())
@@ -1006,8 +1046,13 @@ class AbsoluteReliabilityClaimRule(Rule):
                         severity=self.severity,
                         confidence=(
                             Confidence.LOW
-                            if _TESTED_BOUND.search(scope)
-                            or _UNCERTAIN_TEST_SCOPE.search(scope)
+                            if any(
+                                first <= context.start() < context.end() <= last
+                                for pattern in (_TESTED_BOUND, _UNCERTAIN_TEST_SCOPE)
+                                for context in iter_prose_regex_matches(
+                                    sentence, source, filename, pattern
+                                )
+                            )
                             else self.default_confidence
                         ),
                         suggestion="State the tested scope and observed result",
