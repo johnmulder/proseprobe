@@ -23,8 +23,14 @@ from proseprobe.data.phrases import (
     PEDAGOGICAL_VOICE_PHRASES,
 )
 from proseprobe.parsers.markdown import is_example_line, is_markdown_file
-from proseprobe.parsers.prose import iter_prose_scopes, iter_prose_sentences
+from proseprobe.parsers.prose import (
+    ProseSentence,
+    iter_prose_scopes,
+    iter_prose_sentences,
+)
 from proseprobe.rules._phrases import (
+    _FINITE_CLAUSE,
+    _claim_scope,
     iter_prose_regex_matches,
     longest_literal_phrase_issues,
     original_prose_slice,
@@ -1127,11 +1133,11 @@ class HedgedRequirementRule(Rule):
 
 
 class UndefinedComparativeRule(Rule):
-    """G038: Detect curated predicate comparatives without nearby targets."""
+    """G038: Detect curated comparative claims without attached targets."""
 
     id = "G038"
     name = "Undefined Comparative"
-    description = "Detects predicate comparatives lacking nearby comparison context"
+    description = "Detects predicate comparatives without an attached comparison target"
     severity = Severity.INFO
     default_confidence = Confidence.LOW
     applies_to: ClassVar[set[str]] = {"markdown", "python"}
@@ -1146,24 +1152,26 @@ class UndefinedComparativeRule(Rule):
         r"maintainable|readable|reliable|scalable|secure|stable|verbose)))\b",
         re.IGNORECASE,
     )
-    _TARGET_CONTEXT: ClassVar[re.Pattern[str]] = re.compile(
-        r"\b(?:against|among|benchmark(?:ed|ing|s)?|between|compared\s+(?:to|with)|"
-        r"compar(?:e[ds]?|ing|ison)s?|differ(?:ed|ence|ences|ent|s)?|"
-        r"evaluat(?:e[ds]?|ing|ion)s?|instead\s+of|relative\s+to|than|"
-        r"versus|vs\.?)\b"
-        r"|\bof\s+(?:both|our|the\s+two|these|those)\b"
-        r"|\b(?:benchmark(?:ed|ing|s)?|chart|figure|table)\s+(?:\d+|[A-Z])\b"
-        r"|\b(?:both|first|former|latter|other|second|third)\b",
+    _TARGET: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?:against|among|between|compared\s+(?:to|with)|relative\s+to|"
+        r"than|versus|vs\.?)\s+[\"'\u201c]?\w+\b",
         re.IGNORECASE,
     )
-    _MEASUREMENT: ClassVar[re.Pattern[str]] = re.compile(
-        r"\b\d+(?:,\d{3})*(?:\.\d+)?\s*"
-        r"(?:%|bytes?|gib|gigabytes?|hours?|kb|kib|mb|mib|milliseconds?|ms|"
-        r"operations?|points?|requests?|runs?|seconds?|times?|x)\b",
+    _SUBJECT: ClassVar[re.Pattern[str]] = re.compile(
+        r"\s*(?:The\s+)?(?P<name>[^\W\d_]\w*)(?:\s+parser)?\s*"
+    )
+    _NAMED_PAIR: ClassVar[re.Pattern[str]] = re.compile(
+        r"^We\s+compared\s+(?P<first>[^\W\d_]\w*)\s+and\s+"
+        r"(?P<second>[^\W\d_]\w*)\b",
         re.IGNORECASE,
     )
-    _TABLE_ROW: ClassVar[re.Pattern[str]] = re.compile(
-        r"^\s*\|?.+\|.+\|?\s*$", re.MULTILINE
+    _HEADING_TARGET: ClassVar[re.Pattern[str]] = re.compile(
+        r"^(?:Comparison\s+target:|Compared\s+(?:to|with))\s+"
+        r"(?P<name>[^\W\d_]\w*)(?:\s+parser)?$",
+        re.IGNORECASE,
+    )
+    _PRONOUNS: ClassVar[frozenset[str]] = frozenset(
+        {"he", "i", "it", "she", "that", "these", "they", "this", "those", "we"}
     )
     _LITERAL_CONTEXT: ClassVar[re.Pattern[str]] = re.compile(
         r"\b(?:avoid|do not|don't)\s+(?:claim(?:ing)?|say(?:ing)?|writ(?:e|ing))\b"
@@ -1173,36 +1181,125 @@ class UndefinedComparativeRule(Rule):
     _HYPOTHETICAL: ClassVar[re.Pattern[str]] = re.compile(
         r"\b(?:if|whether)\b", re.IGNORECASE
     )
-    _CONTEXT_LINES = 4
 
     @classmethod
-    def _context_window(cls, lines: list[str], start_line: int, end_line: int) -> str:
-        start = max(0, start_line - cls._CONTEXT_LINES - 1)
-        return "\n".join(lines[start:end_line])
+    def _has_attached_target(
+        cls, sentence: ProseSentence, source: str, filename: str, start: int, end: int
+    ) -> bool:
+        first, last = _claim_scope(source, start, end)
+        for target in iter_prose_regex_matches(sentence, source, filename, cls._TARGET):
+            if not first <= target.start() < target.end() <= last:
+                continue
+            if target.end() <= start and not _FINITE_CLAUSE.search(
+                source[first : target.start()]
+            ):
+                return True
+            if target.start() >= end and not _FINITE_CLAUSE.search(
+                source[end : target.start()]
+            ):
+                return True
+        return False
+
+    @staticmethod
+    def _only_prose_gap(
+        lines: list[str], previous: ProseSentence, current: ProseSentence, filename: str
+    ) -> bool:
+        if previous.end_line == current.start_line:
+            gap = lines[current.start_line - 1][
+                previous.end_column - 1 : current.start_column - 1
+            ]
+        else:
+            parts = lines[previous.end_line - 1 : current.start_line]
+            parts[0] = parts[0][previous.end_column - 1 :]
+            parts[-1] = parts[-1][: current.start_column - 1]
+            gap = "\n".join(parts)
+        if filename.lower().endswith(".py"):
+            gap = re.sub(r"(?m)^[ \t]*#[ \t]?", "", gap)
+        return not gap.strip()
+
+    @classmethod
+    def _has_named_context(
+        cls,
+        content: str,
+        filename: str,
+        lines: list[str],
+        previous: ProseSentence | None,
+        current: ProseSentence,
+        start: int,
+        end: int,
+    ) -> bool:
+        if previous is None or not cls._only_prose_gap(
+            lines, previous, current, filename
+        ):
+            return False
+        source = current.source_text(content)
+        first, _ = _claim_scope(source, start, end)
+        subject = cls._SUBJECT.fullmatch(
+            original_prose_slice(current, source, filename, first, start)
+        )
+        if subject is None:
+            return False
+        name = subject.group("name")
+        if not name[0].isupper() or name.casefold() in cls._PRONOUNS:
+            return False
+        previous_source = previous.source_text(content)
+        if previous.context == "heading" and not filename.lower().endswith(".py"):
+            target = cls._HEADING_TARGET.fullmatch(previous_source)
+            return bool(
+                target is not None
+                and target.group("name")[0].isupper()
+                and target.group("name").casefold() != name.casefold()
+            )
+        if previous.context != current.context or (
+            current.context == "list_item" and previous.scope_id != current.scope_id
+        ):
+            return False
+        for pair in iter_prose_regex_matches(
+            previous, previous_source, filename, cls._NAMED_PAIR
+        ):
+            names = (pair.group("first"), pair.group("second"))
+            if all(value[0].isupper() for value in names) and (
+                names[0].casefold() != names[1].casefold()
+                and name.casefold() in {value.casefold() for value in names}
+            ):
+                return True
+        return False
 
     def check(self, content: str, filename: str) -> list[Issue]:
-        """Report curated comparatives without nearby comparison context."""
+        """Report curated comparatives without supported target attachment."""
         issues: list[Issue] = []
-        source_lines = content.splitlines()
-        for sentence in iter_prose_sentences(content, filename):
+        source_lines = content.split("\n")
+        sentences = iter_prose_sentences(content, filename)
+        for index, sentence in enumerate(sentences):
             if (
                 sentence.context not in {"body", "list_item"}
                 or is_example_line(content, filename, sentence.start_line)
                 or sentence.text.rstrip().endswith("?")
-                or self._LITERAL_CONTEXT.search(sentence.text)
             ):
                 continue
-            context = self._context_window(
-                source_lines, sentence.start_line, sentence.end_line
-            )
-            if (
-                self._TARGET_CONTEXT.search(context)
-                or self._MEASUREMENT.search(context)
-                or self._TABLE_ROW.search(context)
+            source = sentence.source_text(content)
+            if any(
+                iter_prose_regex_matches(
+                    sentence, source, filename, self._LITERAL_CONTEXT
+                )
             ):
                 continue
-            for match in self._CLAIM.finditer(sentence.text):
+            for match in iter_prose_regex_matches(
+                sentence, source, filename, self._CLAIM
+            ):
                 if self._HYPOTHETICAL.search(sentence.text[: match.start()]):
+                    continue
+                if self._has_attached_target(
+                    sentence, source, filename, match.start(), match.end()
+                ) or self._has_named_context(
+                    content,
+                    filename,
+                    source_lines,
+                    sentences[index - 1] if index else None,
+                    sentence,
+                    match.start(),
+                    match.end(),
+                ):
                     continue
                 start, end = match.span("claim")
                 line, column = sentence.source_position(start)

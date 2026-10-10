@@ -1929,14 +1929,18 @@ The service must reject an unsigned archive.
 ### G038: Undefined Comparative
 
 At low confidence, detects curated predicate comparatives such as `is faster`,
-`was worse`, and `remains more reliable` when the nearby source does not name a
-comparison target. The rule reports only the exact comparative phrase.
+`was worse`, and `remains more reliable` without an attached comparison target.
+The rule reports only the exact comparative phrase. A standalone number, figure
+reference, ordinal or single-row table does not name a comparator.
 
-Explicit `than`/`compared with` targets, comparison or evaluation language,
-option sets, benchmark/figure/table/chart references, nearby measurements, and
-Markdown tables suppress the diagnostic. Headings, blockquotes, questions,
-hypotheticals, literal discussions, code, Python strings, and example prose are
-excluded.
+Direct named/set comparisons qualify. Two narrow context forms also qualify:
+an immediately preceding `Comparison target: NAME` or `Compared with NAME`
+heading followed by a named subject, and an immediately preceding
+`We compared NAME and NAME` sentence whose named subject matches the claim.
+Intervening code, headings, list boundaries and unrelated owners break that
+attachment. Pronouns and ambiguous cross-sentence references remain advisory.
+Headings, blockquotes, questions, hypotheticals, literal discussions, code,
+Python strings and example prose are excluded from claim detection.
 
 This experimental rule is not enabled by a profile. Select it explicitly with
 `--select G038` while evaluating whether it fits the document type.

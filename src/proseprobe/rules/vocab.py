@@ -30,6 +30,8 @@ from proseprobe.parsers.prose import (
     iter_prose_sentences,
 )
 from proseprobe.rules._phrases import (
+    _FINITE_CLAUSE,
+    _claim_scope,
     iter_prose_regex_matches,
     longest_literal_phrase_issues,
     original_prose_slice,
@@ -55,36 +57,9 @@ _TESTED_BOUND = re.compile(
     r"(?:conditions?|configuration|environment|setup)\b)",
     re.IGNORECASE,
 )
-_CLAUSE_BOUNDARY = re.compile(
-    r";|(?<!\d),|,(?!\d)|\b(?:and|or|but|yet|whereas|while)\b", re.IGNORECASE
-)
-_FINITE_CLAUSE = re.compile(
-    r"\b(?:is|are|was|were|has|have|had|remains?|never|always|eliminates?)\b"
-    r"|\b(?:we|they|I)\s+(?:tested|observed|compared|processed|reported|measured)\b",
-    re.IGNORECASE,
-)
 _UNCERTAIN_TEST_SCOPE = re.compile(
     r"\b(?:benchmarks?|tests?|tested|trials?|observed|conditions?)\b", re.IGNORECASE
 )
-
-
-def _claim_scope(text: str, start: int, end: int) -> tuple[int, int]:
-    """Keep a claim's clause and its leading modifiers together."""
-    left = 0
-    right = len(text)
-    previous = 0
-    for boundary in _CLAUSE_BOUNDARY.finditer(text):
-        if boundary.group().casefold() in {",", "and", "or"} and not (
-            _FINITE_CLAUSE.search(text[previous : boundary.start()])
-        ):
-            continue
-        previous = boundary.end()
-        if boundary.end() <= start:
-            left = boundary.end()
-        elif boundary.start() >= end:
-            right = boundary.start()
-            break
-    return left, right
 
 
 def _sentence_window_source(

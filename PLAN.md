@@ -1868,35 +1868,35 @@ contract. A measurement before an unrelated heading must not exempt
 `The software is safer.` Keep G038 experimental, INFO/LOW; this is a
 comparison-context check rather than a claim-truth detector.
 
-- [ ] P27.1 Characterize valid current direct comparisons, questions,
+- [x] P27.1 Characterize valid current direct comparisons, questions,
   hypotheticals and literal wording discussion. Record which old negatives
   relied only on unrelated nearby measurements and need reviewed correction.
-- [ ] P27.2 Add a failing regression with a measured sentence, then a heading,
+- [x] P27.2 Add a failing regression with a measured sentence, then a heading,
   then `The software is safer.` Assert the claim is reported despite the prior
   number. Add a fully explicit `safer than ...` negative.
-- [ ] P27.3 Replace the raw-line window for this slice with existing prose scope
+- [x] P27.3 Replace the raw-line window for this slice with existing prose scope
   boundaries. Run the heading-isolation and explicit-comparison tests.
-- [ ] P27.4 Add failing paragraph, list-item, blockquote, Python-owner, fenced
+- [x] P27.4 Add failing paragraph, list-item, blockquote, Python-owner, fenced
   code and inline-code boundary cases for unrelated comparison evidence.
-- [ ] P27.5 Restrict evidence to the declared same-scope unit. Do not introduce
+- [x] P27.5 Restrict evidence to the declared same-scope unit. Do not introduce
   a general parser redesign; run the scope-boundary matrix.
-- [ ] P27.6 Add paired clauses where an unrelated quantity, table, benchmark
+- [x] P27.6 Add paired clauses where an unrelated quantity, table, benchmark
   mention or `first`/`other` occurs next to a comparative. Assert that such words
   alone do not exempt `safer`, while an attached named target does.
-- [ ] P27.7 Require a source-validated target attached to the particular claim,
+- [x] P27.7 Require a source-validated target attached to the particular claim,
   reusing P10's bounded clause logic where its semantics match. Run these cases
   and preserve complete-predicate source validation from P18.
-- [ ] P27.8 Add paired numeric comparisons with an explicit target and a mere
+- [x] P27.8 Add paired numeric comparisons with an explicit target and a mere
   standalone quantity. A number alone cannot establish what was compared.
-- [ ] P27.9 Add only the explicitly supported numeric comparison forms.
+- [x] P27.9 Add only the explicitly supported numeric comparison forms.
   Run their focused tests; unsupported measurements retain advisory findings.
-- [ ] P27.10 Add an immediately adjacent sentence with an explicit comparison
+- [x] P27.10 Add an immediately adjacent sentence with an explicit comparison
   and an ambiguous adjacent sentence. Decide whether the first supported form
   can be bound conservatively; defer ambiguous cross-sentence references.
-- [ ] P27.11 Add a cross-sentence exemption only if the tests establish a
+- [x] P27.11 Add a cross-sentence exemption only if the tests establish a
   clear attachment within the same scope. Otherwise keep the minimum same-clause
   policy and record the deferred forms. Run the declared evidence matrix.
-- [ ] P27.12 Verify Unicode/wrapped claim spans, repeated claims with different
+- [x] P27.12 Verify Unicode/wrapped claim spans, repeated claims with different
   targets, explicit suppression and confidence filtering. Update purpose-written
   annotations with reasons for intentional judgment changes, then run P23/P33.
 - [ ] P27.13 Submit untouched natural development examples and G038 findings to
@@ -2551,3 +2551,20 @@ is explicit and the existing revision alias remains readable. Annotation source,
 contract, reviewer and policy identities survive production filtering.
 All 142 focused tests and the isolated full gate pass; ordinary CLI schemas are
 unchanged. Benchmark identities are the next slice.
+
+### P27 — Attached comparison targets
+
+Twenty-eight regressions failed before correction. G038 now requires a literal
+target attached to the claim's clause. Two narrowly proved context forms retain
+author intent: an immediate named comparison-target heading and an immediate
+`We compared NAME and NAME` sentence with a matching literal named subject.
+Code, headings, list/owner boundaries and non-whitespace gaps break attachment.
+Ambiguous pronouns remain advisory. Original heading/pair negatives stay valid.
+
+Four old ordinal/figure-number/one-row-table/standalone-measurement negatives
+were reviewed against the revised contract and became expected detections; their
+source bytes stay unchanged. Six new positives and five negatives extend the
+purpose-written corpus. Results are 363 TP/6 unchanged FP/0 FN, 449/455 negative
+checks and 61/61 full spans. Focused suites and the isolated package gate pass.
+The shared bounded-clause helper moved without changing its vocabulary behavior.
+G038 remains experimental INFO/LOW; independent review is deferred.

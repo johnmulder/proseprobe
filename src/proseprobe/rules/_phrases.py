@@ -1,10 +1,38 @@
-"""Source-mapped matching for fixed phrase catalogs."""
+"""Source-mapped matching and bounded clause evidence for phrase rules."""
 
 import re
 from collections.abc import Iterator, Sequence
 
 from proseprobe.parsers.prose import ProseSentence, iter_prose_sentences
 from proseprobe.rules.base import Issue, Rule
+
+_CLAUSE_BOUNDARY = re.compile(
+    r";|(?<!\d),|,(?!\d)|\b(?:and|or|but|yet|whereas|while)\b", re.IGNORECASE
+)
+_FINITE_CLAUSE = re.compile(
+    r"\b(?:is|are|was|were|has|have|had|remains?|never|always|eliminates?)\b"
+    r"|\b(?:we|they|I)\s+(?:tested|observed|compared|processed|reported|measured)\b",
+    re.IGNORECASE,
+)
+
+
+def _claim_scope(text: str, start: int, end: int) -> tuple[int, int]:
+    """Keep a claim's clause and its leading modifiers together."""
+    left = 0
+    right = len(text)
+    previous = 0
+    for boundary in _CLAUSE_BOUNDARY.finditer(text):
+        if boundary.group().casefold() in {",", "and", "or"} and not (
+            _FINITE_CLAUSE.search(text[previous : boundary.start()])
+        ):
+            continue
+        previous = boundary.end()
+        if boundary.end() <= start:
+            left = boundary.end()
+        elif boundary.start() >= end:
+            right = boundary.start()
+            break
+    return left, right
 
 
 def original_prose_slice(

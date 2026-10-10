@@ -2201,7 +2201,7 @@ class TestUndefinedComparativeRule:
             "Undefined comparative: 'slower'",
         ]
 
-    def test_context_windows_split_source_once_for_many_sentences(self) -> None:
+    def test_checks_many_scope_isolated_sentences_without_raw_windows(self) -> None:
         class CountedSource(str):
             split_calls = 0
 
@@ -2213,7 +2213,7 @@ class TestUndefinedComparativeRule:
         issues = UndefinedComparativeRule().check(source, "contexts.md")
         assert len(issues) == 50
         assert [issue.line for issue in issues] == list(range(1, 100, 2))
-        assert source.split_calls == 1
+        assert source.split_calls == 0
 
     @pytest.mark.parametrize(
         "source",
@@ -2221,19 +2221,12 @@ class TestUndefinedComparativeRule:
             "Atlas is faster than Boreal.",
             "Compared with Boreal, Atlas is faster.",
             "Among the three parsers, Atlas is faster.",
-            "In our benchmark, Atlas is faster.",
-            "The first parser is faster.",
-            "Figure 2 shows Atlas is faster.",
             "## Compared with Boreal\n\nAtlas is faster.",
+            "## Comparison target: Boreal parser\n\nThe Atlas parser is faster.",
             "We compared Atlas and Boreal.\n\nAtlas is faster.",
-            "Atlas handled 100 requests in 12 ms.\n\nIt is faster.",
-            (
-                "| Parser | Latency |\n| --- | --- |\n| Atlas | 12 ms |\n\n"
-                "Atlas is faster."
-            ),
         ],
     )
-    def test_ignores_nearby_targets_and_evidence(self, source: str) -> None:
+    def test_ignores_supported_attached_or_named_targets(self, source: str) -> None:
         assert UndefinedComparativeRule().check(source, "guide.md") == []
 
     @pytest.mark.parametrize(
@@ -2882,3 +2875,123 @@ def test_source_validation_preserves_supported_formatting(
 )
 def test_source_validation_does_not_strip_predicate_interruption(source: str) -> None:
     assert HedgedRequirementRule().check(source, "guide.md") == []
+
+
+@pytest.mark.parametrize(
+    ("source", "filename"),
+    [
+        (
+            "The benchmark handled 100 requests.\n\n# Safety\n\nThe software is safer.",
+            "guide.md",
+        ),
+        ("The benchmark handled 100 requests.\n\nThe software is safer.", "guide.md"),
+        ("- The benchmark handled 100 requests.\n- The software is safer.", "guide.md"),
+        ("> The benchmark handled 100 requests.\n\nThe software is safer.", "guide.md"),
+        (
+            'def measure():\n    """Handled 100 requests."""\ndef explain():\n    """The software is safer."""',
+            "guide.py",
+        ),
+        ("```text\nHandled 100 requests.\n```\nThe software is safer.", "guide.md"),
+        ("Use `compared with Boreal` as a label.\nThe software is safer.", "guide.md"),
+        ("The software is safer for 100 requests.", "guide.md"),
+        ("In our benchmark, Atlas is faster.", "guide.md"),
+        ("The first parser is faster.", "guide.md"),
+        ("Figure 2 shows Atlas is faster.", "guide.md"),
+        (
+            "| Parser | Latency |\n| --- | --- |\n| Atlas | 12 ms |\n\nAtlas is faster.",
+            "guide.md",
+        ),
+    ],
+)
+def test_comparative_unrelated_evidence_does_not_exempt_claim(
+    source: str,
+    filename: str,
+) -> None:
+    [issue] = UndefinedComparativeRule().check(source, filename)
+    assert issue.rule_id == "G038"
+    assert issue.confidence is Confidence.LOW
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "Atlas is `not` faster.",
+        "Atlas is more `not` reliable.",
+    ],
+)
+def test_comparative_validates_complete_copula_predicate(source: str) -> None:
+    assert UndefinedComparativeRule().check(source, "guide.md") == []
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "Atlas is faster compared `not` with Boreal.",
+        "Atlas is faster than `another` Boreal.",
+        "Avoid `not` claiming Atlas is faster.",
+        "Atlas is faster than.",
+        "Atlas is faster when the port is between 443 and 444.",
+        "When the port is between 443 and 444, Atlas is faster.",
+        "We compared Atlas and Boreal. Cobalt is faster.",
+        "We compared Atlas and Boreal. It is faster.",
+        "We compared Atlas and Boreal.\n\n# Safety\n\nAtlas is faster.",
+        "We compared Atlas and Boreal.\n\n```python\nx = 1\n```\n\nAtlas is faster.",
+        "- We compared Atlas and Boreal.\n- Atlas is faster.",
+        "## Comparison target: Boreal parser\n\n# Safety\n\nThe Atlas parser is faster.",
+    ],
+)
+def test_comparative_requires_supported_target_attachment(source: str) -> None:
+    [issue] = UndefinedComparativeRule().check(source, "guide.md")
+    assert issue.rule_id == "G038"
+
+
+@pytest.mark.parametrize(
+    ("source", "filename"),
+    [
+        ("Atlas is faster than Boreal.", "guide.md"),
+        ("Atlas is faster by 20% than Boreal.", "guide.md"),
+        ("Atlas is faster relative to Boreal.", "guide.md"),
+        ("Compared with Boreal, Atlas is faster.", "guide.md"),
+        ("Among the three parsers, Atlas is faster.", "guide.md"),
+        ("We compared Atlas and Boreal. Atlas is faster.", "guide.md"),
+        ("We compared Atlas and Boreal.\n\nAtlas is faster.", "guide.md"),
+        ("# We compared Atlas and Boreal.\n# Atlas is faster.", "guide.py"),
+        (
+            'def explain():\n    """We compared Atlas and Boreal. Atlas is faster."""',
+            "guide.py",
+        ),
+        (
+            "## Comparison target: Boreal parser\n\nThe Atlas parser is faster.",
+            "guide.md",
+        ),
+        ("## Compared with Boreal\n\nAtlas is faster.", "guide.md"),
+    ],
+)
+def test_comparative_preserves_clear_named_comparison_bindings(
+    source: str,
+    filename: str,
+) -> None:
+    assert UndefinedComparativeRule().check(source, filename) == []
+
+
+def test_comparative_named_pair_does_not_cross_python_ownership() -> None:
+    source = (
+        'def compare():\n    """We compared Atlas and Boreal."""\n'
+        'def explain():\n    """Atlas is faster."""'
+    )
+    [issue] = UndefinedComparativeRule().check(source, "guide.py")
+    assert issue.line == 4
+
+
+def test_comparative_target_attaches_only_to_its_claim() -> None:
+    source = "Atlas is safer than Boreal, but Cobalt is safer."
+    [issue] = UndefinedComparativeRule().check(source, "guide.md")
+    assert issue.column == source.rindex("safer") + 1
+    assert issue.end_column == source.rindex("safer") + 6
+
+
+def test_comparative_unicode_wrap_preserves_subgroup_span() -> None:
+    source = "Équipe is more\nreliable."
+    [issue] = UndefinedComparativeRule().check(source, "guide.md")
+    assert (issue.line, issue.column, issue.end_line, issue.end_column) == (1, 11, 2, 9)
+    assert issue.message == "Undefined comparative: 'more reliable'"
