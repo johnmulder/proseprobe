@@ -87,6 +87,15 @@ extracted prose words in reviewed regions; masked code and unreviewed text do
 not enter its denominator. Empty coverage produces an unavailable density.
 Wilson intervals describe reviewed samples, with source-group variation shown
 separately; correlated findings are not independent population evidence.
+`reviewed_coverage` counts eligible extracted prose words, files and review
+regions even when a reviewed source is clean. `reviewed_source_group_count`
+counts identified groups with such coverage; unidentified coverage remains
+visible as `unspecified`. Disabled, file-ignored and inapplicable rules cannot
+supply coverage credit. `metric_source_group_counts` separately records groups
+contributing to precision, recall and density. A clean group supplies density
+coverage without inventing detection observations or a precision denominator.
+No source-correlated interval is inferred from the number of coverage groups.
+
 Macro averages include supported rules with defined denominators. Span accuracy
 uses matched expectations that actually supplied endpoints.
 

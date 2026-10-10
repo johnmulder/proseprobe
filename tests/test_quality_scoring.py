@@ -433,6 +433,185 @@ def test_runtime_identity_names_unavailable_source_explicitly(tmp_path: Path) ->
     assert identity["source_files_count"] == 0
 
 
+def _coverage_report(
+    root: Path,
+    entries: dict[str, dict[str, object]],
+    capsys: pytest.CaptureFixture[str],
+    *policy: str,
+) -> dict[str, object]:
+    from benchmarks.rule_quality import main
+
+    manifest = root / "coverage.json"
+    manifest.write_text(json.dumps({"version": 2, "files": entries}))
+    assert (
+        main(
+            [
+                "--manifest",
+                str(manifest),
+                "--root",
+                str(root),
+                "--format",
+                "json",
+                *policy,
+            ]
+        )
+        == 0
+    )
+    return json.loads(capsys.readouterr().out)
+
+
+def test_clean_reviewed_source_groups_contribute_coverage_and_density(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    entries = {}
+    for index in (1, 2):
+        name = f"clean{index}.md"
+        (tmp_path / name).write_text("Plain prose.\n")
+        entries[name] = _entry() | {
+            "reviewed_rules": ["V001"],
+            "source_group": f"repository-{index}",
+        }
+    report = _coverage_report(tmp_path, entries, capsys)
+    assert report["reviewed_source_group_count"] == 2
+    assert report["metrics"]["precision"] is report["metrics"]["recall"] is None
+    assert report["metrics"]["false_warnings_per_1000_prose_words"] == 0
+    assert report["metric_source_group_counts"] == {
+        "precision": 0,
+        "recall": 0,
+        "density": 2,
+    }
+    assert set(report["reviewed_coverage"]) == {"repository-1", "repository-2"}
+    assert report["reviewed_coverage"]["repository-1"]["prose_words"] == 2
+
+
+def test_clean_and_detected_files_share_coverage_without_inflating_metric_support(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    (tmp_path / "clean.md").write_text("Plain prose.\n")
+    (tmp_path / "issue.md").write_text("delve\n")
+    entries = {
+        "clean.md": _entry()
+        | {"reviewed_rules": ["V001"], "source_group": "clean-repository"},
+        "issue.md": _entry()
+        | {
+            "reviewed_rules": ["V001"],
+            "source_group": "issue-repository",
+            "expected": [{"rule_id": "V001", "line": 1, "column": 1}],
+        },
+    }
+    report = _coverage_report(tmp_path, entries, capsys)
+    assert report["reviewed_source_group_count"] == 2
+    assert report["metric_source_group_counts"] == {
+        "precision": 1,
+        "recall": 1,
+        "density": 2,
+    }
+    assert "clean-repository" in report["reviewed_coverage"]
+    assert "too few" in report["cluster_interval_reason"]
+
+
+@pytest.mark.parametrize("status", ["unreviewed", "unsupported", "context-dependent"])
+def test_nonreviewed_regions_supply_no_clean_coverage(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], status: str
+) -> None:
+    (tmp_path / "doc.md").write_text("Plain prose.\n")
+    entry = _entry()
+    entry["regions"] = [
+        {
+            "rules": ["V001"],
+            "status": status,
+            "line": 1,
+            "column": 1,
+            "end_column": 13,
+            "note": status,
+        }
+    ]
+    report = _coverage_report(tmp_path, {"doc.md": entry}, capsys)
+    assert report["reviewed_source_group_count"] == 0
+    assert report["reviewed_coverage"] == {}
+
+
+def test_disabled_reviewed_rule_does_not_create_coverage(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    (tmp_path / "doc.md").write_text("Plain prose.\n")
+    entry = _entry() | {"reviewed_rules": ["V001"]}
+    report = _coverage_report(
+        tmp_path,
+        {"doc.md": entry},
+        capsys,
+        "--mode",
+        "production",
+        "--severity",
+        "error",
+    )
+    assert report["reviewed_source_group_count"] == 0
+
+
+def test_file_inapplicable_rule_review_does_not_create_all_rules_coverage(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    (tmp_path / "doc.md").write_text("Plain prose.\n")
+    entry = _entry() | {"reviewed_rules": ["C004"]}
+    report = _coverage_report(tmp_path, {"doc.md": entry}, capsys)
+    assert report["reviewed_source_group_count"] == 0
+
+
+def test_file_ignored_reviewed_rules_do_not_create_coverage(tmp_path: Path) -> None:
+    from benchmarks.quality_scoring import reviewed_coverage
+    from benchmarks.rule_quality import eligible_annotations, prepare_evaluation_scan
+
+    from proseprobe.config import Config, PerFileIgnore
+
+    (tmp_path / "doc.md").write_text("Plain prose.\n")
+    annotations = load_annotations(
+        _manifest(tmp_path, _entry() | {"reviewed_rules": ["V001"]}), tmp_path, {"V001"}
+    )
+    _config, linter, rules = prepare_evaluation_scan(
+        config=Config(
+            select=["V001"], per_file_ignores=[PerFileIgnore("doc.md", ["V001"])]
+        )
+    )
+    eligible = eligible_annotations(annotations, tmp_path, linter, rules)
+    assert reviewed_coverage(eligible, tmp_path, {rule.id for rule in rules}) == {}
+
+
+def test_partial_review_counts_whole_words_and_shared_group_once(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    entries = {}
+    for name in ("a.md", "b.md"):
+        (tmp_path / name).write_text("one two three\n")
+        entries[name] = _entry() | {
+            "regions": [
+                {
+                    "rules": ["V001"],
+                    "status": "reviewed",
+                    "line": 1,
+                    "column": 1,
+                    "end_column": 6,
+                }
+            ]
+        }
+    report = _coverage_report(tmp_path, entries, capsys)
+    assert report["reviewed_source_group_count"] == 1
+    row = report["reviewed_coverage"]["fixture-repository"]
+    assert row["files_count"] == row["reviewed_regions_count"] == 2
+    assert row["prose_words"] == 2
+
+
+def test_unidentified_clean_coverage_is_visible_but_not_independent_group_support(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    (tmp_path / "doc.md").write_text("Plain prose.\n")
+    entry = _entry() | {"reviewed_rules": ["V001"]}
+    del entry["source_group"]
+    report = _coverage_report(tmp_path, {"doc.md": entry}, capsys)
+    assert report["reviewed_source_group_count"] == 0
+    assert report["reviewed_coverage"]["unspecified"]["files_count"] == 1
+    assert report["metric_source_group_counts"]["density"] == 0
+
+
 def test_quality_report_records_runtime_identity_and_schema(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:

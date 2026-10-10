@@ -25,6 +25,7 @@ from benchmarks.quality_scoring import (
     load_annotations,
     metric_summary,
     prose_context,
+    reviewed_coverage,
     score_breakdowns,
     score_findings,
     total_metrics,
@@ -314,7 +315,24 @@ def format_json_report(
     )
     groups = set(annotations.source_groups.values())
     breakdowns = score_breakdowns(score, eligible, config.profile or "default")
-    reviewed_groups = set(breakdowns["source_group"]) - {"unspecified"}
+    coverage = reviewed_coverage(eligible, repo_root, set(score.metrics))
+    reviewed_groups = set(coverage) - {"unspecified"}
+    precision_groups = {
+        eligible.source_groups[item.path]
+        for item in (
+            *[prediction for _expected, prediction in score.matches],
+            *[fp.finding for fp in score.false_positives],
+        )
+        if item.path in eligible.source_groups
+    }
+    recall_groups = {
+        eligible.source_groups[item.path]
+        for item in (
+            *[target for target, _prediction in score.matches],
+            *score.false_negatives,
+        )
+        if item.path in eligible.source_groups
+    }
     span_total = sum(item.span_total for item in score.locations.values())
     exact_spans = sum(item.exact_spans for item in score.locations.values())
     metric_rows = {
@@ -395,9 +413,15 @@ def format_json_report(
             "breakdowns": breakdowns,
             "source_group_count": len(groups),
             "reviewed_source_group_count": len(reviewed_groups),
+            "reviewed_coverage": coverage,
+            "metric_source_group_counts": {
+                "precision": len(precision_groups),
+                "recall": len(recall_groups),
+                "density": len(reviewed_groups),
+            },
             "cluster_interval": None,
-            "cluster_interval_reason": "too few identified source groups; sample-only intervals"
-            if len(reviewed_groups) < 2
+            "cluster_interval_reason": "too few contributing precision or recall source groups; sample-only intervals"
+            if len(precision_groups) < 2 or len(recall_groups) < 2
             else "source-level counts provided; no cluster interval or generalization claim calculated",
             "unreviewed_count": len(score.unreviewed),
             "unsupported_count": len(score.unsupported),
@@ -459,11 +483,7 @@ def main(argv: list[str] | None = None) -> int:
             raise AnnotationError(
                 "strict independent evaluation requires source-bound version-three annotations"
             )
-        eligible = (
-            eligible_annotations(annotations, args.root, linter, rules)
-            if mode == "production"
-            else annotations
-        )
+        eligible = eligible_annotations(annotations, args.root, linter, rules)
         actual = collect_findings(
             annotations, args.root, linter=linter, min_confidence=config.min_confidence
         )

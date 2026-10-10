@@ -6,7 +6,7 @@ import hashlib
 import json
 import math
 import re
-from collections.abc import Set
+from collections.abc import Iterator, Set
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
@@ -1119,6 +1119,16 @@ def count_prose_words(
 ) -> dict[str, int]:
     """Count words once in extracted prose covered by an evaluated reviewed rule."""
     totals = {"markdown": 0, "docstring": 0, "comment": 0}
+    for _path, context, _span, _rules in _reviewed_words(
+        annotations, repo_root, rule_ids
+    ):
+        totals[context] += 1
+    return totals
+
+
+def _reviewed_words(
+    annotations: Annotations, repo_root: Path, rule_ids: set[str]
+) -> Iterator[tuple[str, str, SourceSpan, set[str]]]:
     verified = dict(annotations.verified_sources)
     for path in annotations.files:
         relative = path.resolve().relative_to(repo_root.resolve()).as_posix()
@@ -1131,8 +1141,10 @@ def count_prose_words(
             for line, text in block.lines:
                 for match in re.finditer(r"\b\w+(?:['\u2019-]\w+)*\b", text):
                     span = SourceSpan(line, match.start() + 1, line, match.end() + 1)
-                    if any(
-                        _status(
+                    reviewed_rules = {
+                        rule
+                        for rule in rule_ids
+                        if _status(
                             relative,
                             rule,
                             line,
@@ -1141,7 +1153,45 @@ def count_prose_words(
                             span,
                         )
                         == "reviewed"
-                        for rule in rule_ids
-                    ):
-                        totals[context] += 1
-    return totals
+                    }
+                    if reviewed_rules:
+                        yield relative, context, span, reviewed_rules
+
+
+def reviewed_coverage(
+    annotations: Annotations, repo_root: Path, rule_ids: set[str]
+) -> dict[str, dict[str, Any]]:
+    """Count eligible reviewed prose, including clean files, without detector events."""
+    groups: dict[str, dict[str, Any]] = {}
+    files: dict[str, set[str]] = {}
+    regions: dict[str, set[tuple[str, int]]] = {}
+    for relative, context, span, rules in _reviewed_words(
+        annotations, repo_root, rule_ids
+    ):
+        group = annotations.source_groups.get(relative, "unspecified")
+        row = groups.setdefault(
+            group,
+            {
+                "prose_words": 0,
+                "prose_words_by_context": {"markdown": 0, "docstring": 0, "comment": 0},
+            },
+        )
+        row["prose_words"] += 1
+        row["prose_words_by_context"][context] += 1
+        files.setdefault(group, set()).add(relative)
+        group_regions = regions.setdefault(group, set())
+        if annotations.scopes is None:
+            group_regions.add((relative, -1))
+        else:
+            for index, scope in enumerate(annotations.scopes):
+                if (
+                    scope.path == relative
+                    and scope.status == "reviewed"
+                    and set(scope.rules) & rules
+                    and (scope.span is None or scope.span.contains_span(span))
+                ):
+                    group_regions.add((relative, index))
+    for group, row in groups.items():
+        row["files_count"] = len(files[group])
+        row["reviewed_regions_count"] = len(regions[group])
+    return dict(sorted(groups.items()))

@@ -1757,33 +1757,33 @@ Prerequisites: existing explicit review scopes; P24 identities should be include
 in final reports. This correction precedes P23 coverage assertions and P32
 source-correlated evaluation.
 
-- [ ] P25.1 Define `reviewed_source_group_count` from eligible reviewed coverage,
+- [x] P25.1 Define `reviewed_source_group_count` from eligible reviewed coverage,
   including fully reviewed clean prose. Keep total identified groups distinct.
-- [ ] P25.2 Add a failing fixture with two source groups, each containing eligible
+- [x] P25.2 Add a failing fixture with two source groups, each containing eligible
   reviewed prose but no expected issues or emitted findings; require two reviewed
   groups, zero detections, and unavailable precision/recall denominators.
-- [ ] P25.3 Add a failing fixture mixing one clean reviewed source and one source
+- [x] P25.3 Add a failing fixture mixing one clean reviewed source and one source
   with a supported issue. Require both groups in the coverage count/table.
-- [ ] P25.4 Add tests that unreviewed, unsupported, and context-dependent regions
+- [x] P25.4 Add tests that unreviewed, unsupported, and context-dependent regions
   do not create eligible reviewed coverage for the affected rule.
-- [ ] P25.5 Add a test where only disabled or file-ignored rules were reviewed.
+- [x] P25.5 Add a test where only disabled or file-ignored rules were reviewed.
   Require policy exclusions and no eligible reviewed-group credit from those rules.
-- [ ] P25.6 Add a partial-region test: a reviewed region counts its group once,
+- [x] P25.6 Add a partial-region test: a reviewed region counts its group once,
   but only whole eligible reviewed prose words enter its density denominator.
-- [ ] P25.7 Add a test for multiple files from the same repository; count the group
+- [x] P25.7 Add a test for multiple files from the same repository; count the group
   once and retain file/region counts rather than treating files as independent groups.
-- [ ] P25.8 Add tests for unidentified groups. Keep them visible as unspecified
+- [x] P25.8 Add tests for unidentified groups. Keep them visible as unspecified
   coverage and exclude them from identified-group uncertainty claims.
-- [ ] P25.9 Derive reviewed-group coverage from eligible annotations and extracted
+- [x] P25.9 Derive reviewed-group coverage from eligible annotations and extracted
   prose, independently of TP/FP/FN events. Reuse existing review-scope predicates.
-- [ ] P25.10 Add explicit coverage rows for clean groups without fabricating
+- [x] P25.10 Add explicit coverage rows for clean groups without fabricating
   findings, true negatives, or precision/recall observations.
-- [ ] P25.11 Keep per-metric contributing groups separate from coverage groups.
+- [x] P25.11 Keep per-metric contributing groups separate from coverage groups.
   Two clean groups may support density evidence; they do not supply two nonempty
   precision denominators. Test this distinction before any cluster interval.
-- [ ] P25.12 Correct uncertainty explanations to use the relevant metric's group
+- [x] P25.12 Correct uncertainty explanations to use the relevant metric's group
   support. Update report documentation and schema assertions with the new meanings.
-- [ ] P25.13 Run the existing legacy and sparse quality fixtures. Verify unchanged
+- [x] P25.13 Run the existing legacy and sparse quality fixtures. Verify unchanged
   detection/location counts and document the corrected coverage-only deltas.
 
 Acceptance: reviewed clean material contributes coverage and density without
@@ -2632,3 +2632,14 @@ guide. Human judgments and independent holdout evaluation remain deferred.
 
 The isolated P31 snapshot passed `make check dogfood rule-quality`, preserving
 364 TP/6 FP/0 FN and all 62 supplied spans. P31.9's strict gate awaits P23.
+
+### P25 — Reviewed clean coverage
+
+Seven coverage regressions and a file-applicability regression failed before
+correction. Coverage now derives from whole eligible extracted words and review
+scopes independently of findings. Clean groups contribute files/regions/words;
+unidentified coverage remains explicit. Disabled, ignored, unsupported,
+unreviewed and inapplicable rules do not inflate eligible coverage. Precision,
+recall and density retain separate contributing-group counts and unavailable
+denominators. All 142 related evaluator/benchmark tests and the isolated full
+gate pass. Detection/location counts remain 364 TP/6 FP/0 FN with 62/62 spans.
