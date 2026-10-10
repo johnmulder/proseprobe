@@ -13,6 +13,7 @@ from benchmarks.startup_probe import run_probe as run_startup_probe
 from proseprobe.config import Config, PerFileIgnore
 from proseprobe.core.linter import Linter
 from proseprobe.parsers import markdown, python
+from proseprobe.rules.base import Issue
 from proseprobe.rules.grammar import ExcessiveHedgingRule
 from proseprobe.rules.vocab import AIVocabularyRule, WordyPhraseRule
 
@@ -209,7 +210,29 @@ def test_cold_cli_benchmark_includes_json_serialization(
         return subprocess.CompletedProcess(
             command,
             1,
-            stdout=json.dumps({"summary": {"files_checked": 1, "total_issues": 1}}),
+            stdout=json.dumps(
+                {
+                    "summary": {"files_checked": 1, "total_issues": 1},
+                    "files": [
+                        {
+                            "path": str(root / "notes.md"),
+                            "issues": [
+                                {
+                                    "rule_id": "V001",
+                                    "message": "Vocabulary",
+                                    "line": 1,
+                                    "column": 16,
+                                    "end_line": None,
+                                    "end_column": 21,
+                                    "severity": "warning",
+                                    "confidence": "high",
+                                    "suggestion": None,
+                                }
+                            ],
+                        }
+                    ],
+                }
+            ),
             stderr="",
         )
 
@@ -271,6 +294,145 @@ def test_workload_checksum_does_not_depend_on_temporary_directory(
 
     assert first.workload_sha256 == second.workload_sha256
     assert first.workload_sha256 != changed.workload_sha256
+
+
+def test_benchmark_records_runtime_and_complete_diagnostic_identity(
+    tmp_path: Path,
+) -> None:
+    result = bench_rules.run_scan_benchmark(
+        "identity",
+        {tmp_path / "doc.md": "delve\n"},
+        Config(select=["V001"]),
+        iterations=1,
+    )
+    assert len(result.runtime["source_sha256"]) == 64
+    assert len(result.diagnostics_sha256) == 64
+    assert result.schema_version == 1
+
+
+@pytest.mark.parametrize(
+    "change", ["suggestion", "endpoint", "message", "multiplicity"]
+)
+def test_diagnostic_identity_preserves_complete_observable_findings(
+    tmp_path: Path, change: str
+) -> None:
+    from dataclasses import replace
+
+    documents = {tmp_path / "doc.md": "delve\n"}
+    issue = Issue("V001", "Original message", 1, 1, end_column=6, suggestion="inspect")
+    original = bench_rules._diagnostic_identity(
+        {tmp_path / "doc.md": [issue]}, documents
+    )
+    changed = {
+        "suggestion": [replace(issue, suggestion="review")],
+        "endpoint": [replace(issue, end_column=5)],
+        "message": [replace(issue, message="Changed message")],
+        "multiplicity": [issue, issue],
+    }[change]
+    assert (
+        bench_rules._diagnostic_identity({tmp_path / "doc.md": changed}, documents)
+        != original
+    )
+
+
+def test_diagnostic_identity_is_order_and_relocation_independent(
+    tmp_path: Path,
+) -> None:
+    first = Issue("V001", "First", 1, 1, end_column=6)
+    second = Issue("V009", "Second", 2, 1, end_column=5)
+    a = tmp_path / "a/doc.md"
+    b = tmp_path / "b/doc.md"
+    assert bench_rules._diagnostic_identity(
+        {a: [first, second]}, {a: "delve\n"}
+    ) == bench_rules._diagnostic_identity({b: [second, first]}, {b: "delve\n"})
+
+
+def test_diagnostic_hashing_stays_outside_timed_scan(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    events = []
+    times = iter([0.0, 1.0])
+
+    def clock() -> float:
+        events.append("timer")
+        return next(times)
+
+    original = bench_rules._diagnostic_identity
+
+    def identity(*args, **kwargs):
+        events.append("digest")
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(bench_rules.time, "perf_counter", clock)
+    monkeypatch.setattr(bench_rules, "_diagnostic_identity", identity)
+    bench_rules.run_scan_benchmark(
+        "timing", {Path("doc.md"): "delve\n"}, Config(select=["V001"]), iterations=1
+    )
+    assert events[-3:] == ["timer", "timer", "digest"]
+
+
+@pytest.mark.parametrize("change", ["diagnostics", "workload", "newlines"])
+def test_benchmark_refuses_changed_behavior_or_equal_size_workload(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, change: str
+) -> None:
+    docs = tmp_path / "docs"
+    docs.mkdir()
+    source = docs / "doc.md"
+    source.write_text("delve\n")
+    original = Linter.check
+    calls = 0
+
+    def changing(self: Linter, paths: list[Path]):
+        nonlocal calls
+        calls += 1
+        result = original(self, paths)
+        if calls == 2:
+            if change == "newlines":
+                source.write_bytes(b"delve\r\n")
+            elif change == "workload":
+                source.write_text("plain\n")
+            else:
+                result.issues_by_file[source][0].message = "Different diagnosis"
+        return result
+
+    monkeypatch.setattr(Linter, "check", changing)
+    with pytest.raises(RuntimeError, match="changed"):
+        bench_rules.run_workspace_benchmark(
+            "change", [docs], Config(select=["V001"]), iterations=2
+        )
+
+
+def test_cold_cli_probe_records_actual_child_modules(tmp_path: Path) -> None:
+    source = tmp_path / "doc.md"
+    source.write_text("delve\n")
+    config = tmp_path / "benchmark.toml"
+    config.write_text('select = ["V001"]\n')
+    result = bench_rules.run_cli_benchmark("child", [source], config, iterations=1)
+    assert result.child_runtime["source_sha256"] == result.runtime["source_sha256"]
+    assert result.child_module_locations["cli"].endswith("cli.py")
+
+
+@pytest.mark.parametrize("change", ["runtime", "policy"])
+def test_cli_benchmark_rejects_different_child_identity_or_policy(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, change: str
+) -> None:
+    source = tmp_path / "doc.md"
+    source.write_text("delve\n")
+    config = tmp_path / "benchmark.toml"
+    config.write_text('select = ["V001"]\n')
+    original = bench_rules._probe_cli_identity
+
+    def changed_probe(path: Path):
+        probe = original(path)
+        if change == "runtime":
+            probe["runtime"]["source_sha256"] = "0" * 64
+        else:
+            probe["policy"]["min_confidence"] = "high"
+        return probe
+
+    monkeypatch.setattr(bench_rules, "_probe_cli_identity", changed_probe)
+    with pytest.raises(RuntimeError, match=r"child CLI.*differs"):
+        bench_rules.run_cli_benchmark("different-child", [source], config, iterations=1)
 
 
 @pytest.mark.parametrize("iterations", [0, -1])

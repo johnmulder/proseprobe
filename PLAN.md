@@ -1721,25 +1721,25 @@ Suggested one-line commit: `Identify the runtime source used by quality reports`
 
 ### P24C — Benchmark identity and diagnostic equivalence
 
-- [ ] P24C.1 Characterize existing workload, policy, environment, and cache-state
+- [x] P24C.1 Characterize existing workload, policy, environment, and cache-state
   metadata tests. Preserve their meanings and existing timing measurements.
-- [ ] P24C.2 Add a failing benchmark test requiring the runtime identity from P24B
+- [x] P24C.2 Add a failing benchmark test requiring the runtime identity from P24B
   alongside workload SHA-256, Python/platform, effective policy, and cache state.
-- [ ] P24C.3 Add a canonical digest of complete diagnostics, including relative
+- [x] P24C.3 Add a canonical digest of complete diagnostics, including relative
   path, rule, severity, confidence, full span, message, and suggestion. Test that
   equal finding counts with different findings produce different digests.
-- [ ] P24C.4 Test deterministic ordering and relocation independence of the digest;
+- [x] P24C.4 Test deterministic ordering and relocation independence of the digest;
   a changed suggestion or endpoint must change it. Preserve multiplicity.
-- [ ] P24C.5 Compute diagnostic identity outside timed scan intervals; add a test
+- [x] P24C.5 Compute diagnostic identity outside timed scan intervals; add a test
   around the timing boundary instead of asserting machine-dependent durations.
-- [ ] P24C.6 For new-process CLI measurements, verify the child implementation and
+- [x] P24C.6 For new-process CLI measurements, verify the child implementation and
   policy identity rather than assuming the parent interpreter loaded the same code.
   Use an untimed child probe and actual module locations; preserve production
   CLI output and avoid adding a public provenance command solely for benchmarking.
-- [ ] P24C.7 Test a selected workload or diagnostic result changing between
+- [x] P24C.7 Test a selected workload or diagnostic result changing between
   iterations. Fail the comparison clearly rather than reporting a speed improvement
   for a different workload or changed observable behavior.
-- [ ] P24C.8 Extend benchmark JSON and documentation with the identity fields and
+- [x] P24C.8 Extend benchmark JSON and documentation with the identity fields and
   the comparison requirement: equal workload/policy/diagnostics and comparable
   environment before attributing a timing delta to an implementation change.
 
@@ -2579,3 +2579,14 @@ near-duplicate and case/whitespace-normalized duplicate validation. This does
 not claim arbitrary semantic duplicate detection. All 118 related corpus/scorer
 tests and the isolated `make check dogfood rule-quality` gate pass. Results
 remain 363 TP/6 FP/0 FN. Acquisition and the original freeze are unchanged.
+
+### P24C — Benchmark implementation and behavior identity
+
+Ten identity/probe regressions plus a raw CRLF workload regression failed before
+correction. Benchmark records now bind actual source bytes, imported runtime,
+policy and complete diagnostics; repeated changes fail clearly. The canonical
+diagnostic digest retains multiplicity and is order/relocation independent.
+Tests prove hashing stays outside timed scan intervals. An untimed child probe
+verifies new-process imports and policy without changing production output.
+All 132 related benchmark/evaluation tests and the isolated full gate pass.
+The existing JSON list remains readable, with a per-result schema version.

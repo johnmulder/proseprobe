@@ -168,3 +168,19 @@ alerts and two low-confidence evidence-association alerts remain visible in
 the regression report. The [disposition ledger](assessment-disposition.md)
 records all twelve original cases and distinguishes caller handling from
 raw detection. These counts describe the sample, not a population estimate.
+
+## Benchmark comparisons
+
+Benchmark JSON retains its list envelope; each result now declares schema
+version 1. Workload SHA-256 covers exact selected UTF-8 bytes and relative names.
+Runtime identity uses the same imported-source digest as quality reports. The
+complete diagnostic digest preserves paths, rule IDs, severity, confidence,
+exclusive spans, messages, suggestions and multiplicity. Digest computation
+occurs outside timed scan intervals. Repeated source or diagnostic changes fail
+the measurement rather than producing a comparison across different behavior.
+
+New-process CLI runs record an untimed child import/policy probe and actual
+module locations. Compare timing results only with equal workload, effective
+policy and diagnostic identities under comparable environments and cache
+states. An implementation change may alter the runtime digest; that identity
+must be recorded for each side of the comparison. Ordinary CLI output is unchanged.

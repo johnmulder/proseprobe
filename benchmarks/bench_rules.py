@@ -23,6 +23,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
+from benchmarks.evaluation_identity import runtime_identity
 from proseprobe import __version__
 from proseprobe.config import Config, load_config
 from proseprobe.core.policy import filter_by_confidence, prepare_scan
@@ -31,7 +32,7 @@ from proseprobe.parsers.prose import _source_lines
 from proseprobe.parsers.python import clear_parser_cache as clear_python_cache
 from proseprobe.profiles import PROFILES
 from proseprobe.rules import get_all_rules
-from proseprobe.rules.base import Rule
+from proseprobe.rules.base import Issue, Rule
 
 
 @dataclass
@@ -54,6 +55,11 @@ class BenchmarkResult:
     workload_sha256: str = ""
     policy: dict[str, Any] = field(default_factory=dict)
     environment: dict[str, Any] = field(default_factory=dict)
+    runtime: dict[str, Any] = field(default_factory=dict)
+    diagnostics_sha256: str = ""
+    child_runtime: dict[str, Any] = field(default_factory=dict)
+    child_module_locations: dict[str, str] = field(default_factory=dict)
+    schema_version: int = 1
 
 
 def clear_parser_caches() -> None:
@@ -63,11 +69,60 @@ def clear_parser_caches() -> None:
     _source_lines.cache_clear()
 
 
+def _workload_root(documents: Mapping[Path, str]) -> Path:
+    return (
+        Path(os.path.commonpath([str(path.absolute().parent) for path in documents]))
+        if documents
+        else Path.cwd()
+    )
+
+
+def _diagnostic_identity(
+    findings: Mapping[Path, list[Any]], documents: Mapping[Path, str]
+) -> str:
+    root = _workload_root(documents)
+    selected = {path.absolute() for path in documents}
+    records = []
+    for path, issues in findings.items():
+        if path.absolute() not in selected:
+            raise RuntimeError("selected workload changed during the benchmark")
+        relative = path.absolute().relative_to(root).as_posix()
+        for issue in issues:
+            if isinstance(issue, Issue):
+                record = asdict(issue)
+                record["severity"] = issue.severity.value
+                record["confidence"] = issue.confidence.value
+            else:
+                record = dict(issue)
+                if (
+                    not {
+                        "rule_id",
+                        "message",
+                        "line",
+                        "column",
+                        "end_line",
+                        "end_column",
+                        "severity",
+                        "confidence",
+                        "suggestion",
+                    }
+                    <= record.keys()
+                ):
+                    raise RuntimeError(
+                        "CLI diagnostics do not contain complete issue records"
+                    )
+            records.append({"path": relative, **record})
+    encoded = sorted(
+        json.dumps(record, sort_keys=True, ensure_ascii=False) for record in records
+    )
+    return hashlib.sha256(json.dumps(encoded, ensure_ascii=False).encode()).hexdigest()
+
+
 def _workload_identity(documents: Mapping[Path, str]) -> tuple[int, str]:
     digest = hashlib.sha256()
     if not documents:
         return 0, digest.hexdigest()
-    root = Path(os.path.commonpath([str(path.absolute().parent) for path in documents]))
+    root = _workload_root(documents)
     byte_count = 0
     for path in sorted(
         documents, key=lambda item: str(item.absolute().relative_to(root))
@@ -101,13 +156,14 @@ def _measure(
     name: str,
     documents: Mapping[Path, str],
     rules: list[Rule],
-    scan: Callable[[], tuple[int, int]],
+    scan: Callable[[], tuple[int, int, Mapping[Path, list[Any]]]],
     iterations: int,
     measurement: str,
     cache_state: str,
     policy: dict[str, Any],
     *,
     warmup: bool = True,
+    current_documents: Callable[[], Mapping[Path, str]] | None = None,
 ) -> BenchmarkResult:
     if iterations <= 0:
         raise ValueError("iterations must be positive")
@@ -116,20 +172,44 @@ def _measure(
     if not warmup and cache_state != "new process":
         raise ValueError("cold CLI benchmarks require a new process")
     content_size, checksum = _workload_identity(documents)
+    runtime = runtime_identity()
+    diagnostic_hash = None
+
+    def verify_workload() -> None:
+        if _workload_identity(
+            current_documents() if current_documents else documents
+        ) != (content_size, checksum):
+            raise RuntimeError("selected workload changed during the benchmark")
+
     if warmup:
         clear_parser_caches()
-        scan()
+        verify_workload()
+        _files, _count, records = scan()
+        verify_workload()
+        diagnostic_hash = _diagnostic_identity(records, documents)
     times: list[float] = []
     issues_found = 0
     files_checked = 0
     for _ in range(iterations):
         if cache_state == "cleared":
             clear_parser_caches()
+        verify_workload()
         start = time.perf_counter()
-        files_checked, issues_found = scan()
+        files_checked, issues_found, records = scan()
         times.append(time.perf_counter() - start)
+        verify_workload()
+        current_hash = _diagnostic_identity(records, documents)
+        if issues_found != sum(len(issues) for issues in records.values()):
+            raise RuntimeError(
+                "reported finding count differs from complete diagnostics"
+            )
+        if diagnostic_hash is not None and current_hash != diagnostic_hash:
+            raise RuntimeError("observable diagnostics changed during the benchmark")
+        diagnostic_hash = current_hash
         if files_checked != len(documents):
             raise RuntimeError("selected workload changed during the benchmark")
+    if runtime_identity()["source_sha256"] != runtime["source_sha256"]:
+        raise RuntimeError("runtime implementation changed during the benchmark")
     duration = statistics.median(times)
     return BenchmarkResult(
         name=name,
@@ -148,6 +228,8 @@ def _measure(
         workload_sha256=checksum,
         policy=policy,
         environment=_environment(),
+        runtime=runtime,
+        diagnostics_sha256=diagnostic_hash or "",
     )
 
 
@@ -239,9 +321,9 @@ def run_benchmark(
     """Measure direct calls to all rules, preserving the historical stress workload."""
     rules = get_all_rules()
 
-    def scan() -> tuple[int, int]:
+    def scan() -> tuple[int, int, Mapping[Path, list[Issue]]]:
         issues = [issue for rule in rules for issue in rule.check(content, filename)]
-        return 1, len(issues)
+        return 1, len(issues), {Path(filename): issues}
 
     return _measure(
         name,
@@ -275,15 +357,17 @@ def run_scan_benchmark(
     """Measure in-memory checks and confidence filtering using production policy."""
     config, linter, rules = prepare_scan(config or Config())
 
-    def scan() -> tuple[int, int]:
+    def scan() -> tuple[int, int, Mapping[Path, list[Issue]]]:
         issues = {
             path: findings
             for path, content in documents.items()
             if (findings := linter.check_content(content, path))
         }
-        return len(documents), sum(
-            len(findings)
-            for findings in filter_by_confidence(issues, config.min_confidence).values()
+        filtered = filter_by_confidence(issues, config.min_confidence)
+        return (
+            len(documents),
+            sum(len(findings) for findings in filtered.values()),
+            filtered,
         )
 
     return _measure(
@@ -307,17 +391,22 @@ def run_workspace_benchmark(
 ) -> BenchmarkResult:
     """Measure real discovery, file reading, extraction, rules, and filtering."""
     config, linter, rules = prepare_scan(config or Config())
-    documents = {
-        path: path.read_text(encoding="utf-8") for path in linter.discover_files(paths)
-    }
 
-    def scan() -> tuple[int, int]:
+    def current_documents() -> dict[Path, str]:
+        return {
+            path: path.read_bytes().decode("utf-8")
+            for path in linter.discover_files(paths)
+        }
+
+    documents = current_documents()
+
+    def scan() -> tuple[int, int, Mapping[Path, list[Issue]]]:
         results = linter.check(paths)
-        return results.files_checked, sum(
-            len(findings)
-            for findings in filter_by_confidence(
-                results.issues_by_file, config.min_confidence
-            ).values()
+        filtered = filter_by_confidence(results.issues_by_file, config.min_confidence)
+        return (
+            results.files_checked,
+            sum(len(findings) for findings in filtered.values()),
+            filtered,
         )
 
     return _measure(
@@ -329,7 +418,45 @@ def run_workspace_benchmark(
         "directory discovery/read/production scan",
         cache_state,
         _policy_metadata(config),
+        current_documents=current_documents,
     )
+
+
+def _probe_cli_identity(config_path: Path) -> dict[str, Any]:
+    script = "\n".join(
+        [
+            "import importlib.util, json, sys",
+            "from pathlib import Path",
+            "from dataclasses import asdict",
+            "import proseprobe.cli as cli",
+            "spec = importlib.util.spec_from_file_location('benchmark_identity', sys.argv[2])",
+            "identity = importlib.util.module_from_spec(spec)",
+            "spec.loader.exec_module(identity)",
+            "from proseprobe.config import load_config",
+            "from proseprobe.core.policy import prepare_scan",
+            "config, _, _ = prepare_scan(load_config(Path(sys.argv[1])))",
+            "policy = asdict(config); policy.pop('source_path')",
+            "print(json.dumps({'runtime': identity.runtime_identity(), 'policy': policy, 'module_locations': {'cli': cli.__file__, 'evaluator': identity.__file__}}))",
+        ]
+    )
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            script,
+            str(config_path),
+            str(Path(__file__).with_name("evaluation_identity.py")),
+        ],
+        cwd=config_path.parent,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode:
+        raise RuntimeError(
+            f"CLI identity probe failed ({result.returncode}): {result.stderr}"
+        )
+    return json.loads(result.stdout)
 
 
 def run_cli_benchmark(
@@ -342,9 +469,21 @@ def run_cli_benchmark(
     config_path = config_path.absolute()
     paths = [path.absolute() for path in paths]
     config, linter, rules = prepare_scan(load_config(config_path))
-    documents = {
-        path: path.read_text(encoding="utf-8") for path in linter.discover_files(paths)
-    }
+
+    def current_documents() -> dict[Path, str]:
+        return {
+            path: path.read_bytes().decode("utf-8")
+            for path in linter.discover_files(paths)
+        }
+
+    documents = current_documents()
+    probe = _probe_cli_identity(config_path)
+    if probe["runtime"]["source_sha256"] != runtime_identity()["source_sha256"]:
+        raise RuntimeError(
+            "child CLI implementation differs from parent benchmark implementation"
+        )
+    if probe["policy"] != _policy_metadata(config):
+        raise RuntimeError("child CLI policy differs from parent benchmark policy")
     command = [
         sys.executable,
         "-m",
@@ -357,7 +496,7 @@ def run_cli_benchmark(
         "json",
     ]
 
-    def scan() -> tuple[int, int]:
+    def scan() -> tuple[int, int, Mapping[Path, list[dict[str, Any]]]]:
         result = subprocess.run(
             command,
             cwd=config_path.parent,
@@ -369,10 +508,15 @@ def run_cli_benchmark(
             raise RuntimeError(
                 f"CLI scan failed ({result.returncode}): {result.stderr}"
             )
-        summary = json.loads(result.stdout)["summary"]
-        return summary["files_checked"], summary["total_issues"]
+        payload = json.loads(result.stdout)
+        summary = payload["summary"]
+        return (
+            summary["files_checked"],
+            summary["total_issues"],
+            {Path(entry["path"]): entry["issues"] for entry in payload["files"]},
+        )
 
-    return _measure(
+    result = _measure(
         name,
         documents,
         _selected_rules(config, rules),
@@ -382,7 +526,19 @@ def run_cli_benchmark(
         "new process",
         _policy_metadata(config),
         warmup=False,
+        current_documents=current_documents,
     )
+    final_probe = _probe_cli_identity(config_path)
+    if (
+        final_probe["runtime"]["source_sha256"] != probe["runtime"]["source_sha256"]
+        or final_probe["policy"] != probe["policy"]
+    ):
+        raise RuntimeError(
+            "child implementation or policy changed during the benchmark"
+        )
+    result.child_runtime = probe["runtime"]
+    result.child_module_locations = probe["module_locations"]
+    return result
 
 
 def write_workspace(
@@ -517,7 +673,7 @@ def main() -> None:
             for name, paths in workspaces:
                 _, linter, _ = prepare_scan(config)
                 documents = {
-                    path: path.read_text(encoding="utf-8")
+                    path: path.read_bytes().decode("utf-8")
                     for path in linter.discover_files(paths)
                 }
                 for cache_state in ["warm", "cleared"]:
