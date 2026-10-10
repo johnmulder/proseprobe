@@ -1,8 +1,9 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-10. Independent human evaluation remains deferred by user
-request. Resume that work only when the user requests it and reviewers are
-available. Remote CI and conditional release checks remain separate gates.
+Updated: 2026-10-10. Human development review has resumed by user request.
+Each interactive reading is limited to 80 lines of 80 characters, including
+instructions and questions. Labels, paired reviews and effectiveness reports
+retain their prerequisites; reserved holdout material remains protected.
 Previous tasks and execution records are preserved in Git history at `8547182`.
 
 ## Working rules
@@ -24,14 +25,19 @@ Previous tasks and execution records are preserved in Git history at `8547182`.
 
 ## Remote verification
 
+The earlier implementation candidate `8547182` passed the
+[Ubuntu CI run](https://github.com/johnmulder/proseprobe/actions/runs/38082072918)
+on 2026-10-10. Its three Python jobs, documentation and build passed. The current
+local cleanup commit and new review-session changes require their own exact-SHA
+evidence; no push is included in this session yet.
+
 - [ ] P33.9 Obtain passing Ubuntu Python 3.11–3.13 CI results for the exact
   candidate commit. Record its SHA and result links; local runs do not satisfy
   this gate. This also covers the earlier P17C.2 requirement.
 
-## Independent annotation — deferred
+## Independent annotation — active
 
-Prerequisites: user resumes evaluation and eligible human reviewers are
-available under the recorded source terms. Follow the existing
+Prerequisites: real reviewer provenance and permitted source access. Follow the existing
 [blind review protocol](quality/external/review-protocol.md) and
 [source-bound annotation guide](quality/README.md).
 
@@ -61,7 +67,7 @@ Python contracts require complete, bound context; function-only CodeSearchNet
 samples cannot supply it. Unsupported renderers, templates and unresolved
 contexts remain unsupported. CommonMark conformance supplies syntax evidence.
 
-## Suggestion and revision review — deferred
+## Suggestion and revision review — awaiting blind labels
 
 Prerequisite: initial blind annotations are frozen. Use explicit reviewed
 correspondence and the existing usefulness/paired-report schemas.
@@ -80,7 +86,7 @@ correspondence and the existing usefulness/paired-report schemas.
   denominators. Native edit categories, fewer warnings and passing rescans do
   not establish semantic quality.
 
-## Development evaluation and calibration — deferred
+## Development evaluation and calibration — awaiting accepted labels
 
 Prerequisite: accepted independent development labels and supported contexts.
 Holdout prose and predictions stay hidden from implementers during development.
@@ -109,7 +115,7 @@ Holdout prose and predictions stay hidden from implementers during development.
   profile change from development evidence and record the rationale. Promotion
   is optional; insufficient evidence leaves rules experimental.
 
-## Reserved holdout evaluation — deferred
+## Reserved holdout evaluation — awaiting candidate freeze
 
 Prerequisites: development review and candidate decisions are frozen. Follow the
 existing protocol's source-group support and uncertainty requirements.
@@ -145,3 +151,18 @@ Pursue only if access and primary reuse terms permit the intended evaluation.
 - [ ] P33.14 When a release is explicitly requested, complete every gate in
   [RELEASE_BLOCKERS.md](RELEASE_BLOCKERS.md) for that exact release commit,
   including package checks, legal/publication identity and trusted publishing.
+
+
+## Current review session
+
+Session: `quality/reviews/2026-10-10-interactive/selection.json`.
+Development-only source order is seeded independently of detector output.
+The first cohort uses licensed GitHub Docs prose and three declared claim rules.
+Syntax-only eligibility screening excludes sources with no exposed prose.
+Reviewer identity and prior prediction exposure are requested. No human answers
+or accepted coverage exist yet; a second independent reviewer is not assigned.
+R001 was submitted with exact source/contract/rendered-text bindings and a literal
+row map. Its complete question fits 30 lines of at most 80 characters.
+The bounded formatter passed 28 failing-first synthetic cases and 158 related
+tests. Its first reading awaits the user response; no natural predictions were generated.
+`make check dogfood rule-quality-regression` passes in the current setup.

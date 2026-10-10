@@ -1,0 +1,130 @@
+{
+  "cached_text_path": "downloads/evaluation/blind/interactive-2026-10-10-v1/R001.txt",
+  "contracts_sha256": "44574c524e1f13596b150e5e38f44f47bc4690abced12be954e34c810d5da657",
+  "format": "markdown",
+  "packet_path": "originals/0000.md",
+  "packet_root": "downloads/evaluation/blind/interactive-2026-10-10-v1",
+  "pair_group": "github/docs:content/rest/codespaces/repository-secrets.md",
+  "phase": "initial-blind",
+  "reading_id": "R001",
+  "region": {
+    "column": 1,
+    "end_column": 330,
+    "end_line": 21,
+    "line": 19
+  },
+  "rendered_sha256": "b5eaf72d9b75f15a51689fd4d1ede993930a9b6b27ae6205997647bd81be85ee",
+  "rendered_text": "Blind reading R001: GitHub Docs, development split.\nAttribution: GitHub, Inc. and GitHub Docs contributors; CC BY 4.0.\nReview only the displayed source region for these three contracts:\nG038: comparative claims should identify their comparison target.\nV015: claims such as best/fastest should identify a comparison scope.\nV016: absolute reliability/security claims need stated tested bounds.\nThis is literal source; template variables have not been expanded.\nLong physical lines continue under their original line/column labels.\nRules: G038, V015, V016\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL19 C  1- 59 | ## About {% data variables.product.prodname_codespaces %} \nL19 C 59- 77 | repository secrets\nL20 C  1-  1 | \nL21 C  1- 65 | You can create, list, and delete secrets (such as access tokens \nL21 C 65-127 | for cloud services) for repositories that the user has access \nL21 C127-184 | to. These secrets are made available to the codespace at \nL21 C184-219 | runtime. For more information, see \nL21 C219-284 | [AUTOTITLE](/codespaces/managing-your-codespaces/managing-your-ac\nL21 C284-330 | count-specific-secrets-for-github-codespaces).\n```\n\nList any violations of these contracts, quoting the text and your reason.\nUse the L/C labels if useful. Also flag any missing context.\nIf none apply, say: \"No issues for all three rules in this region.\"\nThat confirms review of this passage for these rules only.\nIf you cannot judge a rule, name it and say why; it stays unresolved.\nKeep suggestions or issues outside these three rules separate.\n",
+  "review_status": "submitted to user; response pending",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 59,
+      "end_line": 19,
+      "line": 19,
+      "reading_line": 14,
+      "source_line_ending": "",
+      "text": "## About {% data variables.product.prodname_codespaces %} "
+    },
+    {
+      "column": 59,
+      "end_column": 77,
+      "end_line": 19,
+      "line": 19,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "repository secrets"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 20,
+      "line": 20,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 21,
+      "line": 21,
+      "reading_line": 17,
+      "source_line_ending": "",
+      "text": "You can create, list, and delete secrets (such as access tokens "
+    },
+    {
+      "column": 65,
+      "end_column": 127,
+      "end_line": 21,
+      "line": 21,
+      "reading_line": 18,
+      "source_line_ending": "",
+      "text": "for cloud services) for repositories that the user has access "
+    },
+    {
+      "column": 127,
+      "end_column": 184,
+      "end_line": 21,
+      "line": 21,
+      "reading_line": 19,
+      "source_line_ending": "",
+      "text": "to. These secrets are made available to the codespace at "
+    },
+    {
+      "column": 184,
+      "end_column": 219,
+      "end_line": 21,
+      "line": 21,
+      "reading_line": 20,
+      "source_line_ending": "",
+      "text": "runtime. For more information, see "
+    },
+    {
+      "column": 219,
+      "end_column": 284,
+      "end_line": 21,
+      "line": 21,
+      "reading_line": 21,
+      "source_line_ending": "",
+      "text": "[AUTOTITLE](/codespaces/managing-your-codespaces/managing-your-ac"
+    },
+    {
+      "column": 284,
+      "end_column": 330,
+      "end_line": 21,
+      "line": 21,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "count-specific-secrets-for-github-codespaces)."
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "V015",
+    "V016"
+  ],
+  "sha256": "6e7b819515fb72b89f1e16a3c7c7b31039b684b9f4adb8bed0c618a7806ec186",
+  "source_group": "github/docs",
+  "source_id": "github/docs:content/rest/codespaces/repository-secrets.md",
+  "source_provenance": {
+    "attribution": "GitHub, Inc. and GitHub Docs contributors",
+    "format": "markdown",
+    "id": "github/docs:content/rest/codespaces/repository-secrets.md",
+    "license": "CC-BY-4.0",
+    "license_url": "https://github.com/github/docs/blob/be38ec5d78e24172587e61b3c6ff40ace1865c71/LICENSE",
+    "locator": "content/rest/codespaces/repository-secrets.md",
+    "native_labels": "none",
+    "pair_group": "github/docs:content/rest/codespaces/repository-secrets.md",
+    "path": "markdown/github/docs/content/rest/codespaces/repository-secrets.md",
+    "review_status": "unreviewed",
+    "revision": "be38ec5d78e24172587e61b3c6ff40ace1865c71",
+    "sha256": "6e7b819515fb72b89f1e16a3c7c7b31039b684b9f4adb8bed0c618a7806ec186",
+    "source_group": "github/docs",
+    "split": "development",
+    "transformation": "none; full raw Markdown document",
+    "url": "https://raw.githubusercontent.com/github/docs/be38ec5d78e24172587e61b3c6ff40ace1865c71/content/rest/codespaces/repository-secrets.md"
+  },
+  "split": "development",
+  "version": 1
+}
