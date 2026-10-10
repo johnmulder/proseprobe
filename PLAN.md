@@ -1806,27 +1806,27 @@ A source string mentioning a raise statement must not be classified as executabl
 placeholder code. Preserve C004's existing comment-marker behavior. Use only
 `ast` and `tokenize`; never import or execute analyzed source.
 
-- [ ] P26.1 Characterize current C004 comment markers, concrete raises and
+- [x] P26.1 Characterize current C004 comment markers, concrete raises and
   inline `pass`/ellipsis placeholders, including issue spans and ordering.
   Record the narrow legitimate abstract/stub forms the new guard will recognize.
-- [ ] P26.2 Add a failing test for the exact string regression, plus a docstring,
+- [x] P26.2 Add a failing test for the exact string regression, plus a docstring,
   ordinary comment, multiline string and f-string literal mentioning the same
   raise text. Confirm the failures come from the code-only path.
-- [ ] P26.3 Replace code-only raw line matching with executable `ast.Raise`
+- [x] P26.3 Replace code-only raw line matching with executable `ast.Raise`
   candidates calling the supported `NotImplementedError` form. Reuse cached
   AST/token data through the smallest parser access method required by C004.
-- [ ] P26.4 Run the string/comment negatives and concrete-raise positives.
+- [x] P26.4 Run the string/comment negatives and concrete-raise positives.
   Preserve the existing message kind and diagnostic source text for supported
   cases; document any intentional span correction.
-- [ ] P26.5 Add failing multiline and Unicode raise-span cases, with a candidate
+- [x] P26.5 Add failing multiline and Unicode raise-span cases, with a candidate
   after a semicolon and multiple executable candidates on one line. Decide
   diagnostic multiplicity explicitly from the current C004 contract.
-- [ ] P26.6 Map AST UTF-8 columns through the existing P02 conversion; select
+- [x] P26.6 Map AST UTF-8 columns through the existing P02 conversion; select
   physical tokens for the actual raise/call span. Run parser and C004 span tests.
-- [ ] P26.7 Add failing inline negatives where `pass` or `...` occurs inside a
+- [x] P26.7 Add failing inline negatives where `pass` or `...` occurs inside a
   string before `# TODO` or `# placeholder`; add real `pass` and literal ellipsis
   statement positives with the same comments.
-- [ ] P26.8 Require the corresponding executable statement before classifying
+- [x] P26.8 Require the corresponding executable statement before classifying
   its inline comment. Keep comment-only marker recognition unchanged. Run this
   slice's positives and negatives.
 - [ ] P26.9 Add paired tests for statically recognizable `abc.abstractmethod`
@@ -1841,7 +1841,7 @@ placeholder code. Preserve C004's existing comment-marker behavior. Use only
 - [ ] P26.12 Add the supported stub guard without broad name-based
   exclusions; leave unresolved aliases and class bases computed at runtime unsupported.
   Run the stub and ordinary-placeholder matrix.
-- [ ] P26.13 Add invalid-Python/tokenization tests. Assert that actual comments
+- [x] P26.13 Add invalid-Python/tokenization tests. Assert that actual comments
   remain available but C004 does not guess executable raises from malformed
   source. Add only the fallback needed by the documented contract.
 - [ ] P26.14 Add focused CLI and corpus regressions for the string false positive
@@ -2523,3 +2523,19 @@ deletion/recreation, a stat race and two controlled CLI iterations. All 363
 related CLI/linter/configuration/baseline tests and the isolated full gate pass.
 The unchanged polling limitation for identical stamps without observed deletion
 is documented. No content hashing, watcher dependency or timing assertion was added.
+
+### P26 — Syntax-backed executable placeholders
+
+Eight initial regressions failed for raise text inside strings/comments, inline
+string tokens and a multiline call. Further failures covered a comment attached
+to a later real statement and inconsistent indentation during tokenization.
+C004 now uses the cached AST for executable raises and the nearest inline
+statement. The obsolete raw raise regex was removed. Shared AST access and
+node spans reuse the existing UTF-8-to-character conversion. The original
+one-code-finding-per-line policy and comment-marker behavior remain intact.
+Invalid syntax retains recognized comments without guessing executable code.
+
+All 207 focused code/parser tests and the isolated `make check dogfood
+rule-quality` snapshot pass, with unchanged corpus detections. Literal examples,
+Unicode, multiline calls, semicolons and source endpoints are covered. Narrow
+abstract/stub guards and final CLI/corpus integration remain open.

@@ -39,11 +39,6 @@ AI_PLACEHOLDER_COMMENT_PATTERNS: Final[list[tuple[str, str]]] = [
     (r"#\s*TODO:\s*Complete this", "generic placeholder"),
 ]
 
-# Code-only placeholder patterns
-AI_PLACEHOLDER_CODE_PATTERNS: Final[list[tuple[str, str]]] = [
-    (r"raise NotImplementedError\([\"'].*[\"']\)", "template error"),
-]
-
 # Inline code + comment placeholder patterns
 # Format: (code_pattern, comment_pattern, kind_description)
 AI_PLACEHOLDER_INLINE_PATTERNS: Final[list[tuple[str, str, str]]] = [

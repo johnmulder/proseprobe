@@ -135,6 +135,23 @@ class PythonParser:
         self._docstrings = sorted(docstrings, key=lambda doc: doc.line)
         return self._docstrings
 
+    def get_syntax_tree(self) -> ast.Module | None:
+        """Return the cached syntax tree without executing source."""
+        return self._tree if self.parse() else None
+
+    def get_node_span(self, node: ast.stmt | ast.expr) -> tuple[int, int, int, int]:
+        """Map an AST node to one-based character columns and exclusive end."""
+        end_line = node.end_lineno or node.lineno
+        end_byte = node.end_col_offset
+        return (
+            node.lineno,
+            self._character_offset(node.lineno, node.col_offset) + 1,
+            end_line,
+            self._character_offset(end_line, end_byte) + 1
+            if end_byte is not None
+            else len(self._lines[end_line - 1]) + 1,
+        )
+
     @staticmethod
     def _docstring_owner(
         node: ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef,
@@ -327,7 +344,7 @@ class PythonParser:
         try:
             for token in tokenize.generate_tokens(io.StringIO(self.content).readline):
                 tokens.append(token)
-        except (tokenize.TokenError, UnicodeDecodeError):
+        except (tokenize.TokenError, UnicodeDecodeError, IndentationError):
             pass
         self._tokens = tokens
         return tokens

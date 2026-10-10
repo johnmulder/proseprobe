@@ -1,5 +1,7 @@
 """Tests for Python parser."""
 
+import ast
+
 import pytest
 
 from proseprobe.parsers.prose import (
@@ -20,6 +22,31 @@ from proseprobe.rules.vocab import AIVocabularyRule
 
 class TestPythonParser:
     """Tests for Python source parser."""
+
+    def test_syntax_consumers_share_the_cached_tree(self) -> None:
+        parser = PythonParser("raise NotImplementedError('later')")
+
+        tree = parser.get_syntax_tree()
+
+        assert isinstance(tree, ast.Module)
+        assert parser.get_syntax_tree() is tree
+        assert isinstance(tree.body[0], ast.Raise)
+
+    def test_statement_span_uses_character_columns(self) -> None:
+        source = 'résumé = 1; raise NotImplementedError("later")'
+        parser = PythonParser(source)
+        tree = parser.get_syntax_tree()
+        assert tree is not None
+
+        assert parser.get_node_span(tree.body[1]) == (
+            1,
+            source.index("raise") + 1,
+            1,
+            len(source) + 1,
+        )
+
+    def test_syntax_consumers_skip_invalid_source(self) -> None:
+        assert PythonParser("def broken(").get_syntax_tree() is None
 
     def test_parse_valid_python(self) -> None:
         content = '''

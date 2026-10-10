@@ -7,7 +7,6 @@ from collections.abc import Iterator
 from typing import ClassVar
 
 from proseprobe.data.code_patterns import (
-    AI_PLACEHOLDER_CODE_PATTERNS,
     AI_PLACEHOLDER_COMMENT_PATTERNS,
     AI_PLACEHOLDER_INLINE_PATTERNS,
     COLLABORATIVE_COMMENT_PATTERNS,
@@ -175,6 +174,22 @@ class AIPlaceholdersRule(Rule):
         comments = parser.get_comments()
 
         # Comment-only placeholders
+        tree = parser.get_syntax_tree()
+        statements = (
+            [node for node in ast.walk(tree) if isinstance(node, ast.stmt)]
+            if tree is not None
+            else []
+        )
+        last_statements: dict[int, ast.stmt] = {}
+        for node in statements:
+            if (node.end_lineno or node.lineno) != node.lineno:
+                continue
+            previous = last_statements.get(node.lineno)
+            if previous is None or (
+                node.end_col_offset or node.col_offset,
+                node.col_offset,
+            ) > (previous.end_col_offset or previous.col_offset, previous.col_offset):
+                last_statements[node.lineno] = node
         for comment in comments:
             source_comment = lines[comment.line - 1][comment.column - 1 :]
             matched_comment = False
@@ -198,11 +213,25 @@ class AIPlaceholdersRule(Rule):
             if matched_comment:
                 continue
             line_text = lines[comment.line - 1]
-            before = line_text[: comment.column - 1]
             source_comment = line_text[comment.column - 1 :]
+            statement = last_statements.get(comment.line)
+            code = ""
+            if (
+                statement is not None
+                and parser.get_node_span(statement)[3] <= comment.column
+                and (
+                    isinstance(statement, ast.Pass)
+                    or (
+                        isinstance(statement, ast.Expr)
+                        and isinstance(statement.value, ast.Constant)
+                        and statement.value.value is Ellipsis
+                    )
+                )
+            ):
+                code = ast.get_source_segment(content, statement) or ""
             for code_pattern, todo_pattern, kind in AI_PLACEHOLDER_INLINE_PATTERNS:
                 todo_match = re.search(todo_pattern, source_comment, re.IGNORECASE)
-                if re.search(code_pattern, before) and todo_match is not None:
+                if re.search(code_pattern, code) and todo_match is not None:
                     issues.append(
                         Issue(
                             rule_id=self.id,
@@ -216,21 +245,33 @@ class AIPlaceholdersRule(Rule):
                     break
 
         # Code-only placeholders
-        for line_num, line in enumerate(lines, start=1):
-            for pattern, kind in AI_PLACEHOLDER_CODE_PATTERNS:
-                match = re.search(pattern, line, re.IGNORECASE)
-                if match:
-                    issues.append(
-                        Issue(
-                            rule_id=self.id,
-                            message=f"Formulaic placeholder: {kind}",
-                            line=line_num,
-                            column=match.start() + 1,
-                            end_column=match.end() + 1,
-                            severity=self.severity,
-                        )
-                    )
-                    break
+        reported_lines: set[int] = set()
+        for node in sorted(statements, key=lambda item: (item.lineno, item.col_offset)):
+            if (
+                not isinstance(node, ast.Raise)
+                or not isinstance(node.exc, ast.Call)
+                or not isinstance(node.exc.func, ast.Name)
+                or node.exc.func.id != "NotImplementedError"
+                or not node.exc.args
+                or not isinstance(node.exc.args[0], ast.Constant)
+                or not isinstance(node.exc.args[0].value, str)
+                or node.lineno in reported_lines
+            ):
+                continue
+            start_line, start_column, _, _ = parser.get_node_span(node)
+            end_line, end_column = parser.get_node_span(node.exc)[2:]
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message="Formulaic placeholder: template error",
+                    line=start_line,
+                    column=start_column,
+                    end_line=end_line if end_line != start_line else None,
+                    end_column=end_column,
+                    severity=self.severity,
+                )
+            )
+            reported_lines.add(node.lineno)
 
         return issues
 

@@ -2050,6 +2050,12 @@ def helper():
 Detects context-free `TODO`, `FIXME`, and `XXX` comments, formulaic TODO
 patterns, and placeholder code. Specific maintenance comments remain valid.
 
+Code-only findings require a parsed raise statement; strings and comments that
+mention that statement remain valid. Inline `pass` and ellipsis checks require
+the actual statement beside the comment. Source spans use character columns
+and cover multiline calls. Malformed source retains recognized comment markers
+without guessing executable placeholders.
+
 **Example (bad):**
 ```python
 # TODO: Implement

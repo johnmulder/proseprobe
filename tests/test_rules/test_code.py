@@ -251,6 +251,77 @@ class TestAIPlaceholders:
         issues = rule.check(text, "test.py")
         assert len(issues) == 0
 
+    @pytest.mark.parametrize(
+        "source",
+        [
+            "example = \"raise NotImplementedError('example')\"",
+            '"""raise NotImplementedError(\'example\')"""',
+            "# raise NotImplementedError('example')",
+            'example = """raise NotImplementedError(\'example\')"""',
+            "example = f\"raise NotImplementedError('example') {name}\"",
+            'message = "pass"  # TODO: document this message',
+            'message = "..."  # TODO: document this message',
+            'pass; message = "value"  # TODO: document this message',
+        ],
+    )
+    def test_code_placeholder_text_is_not_executable(self, source: str) -> None:
+        assert AIPlaceholdersRule().check(source, "test.py") == []
+
+    def test_multiline_raise_has_original_source_span(self) -> None:
+        source = (
+            'def résumé():\n    raise NotImplementedError(\n        "later"\n    )\n'
+        )
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert issue.message == "Formulaic placeholder: template error"
+        assert (issue.line, issue.column) == (2, 5)
+        assert (issue.end_line, issue.end_column) == (4, 6)
+
+    def test_raise_after_unicode_statement_has_character_columns(self) -> None:
+        source = 'résumé = 1; raise NotImplementedError("later")'
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert (issue.line, issue.column) == (1, source.index("raise") + 1)
+        assert issue.end_column == len(source) + 1
+
+    @pytest.mark.parametrize("statement", ["pass", "..."])
+    def test_real_inline_placeholder_keeps_comment_span(self, statement: str) -> None:
+        source = f"def pending():\n    {statement}  # TODO: finish"
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert issue.line == 2
+        assert source.splitlines()[1][issue.column - 1 : issue.end_column - 1] == (
+            "TODO"
+        )
+
+    def test_code_placeholder_preserves_first_occurrence_per_line(self) -> None:
+        source = 'raise NotImplementedError("one"); raise NotImplementedError("two")'
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert source[issue.column - 1 : issue.end_column - 1] == (
+            'raise NotImplementedError("one")'
+        )
+
+    def test_invalid_python_keeps_comment_markers_without_guessing_code(self) -> None:
+        source = "def broken(\nraise NotImplementedError('later')\n# TODO:\n"
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert issue.message == "Formulaic placeholder: marker without context"
+        assert issue.line == 3
+
+    def test_invalid_indentation_keeps_preceding_comment_markers(self) -> None:
+        source = "def broken():\n    pass\n  # TODO:\n  pass\n"
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert issue.message == "Formulaic placeholder: marker without context"
+        assert issue.line == 3
+
 
 class TestCommentRestatesCode:
     """Tests for C006: Comment Restates Code."""
