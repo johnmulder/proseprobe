@@ -355,7 +355,10 @@ lines outside the declared match and same-line context. A shared Git root is
 preferred as the workspace; non-Git
 inputs use their common scan root, independent of argument order.
 
-Version 1 fingerprint files remain readable for one compatibility cycle.
+Version 1 fingerprint files remain readable for one compatibility cycle. Their
+opaque identity includes the diagnostic message; an intentional advice change
+may make an old entry stale. Version 2 source identities exclude that advice.
+Review stale legacy findings before accepting a new identity.
 `update` or `prune` migrates observable active findings to version 2 and reports
 unmatched opaque hashes as stale. Baseline writes use atomic replacement and
 deterministic ordering. An explicitly requested missing, malformed, unreadable,

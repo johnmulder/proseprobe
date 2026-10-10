@@ -790,3 +790,37 @@ class TestCheck:
         linter.check([tmp_path])
 
         assert called["value"]
+
+
+@pytest.mark.parametrize("extra", [[], ["simplify"]])
+def test_literal_vocabulary_advice_obeys_the_effective_scan_policy(
+    tmp_path: Path, extra: list[str]
+) -> None:
+    """Disposable replacements use the same configured linter and precise span."""
+    config = Config(select=["V001"], vocabulary=VocabularyConfig(additional=extra))
+    from proseprobe.core.policy import prepare_scan
+
+    _, linter, _ = prepare_scan(config)
+    source = "We streamline operations."
+    path = tmp_path / "doc.md"
+    [issue] = linter.check_content(source, path)
+    assert (issue.rule_id, issue.line, issue.column, issue.end_column) == (
+        "V001",
+        1,
+        4,
+        14,
+    )
+    if extra:
+        assert issue.suggestion is None
+    else:
+        assert issue.suggestion == "simplify"
+        revised = (
+            source[: issue.column - 1]
+            + issue.suggestion
+            + source[issue.end_column - 1 :]
+        )
+        assert linter.check_content(revised, path) == []
+    for unsupported in ["This is crucial for release.", "This delved into detail."]:
+        [finding] = linter.check_content(unsupported, path)
+        assert finding.rule_id == "V001"
+        assert finding.suggestion is None

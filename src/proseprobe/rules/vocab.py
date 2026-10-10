@@ -248,6 +248,26 @@ class AIVocabularyRule(Rule):
         )
     )
 
+    _DELVE_INTO: ClassVar[re.Pattern[str]] = re.compile(
+        r"\b(?P<term>delve)\s+into\b", re.IGNORECASE
+    )
+
+    @classmethod
+    def _unsupported_suggestion_positions(
+        cls, content: str, filename: str
+    ) -> set[tuple[int, int, int]]:
+        """Find the source-backed complement that a literal replacement breaks."""
+        positions: set[tuple[int, int, int]] = set()
+        for sentence in iter_prose_sentences(content, filename):
+            for match in iter_prose_regex_matches(
+                sentence, sentence.source_text(content), filename, cls._DELVE_INTO
+            ):
+                start, end = match.span("term")
+                line, column = sentence.source_position(start)
+                _, end_column = sentence.source_position(end)
+                positions.add((line, column, end_column))
+        return positions
+
     @classmethod
     def _technical_positions(
         cls, content: str, filename: str
@@ -299,6 +319,9 @@ class AIVocabularyRule(Rule):
         """Check for overused vocabulary words."""
         issues: list[Issue] = []
         technical_positions = self._technical_positions(content, filename)
+        unsupported_suggestions = self._unsupported_suggestion_positions(
+            content, filename
+        )
         for line_num, line in self.iter_lines(content, filename):
             line_lower = line.lower()
 
@@ -316,8 +339,19 @@ class AIVocabularyRule(Rule):
                         continue
                     suggestion = VOCABULARY_SUGGESTIONS.get(word)
                     matched_word = match.group().lower()
-                    if word == "implement" and matched_word != word:
-                        # A base-form replacement does not fit the inflected source.
+                    if suggestion is not None and (
+                        (
+                            word in self._WORD_PATTERNS
+                            and "," not in suggestion
+                            and matched_word not in {word, word.replace("ize", "ise")}
+                        )
+                        or (line_num, match.start() + 1, match.end() + 1)
+                        in unsupported_suggestions
+                        or any(
+                            candidate.search(suggestion)
+                            for _, candidate in self._patterns
+                        )
+                    ):
                         suggestion = None
                     message = f"Overused word: '{matched_word}'"
                     if suggestion:

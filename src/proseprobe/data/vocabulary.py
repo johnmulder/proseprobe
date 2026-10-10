@@ -140,8 +140,6 @@ VOCABULARY_SUGGESTIONS: dict[str, str] = {
     "spearheading": "leading",
     "fostering": "encouraging",
     # Tier 2
-    "crucial": "important",
-    "pivotal": "key",
     "landscape": "field",
     "vibrant": "active",
     "enhance": "improve",
@@ -151,7 +149,6 @@ VOCABULARY_SUGGESTIONS: dict[str, str] = {
     "dynamic": "changing",
     "seamless": "smooth",
     "groundbreaking": "new",
-    "transformative": "major",
     "cutting-edge": "modern",
     "streamline": "simplify",
     "optimize": "improve",
@@ -159,7 +156,6 @@ VOCABULARY_SUGGESTIONS: dict[str, str] = {
     "harness": "use",
     "empower": "enable",
     "endeavor": "effort",
-    "paramount": "important",
     # Magic adverbs
     "quietly": "silently",
     "deeply": "very",
@@ -169,7 +165,6 @@ VOCABULARY_SUGGESTIONS: dict[str, str] = {
     "bombshell": "surprise",
     "shocking": "surprising",
     "devastating": "serious",
-    "explosive": "significant",
     "stunning": "surprising",
     "firestorm": "controversy",
     "backlash": "criticism",

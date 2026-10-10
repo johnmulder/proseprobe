@@ -1490,9 +1490,9 @@ class TestBaselineMode:
         from proseprobe.rules.base import Issue
 
         test_file = tmp_path / "test.md"
-        content = "This delves into topics."
+        content = "A groundbreaking discovery."
         test_file.write_text(content)
-        issue = Issue("V001", "Overused word: 'delves' → consider 'explore'", 1, 6)
+        issue = Issue("V001", "Overused word: 'groundbreaking' → consider 'new'", 1, 3)
         baseline = Baseline(tmp_path / "baseline.json")
         fingerprint = baseline._compute_legacy_fingerprint(
             issue, test_file, content, tmp_path
@@ -1733,10 +1733,10 @@ class TestBaselineCommand:
         from proseprobe.rules.base import Issue
 
         test_file = tmp_path / "doc.md"
-        content = "This delves into topics."
+        content = "A groundbreaking discovery."
         test_file.write_text(content)
         baseline = Baseline(tmp_path / "baseline.json")
-        issue = Issue("V001", "Overused word: 'delves' → consider 'explore'", 1, 6)
+        issue = Issue("V001", "Overused word: 'groundbreaking' → consider 'new'", 1, 3)
         active = baseline._compute_legacy_fingerprint(
             issue, test_file, content, tmp_path
         )
@@ -2581,3 +2581,56 @@ class TestCliExitSemantics:
 
         assert result.exit_code == 1
         assert result.stdout == ""
+
+
+@pytest.mark.parametrize("version", [1, 2])
+def test_advice_change_preserves_only_source_bound_baseline_identity(
+    tmp_path: Path, version: int
+) -> None:
+    """Opaque legacy message hashes become stale when diagnostic advice changes."""
+    from proseprobe.core.baseline import Baseline
+    from proseprobe.rules.base import Issue
+
+    source = tmp_path / "doc.md"
+    content = "This delves into topics."
+    source.write_text(content)
+    historical = Issue(
+        "V001",
+        "Overused word: 'delves' → consider 'explore'",
+        1,
+        6,
+        end_column=12,
+        suggestion="explore",
+    )
+    baseline = Baseline(tmp_path / "baseline.json")
+    if version == 1:
+        fingerprint = baseline._compute_legacy_fingerprint(
+            historical, source, content, tmp_path
+        )
+        baseline.baseline_path.write_text(
+            json.dumps({"version": "1.0", "fingerprints": [fingerprint]})
+        )
+    else:
+        baseline.add_issue(historical, source, content, tmp_path)
+        baseline.save()
+    checked = run_cli(
+        "check",
+        str(source),
+        "--select",
+        "V001",
+        "--baseline",
+        str(baseline.baseline_path),
+    )
+    compared = run_cli(
+        "baseline",
+        "summary",
+        str(source),
+        "--select",
+        "V001",
+        "--baseline",
+        str(baseline.baseline_path),
+    )
+    assert checked.exit_code == (1 if version == 1 else 0)
+    assert "Active: " + str(version - 1) in compared.stdout
+    assert "Stale: " + str(2 - version) in compared.stdout
+    assert "New: " + str(2 - version) in compared.stdout

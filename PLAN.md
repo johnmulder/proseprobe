@@ -2104,31 +2104,31 @@ prompts; the linter does not rewrite files. A rescan checks whether the targeted
 finding is resolved, while human review checks meaning, grammar and usefulness.
 Neither a lower total finding count nor a passing rescan proves semantic quality.
 
-- [ ] P31.1 Inventory suggestion-bearing rules and classify each output as a
+- [x] P31.1 Inventory suggestion-bearing rules and classify each output as a
   literal replacement, contextual review instruction or absent suggestion.
   Record existing inflection guards and overlaps; keep public Issue fields
   unchanged unless a concrete compatibility need arises.
-- [ ] P31.2 Add a failing test for a sentence containing `crucial`, applying its
+- [x] P31.2 Add a failing test for a sentence containing `crucial`, applying its
   literal suggestion only within the exact issue span in a disposable test
   buffer. Rescan under the same effective policy and assert the targeted
   vocabulary issue is resolved without a newly introduced warning.
-- [ ] P31.3 Review the candidate replacement in context. Choose a supported
+- [x] P31.3 Review the candidate replacement in context. Choose a supported
   alternative or omit the literal suggestion when no reliable substitute
   preserves the intended strength; do not ignore `important` to make the test
   pass. Run the pair and existing suggestion-table tests.
-- [ ] P31.4 Add paired default and explicitly expanded vocabulary configurations.
+- [x] P31.4 Add paired default and explicitly expanded vocabulary configurations.
   If a suggested literal is disallowed by the effective configured vocabulary,
   assert that the suggestion is withheld or replaced by neutral review guidance.
-- [ ] P31.5 Add the smallest policy-aware suggestion check within the
+- [x] P31.5 Add the smallest policy-aware suggestion check within the
   rule's existing configured instance. Run configured/default tests and preserve
   deterministic ordering and rule metadata.
-- [ ] P31.6 Add a parameterized rescan characterization for literal suggestion
+- [x] P31.6 Add a parameterized rescan characterization for literal suggestion
   entries using meaningful full sentences. Preserve precise spans, inflection,
   punctuation, quotation ownership and technical terminology in fixtures.
-- [ ] P31.7 Turn each reproduced suggestion cycle or new warning into its own
+- [x] P31.7 Turn each reproduced suggestion cycle or new warning into its own
   failing paired test; review and repair one entry at a time. Do not recursively
   apply suggestions or replace the catalog through a blanket filtered mapping.
-- [ ] P31.8 Add valid near-miss tests where a literal replacement would alter
+- [x] P31.8 Add valid near-miss tests where a literal replacement would alter
   technical meaning or grammatical agreement. Withhold only the unsupported
   suggestion, preserving the finding when its review prompt remains justified.
 - [ ] P31.9 Run complete V001 and replacement-rule tests plus an effective-policy
@@ -2175,39 +2175,39 @@ acceptance evidence exists. P06D.5 remains conditional on clarified reuse terms.
 
 ### P32A — Preserve the pilot and declare coverage
 
-- [ ] P32A.1 Revalidate the original 300-unit manifest/freeze identities without
+- [x] P32A.1 Revalidate the original 300-unit manifest/freeze identities without
   reading holdout prose, generating findings, or altering split assignments.
-- [ ] P32A.2 Record the existing 170-development/130-holdout coverage by dataset,
+- [x] P32A.2 Record the existing 170-development/130-holdout coverage by dataset,
   format, repository, author/pair group where available, and renderer/dialect.
   State that all 80 Python functions are development samples from two repositories.
-- [ ] P32A.3 Declare supported claim populations before annotation: complete
+- [x] P32A.3 Declare supported claim populations before annotation: complete
   Markdown structure, Python docstrings/comments, sentence-level grammar/clarity,
   and explicit renderer-dependent checks. Keep their denominators separate.
-- [ ] P32A.4 Specify which rule contracts each population can evaluate. Sentence
+- [x] P32A.4 Specify which rule contracts each population can evaluate. Sentence
   inputs cannot establish document-structure recall; CodeSearchNet search labels
   cannot establish prose correctness; CommonMark cases establish parser conformance.
   Mark renderer checks on unsupported template dialects unsupported rather than clean.
-- [ ] P32A.5 Keep new sources in a separately versioned extension manifest and
+- [x] P32A.5 Keep new sources in a separately versioned extension manifest and
   freeze. Preserve the original pilot for its already declared evaluation purpose.
-- [ ] P32A.6 Select fresh Python holdout repositories with no overlap with the
+- [x] P32A.6 Select fresh Python holdout repositories with no overlap with the
   development repositories, authors/projects where known, or related revisions.
   Prefer complete modules when surrounding code is needed to judge documentation.
-- [ ] P32A.7 Select additional Markdown repositories in development and reserved
+- [x] P32A.7 Select additional Markdown repositories in development and reserved
   holdout to reduce single-repository/domain dependence. Record the intended
   renderer and template dialect before selecting files.
-- [ ] P32A.8 Declare an attainable source-group count and balanced sample budget
+- [x] P32A.8 Declare an attainable source-group count and balanced sample budget
   before acquisition. Several independent repositories per format are the pilot
   goal; record unavailable genres rather than treating a sample count as coverage.
-- [ ] P32A.9 Verify each candidate's pinned revision, upstream content license,
+- [x] P32A.9 Verify each candidate's pinned revision, upstream content license,
   attribution, access, and intended reuse before accepting cached text. Treat a
   hosting project's license as insufficient evidence for unrelated dataset contents.
 - [x] P32A.10 Add failing tiny-fixture tests for cross-manifest repository/pair
   overlap, duplicate bytes, normalized near duplicates, and split leakage.
 - [x] P32A.11 Extend existing split validation only as required to check the
   original and extension together; keep downloads out of unit tests.
-- [ ] P32A.12 Cache and checksum the accepted development/holdout sources without
+- [x] P32A.12 Cache and checksum the accepted development/holdout sources without
   detector-based selection. Freeze identities and assignments before further tuning.
-- [ ] P32A.13 Export the new blind packet using P24 and verify its index and source
+- [x] P32A.13 Export the new blind packet using P24 and verify its index and source
   identities. Holdout contents stay hidden from implementers during development.
 - [ ] P32A.14 Pin the [CommonMark 0.31.2 examples](https://spec.commonmark.org/0.31.2/)
   and verify their reuse terms before copying fixtures. Record version, source
@@ -2602,3 +2602,33 @@ Generic comment markers keep their normal behavior. The isolated package gate
 passes. The new CLI matrix and a two-line purpose-written corpus distinguish a
 literal raise example from an executable incomplete statement. Corpus results
 are 364 TP/6 unchanged FP/0 FN; P26.14's strict gate awaits P23.
+
+### P31 — Supported vocabulary suggestions
+
+Eighteen reproduced cycle/configuration/inflection/complement regressions failed
+before correction. Five cyclic table alternatives are individually omitted;
+configured instances withhold an alternative their effective vocabulary detects.
+Literal base forms are omitted for unsupported inflections and the source-backed
+`delve into` complement. Findings, spans and detection words remain intact;
+no files are rewritten. Thirteen technical/literal near misses preserve behavior.
+Root integration uses the normal effective-policy construction and disposable
+exact-span replacement. Legacy CLI baseline coverage now uses unchanged advice;
+a separate paired regression confirms old message-bound entries become stale
+while version 2 source entries remain active. Semantic judgments are deferred.
+
+### P32A — Frozen independent source extension
+
+The predeclared seed/budget acquired 24 complete native units: Requests/FastAPI
+in development and CPython/Black/Rich in holdout. Every accepted project has a
+pinned commit, primary license, attribution and exact-byte checksum. Combined
+validation passes for 324 units and 12 known groups, without displaying holdout
+prose or generating detector findings. The original manifest SHA-256 remains
+`2dcadd8fb3bb278ee09a9ff2685b00c7a7c6efde3f0221ae69efcccc825d3ade`;
+the original freeze remains `0c078a48b7d8545241141c0eb4efaab25c705a78b03962d99394e60bfd1b97d0`.
+The fresh bound extension packet has no expected issues or reviewed scopes;
+its index SHA-256 is `aca0c0ccf04b678f3be4b8215d4f01046ba6c9d24ea40ce1d5c9adc9410c6af1`.
+Format/renderer populations and unsupported genres are declared in the pilot
+guide. Human judgments and independent holdout evaluation remain deferred.
+
+The isolated P31 snapshot passed `make check dogfood rule-quality`, preserving
+364 TP/6 FP/0 FN and all 62 supplied spans. P31.9's strict gate awaits P23.

@@ -151,7 +151,12 @@ existing `robust regression` exception remains span-specific; configured
 
 Ordinary blockquotes remain linted. Preserve an exact quotation with an explicit
 line-scoped suppression when its wording must remain unchanged. Inflected
-administrative uses of `implement` have no base-form replacement suggestion.
+forms with an unsupported literal base-form replacement retain their finding
+without that suggestion. The same applies to `delve into`, whose complement
+would not fit `explore`, and to a replacement flagged by the effective configured
+vocabulary. Five cyclic alternatives are omitted: `crucial`, `pivotal`,
+`transformative`, `paramount`, and `explosive`. Contextual review guidance remains
+available. These checks do not establish meaning preservation or rewrite prose.
 
 **Examples include:**
 - `delve`, `tapestry`, `multifaceted`, `nuanced`, `pivotal`, `testament`

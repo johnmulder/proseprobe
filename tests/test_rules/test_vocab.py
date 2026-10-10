@@ -256,7 +256,7 @@ class TestAIVocabularyRule:
         assert len(issues) == 1
         assert issues[0].rule_id == "V001"
         assert "delves" in issues[0].message.lower()
-        assert issues[0].suggestion == "explore"
+        assert issues[0].suggestion is None
 
     @pytest.mark.parametrize(
         "content",
@@ -513,8 +513,8 @@ class TestAIVocabularyRule:
         [
             ("leveraging", Confidence.HIGH, "using"),
             ("leverage", Confidence.MEDIUM, "use"),
-            ("leverages", Confidence.MEDIUM, "use"),
-            ("leveraged", Confidence.MEDIUM, "use"),
+            ("leverages", Confidence.MEDIUM, None),
+            ("leveraged", Confidence.MEDIUM, None),
         ],
     )
     def test_leverage_forms_have_one_canonical_finding(
@@ -522,7 +522,7 @@ class TestAIVocabularyRule:
         rule: AIVocabularyRule,
         text: str,
         confidence: Confidence,
-        suggestion: str,
+        suggestion: str | None,
     ) -> None:
         """Each leverage form should have one confidence and suggestion owner."""
         issues = rule.check(text, "test.md")
@@ -553,7 +553,9 @@ class TestAIVocabularyRule:
 
         assert len(issues) == 1
         assert issues[0].confidence is Confidence.MEDIUM
-        assert issues[0].suggestion == "use"
+        assert issues[0].suggestion == (
+            "use" if text in {"utilize", "utilise"} else None
+        )
 
     def test_allowed_utilize_suppresses_every_supported_form(self) -> None:
         rule = AIVocabularyRule(allowed={"utilize"})
@@ -2500,3 +2502,159 @@ def test_decision_compound_exemption_needs_literal_source() -> None:
     [issue] = VerboseVerbPhraseRule().check(source, "guide.md")
     assert issue.suggestion == "decide"
     assert VerboseVerbPhraseRule().check("We make a decision tree.", "guide.md") == []
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "This is a crucial decision.",
+        "This is a pivotal decision.",
+        "The change is transformative.",
+        "Safety is paramount.",
+        "The evidence is explosive.",
+    ],
+)
+def test_vocabulary_suggestion_does_not_create_a_policy_cycle(source: str) -> None:
+    rule = AIVocabularyRule()
+    [issue] = rule.check(source, "guide.md")
+    if issue.suggestion is not None:
+        revised = (
+            source[: issue.column - 1]
+            + issue.suggestion
+            + source[issue.end_column - 1 :]
+        )
+        assert rule.check(revised, "guide.md") == []
+    else:
+        assert (
+            issue.message
+            == f"Overused word: '{source[issue.column - 1 : issue.end_column - 1].lower()}'"
+        )
+    assert issue.rule_id == "V001"
+    assert issue.severity is Severity.WARNING
+
+
+def test_configured_vocabulary_can_withhold_its_own_disallowed_suggestion() -> None:
+    source = "We utilize existing records."
+    [ordinary] = AIVocabularyRule().check(source, "guide.md")
+    assert ordinary.suggestion == "use"
+    [expanded] = AIVocabularyRule(additional={"use"}).check(source, "guide.md")
+    assert expanded.suggestion is None
+    assert expanded.message == "Overused word: 'utilize'"
+    assert (expanded.line, expanded.column, expanded.end_column) == (1, 4, 11)
+    [allowed] = AIVocabularyRule(additional={"use"}, allowed={"use"}).check(
+        source, "guide.md"
+    )
+    assert allowed.suggestion == "use"
+
+
+def test_configured_vocabulary_checks_multiword_literal_suggestions() -> None:
+    [issue] = AIVocabularyRule(additional={"carry"}).check(
+        "We implement a retry budget.", "guide.md"
+    )
+    assert issue.suggestion is None
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "The worker delved into archived records.",
+        "The worker streamlined the approval process.",
+        "The worker leveraged existing records.",
+        "The worker facilitates the review.",
+        "The worker operationalizes the plan.",
+        "The worker is situating the exercise in its historical context.",
+        "The worker implements a retry budget.",
+    ],
+)
+def test_vocabulary_withholds_base_form_for_inflected_literal_match(
+    source: str,
+) -> None:
+    [issue] = AIVocabularyRule().check(source, "guide.md")
+    assert issue.suggestion is None
+    assert "→ consider" not in issue.message
+    assert issue.rule_id == "V001"
+    assert source[issue.column - 1 : issue.end_column - 1].lower() in issue.message
+
+
+@pytest.mark.parametrize(
+    ("source", "filename"),
+    [
+        ("We delve into archived records.", "guide.md"),
+        ("We delve\ninto archived records.", "guide.md"),
+        ("# We delve\n# into archived records.", "guide.py"),
+        ("> > We delve\n> > into archived records.", "guide.md"),
+    ],
+)
+def test_vocabulary_withholds_incompatible_delve_complement(
+    source: str,
+    filename: str,
+) -> None:
+    [issue] = AIVocabularyRule().check(source, filename)
+    assert issue.suggestion is None
+    assert issue.message == "Overused word: 'delve'"
+
+
+@pytest.mark.parametrize(
+    ("source", "expected"),
+    [
+        ("We utilize existing records.", "use"),
+        ("The article underscores the measured result.", "shows"),
+        ("The operator is leveraging existing records.", "using"),
+        ("The worker will problematize the assumptions.", "question"),
+        ("The worker will problematise the assumptions.", "question"),
+        ("The narrative describes the release.", "story"),
+        ("The retry path is seamless.", "smooth"),
+    ],
+)
+def test_literal_vocabulary_suggestions_resolve_targeted_detection(
+    source: str,
+    expected: str,
+) -> None:
+    rule = AIVocabularyRule()
+    [issue] = rule.check(source, "guide.md")
+    assert issue.suggestion == expected
+    revised = source[: issue.column - 1] + expected + source[issue.end_column - 1 :]
+    assert rule.check(revised, "guide.md") == []
+
+
+@pytest.mark.parametrize(
+    ("rule", "source", "expected"),
+    [
+        (WordyPhraseRule(), "The worker retries in order to finish the upload.", "to"),
+        (RedundantPairRule(), "The operator checks each and every upload.", "each"),
+        (
+            VerboseVerbPhraseRule(),
+            "The operator will make a decision tomorrow.",
+            "decide",
+        ),
+        (
+            RedundantModifierRule(),
+            "The release requires joint collaboration.",
+            "collaboration",
+        ),
+        (NeedlessIntensifierRule(), "The change is very unique.", "unique"),
+    ],
+)
+def test_fixed_literal_suggestions_resolve_their_targeted_rule(
+    rule: Rule,
+    source: str,
+    expected: str,
+) -> None:
+    [issue] = rule.check(source, "guide.md")
+    assert issue.suggestion == expected
+    revised = source[: issue.column - 1] + expected + source[issue.end_column - 1 :]
+    assert rule.check(revised, "guide.md") == []
+
+
+def test_technical_terms_and_review_choices_remain_supported() -> None:
+    rule = AIVocabularyRule()
+    assert (
+        rule.check("We use robust regression for contaminated samples.", "guide.md")
+        == []
+    )
+    assert (
+        rule.check('"""The function implements the mapping protocol."""', "guide.py")
+        == []
+    )
+    [issue] = rule.check("We value synergy among the contributors.", "guide.md")
+    assert issue.suggestion == "cooperation, collaboration"
