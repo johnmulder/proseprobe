@@ -2371,13 +2371,13 @@ could affect their contracts; deterministic unit tests do not time real hardware
 
 - [ ] P33.1 For each completed slice, record its red regression, focused green
   command, implementation commit, and explained corpus delta in the progress log.
-- [ ] P33.2 For each new rule, repeat the P17A metadata, registration, selection,
+- [x] P33.2 For each new rule, repeat the P17A metadata, registration, selection,
   experimental/profile, executable examples, suppression, reporter-span, and
   baseline checks. Prior checked boxes do not cover new IDs automatically.
-- [ ] P33.3 Update user-visible behavior and compatibility documentation for each
+- [x] P33.3 Update user-visible behavior and compatibility documentation for each
   completed correction, including annotation/report schemas and optional feature
   prerequisites. Generate inventory blocks through `make rule-docs`.
-- [ ] P33.4 Scan edited prose with the repository's effective policy and existing
+- [x] P33.4 Scan edited prose with the repository's effective policy and existing
   baseline in JSON Lines. Review exact technical examples rather than changing
   them or refreshing the baseline to eliminate intentional findings.
 - [ ] P33.5 Run `rtk proxy make rule-docs-check check dogfood rule-quality nfr-check`
@@ -2886,3 +2886,21 @@ independent Markdown review and promotion remain deferred. P32C.2 reuses the
 existing native insertion/deletion, token-coordinate and alternate-annotator
 checks plus the unsupported-label export characterization. With no supported
 category-to-rule mapping, its supported-mapping branch is inapplicable.
+
+
+### P33 — User documentation and new-rule contracts
+
+The changelog now records the continuation's observable behavior, evaluation
+schemas and limitations, and its inventory matches the generated 102-rule
+registry. The existing metadata assertion tracks that count; all 25 metadata
+tests pass. README, SPEC, quality guidance and release checks document the new
+explicit two-policy gate. The composed acceptance snapshot passes generated
+rule documentation, tests, lint, typing, dogfood and report-only quality.
+
+A read-only integration audit passed 659 existing contract tests against
+committed `97d7ca2`, whose production scanner matches the final runtime. Those
+checks include C010/M012 examples, metadata, selection, profile exclusions,
+suppression, reporter spans and baseline behavior. Changed Markdown prose scans
+pass with the existing policy and baseline. Three unchanged metadata-test
+docstrings use the intentional technical term `implemented`; their vocabulary
+records were reviewed and retained without editing unrelated text or the baseline.

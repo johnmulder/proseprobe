@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Experimental C010 explicit return-documentation conflicts and opt-in M012
+  local Markdown files/fragments under an explicit project root.
+- Source-bound review packets, actual runtime/diagnostic benchmark identities,
+  and an explicit reviewed regression gate that preserves known mismatches.
+- Separate human suggestion questions, explicitly reviewed revision-pair reports
+  and conditional source-group uncertainty with unavailable-support reasons.
+- A separately frozen 24-unit Python/Markdown source extension and licensed
+  CommonMark extraction/masking conformance fixtures. Human claims are deferred.
 - Experimental G039 repeated function-word and C009 stale Sphinx parameter
   checks, plus optional M011 same-document fragment checks under an explicit
   GitHub anchor policy that remains disabled by default.
@@ -21,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The ProseProbe CLI with `check`, `watch`, `rules`, `explain`, `init`, `version`,
   and `baseline` commands.
-- 100 detection rules across vocabulary, structure, style, grammar, Python code,
+- 102 detection rules across vocabulary, structure, style, grammar, Python code,
   and Markdown markup categories.
 - Markdown, MDX, and Python scanning with source-mapped prose blocks, sentences,
   docstrings, comments, and exact diagnostic spans.
@@ -49,6 +57,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Validated full prose predicates and attached comparison evidence against
+  original source; classified executable placeholders through Python syntax
+  and recognized narrow abstract/typing contracts.
+- Checked explicit variadic parameter kinds and withheld unsupported vocabulary
+  replacements without changing their detections or rewriting files.
+- Reported automatic configuration errors, stopped discovery at the starting
+  Git root, aligned explicit Python filename casing, and declared SARIF Unicode
+  code-point columns. Watch detects nanosecond/size changes in either direction.
+- Counted reviewed clean source coverage separately from detection denominators.
 - Precomputed configured vocabulary patterns and hoisted replacement patterns
   after profiling. Complete finding records are preserved with less scan work.
 
