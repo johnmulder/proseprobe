@@ -1,4 +1,4 @@
-"""Tests for code rules (C001-C009)."""
+"""Tests for code rules (C001-C010)."""
 
 import pytest
 
@@ -1150,3 +1150,44 @@ class TestCommentedOutCode:
         assert rule.severity is Severity.INFO
         assert rule.default_confidence is Confidence.LOW
         assert rule.applies_to == {"python"}
+
+
+@pytest.mark.parametrize(
+    ("declaration", "base", "decorators"),
+    [
+        ("Protocol", "(Protocol)", ""),
+        ("*Protocol", "(Protocol)", ""),
+        ("abstractmethod", "", "    @abstractmethod\n"),
+        ("classmethod", "", "    @classmethod\n    @abstractmethod\n"),
+    ],
+)
+def test_placeholder_contracts_refuse_pep695_shadowed_markers(
+    declaration: str, base: str, decorators: str
+) -> None:
+    import sys
+
+    source = (
+        "from abc import abstractmethod\nfrom typing import Protocol\n"
+        f"class Contract[{declaration}]{base}:\n"
+        + decorators
+        + '    def read(self):\n        raise NotImplementedError("unfinished")\n'
+    )
+    issues = AIPlaceholdersRule().check(source, "doc.py")
+    if sys.version_info < (3, 12):
+        assert issues == []
+    else:
+        [issue] = issues
+        assert issue.rule_id == "C004"
+        line = source.splitlines()[issue.line - 1]
+        assert (
+            line[issue.column - 1 : issue.end_column - 1]
+            == 'raise NotImplementedError("unfinished")'
+        )
+
+
+def test_generic_contract_keeps_unshadowed_protocol_marker() -> None:
+    source = (
+        "from typing import Protocol\nclass Contract[T](Protocol):\n"
+        '    def read(self):\n        raise NotImplementedError("contract")\n'
+    )
+    assert AIPlaceholdersRule().check(source, "doc.py") == []

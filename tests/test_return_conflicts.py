@@ -325,3 +325,22 @@ def test_return_conflict_retains_unshadowed_builtin_decorators(wrapper: str) -> 
     )
     [issue] = ExplicitReturnTypeConflictRule().check(source, "doc.py")
     assert issue.line == 4
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        'def read[int]() -> None:\n    """:rtype: int"""\n',
+        'class Reader[int]:\n    def read(self) -> None:\n        """:rtype: int"""\n',
+        'class Reader[*int]:\n    def read(self) -> None:\n        """:rtype: int"""\n',
+        'class Reader[**int]:\n    def read(self) -> None:\n        """:rtype: int"""\n',
+    ],
+)
+def test_return_conflict_skips_pep695_type_parameter_bindings(source: str) -> None:
+    import sys
+
+    from proseprobe.rules.code import ExplicitReturnTypeConflictRule
+
+    parser = PythonParser(source)
+    assert parser.parse() == (sys.version_info >= (3, 12))
+    assert ExplicitReturnTypeConflictRule().check(source, "doc.py") == []

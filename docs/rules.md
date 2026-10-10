@@ -2070,7 +2070,7 @@ without guessing executable placeholders.
 An otherwise empty method body may be a declared abstract or typing stub when
 literal imports prove `abc.abstractmethod`, `typing.overload`, or an undecorated
 `typing.Protocol` owner. Imported aliases and unshadowed built-in class/static
-method wrappers are supported. Rebinding, namespace mutations, unknown decorators
+method wrappers are supported. Rebinding, type-parameter shadowing, namespace mutations, unknown decorators
 and computed bases prevent the exemption. Generic TODO comments still receive
 normal comment-marker checks; concrete incomplete methods remain eligible.
 

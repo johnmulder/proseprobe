@@ -189,6 +189,8 @@ class AIPlaceholdersRule(Rule):
         bindings: Counter[str] = Counter()
         mutated: set[str] = set()
         for node in ast.walk(tree):
+            for parameter in getattr(node, "type_params", ()):
+                bindings[parameter.name] += 1
             if isinstance(node, (ast.Import, ast.ImportFrom)):
                 for alias in node.names:
                     if alias.name == "*":
@@ -721,6 +723,11 @@ class ExplicitReturnTypeConflictRule(Rule):
     def _supported_bindings(tree: ast.Module) -> bool:
         names = {"int", "classmethod", "staticmethod"}
         for node in ast.walk(tree):
+            if any(
+                getattr(parameter, "name", None) in names
+                for parameter in getattr(node, "type_params", ())
+            ):
+                return False
             if isinstance(node, ast.Name) and (
                 (node.id in names and isinstance(node.ctx, (ast.Store, ast.Del)))
                 or node.id
