@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "declared_on": "2026-10-10",
+  "sampling_seed": "proseprobe-p32-extension-2026-10-10",
+  "selection": "Rank eligible native paths by SHA256(seed + repository + path), before detector use; choose first target count. Do not replace source based on findings.",
+  "path_policy": {
+    "python": "complete .py modules under each declared source prefix; exclude __init__.py; nonempty UTF-8 at most 100000 bytes; no execution",
+    "markdown": "complete root README.md, unchanged native UTF-8",
+    "holdout": "cache/validate bytes automatically; do not display holdout prose or run detector before independently frozen review"
+  },
+  "groups": [
+    {
+      "repository": "psf/requests",
+      "ref": "v2.32.3",
+      "split": "development",
+      "python_prefix": "src/requests/",
+      "python_count": 5,
+      "markdown_path": "README.md",
+      "markdown_count": 1,
+      "renderer": "GitHub Markdown",
+      "dialect": "README; no template processing"
+    },
+    {
+      "repository": "fastapi/fastapi",
+      "ref": "0.115.0",
+      "split": "development",
+      "python_count": 0,
+      "markdown_path": "README.md",
+      "markdown_count": 1,
+      "renderer": "GitHub Markdown",
+      "dialect": "README; embedded HTML supported only by extraction contract"
+    },
+    {
+      "repository": "python/cpython",
+      "ref": "v3.11.15",
+      "split": "holdout",
+      "python_prefix": "Lib/",
+      "python_count": 5,
+      "python_depth": "top-level modules only",
+      "markdown_count": 0
+    },
+    {
+      "repository": "psf/black",
+      "ref": "23.7.0",
+      "split": "holdout",
+      "python_prefix": "src/black/",
+      "python_count": 5,
+      "markdown_path": "README.md",
+      "markdown_count": 1,
+      "renderer": "GitHub Markdown",
+      "dialect": "README; no template processing"
+    },
+    {
+      "repository": "Textualize/rich",
+      "ref": "v13.7.1",
+      "split": "holdout",
+      "python_prefix": "rich/",
+      "python_count": 5,
+      "markdown_path": "README.md",
+      "markdown_count": 1,
+      "renderer": "GitHub Markdown",
+      "dialect": "README; embedded HTML supported only by extraction contract"
+    }
+  ],
+  "budget": {
+    "python_development": 5,
+    "python_holdout": 15,
+    "markdown_development": 2,
+    "markdown_holdout": 2,
+    "total": 24
+  },
+  "limitations": "Purpose-selected open-source Python projects; bounded source-group pilot, no genre or population representativeness claim. Known repository identity isolation only; overlapping contributors can remain unknown. Original 300-unit manifest and freeze remain unchanged."
+}

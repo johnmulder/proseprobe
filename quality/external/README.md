@@ -149,3 +149,46 @@ become clear.
 Independent annotation, disagreements, supported-error mapping, and effectiveness
 measurement remain pending. No human labels have been manufactured or inferred
 from native revisions.
+
+## Frozen source extension
+
+A separate [selection declaration](extension-selection.json),
+[source manifest](extension-sources.json) and [freeze](extension-freeze.json)
+add 24 unreviewed units. The seed and budgets were declared before acquisition;
+path ranking and byte limits use no detector output. Original 300-unit
+manifest and freeze retain their recorded checksums and assignments.
+
+| Repository | Split | Complete Python modules | Complete Markdown documents |
+| --- | --- | ---: | ---: |
+| Requests | Development | 5 | 1 |
+| FastAPI | Development | 0 | 1 |
+| CPython | Holdout | 5 | 0 |
+| Black | Holdout | 5 | 1 |
+| Rich | Holdout | 5 | 1 |
+
+Combined coverage is 177 development and 147 holdout units across 12 known
+source groups. Python now has three development repositories and three reserved
+holdout repositories, with complete module context for the extension. Markdown
+has three repositories per split. Shared contributors may remain unknown;
+these purpose-selected projects do not establish genre representativeness.
+Source groups and paired revisions remain in one split across formats.
+
+Pinned upstream licenses and attribution accompany each sample: Requests uses
+[Apache-2.0](https://github.com/psf/requests/blob/0e322af87745eff34caffe4df68456ebc20d9068/LICENSE),
+FastAPI uses [MIT](https://github.com/fastapi/fastapi/blob/40e33e492dbf4af6172997f4e3238a32e56cbe26/LICENSE),
+CPython retains its [PSF and historical Python licenses](https://github.com/python/cpython/blob/2340a037f7450e70fccfe411e6531afb4d57a312/LICENSE),
+and [Black](https://github.com/psf/black/blob/193ee766ca496871f93621d6b58d57a6564ff81b/LICENSE)
+and [Rich](https://github.com/Textualize/rich/blob/7f580bdcf07a3b269a0e786b6a3aa9c804f393cf/LICENSE)
+use MIT. Native sources, tree inventories, licenses and the version 3 blind
+packet stay in the ignored cache. Packet validation binds all 24 originals
+without predictions, native revisions or reviewed scopes. No holdout prose
+or findings were displayed to implementers during acquisition.
+
+Complete Markdown sources can assess supported document structure and extracted
+prose. Python modules can assess docstrings/comments and static documentation
+contracts. Sentence datasets can assess only supported sentence rules; they
+cannot supply document-structure recall. CodeSearchNet retrieval labels are
+excluded. Renderer checks require their explicit renderer; Liquid, mdBook and
+other unsupported extensions need unsupported coverage declarations. CommonMark
+conformance is reported separately from writing-quality evidence. Human review
+and independent effectiveness claims remain deferred by user request.

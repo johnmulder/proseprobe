@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "frozen_on": "2026-10-10",
+  "sampling_seed": "proseprobe-p32-extension-2026-10-10",
+  "selection_manifest_sha256": "71ee3fa89ada0d184fee22fdda76fcd72a934c10839f6be12e114868e63f432a",
+  "source_manifest_sha256": "1f3a26861f1321747802a9e5b574ae78201b996cdd70ccec9a18094fe052cbbf",
+  "original_manifest_sha256": "2dcadd8fb3bb278ee09a9ff2685b00c7a7c6efde3f0221ae69efcccc825d3ade",
+  "original_freeze_sha256": "0c078a48b7d8545241141c0eb4efaab25c705a78b03962d99394e60bfd1b97d0",
+  "holdout_policy": "cache/validate bytes automatically; do not display holdout prose or run detector before independently frozen review",
+  "groups": [
+    {
+      "repository": "psf/requests",
+      "ref": "v2.32.3",
+      "split": "development",
+      "python_prefix": "src/requests/",
+      "python_count": 5,
+      "markdown_path": "README.md",
+      "markdown_count": 1,
+      "renderer": "GitHub Markdown",
+      "dialect": "README; no template processing",
+      "revision": "0e322af87745eff34caffe4df68456ebc20d9068",
+      "acquired_samples": 6,
+      "eligible_python_count": 17
+    },
+    {
+      "repository": "fastapi/fastapi",
+      "ref": "0.115.0",
+      "split": "development",
+      "python_count": 0,
+      "markdown_path": "README.md",
+      "markdown_count": 1,
+      "renderer": "GitHub Markdown",
+      "dialect": "README; embedded HTML supported only by extraction contract",
+      "revision": "40e33e492dbf4af6172997f4e3238a32e56cbe26",
+      "acquired_samples": 1,
+      "eligible_python_count": 0
+    },
+    {
+      "repository": "python/cpython",
+      "ref": "v3.11.15",
+      "split": "holdout",
+      "python_prefix": "Lib/",
+      "python_count": 5,
+      "python_depth": "top-level modules only",
+      "markdown_count": 0,
+      "revision": "2340a037f7450e70fccfe411e6531afb4d57a312",
+      "acquired_samples": 5,
+      "eligible_python_count": 159
+    },
+    {
+      "repository": "psf/black",
+      "ref": "23.7.0",
+      "split": "holdout",
+      "python_prefix": "src/black/",
+      "python_count": 5,
+      "markdown_path": "README.md",
+      "markdown_count": 1,
+      "renderer": "GitHub Markdown",
+      "dialect": "README; no template processing",
+      "revision": "193ee766ca496871f93621d6b58d57a6564ff81b",
+      "acquired_samples": 6,
+      "eligible_python_count": 21
+    },
+    {
+      "repository": "Textualize/rich",
+      "ref": "v13.7.1",
+      "split": "holdout",
+      "python_prefix": "rich/",
+      "python_count": 5,
+      "markdown_path": "README.md",
+      "markdown_count": 1,
+      "renderer": "GitHub Markdown",
+      "dialect": "README; embedded HTML supported only by extraction contract",
+      "revision": "7f580bdcf07a3b269a0e786b6a3aa9c804f393cf",
+      "acquired_samples": 6,
+      "eligible_python_count": 76
+    }
+  ],
+  "acquired_samples": 24,
+  "sample_identity_sha256": "11a08b8f00f77a1a59002541d8cf4a9af988c2866f79ff857a515b70250eadd3",
+  "review_status": "unreviewed; independent claims deferred by user"
+}
