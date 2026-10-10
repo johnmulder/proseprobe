@@ -52,9 +52,9 @@ integrations.
 | `S` | Structure | 25 | Organizational patterns |
 | `T` | Style | 14 | Typographic issues |
 | `G` | Grammar | 26 | Grammatical patterns |
-| `C` | Code | 8 | Python docstring/comment issues |
+| `C` | Code | 9 | Python docstring/comment issues |
 | `M` | Markup | 11 | Markdown artifacts |
-| **Total** | | **100** | |
+| **Total** | | **101** | |
 
 <!-- rule-docs:categories:end -->
 

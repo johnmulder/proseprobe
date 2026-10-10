@@ -704,6 +704,120 @@ class StaleDocstringParameterRule(Rule):
         return issues
 
 
+class ExplicitReturnTypeConflictRule(Rule):
+    """C010: Detect the supported explicit None-versus-int return conflict."""
+
+    id = "C010"
+    name = "Explicit Return Type Conflict"
+    description = (
+        "Detects explicit None annotations conflicting with Sphinx int return types"
+    )
+    severity = Severity.INFO
+    default_confidence = Confidence.MEDIUM
+    applies_to: ClassVar[set[str]] = {"python"}
+    _field = re.compile(r"^[ \t]*:rtype:[ \t]*(?P<type>\S.*?)[ \t]*$")
+
+    @staticmethod
+    def _int_is_builtin(tree: ast.Module) -> bool:
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Name) and (
+                (node.id == "int" and isinstance(node.ctx, (ast.Store, ast.Del)))
+                or node.id
+                in {
+                    "globals",
+                    "locals",
+                    "vars",
+                    "exec",
+                    "eval",
+                    "setattr",
+                    "delattr",
+                    "__import__",
+                    "__builtins__",
+                }
+            ):
+                return False
+            if (
+                isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+                and node.name == "int"
+            ):
+                return False
+            if isinstance(node, ast.arg) and node.arg == "int":
+                return False
+            if (
+                isinstance(node, (ast.ExceptHandler, ast.MatchAs, ast.MatchStar))
+                and node.name == "int"
+            ):
+                return False
+            if isinstance(node, ast.MatchMapping) and node.rest == "int":
+                return False
+            if isinstance(node, ast.ImportFrom) and (
+                node.module == "builtins"
+                or any(alias.name == "*" for alias in node.names)
+            ):
+                return False
+            if isinstance(node, (ast.Import, ast.ImportFrom)) and any(
+                (alias.asname or alias.name.split(".")[0]) == "int"
+                or alias.name == "builtins"
+                for alias in node.names
+            ):
+                return False
+        return True
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Compare physical fields without inferring intended runtime returns."""
+        parser = _get_cached_parser(content)
+        tree = parser.get_syntax_tree()
+        if tree is None or not self._int_is_builtin(tree):
+            return []
+        blocks = {
+            block.start_line: block for block in parser.get_docstring_prose_blocks()
+        }
+        source_lines = content.split("\n")
+        issues: list[Issue] = []
+        for docstring in parser.get_docstrings():
+            if docstring.return_annotation is None or docstring.has_dynamic_decorators:
+                continue
+            block = blocks.get(docstring.line)
+            if block is None:
+                continue
+            declarations = list(
+                StaleDocstringParameterRule._declaration_lines(block, source_lines)
+            )
+            fields = [
+                (index, line_num, line, match)
+                for index, (line_num, line) in enumerate(declarations)
+                if (match := self._field.match(line)) is not None
+            ]
+            if len(fields) != 1:
+                continue
+            index, line_num, line, match = fields[0]
+            if match.group("type") != "int":
+                continue
+            field_start = line.index(":rtype", match.start(), match.end())
+            raw_field = source_lines[line_num - 1][field_start : match.end("type")]
+            if "'" in raw_field or '"' in raw_field:
+                continue
+            indent = len(line) - len(line.lstrip())
+            if index + 1 < len(declarations):
+                _, following = declarations[index + 1]
+                following_indent = len(following) - len(following.lstrip())
+                if following_indent > indent and not following.lstrip().startswith(":"):
+                    continue
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message="Explicit return declarations conflict: annotation 'None', Sphinx type 'int'",
+                    line=line_num,
+                    column=match.start("type") + 1,
+                    end_column=match.end("type") + 1,
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion="Check both explicit return declarations",
+                )
+            )
+        return issues
+
+
 class CommentedOutCodeRule(Rule):
     """C008: Detect full-line comments that parse as code statements."""
 

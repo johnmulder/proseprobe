@@ -1972,25 +1972,25 @@ do not change named profiles.
 - [x] P29.3 Expose the smallest immutable return-annotation metadata required by
   this rule without changing the existing parameter tuple or AST cache contract.
   Run focused parser tests.
-- [ ] P29.4 Add a failing rule test for `def f() -> None` with `:rtype: int`,
+- [x] P29.4 Add a failing rule test for `def f() -> None` with `:rtype: int`,
   plus a matching `:rtype: None` negative. Assert one finding at the documented
   type's exact physical source span.
-- [ ] P29.5 Add the single explicit conflict and a neutral diagnostic.
+- [x] P29.5 Add the single explicit conflict and a neutral diagnostic.
   Reuse existing physical field/example guards where they match this rule's
   contract. Run the first positive/negative slice.
-- [ ] P29.6 Add failing tests that literal directives, doctests, fenced
+- [x] P29.6 Add failing tests that literal directives, doctests, fenced
   examples, string fragments and a different function's fields cannot create
   a conflict. Add the smallest ownership/example guards and rerun them.
-- [ ] P29.7 Add failing unsupported-case negatives for unions/Optional, aliases,
+- [x] P29.7 Add failing unsupported-case negatives for unions/Optional, aliases,
   rebound type names, quoted unresolved annotations, overloads, decorators marked
   `has_dynamic_decorators`, malformed Python and duplicate/conflicting `:rtype:` fields.
-- [ ] P29.8 Add conservative guards; do not report a declaration when either
+- [x] P29.8 Add conservative guards; do not report a declaration when either
   side is unresolved. Run supported and unsupported cases together.
-- [ ] P29.9 Consider additional mutually exclusive scalar pairs one at a time.
+- [x] P29.9 Consider additional mutually exclusive scalar pairs one at a time.
   For each accepted pair, first add a disagreement positive and valid subtype
   or conversion negatives. Exclude `bool`/`int`, numeric compatibility and
   subclass judgments unless a sound contract is proved; defer otherwise.
-- [ ] P29.10 Check registry IDs and add the rule through the existing factory,
+- [x] P29.10 Check registry IDs and add the rule through the existing factory,
   metadata and experimental selection mechanisms. Add failing registration,
   `explain`, explicit-select and unchanged-profile assertions before wiring it.
 - [ ] P29.11 Add corpus positives/negatives, suppression, confidence-policy,
@@ -2682,3 +2682,21 @@ roots in direct Config construction. The normalized root stays JSON-safe.
 Direct linter and effective-policy construction validate the same context.
 All 351 focused config/linter/CLI tests pass. Target resolution and reads remain
 for the next slice; ordinary scans still perform no local-link checking.
+
+### P29 — Experimental explicit return conflict
+
+Forty missing-rule/registration cases failed before implementation. C010 now
+reports only a source-proved `None` annotation versus a physical `int` Sphinx
+field. Matching/unsupported fields, literal examples, ownership, generators,
+binding uncertainty and duplicate/continued fields are paired negatives.
+Other scalar pairs are intentionally deferred: no sound compatibility contract
+was established for them. The initial check remains experimental INFO/MEDIUM;
+existing profiles are unchanged. CLI/reporting, suppression, confidence,
+severity override and source-bound baseline tests cover the new ID. A complete
+purpose-written corpus module supplies a positive and matching-type negative.
+P29.11's final strict gate awaits P23; independent review is deferred.
+
+C010's isolated `make check dogfood rule-quality` snapshot passes. Results are
+366 TP/6 unchanged FP/0 FN, 452/458 negative checks and 64/64 supplied spans.
+The registry now has 101 rules; generated inventories and explicit count tests
+were updated without changing named-profile membership.

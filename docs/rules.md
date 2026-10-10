@@ -119,6 +119,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `C007` | Docstring Repeats Signature | Code | info | medium | python / raw | — |
 | `C008` | Commented-Out Code | Code | info | low | python / raw | — |
 | `C009` | Stale Docstring Parameter | Code | info | high | python / raw | — |
+| `C010` | Explicit Return Type Conflict | Code | info | medium | python / raw | — |
 | `M001` | Wrong Markup | Markup | warning | low | python / raw | — |
 | `M002` | ChatGPT Markers | Markup | error | medium | markdown / prose | — |
 | `M003` | UTM Parameters | Markup | warning | medium | markdown / raw | — |
@@ -2186,6 +2187,34 @@ def read(path):
 
     :param path: File to read.
     """
+```
+
+---
+
+### C010: Explicit Return Type Conflict
+
+Reports the supported explicit contradiction between an unquoted `-> None`
+annotation and a physical Sphinx `:rtype: int` field. The finding covers the
+field's type and asks the author to check both declarations; it does not infer
+an intended return value. This rule is experimental INFO/MEDIUM and belongs to
+no built-in profile.
+
+The initial contract excludes other scalar pairs, unions, aliases, generics,
+quoted annotations, generators, unknown decorators, duplicate or continued
+fields, malformed source and unresolved built-in bindings. Literal examples,
+doctests and other owners' fields remain outside this contract. Static binding
+checks are conservative across the source module; they do not execute imports.
+
+**Example (bad):**
+```python
+def read() -> None:
+    """:rtype: int"""
+```
+
+**Example (good):**
+```python
+def read() -> None:
+    """:rtype: None"""
 ```
 
 ---

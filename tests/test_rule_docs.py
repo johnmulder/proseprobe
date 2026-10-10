@@ -81,15 +81,15 @@ def test_category_table_is_derived_from_registry() -> None:
     assert "| `T` | Style | 14 |" in rendered
     assert "| `M` | Markup | 11 |" in rendered
     assert "| `G` | Grammar | 26 |" in rendered
-    assert "| `C` | Code | 8 |" in rendered
-    assert "| **Total** | | **100** | |" in rendered
+    assert "| `C` | Code | 9 |" in rendered
+    assert "| **Total** | | **101** | |" in rendered
 
 
 def test_rule_inventory_contains_canonical_metadata() -> None:
     rendered = render_rule_inventory()
     rule_rows = [line for line in rendered.splitlines() if line.startswith("| `")]
 
-    assert len(rule_rows) == 100
+    assert len(rule_rows) == 101
     assert rule_rows[0].startswith("| `V001`")
     assert rule_rows[-1].startswith("| `M011`")
     assert any(

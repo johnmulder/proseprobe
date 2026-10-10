@@ -32,6 +32,7 @@ def test_profiles_cover_non_experimental_rules_without_unknown_rules() -> None:
     assert {
         "C006",
         "C009",
+        "C010",
         "G038",
         "G039",
         "M011",

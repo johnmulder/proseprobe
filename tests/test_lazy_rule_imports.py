@@ -89,6 +89,6 @@ print(json.dumps({'before': before, 'after': sorted(sys.modules),
         module = f"proseprobe.rules.{name}"
         assert module not in result["before"]
         assert module in result["after"]
-    assert len(result["ids"]) == len(set(result["ids"])) == 100
+    assert len(result["ids"]) == len(set(result["ids"])) == 101
     assert result["ids"] == sorted(result["ids"])
     assert result["issues"] == ["V009"]

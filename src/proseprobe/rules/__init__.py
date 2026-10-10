@@ -24,6 +24,7 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         code.DocstringRepeatsSignatureRule(),
         code.CommentedOutCodeRule(),
         code.StaleDocstringParameterRule(),
+        code.ExplicitReturnTypeConflictRule(),
         grammar.CopulaAvoidanceRule(),
         grammar.ExcessiveHedgingRule(),
         grammar.ParticipleChainsRule(),
