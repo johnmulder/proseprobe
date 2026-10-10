@@ -291,7 +291,7 @@ def _review_header(value: Any, root: Path) -> tuple[dict[str, Any], dict[str, An
             _text(context[key], f"packet index.context.{relative}.{key}")
         if context["split"] not in {"development", "holdout"} or context[
             "format"
-        ] not in {"markdown", "codesearchnet", "m2", "jfleg", "asset"}:
+        ] not in {"markdown", "python", "codesearchnet", "m2", "jfleg", "asset"}:
             raise AnnotationError(
                 "packet index.context contains invalid split or format"
             )

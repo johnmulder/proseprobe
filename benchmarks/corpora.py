@@ -11,7 +11,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 SPLITS = frozenset({"development", "holdout"})
-FORMATS = frozenset({"markdown", "codesearchnet", "jfleg", "asset", "m2"})
+FORMATS = frozenset({"markdown", "python", "codesearchnet", "jfleg", "asset", "m2"})
 
 
 class CorpusError(ValueError):
@@ -179,6 +179,48 @@ def read_markdown(source: Source, corpus_root: Path) -> TextSample:
     )
 
 
+def load_source_collection(
+    manifests: Sequence[Path], corpus_root: Path
+) -> tuple[Source, ...]:
+    """Validate split isolation across an original freeze and its extensions."""
+    sources = tuple(
+        source
+        for manifest in manifests
+        for source in load_sources(manifest, corpus_root)
+    )
+    identities: set[str] = set()
+    groups: dict[tuple[str, str], str] = {}
+    fingerprints: dict[str, str] = {}
+    locators: set[tuple[str, str, str]] = set()
+    for source in sources:
+        if source.identity in identities:
+            raise CorpusError(f"duplicate sample identity: {source.identity}")
+        identities.add(source.identity)
+        locator = (
+            source.source_group,
+            str(source.provenance["revision"]),
+            str(source.provenance["locator"]),
+        )
+        if locator in locators:
+            raise CorpusError("duplicate native locator across manifests")
+        locators.add(locator)
+        for field in ("source_group", "pair_group", "near_duplicate_group"):
+            value = source.provenance.get(field)
+            if isinstance(value, str):
+                key = (field, value)
+                if key in groups and groups[key] != source.split:
+                    raise CorpusError(f"{field} crosses split: {value}")
+                groups[key] = source.split
+        normalized = " ".join(
+            read_sample(source, corpus_root).original.casefold().split()
+        )
+        fingerprint = hashlib.sha256(normalized.encode()).hexdigest()
+        if fingerprint in fingerprints and fingerprints[fingerprint] != source.split:
+            raise CorpusError("normalized duplicate crosses split")
+        fingerprints[fingerprint] = source.split
+    return sources
+
+
 @dataclass(frozen=True)
 class CodeSample:
     original: str
@@ -312,7 +354,7 @@ def read_sample(source: Source, corpus_root: Path) -> TextSample:
     except UnicodeError as error:
         raise CorpusError(f"sample is not UTF-8: {source.identity}") from error
     references: tuple[str, ...] = ()
-    if source.format == "markdown":
+    if source.format in {"markdown", "python"}:
         original = text
     elif source.format == "codesearchnet":
         samples = read_codesearchnet(text)
@@ -366,7 +408,7 @@ def export_review_packet(
     originals = []
     for index, source in enumerate(sources):
         sample = read_sample(source, corpus_root)
-        suffix = ".py" if source.format == "codesearchnet" else ".md"
+        suffix = ".py" if source.format in {"codesearchnet", "python"} else ".md"
         relative = f"originals/{index:04d}{suffix}"
         raw = sample.original.encode("utf-8")
         binding = {

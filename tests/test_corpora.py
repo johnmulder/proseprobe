@@ -62,6 +62,110 @@ def test_markdown_preserves_raw_text_and_source_identity(tmp_path: Path) -> None
     assert sample.references == ()
 
 
+def test_complete_python_module_keeps_bytes_and_exports_python_filename(
+    tmp_path: Path,
+) -> None:
+    raw = (
+        '"""Module café documentation."""\r\n'
+        'raise AssertionError("source must not execute")\r\n'
+        "# Keep this comment.\r\n"
+        'def résumé():\r\n    """Read data."""\r\n    return None\r\n'
+    ).encode()
+    record = _record(tmp_path, format="python")
+    (tmp_path / "module.py").write_bytes(raw)
+    record.update(
+        path="module.py",
+        locator="src/module.py",
+        sha256=hashlib.sha256(raw).hexdigest(),
+    )
+
+    sources = load_sources(_manifest(tmp_path, [record]), tmp_path)
+    [source] = sources
+    sample = read_sample(source, tmp_path)
+    corpora.export_review_packet(sources, tmp_path, tmp_path / "packet")
+
+    assert sample.original.encode() == raw
+    assert sample.references == ()
+    assert (tmp_path / "packet/originals/0000.py").read_bytes() == raw
+    from benchmarks.quality_scoring import load_annotations
+
+    from proseprobe.rules import get_all_rules
+
+    annotations = load_annotations(
+        tmp_path / "packet/annotations.unreviewed.json",
+        tmp_path / "packet",
+        {rule.id for rule in get_all_rules()},
+    )
+    assert annotations.source_binding == "sha256-utf8"
+    assert annotations.expected == ()
+
+
+@pytest.mark.parametrize("collision", ["repository", "pair", "declared-near", "bytes"])
+def test_extension_cannot_leak_across_the_original_split(
+    tmp_path: Path, collision: str
+) -> None:
+    first = _record(tmp_path, "first", source_group="one", pair_group="one")
+    second = _record(
+        tmp_path, "second", source_group="two", pair_group="two", split="holdout"
+    )
+    different = b"Different source.\n"
+    (tmp_path / "second.md").write_bytes(different)
+    second["sha256"] = hashlib.sha256(different).hexdigest()
+    if collision == "repository":
+        second["source_group"] = first["source_group"]
+    elif collision == "pair":
+        second["pair_group"] = first["pair_group"]
+    elif collision == "declared-near":
+        first["near_duplicate_group"] = second["near_duplicate_group"] = "shared"
+    else:
+        raw = (tmp_path / "first.md").read_bytes()
+        (tmp_path / "second.md").write_bytes(raw.upper().replace(b"\n", b"\n\n"))
+        second["sha256"] = hashlib.sha256(
+            (tmp_path / "second.md").read_bytes()
+        ).hexdigest()
+    original = _manifest(tmp_path, [first])
+    extension = tmp_path / "extension.json"
+    extension.write_text(json.dumps({"version": 1, "samples": [second]}))
+
+    with pytest.raises(CorpusError, match=r"crosses split|duplicate"):
+        corpora.load_source_collection([original, extension], tmp_path)
+
+
+def test_original_and_extension_keep_separate_source_identities(tmp_path: Path) -> None:
+    first = _record(tmp_path, "first", source_group="one", pair_group="one")
+    second = _record(
+        tmp_path, "second", source_group="two", pair_group="two", split="holdout"
+    )
+    raw = b"Other original.\n"
+    (tmp_path / "second.md").write_bytes(raw)
+    second["sha256"] = hashlib.sha256(raw).hexdigest()
+    original = _manifest(tmp_path, [first])
+    extension = tmp_path / "extension.json"
+    extension.write_text(json.dumps({"version": 1, "samples": [second]}))
+
+    sources = corpora.load_source_collection([original, extension], tmp_path)
+
+    assert [source.identity for source in sources] == ["first", "second"]
+    assert [source.split for source in sources] == ["development", "holdout"]
+
+
+def test_extension_rejects_duplicate_native_locator(tmp_path: Path) -> None:
+    first = _record(tmp_path, "first", source_group="one", pair_group="one")
+    second = _record(
+        tmp_path,
+        "second",
+        source_group="one",
+        pair_group="two",
+        locator=first["locator"],
+    )
+    original = _manifest(tmp_path, [first])
+    extension = tmp_path / "extension.json"
+    extension.write_text(json.dumps({"version": 1, "samples": [second]}))
+
+    with pytest.raises(CorpusError, match=r"duplicate.*locator"):
+        corpora.load_source_collection([original, extension], tmp_path)
+
+
 @pytest.mark.parametrize(
     "field",
     ["url", "revision", "license", "license_url", "attribution", "sha256", "locator"],

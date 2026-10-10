@@ -27,7 +27,8 @@ The source manifest is an acquisition record, separate from issue annotations.
 `review_status: unreviewed` applies to every source unit. `read_sample()` returns
 the original prose and native references without running the linter or applying
 native labels. Use a virtual `.py` filename for CodeSearchNet functions and a
-virtual `.md` filename for the other formats when an annotated evaluation is
+virtual `.py` filename for complete Python modules and a virtual `.md` filename
+for the other formats when an annotated evaluation is
 ready. Original source identities and native coordinate systems must accompany
 any exported diagnostic or annotation.
 
@@ -53,6 +54,14 @@ contains no predictions, native revisions, reviewers or reviewed coverage.
 An existing output directory is rejected. The original frozen pilot and earlier
 blind packet remain intact. Human review fills the new template before any
 independent effectiveness claim; that review is deferred at the user's request.
+
+Complete-module sources use the `python` format. Exports preserve their exact UTF-8 bytes, line endings and complete code as
+`.py` originals without execution. The `load_source_collection()` adapter validates the
+original manifest and separate extensions together. It rejects duplicate source
+identities/native locators and cross-split repository, pair, declared duplicate
+group, or case/whitespace-normalized text collisions. This normalization does
+not establish semantic similarity; uncertain related sources need a declared
+group and review before acceptance.
 
 ## Sampling and provenance
 

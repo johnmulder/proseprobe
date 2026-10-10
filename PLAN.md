@@ -2201,9 +2201,9 @@ acceptance evidence exists. P06D.5 remains conditional on clarified reuse terms.
 - [ ] P32A.9 Verify each candidate's pinned revision, upstream content license,
   attribution, access, and intended reuse before accepting cached text. Treat a
   hosting project's license as insufficient evidence for unrelated dataset contents.
-- [ ] P32A.10 Add failing tiny-fixture tests for cross-manifest repository/pair
+- [x] P32A.10 Add failing tiny-fixture tests for cross-manifest repository/pair
   overlap, duplicate bytes, normalized near duplicates, and split leakage.
-- [ ] P32A.11 Extend existing split validation only as required to check the
+- [x] P32A.11 Extend existing split validation only as required to check the
   original and extension together; keep downloads out of unit tests.
 - [ ] P32A.12 Cache and checksum the accepted development/holdout sources without
   detector-based selection. Freeze identities and assignments before further tuning.
@@ -2568,3 +2568,14 @@ purpose-written corpus. Results are 363 TP/6 unchanged FP/0 FN, 449/455 negative
 checks and 61/61 full spans. Focused suites and the isolated package gate pass.
 The shared bounded-clause helper moved without changing its vocabulary behavior.
 G038 remains experimental INFO/LOW; independent review is deferred.
+
+### P32A — Complete-module adapters and extension isolation
+
+Seven new offline cases reproduced the missing complete-module adapter and
+cross-manifest split checks. Exact Python UTF-8 bytes now remain intact in the
+source-bound `.py` review packet without execution. Original and extension
+manifests retain separate identities, with combined repository/pair/declared
+near-duplicate and case/whitespace-normalized duplicate validation. This does
+not claim arbitrary semantic duplicate detection. All 118 related corpus/scorer
+tests and the isolated `make check dogfood rule-quality` gate pass. Results
+remain 363 TP/6 FP/0 FN. Acquisition and the original freeze are unchanged.
