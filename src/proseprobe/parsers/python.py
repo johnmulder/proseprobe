@@ -16,6 +16,14 @@ from proseprobe.parsers.prose import (
 )
 
 
+@dataclass(frozen=True)
+class ReturnAnnotation:
+    """A supported static return declaration with its physical source span."""
+
+    name: str
+    span: tuple[int, int, int, int]
+
+
 @dataclass
 class Docstring:
     """A docstring in Python code."""
@@ -28,6 +36,7 @@ class Docstring:
     parameters: tuple[str, ...]
     signature_parameters: tuple[tuple[str, str], ...] = ()
     has_dynamic_decorators: bool = False
+    return_annotation: ReturnAnnotation | None = None
 
     @property
     def accepts_kwargs(self) -> bool:
@@ -121,6 +130,7 @@ class PythonParser:
                     owner_name=owner_name,
                     parameters=parameters,
                     signature_parameters=self._signature_parameters(node),
+                    return_annotation=self._return_annotation(node),
                     has_dynamic_decorators=isinstance(
                         node, (ast.FunctionDef, ast.AsyncFunctionDef)
                     )
@@ -151,6 +161,27 @@ class PythonParser:
             if end_byte is not None
             else len(self._lines[end_line - 1]) + 1,
         )
+
+    def _return_annotation(
+        self, node: ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef
+    ) -> ReturnAnnotation | None:
+        if (
+            not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            or not isinstance(node.returns, ast.Constant)
+            or node.returns.value is not None
+        ):
+            return None
+        pending: list[ast.AST] = list(node.body)
+        while pending:
+            current = pending.pop()
+            if isinstance(current, (ast.Yield, ast.YieldFrom)):
+                return None
+            if not isinstance(
+                current,
+                (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda),
+            ):
+                pending.extend(ast.iter_child_nodes(current))
+        return ReturnAnnotation("None", self.get_node_span(node.returns))
 
     @staticmethod
     def _docstring_owner(

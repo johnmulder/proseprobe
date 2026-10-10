@@ -1962,14 +1962,14 @@ new stable rule ID only after checking the current registry. Keep the rule
 experimental with provisional INFO/MEDIUM metadata and available through existing explicit-selection policy;
 do not change named profiles.
 
-- [ ] P29.1 Define the first supported annotation/doc-type pair and the skip
+- [x] P29.1 Define the first supported annotation/doc-type pair and the skip
   contract. Limit initial coverage to physical Sphinx fields and statically
   recognized types; defer Google/NumPy prose, aliases, unions, generics,
   overloads, generators, decorators marked `has_dynamic_decorators` and unresolved bindings.
-- [ ] P29.2 Add a failing parser metadata test for a function annotated `None`,
+- [x] P29.2 Add a failing parser metadata test for a function annotated `None`,
   its nested/async counterparts and a function lacking a return annotation.
   Assert ownership and source-coordinate mapping.
-- [ ] P29.3 Expose the smallest immutable return-annotation metadata required by
+- [x] P29.3 Expose the smallest immutable return-annotation metadata required by
   this rule without changing the existing parameter tuple or AST cache contract.
   Run focused parser tests.
 - [ ] P29.4 Add a failing rule test for `def f() -> None` with `:rtype: int`,
@@ -2657,3 +2657,17 @@ experimental policy. P28.7's strict gate awaits P23.
 
 P28's isolated full gate passes with 365 TP/6 unchanged FP/0 FN and 63/63
 supplied full spans. Existing source identities and negative judgments remain.
+
+### P29 — Static return annotation metadata
+
+The initial rule contract is deliberately limited to an unquoted `-> None`
+declaration and a physical Sphinx `:rtype: int` field with an unshadowed built-in
+name. Other scalar pairs, aliases, unions, generic types, quoted annotations,
+generators and unresolved declarations remain unsupported; no runtime behavior
+is inferred. C010 is reserved after registry verification.
+
+Ten missing-metadata regressions failed before correction. The parser now exposes
+an immutable supported return declaration and a physical character span while
+preserving existing signature tuples and ownership. Nested/async functions,
+Unicode columns, absent/unresolved declarations and owned versus nested yields
+are covered. All 286 focused parser/code tests pass; rule wiring is next.
