@@ -1,8 +1,13 @@
 # ProseProbe improvement plan
 
-Status: engineering changes and final local verification complete.
+Status: original engineering packages and their local verification complete.
+Reassessment packages P18–P33 are planned and remain open.
 Independent human evaluation and the listed external gates remain pending.
 Assessment date: 2026-10-09.
+
+Start new work at [Reassessment continuation](#reassessment-continuation).
+P00–P17 and their execution records remain historical evidence. An existing
+checked item does not complete a new regression or acceptance gate below.
 
 This plan covers the discovery and parser defects, evaluation gaps, heuristic
 refinements, new rules, and public datasets identified in the project assessment.
@@ -1214,3 +1219,1190 @@ Change commits include `ca2fd6d` (new experimental rules), `a58441e`
 `f8f8f52` (literal wrapping), `a0cbd3a` (regex wrapping), `2de7cc2` (deferred
 imports), `802be72` (measured pattern construction), and `91eb4ea` (integration
 contracts). Earlier package commits are recorded above.
+
+## Reassessment continuation
+
+Planning date: 2026-10-09. Status: all new tasks below are open.
+Baseline revision: `bf53d0adfed8bd04884cbdfc542f365c026ee796`.
+
+This continuation covers every issue from the second assessment. The previous
+implementation improved source mapping, policy consistency, matching, and
+measurement. The next work corrects remaining defects, tests useful additions,
+and establishes independent evidence. Keep the original completed records and
+unchecked human-review tasks intact.
+
+The reassessment reran the curated regression evaluator: all-rules info/low
+with GitHub anchors produced 336 true positives, six false positives, no misses,
+and 428/434 passed negative checks; default production warning/low with anchors
+off produced 106 true positives, four false positives, no misses, and 65/69
+passed negative checks. Precision is 98.25% and 96.36%, respectively. The last
+full local verification recorded 2,665 tests on Python 3.11–3.13 and 96.01%
+coverage. These are regression and engineering results. The frozen 300-unit
+natural-text pilot has no independent labels or effectiveness score.
+
+### Scope and issue mapping
+
+| Assessment issue | Work package |
+| --- | --- |
+| Phrases synthesized across masked inline content; incomplete predicate validation | P18 |
+| Uncaught automatic TOML errors; parent configuration beyond a Git root | P19 |
+| Missing SARIF column convention | P20 |
+| Python extension casing differs between routing and parsing | P21 |
+| Watch misses backward timestamps and some recreated files | P22 |
+| Valid quality reports always succeed even with new mismatches | P23 |
+| Labels lack annotation-time source binding; runtime and benchmark identity gaps | P24 |
+| Fully reviewed clean source groups disappear from coverage counts | P25 |
+| Placeholder checks confuse executable code, strings, and abstract contracts | P26 |
+| Unrelated raw context suppresses undefined-comparative findings | P27 |
+| Explicit starred parameter documentation conflicts with signature kinds | P28 |
+| Explicit return annotation and documentation can contradict each other | P29 |
+| Missing local Markdown link targets and supported cross-document fragments | P30 |
+| Suggested replacements can trigger the same rule or lose meaning | P31 |
+| Independent labels, Python holdout, source diversity, calibration, and dataset limits | P32 |
+| Integration, documented behavior, performance, completion, and remote checks | P33 |
+
+P18–P28 and P31 address confirmed defects or gaps. P29 and P30 are scoped
+experiments. They require a written contract before implementation and remain
+experimental until independent evidence supports wider use. Existing rule IDs
+stay stable; assign a new ID only after checking the registry. Avoid duplicating
+M005 reference-definition checks or expanding placeholder catalogs before P26.
+
+### Execution order
+
+| Stage | Packages | Dependency or coordination constraint |
+| --- | --- | --- |
+| Capture current evidence | P18/P19/P20/P21/P22 first tests; P32 review protocol | Preserve baseline and frozen holdout text |
+| Correct independent operational defects | P19–P22 | May run alongside P18 with separate file ownership |
+| Complete evaluation foundations | P24, P25, then P23 | Provenance and reviewed coverage precede the strict gate |
+| Correct rule precision | P18, P26, P27, P28, P31 | Sequence shared rule-file edits; use the regression gate when available |
+| Trial scoped new checks | P29, P30 | Written contracts, source validation, and production-policy tests |
+| Obtain and evaluate independent evidence | P32 | Human annotation precedes detector comparison and holdout tuning |
+| Final integration | P33 | Required engineering gates and honest unresolved-status record |
+
+P32 protocol and source-inventory work can begin immediately. Human review and
+publication of effectiveness results have their own prerequisites. Continue
+independent engineering work while waiting for a reviewer. Preserve all 300
+frozen source assignments; new coverage belongs to a separately frozen extension.
+
+### Test and change discipline for this continuation
+
+- Begin each behavior slice with the smallest failing test. Record the command,
+  failure, and intended invariant before editing production code.
+- Change one behavior at a time. Run its new test and the related existing tests
+  before broader acceptance checks. Characterize behavior before a refactor.
+- Use temporary fixtures and synthetic examples for deterministic tests. Keep
+  external downloads, wall-clock thresholds, and human judgments outside unit tests.
+- Check complete issue records when moving match logic: rule ID, message,
+  suggestion, confidence, severity, ordering, and original-source endpoints.
+- Preserve caller policy, inline suppression, baseline durability, and the
+  original known false-positive inputs and negative annotations.
+- Record deliberate annotation or detection-contract changes with reasons.
+  Report known mismatches; a regression ledger must not suppress raw findings.
+- Keep parser conformance, curated regression, independently reviewed natural
+  text, and native human revisions as separately reported evidence.
+- Update this document after each slice with status, test evidence, quality delta,
+  and remaining prerequisites. Check a box only when its action is complete.
+- Commit each coherent behavior change with a one-line message. Suggested
+  messages below identify useful boundaries; do not combine unrelated packages.
+- Run the P33 slice gate before each implementation commit. Repeat broader
+  checks when new changes, failures, or unresolved concerns justify them.
+
+No implementation is performed by this planning revision. Existing runtime
+dependencies, profiles, baselines, corpus annotations, and source freezes are
+unchanged. The package-specific acceptance criteria below control completion.
+
+## P18 — Validate complete phrase predicates against original source
+
+Targets: `src/proseprobe/rules/_phrases.py`,
+`src/proseprobe/rules/grammar.py`, `src/proseprobe/rules/vocab.py`,
+`tests/test_rules/test_grammar.py`, `tests/test_rules/test_vocab.py`,
+`tests/test_parsers/test_prose.py`, `tests/test_linter.py`,
+`quality/annotations.json` and purpose-written regression fixtures.
+Prerequisites: completed P02, P03 and P08; P24 before publishing new measurements.
+
+Masked prose must not create a detection or an exemption that the original source
+cannot support. Validate the entire predicate used to decide a match, including
+its copula or modal, while keeping the existing diagnostic subspan. In particular,
+V015 validates `is ... best` before reporting only `best`. Context used for
+exceptions, definition suffixes, or confidence changes also needs original-source
+evidence. Keep exact phrase catalogs, rule IDs, severities and ordering stable.
+
+- [ ] P18.1 Inventory the six assessed rules: G024, G025, G037, V014, V015 and
+  V016. Record each candidate pattern, diagnostic subgroup, exception predicate,
+  confidence predicate and existing focused tests. Audit direct sentence-regex
+  consumers for the same defect; add another rule only after reproducing it.
+- [ ] P18.2 Add a passing characterization matrix for ordinary and wrapped
+  positives in Markdown body/list/blockquote and Python docstring/comment prose.
+  Assert complete issue records, including original-source exclusive endpoints.
+- [ ] P18.3 Add failing G037 negatives for
+  ``Clients must `not` normally restart.`` and the HTML-masked equivalent. Confirm
+  that the current false match is `must normally` before changing the rule.
+- [ ] P18.4 Route G037 candidates through the existing source-validation helper.
+  Validate the modal and hedge together; retain legitimate whitespace and
+  continuation prefixes. Run the G037 matrix before continuing.
+- [ ] P18.5 Add a failing G037 definition-suffix case where an intervening masked
+  token makes an apparent `means` exemption. Assert that masking does not remove
+  a genuine finding. Add an uninterrupted definition negative alongside it.
+- [ ] P18.6 Make that exemption validate its complete original-source suffix.
+  Run G037 positives, negatives and source-span checks.
+- [ ] P18.7 Add failing G024 tests with inline code or HTML interrupting each
+  fixed opener, including ``It must `not` be ensured that the file is closed.``
+  Preserve a valid sentence-start opener and a wrapped positive.
+- [ ] P18.8 Validate G024's full anchored opener against the corresponding source
+  slice without removing its sentence-start requirement. Run focused G024 tests.
+- [ ] P18.9 Add failing G025 tests with a masked interruption in both
+  `You will need to` and `You can proceed to`. Include
+  ``You `should reconsider` will need to restart.`` Retain ordinary repeated matches.
+- [ ] P18.10 Validate each complete G025 instruction phrase and rerun its focused
+  tests, including a later valid candidate after an invalid interrupted one.
+- [ ] P18.11 Add failing V014 tests for ``a large `unexpected` number of`` and
+  ``a handful `unexpected` of``. Include
+  ``A small `but measurable` number of errors occurred.`` Add a wrapped positive
+  with exact endpoints.
+- [ ] P18.12 Validate each full V014 quantity phrase. Keep its documented evidence
+  policy and confidence behavior intact; run V014 tests.
+- [ ] P18.13 Add failing V015 negatives for ``The parser is `not` the best.`` and
+  interruptions within a multiword superlative. Assert no diagnostic from a
+  fabricated copula/claim pair, even when the adjective span itself is literal.
+- [ ] P18.14 Validate V015's whole `_CLAIM` match before selecting the `claim`
+  subgroup for its diagnostic. Run the V015 detection and full-span matrix.
+- [ ] P18.15 Add failing V015 guard tests where masked code/HTML invents a local
+  comparison set, a hypothetical qualifier, or literal-discussion context.
+  Pair each with a genuine explicit comparison or qualifier negative.
+- [ ] P18.16 Use original-source bounded prose for each reproduced exemption.
+  Preserve existing clause attachment and refrain from treating all nearby
+  comparison vocabulary as evidence. Run V015 guard tests.
+- [ ] P18.17 Add failing V016 negatives for ``The system never `not` fails.`` and
+  interruptions within `always succeeds`, `eliminates all errors`, and
+  `100% secure`. Add corresponding unmasked and wrapped positives.
+- [ ] P18.18 Validate each whole V016 reliability predicate and run its focused
+  detection/source-span tests.
+- [ ] P18.19 Add failing V016 tests where masking fabricates a tested bound or
+  changes its attachment, plus a case where masked text incorrectly changes
+  confidence. Assert genuine attached bounds still qualify the observation.
+- [ ] P18.20 Validate only the reproduced context predicates against original
+  source, preserving the existing clause boundary and tested-scope policy.
+  Run V016 confidence and bound tests.
+- [ ] P18.21 Add a shared helper regression for Markdown markup, punctuation,
+  block boundaries, CRLF, Unicode, Python comment prefixes and nested
+  blockquote prefixes. Characterize legitimate formatting that each caller
+  supports; do not globally strip markup to manufacture phrase adjacency.
+- [ ] P18.22 Make the smallest helper correction justified by those tests.
+  Avoid broadening matching for already validated rules. Run every current
+  helper caller's tests and compare complete prior positive records.
+- [ ] P18.23 Add one CLI/source-map integration assertion for G037 and V016, and
+  one V015 assertion showing that the validated predicate and reported subgroup
+  intentionally have different spans. Run focused linter/reporter tests.
+- [ ] P18.24 Add purpose-written positive/negative corpus annotations for the
+  corrected behaviors, retaining the old raw false-positive dispositions.
+  Run the P23 regression gate and P33 package checks. Keep external holdout text
+  unopened during this work.
+
+Acceptance: masking cannot invent these predicates or their tested exemptions;
+valid wraps remain detected with original-source spans; unchanged positives keep
+metadata and ordering. Regression scores are reported with P24 provenance.
+Suggested one-line commits: `Validate requirement phrases against original
+source`; `Validate complete quantity and claim predicates`; `Preserve claim
+exemptions only with source-backed context`.
+
+## P19 — Make configuration discovery obey its error and boundary contracts
+
+Targets: `src/proseprobe/config.py`, `tests/test_config.py`,
+`tests/test_cli.py`, configuration documentation.
+Prerequisites: reassessment baseline; independent of rule changes.
+
+- [ ] P19.1 Characterize the current precedence with temporary fixtures:
+  current `.proseprobe.toml`, current `pyproject.toml` with
+  `[tool.proseprobe]`, parent `.proseprobe.toml` through the Git root, user
+  configuration, then defaults. Reuse passing tests where available.
+- [ ] P19.2 Add a failing unit test for an automatically discovered malformed
+  current-directory `pyproject.toml`. Require `ConfigError` containing its path
+  and parse diagnostic. A malformed file without a readable tool table also
+  fails clearly; discovery must not silently guess that it is unrelated.
+- [ ] P19.3 Add a failing CLI regression for automatic discovery. Assert exit
+  code 2, a configuration diagnostic on stderr, and no traceback or findings.
+  Reuse the existing explicit-path malformed-TOML test as the comparison.
+- [ ] P19.4 Wrap discovery's TOML read/parse errors in the existing `ConfigError`
+  contract. Add one deterministic read-error test using a patched file reader;
+  avoid permission-mode tests that depend on the executing account.
+- [ ] P19.5 Add a failing boundary test with the starting directory itself as a
+  Git root and a conflicting `.proseprobe.toml` above it. Parameterize a `.git`
+  directory and a `.git` worktree file. Neither may inherit that parent file.
+- [ ] P19.6 Add the paired nested-directory test: a root-local
+  `.proseprobe.toml` is eligible, but configuration above that root is not.
+  Preserve current-directory precedence even when the directory is the root.
+- [ ] P19.7 Correct the upward-search stopping condition. Detect the marker in
+  the starting directory as well as each parent; do not parse Git internals or
+  add a Git subprocess to configuration discovery.
+- [ ] P19.8 Verify user fallback with `Path.home()` redirected to a temporary
+  location. Reuse the existing parent-`pyproject.toml` exclusion test; keep that
+  documented exclusion intact. Assert that an explicit `--config` still works
+  outside the discovery boundary.
+- [ ] P19.9 Update the configuration documentation if its description needs
+  clarification. Run focused configuration/CLI tests and the package gate.
+
+Acceptance: automatic and explicit parsing failures share the documented CLI
+error path. Discovery includes the Git root, stops there, supports worktree
+markers, and preserves precedence, user fallback, and parent-pyproject policy.
+
+Suggested commits: `Report configuration discovery parse errors consistently`;
+`Stop configuration discovery at the starting Git root`.
+
+## P20 — Declare SARIF columns as Unicode code points
+
+Targets: `src/proseprobe/core/reporter.py`, `tests/test_reporter.py`,
+`tests/test_cli.py`; existing source-position fixtures.
+Prerequisites: P02 source-coordinate contract, already complete.
+
+- [ ] P20.1 Add a failing reporter assertion that each SARIF run has
+  `columnKind: "unicodeCodePoints"`, including a run with no findings.
+- [ ] P20.2 Add a failing CLI fixture containing an astral character before a
+  known finding, such as `😀 delve`. Assert the actual exclusive-end source
+  slice and SARIF start/end columns in Python character units. Include a
+  Python docstring variant if the existing Unicode integration test lacks it.
+- [ ] P20.3 Add the run property without converting the linter's coordinates.
+  Reuse ASCII and multiline reporter tests to establish unchanged regions,
+  rule metadata, severity, confidence, and rank.
+- [ ] P20.4 Record SARIF 2.1.0 §3.14.27 as the contract in the existing reporter
+  documentation or test comment. Run reporter/CLI tests and the package gate.
+  Do not add a runtime schema-validation dependency for this property.
+
+Acceptance: SARIF explicitly identifies the coordinate convention used by all
+text findings, and a reader can recover the source span after an astral
+character. Other output formats preserve their existing schemas.
+
+Suggested commit: `Declare Unicode code point columns in SARIF`.
+
+## P21 — Align Python file classification across scan entry points
+
+Targets: `src/proseprobe/core/linter.py`,
+`src/proseprobe/parsers/prose.py`, a small shared file-kind helper only if needed,
+`tests/test_linter.py`, `tests/test_cli.py`, parser dispatch tests.
+Prerequisites: reassessment baseline; independent of P19/P20.
+
+- [ ] P21.1 Add a failing linter test that explicitly supplied `example.PY`
+  produces the same Python-only rule finding as `example.py`. Compare full
+  finding records after normalizing only the filename.
+- [ ] P21.2 Add a failing CLI comparison between an explicit `.PY` file and
+  stdin with `--filename example.PY`. Assert Python documentation extraction,
+  Python-only rule eligibility, suppression handling, and virtual path output.
+- [ ] P21.3 Inventory existing suffix checks used for rule eligibility and
+  prose extraction. Characterize `.py`, `.PY`, Markdown suffixes, and an
+  unsupported suffix; preserve any intentional fallback behavior.
+- [ ] P21.4 Make file classification consistent using a small shared predicate
+  or the existing helper location. Keep the registry and parser interfaces;
+  introduce no file-type plugin framework.
+- [ ] P21.5 Add a discovery contract test with `.py` and `.PY` siblings:
+  configured directory include globs retain their existing case behavior.
+  A caller-supplied `*.PY` glob selects the uppercase file; explicit-file
+  overrides and configured exclusions retain their current behavior.
+- [ ] P21.6 Verify production/evaluator eligibility uses the same classification.
+  Run focused linter/parser/CLI tests and the package gate. Document explicit
+  filename classification only if the existing documentation is ambiguous.
+
+Acceptance: supported explicit and virtual Python filenames have consistent
+rule applicability regardless of suffix casing. This change does not silently
+broaden directory discovery or reinterpret user glob patterns.
+
+Suggested commit: `Align Python file classification for explicit and stdin scans`.
+
+## P22 — Detect watch changes when timestamps move backward
+
+Targets: `src/proseprobe/cli.py::_changed_files`, watch state initialization,
+`tests/test_cli.py`, watch documentation.
+Prerequisites: P21 before the integration comparison; helper work independent.
+
+- [ ] P22.1 Add a failing helper test that scans a temporary file, changes its
+  bytes, sets an earlier timestamp with `os.utime(ns=...)`, and scans again.
+  Assert that the second version is returned exactly once.
+- [ ] P22.2 Add deterministic tests for an unchanged stamp, a newer stamp, and
+  equal `mtime_ns` with changed size. Assert first discovery always schedules
+  the file. Use controlled stat values where filesystem precision differs.
+- [ ] P22.3 Replace the increasing float-time comparison with inequality of
+  `(st_mtime_ns, st_size)` stamps. Rename local state to describe the stamp,
+  keeping the helper private and avoiding content hashing or a new watcher.
+- [ ] P22.4 Add a failing deletion/recreation sequence: discover the file,
+  delete it for one iteration, then recreate it with its old timestamp and
+  size. Require removal of the departed path's cached stamp and scheduling
+  upon rediscovery.
+- [ ] P22.5 Prune state for paths no longer returned by successful discovery.
+  Add a file-removal-between-discovery-and-stat case; skip its failed stat
+  without terminating the loop. Confirm surviving paths retain their stamps.
+- [ ] P22.6 Exercise two watch iterations through the CLI with a controlled
+  sleep callback: the initial file has no finding, the backward-stamped edit
+  adds one, and the next batch reports it. Stop with `KeyboardInterrupt`;
+  avoid elapsed-time assertions or real waiting.
+- [ ] P22.7 Reuse check/watch parity tests for configuration, profile, baseline,
+  confidence, suppressions, quiet output, and read errors. Document that this
+  polling scheme cannot detect changed bytes when both stamp fields remain
+  identical and no deletion is observed. Run focused tests and the package gate.
+
+Acceptance: watch notices forward or backward stamp changes, equal-time size
+changes, and observed deletion/recreation. It schedules each changed version
+once and preserves the current polling and reporting contracts.
+
+Suggested commit: `Detect watch changes using nanosecond and size stamps`.
+
+## P23 — Add an explicit reviewed regression gate
+
+Targets: `benchmarks/rule_quality.py`, the smallest dedicated regression-gate
+module if separation is useful, quality tests, `quality/` gate records,
+`quality/README.md`, `Makefile`, existing CI workflow.
+Prerequisites: P24 annotation/source/rule provenance, P25 reviewed coverage
+accounting, and a fresh all-rules/default-production snapshot. Adding the
+gate does not depend on acquiring human labels for the external pilot.
+
+The existing `rule-quality` command remains a report-only measurement. The new
+gate compares reviewed mismatches, never a count allowance or a population
+precision target. All raw mismatches stay visible in both modes.
+
+- [ ] P23.1 Characterize current report-only behavior with an in-memory or
+  temporary reviewed corpus containing one false positive and one false
+  negative. Assert successful evaluation still returns 0 and prints both.
+- [ ] P23.2 Define a versioned known-mismatch record for a named effective
+  policy. Bind each item to mismatch kind, rule ID, source identity/hash, and
+  source span or stable expected-label identity. Record the review reason,
+  annotation/rule contract identifiers, effective policy, and evaluation code
+  provenance from P24. Runtime identity records the ledger's creation; it
+  does not require unchanged runtime code, because the gate evaluates new code.
+  Do not bind acceptance to a fixed FP/FN total.
+- [ ] P23.3 Add failing validator tests for duplicate identities, invalid spans,
+  unknown rules, changed source hashes, a mismatched policy, and unsupported
+  record versions. Invalid gate input returns a clear error, not success.
+- [ ] P23.4 Add record validation and deterministic mismatch identities.
+  Preserve raw scoring, one-to-one matching, and full findings; an allowlisted
+  mismatch is still an FP or FN in the report.
+- [ ] P23.5 Add failing comparator tests: an exact known FP is allowed; a new
+  FP fails even when another known FP disappears; a new FN or lost expected
+  positive fails; moving a mismatch to a different source span fails. Distinct
+  mismatches sharing a rule and line must remain distinguishable.
+- [ ] P23.6 Add the comparator. A corrected known mismatch passes and is
+  listed as resolved; require review before deleting its record, rather than
+  reintroducing the finding to match a frozen count. Explain every newly
+  failing identity in deterministic output.
+- [ ] P23.7 Add failing coverage tests for explicit unreviewed, unsupported, and
+  context-dependent regions, including a corpus with zero emitted findings.
+  Strict gating must refuse unknown eligible review coverage from annotations,
+  not infer completeness from the absence of detections. Permit out-of-policy
+  exclusions only when recorded by the effective policy. Recognize the legacy
+  exhaustive curated regression manifest under its existing contract. Its
+  frozen gate record must bind the evaluated sources and annotation snapshot;
+  this does not convert legacy judgments into independent human annotations.
+- [ ] P23.8 Enforce the coverage precondition before accepting the comparison.
+  Keep ordinary external evaluation available as report-only; refuse strict
+  gating of the frozen unreviewed pilot without changing its labels or scope.
+- [ ] P23.9 Add failing CLI tests for the explicit gate option: exit 0 for only
+  reviewed known mismatches, 1 for a new reviewed regression, and 2 for invalid
+  gate inputs or insufficient review coverage. Preserve complete text/JSON
+  raw metrics and attach a separate gate result; ordinary invocation remains
+  report-only and returns its existing code.
+- [ ] P23.10 Add the CLI option and output contract. Require the requested
+  policy to match the reviewed gate record; do not silently switch policies,
+  discover project configuration, apply suppression baselines, or hide issues.
+- [ ] P23.11 Review and freeze the current six all-rules FP identities and the
+  default-production subset of four using the disposition ledger. Keep all
+  six negative annotations and original input text. Store each policy's
+  records explicitly; confirm there are currently no known FNs.
+- [ ] P23.12 Add an explicit Make target that checks both reviewed regression
+  policies. Document creation, intentional contract migration, correction, and
+  manual review of gate records; provide no automatic acceptance/refresh path.
+- [ ] P23.13 Add the new target to CI after its focused tests and package gate
+  pass. Keep ordinary `rule-quality` available for measurements. Verify a
+  disposable newly missed positive makes the Make target fail without editing
+  the committed annotations. Remote execution is tracked under P33.
+
+Acceptance: exact reviewed known mismatches remain visible and do not block the
+gate. Any new FP or FN under the recorded policy fails, including replacements
+that keep totals unchanged. Unknown coverage and stale provenance cannot
+produce a passing strict gate. Independent human effectiveness targets remain
+pending P32; this gate makes no generalization claim.
+
+Suggested commits: `Validate reviewed regression mismatch records`;
+`Add an explicit reviewed quality regression gate`;
+`Run reviewed quality regression checks in CI`.
+
+## P24 — Bind evaluation evidence to the material actually reviewed
+
+Targets: `benchmarks/quality_scoring.py`, `benchmarks/rule_quality.py`,
+`benchmarks/corpora.py`, `benchmarks/bench_rules.py`,
+`tests/test_quality_scoring.py`, `tests/test_rule_quality.py`,
+`tests/test_corpora.py`, `tests/test_benchmarks.py`, `quality/README.md`,
+`quality/external/README.md`.
+
+Prerequisites: the existing P05/P06/P07 implementation. Complete P24A before
+accepting new independent annotations or enabling the strict P23 gate. P24B/C
+can proceed independently of human review. Preserve readable version 1 and
+version 2 manifests and their existing scoring semantics.
+
+### P24A — Annotation identity and review metadata
+
+- [ ] P24A.1 Record the existing version 1/2 loading, scope, and report contracts
+  with focused tests; retain start-only legacy span behavior.
+- [ ] P24A.2 Specify a version 3 annotation contract before implementation. Require
+  each source's relative path, source identity, and SHA-256 of the exact UTF-8
+  bytes reviewed. Retain version 2 scope fields and semantic matching rules.
+- [ ] P24A.3 Specify one review header containing the blind-packet/index identity,
+  review-protocol revision, reviewed rule-contract snapshot identity, declared
+  profile/policy, and reviewer identifiers. Use pseudonymous identifiers where
+  appropriate; metadata must describe actual review, not imply certification.
+- [ ] P24A.4 Add a failing tiny-fixture test: changing source wording while leaving
+  all annotated coordinates in bounds must make a bound manifest invalid.
+- [ ] P24A.5 Add a failing test for a changed newline encoding and a changed
+  non-ASCII character. Bind raw bytes; avoid silently normalizing reviewed text.
+- [ ] P24A.6 Validate source hashes before scoring and name the source and expected
+  identity in an `AnnotationError` on mismatch.
+- [ ] P24A.7 Add parameterized failing tests for missing identity/hash fields,
+  malformed hashes, duplicate source identities, and invalid review metadata.
+- [ ] P24A.8 Validate the new fields using the existing strict schema helpers;
+  reject unknown fields rather than accepting ambiguous metadata.
+- [ ] P24A.9 Add a failing test for an annotation packet linked to a different
+  frozen index or rule-contract snapshot. Verify those referenced artifacts
+  locally; do not contact the web during evaluation.
+- [ ] P24A.10 Store the reviewed contract snapshot and its checksum with the packet.
+  A later contract change requires a recorded review decision before reusing
+  affected labels; changing detector implementation alone does not rewrite labels.
+- [ ] P24A.11 Add a failing export test that the blind originals and review index
+  carry exact source-byte identities but contain no predictions or native revisions.
+- [ ] P24A.12 Extend the existing packet export with the bound annotation template
+  and index fields. Keep every exported source initially unreviewed.
+- [ ] P24A.13 Add a failing test that source mutation during collection cannot
+  produce a report claiming the original reviewed bytes. Revalidate the evaluated
+  inputs before reporting, or reuse the verified bytes through the scan if the
+  existing interfaces support it without a broader parsing redesign.
+- [ ] P24A.14 Add legacy-compatibility report tests. Version 1/2 results must say
+  `source_binding: legacy-unbound` and `review_provenance: unavailable`; preserve
+  their counts and avoid inventing annotation-time hashes or reviewers.
+- [ ] P24A.15 Add a strict evaluation option used by the independent-data gate;
+  reject unbound annotations under that option while preserving report-only
+  legacy evaluation. Test success and failure exit behavior before wiring P23.
+  P23 may accept the legacy curated corpus through a separately source-bound
+  regression ledger; that exception does not apply to independent labels.
+- [ ] P24A.16 Document version 3 with one minimal offline fixture and a reviewed
+  migration procedure. Migrating the curated regression manifest may add current
+  source identities; it does not make past judgments independently human-reviewed.
+
+Acceptance: a bound label cannot silently survive a different reviewed source,
+packet, or contract snapshot; legacy measurements remain usable and explicitly
+unbound. Test fixtures establish this without reading frozen holdout text.
+
+Suggested one-line commits: `Bind new annotations to reviewed source bytes`;
+`Record annotation review provenance and preserve legacy reports`.
+
+### P24B — Runtime identity in quality reports
+
+- [ ] P24B.1 Define the report identity: HEAD when available, tracked working-tree
+  state, and a deterministic digest of the package/evaluator source actually used.
+  Include relevant untracked Python implementation files; omit caches, downloaded
+  corpora, outputs, and unrelated documents. Record the identity scope explicitly.
+- [ ] P24B.2 Add failing tests in disposable repositories for clean HEAD, modified
+  runtime code, staged changes, and an untracked implementation module.
+- [ ] P24B.3 Build deterministic source identity within an existing
+  utility boundary shared by evaluation and benchmarks. Avoid a provenance framework.
+- [ ] P24B.4 Add tests for Git unavailable and an installed package outside a
+  checkout. Report unavailable Git fields explicitly; retain a source digest and
+  package version when their material is available.
+- [ ] P24B.5 Add a relocation test: copying identical sources to a different
+  temporary directory leaves their digest unchanged. Include relative names and
+  bytes so renaming or editing runtime code changes the digest.
+- [ ] P24B.6 Add a report test showing that the same HEAD with different runtime
+  source bytes produces different identity and an explicit dirty-state indication.
+- [ ] P24B.7 Add the identity to quality JSON with an intentional schema-version
+  update and document compatibility. Keep existing `revision` readable if retained.
+- [ ] P24B.8 Record the input manifest, bound source identities, annotation protocol,
+  contracts, and effective policy in the same report. Test that these identities
+  do not disappear under production-mode exclusions or confidence filtering.
+
+Acceptance: reports distinguish an exact committed implementation from a changed
+checkout and expose unavailable identity fields. No report implies HEAD alone
+identifies uncommitted runtime behavior.
+
+Suggested one-line commit: `Identify the runtime source used by quality reports`.
+
+### P24C — Benchmark identity and diagnostic equivalence
+
+- [ ] P24C.1 Characterize existing workload, policy, environment, and cache-state
+  metadata tests. Preserve their meanings and existing timing measurements.
+- [ ] P24C.2 Add a failing benchmark test requiring the runtime identity from P24B
+  alongside workload SHA-256, Python/platform, effective policy, and cache state.
+- [ ] P24C.3 Add a canonical digest of complete diagnostics, including relative
+  path, rule, severity, confidence, full span, message, and suggestion. Test that
+  equal finding counts with different findings produce different digests.
+- [ ] P24C.4 Test deterministic ordering and relocation independence of the digest;
+  a changed suggestion or endpoint must change it. Preserve multiplicity.
+- [ ] P24C.5 Compute diagnostic identity outside timed scan intervals; add a test
+  around the timing boundary instead of asserting machine-dependent durations.
+- [ ] P24C.6 For new-process CLI measurements, verify the child implementation and
+  policy identity rather than assuming the parent interpreter loaded the same code.
+  Use an untimed child probe and actual module locations; preserve production
+  CLI output and avoid adding a public provenance command solely for benchmarking.
+- [ ] P24C.7 Test a selected workload or diagnostic result changing between
+  iterations. Fail the comparison clearly rather than reporting a speed improvement
+  for a different workload or changed observable behavior.
+- [ ] P24C.8 Extend benchmark JSON and documentation with the identity fields and
+  the comparison requirement: equal workload/policy/diagnostics and comparable
+  environment before attributing a timing delta to an implementation change.
+
+Acceptance: a benchmark result identifies its code and behavior as well as its
+inputs. Existing speed measurements remain outside deterministic unit-test gates.
+
+Suggested one-line commit: `Record benchmark runtime and diagnostic identities`.
+
+## P25 — Count reviewed clean sources independently of detections
+
+Targets: `benchmarks/quality_scoring.py`, `benchmarks/rule_quality.py`,
+`tests/test_quality_scoring.py`, `tests/test_rule_quality.py`, `quality/README.md`.
+
+Prerequisites: existing explicit review scopes; P24 identities should be included
+in final reports. This correction precedes P23 coverage assertions and P32
+source-correlated evaluation.
+
+- [ ] P25.1 Define `reviewed_source_group_count` from eligible reviewed coverage,
+  including fully reviewed clean prose. Keep total identified groups distinct.
+- [ ] P25.2 Add a failing fixture with two source groups, each containing eligible
+  reviewed prose but no expected issues or emitted findings; require two reviewed
+  groups, zero detections, and unavailable precision/recall denominators.
+- [ ] P25.3 Add a failing fixture mixing one clean reviewed source and one source
+  with a supported issue. Require both groups in the coverage count/table.
+- [ ] P25.4 Add tests that unreviewed, unsupported, and context-dependent regions
+  do not create eligible reviewed coverage for the affected rule.
+- [ ] P25.5 Add a test where only disabled or file-ignored rules were reviewed.
+  Require policy exclusions and no eligible reviewed-group credit from those rules.
+- [ ] P25.6 Add a partial-region test: a reviewed region counts its group once,
+  but only whole eligible reviewed prose words enter its density denominator.
+- [ ] P25.7 Add a test for multiple files from the same repository; count the group
+  once and retain file/region counts rather than treating files as independent groups.
+- [ ] P25.8 Add tests for unidentified groups. Keep them visible as unspecified
+  coverage and exclude them from identified-group uncertainty claims.
+- [ ] P25.9 Derive reviewed-group coverage from eligible annotations and extracted
+  prose, independently of TP/FP/FN events. Reuse existing review-scope predicates.
+- [ ] P25.10 Add explicit coverage rows for clean groups without fabricating
+  findings, true negatives, or precision/recall observations.
+- [ ] P25.11 Keep per-metric contributing groups separate from coverage groups.
+  Two clean groups may support density evidence; they do not supply two nonempty
+  precision denominators. Test this distinction before any cluster interval.
+- [ ] P25.12 Correct uncertainty explanations to use the relevant metric's group
+  support. Update report documentation and schema assertions with the new meanings.
+- [ ] P25.13 Run the existing legacy and sparse quality fixtures. Verify unchanged
+  detection/location counts and document the corrected coverage-only deltas.
+
+Acceptance: reviewed clean material contributes coverage and density without
+being mistaken for detections. Unreviewed text and disabled rules cannot inflate
+coverage or support an unjustified interval.
+
+Suggested one-line commit: `Include reviewed clean sources in coverage accounting`.
+
+## P26 — Classify C004 placeholders using Python syntax
+
+Targets: `src/proseprobe/rules/code.py`,
+`src/proseprobe/data/code_patterns.py`, `src/proseprobe/parsers/python.py`,
+`tests/test_rules/test_code.py`, `tests/test_parsers/test_python.py`,
+`tests/test_linter.py`, rule documentation and purpose-written corpus fixtures.
+Prerequisites: completed P02 and P14; P23 for regression acceptance.
+
+The concrete regression is
+`example = "raise NotImplementedError('example')"`.
+A source string mentioning a raise statement must not be classified as executable
+placeholder code. Preserve C004's existing comment-marker behavior. Use only
+`ast` and `tokenize`; never import or execute analyzed source.
+
+- [ ] P26.1 Characterize current C004 comment markers, concrete raises and
+  inline `pass`/ellipsis placeholders, including issue spans and ordering.
+  Record the narrow legitimate abstract/stub forms the new guard will recognize.
+- [ ] P26.2 Add a failing test for the exact string regression, plus a docstring,
+  ordinary comment, multiline string and f-string literal mentioning the same
+  raise text. Confirm the failures come from the code-only path.
+- [ ] P26.3 Replace code-only raw line matching with executable `ast.Raise`
+  candidates calling the supported `NotImplementedError` form. Reuse cached
+  AST/token data through the smallest parser access method required by C004.
+- [ ] P26.4 Run the string/comment negatives and concrete-raise positives.
+  Preserve the existing message kind and diagnostic source text for supported
+  cases; document any intentional span correction.
+- [ ] P26.5 Add failing multiline and Unicode raise-span cases, with a candidate
+  after a semicolon and multiple executable candidates on one line. Decide
+  diagnostic multiplicity explicitly from the current C004 contract.
+- [ ] P26.6 Map AST UTF-8 columns through the existing P02 conversion; select
+  physical tokens for the actual raise/call span. Run parser and C004 span tests.
+- [ ] P26.7 Add failing inline negatives where `pass` or `...` occurs inside a
+  string before `# TODO` or `# placeholder`; add real `pass` and literal ellipsis
+  statement positives with the same comments.
+- [ ] P26.8 Require the corresponding executable statement before classifying
+  its inline comment. Keep comment-only marker recognition unchanged. Run this
+  slice's positives and negatives.
+- [ ] P26.9 Add paired tests for statically recognizable `abc.abstractmethod`
+  declarations versus concrete incomplete methods. Cover recognized imported
+  aliases only if their source bindings can be proved without imports.
+- [ ] P26.10 Add the narrow abstract-contract guard supported by those tests.
+  Unknown decorators must not imply that a declaration is abstract. Run C004
+  tests and verify unchanged concrete-placeholder behavior.
+- [ ] P26.11 Add paired overload/Protocol stub tests only for forms statically
+  recognized from source imports/decorators/base classes. Preserve concrete
+  method bodies that coexist with overload declarations.
+- [ ] P26.12 Add the supported stub guard without broad name-based
+  exclusions; leave unresolved aliases and class bases computed at runtime unsupported.
+  Run the stub and ordinary-placeholder matrix.
+- [ ] P26.13 Add invalid-Python/tokenization tests. Assert that actual comments
+  remain available but C004 does not guess executable raises from malformed
+  source. Add only the fallback needed by the documented contract.
+- [ ] P26.14 Add focused CLI and corpus regressions for the string false positive
+  and a real placeholder. Run P23 and P33 checks; update C004 documentation to
+  describe syntax-backed scope and conservative guards.
+
+Acceptance: text mentioning placeholder code is not mistaken for executable
+code; narrow recognized abstract/stub contracts remain legitimate; existing
+comment-marker diagnostics and static source mapping are preserved.
+Suggested one-line commits: `Use Python syntax for placeholder raises`;
+`Require executable statements for inline placeholders`;
+`Preserve recognized abstract and stub contracts`.
+
+## P27 — Attach G038 comparison evidence to the claim
+
+Targets: `src/proseprobe/rules/grammar.py`,
+`src/proseprobe/parsers/prose.py` only if an existing scope boundary is missing,
+`tests/test_rules/test_grammar.py`, `tests/test_parsers/test_prose.py`,
+`quality/annotations.json` and purpose-written regression fixtures.
+Prerequisites: P18; P23; completed P10.
+
+Replace the raw four-line lookback with an explicit bounded prose-evidence
+contract. A measurement before an unrelated heading must not exempt
+`The software is safer.` Keep G038 experimental, INFO/LOW; this is a
+comparison-context check rather than a claim-truth detector.
+
+- [ ] P27.1 Characterize valid current direct comparisons, questions,
+  hypotheticals and literal wording discussion. Record which old negatives
+  relied only on unrelated nearby measurements and need reviewed correction.
+- [ ] P27.2 Add a failing regression with a measured sentence, then a heading,
+  then `The software is safer.` Assert the claim is reported despite the prior
+  number. Add a fully explicit `safer than ...` negative.
+- [ ] P27.3 Replace the raw-line window for this slice with existing prose scope
+  boundaries. Run the heading-isolation and explicit-comparison tests.
+- [ ] P27.4 Add failing paragraph, list-item, blockquote, Python-owner, fenced
+  code and inline-code boundary cases for unrelated comparison evidence.
+- [ ] P27.5 Restrict evidence to the declared same-scope unit. Do not introduce
+  a general parser redesign; run the scope-boundary matrix.
+- [ ] P27.6 Add paired clauses where an unrelated quantity, table, benchmark
+  mention or `first`/`other` occurs next to a comparative. Assert that such words
+  alone do not exempt `safer`, while an attached named target does.
+- [ ] P27.7 Require a source-validated target attached to the particular claim,
+  reusing P10's bounded clause logic where its semantics match. Run these cases
+  and preserve complete-predicate source validation from P18.
+- [ ] P27.8 Add paired numeric comparisons with an explicit target and a mere
+  standalone quantity. A number alone cannot establish what was compared.
+- [ ] P27.9 Add only the explicitly supported numeric comparison forms.
+  Run their focused tests; unsupported measurements retain advisory findings.
+- [ ] P27.10 Add an immediately adjacent sentence with an explicit comparison
+  and an ambiguous adjacent sentence. Decide whether the first supported form
+  can be bound conservatively; defer ambiguous cross-sentence references.
+- [ ] P27.11 Add a cross-sentence exemption only if the tests establish a
+  clear attachment within the same scope. Otherwise keep the minimum same-clause
+  policy and record the deferred forms. Run the declared evidence matrix.
+- [ ] P27.12 Verify Unicode/wrapped claim spans, repeated claims with different
+  targets, explicit suppression and confidence filtering. Update purpose-written
+  annotations with reasons for intentional judgment changes, then run P23/P33.
+- [ ] P27.13 Submit untouched natural development examples and G038 findings to
+  P32's independent review. Promote neither severity nor profile membership
+  from regression-only precision.
+
+Acceptance: unrelated text cannot exempt a comparative; supported directly
+attached comparisons remain clean; G038's experimental status and documented
+limitations remain visible.
+Suggested one-line commit: `Require claim-local evidence for undefined
+comparatives`.
+
+## P28 — Check explicit C009 variadic parameter kinds
+
+Targets: `src/proseprobe/rules/code.py`,
+`tests/test_rules/test_code.py`, `tests/test_parsers/test_python.py`,
+C009 documentation and purpose-written regression fixtures.
+Prerequisites: completed P14; P23.
+
+`def f(args)` accompanied by `:param *args:` currently passes. Compare explicit
+stars with the parser's existing `signature_parameters` kind metadata. Unstarred
+Sphinx fields remain valid for ordinary and variadic parameter names; keep the
+conservative unstarred forwarded-keyword behavior for `**kwargs`.
+
+- [ ] P28.1 Add failing `:param *args:`/ordinary-`args` and
+  `:param **kwargs:`/ordinary-`kwargs` tests. Assert one mismatch, source name
+  endpoints and a message identifying the declaration/signature conflict.
+- [ ] P28.2 Compare `*` to `var_positional` and `**` to `var_keyword` using existing
+  metadata. Preserve C009's missing-name path; run these focused tests.
+- [ ] P28.3 Add failing swapped-star tests for `*args` documented as `**args`
+  and `**kwargs` documented as `*kwargs`. Add matching starred negatives.
+- [ ] P28.4 Correct only the explicit-kind comparison and run the full paired
+  kind matrix: ordinary, positional-only, keyword-only, variadic positional and
+  variadic keyword parameters.
+- [ ] P28.5 Add characterization assertions for unstarred variadic fields and
+  unstarred delegated keys accepted by `**kwargs`. Do not require stars when
+  they were omitted intentionally.
+- [ ] P28.6 Verify NFKC names, typed Sphinx fields, async/nested functions,
+  decorators marked `has_dynamic_decorators`, literal examples and malformed Python using existing
+  cases plus missing explicit-kind assertions.
+- [ ] P28.7 Add a focused CLI/corpus mismatch and its legitimate counterpart.
+  Update C009's description only as needed; keep its ID and experimental
+  metadata stable. Run P23 and P33 checks.
+
+Acceptance: explicit stars agree with the declared parameter kind; unstarred
+legitimate fields and conservative forwarded-keyword contracts keep their
+existing behavior.
+Suggested one-line commit: `Check explicit variadic docstring parameter kinds`.
+
+## P29 — Add an experimental explicit return-type conflict check
+
+Targets: `src/proseprobe/parsers/python.py`, `src/proseprobe/rules/code.py`,
+`src/proseprobe/rules/__init__.py`, `src/proseprobe/config.py` only if its
+experimental registry requires an entry, parser/rule/metadata/CLI tests,
+`quality/annotations.json`, generated rule documentation.
+Prerequisites: completed P14; P28 for reusable physical-field extraction; P23;
+P24; P32 before any profile promotion.
+
+Start with the unambiguous conflict `-> None` versus an explicit Sphinx
+`:rtype: int`. The finding reports the inconsistency and asks the author to check
+both declarations; it must not infer the intended runtime return value. Reserve a
+new stable rule ID only after checking the current registry. Keep the rule
+experimental with provisional INFO/MEDIUM metadata and available through existing explicit-selection policy;
+do not change named profiles.
+
+- [ ] P29.1 Define the first supported annotation/doc-type pair and the skip
+  contract. Limit initial coverage to physical Sphinx fields and statically
+  recognized types; defer Google/NumPy prose, aliases, unions, generics,
+  overloads, generators, decorators marked `has_dynamic_decorators` and unresolved bindings.
+- [ ] P29.2 Add a failing parser metadata test for a function annotated `None`,
+  its nested/async counterparts and a function lacking a return annotation.
+  Assert ownership and source-coordinate mapping.
+- [ ] P29.3 Expose the smallest immutable return-annotation metadata required by
+  this rule without changing the existing parameter tuple or AST cache contract.
+  Run focused parser tests.
+- [ ] P29.4 Add a failing rule test for `def f() -> None` with `:rtype: int`,
+  plus a matching `:rtype: None` negative. Assert one finding at the documented
+  type's exact physical source span.
+- [ ] P29.5 Add the single explicit conflict and a neutral diagnostic.
+  Reuse existing physical field/example guards where they match this rule's
+  contract. Run the first positive/negative slice.
+- [ ] P29.6 Add failing tests that literal directives, doctests, fenced
+  examples, string fragments and a different function's fields cannot create
+  a conflict. Add the smallest ownership/example guards and rerun them.
+- [ ] P29.7 Add failing unsupported-case negatives for unions/Optional, aliases,
+  rebound type names, quoted unresolved annotations, overloads, decorators marked
+  `has_dynamic_decorators`, malformed Python and duplicate/conflicting `:rtype:` fields.
+- [ ] P29.8 Add conservative guards; do not report a declaration when either
+  side is unresolved. Run supported and unsupported cases together.
+- [ ] P29.9 Consider additional mutually exclusive scalar pairs one at a time.
+  For each accepted pair, first add a disagreement positive and valid subtype
+  or conversion negatives. Exclude `bool`/`int`, numeric compatibility and
+  subclass judgments unless a sound contract is proved; defer otherwise.
+- [ ] P29.10 Check registry IDs and add the rule through the existing factory,
+  metadata and experimental selection mechanisms. Add failing registration,
+  `explain`, explicit-select and unchanged-profile assertions before wiring it.
+- [ ] P29.11 Add corpus positives/negatives, suppression, confidence-policy,
+  JSONL/SARIF and UTF-8 span assertions. Generate documentation with the existing
+  generator; run P23/P33.
+- [ ] P29.12 Evaluate precision and usefulness through P32's blind development
+  review. Record unsupported types and disagreements; leave promotion pending
+  until predeclared independent evidence supports it.
+
+Acceptance: supported explicit contradictions are reported without guessing
+which side is correct; unresolved or semantically compatible cases are skipped;
+the new check remains experimental and existing rule IDs/profiles are stable.
+Suggested one-line commits: `Expose static return annotation metadata`;
+`Add experimental explicit return documentation conflicts`.
+
+## P30 — Add optional project-local file link validation
+
+Targets: `src/proseprobe/config.py`, `src/proseprobe/core/policy.py`,
+`src/proseprobe/core/linter.py`, `src/proseprobe/rules/markup.py`,
+`src/proseprobe/rules/__init__.py`, `src/proseprobe/parsers/markdown.py` only if
+shared parsing extraction is justified, config/linter/markup/CLI tests,
+`tests/test_rule_quality.py`, generated documentation and corpus fixtures.
+Prerequisites: completed P15; P18; P23; P24; P32 before promotion.
+
+The initial example is `[Install](setup.md#install)` when `setup.md` is missing.
+Enable the capability only with an explicit project root and documented local
+path/renderer policy. Do not infer website routes, check remote URLs, perform
+network requests, or silently use the process working directory. Ordinary scans
+and stdin remain unchanged when this capability is off. Keep M011 responsible
+for same-document fragments; do not duplicate M005's duplicate-reference check.
+
+- [ ] P30.1 Record supported targets: literal relative Markdown file paths,
+  optional fragments under the existing GitHub anchor policy, and reference
+  destinations. Define root-relative path behavior, query handling, generated
+  route exclusions, unreadable targets and unsupported renderer outcomes.
+- [ ] P30.2 Add a failing config test showing the capability off by default,
+  invalid roots rejected and explicit roots resolved relative to the declared
+  configuration source. Add unknown-option and show-config assertions.
+- [ ] P30.3 Add the smallest explicit root/enable configuration supported
+  by that contract. Run focused config tests before adding filesystem reads.
+- [ ] P30.4 Add a failing linter test proving a scan context supplies the
+  project root independently of cwd and independently of source-file discovery.
+  Assert no project-local checking for virtual stdin without an explicit
+  supported context.
+- [ ] P30.5 Choose the smallest project-aware integration supported by the test:
+  explicit rule construction/context injection with a scan-scoped target reader.
+  Keep `Rule.check(content, filename)` compatibility for existing rules; avoid a
+  global filesystem service or unrelated rule framework migration.
+- [ ] P30.6 Add failing temporary-project tests for a missing `setup.md`, an
+  existing sibling and a nested `../setup.md` still inside the root. Assert
+  destination source spans and one finding per supported broken occurrence.
+- [ ] P30.7 Add literal relative-file resolution within the explicit root.
+  Run these cases with the same inputs under different cwd values.
+- [ ] P30.8 Add failing boundary tests for `..` escape, symlink escape,
+  percent-encoded separators, absolute filesystem paths and malformed encoding.
+  Declare unsupported/out-of-root behavior without reading outside the root.
+- [ ] P30.9 Enforce the boundary before target access using standard-library path
+  and URL parsing. Run access-spy assertions proving out-of-root files were never
+  opened; avoid reporting unsupported routes as definitely missing files.
+- [ ] P30.10 Add failing tests for inline links with titles, balanced parentheses,
+  Unicode/spaces, escaped destinations and used reference definitions. Add
+  image/code/frontmatter/external/mailto/generated-route negatives.
+- [ ] P30.11 Reuse M011's proven destination parsing through a narrowly shared
+  helper only where both rules need it. Compare M011 complete results before and
+  after extraction, then run both markup matrices.
+- [ ] P30.12 Add failing `setup.md#install` cases for a present matching anchor,
+  a missing anchor, duplicate headings and explicit HTML IDs. Assert that target
+  fragment checking requires the explicit supported renderer.
+- [ ] P30.13 Reuse the same renderer-specific anchor policy as M011. Do not
+  guess mdBook/MDX/Liquid anchors. Run cross-file and same-file fragment tests.
+- [ ] P30.14 Add failing scan tests for multiple links to one target, a target
+  that changes between scans, unreadable/malformed UTF-8 targets and a target
+  omitted by discovery. Assert bounded per-scan reads and documented errors.
+- [ ] P30.15 Add a small scan-local target cache, reset for each scan.
+  Distinguish missing from unreadable/unsupported targets; preserve existing
+  input-error and files-checked semantics according to the declared contract.
+  Run read-count tests without wall-clock thresholds.
+- [ ] P30.16 Check registry IDs and add an experimental rule entry. Add failing
+  explicit-selection, disabled-setting/severity-override, profile, provisional
+  INFO/MEDIUM metadata,
+  suppression and JSONL/SARIF assertions before connecting the factory.
+- [ ] P30.17 Extend evaluator setup with the same explicit project context and
+  provenance, then add a production/evaluation parity regression. Record the
+  explicit context in an enabled all-rules track; default production keeps this
+  optional capability off and records excluded positives. No implicit
+  root discovery or external holdout reads are allowed.
+- [ ] P30.18 Add a small purpose-written linked-file corpus and documentation
+  covering supported roots/renderers/routes. Run P23/P33, then obtain P32's
+  independent Markdown precision review before any promotion.
+
+Acceptance: opt-in scans find supported missing files and fragments using an
+explicit root/renderer contract; unsupported generated routes remain honest;
+target reads stay inside the root and scan context; existing off-by-default
+behavior, M005 and M011 contracts stay intact.
+Suggested one-line commits: `Add explicit project context for local links`;
+`Check optional project-local Markdown targets`;
+`Validate supported cross-file fragments`.
+
+## P31 — Evaluate and repair suggestion usefulness
+
+Targets: `src/proseprobe/data/vocabulary.py`,
+`src/proseprobe/data/phrases.py`, `src/proseprobe/rules/vocab.py`,
+`tests/test_rules/test_vocab.py`, `tests/test_linter.py`,
+`benchmarks/quality_scoring.py` and evaluation manifests only for the declared
+human usefulness labels, suggestion documentation.
+Prerequisites: P23; P24; P32 for semantic judgments.
+
+The concrete regression is V001's `crucial` → `important`: the replacement is
+itself detected by the effective default policy. Suggestions remain review
+prompts; the linter does not rewrite files. A rescan checks whether the targeted
+finding is resolved, while human review checks meaning, grammar and usefulness.
+Neither a lower total finding count nor a passing rescan proves semantic quality.
+
+- [ ] P31.1 Inventory suggestion-bearing rules and classify each output as a
+  literal replacement, contextual review instruction or absent suggestion.
+  Record existing inflection guards and overlaps; keep public Issue fields
+  unchanged unless a concrete compatibility need arises.
+- [ ] P31.2 Add a failing test for a sentence containing `crucial`, applying its
+  literal suggestion only within the exact issue span in a disposable test
+  buffer. Rescan under the same effective policy and assert the targeted
+  vocabulary issue is resolved without a newly introduced warning.
+- [ ] P31.3 Review the candidate replacement in context. Choose a supported
+  alternative or omit the literal suggestion when no reliable substitute
+  preserves the intended strength; do not ignore `important` to make the test
+  pass. Run the pair and existing suggestion-table tests.
+- [ ] P31.4 Add paired default and explicitly expanded vocabulary configurations.
+  If a suggested literal is disallowed by the effective configured vocabulary,
+  assert that the suggestion is withheld or replaced by neutral review guidance.
+- [ ] P31.5 Add the smallest policy-aware suggestion check within the
+  rule's existing configured instance. Run configured/default tests and preserve
+  deterministic ordering and rule metadata.
+- [ ] P31.6 Add a parameterized rescan characterization for literal suggestion
+  entries using meaningful full sentences. Preserve precise spans, inflection,
+  punctuation, quotation ownership and technical terminology in fixtures.
+- [ ] P31.7 Turn each reproduced suggestion cycle or new warning into its own
+  failing paired test; review and repair one entry at a time. Do not recursively
+  apply suggestions or replace the catalog through a blanket filtered mapping.
+- [ ] P31.8 Add valid near-miss tests where a literal replacement would alter
+  technical meaning or grammatical agreement. Withhold only the unsupported
+  suggestion, preserving the finding when its review prompt remains justified.
+- [ ] P31.9 Run complete V001 and replacement-rule tests plus an effective-policy
+  linter integration test. Document intentional suggestion changes and omissions;
+  run P23/P33 before committing the catalog correction.
+- [ ] P31.10 Define P32's usefulness questions separately: was the original
+  finding helpful, did the suggestion fit the sentence, did it preserve meaning,
+  and would the reviewer accept it? Permit `context-dependent` and unresolved
+  judgments rather than forcing binary correctness.
+- [ ] P31.11 Add failing evaluator tests for separate human suggestion judgments,
+  missing judgments, paired source/revision provenance and report denominators.
+  Keep automatic rescan outcomes separate from semantic usefulness scores.
+- [ ] P31.12 Add only the agreed label/report extension through P24-bound
+  annotation inputs. Run scorer tests; report annotation coverage and unresolved
+  judgments so unreviewed suggestions are not counted as successful.
+- [ ] P31.13 Collect blinded human judgments on untouched development sources
+  and reserved revision pairs through P32. Review recurring failures, freeze
+  changes, and use the holdout only for the declared final evaluation.
+
+Acceptance: supported literal suggestions do not introduce the assessed targeted
+cycle under the effective policy; inflection/technical-meaning guards remain;
+semantic usefulness is measured from explicit human judgments and honest
+coverage, with no rewrite mode or automatic success inferred from fewer findings.
+Suggested one-line commits: `Avoid suggestions rejected by effective vocabulary
+policy`; `Add suggestion rescan regressions`;
+`Report independently reviewed suggestion usefulness`.
+
+## P32 — Complete independent evaluation and extend source coverage
+
+Targets: `quality/external/README.md`, `quality/sources.json`,
+`quality/external/split-freeze.json`, a separate extension manifest/freeze,
+`benchmarks/corpora.py`, `benchmarks/quality_scoring.py`,
+`benchmarks/rule_quality.py`, `tests/test_corpora.py`,
+`tests/test_quality_scoring.py`, independently supplied annotation artifacts.
+
+Prerequisites: P24/P25 for accepted annotation reports. Blind sampling and
+reviewer preparation can begin earlier. P23 controls curated regressions;
+independent precision thresholds and rule/profile promotion require this package.
+
+This package completes the open human-evaluation work in P06A.7–P06A.9,
+P06B.3/P06B.6, P06C.3/P06C.7, P06D.3, P12.11, P13.8, P15.9,
+P16.6–P16.8, and P16.10a. Update those earlier checkboxes only when their actual
+acceptance evidence exists. P06D.5 remains conditional on clarified reuse terms.
+
+### P32A — Preserve the pilot and declare coverage
+
+- [ ] P32A.1 Revalidate the original 300-unit manifest/freeze identities without
+  reading holdout prose, generating findings, or altering split assignments.
+- [ ] P32A.2 Record the existing 170-development/130-holdout coverage by dataset,
+  format, repository, author/pair group where available, and renderer/dialect.
+  State that all 80 Python functions are development samples from two repositories.
+- [ ] P32A.3 Declare supported claim populations before annotation: complete
+  Markdown structure, Python docstrings/comments, sentence-level grammar/clarity,
+  and explicit renderer-dependent checks. Keep their denominators separate.
+- [ ] P32A.4 Specify which rule contracts each population can evaluate. Sentence
+  inputs cannot establish document-structure recall; CodeSearchNet search labels
+  cannot establish prose correctness; CommonMark cases establish parser conformance.
+  Mark renderer checks on unsupported template dialects unsupported rather than clean.
+- [ ] P32A.5 Keep new sources in a separately versioned extension manifest and
+  freeze. Preserve the original pilot for its already declared evaluation purpose.
+- [ ] P32A.6 Select fresh Python holdout repositories with no overlap with the
+  development repositories, authors/projects where known, or related revisions.
+  Prefer complete modules when surrounding code is needed to judge documentation.
+- [ ] P32A.7 Select additional Markdown repositories in development and reserved
+  holdout to reduce single-repository/domain dependence. Record the intended
+  renderer and template dialect before selecting files.
+- [ ] P32A.8 Declare an attainable source-group count and balanced sample budget
+  before acquisition. Several independent repositories per format are the pilot
+  goal; record unavailable genres rather than treating a sample count as coverage.
+- [ ] P32A.9 Verify each candidate's pinned revision, upstream content license,
+  attribution, access, and intended reuse before accepting cached text. Treat a
+  hosting project's license as insufficient evidence for unrelated dataset contents.
+- [ ] P32A.10 Add failing tiny-fixture tests for cross-manifest repository/pair
+  overlap, duplicate bytes, normalized near duplicates, and split leakage.
+- [ ] P32A.11 Extend existing split validation only as required to check the
+  original and extension together; keep downloads out of unit tests.
+- [ ] P32A.12 Cache and checksum the accepted development/holdout sources without
+  detector-based selection. Freeze identities and assignments before further tuning.
+- [ ] P32A.13 Export the new blind packet using P24 and verify its index and source
+  identities. Holdout contents stay hidden from implementers during development.
+- [ ] P32A.14 Pin the [CommonMark 0.31.2 examples](https://spec.commonmark.org/0.31.2/)
+  and verify their reuse terms before copying fixtures. Record version, source
+  checksum and the supported parser features selected for conformance checks.
+- [ ] P32A.15 Map selected fence, inline-code, link/reference, heading and HTML
+  examples to the existing extraction/masking contracts. Keep unsupported
+  syntax and renderer extensions explicit; do not require a full HTML renderer.
+- [ ] P32A.16 Add offline conformance cases using the current parser test files.
+  For each reproduced mismatch, record a failing extraction/span assertion,
+  apply the smallest correction, and run the affected parser/rule tests.
+- [ ] P32A.17 Report conformance results separately from human writing-quality
+  metrics. These examples supply syntax contracts, not useful-finding labels.
+
+Acceptance: extension material adds independent projects and missing Python
+holdout coverage without modifying or relabeling the original 300 sources.
+Licenses, renderer limitations, and unsupported populations remain explicit.
+
+Suggested one-line commit: `Freeze independent Python and Markdown evaluation sources`.
+
+### P32B — Blind annotation and adjudication
+
+- [ ] P32B.1 Obtain human reviewers for eligible sources and record reviewer
+  identifiers. Do not substitute agent judgments for independent human labels.
+- [ ] P32B.2 Prepare the review protocol and selected rule-contract snapshots.
+  Require issue usefulness, intended meaning, exact spans, supported rules,
+  exhaustive reviewed coverage, and unresolved-status reasons.
+- [ ] P32B.3 Choose the double-annotation subset before showing any predictions;
+  distribute it across formats and source groups. Record its selection seed/list.
+- [ ] P32B.4 Add offline validator tests for incomplete coverage declarations,
+  out-of-bounds spans, missing reviewer identity, source mismatch, and unresolved
+  judgments accidentally represented as clean negatives.
+- [ ] P32B.5 Give reviewers randomly selected originals and necessary source
+  context only. Withhold detector output and native revisions during this first pass.
+- [ ] P32B.6 Collect the initial annotations of eligible random prose, including
+  independent issues the detector may miss and fully reviewed clean regions.
+- [ ] P32B.7 Collect the second review of the preselected subset independently;
+  retain both original judgments rather than overwriting disagreements.
+- [ ] P32B.8 Record agreement/disagreement counts with their denominators, then
+  adjudicate each disagreement with a rationale and reviewer identity.
+- [ ] P32B.9 Freeze the initial adjudicated labels and coverage before generating
+  detector predictions. Keep genuinely unresolved issues context-dependent.
+- [ ] P32B.10 Run a separately identified triggered-finding review after the blind
+  pass. Keep discovered labels, additional trigger-only labels, and coverage apart;
+  trigger-only review supplies precision evidence rather than exhaustive recall.
+- [ ] P32B.11 For sparse rules, request independently authored positives and near
+  misses; mark them purpose-written and score them separately from natural text.
+- [ ] P32B.12 Validate the accepted annotation artifacts with strict P24 binding
+  and P25 coverage checks. Record actual reviewed quantities and remaining gaps.
+
+Acceptance: supported natural-text recall uses exhaustive blind-reviewed regions,
+precision uses explicit judgments, disagreements remain auditable, and no human
+labels or negative coverage are inferred from absence of detector findings.
+
+Suggested one-line commits: `Document blind review and adjudication protocol`;
+`Record independently reviewed pilot annotations` (only after review exists).
+
+### P32C — Use native edits as supplementary evidence
+
+- [ ] P32C.1 Write a small W&I error-type mapping table linking only supported
+  native edit categories to specific rule contracts. Record unsupported categories,
+  annotator identity, and automatically assigned ERRANT types separately.
+- [ ] P32C.2 Add failing offline tests for supported edits, unsupported edits,
+  insertions/deletions, alternate annotators whose edits overlap, and artifacts
+  caused by preprocessing. Preserve the tokenized-source coordinates already established in P06C.4.
+- [ ] P32C.3 Add only the reviewed mapping; ambiguous native labels require
+  judgment and cannot automatically become rule positives or negatives. An empty supported mapping
+  is valid when no existing rule matches a native category.
+- [ ] P32C.4 After blind original review is frozen, provide all four JFLEG and all
+  ten ASSET references under their existing pair identities and access terms.
+- [ ] P32C.5 Add deterministic paired-report tests for a resolved useful finding,
+  a retained valid warning, a new incorrect warning, and unavailable correspondence.
+- [ ] P32C.6 Record human judgments of usefulness and meaning preservation for
+  each relevant before/after change; use native revisions as alternatives, not as
+  ten independent sources or as automatic clean ground truth.
+- [ ] P32C.7 Report paired warning changes beside their human outcomes and sample
+  sizes. Do not use warning reduction, GLEU, or simplification labels alone as proof
+  that this linter improved prose.
+- [ ] P32C.8 Keep JFLEG's CC BY-NC-SA 4.0, ASSET's CC BY-NC 4.0, and W&I's
+  noncommercial restrictions with materials and outputs as applicable. Continue
+  excluding LOCNESS from this pilot under the documented distribution restriction.
+- [ ] P32C.9 Retain exclusion of the README simplification package while reuse
+  terms remain unresolved. Recheck primary terms only if this conditional source
+  is pursued; accessible downloads and commit keywords do not establish permission
+  or reliable clarity labels.
+- [ ] P32C.10 If README reuse terms become clear, first add tiny offline
+  revision-pair tests, then manually verify sampled revisions and freeze their
+  source groups. Keep weak commit-keyword labels distinct from reviewed labels.
+
+Acceptance: native edits add evidence about actionability without expanding
+unsupported rule coverage or silently assigning quality judgments.
+
+Suggested one-line commit: `Report independently judged revision-pair usefulness`.
+
+### P32D — Report effectiveness and decide promotion
+
+- [ ] P32D.1 Generate strict development reports for all-rules and the unchanged
+  default production policy. Retain raw counts, eligible misses, exact/full-span
+  accuracy, reviewed words, source coverage, exclusions, and usefulness judgments.
+- [ ] P32D.2 Define a source-correlated uncertainty method and minimum contributing
+  groups before implementation. Use repositories/authors or appropriate independent
+  source groups, keeping every paired revision within its group.
+- [ ] P32D.3 Add deterministic toy-group tests with unequal group sizes, clean
+  reviewed groups, zero denominators, a dominant repository, and too few groups.
+  If resampling is used, fix its seed and report its procedure and support.
+- [ ] P32D.4 Calculate the justified interval in evaluation-only code without a
+  runtime dependency. Return unavailable intervals with reasons when group support
+  is inadequate; retain Wilson intervals as explicitly sample-only where useful.
+- [ ] P32D.5 Publish per-rule/profile/format/context/source-group results with
+  denominators. Avoid an aggregate improvement claim that conceals a regression
+  in production warnings, supported recall, or a sparsely covered rule.
+- [ ] P32D.6 Review P12 technical/quotation precision, P13 repeated words, P15
+  renderer-specific anchors, and the new P26–P31 slices on development evidence.
+  Preserve exact quotations and meaningful terminology when judging suggestions.
+- [ ] P32D.7 Choose any proposed threshold, confidence, severity, default, or named
+  profile change from development evidence and record a concrete rationale. Keep
+  rules experimental when support is inadequate; no promotion is required.
+- [ ] P32D.8 Predeclare independent quality targets, supported populations, minimum
+  sample/group support, and treatment of unavailable metrics before opening holdout.
+  Keep these targets distinct from P23's curated no-new-regressions gate.
+- [ ] P32D.9 Freeze the candidate implementation/policy and evaluate once on the
+  reserved holdout through the same strict report path; retain misses and raw false
+  positives instead of altering labels to pass the target.
+- [ ] P32D.10 Have human reviewers assess holdout usefulness under the frozen
+  contracts. Publish agreement, unresolved cases, and source-correlated uncertainty.
+- [ ] P32D.11 If holdout results prompt tuning, reclassify the inspected material
+  as development evidence and reserve fresh source groups before another independent
+  claim. Record the decision without silently reusing the same holdout.
+- [ ] P32D.12 Update P06/P12/P13/P15/P16 pending steps with links to the real
+  annotation/report evidence, or leave them open with the specific missing prerequisite.
+
+Acceptance: effectiveness claims identify the population, independent reviewers,
+exact code/data/policy, reviewed denominators, and uncertainty. Experimental rules
+are promoted only when the declared evidence supports the concrete policy change.
+
+Suggested one-line commits: `Report source-group uncertainty for independent evaluation`;
+`Record independent effectiveness results and policy decisions`.
+
+## P33 — Integrate the continuation and preserve release boundaries
+
+Targets: all changed package tests, `PLAN.md`, `CHANGELOG.md`, `SPEC.md`,
+`README.md`, `docs/rules.md`, `quality/README.md`, `RELEASE_BLOCKERS.md`.
+
+Prerequisites: complete selected engineering slices P18–P31. Human-dependent
+P32 work may remain open with its actual unmet prerequisites; it cannot be
+represented as completed engineering verification. Reuse P17's acceptance gates
+but rerun them against the continuation's final state.
+
+Slice gate: run the focused tests, related integration tests, `make check`,
+`make dogfood`, and the applicable quality reports after each coherent behavior
+change. Add the P23 strict regression target once available. Review corpus
+deltas and edited prose before a one-line implementation commit. Performance
+checks are required when changed scan behavior, target reads, or measurements
+could affect their contracts; deterministic unit tests do not time real hardware.
+
+- [ ] P33.1 For each completed slice, record its red regression, focused green
+  command, implementation commit, and explained corpus delta in the progress log.
+- [ ] P33.2 For each new rule, repeat the P17A metadata, registration, selection,
+  experimental/profile, executable examples, suppression, reporter-span, and
+  baseline checks. Prior checked boxes do not cover new IDs automatically.
+- [ ] P33.3 Update user-visible behavior and compatibility documentation for each
+  completed correction, including annotation/report schemas and optional feature
+  prerequisites. Generate inventory blocks through `make rule-docs`.
+- [ ] P33.4 Scan edited prose with the repository's effective policy and existing
+  baseline in JSON Lines. Review exact technical examples rather than changing
+  them or refreshing the baseline to eliminate intentional findings.
+- [ ] P33.5 Run `rtk proxy make rule-docs-check check dogfood rule-quality nfr-check`
+  on the final implementation state. Run the new P23 regression gate separately
+  if its package is complete; a report-only score remains a different outcome.
+- [ ] P33.6 Verify filesystem and stdin text/JSON/JSON Lines/SARIF scans with
+  Unicode, clean files, invalid configuration, and unreadable input. Retain
+  documented exit codes and configuration precedence.
+- [ ] P33.7 Verify watch mode and baseline maintenance after the P18–P22 changes,
+  including legacy readable baselines and deterministic source coordinates.
+- [ ] P33.8 Rerun the full tests under Python 3.11, 3.12, and 3.13 where local
+  interpreters exist. Record unavailable environments rather than claiming coverage.
+- [ ] P33.9 Require the remote Ubuntu Python 3.11–3.13 matrix for the exact final
+  commit when remote CI is available. Keep P17C.2 open until that evidence exists;
+  local matrix results do not substitute for remote execution.
+- [ ] P33.10 Compare full-scan timing, startup, and memory using P24C's equal
+  workload/policy/diagnostics identities and recorded environments. Investigate
+  material regressions without adding machine-specific unit-test thresholds.
+- [ ] P33.11 Publish current regression results for both policies and disposition
+  every changed mismatch. The starting continuation snapshot is 336 TP/6 FP/0 FN
+  all-rules and 106 TP/4 FP/0 FN production; those are recorded evidence, not
+  immutable numbers or independent natural-text effectiveness estimates.
+- [ ] P33.12 Review every continuation package against its acceptance criteria.
+  Mark completed, intentionally deferred, or awaiting human/external evidence with
+  a reason. Preserve the original execution record and frozen pilot identities.
+- [ ] P33.13 Record the final commit, clean/dirty state, source/report identities,
+  successful commands, limitations, and remaining P32 judgments in `PLAN.md`.
+- [ ] P33.14 If a release is later requested, follow `RELEASE_BLOCKERS.md` for
+  that exact release commit, including package inspection and publication identity.
+  Do not create a release/tag or publish as part of this plan alone.
+
+Acceptance: the final engineering state passes the repository gates with reviewable
+commits and current evidence. Independent evaluation, unavailable remote checks,
+conditional datasets, and publication remain accurately distinguished.
+
+Suggested one-line commit: `Record continuation verification and remaining evaluation gates`.
