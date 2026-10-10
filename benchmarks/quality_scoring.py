@@ -9,11 +9,14 @@ import re
 from collections.abc import Iterator, Set
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from benchmarks.evaluation_identity import rule_contract_snapshot
 from proseprobe.parsers.prose import ProseBlock, iter_prose_blocks
 from proseprobe.profiles import PROFILES
+
+if TYPE_CHECKING:
+    from benchmarks.usefulness import UsefulnessRating
 
 
 class AnnotationError(ValueError):
@@ -74,6 +77,7 @@ class ActualFinding:
     severity: str = field(default="warning", compare=False)
     confidence: str = field(default="medium", compare=False)
     context: str = field(default="", compare=False)
+    suggestion: str | None = field(default=None, compare=False)
 
 
 @dataclass(frozen=True, order=True)
@@ -107,6 +111,7 @@ class Annotations:
     source_identities: dict[str, dict[str, str]] = field(default_factory=dict)
     review_provenance: dict[str, Any] | None = None
     verified_sources: tuple[tuple[str, bytes], ...] = ()
+    usefulness: tuple[UsefulnessRating, ...] = ()
 
 
 def validate_source_bindings(annotations: Annotations, repo_root: Path) -> None:
@@ -451,6 +456,8 @@ def load_annotations(
     manifest_path: Path, repo_root: Path, rule_ids: set[str]
 ) -> Annotations:
     """Load legacy annotations or sparse scopes with optional reviewed-byte binding."""
+    from benchmarks.usefulness import load_usefulness
+
     try:
         raw = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
@@ -485,6 +492,9 @@ def load_annotations(
     source_groups: dict[str, str] = {}
     source_identities: dict[str, dict[str, str]] = {}
     verified_sources: list[tuple[str, bytes]] = []
+    usefulness: list[UsefulnessRating] = []
+    usefulness_ids: set[str] = set()
+    usefulness_votes: set[tuple[str, str, str]] = set()
     seen_source_ids: set[str] = set()
     expected_keys: set[tuple[str, str, int, int]] = set()
     identities: set[str] = set()
@@ -504,7 +514,8 @@ def load_annotations(
             required={"expected", "negative_cases"}
             | ({"reviewed_rules"} if version >= 2 else set())
             | ({"source_id", "sha256"} if version == 3 else set()),
-            optional={"regions", "source_group"} if version >= 2 else set(),
+            optional=({"regions", "source_group"} if version >= 2 else set())
+            | ({"usefulness"} if version == 3 else set()),
             context=relative_path,
         )
         if not isinstance(entry["expected"], list) or not isinstance(
@@ -542,6 +553,31 @@ def load_annotations(
             verified_sources.append((relative_path, source_bytes))
         source_text = source_bytes.decode("utf-8")
         lines = source_text.splitlines()
+        if version == 3:
+            assert review is not None
+            ratings = load_usefulness(
+                entry.get("usefulness", []),
+                relative_path,
+                entry["source_id"],
+                lines,
+                resolved_root,
+                review["reviewers"],
+                rule_ids,
+                packet_index.get("context", {})
+                .get(relative_path, {})
+                .get("pair_group"),
+            )
+            for rating in ratings:
+                if rating.identity in usefulness_ids:
+                    raise AnnotationError("duplicate usefulness review identity")
+                usefulness_ids.add(rating.identity)
+                vote = (rating.path, rating.diagnostic_sha256, rating.reviewer)
+                if vote in usefulness_votes:
+                    raise AnnotationError(
+                        "duplicate usefulness rating for the same prompt and reviewer"
+                    )
+                usefulness_votes.add(vote)
+            usefulness.extend(ratings)
         files.append(source_path)
         if version >= 2:
             reviewed = _rule_tokens(
@@ -734,9 +770,11 @@ def load_annotations(
             if scope.status == "reviewed"
             for rule in scope.rules
         }
-        used_rules = reviewed_rules | {
-            item.rule_id for item in (*expected, *negative_cases)
-        }
+        used_rules = (
+            reviewed_rules
+            | {item.rule_id for item in (*expected, *negative_cases)}
+            | {rating.finding["rule_id"] for rating in usefulness}
+        )
         contracts = _review_artifact(
             review["rule_contracts"],
             manifest_path.parent,
@@ -760,6 +798,7 @@ def load_annotations(
         source_identities,
         review,
         tuple(verified_sources),
+        tuple(usefulness),
     )
 
 

@@ -244,3 +244,31 @@ unavailable. `--require-bound` and source-bound version 3 strict gates reject
 that enabled context until a target/native-path binding contract is available,
 even with zero cross-file findings. Curated report-only optional measurements
 remain available; the default reviewed gates keep the feature off.
+
+## Human suggestion usefulness
+
+Version 3 files may add a `usefulness` list. Each row names its review ID and a
+header-declared reviewer, preserves the complete Issue-shaped diagnostic and its
+canonical `diagnostic_sha256`, and supplies an `answers` object. The four keys
+are `finding_helpful`, `suggestion_fits_sentence`, `meaning_preserved`, and
+`reviewer_accepts`. Values are `yes`, `no`, `context-dependent`, `unresolved`,
+or `unreviewed`; omitted answers stay unreviewed. Absent suggestions cannot
+receive binary suggestion answers. Rated rules must belong to the packet's
+reviewed contract snapshot, including trigger-only judgments. Renaming a duplicate
+reviewer/prompt row cannot add another vote; distinct reviewers remain visible.
+
+Rows also declare `revision` and `automatic_rescan`, using null when absent.
+Revision provenance requires path, source ID/hash, original source ID and the
+original packet's declared pair group. Local bytes and scope are validated.
+Recorded mechanical observations name targeted resolution, new-warning count,
+policy hash and runtime source hash. They are observations, not a verified
+current run or inferred semantic success.
+
+The JSON `usefulness` result separates emitted findings, distinct full-record
+prompts, linked prompts/ratings/reviewers and unlinked historical ratings. Every
+question reports yes/no denominator, context-dependent/unresolved/unreviewed
+counts and an unavailable rate when binary responses are absent. Raw duplicate
+emissions remain in the quality score even when they share a review prompt.
+Current source/prompt changes make old ratings unlinked; missing human ratings
+never become successful suggestions. No real human judgments are supplied by
+the repository's synthetic validation fixtures.

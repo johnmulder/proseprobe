@@ -224,3 +224,8 @@ and alternate annotators remain available for contextual human review. The
 revision edit extraction/classification from the native annotator identity.
 Independent human review, meaning judgments, holdout results and promotion
 remain deferred by user decision.
+
+Function-only CodeSearchNet inputs support extracted prose and signature-local
+fields. Module-binding-sensitive contracts require complete module context;
+that coverage remains unsupported until the context is preserved and bound in
+the reviewed evaluation input. Their retrieval labels remain excluded.

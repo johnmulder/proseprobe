@@ -2134,14 +2134,14 @@ Neither a lower total finding count nor a passing rescan proves semantic quality
 - [ ] P31.9 Run complete V001 and replacement-rule tests plus an effective-policy
   linter integration test. Document intentional suggestion changes and omissions;
   run P23/P33 before committing the catalog correction.
-- [ ] P31.10 Define P32's usefulness questions separately: was the original
+- [x] P31.10 Define P32's usefulness questions separately: was the original
   finding helpful, did the suggestion fit the sentence, did it preserve meaning,
   and would the reviewer accept it? Permit `context-dependent` and unresolved
   judgments rather than forcing binary correctness.
-- [ ] P31.11 Add failing evaluator tests for separate human suggestion judgments,
+- [x] P31.11 Add failing evaluator tests for separate human suggestion judgments,
   missing judgments, paired source/revision provenance and report denominators.
   Keep automatic rescan outcomes separate from semantic usefulness scores.
-- [ ] P31.12 Add only the agreed label/report extension through P24-bound
+- [x] P31.12 Add only the agreed label/report extension through P24-bound
   annotation inputs. Run scorer tests; report annotation coverage and unresolved
   judgments so unreviewed suggestions are not counted as successful.
 - [ ] P31.13 Collect blinded human judgments on untouched development sources
@@ -2806,3 +2806,25 @@ groups per metric and explicit unavailable denominators. Paired variants stay
 within groups. Group sizes/dominant share and conditional pilot limitations are
 required; no natural-text or population claim is generated. Human collection,
 adjudication, semantic usefulness and independent holdout decisions are deferred.
+
+### P31 — Source-bound human usefulness schema
+
+Four initial missing-schema/report regressions and three review hardening cases
+failed before correction. Version 3 can now preserve separately answered finding
+helpfulness, sentence fit, meaning preservation and reviewer acceptance, with
+missing/context-dependent/unresolved coverage and actual binary denominators.
+Exact source and full prompt hashes, reviewer identity, reviewed contracts and
+original/revision pair provenance are required. Duplicate renamed reviewer votes
+are rejected while distinct reviewers remain auditable. Recorded rescan evidence
+stays separate and cannot imply semantics or a verified current run.
+All 172 focused tests and the isolated full gate pass with unchanged raw corpus
+counts. No real human ratings, natural-text scores or profile changes were added.
+
+### P26/P29 — Python type-parameter bindings
+
+Eight reproduced Python 3.12+ binding cases failed before correction. Declared
+PEP 695 parameters can shadow a type or imported contract marker without an AST
+Name Store. The existing static binding guards now account for those parameters.
+Unshadowed generic Protocol declarations remain valid; Python 3.11 treats the
+new syntax under its existing malformed-source contract. All 301 related code
+and return tests pass; production metadata and corpus judgments are unchanged.

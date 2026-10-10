@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import subprocess
 from dataclasses import asdict
 from pathlib import Path
@@ -11,6 +12,14 @@ from typing import Any
 import proseprobe
 from proseprobe import __version__
 from proseprobe.rules import get_rule_metadata
+
+
+def diagnostic_sha256(finding: dict[str, Any]) -> str:
+    """Bind a complete diagnostic regardless of JSON member order."""
+    raw = json.dumps(
+        finding, sort_keys=True, ensure_ascii=False, separators=(",", ":")
+    ).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
 
 
 def rule_contract_snapshot(rule_ids: set[str] | None = None) -> dict[str, Any]:

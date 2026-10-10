@@ -33,6 +33,28 @@ def _entry() -> dict[str, object]:
     }
 
 
+def test_full_diagnostic_hash_is_order_independent_and_suggestion_bound() -> None:
+    from benchmarks.evaluation_identity import diagnostic_sha256
+
+    finding = {
+        "rule_id": "V001",
+        "message": "Vocabulary",
+        "line": 1,
+        "column": 1,
+        "end_line": 1,
+        "end_column": 6,
+        "severity": "warning",
+        "confidence": "high",
+        "suggestion": "inspect",
+    }
+    assert diagnostic_sha256(finding) == diagnostic_sha256(
+        dict(reversed(list(finding.items())))
+    )
+    assert diagnostic_sha256(finding) != diagnostic_sha256(
+        finding | {"suggestion": "review"}
+    )
+
+
 def _bound_manifest(root: Path, *, reviewed: bool = True) -> Path:
     from benchmarks.evaluation_identity import rule_contract_snapshot
 

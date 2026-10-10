@@ -38,6 +38,7 @@ from benchmarks.regression_gate import (
     load_gate_record,
     require_complete_review,
 )
+from benchmarks.usefulness import usefulness_report
 from proseprobe import __version__
 from proseprobe.config import Config, ConfigError
 from proseprobe.core.linter import Linter
@@ -293,6 +294,7 @@ def collect_findings(
                 severity=issue.severity.value,
                 confidence=issue.confidence.value,
                 context=prose_context(source, str(path), issue.line, issue.column),
+                suggestion=issue.suggestion,
             )
             for issue in issues
         )
@@ -374,6 +376,14 @@ def format_json_report(
             "runtime": runtime,
             "mode": mode,
             "gate": gate,
+            "usefulness": usefulness_report(
+                annotations,
+                tuple(item for _expected, item in score.matches)
+                + tuple(item.finding for item in score.false_positives)
+                + score.unreviewed
+                + score.unsupported
+                + score.context_dependent,
+            ),
             "scoring": "reviewed-semantic"
             if any(item.match_region is not None for item in eligible.expected)
             else "exact-start",
