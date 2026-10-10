@@ -218,3 +218,29 @@ regression contract and ledger-bound immutable scan bytes. That exception does
 not create independent annotation-time provenance. Gate records need manual
 review before source/contract migration or removal of a resolved mismatch;
 there is no automatic acceptance or refresh option.
+
+## Explicit project context
+
+M012 stays off in default production and the historical all-rules track; its
+purpose-written positives/negatives remain recorded as policy exclusions.
+An explicit context enables the optional track without configuration discovery:
+
+```sh
+rtk proxy .venv/bin/python -m benchmarks.rule_quality --mode all-rules --project-root quality/corpus/local-links --format json
+```
+
+The report records the effective absolute root and enable flag; strict gate
+policy identity uses a root-relative declared project path where possible.
+Production uses the same explicit context construction and rule policy as the
+CLI. Input-file policy, confidence filtering and baseline exclusion remain.
+Keep target context under review as well as the linked document. Natural blind
+packets use numbered filenames and incomplete repository context; mark local
+link coverage unsupported until native paths and required targets are preserved
+and bound. Their existing source-byte binding alone cannot establish cross-file
+link truth or independent M012 effectiveness.
+
+Enabled local-link reports explicitly declare target/native-context binding
+unavailable. `--require-bound` and source-bound version 3 strict gates reject
+that enabled context until a target/native-path binding contract is available,
+even with zero cross-file findings. Curated report-only optional measurements
+remain available; the default reviewed gates keep the feature off.

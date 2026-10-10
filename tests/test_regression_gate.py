@@ -286,6 +286,27 @@ def test_empty_bound_source_requires_an_explicit_reviewed_scope(tmp_path: Path) 
     require_complete_review(reviewed, tmp_path, linter, rules, "source-bound-v3")
 
 
+def test_source_bound_gate_refuses_enabled_unbound_target_context(
+    tmp_path: Path,
+) -> None:
+    from benchmarks.quality_scoring import ReviewScope
+    from benchmarks.regression_gate import require_complete_review
+
+    annotations, _config, _linter, _rules, _manifest, _path, _record = _inputs(tmp_path)
+    _config, linter, rules = prepare_evaluation_scan(
+        mode="production", project_root=tmp_path
+    )
+    bound = replace(
+        annotations,
+        source_binding="sha256-utf8",
+        scopes=(ReviewScope("doc.md", tuple(rule.id for rule in rules)),),
+    )
+    with pytest.raises(
+        AnnotationError, match="native target paths/bytes are not bound"
+    ):
+        require_complete_review(bound, tmp_path, linter, rules, "source-bound-v3")
+
+
 def test_string_project_root_policy_is_relocatable_when_inside_corpus_root(
     tmp_path: Path,
 ) -> None:

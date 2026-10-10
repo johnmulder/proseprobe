@@ -63,7 +63,7 @@ Each specialized profile includes the general set plus its listed rules.
 Running without a profile preserves the all-category selection, warning
 minimum severity, and low minimum confidence.
 
-`C006`, `C009`, `C010`, `G038`, `G039`, `M011`, `S029`, `T013`, `V015`, and `V017`
+`C006`, `C009`, `C010`, `G038`, `G039`, `M011`, `M012`, `S029`, `T013`, `V015`, and `V017`
 are experimental and are not
 included in any built-in profile. Enable an experimental rule explicitly,
 including its informational severity and low confidence:
@@ -84,7 +84,31 @@ configuration file resolves against that file's directory. Direct Python
 `Config` construction requires an absolute root; no root is derived from cwd.
 The declared root is validated even while the feature is off. `--show-config`
 prints the effective flag, normalized root and exclusions. These settings are
-the context prerequisite for the experimental local-file rule.
+the context prerequisite for experimental M012. A severity override alone does
+not enable it while `local_links` is false.
+
+```toml
+[tool.proseprobe]
+local_links = true
+project_root = "."
+local_link_exclude = ["generated/**"]
+markdown_anchor_style = "github"
+select = ["M012"]
+minimum_severity = "info"
+```
+
+Literal relative `.md`/`.markdown` destinations resolve against the source file
+inside this root. Exclusions match root-relative paths before and after static
+symlink resolution. Queries, root-relative/generated routes and unsupported
+renderers remain outside the check. Fragment checks require the explicit GitHub
+policy; file existence checks also work with the anchor style off. Unreadable
+or unsupported fragment targets produce a validation advisory. Each scan reads
+repeated targets once and resets its target cache for the next scan.
+
+Filesystem scans supply absolute source identity while preserving reported
+paths. Virtual stdin supports local links only with an absolute `--filename`
+inside the configured root. Target reads do not change files-checked counts
+and can include targets omitted by source-file discovery. No network is used.
 
 ### Markdown fragment policy
 

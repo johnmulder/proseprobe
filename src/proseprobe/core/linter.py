@@ -7,10 +7,14 @@ from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from proseprobe.config import Config, ConfigError, validate_project_context
 from proseprobe.parsers.prose import iter_inline_suppressions
 from proseprobe.rules.base import Issue, Rule
+
+if TYPE_CHECKING:
+    from proseprobe.rules.markup import LocalMarkdownLinkRule
 
 __all__ = ["LintReadError", "LintResults", "Linter"]
 
@@ -213,15 +217,31 @@ class Linter:
             content = path.read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError) as exc:
             raise LintReadError(path, str(exc)) from exc
-        return self.check_content(content, path)
+        return self._check_content(content, path, source_path=path.absolute())
 
     def check_content(self, content: str, path: Path) -> list[Issue]:
         """Check in-memory content using a path for file-specific policy."""
+        return self._check_content(content, path)
+
+    def _project_rules(self) -> list["LocalMarkdownLinkRule"]:
+        if not self.config.local_links:
+            return []
+        from proseprobe.rules.markup import LocalMarkdownLinkRule
+
+        return [rule for rule in self._rules if isinstance(rule, LocalMarkdownLinkRule)]
+
+    def _check_content(
+        self, content: str, path: Path, *, source_path: Path | None = None
+    ) -> list[Issue]:
         issues: list[Issue] = []
+        project_rules = self._project_rules()
 
         for rule in self._rules:
             if self._rule_enabled(rule, path):
-                issues.extend(rule.check(content, str(path)))
+                filename = (
+                    source_path if rule in project_rules and source_path else path
+                )
+                issues.extend(rule.check(content, str(filename)))
 
         return self._apply_inline_suppressions(issues, content, path)
 
@@ -274,11 +294,20 @@ class Linter:
         worker_count = min(32, (os.cpu_count() or 1) + 4)
 
         file_results: list[tuple[Path, list[Issue]]]
-        if len(files) > 1 and worker_count > 1:
-            with ThreadPoolExecutor(max_workers=min(worker_count, len(files))) as pool:
-                file_results = list(pool.map(self._check_file_with_path, files))
-        else:
-            file_results = [self._check_file_with_path(file) for file in files]
+        project_rules = self._project_rules()
+        for rule in project_rules:
+            rule.begin_scan()
+        try:
+            if len(files) > 1 and worker_count > 1:
+                with ThreadPoolExecutor(
+                    max_workers=min(worker_count, len(files))
+                ) as pool:
+                    file_results = list(pool.map(self._check_file_with_path, files))
+            else:
+                file_results = [self._check_file_with_path(file) for file in files]
+        finally:
+            for rule in project_rules:
+                rule.end_scan()
 
         file_results.sort(key=lambda item: str(item[0]))
         issues_by_file = {path: issues for path, issues in file_results if issues}

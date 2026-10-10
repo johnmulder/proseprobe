@@ -154,22 +154,33 @@ def prepare_evaluation_scan(
     ignore: str | None = None,
     severity: str | None = None,
     min_confidence: str | None = None,
+    project_root: Path | None = None,
 ) -> tuple[Config, Linter, list[Rule]]:
     """Construct isolated legacy or production policy without config discovery."""
     overrides = (config is not None, profile, select, ignore, severity, min_confidence)
-    mode = mode or ("production" if any(overrides) else "all-rules")
+    mode = mode or (
+        "production" if any(overrides) or project_root is not None else "all-rules"
+    )
     if mode == "all-rules":
         if any(overrides):
             raise ValueError("all-rules mode cannot be combined with policy overrides")
+        base = Config(markdown_anchor_style="github")
+        if project_root is not None:
+            base.local_links = True
+            base.project_root = str(project_root.resolve())
         return prepare_scan(
-            Config(markdown_anchor_style="github"),
+            base,
             severity="info",
             min_confidence="low",
         )
     if mode != "production":
         raise ValueError(f"unknown evaluation mode: {mode}")
+    base = config if config is not None else Config()
+    if project_root is not None:
+        base.local_links = True
+        base.project_root = str(project_root.resolve())
     return prepare_scan(
-        config if config is not None else Config(),
+        base,
         profile=profile,
         select=select,
         ignore=ignore,
@@ -367,6 +378,14 @@ def format_json_report(
             if any(item.match_region is not None for item in eligible.expected)
             else "exact-start",
             "policy": policy,
+            "local_link_context": {
+                "root": config.project_root,
+                "enabled": config.local_links,
+                "target_binding": "unavailable"
+                if config.local_links
+                else "not-required",
+                "reason": "native-context-not-bound" if config.local_links else None,
+            },
             "corpus": {
                 "manifest_sha256": hashlib.sha256(
                     manifest_path.read_bytes()
@@ -464,6 +483,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--root", type=Path, default=REPO_ROOT)
     parser.add_argument(
+        "--project-root",
+        type=Path,
+        help="explicitly enable local links under this project directory",
+    )
+    parser.add_argument(
         "--gate",
         type=Path,
         help="check an explicitly reviewed exact-mismatch regression ledger",
@@ -476,7 +500,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     mode = args.mode or (
         "production"
-        if any((args.profile, args.severity, args.min_confidence))
+        if any((args.profile, args.severity, args.min_confidence, args.project_root))
         else "all-rules"
     )
     try:
@@ -485,6 +509,7 @@ def main(argv: list[str] | None = None) -> int:
             profile=args.profile,
             severity=args.severity,
             min_confidence=args.min_confidence,
+            project_root=args.project_root,
         )
     except ValueError as exc:
         parser.error(str(exc))
@@ -492,6 +517,10 @@ def main(argv: list[str] | None = None) -> int:
     try:
         registry_ids = {rule.id for rule in get_all_rules()}
         annotations = load_annotations(args.manifest, args.root, registry_ids)
+        if args.require_bound and config.local_links:
+            raise AnnotationError(
+                "strict source-bound evaluation cannot enable local_links: native target paths/bytes are not bound"
+            )
         if args.require_bound and annotations.source_binding != "sha256-utf8":
             raise AnnotationError(
                 "strict independent evaluation requires source-bound version-three annotations"
@@ -554,6 +583,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Rule quality error: {exc}", file=sys.stderr)
         return 2
     if args.format == "text":
+        if config.local_links:
+            print(
+                f"Local link context: {config.project_root}; target binding: unavailable (native-context-not-bound)"
+            )
         print(
             f"Mode: {mode}; severity: {config.severity}; minimum confidence: {config.min_confidence}"
         )

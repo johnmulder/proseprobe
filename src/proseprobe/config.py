@@ -250,6 +250,12 @@ def validate_project_context(config: Config) -> None:
     source = config.source_path or Path("<configuration>")
     if not isinstance(config.local_links, bool):
         raise ConfigError(source, "local_links must be a boolean")
+    try:
+        config.local_link_exclude = _require_list(
+            config.local_link_exclude, "local_link_exclude"
+        )
+    except ValueError as exc:
+        raise ConfigError(source, str(exc)) from exc
     if config.project_root is None:
         if config.local_links:
             raise ConfigError(source, "local_links requires an explicit project_root")

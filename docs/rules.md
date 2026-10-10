@@ -131,6 +131,7 @@ block by hand. The examples and guidance below remain hand-maintained.
 | `M009` | Bare URL in Prose | Markup | info | high | markdown / prose | — |
 | `M010` | Non-Descriptive Link Text | Markup | warning | high | markdown / non_code | — |
 | `M011` | Unresolved Same-Document Fragment | Markup | info | high | markdown / non_code | `markdown_anchor_style` |
+| `M012` | Unresolved Local Markdown Target | Markup | info | medium | markdown / non_code | `local_links` |
 
 <!-- rule-docs:inventory:end -->
 
@@ -2513,4 +2514,37 @@ Read [installation](#install) before starting the service.
 # Install
 
 Read [installation](#install) before starting the service.
+```
+
+---
+
+### M012: Unresolved Local Markdown Target
+
+Checks literal relative `.md` and `.markdown` links inside an explicitly enabled
+project root. Existing targets remain valid; missing files are reported at the
+link destination. Cross-file fragments require `markdown_anchor_style = "github"`
+and reuse M011's heading/HTML anchor policy. Used reference destinations, titles,
+balanced parentheses, escaping, Unicode and spaces follow the supported static
+link parser. M011 still owns same-document fragments.
+
+This experimental INFO/MEDIUM rule defaults to off. Absolute/root-relative paths,
+queries, encoded separators, remote URLs, generated routes, MDX targets and
+out-of-root paths are unsupported. Static symlink escapes are rejected before
+content reads; no adversarial filesystem-race guarantee is made. Unreadable or
+unsupported fragment targets receive a neutral validation advisory. Source
+paths must be absolute inside the declared root; relative virtual stdin names
+have no local context. Repeated targets are read once per scan with a concurrent
+cache; the cache resets between scans. No network access occurs.
+
+The executable examples require a project containing `setup.md` with the
+heading `# Install`; `missing.md` is absent.
+
+**Example (bad):**
+```markdown
+Read [Install](missing.md).
+```
+
+**Example (good):**
+```markdown
+Read [Install](setup.md#install).
 ```

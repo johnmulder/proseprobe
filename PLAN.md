@@ -1391,7 +1391,7 @@ evidence. Keep exact phrase catalogs, rule IDs, severities and ordering stable.
 - [x] P18.22 Make the smallest helper correction justified by those tests.
   Avoid broadening matching for already validated rules. Run every current
   helper caller's tests and compare complete prior positive records.
-- [ ] P18.23 Add one CLI/source-map integration assertion for G037 and V016, and
+- [x] P18.23 Add one CLI/source-map integration assertion for G037 and V016, and
   one V015 assertion showing that the validated predicate and reported subgroup
   intentionally have different spans. Run focused linter/reporter tests.
 - [ ] P18.24 Add purpose-written positive/negative corpus annotations for the
@@ -2022,7 +2022,7 @@ network requests, or silently use the process working directory. Ordinary scans
 and stdin remain unchanged when this capability is off. Keep M011 responsible
 for same-document fragments; do not duplicate M005's duplicate-reference check.
 
-- [ ] P30.1 Record supported targets: literal relative Markdown file paths,
+- [x] P30.1 Record supported targets: literal relative Markdown file paths,
   optional fragments under the existing GitHub anchor policy, and reference
   destinations. Define root-relative path behavior, query handling, generated
   route exclusions, unreadable targets and unsupported renderer outcomes.
@@ -2031,48 +2031,48 @@ for same-document fragments; do not duplicate M005's duplicate-reference check.
   configuration source. Add unknown-option and show-config assertions.
 - [x] P30.3 Add the smallest explicit root/enable configuration supported
   by that contract. Run focused config tests before adding filesystem reads.
-- [ ] P30.4 Add a failing linter test proving a scan context supplies the
+- [x] P30.4 Add a failing linter test proving a scan context supplies the
   project root independently of cwd and independently of source-file discovery.
   Assert no project-local checking for virtual stdin without an explicit
   supported context.
-- [ ] P30.5 Choose the smallest project-aware integration supported by the test:
+- [x] P30.5 Choose the smallest project-aware integration supported by the test:
   explicit rule construction/context injection with a scan-scoped target reader.
   Keep `Rule.check(content, filename)` compatibility for existing rules; avoid a
   global filesystem service or unrelated rule framework migration.
-- [ ] P30.6 Add failing temporary-project tests for a missing `setup.md`, an
+- [x] P30.6 Add failing temporary-project tests for a missing `setup.md`, an
   existing sibling and a nested `../setup.md` still inside the root. Assert
   destination source spans and one finding per supported broken occurrence.
-- [ ] P30.7 Add literal relative-file resolution within the explicit root.
+- [x] P30.7 Add literal relative-file resolution within the explicit root.
   Run these cases with the same inputs under different cwd values.
-- [ ] P30.8 Add failing boundary tests for `..` escape, symlink escape,
+- [x] P30.8 Add failing boundary tests for `..` escape, symlink escape,
   percent-encoded separators, absolute filesystem paths and malformed encoding.
   Declare unsupported/out-of-root behavior without reading outside the root.
-- [ ] P30.9 Enforce the boundary before target access using standard-library path
+- [x] P30.9 Enforce the boundary before target access using standard-library path
   and URL parsing. Run access-spy assertions proving out-of-root files were never
   opened; avoid reporting unsupported routes as definitely missing files.
-- [ ] P30.10 Add failing tests for inline links with titles, balanced parentheses,
+- [x] P30.10 Add failing tests for inline links with titles, balanced parentheses,
   Unicode/spaces, escaped destinations and used reference definitions. Add
   image/code/frontmatter/external/mailto/generated-route negatives.
-- [ ] P30.11 Reuse M011's proven destination parsing through a narrowly shared
+- [x] P30.11 Reuse M011's proven destination parsing through a narrowly shared
   helper only where both rules need it. Compare M011 complete results before and
   after extraction, then run both markup matrices.
-- [ ] P30.12 Add failing `setup.md#install` cases for a present matching anchor,
+- [x] P30.12 Add failing `setup.md#install` cases for a present matching anchor,
   a missing anchor, duplicate headings and explicit HTML IDs. Assert that target
   fragment checking requires the explicit supported renderer.
-- [ ] P30.13 Reuse the same renderer-specific anchor policy as M011. Do not
+- [x] P30.13 Reuse the same renderer-specific anchor policy as M011. Do not
   guess mdBook/MDX/Liquid anchors. Run cross-file and same-file fragment tests.
-- [ ] P30.14 Add failing scan tests for multiple links to one target, a target
+- [x] P30.14 Add failing scan tests for multiple links to one target, a target
   that changes between scans, unreadable/malformed UTF-8 targets and a target
   omitted by discovery. Assert bounded per-scan reads and documented errors.
-- [ ] P30.15 Add a small scan-local target cache, reset for each scan.
+- [x] P30.15 Add a small scan-local target cache, reset for each scan.
   Distinguish missing from unreadable/unsupported targets; preserve existing
   input-error and files-checked semantics according to the declared contract.
   Run read-count tests without wall-clock thresholds.
-- [ ] P30.16 Check registry IDs and add an experimental rule entry. Add failing
+- [x] P30.16 Check registry IDs and add an experimental rule entry. Add failing
   explicit-selection, disabled-setting/severity-override, profile, provisional
   INFO/MEDIUM metadata,
   suppression and JSONL/SARIF assertions before connecting the factory.
-- [ ] P30.17 Extend evaluator setup with the same explicit project context and
+- [x] P30.17 Extend evaluator setup with the same explicit project context and
   provenance, then add a production/evaluation parity regression. Record the
   explicit context in an enabled all-rules track; default production keeps this
   optional capability off and records excluded positives. No implicit
@@ -2734,3 +2734,52 @@ and fixtures. Independent human claims remain deferred.
 The isolated P23 comparator snapshot passes `make check dogfood rule-quality`.
 All raw results remain 366 TP/6 FP/0 FN and 64/64 supplied spans. Review caught
 and fixed empty-source unknown coverage and string-root relocation before commit.
+
+### P18/P27 — Production integration
+
+Thirty-eight authored CLI/linter cases verify complete records, Unicode/wrapped
+source spans, Markdown/Python contexts, masked negative controls, claim subgroup
+spans, attached comparison targets, selection, confidence and narrow suppression.
+All 225 related integration/CLI tests and the isolated package gate pass, with
+unchanged 366 TP/6 FP/0 FN and 64/64 supplied spans. Production code is unchanged.
+P18.23 is complete; final strict gating remains in P23/P33.
+
+### P29 — Rebound wrapper guards
+
+Two further source-binding regressions exposed rebound built-in decorator names.
+The rule now refuses those unresolved contracts while paired unshadowed class
+and static method wrappers remain eligible. All 57 return-contract tests and
+the isolated full gate pass with unchanged corpus metrics.
+
+### P30 — Optional local Markdown targets
+
+The feature has 32 target/cache tests plus 563 related runtime/metadata/CLI tests.
+Initial unsupported/default/config/registration cases failed before their fixes;
+complete M011 characterizations preserve the extracted helper's behavior.
+Literal relative Markdown targets resolve inside the explicit root, with static
+escape rejection, used references, optional GitHub fragments and neutral
+unreadable/unsupported advisories. Concurrent cache misses read a target once;
+new scans reset the cache. Virtual inputs require an absolute supported path.
+No network, implicit root or profile promotion was added. M012 is experimental
+INFO/MEDIUM and defaults to OFF; the registry now contains 102 rules.
+
+Explicit evaluator project context uses the production construction in both
+tracks and records the policy. A purpose-written linked-file project binds
+its existing target and supplies two full-span positives and two negatives.
+Default all-rules remains 366 TP/6 FP/0 FN, excluding those four optional cases;
+the enabled track has 368 TP/6 FP/0 FN and 66/66 spans. Default production stays
+106 TP/4 FP/0 FN. Natural blind packets lack complete native link context and
+cannot establish M012 effectiveness; their local-link coverage remains unsupported.
+P30.18's final strict gate and independent review retain their actual status.
+
+P30 review identified that v3 source binding does not bind native link paths or
+target dependencies. Two strict-refusal regressions now prevent enabled local
+context from passing independent source-bound gates; reports explicitly name
+that unavailable binding. The four context/parity cases and all 154 related
+evaluator/gate tests pass. This limitation does not alter default policies or
+the optional purpose-written report-only measurement.
+
+The combined M012/context snapshot passed `make check dogfood rule-quality`;
+all executable documentation examples pass under their explicit temporary
+project context. Final strict refusal tests were included in that snapshot.
+All optional contexts remain report-only until target/native-path binding exists.

@@ -4689,6 +4689,41 @@
           "note": "The explicit annotation and physical Sphinx return type both declare None."
         }
       ]
+    },
+    "quality/corpus/local-links/README.md": {
+      "expected": [
+        {
+          "rule_id": "M012",
+          "line": 4,
+          "column": 21,
+          "end_line": 4,
+          "end_column": 31
+        },
+        {
+          "rule_id": "M012",
+          "line": 7,
+          "column": 11,
+          "end_line": 7,
+          "end_column": 27
+        }
+      ],
+      "negative_cases": [
+        {
+          "rule_id": "M012",
+          "line": 3,
+          "note": "The complete project context contains this file and GitHub heading fragment."
+        }
+      ]
+    },
+    "quality/corpus/local-links/setup.md": {
+      "expected": [],
+      "negative_cases": [
+        {
+          "rule_id": "M012",
+          "line": 3,
+          "note": "The bound target supplies context without a broken local link."
+        }
+      ]
     }
   }
 }

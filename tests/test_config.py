@@ -348,6 +348,18 @@ select = ["G001"]
         with pytest.raises(ConfigError, match=r"project_root.*absolute"):
             Linter(config)
 
+    @pytest.mark.parametrize("invalid", [True, "generated/**", [1]])
+    def test_direct_config_rejects_invalid_local_link_exclusions(
+        self, invalid: object
+    ) -> None:
+        from proseprobe.core.linter import Linter
+
+        config = Config()
+        config.local_link_exclude = invalid  # type: ignore[assignment]
+
+        with pytest.raises(ConfigError, match="local_link_exclude"):
+            Linter(config)
+
     def test_profile_supplies_policy_defaults(self, tmp_path: Path) -> None:
         """A profile should fill policy keys omitted from configuration."""
         config_file = tmp_path / ".proseprobe.toml"

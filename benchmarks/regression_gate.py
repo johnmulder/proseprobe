@@ -307,6 +307,10 @@ def require_complete_review(
                 "legacy gate coverage requires the exhaustive version-one curated contract"
             )
         return
+    if linter.config.local_links:
+        raise AnnotationError(
+            "strict source-bound evaluation cannot enable local_links: native target paths/bytes are not bound"
+        )
     if annotations.source_binding != "sha256-utf8":
         raise AnnotationError(
             "independent gate coverage requires source-bound version-three annotations"

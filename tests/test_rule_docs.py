@@ -79,19 +79,19 @@ def test_category_table_is_derived_from_registry() -> None:
     assert "| `V` | Vocabulary | 16 |" in rendered
     assert "| `S` | Structure | 25 |" in rendered
     assert "| `T` | Style | 14 |" in rendered
-    assert "| `M` | Markup | 11 |" in rendered
+    assert "| `M` | Markup | 12 |" in rendered
     assert "| `G` | Grammar | 26 |" in rendered
     assert "| `C` | Code | 9 |" in rendered
-    assert "| **Total** | | **101** | |" in rendered
+    assert "| **Total** | | **102** | |" in rendered
 
 
 def test_rule_inventory_contains_canonical_metadata() -> None:
     rendered = render_rule_inventory()
     rule_rows = [line for line in rendered.splitlines() if line.startswith("| `")]
 
-    assert len(rule_rows) == 101
+    assert len(rule_rows) == 102
     assert rule_rows[0].startswith("| `V001`")
-    assert rule_rows[-1].startswith("| `M011`")
+    assert rule_rows[-1].startswith("| `M012`")
     assert any(
         "`S001`" in row
         and "info" in row
@@ -342,11 +342,21 @@ def test_documented_examples_match_rule_behavior(
     language: str,
     bad_example: str,
     good_example: str,
+    tmp_path: Path,
 ) -> None:
     """Each rule's examples should remain executable documentation."""
     config = Config(markdown_anchor_style="github") if rule_id == "M011" else Config()
     rule = next(rule for rule in get_all_rules(config) if rule.id == rule_id)
     filename = "example.py" if language == "python" else "example.md"
+    if rule_id == "M012":
+        (tmp_path / "setup.md").write_text("# Install\n")
+        config = Config(
+            local_links=True,
+            project_root=str(tmp_path),
+            markdown_anchor_style="github",
+        )
+        rule = next(rule for rule in get_all_rules(config) if rule.id == rule_id)
+        filename = str(tmp_path / "example.md")
 
     bad_issues = rule.check(bad_example, filename)
     good_issues = rule.check(good_example, filename)

@@ -19,7 +19,7 @@ def test_metadata_covers_registry_in_rule_id_order() -> None:
     metadata_ids = tuple(item.id for item in metadata)
 
     assert metadata_ids == tuple(rule.id for rule in get_all_rules())
-    assert len(metadata) == 101
+    assert len(metadata) == 102
     assert len(set(metadata_ids)) == len(metadata_ids)
 
 
@@ -548,4 +548,19 @@ def test_metadata_renderer_setting_is_a_real_config_field() -> None:
         item.config_key
         for item in get_rule_metadata()
         if item.config_key and not item.config_key.startswith("thresholds.")
-    } == {"markdown_anchor_style"}
+    } == {"markdown_anchor_style", "local_links"}
+
+
+def test_metadata_local_links_is_experimental_and_off_by_default() -> None:
+    metadata = get_rule_metadata_by_id("M012")
+
+    assert metadata is not None
+    assert metadata.default_severity is Severity.INFO
+    assert metadata.default_confidence is Confidence.MEDIUM
+    assert metadata.applies_to == ("markdown",)
+    assert metadata.content_scope == "non_code"
+    assert metadata.profiles == ()
+    assert metadata.config_key == "local_links"
+    config = Config(severity_overrides={"M012": "error"})
+    [rule] = [rule for rule in get_all_rules(config) if rule.id == "M012"]
+    assert rule.severity is Severity.OFF

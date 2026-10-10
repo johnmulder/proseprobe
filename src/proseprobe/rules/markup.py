@@ -1,15 +1,19 @@
-"""Markup detection rules (M001-M011)."""
+"""Markup detection rules (M001-M012)."""
 
 import html
+import os
 import re
 import string
 import unicodedata
 from collections.abc import Iterator
 from dataclasses import dataclass
+from fnmatch import fnmatchcase
 from html.parser import HTMLParser
 from itertools import pairwise
+from pathlib import Path
+from threading import Lock
 from typing import ClassVar
-from urllib.parse import unquote
+from urllib.parse import unquote, urlsplit
 
 from proseprobe.parsers.markdown import (
     MarkdownParser,
@@ -255,6 +259,191 @@ class BrokenReferencesRule(Rule):
                     )
                 )
 
+        return sorted(issues, key=lambda issue: (issue.line, issue.column))
+
+
+@dataclass(frozen=True)
+class _LocalTarget:
+    status: str
+    anchors: frozenset[str] = frozenset()
+    detail: str = ""
+
+
+class LocalMarkdownLinkRule(Rule):
+    """M012: Check literal Markdown files inside an explicit project root."""
+
+    id = "M012"
+    name = "Unresolved Local Markdown Target"
+    description = "Checks literal local Markdown files and supported GitHub fragments"
+    severity = Severity.INFO
+    default_confidence = Confidence.MEDIUM
+    applies_to: ClassVar[set[str]] = {"markdown"}
+    content_scope = "non_code"
+    config_key = "local_links"
+
+    def __init__(
+        self,
+        local_links: bool = False,
+        project_root: str | None = None,
+        markdown_anchor_style: str = "off",
+        local_link_exclude: list[str] | None = None,
+    ) -> None:
+        super().__init__()
+        if markdown_anchor_style not in {"off", "github"}:
+            raise ValueError("markdown_anchor_style must be off or github")
+        self._root = Path(project_root).resolve() if project_root else None
+        if local_links and (
+            project_root is None
+            or not Path(project_root).is_absolute()
+            or self._root is None
+            or not self._root.is_dir()
+        ):
+            raise ValueError("local_links requires an absolute existing project_root")
+        self._enabled = local_links
+        self._style = markdown_anchor_style
+        self._exclude = tuple(local_link_exclude or [])
+        self._cache: dict[Path, _LocalTarget] = {}
+        self._cache_lock = Lock()
+        self._batch = False
+        if not local_links:
+            self.severity = Severity.OFF
+
+    def begin_scan(self) -> None:
+        """Start one file batch with a fresh bounded target-read cache."""
+        with self._cache_lock:
+            self._cache.clear()
+        self._batch = True
+
+    def end_scan(self) -> None:
+        """Finish the batch so standalone checks start fresh."""
+        self._batch = False
+
+    def _resolve_target(
+        self, source: Path, destination: str
+    ) -> tuple[Path, str] | None:
+        assert self._root is not None
+        resolved = html.unescape(SameDocumentFragmentRule._unescape(destination))
+        if (
+            any(ord(char) < 32 for char in resolved)
+            or re.search(r"%(?![0-9a-fA-F]{2})", resolved)
+            or "?" in resolved
+        ):
+            return None
+        try:
+            parts = urlsplit(resolved)
+        except ValueError:
+            return None
+        if parts.scheme or parts.netloc or not parts.path or parts.path.startswith("/"):
+            return None
+        if re.search(r"%2f|%5c", parts.path, re.IGNORECASE):
+            return None
+        try:
+            path = unquote(parts.path, errors="strict")
+            fragment = unquote(parts.fragment, errors="strict")
+        except UnicodeDecodeError:
+            return None
+        if (
+            "\\" in path
+            or any(ord(char) < 32 for char in path)
+            or Path(path).suffix.lower() not in {".md", ".markdown"}
+        ):
+            return None
+        lexical = Path(os.path.normpath(source.parent / path))
+        try:
+            relative = lexical.relative_to(self._root)
+        except ValueError:
+            return None
+        if any(fnmatchcase(relative.as_posix(), pattern) for pattern in self._exclude):
+            return None
+        try:
+            target = lexical.resolve()
+            relative = target.relative_to(self._root)
+        except (OSError, RuntimeError, ValueError):
+            return None
+        if any(fnmatchcase(relative.as_posix(), pattern) for pattern in self._exclude):
+            return None
+        return target, fragment
+
+    def _read_target(self, path: Path) -> _LocalTarget:
+        with self._cache_lock:
+            if path in self._cache:
+                return self._cache[path]
+            try:
+                content = path.read_text(encoding="utf-8")
+            except FileNotFoundError:
+                result = _LocalTarget("missing")
+            except (OSError, UnicodeDecodeError) as exc:
+                result = _LocalTarget("unreadable", detail=str(exc))
+            else:
+                document = (
+                    SameDocumentFragmentRule._document(content)
+                    if self._style == "github"
+                    else None
+                )
+                result = (
+                    _LocalTarget(
+                        "unsupported",
+                        detail="generated markup has no static anchor contract",
+                    )
+                    if self._style == "github" and document is None
+                    else _LocalTarget(
+                        "present", frozenset(document[0]) if document else frozenset()
+                    )
+                )
+            self._cache[path] = result
+            return result
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check supported destinations with absolute source identity."""
+        if not self._enabled or self._root is None or not is_markdown_file(filename):
+            return []
+        source = Path(filename)
+        if not source.is_absolute():
+            return []
+        try:
+            source = source.resolve()
+            source.relative_to(self._root)
+        except (OSError, RuntimeError, ValueError):
+            return []
+        document = SameDocumentFragmentRule._document(content)
+        if document is None:
+            return []
+        if not self._batch:
+            with self._cache_lock:
+                self._cache.clear()
+        issues: list[Issue] = []
+        for destination, line, column, end_column in document[1]:
+            resolved = self._resolve_target(source, destination)
+            if resolved is None:
+                continue
+            path, fragment = resolved
+            target = self._read_target(path)
+            if target.status == "missing":
+                message = f"No local Markdown file for '{destination}'"
+            elif target.status == "unreadable" or (
+                target.status == "unsupported" and fragment and self._style == "github"
+            ):
+                message = (
+                    f"Could not validate local target '{destination}': {target.detail}"
+                )
+            elif (
+                fragment and self._style == "github" and fragment not in target.anchors
+            ):
+                message = f"No GitHub fragment target for '{destination}'"
+            else:
+                continue
+            issues.append(
+                Issue(
+                    rule_id=self.id,
+                    message=message,
+                    line=line,
+                    column=column,
+                    end_column=end_column,
+                    severity=self.severity,
+                    confidence=self.default_confidence,
+                    suggestion="Check the file path, selected renderer, and target access",
+                )
+            )
         return sorted(issues, key=lambda issue: (issue.line, issue.column))
 
 
@@ -816,10 +1005,11 @@ class SameDocumentFragmentRule(Rule):
         custom.feed(anchor_source)
         return headings | custom.targets
 
-    def check(self, content: str, filename: str) -> list[Issue]:
-        """Check supported static fragments while preserving destination spans."""
-        if self._style == "off" or not is_markdown_file(filename):
-            return []
+    @classmethod
+    def _document(
+        cls, content: str
+    ) -> tuple[set[str], list[tuple[str, int, int, int]]] | None:
+        """Extract static anchors and supported link destination source spans."""
         parser = _get_cached_markdown_parser(content)
         excluded = parser._code_lines() | parser._front_matter_lines()
         masked_lines = [
@@ -838,7 +1028,7 @@ class SameDocumentFragmentRule(Rule):
         if parser._mdx_block_lines() & active or any(
             "{%" in line or "{{" in line for _, line in anchor_lines
         ):
-            return []
+            return None
         references = parser.get_references()
         definition_lines = {
             reference.line for reference in references if reference.is_definition
@@ -853,7 +1043,7 @@ class SameDocumentFragmentRule(Rule):
                 html_lines.append("")
                 continue
             chars = list(line)
-            for link in self._links(line):
+            for link in cls._links(line):
                 start = (
                     link.start - 1 if link.is_image else link.start + len(link.text) + 2
                 )
@@ -864,26 +1054,26 @@ class SameDocumentFragmentRule(Rule):
                     reference.line == number
                     and not reference.is_definition
                     and line[start : start + 2] == "!["
-                    and not self._escaped(line, start)
+                    and not cls._escaped(line, start)
                 ):
                     end = reference.end_column - 1
                     chars[start:end] = " " * (end - start)
             html_lines.append("".join(chars))
         anchor_source = "\n".join(
             "".join(
-                "&lt;" if char == "<" and self._escaped(line, index) else char
+                "&lt;" if char == "<" and cls._escaped(line, index) else char
                 for index, char in enumerate(line)
             )
             for line in html_lines
         )
-        targets = self._targets(parser, anchor_source)
+        targets = cls._targets(parser, anchor_source)
         visible = {number for number, _ in parser.get_lines()} - excluded
         source_lines = content.split("\n")
         destinations: list[tuple[str, int, int, int]] = []
         for line_num, line in anchor_lines:
             if line_num not in visible or line_num in definition_lines:
                 continue
-            for link in self._links(line):
+            for link in cls._links(line):
                 if not link.is_image:
                     destinations.append(
                         (
@@ -906,7 +1096,7 @@ class SameDocumentFragmentRule(Rule):
                 not source_lines[reference.line - 1][reference.column - 1 :].startswith(
                     "!["
                 )
-                or self._escaped(source_lines[reference.line - 1], reference.column - 1)
+                or cls._escaped(source_lines[reference.line - 1], reference.column - 1)
             )
         }
         seen: set[str] = set()
@@ -916,16 +1106,26 @@ class SameDocumentFragmentRule(Rule):
             seen.add(reference.label)
             if reference.label not in used or reference.line not in visible:
                 continue
-            parsed = self._destination(
+            parsed = cls._destination(
                 source_lines[reference.line - 1], reference.destination_start - 1
             )
             if parsed is not None:
                 destination, start, end, after = parsed
                 source = source_lines[reference.line - 1]
-                if self._link_end(source + ")", after) == len(source) + 1:
+                if cls._link_end(source + ")", after) == len(source) + 1:
                     destinations.append(
                         (destination, reference.line, start + 1, end + 1)
                     )
+        return targets, destinations
+
+    def check(self, content: str, filename: str) -> list[Issue]:
+        """Check supported static fragments while preserving destination spans."""
+        if self._style == "off" or not is_markdown_file(filename):
+            return []
+        document = self._document(content)
+        if document is None:
+            return []
+        targets, destinations = document
         issues: list[Issue] = []
         for destination, line_num, column, end_column in destinations:
             resolved = html.unescape(self._unescape(destination))

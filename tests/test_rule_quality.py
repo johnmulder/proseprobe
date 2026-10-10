@@ -24,6 +24,116 @@ from proseprobe.core.linter import Linter
 from proseprobe.rules import get_all_rules
 
 
+@pytest.mark.parametrize("mode", ["all-rules", "production"])
+def test_evaluator_local_links_require_explicit_project_context(
+    tmp_path: Path, mode: str
+) -> None:
+    from benchmarks.rule_quality import prepare_evaluation_scan
+
+    config, _linter, _rules = prepare_evaluation_scan(mode=mode)
+    assert config.local_links is False
+    assert config.project_root is None
+    config, _linter, _rules = prepare_evaluation_scan(mode=mode, project_root=tmp_path)
+    assert config.local_links is True
+    assert config.project_root == str(tmp_path.resolve())
+
+
+def test_explicit_local_link_evaluator_matches_cli_and_reports_context(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    import benchmarks.rule_quality as evaluator
+
+    from tests.test_cli import run_cli
+
+    source = tmp_path / "doc.md"
+    source.write_text("Read [the guide](missing.md).\n")
+    config_path = tmp_path / "explicit.toml"
+    config_path.write_text(
+        f'local_links = true\nproject_root = "{tmp_path}"\nseverity = "info"\n'
+    )
+    config, linter, _rules = evaluator.prepare_evaluation_scan(
+        mode="production", project_root=tmp_path, severity="info"
+    )
+    actual = collect_findings(Annotations((source,), (), ()), tmp_path, linter=linter)
+    cli = run_cli(
+        "check", str(source), "--config", str(config_path), "--format", "json"
+    )
+    records = [
+        issue for file in json.loads(cli.stdout)["files"] for issue in file["issues"]
+    ]
+    assert [
+        (item.rule_id, item.line, item.column, item.message) for item in actual
+    ] == sorted(
+        (item["rule_id"], item["line"], item["column"], item["message"])
+        for item in records
+    )
+    assert any(item.rule_id == "M012" for item in actual)
+    manifest = tmp_path / "annotations.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "version": 2,
+                "files": {
+                    "doc.md": {
+                        "expected": [],
+                        "negative_cases": [],
+                        "reviewed_rules": [],
+                    }
+                },
+            }
+        )
+    )
+    assert (
+        evaluator.main(
+            [
+                "--mode",
+                "production",
+                "--project-root",
+                str(tmp_path),
+                "--severity",
+                "info",
+                "--manifest",
+                str(manifest),
+                "--root",
+                str(tmp_path),
+                "--format",
+                "json",
+            ]
+        )
+        == 0
+    )
+    report = json.loads(capsys.readouterr().out)
+    assert report["policy"]["project_root"] == config.project_root
+    assert report["policy"]["local_links"] is True
+    assert report["local_link_context"]["target_binding"] == "unavailable"
+    assert report["local_link_context"]["reason"] == "native-context-not-bound"
+
+
+def test_strict_bound_evaluation_refuses_unbound_native_link_context(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    from benchmarks.rule_quality import main
+
+    from tests.test_quality_scoring import _bound_manifest
+
+    manifest = _bound_manifest(tmp_path, reviewed=False)
+    assert (
+        main(
+            [
+                "--manifest",
+                str(manifest),
+                "--root",
+                str(tmp_path),
+                "--project-root",
+                str(tmp_path),
+                "--require-bound",
+            ]
+        )
+        == 2
+    )
+    assert "native target paths/bytes are not bound" in capsys.readouterr().err
+
+
 @pytest.mark.parametrize(
     "profile", [None, "academic", "business", "general", "journalism", "technical-docs"]
 )
@@ -96,14 +206,19 @@ def test_policy_eligibility_excludes_disabled_severity_and_file_context_but_not_
     assert score.metrics["V001"].false_negatives == 1
 
 
-def test_legacy_mode_retains_all_rules_and_is_explicit() -> None:
+def test_legacy_mode_retains_all_enabled_rules_and_explicit_context_policy() -> None:
     from benchmarks.rule_quality import prepare_evaluation_scan
+
+    from proseprobe.rules.base import Severity
 
     implicit = prepare_evaluation_scan()
     explicit = prepare_evaluation_scan(mode="all-rules")
     assert implicit[0].severity == explicit[0].severity == "info"
     assert implicit[0].min_confidence == explicit[0].min_confidence == "low"
-    assert {rule.id for rule in explicit[2]} == {rule.id for rule in get_all_rules()}
+    assert {rule.id for rule in explicit[2]} == {
+        rule.id for rule in get_all_rules(explicit[0]) if rule.severity != Severity.OFF
+    }
+    assert "M012" not in {rule.id for rule in explicit[2]}
     assert prepare_evaluation_scan(profile="general")[0].profile == "general"
     with pytest.raises(ValueError, match="all-rules"):
         prepare_evaluation_scan(mode="all-rules", profile="general")

@@ -62,6 +62,12 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         markup.BareURLInProseRule(),
         markup.NonDescriptiveLinkTextRule(),
         markup.SameDocumentFragmentRule(config.markdown_anchor_style),
+        markup.LocalMarkdownLinkRule(
+            config.local_links,
+            config.project_root,
+            config.markdown_anchor_style,
+            config.local_link_exclude,
+        ),
         struct.RuleOfThreeRule(thresholds.rule_of_three),
         struct.NegativeParallelismRule(),
         struct.ChallengeConclusionsRule(),
@@ -127,6 +133,8 @@ def get_all_rules(config: Config | None = None) -> list[Rule]:
         if override:
             rule.severity = severity_from_str(override, rule.severity) or rule.severity
         if rule.id == "M011" and config.markdown_anchor_style == "off":
+            rule.severity = Severity.OFF
+        if rule.id == "M012" and not config.local_links:
             rule.severity = Severity.OFF
     return sorted(rules, key=lambda rule: rule.id)
 

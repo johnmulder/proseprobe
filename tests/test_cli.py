@@ -867,7 +867,7 @@ class TestRulesCommand:
         assert data["schema_version"] == 1
         assert data["version"] == __version__
         rules = data["rules"]
-        assert len(rules) == 101
+        assert len(rules) == 102
         assert [rule["id"] for rule in rules] == sorted(rule["id"] for rule in rules)
         assert next(rule for rule in rules if rule["id"] == "S001") == {
             "id": "S001",
@@ -2687,3 +2687,134 @@ def test_show_config_reports_explicit_local_link_context(tmp_path: Path) -> None
     assert "Local links: True" in result.stdout
     assert f"Project root: {project.resolve()}" in result.stdout
     assert "Local link exclude: ['generated/**']" in result.stdout
+
+
+@pytest.mark.parametrize("output_format", ["jsonl", "sarif"])
+def test_local_links_explicit_config_reports_source_span_and_suppression(
+    tmp_path: Path, output_format: str
+) -> None:
+    config_path = tmp_path / "config.toml"
+    config_path.write_text('local_links = true\nproject_root = "."\n')
+    source = (
+        "<!-- proseprobe-ignore-next-line M012 -->\n[Suppressed](setup.md)\n"
+        "[Missing](other.md)\n"
+    )
+    file = tmp_path / "index.md"
+    file.write_text(source)
+
+    result = run_cli(
+        "check",
+        str(file),
+        "--config",
+        str(config_path),
+        "--select",
+        "M012",
+        "--severity",
+        "info",
+        "--format",
+        output_format,
+    )
+
+    assert result.exit_code == 0
+    assert result.stderr == ""
+    if output_format == "jsonl":
+        [record] = [json.loads(line) for line in result.stdout.splitlines()]
+        assert record["rule_id"] == "M012"
+        assert record["path"] == str(file)
+        assert record["confidence"] == "medium"
+        assert (record["line"], record["column"], record["end_column"]) == (3, 11, 19)
+    else:
+        run = json.loads(result.stdout)["runs"][0]
+        [finding] = run["results"]
+        assert finding["ruleId"] == "M012"
+        assert finding["rank"] == 50.0
+        assert finding["properties"]["confidence"] == "medium"
+        location = finding["locations"][0]["physicalLocation"]
+        assert location["artifactLocation"]["uri"] == str(file)
+        assert location["region"] == {
+            "startLine": 3,
+            "startColumn": 11,
+            "endLine": 3,
+            "endColumn": 19,
+        }
+
+
+def test_local_links_disabled_setting_wins_over_severity_override(
+    tmp_path: Path,
+) -> None:
+    config_path = tmp_path / "config.toml"
+    config_path.write_text('[severity]\nM012 = "error"\n')
+    file = tmp_path / "index.md"
+    file.write_text("[Missing](setup.md)\n")
+
+    result = run_cli(
+        "check",
+        str(file),
+        "--config",
+        str(config_path),
+        "--select",
+        "M012",
+        "--severity",
+        "info",
+        "--format",
+        "jsonl",
+    )
+
+    assert result.exit_code == 0
+    assert result.stdout == result.stderr == ""
+
+
+def test_local_links_stdin_requires_absolute_virtual_filename(tmp_path: Path) -> None:
+    config_path = tmp_path / "config.toml"
+    config_path.write_text('local_links = true\nproject_root = "."\n')
+    options = (
+        "--config",
+        str(config_path),
+        "--select",
+        "M012",
+        "--severity",
+        "info",
+        "--format",
+        "jsonl",
+    )
+    source = "[Missing](setup.md)\n"
+
+    relative = run_cli("check", "-", "--filename", "virtual.md", *options, stdin=source)
+    absolute = run_cli(
+        "check", "-", "--filename", str(tmp_path / "virtual.md"), *options, stdin=source
+    )
+
+    assert relative.exit_code == absolute.exit_code == 0
+    assert relative.stdout == relative.stderr == absolute.stderr == ""
+    [record] = [json.loads(line) for line in absolute.stdout.splitlines()]
+    assert record["rule_id"] == "M012"
+    assert record["path"] == str(tmp_path / "virtual.md")
+
+
+def test_local_link_baseline_retains_only_reviewed_destination(tmp_path: Path) -> None:
+    config_path = tmp_path / "config.toml"
+    config_path.write_text('local_links = true\nproject_root = "."\n')
+    file = tmp_path / "index.md"
+    file.write_text("[Missing](setup.md)\n")
+    baseline = tmp_path / "baseline.json"
+    options = (
+        "--config",
+        str(config_path),
+        "--select",
+        "M012",
+        "--severity",
+        "info",
+        "--baseline",
+        str(baseline),
+    )
+
+    generated = run_cli("check", str(file), *options, "--generate-baseline")
+    hidden = run_cli("check", str(file), *options, "--format", "jsonl")
+    file.write_text("[Missing](other.md)\n")
+    changed = run_cli("check", str(file), *options, "--format", "jsonl")
+
+    assert generated.exit_code == hidden.exit_code == changed.exit_code == 0
+    assert hidden.stdout == hidden.stderr == changed.stderr == ""
+    [record] = [json.loads(line) for line in changed.stdout.splitlines()]
+    assert record["rule_id"] == "M012"
+    assert "other.md" in record["message"]

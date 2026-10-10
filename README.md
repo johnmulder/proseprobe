@@ -53,8 +53,8 @@ integrations.
 | `T` | Style | 14 | Typographic issues |
 | `G` | Grammar | 26 | Grammatical patterns |
 | `C` | Code | 9 | Python docstring/comment issues |
-| `M` | Markup | 11 | Markdown artifacts |
-| **Total** | | **101** | |
+| `M` | Markup | 12 | Markdown artifacts |
+| **Total** | | **102** | |
 
 <!-- rule-docs:categories:end -->
 

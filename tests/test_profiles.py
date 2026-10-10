@@ -36,6 +36,7 @@ def test_profiles_cover_non_experimental_rules_without_unknown_rules() -> None:
         "G038",
         "G039",
         "M011",
+        "M012",
         "S029",
         "T013",
         "V015",
