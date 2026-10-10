@@ -803,6 +803,91 @@ def fetch(url, timeout):
         assert issue.severity is Severity.INFO
         assert issue.confidence is Confidence.HIGH
 
+    @pytest.mark.parametrize(
+        ("signature", "field", "declared_kind", "actual_kind"),
+        [
+            ("args", "*args", "variadic positional", "positional parameter"),
+            ("kwargs", "**kwargs", "variadic keyword", "positional parameter"),
+            ("args, /", "*args", "variadic positional", "positional-only"),
+            ("*, kwargs", "**kwargs", "variadic keyword", "keyword-only"),
+            ("*args", "**args", "variadic keyword", "variadic positional"),
+            ("**kwargs", "*kwargs", "variadic positional", "variadic keyword"),
+        ],
+    )
+    def test_explicit_stars_must_match_source_parameter_kind(
+        self, signature: str, field: str, declared_kind: str, actual_kind: str
+    ) -> None:
+        source = f'def fetch({signature}):\n    """:param {field}: Input."""'
+
+        [issue] = code.StaleDocstringParameterRule().check(source, "test.py")
+
+        assert issue.rule_id == "C009"
+        assert declared_kind in issue.message
+        assert actual_kind in issue.message
+        assert f"'{field}'" in issue.message
+        assert "signature" in issue.message
+        name = field.lstrip("*")
+        line = source.splitlines()[1]
+        assert line[issue.column - 1 : issue.end_column - 1] == name
+        assert issue.severity is Severity.INFO
+        assert issue.confidence is Confidence.HIGH
+
+    @pytest.mark.parametrize(
+        ("signature", "field"),
+        [
+            ("args", "args"),
+            ("args, /", "args"),
+            ("*, kwargs", "kwargs"),
+            ("*args", "args"),
+            ("**kwargs", "kwargs"),
+            ("*args", "*args"),
+            ("**kwargs", "**kwargs"),
+            ("**options", "delegated"),
+        ],
+    )
+    def test_matching_or_unstarred_parameter_kinds_remain_valid(
+        self, signature: str, field: str
+    ) -> None:
+        source = f'def fetch({signature}):\n    """:param {field}: Input."""'
+
+        assert code.StaleDocstringParameterRule().check(source, "test.py") == []
+
+    def test_typed_nfkc_star_conflict_preserves_physical_name_span(self) -> None:
+        name = "\u212a"
+        source = f'async def fetch(*{name}):\n    """:param tuple **{name}: Input."""'
+
+        [issue] = code.StaleDocstringParameterRule().check(source, "test.py")
+
+        assert f"'**{name}'" in issue.message
+        assert "variadic keyword" in issue.message
+        assert "variadic positional" in issue.message
+        line = source.splitlines()[1]
+        assert line[issue.column - 1 : issue.end_column - 1] == name
+
+    @pytest.mark.parametrize(
+        "source",
+        [
+            '@wrap\ndef fetch(args):\n    """:param *args: Input."""',
+            'def fetch(args):\n    """```\n    :param *args: Literal example.\n    ```"""',
+            'def fetch(args):\n    """Example::\n\n        :param *args: Literal example.\n    """',
+            'def fetch(\n    """:param *args: Input."""',
+        ],
+    )
+    def test_explicit_kind_unsupported_contexts_remain_unreported(
+        self, source: str
+    ) -> None:
+        assert code.StaleDocstringParameterRule().check(source, "test.py") == []
+
+    def test_nested_explicit_kind_fields_use_own_signature(self) -> None:
+        source = (
+            'def outer(*args):\n    """:param *args: Values."""\n'
+            '    async def inner(args):\n        """:param *args: Value."""\n'
+        )
+
+        [issue] = code.StaleDocstringParameterRule().check(source, "test.py")
+
+        assert issue.line == 4
+
     @pytest.mark.parametrize("field", [":param retries:", ":param timeot:"])
     def test_reports_renamed_or_misspelled_parameters(self, field: str) -> None:
         source = f'def fetch(url, timeout):\n    """{field} Value."""'

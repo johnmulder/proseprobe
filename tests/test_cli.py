@@ -2634,3 +2634,36 @@ def test_advice_change_preserves_only_source_bound_baseline_identity(
     assert "Active: " + str(version - 1) in compared.stdout
     assert "Stale: " + str(2 - version) in compared.stdout
     assert "New: " + str(2 - version) in compared.stdout
+
+
+def test_explicit_docstring_parameter_kind_conflict_cli() -> None:
+    source = (
+        'def ordinary(args):\n    """:param *args: Input."""\n'
+        'def variadic(*args):\n    """:param *args: Values."""\n'
+    )
+
+    result = run_cli(
+        "check",
+        "-",
+        "--filename",
+        "signature.py",
+        "--select",
+        "C009",
+        "--severity",
+        "info",
+        "--format",
+        "jsonl",
+        stdin=source,
+    )
+
+    assert result.exit_code == 0
+    assert result.stderr == ""
+    [record] = [json.loads(line) for line in result.stdout.splitlines()]
+    assert record["rule_id"] == "C009"
+    assert record["path"] == "signature.py"
+    assert record["severity"] == "info"
+    assert record["confidence"] == "high"
+    assert record["line"] == 2
+    assert "variadic positional" in record["message"]
+    line = source.splitlines()[1]
+    assert line[record["column"] - 1 : record["end_column"] - 1] == "args"

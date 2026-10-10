@@ -579,7 +579,7 @@ class StaleDocstringParameterRule(Rule):
     id = "C009"
     name = "Stale Docstring Parameter"
     description = (
-        "Detects Sphinx parameter declarations absent from the function signature"
+        "Detects Sphinx parameter names or explicit kinds that conflict with signatures"
     )
     severity = Severity.INFO
     default_confidence = Confidence.HIGH
@@ -590,6 +590,13 @@ class StaleDocstringParameterRule(Rule):
     _literal_directive = re.compile(
         r"^\.\.[ \t]+(?:code(?:-block)?|parsed-literal|doctest)::(?:\s|$)"
     )
+    _kind_labels: ClassVar[dict[str, str]] = {
+        "positional_only": "a positional-only parameter",
+        "positional": "a positional parameter",
+        "keyword_only": "a keyword-only parameter",
+        "var_positional": "variadic positional arguments",
+        "var_keyword": "variadic keyword arguments",
+    }
 
     @classmethod
     def _declaration_lines(
@@ -644,7 +651,7 @@ class StaleDocstringParameterRule(Rule):
             block = blocks.get(docstring.line)
             if block is None:
                 continue
-            parameters = {name for name, _ in docstring.signature_parameters}
+            parameters = dict(docstring.signature_parameters)
             for line_num, line in self._declaration_lines(block, source_lines):
                 match = self._field.match(line)
                 if match is None:
@@ -657,21 +664,41 @@ class StaleDocstringParameterRule(Rule):
                 raw_field = source_lines[line_num - 1][field_start : match.end()]
                 if '"' in raw_field or "'" in raw_field:
                     continue
-                if unicodedata.normalize("NFKC", name) in parameters or (
-                    docstring.accepts_kwargs and not raw_name.startswith("*")
-                ):
-                    continue
+                kind = parameters.get(unicodedata.normalize("NFKC", name))
+                explicit_kind = (
+                    "var_keyword"
+                    if raw_name.startswith("**")
+                    else "var_positional"
+                    if raw_name.startswith("*")
+                    else None
+                )
+                if kind is not None:
+                    if explicit_kind is None or explicit_kind == kind:
+                        continue
+                    message = (
+                        f"Docstring parameter '{raw_name}' declares "
+                        f"{self._kind_labels[explicit_kind]}, but the function signature "
+                        f"declares {self._kind_labels[kind]}"
+                    )
+                    suggestion = "Check the field's stars and the parameter kind in the signature"
+                else:
+                    if docstring.accepts_kwargs and explicit_kind is None:
+                        continue
+                    message = f"Docstring parameter '{name}' is absent from the function signature"
+                    suggestion = (
+                        "Update the field to match the parameter name, or remove it"
+                    )
                 start = match.start("name") + len(raw_name) - len(name)
                 issues.append(
                     Issue(
                         rule_id=self.id,
-                        message=f"Docstring parameter '{name}' is absent from the function signature",
+                        message=message,
                         line=line_num,
                         column=start + 1,
                         end_column=match.end("name") + 1,
                         severity=self.severity,
                         confidence=self.default_confidence,
-                        suggestion="Update the field to match the parameter name, or remove it",
+                        suggestion=suggestion,
                     )
                 )
         return issues

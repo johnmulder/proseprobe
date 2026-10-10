@@ -1921,20 +1921,20 @@ stars with the parser's existing `signature_parameters` kind metadata. Unstarred
 Sphinx fields remain valid for ordinary and variadic parameter names; keep the
 conservative unstarred forwarded-keyword behavior for `**kwargs`.
 
-- [ ] P28.1 Add failing `:param *args:`/ordinary-`args` and
+- [x] P28.1 Add failing `:param *args:`/ordinary-`args` and
   `:param **kwargs:`/ordinary-`kwargs` tests. Assert one mismatch, source name
   endpoints and a message identifying the declaration/signature conflict.
-- [ ] P28.2 Compare `*` to `var_positional` and `**` to `var_keyword` using existing
+- [x] P28.2 Compare `*` to `var_positional` and `**` to `var_keyword` using existing
   metadata. Preserve C009's missing-name path; run these focused tests.
-- [ ] P28.3 Add failing swapped-star tests for `*args` documented as `**args`
+- [x] P28.3 Add failing swapped-star tests for `*args` documented as `**args`
   and `**kwargs` documented as `*kwargs`. Add matching starred negatives.
-- [ ] P28.4 Correct only the explicit-kind comparison and run the full paired
+- [x] P28.4 Correct only the explicit-kind comparison and run the full paired
   kind matrix: ordinary, positional-only, keyword-only, variadic positional and
   variadic keyword parameters.
-- [ ] P28.5 Add characterization assertions for unstarred variadic fields and
+- [x] P28.5 Add characterization assertions for unstarred variadic fields and
   unstarred delegated keys accepted by `**kwargs`. Do not require stars when
   they were omitted intentionally.
-- [ ] P28.6 Verify NFKC names, typed Sphinx fields, async/nested functions,
+- [x] P28.6 Verify NFKC names, typed Sphinx fields, async/nested functions,
   decorators marked `has_dynamic_decorators`, literal examples and malformed Python using existing
   cases plus missing explicit-kind assertions.
 - [ ] P28.7 Add a focused CLI/corpus mismatch and its legitimate counterpart.
@@ -2643,3 +2643,17 @@ unreviewed and inapplicable rules do not inflate eligible coverage. Precision,
 recall and density retain separate contributing-group counts and unavailable
 denominators. All 142 related evaluator/benchmark tests and the isolated full
 gate pass. Detection/location counts remain 364 TP/6 FP/0 FN with 62/62 spans.
+
+### P28 — Explicit variadic parameter kinds
+
+Eight rule regressions and a CLI regression failed before correction. C009
+compares literal stars with existing immutable signature kind metadata while
+preserving unstarred fields, forwarded keywords and absent-name diagnostics.
+Twelve ordinary/variadic near misses retain their behavior. Unicode/NFKC,
+typed fields, nested/async ownership, decorators and malformed source are covered.
+The focused 462-test slice passed. A purpose-written complete module adds one
+full-span mismatch and a matching-star negative. C009 keeps INFO/HIGH and its
+experimental policy. P28.7's strict gate awaits P23.
+
+P28's isolated full gate passes with 365 TP/6 unchanged FP/0 FN and 63/63
+supplied full spans. Existing source identities and negative judgments remain.

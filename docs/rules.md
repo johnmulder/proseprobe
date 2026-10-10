@@ -2155,8 +2155,11 @@ result = load_cache()
 ### C009: Stale Docstring Parameter
 
 Reports a Sphinx `:param name:` declaration when that name is absent from its
-owning function's source signature. Simple typed fields and variadic names are
-supported, with the finding on the declared name. Source parameter kinds are
+owning function's source signature. Explicit `*` and `**` must agree with the
+variadic positional or variadic keyword kind in that signature. Unstarred fields
+remain valid for ordinary and variadic names; forwarded unstarred keywords through
+`**kwargs` remain conservative. Simple typed fields are supported, with the
+finding on the declared name. Source parameter kinds are
 preserved separately from C007's existing normalized tuple. A normal parameter
 named `self` or `cls` is valid.
 
