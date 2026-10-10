@@ -210,6 +210,42 @@ class TestCheckCommand:
         assert result.exit_code == 0
         assert result.stdout == ""
 
+    @pytest.mark.parametrize(
+        ("filename", "source"),
+        [("case.md", "😀 delve\n"), ("case.py", '"""😀 delve"""\n')],
+    )
+    def test_sarif_astral_character_uses_code_point_columns(
+        self, filename: str, source: str
+    ) -> None:
+        result = run_cli(
+            "check",
+            "-",
+            "--filename",
+            filename,
+            "--select",
+            "V001",
+            "--format",
+            "sarif",
+            stdin=source,
+        )
+
+        assert result.exit_code == 1
+        assert result.stderr == ""
+        run = json.loads(result.stdout)["runs"][0]
+        assert run["columnKind"] == "unicodeCodePoints"
+        finding = run["results"][0]
+        assert finding["ruleId"] == "V001"
+        region = finding["locations"][0]["physicalLocation"]["region"]
+        column = source.index("delve") + 1
+        assert region == {
+            "startLine": 1,
+            "startColumn": column,
+            "endLine": 1,
+            "endColumn": column + len("delve"),
+        }
+        matched = source[region["startColumn"] - 1 : region["endColumn"] - 1]
+        assert matched == "delve"
+
     def test_attributed_fence_masks_code_and_keeps_surrounding_prose(self) -> None:
         result = run_cli(
             "check",

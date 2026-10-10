@@ -183,6 +183,7 @@ def _format_sarif(results: _Results, rules: list[Any] | None = None) -> str:
         "version": "2.1.0",
         "runs": [
             {
+                "columnKind": "unicodeCodePoints",
                 "tool": {
                     "driver": {
                         "name": "proseprobe",

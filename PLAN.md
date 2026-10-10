@@ -1455,16 +1455,16 @@ Targets: `src/proseprobe/core/reporter.py`, `tests/test_reporter.py`,
 `tests/test_cli.py`; existing source-position fixtures.
 Prerequisites: P02 source-coordinate contract, already complete.
 
-- [ ] P20.1 Add a failing reporter assertion that each SARIF run has
+- [x] P20.1 Add a failing reporter assertion that each SARIF run has
   `columnKind: "unicodeCodePoints"`, including a run with no findings.
-- [ ] P20.2 Add a failing CLI fixture containing an astral character before a
+- [x] P20.2 Add a failing CLI fixture containing an astral character before a
   known finding, such as `😀 delve`. Assert the actual exclusive-end source
   slice and SARIF start/end columns in Python character units. Include a
   Python docstring variant if the existing Unicode integration test lacks it.
-- [ ] P20.3 Add the run property without converting the linter's coordinates.
+- [x] P20.3 Add the run property without converting the linter's coordinates.
   Reuse ASCII and multiline reporter tests to establish unchanged regions,
   rule metadata, severity, confidence, and rank.
-- [ ] P20.4 Record SARIF 2.1.0 §3.14.27 as the contract in the existing reporter
+- [x] P20.4 Record SARIF 2.1.0 §3.14.27 as the contract in the existing reporter
   documentation or test comment. Run reporter/CLI tests and the package gate.
   Do not add a runtime schema-validation dependency for this property.
 
@@ -2457,3 +2457,12 @@ user fallback and explicit paths beyond the automatic boundary. All 269 focused
 configuration/CLI tests and the isolated `make check dogfood rule-quality`
 snapshot pass. Configuration documentation now states both error and boundary
 contracts. P19 is complete; raw corpus detections remain unchanged.
+
+### P20 — SARIF coordinate convention
+
+Four reporter/CLI tests failed on the absent run property before correction.
+SARIF now declares Unicode code-point columns for empty and populated runs.
+Markdown and Python astral-character fixtures recover the exact exclusive-end
+source slices without coordinate conversion. All 190 focused reporter/CLI tests
+and the isolated package gate pass. The specification records the convention;
+other output schemas and existing positions are preserved.

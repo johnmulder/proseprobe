@@ -384,6 +384,8 @@ may include info records, while warning or error records produce exit `1`.
 ### 6.4 SARIF
 
 Standard SARIF 2.1.0 format for GitHub Code Scanning integration.
+Each run declares `columnKind: "unicodeCodePoints"`; columns count Python
+characters, including one column for an astral character such as an emoji.
 Grouped JSON and SARIF are complete `check` documents written to stdout. JSON
 Lines is a diagnostic stream. Operational diagnostics are written to stderr so
 structured stdout remains parseable.

@@ -256,6 +256,8 @@ class TestSarifFormat:
         data = json.loads(output)
         assert "$schema" in data
         assert "runs" in data
+        # SARIF 2.1.0 §3.14.27 declares the unit used by text-region columns.
+        assert data["runs"][0]["columnKind"] == "unicodeCodePoints"
 
     def test_sarif_with_issues(self) -> None:
         """Test SARIF output with issues."""
@@ -277,6 +279,7 @@ class TestSarifFormat:
         assert len(data["runs"]) > 0
         run = data["runs"][0]
         assert "results" in run
+        assert run["columnKind"] == "unicodeCodePoints"
 
 
 class TestConfidenceOutput:
