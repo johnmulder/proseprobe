@@ -2231,12 +2231,12 @@ Suggested one-line commit: `Freeze independent Python and Markdown evaluation so
 
 - [ ] P32B.1 Obtain human reviewers for eligible sources and record reviewer
   identifiers. Do not substitute agent judgments for independent human labels.
-- [ ] P32B.2 Prepare the review protocol and selected rule-contract snapshots.
+- [x] P32B.2 Prepare the review protocol and selected rule-contract snapshots.
   Require issue usefulness, intended meaning, exact spans, supported rules,
   exhaustive reviewed coverage, and unresolved-status reasons.
-- [ ] P32B.3 Choose the double-annotation subset before showing any predictions;
+- [x] P32B.3 Choose the double-annotation subset before showing any predictions;
   distribute it across formats and source groups. Record its selection seed/list.
-- [ ] P32B.4 Add offline validator tests for incomplete coverage declarations,
+- [x] P32B.4 Add offline validator tests for incomplete coverage declarations,
   out-of-bounds spans, missing reviewer identity, source mismatch, and unresolved
   judgments accidentally represented as clean negatives.
 - [ ] P32B.5 Give reviewers randomly selected originals and necessary source
@@ -2266,13 +2266,13 @@ Suggested one-line commits: `Document blind review and adjudication protocol`;
 
 ### P32C — Use native edits as supplementary evidence
 
-- [ ] P32C.1 Write a small W&I error-type mapping table linking only supported
+- [x] P32C.1 Write a small W&I error-type mapping table linking only supported
   native edit categories to specific rule contracts. Record unsupported categories,
   annotator identity, and automatically assigned ERRANT types separately.
 - [ ] P32C.2 Add failing offline tests for supported edits, unsupported edits,
   insertions/deletions, alternate annotators whose edits overlap, and artifacts
   caused by preprocessing. Preserve the tokenized-source coordinates already established in P06C.4.
-- [ ] P32C.3 Add only the reviewed mapping; ambiguous native labels require
+- [x] P32C.3 Add only the reviewed mapping; ambiguous native labels require
   judgment and cannot automatically become rule positives or negatives. An empty supported mapping
   is valid when no existing rule matches a native category.
 - [ ] P32C.4 After blind original review is frozen, provide all four JFLEG and all
@@ -2285,10 +2285,10 @@ Suggested one-line commits: `Document blind review and adjudication protocol`;
 - [ ] P32C.7 Report paired warning changes beside their human outcomes and sample
   sizes. Do not use warning reduction, GLEU, or simplification labels alone as proof
   that this linter improved prose.
-- [ ] P32C.8 Keep JFLEG's CC BY-NC-SA 4.0, ASSET's CC BY-NC 4.0, and W&I's
+- [x] P32C.8 Keep JFLEG's CC BY-NC-SA 4.0, ASSET's CC BY-NC 4.0, and W&I's
   noncommercial restrictions with materials and outputs as applicable. Continue
   excluding LOCNESS from this pilot under the documented distribution restriction.
-- [ ] P32C.9 Retain exclusion of the README simplification package while reuse
+- [x] P32C.9 Retain exclusion of the README simplification package while reuse
   terms remain unresolved. Recheck primary terms only if this conditional source
   is pursued; accessible downloads and commit keywords do not establish permission
   or reliable clarity labels.
@@ -2306,7 +2306,7 @@ Suggested one-line commit: `Report independently judged revision-pair usefulness
 - [ ] P32D.1 Generate strict development reports for all-rules and the unchanged
   default production policy. Retain raw counts, eligible misses, exact/full-span
   accuracy, reviewed words, source coverage, exclusions, and usefulness judgments.
-- [ ] P32D.2 Define a source-correlated uncertainty method and minimum contributing
+- [x] P32D.2 Define a source-correlated uncertainty method and minimum contributing
   groups before implementation. Use repositories/authors or appropriate independent
   source groups, keeping every paired revision within its group.
 - [ ] P32D.3 Add deterministic toy-group tests with unequal group sizes, clean
@@ -2783,3 +2783,26 @@ The combined M012/context snapshot passed `make check dogfood rule-quality`;
 all executable documentation examples pass under their explicit temporary
 project context. Final strict refusal tests were included in that snapshot.
 All optional contexts remain report-only until target/native-path binding exists.
+
+### P32B/C/D — Review preparation and declared limits
+
+The detailed blind protocol preserves initial independent issue/coverage review,
+original double-annotation judgments, adjudication provenance and separate
+triggered/suggestion passes. A metadata-only seed preselects 23 units across 12
+known groups without viewing prose or predictions. P24/P23 offline validation
+already covers reviewer identity, source mismatch, invalid spans, insufficient
+coverage and unresolved strict scopes; those checks are reused.
+
+The native ERRANT mapping deliberately has no supported category-to-rule truth
+conversion. Existing token-span insertion/deletion/alternative-annotator tests
+remain, and a new packet characterization preserves overlapping native edits
+without inferring expected issues, clean negatives, reviewed rules or reviewers.
+Noncommercial/license exclusions stay intact. Conditional README acquisition
+remains excluded; no new reuse assumption was made.
+
+The predeclared uncertainty method is whole identified-group percentile bootstrap,
+2,000 replicates, seed 20261010 and 95% endpoints, with at least five contributing
+groups per metric and explicit unavailable denominators. Paired variants stay
+within groups. Group sizes/dominant share and conditional pilot limitations are
+required; no natural-text or population claim is generated. Human collection,
+adjudication, semantic usefulness and independent holdout decisions are deferred.

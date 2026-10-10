@@ -485,3 +485,43 @@ def test_review_packet_is_source_bound_and_initially_unreviewed(tmp_path: Path) 
                 "new-packet",
             ]
         )
+
+
+def test_native_edit_types_never_become_independent_issue_labels(
+    tmp_path: Path,
+) -> None:
+    """Alternative edits preserve token coordinates and an unreviewed original."""
+    native = (
+        "S The the flag is ready .\n"
+        "A 1 2|||U:DET||||||REQUIRED|||-NONE-|||0\n"
+        "A 1 3|||R:OTHER|||a marker|||REQUIRED|||-NONE-|||1\n"
+        "A 5 5|||M:OTHER|||now|||REQUIRED|||-NONE-|||2\n"
+    )
+    record = _record(tmp_path, format="m2")
+    path = tmp_path / "source.m2"
+    path.write_text(native)
+    record.update(
+        path="source.m2", sha256=hashlib.sha256(path.read_bytes()).hexdigest()
+    )
+    sources = load_sources(_manifest(tmp_path, [record]), tmp_path)
+    [sentence] = read_m2(native)
+    assert [edit.annotator for edit in sentence.edits] == ["0", "1", "2"]
+    assert [edit.error_type for edit in sentence.edits] == [
+        "U:DET",
+        "R:OTHER",
+        "M:OTHER",
+    ]
+    assert sentence.source_span(sentence.edits[0]) == (4, 7)
+    assert sentence.source_span(sentence.edits[1]) == (4, 12)
+    assert sentence.source_span(sentence.edits[2]) == (22, 22)
+    sample = read_sample(sources[0], tmp_path)
+    assert sample.original == "The the flag is ready ."
+    assert sample.references == ()
+    corpora.export_review_packet(sources, tmp_path, tmp_path / "packet")
+    template = json.loads((tmp_path / "packet/annotations.unreviewed.json").read_text())
+    entry = template["files"]["originals/0000.md"]
+    assert entry["expected"] == []
+    assert entry["negative_cases"] == []
+    assert entry["reviewed_rules"] == []
+    assert entry["regions"] == []
+    assert template["review"]["reviewers"] == []

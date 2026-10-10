@@ -1,0 +1,197 @@
+{
+  "version": 1,
+  "declared_on": "2026-10-10",
+  "sampling_seed": "proseprobe-p32-double-annotation-2026-10-10",
+  "method": "Select one unit per available format in each known source group, then fill to two by SHA256(seed + source ID); cap at available units. Selection uses metadata only, before any predictions or human labels.",
+  "samples": [
+    {
+      "id": "Textualize/rich:7f580bdcf07a3b269a0e786b6a3aa9c804f393cf:README.md",
+      "source_group": "Textualize/rich",
+      "pair_group": "Textualize/rich:README.md",
+      "split": "holdout",
+      "format": "markdown",
+      "sha256": "5d4fb427e277b1231b663b4871a8b05df0888445f495608becf1e098780c0fda"
+    },
+    {
+      "id": "Textualize/rich:7f580bdcf07a3b269a0e786b6a3aa9c804f393cf:rich/live.py",
+      "source_group": "Textualize/rich",
+      "pair_group": "Textualize/rich:rich/live.py",
+      "split": "holdout",
+      "format": "python",
+      "sha256": "bd4727255d8b3122b7b1035a20b6e6d3efc1f01a407a21df71030030b7e945ed"
+    },
+    {
+      "id": "bea:C.dev:59",
+      "source_group": "W&I+LOCNESS/v2.1/development",
+      "pair_group": "bea:C.dev:59",
+      "split": "development",
+      "format": "m2",
+      "sha256": "9483612a280c04ff16b1e2d31f423b477c97d134ccfe81ddbe6b6ab51040dd93"
+    },
+    {
+      "id": "bea:A.dev:57",
+      "source_group": "W&I+LOCNESS/v2.1/development",
+      "pair_group": "bea:A.dev:57",
+      "split": "development",
+      "format": "m2",
+      "sha256": "dfb8057e9367652ba112c5358965f028f14a47dc9aca679e6aa1b78b62ca5c5d"
+    },
+    {
+      "id": "codesearchnet:python:test:67",
+      "source_group": "apache/airflow",
+      "pair_group": "https://github.com/apache/airflow/blob/b69c686ad8a0c89b9136bb4b31767257eb7b2597/airflow/hooks/mysql_hook.py#L107-L117",
+      "split": "development",
+      "format": "codesearchnet",
+      "sha256": "1ed760b8df193bbead8005630f8c91e98ea7b1b6abb90f52c3234690ffc67022"
+    },
+    {
+      "id": "codesearchnet:python:test:79",
+      "source_group": "apache/airflow",
+      "pair_group": "https://github.com/apache/airflow/blob/b69c686ad8a0c89b9136bb4b31767257eb7b2597/airflow/operators/bash_operator.py#L86-L144",
+      "split": "development",
+      "format": "codesearchnet",
+      "sha256": "60b49f6f4223cca05cb964964044e8638434115d1156ba1537ee5de196694261"
+    },
+    {
+      "id": "asset:dataset/asset.valid.orig:498",
+      "source_group": "facebookresearch/asset",
+      "pair_group": "asset:dataset/asset.valid.orig:498",
+      "split": "holdout",
+      "format": "asset",
+      "sha256": "1033368afa3e7a13136c80b301868f448016fec78f32287063987609b10fdb7d"
+    },
+    {
+      "id": "asset:dataset/asset.valid.orig:1692",
+      "source_group": "facebookresearch/asset",
+      "pair_group": "asset:dataset/asset.valid.orig:1692",
+      "split": "holdout",
+      "format": "asset",
+      "sha256": "44a2884d24f17118530a8b77f69b123d383dcd3176f5fbbaa9d01ba16e41c936"
+    },
+    {
+      "id": "fastapi/fastapi:40e33e492dbf4af6172997f4e3238a32e56cbe26:README.md",
+      "source_group": "fastapi/fastapi",
+      "pair_group": "fastapi/fastapi:README.md",
+      "split": "development",
+      "format": "markdown",
+      "sha256": "4fd6beb4d1c0bbe7c3ff56b18a3d106efaa7edd33f6c13ed357bd8a4e942a7f6"
+    },
+    {
+      "id": "github/docs:content/code-security/concepts/vulnerability-reporting-and-management/repository-security-advisories.md",
+      "source_group": "github/docs",
+      "pair_group": "github/docs:content/code-security/concepts/vulnerability-reporting-and-management/repository-security-advisories.md",
+      "split": "development",
+      "format": "markdown",
+      "sha256": "87017dff80bf2f0348dbe5a418e9997fe4682631693901ad27ce15e214b2404e"
+    },
+    {
+      "id": "github/docs:content/actions/reference/workflows-and-actions/metadata-syntax.md",
+      "source_group": "github/docs",
+      "pair_group": "github/docs:content/actions/reference/workflows-and-actions/metadata-syntax.md",
+      "split": "development",
+      "format": "markdown",
+      "sha256": "90b420b0b374366fb19637315758776f7cd6981dd98fabea6fd9b424004fe7dc"
+    },
+    {
+      "id": "jfleg:dev/dev.src:314",
+      "source_group": "keisks/jfleg",
+      "pair_group": "jfleg:dev/dev.src:314",
+      "split": "holdout",
+      "format": "jfleg",
+      "sha256": "9ad16b1de7cae24460cead40fe1c335f30bd9ad9020626e021bd3fbec2f43007"
+    },
+    {
+      "id": "jfleg:dev/dev.src:418",
+      "source_group": "keisks/jfleg",
+      "pair_group": "jfleg:dev/dev.src:418",
+      "split": "holdout",
+      "format": "jfleg",
+      "sha256": "7c095fa382f90a94fb6cc34fea741438361962f30beb3841a2ad5bb8f307d9d9"
+    },
+    {
+      "id": "psf/black:193ee766ca496871f93621d6b58d57a6564ff81b:README.md",
+      "source_group": "psf/black",
+      "pair_group": "psf/black:README.md",
+      "split": "holdout",
+      "format": "markdown",
+      "sha256": "ccc94bf34918ad9f5cf47b87bd2425eb583e58d970bf5c4f12339d37ef7bf35f"
+    },
+    {
+      "id": "psf/black:193ee766ca496871f93621d6b58d57a6564ff81b:src/black/parsing.py",
+      "source_group": "psf/black",
+      "pair_group": "psf/black:src/black/parsing.py",
+      "split": "holdout",
+      "format": "python",
+      "sha256": "da2450c976e4a585445d9936fd61653c3cc27ec758e9523121a2be5828ab527d"
+    },
+    {
+      "id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:README.md",
+      "source_group": "psf/requests",
+      "pair_group": "psf/requests:README.md",
+      "split": "development",
+      "format": "markdown",
+      "sha256": "4f7bfa1b3f7c87268767235307d0bcae78997a96ca00a3b31062e5b9a295ed7c"
+    },
+    {
+      "id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+      "source_group": "psf/requests",
+      "pair_group": "psf/requests:src/requests/cookies.py",
+      "split": "development",
+      "format": "python",
+      "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c"
+    },
+    {
+      "id": "python/cpython:2340a037f7450e70fccfe411e6531afb4d57a312:Lib/difflib.py",
+      "source_group": "python/cpython",
+      "pair_group": "python/cpython:Lib/difflib.py",
+      "split": "holdout",
+      "format": "python",
+      "sha256": "0c6afc23568d55b3e9ac914f9c5361e3033e778aa5b58d3cc82835fc5c638679"
+    },
+    {
+      "id": "python/cpython:2340a037f7450e70fccfe411e6531afb4d57a312:Lib/gettext.py",
+      "source_group": "python/cpython",
+      "pair_group": "python/cpython:Lib/gettext.py",
+      "split": "holdout",
+      "format": "python",
+      "sha256": "a5c249a522b6b8e3aa6f1b12a8bcc09508b99ad612b58d2fc973db27ea3b7cc3"
+    },
+    {
+      "id": "rust-lang/book:src/ch15-00-smart-pointers.md",
+      "source_group": "rust-lang/book",
+      "pair_group": "rust-lang/book:src/ch15-00-smart-pointers.md",
+      "split": "holdout",
+      "format": "markdown",
+      "sha256": "adf324198a3eb791ba5828cee69a201f3f2e6f8493280bfb5c897e8b50fca0f1"
+    },
+    {
+      "id": "rust-lang/book:src/ch19-02-refutability.md",
+      "source_group": "rust-lang/book",
+      "pair_group": "rust-lang/book:src/ch19-02-refutability.md",
+      "split": "holdout",
+      "format": "markdown",
+      "sha256": "815644eaa08948e0adb23fe62c64d1359cd1f6eddbb923af294f7028f5b9e5e2"
+    },
+    {
+      "id": "codesearchnet:python:test:30",
+      "source_group": "soimort/you-get",
+      "pair_group": "https://github.com/soimort/you-get/blob/b746ac01c9f39de94cac2d56f665285b0523b974/src/you_get/util/fs.py#L5-L47",
+      "split": "development",
+      "format": "codesearchnet",
+      "sha256": "679045de4e602ef08e2ff6882b57ce7090f9f83c976889dc2e916b747ecf6d0f"
+    },
+    {
+      "id": "codesearchnet:python:test:42",
+      "source_group": "soimort/you-get",
+      "pair_group": "https://github.com/soimort/you-get/blob/b746ac01c9f39de94cac2d56f665285b0523b974/src/you_get/common.py#L415-L454",
+      "split": "development",
+      "format": "codesearchnet",
+      "sha256": "edbd8fa1aa2eed373a44c3d5e77d96f3bc01699c2e284c7024f0e32f2309c9c6"
+    }
+  ],
+  "sample_count": 23,
+  "source_group_count": 12,
+  "review_status": "deferred by user; no annotations collected",
+  "original_manifest_sha256": "2dcadd8fb3bb278ee09a9ff2685b00c7a7c6efde3f0221ae69efcccc825d3ade",
+  "extension_manifest_sha256": "1f3a26861f1321747802a9e5b574ae78201b996cdd70ccec9a18094fe052cbbf"
+}

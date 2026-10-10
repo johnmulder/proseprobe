@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "reviewed_on": "2026-10-10",
+  "source": "https://github.com/chrisjbryant/errant",
+  "native_classification": "ERRANT types attached to W&I human revision edits; automatically assigned category, native annotator identity retained",
+  "supported_mappings": [],
+  "unsupported_categories": [
+    {
+      "category": "R:VERB:SVA / R:VERB:TENSE",
+      "reason": "Agreement and tense correction are outside the existing bounded prose-pattern contracts."
+    },
+    {
+      "category": "M:DET / U:DET / R:DET",
+      "reason": "Article edits do not by category alone establish repeated-function-word or other linter violations."
+    },
+    {
+      "category": "R:SPELL / R:ORTH",
+      "reason": "Spelling and orthographic correction categories do not establish an existing specific rule contract."
+    },
+    {
+      "category": "R:OTHER / U:OTHER / M:OTHER",
+      "reason": "Broad edit classes require a contextual judgment; they do not identify a rule violation or clean source."
+    },
+    {
+      "category": "all remaining native types / noop",
+      "reason": "No independently reviewed exact category-to-rule equivalence is established. A noop is an annotator alternative, not exhaustive linter coverage."
+    }
+  ],
+  "coordinate_contract": "Native token offsets map only to the unchanged visible tokenized sentence. Do not detokenize, collapse alternate annotators or infer corrections as clean negatives.",
+  "annotation_policy": "An empty supported mapping is intentional. Independent human issue/coverage labels remain deferred; source packet exports never promote native edit types into expected findings."
+}

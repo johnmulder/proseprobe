@@ -211,3 +211,16 @@ The complete upstream specification has 652 examples and SHA-256
 `257c41ad946f7a1414a499aca402a1aa8fdac3678532266611348c1cf54f4b80`.
 Example IDs, selection contracts and unsupported reasons accompany the fixture.
 Reported conformance support applies to these source projections alone.
+
+## Deferred review handoff
+
+[The detailed protocol](review-protocol.md) defines blind issue/coverage review,
+a metadata-selected double-annotation subset, separate suggestion questions,
+native-pair correspondence and predeclared group uncertainty. No reviewers or
+real annotation labels have been assigned. [The native mapping](native-edit-mapping.json)
+accepts no automated ERRANT category as rule truth; native token coordinates
+and alternate annotators remain available for contextual human review. The
+[ERRANT upstream description](https://github.com/chrisjbryant/errant) distinguishes
+revision edit extraction/classification from the native annotator identity.
+Independent human review, meaning judgments, holdout results and promotion
+remain deferred by user decision.
