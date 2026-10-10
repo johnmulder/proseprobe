@@ -2,7 +2,6 @@
 
 from proseprobe.config import Config
 from proseprobe.profiles import profile_names_for_rule
-from proseprobe.rules import code, grammar, markup, struct, style, vocab
 from proseprobe.rules.base import Rule, RuleMetadata, Severity, severity_from_str
 
 __all__ = ["get_all_rules", "get_rule_metadata", "get_rule_metadata_by_id"]
@@ -10,6 +9,8 @@ __all__ = ["get_all_rules", "get_rule_metadata", "get_rule_metadata_by_id"]
 
 def get_all_rules(config: Config | None = None) -> list[Rule]:
     """Return all rules configured for a lint run."""
+    from proseprobe.rules import code, grammar, markup, struct, style, vocab
+
     config = config or Config()
     thresholds = config.thresholds
     allowed = {word.lower() for word in config.vocabulary.allowed}

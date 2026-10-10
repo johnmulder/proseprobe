@@ -445,6 +445,10 @@ version changes only for incompatible contract changes.
 | `data/*` | Vocabulary lists and patterns |
 | `_rule_docs` | Deterministic generated-document synchronization |
 
+Rule catalog modules load when the registry is constructed. Version and help
+avoid those implementation imports; scan and metadata commands construct the
+complete configured registry.
+
 ### 7.2 Rule Protocol
 
 All rules provide:

@@ -1060,3 +1060,16 @@ non-DOTALL meaning. Masked gaps and separate prose regions cannot manufacture
 fixed phrases. Eight reviewed corpus positives include the five primary rules
 and three existing vocabulary/promotional diagnoses on the same deliberate
 examples; eight fenced negatives preserve code masking.
+
+### P07/P17 — Measured startup import delay corrected
+
+An isolated archived `f8f8f52` import trace attributed about 25 ms to rule
+catalog imports on the version command. Three subprocess regressions failed
+before deferring those imports until registry construction. The smallest source
+change moves the existing catalog import into `get_all_rules`; version/help
+output, the 100-rule catalog, and production scanning remain covered.
+
+All 215 focused lazy-import/metadata/CLI checks and static checks pass. A startup
+probe after the change measured 54.4 ms, compared with the earlier 99.7 ms probe.
+These are hardware-dependent single samples; the unchanged 100 ms gate remains.
+The scan profile is reviewed separately from import latency.

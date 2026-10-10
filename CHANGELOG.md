@@ -49,6 +49,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Deferred rule catalog imports until registry construction so version/help
+  avoid loading detection implementations while scans retain the complete catalog.
+
 - Separated evaluation coverage, exact starts, full spans, and reviewed semantic
   detection; added sparse external annotation regions and denominator-aware reports.
 
