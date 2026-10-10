@@ -1,11 +1,12 @@
 # ProseProbe improvement plan
 
-Status: original engineering packages and their local verification complete.
-Reassessment packages P18–P33 are in progress; their checks and records appear below.
-Independent human evaluation and the listed external gates remain pending.
+Status: engineering packages and local verification are complete through P33.
+Independent human effectiveness work is deferred by the user; exact-commit remote
+CI and conditional release gates remain open. Checks and records appear below.
 Assessment date: 2026-10-09.
 
-Start new work at [Reassessment continuation](#reassessment-continuation).
+Continuation status and remaining work are recorded at
+[Reassessment continuation](#reassessment-continuation).
 P00–P17 and their execution records remain historical evidence. An existing
 checked item does not complete a new regression or acceptance gate below.
 
@@ -2342,7 +2343,7 @@ Suggested one-line commit: `Report independently judged revision-pair usefulness
 - [ ] P32D.11 If holdout results prompt tuning, reclassify the inspected material
   as development evidence and reserve fresh source groups before another independent
   claim. Record the decision without silently reusing the same holdout.
-- [ ] P32D.12 Update P06/P12/P13/P15/P16 pending steps with links to the real
+- [x] P32D.12 Update P06/P12/P13/P15/P16 pending steps with links to the real
   annotation/report evidence, or leave them open with the specific missing prerequisite.
 
 Acceptance: effectiveness claims identify the population, independent reviewers,
@@ -2369,7 +2370,7 @@ deltas and edited prose before a one-line implementation commit. Performance
 checks are required when changed scan behavior, target reads, or measurements
 could affect their contracts; deterministic unit tests do not time real hardware.
 
-- [ ] P33.1 For each completed slice, record its red regression, focused green
+- [x] P33.1 For each completed slice, record its red regression, focused green
   command, implementation commit, and explained corpus delta in the progress log.
 - [x] P33.2 For each new rule, repeat the P17A metadata, registration, selection,
   experimental/profile, executable examples, suppression, reporter-span, and
@@ -2380,30 +2381,30 @@ could affect their contracts; deterministic unit tests do not time real hardware
 - [x] P33.4 Scan edited prose with the repository's effective policy and existing
   baseline in JSON Lines. Review exact technical examples rather than changing
   them or refreshing the baseline to eliminate intentional findings.
-- [ ] P33.5 Run `rtk proxy make rule-docs-check check dogfood rule-quality nfr-check`
+- [x] P33.5 Run `rtk proxy make rule-docs-check check dogfood rule-quality nfr-check`
   on the final implementation state. Run the new P23 regression gate separately
   if its package is complete; a report-only score remains a different outcome.
-- [ ] P33.6 Verify filesystem and stdin text/JSON/JSON Lines/SARIF scans with
+- [x] P33.6 Verify filesystem and stdin text/JSON/JSON Lines/SARIF scans with
   Unicode, clean files, invalid configuration, and unreadable input. Retain
   documented exit codes and configuration precedence.
-- [ ] P33.7 Verify watch mode and baseline maintenance after the P18–P22 changes,
+- [x] P33.7 Verify watch mode and baseline maintenance after the P18–P22 changes,
   including legacy readable baselines and deterministic source coordinates.
-- [ ] P33.8 Rerun the full tests under Python 3.11, 3.12, and 3.13 where local
+- [x] P33.8 Rerun the full tests under Python 3.11, 3.12, and 3.13 where local
   interpreters exist. Record unavailable environments rather than claiming coverage.
 - [ ] P33.9 Require the remote Ubuntu Python 3.11–3.13 matrix for the exact final
   commit when remote CI is available. Keep P17C.2 open until that evidence exists;
   local matrix results do not substitute for remote execution.
-- [ ] P33.10 Compare full-scan timing, startup, and memory using P24C's equal
+- [x] P33.10 Compare full-scan timing, startup, and memory using P24C's equal
   workload/policy/diagnostics identities and recorded environments. Investigate
   material regressions without adding machine-specific unit-test thresholds.
-- [ ] P33.11 Publish current regression results for both policies and disposition
+- [x] P33.11 Publish current regression results for both policies and disposition
   every changed mismatch. The starting continuation snapshot is 336 TP/6 FP/0 FN
   all-rules and 106 TP/4 FP/0 FN production; those are recorded evidence, not
   immutable numbers or independent natural-text effectiveness estimates.
-- [ ] P33.12 Review every continuation package against its acceptance criteria.
+- [x] P33.12 Review every continuation package against its acceptance criteria.
   Mark completed, intentionally deferred, or awaiting human/external evidence with
   a reason. Preserve the original execution record and frozen pilot identities.
-- [ ] P33.13 Record the final commit, clean/dirty state, source/report identities,
+- [x] P33.13 Record the final commit, clean/dirty state, source/report identities,
   successful commands, limitations, and remaining P32 judgments in `PLAN.md`.
 - [ ] P33.14 If a release is later requested, follow `RELEASE_BLOCKERS.md` for
   that exact release commit, including package inspection and publication identity.
@@ -2904,3 +2905,219 @@ suppression, reporter spans and baseline behavior. Changed Markdown prose scans
 pass with the existing policy and baseline. Three unchanged metadata-test
 docstrings use the intentional technical term `implemented`; their vocabulary
 records were reviewed and retained without editing unrelated text or the baseline.
+
+
+### P33 — Final engineering verification
+
+Engineering/test/documentation snapshot: `8ddc7a810d17be88c2e58f9e29cd333429f44140`.
+The checkout was clean before final verification. This completion record changes
+only `PLAN.md`; it does not change the tested implementation, tests, schemas,
+corpus, policy, baseline or dependencies. No push, tag or publication was requested.
+
+The final command is:
+
+```text
+rtk proxy make rule-docs-check check dogfood rule-quality nfr-check rule-quality-regression
+```
+
+The local full suites pass 3,485 tests under Python 3.11.15, 3.12.15 and 3.13.16.
+Generated documentation, Ruff, source mypy, dogfood, coverage and both strict
+quality policies pass. Coverage is 96.38% against the unchanged 90% gate.
+Startup is 50.6 ms against 100 ms. Memory is a tracemalloc allocation peak of 23.8 MB for 10,000
+discovered/checked files against 100 MB; it does not measure OS RSS.
+A 32-case filesystem/stdin × reporter × scenario matrix passes, with physical
+Unicode spans and clean/configuration/read exits 0/2/3. The existing 659-case
+contract audit covers new rules, errors, watch and baseline maintenance. The
+final suite includes those contracts and the additional evaluator/gate tests.
+
+The matrix used isolated archives of the exact snapshot, with the available
+Python environments and snapshot imports verified. Timings for these concurrent
+test runs are execution records, not an interpreter performance comparison.
+The final machine is CPython on macOS 27.0.1 arm64 with 16 logical CPUs.
+The full acceptance throughput probe uses 79 technical-docs rules and five
+samples per mode. Its current 71-file reviewed corpus (44.8 KiB, 188 findings)
+has cleared-directory median 281.41 ms and cold JSON CLI median 362.64 ms;
+workload SHA-256 `cf7d7e7cf095d7730e4a7be1802cbe7de65080f0178e0e7b8643097f859d8f25`.
+Its 44-file generated workloads have cleared-directory medians 57.24 ms
+(distinct) and 55.71 ms (repeated). A separately archived final-head run gives
+55.301/53.573 ms cleared directory and 132.548/130.669 ms cold CLI.
+
+All ten generated-mode workload, effective-policy and full diagnostic identities
+match the earlier `7e78d10` generated run: distinct workload
+`22a5eea02901d049014c78027026c5153988e59d1c404e7429e682b85a55498c`;
+repeated workload `83fe45e7f6b3965d3310c8fe023dd60c4c8065fe056b195ab447e69372201e1b`;
+complete diagnostics `44fc7d6a922c852d27ee0e3051e6609718b49b41de3b6fbecb69e2c81d4e6678`.
+Those two-findings outputs also match the baseline generated-workload replay.
+The archived primary startup/memory replicate passes at 52.9 ms and 23.8 MB.
+Its separately instrumented memory run is 23.3 MB, with 400,000 bytes and zero
+findings; that supplementary peak stays separate from the original gate.
+The generated benchmark policy SHA-256 is
+`e1c3f531d2f4fb1fdd197a27bb4420f700521db1341360d51c226ff04f5103e2`.
+Final benchmark JSON SHA-256 is
+`f11db1453a947726b1c4de7089f07b5bbf6ad10d749fbea5e4fc2c7df0578980`.
+The immutable final snapshot archive SHA-256 is
+`a182428d5a7046744aea4386d1eafc83ecd72a8c2025a996e8292e858046b794`.
+Shared machine load differs across measurements; parser-cache clearing does
+not clear filesystem caches. Earlier P17's 64-file reviewed corpus and historical
+P07 rows are not interchangeable timing baselines. No historical speedup or
+implementation timing attribution is claimed.
+
+#### Current curated regression evidence
+
+| Track | TP | FP | FN | Passed negatives | Supplied full spans | Gate |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| All-rules, info/low, GitHub anchors | 366 | 6 | 0 | 452/458 | 64/64 | Pass |
+| Default production, warning/low, anchors off | 106 | 4 | 0 | 65/69 | 8/8 | Pass |
+| Optional explicit local-link project, info/low | 368 | 6 | 0 | 454/460 | 66/66 | Report only |
+
+The manifest contains 76 files, 368 positive annotations and 460 negative checks.
+Default all-rules excludes M012's two positives and two negatives. The six raw
+mismatches and unchanged source/negative judgments remain in the reviewed
+[disposition ledger](quality/assessment-disposition.md). Both default strict
+gates reject new FP/FN identities; neither uses a numeric mismatch allowance.
+The optional link context lacks bound native paths/targets for independent v3
+review and is refused by strict independent source-bound validation.
+
+All tracks cover 6,625 eligible reviewed prose words. The curated manifest has
+legacy annotation-time binding and unidentified source groups; its gate binds
+frozen source bytes separately. Its source-group intervals remain unavailable,
+and it supplies no real human usefulness ratings. Those limitations stay in
+reports rather than becoming independent evidence.
+
+#### Final identities and retained artifacts
+
+Package/evaluator source SHA-256 (43 Python files):
+`e00ba5895315e1164b8ca161d6c294086e0c0175d5e4aa92d39d4c0b9fdcccd2`.
+Package version remains `0.1.0`; scoped source Git state is clean at the snapshot.
+Runtime dependencies remain empty. Named profile memberships and the existing
+baseline are unchanged; C010 and M012 were added only to the experimental set.
+
+| Artifact | SHA-256 |
+| --- | --- |
+| Curated annotations | `d4dd393c6219a0782689860a0ce55eae03c26955e6e95c56fdaff6f6e361eeb3` |
+| All-rules reviewed gate | `be202a54f054f6f5998a295129753e213a7e7b09c4d443ddc90f53b99e0785e2` |
+| Production reviewed gate | `f8ec3b37b0bfe1cf32ed890328de1782864b68f15bc47504e15241acd19b7cac` |
+| Existing baseline | `9140f16ef9e3678bc59c1826750d54da4583463f89502fdb707a82927ec437f2` |
+| Original 300-source manifest | `2dcadd8fb3bb278ee09a9ff2685b00c7a7c6efde3f0221ae69efcccc825d3ade` |
+| Original split freeze | `0c078a48b7d8545241141c0eb4efaab25c705a78b03962d99394e60bfd1b97d0` |
+| Separate 24-source extension | `1f3a26861f1321747802a9e5b574ae78201b996cdd70ccec9a18094fe052cbbf` |
+| Extension split freeze | `f20e2657d3dbed097f698b9dcd98b4c5cd94ac4190304a4b173d2d57d5ec2d81` |
+| Final all-rules JSON report | `8b5ce3931d52ac9c438892766217dae1b6c1e81581f114a9fb07703b8e6953bc` |
+| Final production JSON report | `33bf270dd5c329d87130f1bf238bee358e831d91c24c9414676401aa7a480742` |
+| Final local-links JSON report | `349f04ec61f2d61f480d7c6147abcbfdbbb1ee70f5084df62ca32324ac2bfab0` |
+
+Canonical report-policy SHA-256 uses sorted compact UTF-8 JSON: all-rules
+`0b3f804d360fce92ec7699bdf6650b90654d61392c058ba8b497dd8377490896`;
+production `b430abd8f79402ca7821ddc37ca60b2de6dc0dea48d0fa0e05695dbb7a90497e`.
+The optional local-project policy also includes its explicit absolute root.
+
+Both external manifests passed cached source and 73-artifact checksums,
+identity/group isolation and normalized duplicate checks: 324 units, 177
+development and 147 holdout, across 12 known groups. These checks display only
+metadata. All original 300 assignments remain frozen; no holdout prose or
+findings were viewed for tuning or independent scoring. The blind extension
+packet remains unreviewed. Conditional README data and LOCNESS remain excluded.
+
+Local acceptance output and exact report JSON are retained under
+`/private/tmp/proseprobe-final-acceptance.log`,
+`/private/tmp/proseprobe-final-{all-rules,production,local-links}.json`, and
+`/private/tmp/proseprobe-final-report-identities.json`. The coverage/CLI/source
+and NFR audit is recorded in `/private/tmp/proseprobe-continuation-verification.md`
+(SHA-256 `97186ded7ce58151eb834e0caa6566652864cb827041bdeee668bfbcdfd667fd`);
+focused red/green records appear above and in the evaluation/precision logs.
+The final generated raw measurements and supplementary identities are retained
+in `/private/tmp/proseprobe-final-bench.json`,
+`/private/tmp/proseprobe-final-memory-identity.json`, and
+`/private/tmp/proseprobe-final-startup-identity.json`.
+These local artifacts preserve this run; the committed hashes and commands
+identify how to reproduce checks after temporary files are removed.
+
+#### Continuation commit index
+
+Each completed slice was committed with hooks enabled and a one-line message.
+Focused red/green behavior and explained corpus changes are recorded above;
+all focused contracts also pass in the final three-version suite.
+
+| Commit | Completed change |
+| --- | --- |
+| `6d0ca74` | Report configuration discovery parse errors consistently |
+| `27d000e` | Validate requirement phrases against original source |
+| `163245e` | Stop configuration discovery at the starting Git root |
+| `f81994a` | Declare Unicode code point columns in SARIF |
+| `ff6d810` | Validate complete quantity and claim predicates |
+| `a638de0` | Bind new annotations to reviewed source bytes |
+| `ae8d326` | Align Python file classification for explicit and stdin scans |
+| `72cfa9f` | Detect watch changes using nanosecond and size stamps |
+| `49e587b` | Use Python syntax for executable placeholders |
+| `f8623bc` | Identify the runtime source used by quality reports |
+| `90ac833` | Require attached evidence for undefined comparatives |
+| `2381372` | Validate complete-module source extensions |
+| `05836aa` | Record benchmark runtime and diagnostic identities |
+| `f6f3dbb` | Preserve recognized abstract and stub contracts |
+| `a8cd11e` | Avoid unsupported vocabulary replacement suggestions |
+| `418b033` | Include reviewed clean sources in coverage accounting |
+| `bf6a299` | Freeze independent Python and Markdown evaluation sources |
+| `2ea87c5` | Check explicit variadic docstring parameter kinds |
+| `0a0a89a` | Expose static return annotation metadata |
+| `743d5e4` | Add explicit project context for local links |
+| `cb1e8de` | Add experimental explicit return documentation conflicts |
+| `3bc2c0d` | Verify and repair supported CommonMark extraction contracts |
+| `1fdf2a5` | Add an explicit reviewed quality regression gate |
+| `021bf9f` | Guard return conflicts under decorator rebinding |
+| `12adae8` | Verify repaired predicates through production scans |
+| `7e78d10` | Check optional project-local Markdown targets |
+| `e394a12` | Prepare blinded review and native revision handoff |
+| `00f56d1` | Respect type parameter shadowing in static code guards |
+| `76b0643` | Report source-bound human suggestion judgments |
+| `97d7ca2` | Report explicitly reviewed revision pairs |
+| `41cbc64` | Report conditional source-group uncertainty |
+| `67923eb` | Enforce reviewed quality regressions in Make and CI |
+| `8ddc7a8` | Document continuation behavior and evaluation limits |
+
+Focused replay commands, from the checkout with its existing venv:
+
+```text
+rtk proxy .venv/bin/pytest tests/test_source_predicate_integration.py tests/test_parsers/test_prose.py tests/test_rules/test_vocab.py tests/test_rules/test_grammar.py tests/test_rules/test_struct.py -q
+rtk proxy .venv/bin/pytest tests/test_config.py tests/test_cli.py tests/test_linter.py tests/test_reporter.py tests/test_baseline.py -q
+rtk proxy .venv/bin/pytest tests/test_quality_scoring.py tests/test_rule_quality.py tests/test_regression_gate.py tests/test_usefulness.py tests/test_benchmarks.py -q
+rtk proxy .venv/bin/pytest tests/test_rules/test_code.py tests/test_parsers/test_python.py tests/test_return_conflicts.py -q
+rtk proxy .venv/bin/pytest tests/test_rules/test_local_links.py tests/test_fragments.py tests/test_rules/test_markup.py tests/test_parsers/test_markdown.py -q
+rtk proxy .venv/bin/pytest tests/test_corpora.py tests/test_paired_quality.py tests/test_source_intervals.py -q
+```
+
+#### Package disposition and remaining prerequisites
+
+| Package | Final disposition |
+| --- | --- |
+| P18 | Complete: original-source predicates, confidence/exemption guards, spans and production/corpus contracts pass. |
+| P19 | Complete: automatic configuration failures and starting Git-root boundaries preserve explicit precedence. |
+| P20 | Complete: populated and empty SARIF declare code-point columns and Unicode/exclusive endpoints pass. |
+| P21 | Complete: explicit Python filename casing and stdin/file classification agree. |
+| P22 | Complete: nanosecond/size changes, backward stamps, observed deletion/recreation and watch/baseline parity pass. Identical stamps without observed deletion retain the documented polling limit. |
+| P23 | Complete: reviewed ledgers, immutable scan inputs, strict mismatch comparison, Make/CI wiring and actual target failure proof pass. |
+| P24 | Complete: version 3 source-bound review, actual runtime identity and benchmark provenance pass. Legacy provenance remains explicit. |
+| P25 | Complete: clean reviewed coverage and metric-specific group denominators remain separate from detections. |
+| P26 | Complete: AST-backed executable placeholders, supported abstract/stub guards, binding refusals and CLI/corpus integration pass. |
+| P27 | Engineering complete: direct claim comparison targets and supported named-scope guards pass. P27.13 awaits independent natural development judgments. |
+| P28 | Complete: explicit starred parameter kinds, conservative unstarred handling and CLI/corpus contracts pass. |
+| P29 | Engineering complete: narrow explicit None/int return conflict, static metadata and refusal guards pass. Further scalar contracts and P29.12 promotion require soundness/independent evidence. C010 stays experimental. |
+| P30 | Engineering complete: explicit root/renderer, confined supported target reads, scan-local cache and report-only corpus pass. P30.18 remains open only for independent Markdown precision review; native-context binding is unavailable for v3 independent scoring. M012 stays experimental and OFF by default. |
+| P31 | Engineering complete: unsupported replacements withheld, rescans and source-bound human-question schema pass. P31.13 needs human usefulness/meaning judgments. |
+| P32 | Preparation/offline engineering complete: separate source freeze, licensed syntax conformance, blind protocol, native-label limits, explicit paired adapter and declared group intervals pass. Human annotation, natural scores, calibration and holdout decisions remain deferred. |
+| P33 | Local engineering verification complete. Exact-commit remote CI and any future release retain their separate prerequisites. |
+
+The user's 2026-10-10 deferral keeps P32B.1/.5–12, P32C.4/.6–7 and
+P32D.1/.5–11 open. No real reviewer is assigned, no accepted independent labels
+exist, and no semantic outcomes or independent quality targets are established.
+P32C.10 remains conditional on clear README reuse terms; the source stays excluded.
+Original P06/P12/P13/P15/P16 human-dependent checks remain open for the same
+missing independent annotation, supported-context judgments and reserved-holdout
+evidence described in the [review protocol](quality/external/review-protocol.md).
+No threshold, confidence, severity, default or named profile was promoted.
+
+P33.9 remains open for remote Ubuntu Python 3.11–3.13 CI on the exact final
+commit; local matrix results are recorded separately. P33.14 remains conditional
+on a requested release and all gates in [RELEASE_BLOCKERS.md](RELEASE_BLOCKERS.md).
+No copyright, publication identity, external release or tag decision is inferred.
+The final completion commit is documentation only; its checkout cleanliness is
+verified after the enabled hooks finish.
