@@ -14,6 +14,26 @@ from proseprobe.core.baseline import (
 )
 from proseprobe.rules.base import Confidence, Issue, Severity
 from proseprobe.rules.grammar import ExcessiveHedgingRule
+from proseprobe.rules.vocab import WordyPhraseRule
+
+
+def test_distinct_multiline_matches_with_identical_first_lines_keep_separate_identities(
+    tmp_path: Path,
+) -> None:
+    source = (
+        "We retry in\norder to recover.\n\nWe retry in\nthe event that checks fail.\n"
+    )
+    issues = WordyPhraseRule().check(source, "case.md")
+    assert len(issues) == 2
+    baseline = Baseline(tmp_path / "baseline.json")
+    path = tmp_path / "case.md"
+    for issue in issues:
+        baseline.add_issue(issue, path, source, tmp_path)
+    assert len(baseline.entries) == 2
+    assert {entry.match for entry in baseline.entries} == {
+        "in order to",
+        "in the event that",
+    }
 
 
 def test_multiline_baseline_tracks_complete_match_and_roundtrips(

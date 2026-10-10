@@ -1,6 +1,7 @@
 # ProseProbe improvement plan
 
-Status: in progress; checkboxes record verified work.
+Status: engineering implemented; final local verification in progress.
+Independent human evaluation and the listed external gates remain pending.
 Assessment date: 2026-10-09.
 
 This plan covers the discovery and parser defects, evaluation gaps, heuristic
@@ -302,7 +303,7 @@ Targets: `quality/`, evaluation-only adapters under `benchmarks/`,
   subset, record disagreements, and retain the adjudication rationale.
 - [ ] P06A.9 Add independently authored positive and near-miss cases for rules
   with sparse coverage. Label purpose-written cases separately from natural text.
-- [ ] P06A.10 Preserve the original 12 false-positive cases as honest regression
+- [x] P06A.10 Preserve the original 12 false-positive cases as honest regression
   evidence. Record whether each is corrected, explicitly handled by policy, or
   retained as a documented limitation.
 
@@ -653,20 +654,20 @@ accurate destination spans, and leave default scans unchanged.
 
 Targets: evaluator reports, held-out corpus, annotation guidance, CI measurement.
 
-- [ ] P16.1 Add deterministic metric tests for precision, eligible-issue recall,
+- [x] P16.1 Add deterministic metric tests for precision, eligible-issue recall,
   false warnings per 1,000 prose words, and source-span accuracy.
-- [ ] P16.2 Define the prose-word denominator from eligible extracted prose.
+- [x] P16.2 Define the prose-word denominator from eligible extracted prose.
   Exclude masked code and report separate Markdown, docstring, and comment totals.
-- [ ] P16.3 Add confidence intervals and sample sizes for per-rule precision.
+- [x] P16.3 Add confidence intervals and sample sizes for per-rule precision.
   Test empty denominators and small samples; do not report certainty from one case.
-- [ ] P16.3a Account for findings grouped within source repositories. Use
+- [x] P16.3a Account for findings grouped within source repositories. Use
   source-cluster-aware uncertainty where sufficient sources support it; otherwise
   state that simple intervals describe only the reviewed sample.
-- [ ] P16.4 Report both totals across findings and averages across supported rules,
+- [x] P16.4 Report both totals across findings and averages across supported rules,
   with rare rules and unsupported/unreviewed cases visible.
-- [ ] P16.4a Report source-level variation where sample sizes permit. Do not treat
+- [x] P16.4a Report source-level variation where sample sizes permit. Do not treat
   many sentences from one repository as independent evidence from many projects.
-- [ ] P16.5 Review default warning/error behavior separately from all-rule and
+- [x] P16.5 Review default warning/error behavior separately from all-rule and
   informational results. Keep high-confidence failures visible even when the
   aggregate score improves.
 - [ ] P16.6 Assess whether a warning leads to a useful, meaning-preserving edit.
@@ -676,15 +677,15 @@ Targets: evaluator reports, held-out corpus, annotation guidance, CI measurement
   evidence. Inspect new warnings on human corrections and retained valid warnings.
 - [ ] P16.8 Choose confidence/default/profile changes using development evidence,
   then evaluate the chosen policy once on the reserved holdout set.
-- [ ] P16.9 Treat later tuning prompted by holdout errors as development work and
+- [x] P16.9 Treat later tuning prompted by holdout errors as development work and
   reserve fresh independent sources before claiming another generalization result.
-- [ ] P16.10 Keep corpus metrics report-only until reviewed coverage supports a
+- [x] P16.10 Keep corpus metrics report-only until reviewed coverage supports a
   justified gate. Then specify a no-new-regressions check and any numeric
   thresholds with documented denominators and small-sample treatment.
 - [ ] P16.10a Set quality targets from reviewed development data before consulting
   holdout results. Test the gate on controlled regressions and retain known
   mismatches explicitly instead of adopting a blanket pass threshold.
-- [ ] P16.11 Publish results with commit, policy, corpus version, sample sizes,
+- [x] P16.11 Publish results with commit, policy, corpus version, sample sizes,
   uncertainty, known limitations, and the disposition of every assessed issue.
 
 Acceptance: a measured improvement means more useful findings or fewer incorrect
@@ -698,33 +699,33 @@ written decision and its unmet prerequisite; it must not appear as completed.
 
 ### New-rule checklist
 
-- [ ] P17A.1 Allocate an unused ID and declare class metadata, supported file
+- [x] P17A.1 Allocate an unused ID and declare class metadata, supported file
   types, content scope, severity, confidence, and any real configuration field.
-- [ ] P17A.2 Register the rule and test its selection, ignore handling, severity
+- [x] P17A.2 Register the rule and test its selection, ignore handling, severity
   overrides, and experimental/profile classification.
-- [ ] P17A.3 Update metadata, profile, and rule-count assertions to reflect the
+- [x] P17A.3 Update metadata, profile, and rule-count assertions to reflect the
   declared rule catalog. Preserve registry consistency checks.
-- [ ] P17A.4 Add the handwritten rule-reference section and required executable
+- [x] P17A.4 Add the handwritten rule-reference section and required executable
   positive/negative examples; generate canonical inventory and category counts
   with `make rule-docs`.
-- [ ] P17A.5 Add at least one genuine positive and one explicit negative corpus
+- [x] P17A.5 Add at least one genuine positive and one explicit negative corpus
   case. Add more independent coverage before using it to justify promotion.
-- [ ] P17A.6 Verify JSON Lines/SARIF span behavior, deterministic ordering, inline
+- [x] P17A.6 Verify JSON Lines/SARIF span behavior, deterministic ordering, inline
   suppression, and baseline interaction where the rule introduces a new case.
 
 ### Checks for each slice
 
-- [ ] P17B.1 Run the smallest relevant test command until the new regression is
+- [x] P17B.1 Run the smallest relevant test command until the new regression is
   green, then run related integration tests.
-- [ ] P17B.2 Review every changed corpus finding and expectation. Preserve false
+- [x] P17B.2 Review every changed corpus finding and expectation. Preserve false
   positives as mismatches until the behavior or annotation has a justified change.
-- [ ] P17B.3 Run `make rule-docs-check`, `make check`, `make dogfood`, and
+- [x] P17B.3 Run `make rule-docs-check`, `make check`, `make dogfood`, and
   `make rule-quality`. Explain quality deltas; the current evaluator's successful
   exit does not mean it has no false positives.
-- [ ] P17B.4 Run the ProseProbe JSON Lines scan on edited prose with the project's
+- [x] P17B.4 Run the ProseProbe JSON Lines scan on edited prose with the project's
   existing policy and baseline. Review technical terms and exact examples before
   rewriting them.
-- [ ] P17B.5 Update `CHANGELOG.md` and affected specification/configuration docs
+- [x] P17B.5 Update `CHANGELOG.md` and affected specification/configuration docs
   for user-visible changes. Keep generated blocks generated.
 
 ### Final integration
@@ -733,15 +734,15 @@ written decision and its unmet prerequisite; it must not appear as completed.
   `make nfr-check` on the final implementation commit.
 - [ ] P17C.2 Require the Python 3.11, 3.12, and 3.13 CI matrix for that commit.
   Report any unavailable remote check explicitly.
-- [ ] P17C.3 Verify representative filesystem and stdin scans in text, JSON,
+- [x] P17C.3 Verify representative filesystem and stdin scans in text, JSON,
   JSON Lines, and SARIF, including clean inputs and operational errors.
-- [ ] P17C.4 Verify `watch` and baseline maintenance after shared-policy changes.
+- [x] P17C.4 Verify `watch` and baseline maintenance after shared-policy changes.
   Preserve legacy readable baselines, deterministic identity, and atomic writes.
-- [ ] P17C.5 Compare the full-scan benchmark and memory/startup probes with P00/P07
+- [x] P17C.5 Compare the full-scan benchmark and memory/startup probes with P00/P07
   evidence. Investigate material regressions before closing the plan.
-- [ ] P17C.6 Review each package against its acceptance criteria and record
+- [x] P17C.6 Review each package against its acceptance criteria and record
   completed, deferred, or unresolved status with supporting test and corpus results.
-- [ ] P17C.7 Keep publication separate. Follow `RELEASE_BLOCKERS.md` if a release
+- [x] P17C.7 Keep publication separate. Follow `RELEASE_BLOCKERS.md` if a release
   is requested; completion of this plan does not authorize a tag or publication.
 
 ## Commands for execution
@@ -853,7 +854,9 @@ accepted duplicate paragraph after the pending multiline baseline correction;
 its source explanation is updated with P08. Source-only type checking passes; an extended
 benchmark type check found the same 18 existing errors as the prior commit.
 
-Implementation commits so far: P01 `917973e`, P02 `38a20fb`, P03 `0f8bbed`.
+Implementation commits include P01 `917973e`, P02 `38a20fb`, P03 `0f8bbed`,
+P04 `55a4eb2`, P05 `dbfeb3f`, P06 `09e834c`, P07 `f2c2c73`, P08 `86aa453`,
+and P09 `5e3588b`.
 
 
 ### P05 — Coverage and scoring separated
@@ -978,6 +981,7 @@ records a reviewed defect under enabled GitHub policy while retaining the M004
 negative. Independent precision and renderer-corpus human review remain pending;
 no profile promotion has been made.
 
+
 ### P10 — Evidence narrowed to the matched claim
 
 Seventeen initial regressions plus four boundary refinements failed before the
@@ -1026,6 +1030,44 @@ this checkpoint contains 320 true positives, six false positives, no misses,
 and 413/419 passed negative checks. This is not an independent population
 estimate. Frozen external holdout review remains pending and unused for tuning.
 
+
+### P16 — Measurement engineering completed; independent review pending
+
+Deterministic tests cover precision/recall, full spans, macro averages, empty
+coverage, confidence filtering, reviewed prose-word denominators, and Wilson
+sample intervals. Reports separate Markdown, docstrings, and comments and
+show source-group variation. No independent source groups are declared for the
+legacy purpose-written corpus, so cluster intervals remain unavailable with an
+explicit reason; simple intervals are limited to the reviewed sample.
+
+Default warning/error policy and all-rule informational behavior are measured
+separately. Six residual raw false positives remain visible; four have warning
+severity and two informational severity. Metrics remain report-only. No arbitrary
+numeric gate, profile promotion, or confidence recalibration was adopted before
+human review. Future tuning prompted by holdout errors requires fresh independent
+sources before another generalization claim.
+
+Blind annotation, independent usefulness judgments, revision-pair review,
+source-cluster sampling, and predeclared quality targets remain pending. Native
+M2 types cannot substitute for supported issue annotations. Publication and tags
+remain outside this task.
+
+### P17 — Integration coverage expanded
+
+The existing 205 CLI/reporter/baseline checks passed, including watch/check
+policy parity, suppression, legacy baseline reading, maintenance, load-once,
+and atomic save failures. Additional characterization covers clean stdin in
+all four formats, warning stdin SARIF source positions, and operational read
+errors in each output format. The Markdown parity fixture now uses the actual
+next-line directive rather than an ordinary HTML comment. No operational behavior
+or structured schema changed to satisfy these checks.
+
+Python 3.11.15 and 3.12.15 are available locally. Isolated temporary environments
+with matching pytest/Hypothesis dependencies are prepared for full compatibility
+runs. Repository/runtime dependencies remain unchanged. Ubuntu remote CI on the
+final commit remains a separate check; no push or publication was requested.
+
+
 ### P08.7 — Older literal catalogs migrated after individual regressions
 
 Twenty-four wrapped-span tests and one masked-first/valid-later S019 test failed
@@ -1061,6 +1103,7 @@ fixed phrases. Eight reviewed corpus positives include the five primary rules
 and three existing vocabulary/promotional diagnoses on the same deliberate
 examples; eight fenced negatives preserve code masking.
 
+
 ### P07/P17 — Measured startup import delay corrected
 
 An isolated archived `f8f8f52` import trace attributed about 25 ms to rule
@@ -1073,6 +1116,7 @@ All 215 focused lazy-import/metadata/CLI checks and static checks pass. A startu
 probe after the change measured 54.4 ms, compared with the earlier 99.7 ms probe.
 These are hardware-dependent single samples; the unchanged 100 ms gate remains.
 The scan profile is reviewed separately from import latency.
+
 
 ### P07/P17 — Measured pattern construction hoisted
 
@@ -1097,3 +1141,41 @@ Earlier P07 timings came from a mixed working tree, so they provide directional
 history rather than reproducible commit attribution. The controlled comparison
 records exact runtime-tree and patch hashes. No global cache, dependency,
 parser/traversal redesign, wall-clock unit threshold, or holdout tuning was added.
+
+
+### P17 — Final acceptance review
+
+All engineering packages have passed their focused tests, static checks,
+executable documentation checks, edited-prose review, and integrated corpus
+review. No runtime dependencies or baseline entries were added. The registry
+contains 100 rules; named profile promotion and independent effectiveness claims
+remain deliberately pending. Additional baseline characterization proves that
+different wrapped phrases with identical first lines retain separate identities.
+
+| Package | Engineering status | Remaining prerequisite |
+| --- | --- | --- |
+| P00–P05 | Complete | None |
+| P06 | Provenance, adapters, frozen pilot, blind packet complete | Human annotation, double review, native-error/revision judgments; README revision reuse terms unresolved |
+| P07–P11 | Complete, including confirmed wrapping and measured performance fixes | None |
+| P12 | Technical and explicit quotation policy complete | Independent development/holdout usefulness review |
+| P13–P15 | Rules, renderer setting, metadata, docs, and integrations complete | Independent precision and renderer-corpus review before promotion |
+| P16 | Metric/report engineering and legacy disposition complete | Human usefulness, paired revisions, calibration, and predeclared quality targets |
+| P17 | Local acceptance checks and publication boundary implemented | Final committed-state local run; remote Ubuntu CI remains unverified |
+
+The human reviewer request remains unanswered. No agent supplied human labels,
+read external holdout prose for tuning, or inferred correctness from native
+revisions. The excluded README dataset can be reconsidered only after its reuse
+terms become clear. No push, tag, package publication, or external message was
+sent. Local three-version tests do not replace the remote Ubuntu matrix.
+
+Regression results on runtime revision `802be72` use corpus version 1, all rules,
+info/low confidence, and explicitly enabled GitHub anchors: 336 true positives,
+six retained false positives, no misses, and 428/434 passed negative checks.
+Detection precision is 98.25% (336/342); eligible recall is 100% (336/336).
+All 34 expectations supplying full endpoints matched; the other expectations
+remain start-only checks. Default production warning/low policy with renderer
+off reports 106 true positives, four false positives, no misses, and 65/69
+passed negative checks. Warning density is 0.681 per 1,000 reviewed prose words
+(4/5,872). Wilson intervals are sample-only; identified independent source groups
+are absent, so cluster intervals are unavailable. These figures describe the
+purpose-written regression corpus, not the 300-unit natural-text pilot.

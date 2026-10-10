@@ -82,7 +82,7 @@ def test_explicit_policy_matches_cli_complete_issue_records(
     markdown.write_text(
         "# TITLE\n\nDelve into a notable topic.\n\nRelease 4 is the fastest parser.\n"
         "\nThis is the fastest parser.\n"
-        "\n<!-- proseprobe: ignore=V001 -->\ndelve\n"
+        "\n<!-- proseprobe-ignore-next-line V001 -->\ndelve\n"
     )
     python = tmp_path / "doc.py"
     python.write_text(
@@ -505,6 +505,57 @@ class TestCheckCommand:
 class TestStdinInput:
     """Tests for checking one document from standard input."""
 
+    @pytest.mark.parametrize("output_format", ["text", "json", "jsonl", "sarif"])
+    def test_clean_stdin_in_each_output_format(self, output_format: str) -> None:
+        result = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "draft.md",
+            "--select",
+            "V001",
+            "--format",
+            output_format,
+            stdin="Read the setup guide.",
+        )
+        assert result.exit_code == 0
+        assert result.stderr == ""
+        if output_format == "text":
+            assert result.stdout == "No issues found!\n"
+        elif output_format == "jsonl":
+            assert result.stdout == ""
+        elif output_format == "json":
+            data = json.loads(result.stdout)
+            assert data["files"] == []
+            assert data["summary"]["files_checked"] == 1
+        else:
+            assert json.loads(result.stdout)["runs"][0]["results"] == []
+
+    def test_warning_stdin_sarif_preserves_virtual_path_and_region(self) -> None:
+        result = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "draft.md",
+            "--select",
+            "V001",
+            "--format",
+            "sarif",
+            stdin="Café operators delve into setup.",
+        )
+        assert result.exit_code == 1
+        assert result.stderr == ""
+        [record] = json.loads(result.stdout)["runs"][0]["results"]
+        location = record["locations"][0]["physicalLocation"]
+        assert record["ruleId"] == "V001"
+        assert location["artifactLocation"]["uri"] == "draft.md"
+        assert location["region"] == {
+            "startLine": 1,
+            "startColumn": 16,
+            "endLine": 1,
+            "endColumn": 21,
+        }
+
     def test_stdin_json_uses_virtual_filename_and_unicode(self) -> None:
         result = run_cli(
             "check",
@@ -612,10 +663,13 @@ class TestStdinInput:
         assert result.stdout == ""
         assert "draft.md: line 1: unknown" in result.stderr
 
-    def test_stdin_read_failure_is_an_input_error(self) -> None:
+    @pytest.mark.parametrize("output_format", ["text", "json", "jsonl", "sarif"])
+    def test_stdin_read_failure_is_an_input_error(self, output_format: str) -> None:
         with patch.object(sys, "stdin") as broken_input:
             broken_input.read.side_effect = OSError("broken stream")
-            result = run_cli("check", "-", "--filename", "draft.md", "--format", "json")
+            result = run_cli(
+                "check", "-", "--filename", "draft.md", "--format", output_format
+            )
 
         assert result.exit_code == 3
         assert result.stdout == ""
@@ -2175,14 +2229,18 @@ class TestCliValidation:
         assert f"{test_file}: line 2: {detail}" in result.stderr
         assert "Traceback" not in result.stderr
 
-    def test_invalid_utf8_file_returns_internal_error(self, tmp_path: Path) -> None:
+    @pytest.mark.parametrize("output_format", ["text", "json", "jsonl", "sarif"])
+    def test_invalid_utf8_file_returns_internal_error(
+        self, tmp_path: Path, output_format: str
+    ) -> None:
         """Undecodable files should be reported without tracebacks."""
         test_file = tmp_path / "invalid.md"
         test_file.write_bytes(b"\xff")
 
-        result = run_cli("check", str(test_file))
+        result = run_cli("check", str(test_file), "--format", output_format)
 
         assert result.exit_code == 3
+        assert result.stdout == ""
         assert "Could not read file" in result.stderr
         assert str(test_file) in result.stderr
         assert "Traceback" not in result.stderr

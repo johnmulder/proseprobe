@@ -141,6 +141,36 @@ def test_precision_rules_are_experimental_with_canonical_metadata() -> None:
         assert metadata.default_confidence.value == "high"
 
 
+@pytest.mark.parametrize(
+    ("rule_id", "filename", "content", "token", "column"), CASES[:2]
+)
+def test_experimental_rules_follow_category_and_profile_policy(
+    rule_id: str,
+    filename: str,
+    content: str,
+    token: str,
+    column: int,
+) -> None:
+    _, default, _ = prepare_scan(Config())
+    assert not any(
+        issue.rule_id == rule_id
+        for issue in default.check_content(content, Path(filename))
+    )
+    _, informational, _ = prepare_scan(Config(severity="info"))
+    [issue] = [
+        issue
+        for issue in informational.check_content(content, Path(filename))
+        if issue.rule_id == rule_id
+    ]
+    assert issue.column == column
+    assert token in content
+    _, profiled, _ = prepare_scan(Config(), profile="technical-docs")
+    assert not any(
+        issue.rule_id == rule_id
+        for issue in profiled.check_content(content, Path(filename))
+    )
+
+
 def test_fragment_renderer_off_cannot_be_enabled_by_severity_override() -> None:
     _, linter, rules = prepare_scan(
         Config(select=["M011"], severity="info", severity_overrides={"M011": "error"})
