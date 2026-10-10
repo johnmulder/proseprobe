@@ -272,3 +272,28 @@ emissions remain in the quality score even when they share a review prompt.
 Current source/prompt changes make old ratings unlinked; missing human ratings
 never become successful suggestions. No real human judgments are supplied by
 the repository's synthetic validation fixtures.
+
+## Reviewed native revision pairs
+
+`benchmarks.paired_quality.paired_report()` accepts two minimal source-bound
+evaluation records, their exact original/revision UTF-8 bytes, and an optional
+explicit correspondence review. Each source names path, ID/hash, source group
+and pair group; the revision names its original source ID. Records retain the
+complete effective policy, runtime provenance and Issue-shaped findings. Actual
+runtime package version/source digest and policy must agree; location or Git-only
+metadata differences remain visible without changing comparison identity.
+
+Correspondence names a reviewer/review ID and binds both source records. Each
+row references full diagnostic hashes on one or both sides with explicit
+valid/incorrect/context-dependent/unresolved judgments and the four separate
+human questions. Diagnostic identity is unique; duplicates, changed source bytes,
+wrong groups, ambiguous alignment and malformed spans are rejected. Production
+single-line spans retain their null `end_line` and supplied `end_column`; M004
+alone retains its zero-width exception.
+
+The report preserves all provenance, mechanical finding/warning counts and
+deltas, reviewed transitions, human status denominators and unmatched diagnostic
+IDs. Missing correspondence or meaning judgments remain unavailable. No native
+edit type, eliminated warning or reference text automatically supplies a useful
+finding or preserved meaning. The offline tests use synthetic review outcomes;
+actual independent paired evidence remains deferred.

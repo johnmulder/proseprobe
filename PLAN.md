@@ -2277,7 +2277,7 @@ Suggested one-line commits: `Document blind review and adjudication protocol`;
   is valid when no existing rule matches a native category.
 - [ ] P32C.4 After blind original review is frozen, provide all four JFLEG and all
   ten ASSET references under their existing pair identities and access terms.
-- [ ] P32C.5 Add deterministic paired-report tests for a resolved useful finding,
+- [x] P32C.5 Add deterministic paired-report tests for a resolved useful finding,
   a retained valid warning, a new incorrect warning, and unavailable correspondence.
 - [ ] P32C.6 Record human judgments of usefulness and meaning preservation for
   each relevant before/after change; use native revisions as alternatives, not as
@@ -2828,3 +2828,15 @@ Name Store. The existing static binding guards now account for those parameters.
 Unshadowed generic Protocol declarations remain valid; Python 3.11 treats the
 new syntax under its existing malformed-source contract. All 301 related code
 and return tests pass; production metadata and corpus judgments are unchanged.
+
+### P32C — Explicit paired revision reports
+
+The pure paired adapter preserves exact original/revision bytes, source/pair/group
+identities, policy and actual runtime digest. It accepts only explicit reviewed
+full-diagnostic correspondence and named human judgments. Warning changes and
+semantic questions have separate outcomes and denominators; missing alignment
+remains unavailable. Initial missing-helper/adapter and malformed-input cases
+failed before implementation. Review caught five production-coordinate/zero-span
+failures: single-line Issue fields remain unchanged and M004's exception stays
+narrow. All 75 focused tests, Ruff, typing and prose checks pass. No heuristic
+alignment, native-label conversion or actual human evidence was introduced.
