@@ -94,6 +94,32 @@ The [external pilot guide](external/README.md) records frozen sources and the
 blind human-review workflow. Native revisions are supplementary evidence,
 not automatically assigned writing-quality labels.
 
+## Source-bound review artifacts
+
+Version 3 retains version 2 coverage and matching semantics and binds each file
+to a source identity and SHA-256 of its exact UTF-8 bytes. A review header names
+the packet index, declared rule-contract snapshot, protocol, policy and reviewers.
+Both referenced artifacts have locally verified checksums. The snapshot covers
+declared rule metadata; implementation identity is reported separately.
+Initially unreviewed templates have no reviewer identifiers or clean judgments.
+
+Bound scans consume verified immutable bytes through the normal file policy.
+A changed source, packet or declared contract requires review before reuse.
+Legacy version 1/2 reports remain available and explicitly state that their
+annotation-time source binding and review provenance are unavailable.
+`--require-bound` rejects legacy annotations for independent evaluation.
+
+The `quality/examples/source-bound/` packet is a minimal offline example with
+agent-authored text and labels; it provides no independent human evidence:
+
+```sh
+rtk proxy .venv/bin/python -m benchmarks.rule_quality --manifest quality/examples/source-bound/annotations.json --root quality/examples/source-bound --require-bound --format json
+```
+
+Preserve source bytes during annotation. After a deliberate source or contract
+change, review affected labels and issue a new versioned packet with its real
+review provenance. Do not refresh checksums to make an old review appear current.
+
 ## Updating the corpus
 
 1. Add or edit the smallest source excerpt that covers the behavior.

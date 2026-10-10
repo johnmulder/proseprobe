@@ -28,6 +28,7 @@ from benchmarks.quality_scoring import (
     score_breakdowns,
     score_findings,
     total_metrics,
+    validate_source_bindings,
     wilson_interval,
 )
 from proseprobe import __version__
@@ -207,16 +208,17 @@ def eligible_annotations(
             )
             for scope in scopes
         )
-    return Annotations(
-        annotations.files,
-        tuple(
+    return replace(
+        annotations,
+        expected=tuple(
             replace(item, severity=rules_by_id[item.rule_id].severity.value)
             for item in annotations.expected
             if eligible(item)
         ),
-        tuple(item for item in annotations.negative_cases if eligible(item)),
-        scopes,
-        annotations.source_groups,
+        negative_cases=tuple(
+            item for item in annotations.negative_cases if eligible(item)
+        ),
+        scopes=scopes,
     )
 
 
@@ -230,14 +232,37 @@ def collect_findings(
     """Collect findings under explicit policy or the legacy all-rules default."""
     if linter is None:
         _config, linter, _rules = prepare_evaluation_scan()
-    raw = linter.check(list(annotations.files))
-    results = filter_by_confidence(raw.issues_by_file, min_confidence)
+    validate_source_bindings(annotations, repo_root)
+    verified = dict(annotations.verified_sources)
+    if annotations.source_binding == "sha256-utf8":
+        issues_by_file = {}
+        for path in linter.discover_files(list(annotations.files)):
+            relative = path.resolve().relative_to(repo_root.resolve()).as_posix()
+            source_bytes = verified[relative]
+            if (
+                hashlib.sha256(source_bytes).hexdigest()
+                != annotations.source_identities[relative]["sha256"]
+            ):
+                raise AnnotationError(
+                    f"{relative}: cached reviewed source SHA-256 differs"
+                )
+            issues = linter.check_content(source_bytes.decode("utf-8"), path)
+            if issues:
+                issues_by_file[path] = issues
+    else:
+        issues_by_file = linter.check(list(annotations.files)).issues_by_file
+    validate_source_bindings(annotations, repo_root)
+    results = filter_by_confidence(issues_by_file, min_confidence)
 
     findings: list[ActualFinding] = []
     resolved_root = repo_root.resolve()
     for path, issues in results.items():
         relative_path = path.resolve().relative_to(resolved_root).as_posix()
-        source = path.read_text(encoding="utf-8")
+        source = (
+            verified[relative_path].decode("utf-8")
+            if verified
+            else path.read_text(encoding="utf-8")
+        )
         findings.extend(
             ActualFinding(
                 relative_path,
@@ -253,6 +278,7 @@ def collect_findings(
             )
             for issue in issues
         )
+    validate_source_bindings(annotations, repo_root)
     return tuple(sorted(findings))
 
 
@@ -268,6 +294,7 @@ def format_json_report(
 ) -> str:
     """Report counts with explicit policy and reproducible corpus provenance."""
     root = repo_root.resolve()
+    validate_source_bindings(annotations, repo_root)
     hashes = {
         path.resolve().relative_to(root).as_posix(): hashlib.sha256(
             path.read_bytes()
@@ -334,6 +361,8 @@ def format_json_report(
             "annotation_completeness": "legacy-exhaustive"
             if annotations.scopes is None
             else "explicit-scopes",
+            "source_binding": annotations.source_binding,
+            "review_provenance": annotations.review_provenance or "unavailable",
             "annotation_scopes": [asdict(scope) for scope in annotations.scopes]
             if annotations.scopes is not None
             else None,
@@ -409,6 +438,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--format", choices=("text", "json"), default="text")
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--root", type=Path, default=REPO_ROOT)
+    parser.add_argument(
+        "--require-bound",
+        action="store_true",
+        help="require version-three source-bound annotations",
+    )
     args = parser.parse_args(argv)
     mode = args.mode or (
         "production"
@@ -428,6 +462,10 @@ def main(argv: list[str] | None = None) -> int:
     try:
         registry_ids = {rule.id for rule in get_all_rules()}
         annotations = load_annotations(args.manifest, args.root, registry_ids)
+        if args.require_bound and annotations.source_binding != "sha256-utf8":
+            raise AnnotationError(
+                "strict independent evaluation requires source-bound version-three annotations"
+            )
         eligible = (
             eligible_annotations(annotations, args.root, linter, rules)
             if mode == "production"

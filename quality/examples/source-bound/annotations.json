@@ -1,0 +1,42 @@
+{
+  "files": {
+    "original.md": {
+      "expected": [],
+      "negative_cases": [
+        {
+          "line": 1,
+          "note": "Ordinary literal instruction.",
+          "rule_id": "V001"
+        }
+      ],
+      "regions": [],
+      "reviewed_rules": [
+        "V001"
+      ],
+      "sha256": "ce1ba678d9b6d99aaf4bf8facee81e9e6f8b657bc688a37f05c4375a06382a54",
+      "source_group": "agent-authored-example",
+      "source_id": "proseprobe:agent-authored-example:v1"
+    }
+  },
+  "review": {
+    "packet_index": {
+      "path": "index.json",
+      "sha256": "4cbbb568afa99a3e4fa310c753112eeb6f5843775581616464125e66351f1c85"
+    },
+    "policy": {
+      "min_confidence": "low",
+      "mode": "all-rules",
+      "profile": "default",
+      "severity": "info"
+    },
+    "protocol_revision": "agent-authored-documentation-example-v1",
+    "reviewers": [
+      "agent-authored-example"
+    ],
+    "rule_contracts": {
+      "path": "contracts.json",
+      "sha256": "b1c5952a4dd819b3ee1c87da8d6142fe452733ed0562147265571d5b341ea350"
+    }
+  },
+  "version": 3
+}

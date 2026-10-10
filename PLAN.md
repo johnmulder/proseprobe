@@ -1637,48 +1637,48 @@ version 2 manifests and their existing scoring semantics.
 
 ### P24A — Annotation identity and review metadata
 
-- [ ] P24A.1 Record the existing version 1/2 loading, scope, and report contracts
+- [x] P24A.1 Record the existing version 1/2 loading, scope, and report contracts
   with focused tests; retain start-only legacy span behavior.
-- [ ] P24A.2 Specify a version 3 annotation contract before implementation. Require
+- [x] P24A.2 Specify a version 3 annotation contract before implementation. Require
   each source's relative path, source identity, and SHA-256 of the exact UTF-8
   bytes reviewed. Retain version 2 scope fields and semantic matching rules.
-- [ ] P24A.3 Specify one review header containing the blind-packet/index identity,
+- [x] P24A.3 Specify one review header containing the blind-packet/index identity,
   review-protocol revision, reviewed rule-contract snapshot identity, declared
   profile/policy, and reviewer identifiers. Use pseudonymous identifiers where
   appropriate; metadata must describe actual review, not imply certification.
-- [ ] P24A.4 Add a failing tiny-fixture test: changing source wording while leaving
+- [x] P24A.4 Add a failing tiny-fixture test: changing source wording while leaving
   all annotated coordinates in bounds must make a bound manifest invalid.
-- [ ] P24A.5 Add a failing test for a changed newline encoding and a changed
+- [x] P24A.5 Add a failing test for a changed newline encoding and a changed
   non-ASCII character. Bind raw bytes; avoid silently normalizing reviewed text.
-- [ ] P24A.6 Validate source hashes before scoring and name the source and expected
+- [x] P24A.6 Validate source hashes before scoring and name the source and expected
   identity in an `AnnotationError` on mismatch.
-- [ ] P24A.7 Add parameterized failing tests for missing identity/hash fields,
+- [x] P24A.7 Add parameterized failing tests for missing identity/hash fields,
   malformed hashes, duplicate source identities, and invalid review metadata.
-- [ ] P24A.8 Validate the new fields using the existing strict schema helpers;
+- [x] P24A.8 Validate the new fields using the existing strict schema helpers;
   reject unknown fields rather than accepting ambiguous metadata.
-- [ ] P24A.9 Add a failing test for an annotation packet linked to a different
+- [x] P24A.9 Add a failing test for an annotation packet linked to a different
   frozen index or rule-contract snapshot. Verify those referenced artifacts
   locally; do not contact the web during evaluation.
-- [ ] P24A.10 Store the reviewed contract snapshot and its checksum with the packet.
+- [x] P24A.10 Store the reviewed contract snapshot and its checksum with the packet.
   A later contract change requires a recorded review decision before reusing
   affected labels; changing detector implementation alone does not rewrite labels.
-- [ ] P24A.11 Add a failing export test that the blind originals and review index
+- [x] P24A.11 Add a failing export test that the blind originals and review index
   carry exact source-byte identities but contain no predictions or native revisions.
-- [ ] P24A.12 Extend the existing packet export with the bound annotation template
+- [x] P24A.12 Extend the existing packet export with the bound annotation template
   and index fields. Keep every exported source initially unreviewed.
-- [ ] P24A.13 Add a failing test that source mutation during collection cannot
+- [x] P24A.13 Add a failing test that source mutation during collection cannot
   produce a report claiming the original reviewed bytes. Revalidate the evaluated
   inputs before reporting, or reuse the verified bytes through the scan if the
   existing interfaces support it without a broader parsing redesign.
-- [ ] P24A.14 Add legacy-compatibility report tests. Version 1/2 results must say
+- [x] P24A.14 Add legacy-compatibility report tests. Version 1/2 results must say
   `source_binding: legacy-unbound` and `review_provenance: unavailable`; preserve
   their counts and avoid inventing annotation-time hashes or reviewers.
-- [ ] P24A.15 Add a strict evaluation option used by the independent-data gate;
+- [x] P24A.15 Add a strict evaluation option used by the independent-data gate;
   reject unbound annotations under that option while preserving report-only
   legacy evaluation. Test success and failure exit behavior before wiring P23.
   P23 may accept the legacy curated corpus through a separately source-bound
   regression ledger; that exception does not apply to independent labels.
-- [ ] P24A.16 Document version 3 with one minimal offline fixture and a reviewed
+- [x] P24A.16 Document version 3 with one minimal offline fixture and a reviewed
   migration procedure. Migrating the curated regression manifest may add current
   source identities; it does not make past judgments independently human-reviewed.
 
@@ -2482,3 +2482,22 @@ Seventeen full-span positives and twenty negatives were added as purpose-written
 regressions. Results are 353 TP/6 FP/0 FN and 448/454 negative checks; all 51
 supplied full spans match. The six original FP inputs and judgments remain.
 P18.23 integration and P18.24 strict regression gating await their prerequisites.
+
+### P24A — Source-bound annotation packets
+
+Version 3 annotations preserve sparse scope semantics and bind exact UTF-8 bytes
+to source identities, a local packet index, declared rule-contract metadata and
+real review provenance. Ten source-binding tests and packet-export regressions
+failed before correction. Additional tests reproduced the second-read mutation
+case; bound scans now consume immutable verified bytes through normal discovery
+and content policy. Context and prose-word denominators use those same bytes.
+Changed sources, indexes, contracts and invalid metadata fail clearly.
+
+Fresh packet exports preserve group/pair/split/format identities and contain
+no predictions, native revisions or reviewed judgments. Existing directories
+are rejected. Legacy reports explicitly remain unbound; `--require-bound`
+rejects them for independent evaluation. All 133 focused tests and the isolated
+package gate pass. Documentation includes a checked agent-authored offline
+example, which is not independent human evidence. Runtime/benchmark identities
+and reviewed-clean-group accounting remain for P24B/C and P25. Frozen pilot
+files and holdout content remain untouched.

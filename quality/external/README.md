@@ -39,6 +39,21 @@ annotation schema. Its `expected`, `negative_cases`, `reviewed_rules`, and
 and issue spans before evaluation; empty lists establish unknown coverage.
 The evaluator's root for these files is `downloads/evaluation/blind/`.
 
+## Source-bound packet export
+
+For a fresh version 3 review packet, choose a new output directory:
+
+```sh
+rtk proxy .venv/bin/python -m benchmarks.corpora quality/sources.json --cache downloads/evaluation --export-review-packet blind/review-v3
+```
+
+The export preserves exact original bytes, source/pair/split/format identities,
+and a checksum-linked declared rule-contract snapshot. Its annotation template
+contains no predictions, native revisions, reviewers or reviewed coverage.
+An existing output directory is rejected. The original frozen pilot and earlier
+blind packet remain intact. Human review fills the new template before any
+independent effectiveness claim; that review is deferred at the user's request.
+
 ## Sampling and provenance
 
 | Source | Units | Split | Native labels and limits |

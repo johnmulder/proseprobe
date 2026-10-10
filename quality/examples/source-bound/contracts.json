@@ -1,0 +1,26 @@
+{
+  "rules": {
+    "V001": {
+      "applies_to": [
+        "markdown",
+        "python"
+      ],
+      "category": "Vocabulary",
+      "config_key": null,
+      "content_scope": "prose",
+      "default_confidence": "medium",
+      "default_severity": "warning",
+      "description": "Detects overused and clich\u00e9d words",
+      "id": "V001",
+      "name": "Overused Vocabulary",
+      "profiles": [
+        "academic",
+        "business",
+        "general",
+        "journalism",
+        "technical-docs"
+      ]
+    }
+  },
+  "version": 1
+}

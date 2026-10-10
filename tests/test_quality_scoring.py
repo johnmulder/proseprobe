@@ -1,5 +1,6 @@
 """Scoring contracts for source spans and independently reviewed regions."""
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -29,6 +30,259 @@ def _entry() -> dict[str, object]:
         "regions": [],
         "source_group": "fixture-repository",
     }
+
+
+def _bound_manifest(root: Path, *, reviewed: bool = True) -> Path:
+    from benchmarks.evaluation_identity import rule_contract_snapshot
+
+    source = root / "doc.md"
+    source.write_bytes("delve café\n".encode())
+    binding = {
+        "source_id": "fixture-1",
+        "sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+    }
+    index = root / "index.json"
+    index.write_text(json.dumps({"version": 1, "files": {"doc.md": binding}}))
+    contracts = root / "contracts.json"
+    contracts.write_text(json.dumps(rule_contract_snapshot({"V001"})))
+    entry = _entry() | binding
+    entry["reviewed_rules"] = ["V001"] if reviewed else []
+    review = {
+        "packet_index": {
+            "path": "index.json",
+            "sha256": hashlib.sha256(index.read_bytes()).hexdigest(),
+        },
+        "rule_contracts": {
+            "path": "contracts.json",
+            "sha256": hashlib.sha256(contracts.read_bytes()).hexdigest(),
+        },
+        "protocol_revision": "fixture-protocol-1",
+        "policy": {
+            "mode": "production",
+            "profile": "default",
+            "severity": "warning",
+            "min_confidence": "low",
+        },
+        "reviewers": ["reviewer-fixture"] if reviewed else [],
+    }
+    manifest = root / "annotations.json"
+    manifest.write_text(
+        json.dumps({"version": 3, "review": review, "files": {"doc.md": entry}})
+    )
+    return manifest
+
+
+@pytest.mark.parametrize(
+    "replacement", [b"plain cafe\n", "delve café\r\n".encode(), "delve cafè\n".encode()]
+)
+def test_bound_annotations_reject_changed_raw_source_bytes(
+    tmp_path: Path, replacement: bytes
+) -> None:
+    manifest = _bound_manifest(tmp_path)
+    load_annotations(manifest, tmp_path, {"V001"})
+    (tmp_path / "doc.md").write_bytes(replacement)
+    with pytest.raises(AnnotationError, match=r"doc\.md.*SHA-256"):
+        load_annotations(manifest, tmp_path, {"V001"})
+
+
+@pytest.mark.parametrize(
+    ("field", "value"), [("source_id", ""), ("sha256", "bad"), ("extra", "unknown")]
+)
+def test_bound_annotation_fields_are_strict(
+    tmp_path: Path, field: str, value: str
+) -> None:
+    manifest = _bound_manifest(tmp_path)
+    data = json.loads(manifest.read_text())
+    data["files"]["doc.md"][field] = value
+    manifest.write_text(json.dumps(data))
+    with pytest.raises(AnnotationError):
+        load_annotations(manifest, tmp_path, {"V001"})
+
+
+@pytest.mark.parametrize("artifact", ["index.json", "contracts.json"])
+def test_bound_annotations_verify_referenced_artifacts(
+    tmp_path: Path, artifact: str
+) -> None:
+    manifest = _bound_manifest(tmp_path)
+    (tmp_path / artifact).write_text("{}")
+    with pytest.raises(AnnotationError, match="SHA-256"):
+        load_annotations(manifest, tmp_path, {"V001"})
+
+
+def test_bound_annotation_reviewers_cannot_be_invented_for_unreviewed_template(
+    tmp_path: Path,
+) -> None:
+    manifest = _bound_manifest(tmp_path, reviewed=False)
+    annotations = load_annotations(manifest, tmp_path, {"V001"})
+    assert annotations.source_binding == "sha256-utf8"
+    assert annotations.review_provenance["reviewers"] == []
+    data = json.loads(manifest.read_text())
+    data["files"]["doc.md"]["reviewed_rules"] = ["V001"]
+    manifest.write_text(json.dumps(data))
+    with pytest.raises(AnnotationError, match="reviewer"):
+        load_annotations(manifest, tmp_path, {"V001"})
+
+
+def test_bound_source_mutation_during_collection_is_rejected(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from benchmarks.rule_quality import prepare_evaluation_scan
+
+    annotations = load_annotations(_bound_manifest(tmp_path), tmp_path, {"V001"})
+    _config, linter, _rules = prepare_evaluation_scan()
+    original = linter.check_content
+
+    def changing_check(source: str, path: Path):
+        results = original(source, path)
+        (tmp_path / "doc.md").write_text("plain cafe\n")
+        return results
+
+    monkeypatch.setattr(linter, "check_content", changing_check)
+    with pytest.raises(AnnotationError, match="SHA-256"):
+        collect_findings(annotations, tmp_path, linter=linter)
+
+
+def test_bound_collection_uses_verified_bytes_despite_a_different_second_read(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    annotations = load_annotations(_bound_manifest(tmp_path), tmp_path, {"V001"})
+    original = Path.read_text
+
+    def different_read(path: Path, *args: object, **kwargs: object) -> str:
+        if path == tmp_path / "doc.md":
+            return "plain\n"
+        return original(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", different_read)
+    findings = collect_findings(annotations, tmp_path)
+    assert [finding.rule_id for finding in findings] == ["V001"]
+    from benchmarks.quality_scoring import count_prose_words
+
+    assert count_prose_words(annotations, tmp_path, {"V001"})["markdown"] == 2
+    assert (tmp_path / "doc.md").read_bytes() == "delve café\n".encode()
+
+
+def test_bound_collection_preserves_discovery_and_per_file_policy(
+    tmp_path: Path,
+) -> None:
+    from benchmarks.rule_quality import prepare_evaluation_scan
+
+    from proseprobe.config import Config, PerFileIgnore
+
+    annotations = load_annotations(_bound_manifest(tmp_path), tmp_path, {"V001"})
+    for config in (
+        Config(select=["V001"], exclude=["doc.md"]),
+        Config(select=["V001"], per_file_ignores=[PerFileIgnore("doc.md", ["V001"])]),
+    ):
+        _config, linter, _rules = prepare_evaluation_scan(config=config)
+        assert collect_findings(annotations, tmp_path, linter=linter) == ()
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        "missing-review",
+        "missing-source-id",
+        "duplicate-source-id",
+        "empty-protocol",
+        "unknown-review-key",
+        "duplicate-reviewer",
+        "index-mismatch",
+        "contract-change",
+        "unknown-profile",
+        "impossible-all-rules-policy",
+        "invented-context-source",
+        "wrong-context-group",
+    ],
+)
+def test_bound_annotations_reject_inconsistent_review_metadata(
+    tmp_path: Path, change: str
+) -> None:
+    manifest = _bound_manifest(tmp_path)
+    data = json.loads(manifest.read_text())
+    if change == "missing-review":
+        del data["review"]
+    elif change == "missing-source-id":
+        del data["files"]["doc.md"]["source_id"]
+    elif change == "duplicate-source-id":
+        (tmp_path / "other.md").write_bytes((tmp_path / "doc.md").read_bytes())
+        data["files"]["other.md"] = data["files"]["doc.md"]
+    elif change == "empty-protocol":
+        data["review"]["protocol_revision"] = ""
+    elif change == "unknown-review-key":
+        data["review"]["certified"] = True
+    elif change == "duplicate-reviewer":
+        data["review"]["reviewers"] *= 2
+    elif change == "unknown-profile":
+        data["review"]["policy"]["profile"] = "imaginary-profile"
+    elif change == "impossible-all-rules-policy":
+        data["review"]["policy"]["mode"] = "all-rules"
+    else:
+        artifact = "contracts.json" if change == "contract-change" else "index.json"
+        content = json.loads((tmp_path / artifact).read_text())
+        if change == "index-mismatch":
+            content["files"]["doc.md"]["source_id"] = "different-packet"
+        elif change == "contract-change":
+            content["rules"]["V001"]["description"] = "Different declared contract"
+        else:
+            path = "invented.md" if change == "invented-context-source" else "doc.md"
+            content["context"] = {
+                path: {
+                    "source_group": "wrong-group",
+                    "pair_group": "fixture-1",
+                    "split": "development",
+                    "format": "markdown",
+                }
+            }
+        (tmp_path / artifact).write_text(json.dumps(content))
+        reference = "rule_contracts" if change == "contract-change" else "packet_index"
+        data["review"][reference]["sha256"] = hashlib.sha256(
+            (tmp_path / artifact).read_bytes()
+        ).hexdigest()
+    manifest.write_text(json.dumps(data))
+    with pytest.raises(AnnotationError):
+        load_annotations(manifest, tmp_path, {"V001"})
+
+
+def test_legacy_reports_explicitly_identify_unbound_labels(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    from benchmarks.rule_quality import main
+
+    (tmp_path / "doc.md").write_text("plain\n")
+    manifest = _manifest(tmp_path, _entry())
+    args = ["--manifest", str(manifest), "--root", str(tmp_path), "--format", "json"]
+    assert main(args) == 0
+    report = json.loads(capsys.readouterr().out)
+    assert report["source_binding"] == "legacy-unbound"
+    assert report["review_provenance"] == "unavailable"
+    assert main([*args, "--require-bound"]) == 2
+    assert "source-bound" in capsys.readouterr().err
+
+
+def test_bound_manifest_strict_cli_success_preserves_review_identity(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    from benchmarks.rule_quality import main
+
+    manifest = _bound_manifest(tmp_path, reviewed=False)
+    assert (
+        main(
+            [
+                "--manifest",
+                str(manifest),
+                "--root",
+                str(tmp_path),
+                "--format",
+                "json",
+                "--require-bound",
+            ]
+        )
+        == 0
+    )
+    report = json.loads(capsys.readouterr().out)
+    assert report["source_binding"] == "sha256-utf8"
+    assert report["review_provenance"]["reviewers"] == []
 
 
 def test_expected_and_actual_endpoints_survive_collection(tmp_path: Path) -> None:

@@ -329,3 +329,55 @@ def test_cli_validates_without_displaying_text_and_exports_blind_originals(
     assert record["original"].encode() == (tmp_path / "example.md").read_bytes()
     assert "references" not in record
     assert "findings" not in record
+
+
+def test_review_packet_is_source_bound_and_initially_unreviewed(tmp_path: Path) -> None:
+    from benchmarks.quality_scoring import load_annotations
+
+    from proseprobe.rules import get_all_rules
+
+    manifest = _manifest(tmp_path, [_record(tmp_path)])
+    assert (
+        corpora.main(
+            [
+                str(manifest),
+                "--cache",
+                str(tmp_path),
+                "--export-review-packet",
+                "new-packet",
+            ]
+        )
+        == 0
+    )
+    packet = tmp_path / "new-packet"
+    annotations = load_annotations(
+        packet / "annotations.unreviewed.json",
+        packet,
+        {rule.id for rule in get_all_rules()},
+    )
+    assert annotations.source_binding == "sha256-utf8"
+    assert annotations.scopes == ()
+    assert annotations.expected == annotations.negative_cases == ()
+    assert annotations.review_provenance["reviewers"] == []
+    [source] = annotations.files
+    assert source.read_bytes() == (tmp_path / "example.md").read_bytes()
+    index = json.loads((packet / "index.json").read_text())
+    [context] = index["context"].values()
+    assert context == {
+        "source_group": "github/example",
+        "pair_group": "example",
+        "split": "development",
+        "format": "markdown",
+    }
+    assert "references" not in json.dumps(index)
+    assert "findings" not in json.dumps(index)
+    with pytest.raises(SystemExit):
+        corpora.main(
+            [
+                str(manifest),
+                "--cache",
+                str(tmp_path),
+                "--export-review-packet",
+                "new-packet",
+            ]
+        )

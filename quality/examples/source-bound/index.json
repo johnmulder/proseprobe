@@ -1,0 +1,9 @@
+{
+  "files": {
+    "original.md": {
+      "sha256": "ce1ba678d9b6d99aaf4bf8facee81e9e6f8b657bc688a37f05c4375a06382a54",
+      "source_id": "proseprobe:agent-authored-example:v1"
+    }
+  },
+  "version": 1
+}

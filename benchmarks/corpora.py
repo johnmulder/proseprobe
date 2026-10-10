@@ -353,15 +353,103 @@ def read_sample(source: Source, corpus_root: Path) -> TextSample:
     )
 
 
+def export_review_packet(
+    sources: tuple[Source, ...], corpus_root: Path, output: Path
+) -> None:
+    """Create a fresh offline packet without predictions, revisions, or labels."""
+    from benchmarks.evaluation_identity import rule_contract_snapshot
+
+    if output.exists():
+        raise CorpusError("review packet already exists; choose a new versioned path")
+    files = {}
+    contexts = {}
+    originals = []
+    for index, source in enumerate(sources):
+        sample = read_sample(source, corpus_root)
+        suffix = ".py" if source.format == "codesearchnet" else ".md"
+        relative = f"originals/{index:04d}{suffix}"
+        raw = sample.original.encode("utf-8")
+        binding = {
+            "source_id": sample.identity,
+            "sha256": hashlib.sha256(raw).hexdigest(),
+        }
+        files[relative] = binding
+        contexts[relative] = {
+            "source_group": sample.source_group,
+            "pair_group": sample.pair_group,
+            "split": sample.split,
+            "format": source.format,
+        }
+        originals.append((relative, raw, sample.source_group))
+    index_bytes = (
+        json.dumps(
+            {"version": 1, "files": files, "context": contexts},
+            sort_keys=True,
+            indent=2,
+        )
+        + "\n"
+    ).encode()
+    contracts_bytes = (
+        json.dumps(rule_contract_snapshot(), sort_keys=True, indent=2) + "\n"
+    ).encode()
+    manifest = {
+        "version": 3,
+        "review": {
+            "packet_index": {
+                "path": "index.json",
+                "sha256": hashlib.sha256(index_bytes).hexdigest(),
+            },
+            "rule_contracts": {
+                "path": "contracts.json",
+                "sha256": hashlib.sha256(contracts_bytes).hexdigest(),
+            },
+            "protocol_revision": "unreviewed-template-v1",
+            "policy": {
+                "mode": "all-rules",
+                "profile": "default",
+                "severity": "info",
+                "min_confidence": "low",
+            },
+            "reviewers": [],
+        },
+        "files": {
+            relative: {
+                **files[relative],
+                "source_group": group,
+                "reviewed_rules": [],
+                "regions": [],
+                "expected": [],
+                "negative_cases": [],
+            }
+            for relative, _raw, group in originals
+        },
+    }
+    (output / "originals").mkdir(parents=True)
+    for relative, raw, _group in originals:
+        (output / relative).write_bytes(raw)
+    (output / "index.json").write_bytes(index_bytes)
+    (output / "contracts.json").write_bytes(contracts_bytes)
+    (output / "annotations.unreviewed.json").write_text(
+        json.dumps(manifest, sort_keys=True, indent=2) + "\n", encoding="utf-8"
+    )
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Validate cached provenance and optionally export blind original prose."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("manifest", type=Path)
     parser.add_argument("--cache", type=Path, required=True)
     parser.add_argument("--export-blind", help="output path relative to the cache")
+    parser.add_argument(
+        "--export-review-packet", help="fresh packet directory relative to the cache"
+    )
     args = parser.parse_args(argv)
     try:
         sources = load_sources(args.manifest, args.cache)
+        if args.export_review_packet:
+            export_review_packet(
+                sources, args.cache, _path(args.cache, args.export_review_packet)
+            )
         if args.export_blind:
             output = _path(args.cache, args.export_blind)
             output.parent.mkdir(parents=True, exist_ok=True)

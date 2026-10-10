@@ -331,7 +331,7 @@ def test_loads_valid_annotations(tmp_path: Path) -> None:
     ("mutate", "message"),
     [
         (lambda data: data.update({"extra": True}), "unknown key"),
-        (lambda data: data.update({"version": 3}), "version must be 1 or 2"),
+        (lambda data: data.update({"version": 4}), "version must be 1, 2 or 3"),
         (
             lambda data: data["files"]["doc.md"]["expected"][0].update(
                 {"rule_id": "NOPE"}

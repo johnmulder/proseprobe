@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import re
@@ -10,7 +11,9 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
+from benchmarks.evaluation_identity import rule_contract_snapshot
 from proseprobe.parsers.prose import ProseBlock, iter_prose_blocks
+from proseprobe.profiles import PROFILES
 
 
 class AnnotationError(ValueError):
@@ -100,6 +103,20 @@ class Annotations:
     negative_cases: tuple[NegativeCase, ...]
     scopes: tuple[ReviewScope, ...] | None = None
     source_groups: dict[str, str] = field(default_factory=dict)
+    source_binding: str = "legacy-unbound"
+    source_identities: dict[str, dict[str, str]] = field(default_factory=dict)
+    review_provenance: dict[str, Any] | None = None
+    verified_sources: tuple[tuple[str, bytes], ...] = ()
+
+
+def validate_source_bindings(annotations: Annotations, repo_root: Path) -> None:
+    """Reject changed reviewed bytes before scanning or publishing a report."""
+    for relative, binding in annotations.source_identities.items():
+        actual = hashlib.sha256((repo_root / relative).read_bytes()).hexdigest()
+        if actual != binding["sha256"]:
+            raise AnnotationError(
+                f"{relative}: SHA-256 differs from reviewed source {binding['source_id']} ({binding['sha256']})"
+            )
 
 
 @dataclass
@@ -172,6 +189,124 @@ def _text(value: Any, context: str, *, allow_empty: bool = False) -> str:
     if not isinstance(value, str) or (not allow_empty and not value.strip()):
         raise AnnotationError(f"{context} must be a non-empty string")
     return value
+
+
+def _sha256(value: Any, context: str) -> str:
+    digest = _text(value, context)
+    if re.fullmatch(r"[0-9a-f]{64}", digest) is None:
+        raise AnnotationError(f"{context} must be a lowercase SHA-256")
+    return digest
+
+
+def _review_artifact(value: Any, root: Path, context: str) -> dict[str, Any]:
+    reference = _mapping(value, context)
+    _keys(reference, required={"path", "sha256"}, context=context)
+    name = _text(reference["path"], context)
+    path = (root / name).resolve()
+    if Path(name).is_absolute() or not path.is_relative_to(root.resolve()):
+        raise AnnotationError(f"{context}: artifact path escapes the packet")
+    checksum = _sha256(reference["sha256"], context)
+    try:
+        raw = path.read_bytes()
+    except OSError as exc:
+        raise AnnotationError(f"{context}: unreadable artifact {name}: {exc}") from exc
+    if hashlib.sha256(raw).hexdigest() != checksum:
+        raise AnnotationError(f"{context}: referenced artifact SHA-256 differs")
+    try:
+        return _mapping(json.loads(raw.decode("utf-8")), context)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise AnnotationError(f"{context}: invalid artifact JSON") from exc
+
+
+def _review_header(value: Any, root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
+    header = _mapping(value, "manifest.review")
+    _keys(
+        header,
+        required={
+            "packet_index",
+            "rule_contracts",
+            "protocol_revision",
+            "policy",
+            "reviewers",
+        },
+        context="manifest.review",
+    )
+    _text(header["protocol_revision"], "manifest.review.protocol_revision")
+    policy = _mapping(header["policy"], "manifest.review.policy")
+    _keys(
+        policy,
+        required={"mode", "profile", "severity", "min_confidence"},
+        context="manifest.review.policy",
+    )
+    for key in policy:
+        _text(policy[key], f"manifest.review.policy.{key}")
+    if (
+        policy["mode"] not in {"production", "all-rules"}
+        or policy["severity"] not in {"info", "warning", "error"}
+        or policy["min_confidence"] not in {"low", "medium", "high"}
+        or policy["profile"] not in {"default", *PROFILES}
+    ):
+        raise AnnotationError("manifest.review.policy contains invalid policy values")
+    if policy["mode"] == "all-rules" and policy != {
+        "mode": "all-rules",
+        "profile": "default",
+        "severity": "info",
+        "min_confidence": "low",
+    }:
+        raise AnnotationError(
+            "all-rules review policy requires default profile, info severity and low confidence"
+        )
+    reviewers = header["reviewers"]
+    if (
+        not isinstance(reviewers, list)
+        or any(not isinstance(item, str) or not item.strip() for item in reviewers)
+        or len(set(reviewers)) != len(reviewers)
+    ):
+        raise AnnotationError(
+            "manifest.review.reviewers must contain unique nonempty identifiers"
+        )
+    index = _review_artifact(
+        header["packet_index"], root, "manifest.review.packet_index"
+    )
+    _keys(
+        index,
+        required={"version", "files"},
+        optional={"context"},
+        context="packet index",
+    )
+    if type(index["version"]) is not int or index["version"] != 1:
+        raise AnnotationError("unsupported packet index version")
+    _mapping(index["files"], "packet index.files")
+    contexts = _mapping(index.get("context", {}), "packet index.context")
+    for relative, value in contexts.items():
+        if relative not in index["files"]:
+            raise AnnotationError("packet index.context names an unknown source")
+        context = _mapping(value, f"packet index.context.{relative}")
+        _keys(
+            context,
+            required={"source_group", "pair_group", "split", "format"},
+            context=f"packet index.context.{relative}",
+        )
+        for key in context:
+            _text(context[key], f"packet index.context.{relative}.{key}")
+        if context["split"] not in {"development", "holdout"} or context[
+            "format"
+        ] not in {"markdown", "codesearchnet", "m2", "jfleg", "asset"}:
+            raise AnnotationError(
+                "packet index.context contains invalid split or format"
+            )
+    contracts = _review_artifact(
+        header["rule_contracts"], root, "manifest.review.rule_contracts"
+    )
+    _keys(contracts, required={"version", "rules"}, context="rule contracts")
+    if type(contracts["version"]) is not int or contracts["version"] != 1:
+        raise AnnotationError("unsupported rule contract version")
+    contract_rules = _mapping(contracts["rules"], "rule contracts.rules")
+    if contracts != rule_contract_snapshot(set(contract_rules)):
+        raise AnnotationError(
+            "reviewed rule contracts differ from current declared contracts; review affected labels before migration"
+        )
+    return header, index
 
 
 def _location(
@@ -315,7 +450,7 @@ def _negative_conflicts(negative: NegativeCase, expected: ExpectedFinding) -> bo
 def load_annotations(
     manifest_path: Path, repo_root: Path, rule_ids: set[str]
 ) -> Annotations:
-    """Load exhaustive legacy annotations or explicit sparse version-two scopes."""
+    """Load legacy annotations or sparse scopes with optional reviewed-byte binding."""
     try:
         raw = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
@@ -323,10 +458,22 @@ def load_annotations(
             f"{manifest_path}: invalid JSON or unreadable manifest: {exc}"
         ) from exc
     root = _mapping(raw, "manifest")
-    _keys(root, required={"version", "files"}, context="manifest")
+    _keys(
+        root,
+        required={"version", "files"},
+        optional={"review"} if root.get("version") == 3 else set(),
+        context="manifest",
+    )
     version = root["version"]
-    if type(version) is not int or version not in {1, 2}:
-        raise AnnotationError("manifest.version must be 1 or 2")
+    if type(version) is not int or version not in {1, 2, 3}:
+        raise AnnotationError("manifest.version must be 1, 2 or 3")
+    if version == 3 and "review" not in root:
+        raise AnnotationError("manifest missing review header")
+    review, packet_index = (
+        _review_header(root["review"], manifest_path.parent)
+        if version == 3
+        else (None, {})
+    )
     files_data = _mapping(root["files"], "manifest.files")
     if not files_data:
         raise AnnotationError("manifest.files must not be empty")
@@ -336,13 +483,18 @@ def load_annotations(
     negative_cases: list[NegativeCase] = []
     scopes: list[ReviewScope] = []
     source_groups: dict[str, str] = {}
+    source_identities: dict[str, dict[str, str]] = {}
+    verified_sources: list[tuple[str, bytes]] = []
+    seen_source_ids: set[str] = set()
     expected_keys: set[tuple[str, str, int, int]] = set()
     identities: set[str] = set()
     negative_keys: set[tuple[str, str, int, int | None, int | None, int | None]] = set()
     for relative_path, file_value in sorted(files_data.items()):
         _text(relative_path, "manifest file path")
         source_path = (resolved_root / relative_path).resolve()
-        if not source_path.is_relative_to(resolved_root):
+        if not source_path.is_relative_to(resolved_root) or (
+            version == 3 and Path(relative_path).is_absolute()
+        ):
             raise AnnotationError(f"{relative_path}: path escapes the repository")
         if not source_path.is_file():
             raise AnnotationError(f"{relative_path}: source file does not exist")
@@ -350,8 +502,9 @@ def load_annotations(
         _keys(
             entry,
             required={"expected", "negative_cases"}
-            | ({"reviewed_rules"} if version == 2 else set()),
-            optional={"regions", "source_group"} if version == 2 else set(),
+            | ({"reviewed_rules"} if version >= 2 else set())
+            | ({"source_id", "sha256"} if version == 3 else set()),
+            optional={"regions", "source_group"} if version >= 2 else set(),
             context=relative_path,
         )
         if not isinstance(entry["expected"], list) or not isinstance(
@@ -360,10 +513,37 @@ def load_annotations(
             raise AnnotationError(
                 f"{relative_path}.expected and negative_cases must be lists"
             )
-        source_text = source_path.read_text(encoding="utf-8")
+        source_bytes = source_path.read_bytes()
+        if version == 3:
+            binding = {
+                "source_id": _text(entry["source_id"], f"{relative_path}.source_id"),
+                "sha256": _sha256(entry["sha256"], f"{relative_path}.sha256"),
+            }
+            if binding["source_id"] in seen_source_ids:
+                raise AnnotationError(f"{relative_path}: duplicate source identity")
+            seen_source_ids.add(binding["source_id"])
+            if packet_index["files"].get(relative_path) != binding:
+                raise AnnotationError(
+                    f"{relative_path}: source binding differs from frozen packet index"
+                )
+            context = packet_index.get("context", {}).get(relative_path)
+            if (
+                context is not None
+                and entry.get("source_group") != context["source_group"]
+            ):
+                raise AnnotationError(
+                    f"{relative_path}: source group differs from frozen packet index"
+                )
+            if hashlib.sha256(source_bytes).hexdigest() != binding["sha256"]:
+                raise AnnotationError(
+                    f"{relative_path}: SHA-256 differs from reviewed source {binding['source_id']} ({binding['sha256']})"
+                )
+            source_identities[relative_path] = binding
+            verified_sources.append((relative_path, source_bytes))
+        source_text = source_bytes.decode("utf-8")
         lines = source_text.splitlines()
         files.append(source_path)
-        if version == 2:
+        if version >= 2:
             reviewed = _rule_tokens(
                 entry["reviewed_rules"], rule_ids, f"{relative_path}.reviewed_rules"
             )
@@ -433,7 +613,7 @@ def load_annotations(
                 data,
                 required={"rule_id", "line", "column"},
                 optional={"note", "end_line", "end_column"}
-                | ({"id", "match_region"} if version == 2 else set()),
+                | ({"id", "match_region"} if version >= 2 else set()),
                 context=context,
             )
             rule_id = _text(data["rule_id"], context).upper()
@@ -500,7 +680,7 @@ def load_annotations(
                 data,
                 required={"rule_id", "line", "note"},
                 optional={"column", "end_line", "end_column"}
-                if version == 2
+                if version >= 2
                 else set(),
                 context=context,
             )
@@ -547,12 +727,39 @@ def load_annotations(
             missing = sorted(rule_ids - {item.rule_id for item in items})
             if missing:
                 raise AnnotationError(f"rules missing {label}: " + ", ".join(missing))
+    if review is not None:
+        reviewed_rules = {
+            rule
+            for scope in scopes
+            if scope.status == "reviewed"
+            for rule in scope.rules
+        }
+        used_rules = reviewed_rules | {
+            item.rule_id for item in (*expected, *negative_cases)
+        }
+        contracts = _review_artifact(
+            review["rule_contracts"],
+            manifest_path.parent,
+            "manifest.review.rule_contracts",
+        )["rules"]
+        if not used_rules <= contracts.keys():
+            raise AnnotationError(
+                "reviewed labels require rules present in the contract snapshot"
+            )
+        if reviewed_rules and not review["reviewers"]:
+            raise AnnotationError(
+                "reviewed scopes require at least one declared reviewer"
+            )
     return Annotations(
         tuple(files),
         tuple(sorted(expected)),
         tuple(sorted(negative_cases)),
-        tuple(scopes) if version == 2 else None,
+        tuple(scopes) if version >= 2 else None,
         source_groups,
+        "sha256-utf8" if version == 3 else "legacy-unbound",
+        source_identities,
+        review,
+        tuple(verified_sources),
     )
 
 
@@ -912,9 +1119,14 @@ def count_prose_words(
 ) -> dict[str, int]:
     """Count words once in extracted prose covered by an evaluated reviewed rule."""
     totals = {"markdown": 0, "docstring": 0, "comment": 0}
+    verified = dict(annotations.verified_sources)
     for path in annotations.files:
         relative = path.resolve().relative_to(repo_root.resolve()).as_posix()
-        source = path.read_text(encoding="utf-8")
+        source = (
+            verified[relative].decode("utf-8")
+            if verified
+            else path.read_text(encoding="utf-8")
+        )
         for block, context in _context_blocks(source, str(path)):
             for line, text in block.lines:
                 for match in re.finditer(r"\b\w+(?:['\u2019-]\w+)*\b", text):
