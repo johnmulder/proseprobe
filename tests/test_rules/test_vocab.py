@@ -1,5 +1,7 @@
 """Tests for vocabulary rules (V001-V011 and V013-V017)."""
 
+import re
+
 import pytest
 
 from proseprobe.config import Config
@@ -11,7 +13,7 @@ from proseprobe.data.phrases import (
     WORDY_PHRASE_REPLACEMENTS,
 )
 from proseprobe.rules import get_all_rules
-from proseprobe.rules.base import Confidence, Rule, Severity
+from proseprobe.rules.base import Confidence, Issue, Rule, Severity
 from proseprobe.rules.vocab import (
     AbsoluteReliabilityClaimRule,
     AIVocabularyRule,
@@ -30,6 +32,88 @@ from proseprobe.rules.vocab import (
     WeaselWordsRule,
     WordyPhraseRule,
 )
+
+
+def test_configured_vocabulary_patterns_are_built_once_across_lines_and_checks(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    builds = 0
+    original_escape = re.escape
+
+    def count_escape(pattern: str) -> str:
+        nonlocal builds
+        if pattern == "tailoredsignal":
+            builds += 1
+        return original_escape(pattern)
+
+    monkeypatch.setattr(re, "escape", count_escape)
+    rule = AIVocabularyRule(allowed={"robust"}, additional={"tailoredsignal", "robust"})
+    content = "We UTILIZE TailoredSignal.\nWe UTILIZE TailoredSignal.\n"
+    expected = [
+        issue
+        for line in (1, 2)
+        for issue in (
+            Issue(
+                rule_id="V001",
+                message="Overused word: 'tailoredsignal'",
+                line=line,
+                column=12,
+                end_column=26,
+            ),
+            Issue(
+                rule_id="V001",
+                message="Overused word: 'utilize' → consider 'use'",
+                line=line,
+                column=4,
+                end_column=11,
+                suggestion="use",
+            ),
+        )
+    ]
+
+    assert rule.check(content, "guide.md") == expected
+    assert rule.check(content, "guide.md") == expected
+    assert rule.check("A robust result.", "guide.md") == []
+    assert builds == 1
+
+
+def test_replacement_patterns_are_built_once_per_call_and_use_current_table(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    builds = 0
+    original_escape = re.escape
+
+    def count_escape(pattern: str) -> str:
+        nonlocal builds
+        if pattern == "tailored":
+            builds += 1
+        return original_escape(pattern)
+
+    monkeypatch.setattr(re, "escape", count_escape)
+    monkeypatch.setitem(WORDY_PHRASE_REPLACEMENTS, "tailored phrase", "short text")
+    rule = WordyPhraseRule()
+    content = "Use tailored phrase.\nUse tailored phrase.\n"
+
+    def expected(suggestion: str) -> list[Issue]:
+        return [
+            Issue(
+                rule_id="V009",
+                message="Wordy phrase: 'tailored phrase'",
+                line=line,
+                column=5,
+                end_column=20,
+                severity=Severity.INFO,
+                confidence=Confidence.HIGH,
+                suggestion=suggestion,
+            )
+            for line in (1, 2)
+        ]
+
+    assert rule.check(content, "guide.md") == expected("short text")
+    assert builds == 1
+    monkeypatch.setitem(WORDY_PHRASE_REPLACEMENTS, "tailored phrase", "brief text")
+    assert rule.check(content, "guide.md") == expected("brief text")
+    assert builds == 2
 
 
 @pytest.mark.parametrize(

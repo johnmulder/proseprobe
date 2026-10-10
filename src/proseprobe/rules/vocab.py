@@ -158,14 +158,20 @@ def _replacement_phrase_issues(
     """Return exact prose findings for a fixed replacement table."""
     issues: list[Issue] = []
     lines = content.split("\n")
+    patterns = [
+        (
+            re.compile(
+                r"\b" + r"\s+".join(re.escape(word) for word in phrase.split()) + r"\b",
+                re.IGNORECASE,
+            ),
+            replacement,
+        )
+        for phrase, replacement in replacements.items()
+    ]
     for sentence in iter_prose_sentences(content, filename):
         if sentence.context == "heading":
             continue
-        for phrase, replacement in replacements.items():
-            pattern = re.compile(
-                r"\b" + r"\s+".join(re.escape(word) for word in phrase.split()) + r"\b",
-                re.IGNORECASE,
-            )
+        for pattern, replacement in patterns:
             for match in pattern.finditer(sentence.text):
                 start_line, start_column = sentence.source_position(match.start())
                 end_line, end_column = sentence.source_position(match.end())
@@ -298,6 +304,13 @@ class AIVocabularyRule(Rule):
         self._additional = {w.lower() for w in (additional or set())} - self._allowed
         self._vocabulary = AI_VOCABULARY | self._additional
         self._allowed_phrases = {p.lower() for p in (allowed_phrases or set())}
+        self._patterns: list[tuple[str, re.Pattern[str]]] = []
+        for word in sorted(self._vocabulary - self._allowed):
+            if word in self._WORD_PATTERNS:
+                pattern = rf"\b{self._WORD_PATTERNS[word]}\b"
+            else:
+                pattern = rf"\b{re.escape(word)}\b"
+            self._patterns.append((word, re.compile(pattern, re.IGNORECASE)))
 
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for overused vocabulary words."""
@@ -310,16 +323,8 @@ class AIVocabularyRule(Rule):
             if any(phrase in line_lower for phrase in self._allowed_phrases):
                 continue
 
-            for word in sorted(self._vocabulary):
-                if word in self._allowed:
-                    continue
-                # Use custom pattern if available, otherwise exact match
-                if word in self._WORD_PATTERNS:
-                    pattern = rf"\b{self._WORD_PATTERNS[word]}\b"
-                else:
-                    pattern = rf"\b{re.escape(word)}\b"
-
-                for match in re.finditer(pattern, line, re.IGNORECASE):
+            for word, pattern in self._patterns:
+                for match in pattern.finditer(line):
                     if (
                         line_num,
                         match.start() + 1,

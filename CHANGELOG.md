@@ -49,6 +49,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Precomputed configured vocabulary patterns and hoisted replacement patterns
+  after profiling. Complete finding records are preserved with less scan work.
+
 - Deferred rule catalog imports until registry construction so version/help
   avoid loading detection implementations while scans retain the complete catalog.
 

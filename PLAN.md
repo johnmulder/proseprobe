@@ -1073,3 +1073,27 @@ All 215 focused lazy-import/metadata/CLI checks and static checks pass. A startu
 probe after the change measured 54.4 ms, compared with the earlier 99.7 ms probe.
 These are hardware-dependent single samples; the unchanged 100 ms gate remains.
 The scan profile is reviewed separately from import latency.
+
+### P07/P17 — Measured pattern construction hoisted
+
+The archived scan profile showed repeated escaping and regex-cache lookups.
+Warm scans performed no new regex compilation. Two operation-count regressions
+failed before moving V001 pattern construction to each configured instance and
+replacement-pattern construction to each call. Full issue records preserve
+sorted-word order, case, suggestions, allowed/additional words, and current
+replacement-table contents. All 1,781 related tests and static checks pass.
+
+A controlled five-sample comparison uses archived `2de7cc2` before and that
+archive plus only the vocabulary patch after. The frozen twenty development
+files, 70,869 bytes, 79-rule policy, workload checksum, and 49 complete finding
+records are identical. The record checksum is
+`1aee145055e10ead60945b33204d6da991b4d1bd354767da78bfe1861f362018`.
+Serial medians changed 264.16 to 212.46 ms; warmed discovery/read scans 270.88
+to 217.43 ms; cleared parser caches 285.94 to 231.94 ms; new-process JSON CLI
+365.53 to 312.22 ms. These paired measurements show roughly 19–20% scan reduction
+and 14.6% cold-CLI reduction under those resource conditions.
+
+Earlier P07 timings came from a mixed working tree, so they provide directional
+history rather than reproducible commit attribution. The controlled comparison
+records exact runtime-tree and patch hashes. No global cache, dependency,
+parser/traversal redesign, wall-clock unit threshold, or holdout tuning was added.
