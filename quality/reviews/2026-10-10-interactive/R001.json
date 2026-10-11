@@ -1,4 +1,5 @@
 {
+  "annotation_path": "quality/reviews/2026-10-10-interactive/annotations.R001.reviewed.json",
   "cached_text_path": "downloads/evaluation/blind/interactive-2026-10-10-v1/R001.txt",
   "contracts_sha256": "44574c524e1f13596b150e5e38f44f47bc4690abced12be954e34c810d5da657",
   "format": "markdown",
@@ -15,7 +16,8 @@
   },
   "rendered_sha256": "b5eaf72d9b75f15a51689fd4d1ede993930a9b6b27ae6205997647bd81be85ee",
   "rendered_text": "Blind reading R001: GitHub Docs, development split.\nAttribution: GitHub, Inc. and GitHub Docs contributors; CC BY 4.0.\nReview only the displayed source region for these three contracts:\nG038: comparative claims should identify their comparison target.\nV015: claims such as best/fastest should identify a comparison scope.\nV016: absolute reliability/security claims need stated tested bounds.\nThis is literal source; template variables have not been expanded.\nLong physical lines continue under their original line/column labels.\nRules: G038, V015, V016\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL19 C  1- 59 | ## About {% data variables.product.prodname_codespaces %} \nL19 C 59- 77 | repository secrets\nL20 C  1-  1 | \nL21 C  1- 65 | You can create, list, and delete secrets (such as access tokens \nL21 C 65-127 | for cloud services) for repositories that the user has access \nL21 C127-184 | to. These secrets are made available to the codespace at \nL21 C184-219 | runtime. For more information, see \nL21 C219-284 | [AUTOTITLE](/codespaces/managing-your-codespaces/managing-your-ac\nL21 C284-330 | count-specific-secrets-for-github-codespaces).\n```\n\nList any violations of these contracts, quoting the text and your reason.\nUse the L/C labels if useful. Also flag any missing context.\nIf none apply, say: \"No issues for all three rules in this region.\"\nThat confirms review of this passage for these rules only.\nIf you cannot judge a rule, name it and say why; it stays unresolved.\nKeep suggestions or issues outside these three rules separate.\n",
-  "review_status": "submitted to user; response pending",
+  "response_path": "quality/reviews/2026-10-10-interactive/R001.response.json",
+  "review_status": "human clean judgments recorded; region-only annotation validated",
   "rows": [
     {
       "column": 1,

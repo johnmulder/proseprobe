@@ -1,0 +1,320 @@
+{
+  "cached_text_path": "downloads/evaluation/blind/interactive-2026-10-10-R003-v1/R003.txt",
+  "contracts_sha256": "44574c524e1f13596b150e5e38f44f47bc4690abced12be954e34c810d5da657",
+  "format": "markdown",
+  "guidance_sha256": "84595a91a337156caa08e449035a6bd818c3360827c74982b2f8183e25495920",
+  "packet_path": "originals/0000.md",
+  "packet_root": "downloads/evaluation/blind/interactive-2026-10-10-R003-v1",
+  "pair_group": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md",
+  "phase": "initial-blind",
+  "reading_id": "R003",
+  "region": {
+    "column": 1,
+    "end_column": 594,
+    "end_line": 22,
+    "line": 14
+  },
+  "remaining_source_lines": [
+    {
+      "end_line": 38,
+      "line": 23,
+      "status": "unreviewed; not shown"
+    }
+  ],
+  "rendered_sha256": "cefa345d451f1001fc6c98c1577889efa3301ff3e74646698a5ef019df584ad6",
+  "rendered_text": "Blind reading R003: archived GitHub Docs, development split.\nAttribution: GitHub, Inc. and GitHub Docs contributors; CC BY 4.0.\nThis is frozen historical text, not current service terms.\nReview the displayed passage for the same three contracts:\nG038: comparisons should identify their comparison target.\nV015: best/fastest claims should identify a comparison scope.\nV016: absolute reliability/security claims need stated tested bounds.\nThe later calculation table, exclusions and redemption terms are omitted.\nIf omitted context is necessary, say context needed for that rule.\nUse the earlier guidance; other rules and omitted text stay unreviewed.\nRules: G038, V015, V016\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL14 C  1- 65 | _These terms apply to Customers who licensed the Products prior \nL14 C 65-130 | to January 4, 2021. Customers who purchase GitHub Products after \nL14 C130-194 | that date are directed to https://github.com/customer-terms for \nL14 C194-209 | current terms._\nL15 C  1-  1 | \nL16 C  1- 63 | **Short version:** GitHub guarantees a 99.9% quarterly uptime \nL16 C 63-124 | commitment for the applicable GitHub service (the \u201c**Service \nL16 C124-186 | Level**\u201d or \u201c**SLA**\u201d). If GitHub does not meet the SLA, then \nL16 C186-246 | Customer will be entitled to a service credit to Customer\u2019s \nL16 C246-278 | account (\u201c**Service Credits**\u201d).\nL17 C  1-  1 | \nL18 C  1- 65 | For definitions of each Service feature (\u201c**Service Feature**\u201d) \nL18 C 65-128 | and to review historical and current Uptime, visit the [GitHub \nL18 C128-191 | Status Page](https://www.githubstatus.com/). Capitalized terms \nL18 C191-253 | used but not defined in this SLA have the meaning assigned in \nL18 C253-285 | Customer\u2019s applicable agreement.\nL19 C  1-  1 | \nL20 C  1- 20 | ## Uptime Guarantee\nL21 C  1-  1 | \nL22 C  1- 62 | \u201c**Uptime**\u201d is the percentage of total possible minutes the \nL22 C 62-122 | applicable GitHub service was available in a given calendar \nL22 C122-184 | quarter. GitHub commits to maintain at least 99.9% Uptime for \nL22 C184-247 | the applicable GitHub service. The Uptime calculation for each \nL22 C247-311 | Service Feature that may be included with the applicable GitHub \nL22 C311-376 | service is described below (\u201c**Uptime Calculation**\u201d). If GitHub \nL22 C376-436 | does not meet the SLA, Customer will be entitled to Service \nL22 C436-495 | Credits based on the calculation below (\u201c**Service Credits \nL22 C495-558 | Calculation**\u201d). Note, Downtime does not affect every customer \nL22 C558-594 | at the same time or in the same way.\n```\n\nReply for G038, V015 and V016: no issue; or quote and explain an issue;\nor say context needed. If you did not check a rule, say not reviewed.\nYour answer covers only this displayed region and these three rules.\nIf convenient, add a reviewer alias and whether you have previously seen\ndetector outputs for these external samples.\n",
+  "review_status": "submitted to user; response pending",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 14,
+      "line": 14,
+      "reading_line": 16,
+      "source_line_ending": "",
+      "text": "_These terms apply to Customers who licensed the Products prior "
+    },
+    {
+      "column": 65,
+      "end_column": 130,
+      "end_line": 14,
+      "line": 14,
+      "reading_line": 17,
+      "source_line_ending": "",
+      "text": "to January 4, 2021. Customers who purchase GitHub Products after "
+    },
+    {
+      "column": 130,
+      "end_column": 194,
+      "end_line": 14,
+      "line": 14,
+      "reading_line": 18,
+      "source_line_ending": "",
+      "text": "that date are directed to https://github.com/customer-terms for "
+    },
+    {
+      "column": 194,
+      "end_column": 209,
+      "end_line": 14,
+      "line": 14,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "current terms._"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 15,
+      "line": 15,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 21,
+      "source_line_ending": "",
+      "text": "**Short version:** GitHub guarantees a 99.9% quarterly uptime "
+    },
+    {
+      "column": 63,
+      "end_column": 124,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 22,
+      "source_line_ending": "",
+      "text": "commitment for the applicable GitHub service (the \u201c**Service "
+    },
+    {
+      "column": 124,
+      "end_column": 186,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 23,
+      "source_line_ending": "",
+      "text": "Level**\u201d or \u201c**SLA**\u201d). If GitHub does not meet the SLA, then "
+    },
+    {
+      "column": 186,
+      "end_column": 246,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 24,
+      "source_line_ending": "",
+      "text": "Customer will be entitled to a service credit to Customer\u2019s "
+    },
+    {
+      "column": 246,
+      "end_column": 278,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": "account (\u201c**Service Credits**\u201d)."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 17,
+      "line": 17,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 27,
+      "source_line_ending": "",
+      "text": "For definitions of each Service feature (\u201c**Service Feature**\u201d) "
+    },
+    {
+      "column": 65,
+      "end_column": 128,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 28,
+      "source_line_ending": "",
+      "text": "and to review historical and current Uptime, visit the [GitHub "
+    },
+    {
+      "column": 128,
+      "end_column": 191,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 29,
+      "source_line_ending": "",
+      "text": "Status Page](https://www.githubstatus.com/). Capitalized terms "
+    },
+    {
+      "column": 191,
+      "end_column": 253,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 30,
+      "source_line_ending": "",
+      "text": "used but not defined in this SLA have the meaning assigned in "
+    },
+    {
+      "column": 253,
+      "end_column": 285,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "Customer\u2019s applicable agreement."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 19,
+      "line": 19,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 20,
+      "line": 20,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "## Uptime Guarantee"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 21,
+      "line": 21,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 62,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 35,
+      "source_line_ending": "",
+      "text": "\u201c**Uptime**\u201d is the percentage of total possible minutes the "
+    },
+    {
+      "column": 62,
+      "end_column": 122,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 36,
+      "source_line_ending": "",
+      "text": "applicable GitHub service was available in a given calendar "
+    },
+    {
+      "column": 122,
+      "end_column": 184,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 37,
+      "source_line_ending": "",
+      "text": "quarter. GitHub commits to maintain at least 99.9% Uptime for "
+    },
+    {
+      "column": 184,
+      "end_column": 247,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 38,
+      "source_line_ending": "",
+      "text": "the applicable GitHub service. The Uptime calculation for each "
+    },
+    {
+      "column": 247,
+      "end_column": 311,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 39,
+      "source_line_ending": "",
+      "text": "Service Feature that may be included with the applicable GitHub "
+    },
+    {
+      "column": 311,
+      "end_column": 376,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 40,
+      "source_line_ending": "",
+      "text": "service is described below (\u201c**Uptime Calculation**\u201d). If GitHub "
+    },
+    {
+      "column": 376,
+      "end_column": 436,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 41,
+      "source_line_ending": "",
+      "text": "does not meet the SLA, Customer will be entitled to Service "
+    },
+    {
+      "column": 436,
+      "end_column": 495,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 42,
+      "source_line_ending": "",
+      "text": "Credits based on the calculation below (\u201c**Service Credits "
+    },
+    {
+      "column": 495,
+      "end_column": 558,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 43,
+      "source_line_ending": "",
+      "text": "Calculation**\u201d). Note, Downtime does not affect every customer "
+    },
+    {
+      "column": 558,
+      "end_column": 594,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "at the same time or in the same way."
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "V015",
+    "V016"
+  ],
+  "selection_basis": "next source in unchanged seeded order; opening complete paragraphs before the table; no detector output used",
+  "sha256": "4fe410984681f95a867f894f67523cfa461e039a9b7d43fc7bce297178c7dec1",
+  "source_group": "github/docs",
+  "source_id": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md",
+  "source_provenance": {
+    "attribution": "GitHub, Inc. and GitHub Docs contributors",
+    "format": "markdown",
+    "id": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md",
+    "license": "CC-BY-4.0",
+    "license_url": "https://github.com/github/docs/blob/be38ec5d78e24172587e61b3c6ff40ace1865c71/LICENSE",
+    "locator": "content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md",
+    "native_labels": "none",
+    "pair_group": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md",
+    "path": "markdown/github/docs/content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md",
+    "review_status": "unreviewed",
+    "revision": "be38ec5d78e24172587e61b3c6ff40ace1865c71",
+    "sha256": "4fe410984681f95a867f894f67523cfa461e039a9b7d43fc7bce297178c7dec1",
+    "source_group": "github/docs",
+    "split": "development",
+    "transformation": "none; full raw Markdown document",
+    "url": "https://raw.githubusercontent.com/github/docs/be38ec5d78e24172587e61b3c6ff40ace1865c71/content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md"
+  },
+  "split": "development",
+  "tracked_unreviewed_manifest": "quality/reviews/2026-10-10-interactive/R003/annotations.unreviewed.json",
+  "version": 1
+}

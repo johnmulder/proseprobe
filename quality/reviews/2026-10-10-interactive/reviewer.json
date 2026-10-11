@@ -1,0 +1,14 @@
+{
+  "display_name": null,
+  "identity_basis": "actual human user in this review conversation; stable opaque session identifier",
+  "independence": "unverified",
+  "permitted_source_access": {
+    "basis": "public licensed original under recorded provenance",
+    "license": "CC-BY-4.0",
+    "source_group": "github/docs"
+  },
+  "prior_prediction_exposure": "unknown; question unanswered",
+  "reviewer_id": "human-session-user-2026-10-10",
+  "second_independent_reviewer": null,
+  "version": 1
+}

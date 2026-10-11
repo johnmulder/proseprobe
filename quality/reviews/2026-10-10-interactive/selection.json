@@ -86,7 +86,8 @@
     "characters_per_line": 80,
     "lines": 80
   },
-  "reviewer_status": "identity and previous prediction exposure requested; unanswered",
+  "reviewer_id": "human-session-user-2026-10-10",
+  "reviewer_status": "actual session user recorded with opaque ID; display name and previous prediction exposure unknown",
   "scope": "only explicit contiguous source regions and named rules; no whole-file or all-rule coverage inferred",
   "screening": "Syntax-only parser eligibility: skip sources with no exposed prose; no detection rules or quality judgments used.",
   "second_reviewer_status": "not assigned",

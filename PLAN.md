@@ -159,10 +159,23 @@ Session: `quality/reviews/2026-10-10-interactive/selection.json`.
 Development-only source order is seeded independently of detector output.
 The first cohort uses licensed GitHub Docs prose and three declared claim rules.
 Syntax-only eligibility screening excludes sources with no exposed prose.
-Reviewer identity and prior prediction exposure are requested. No human answers
-or accepted coverage exist yet; a second independent reviewer is not assigned.
-R001 was submitted with exact source/contract/rendered-text bindings and a literal
-row map. Its complete question fits 30 lines of at most 80 characters.
-The bounded formatter passed 28 failing-first synthetic cases and 158 related
-tests. Its first reading awaits the user response; no natural predictions were generated.
-`make check dogfood rule-quality-regression` passes in the current setup.
+
+R001 and R002 received no-issue judgments for all three rules from the actual
+session user. Literal answers are retained separately, with R001's V016 spelling
+typo preserved. Version 3 annotations validate G038/V015/V016 only within
+R001 L19 C1–L21 C330 and R002 L16 C1–L40 C260. Other text and rules stay
+unreviewed. The reviewer has an opaque identifier; name and prior prediction
+exposure remain unknown, and independence is unverified. A second human reviewer
+is not assigned.
+
+R003 is submitted with 51 lines of at most 80 characters and awaits an answer.
+It covers the next seeded source's opening section, L14 C1–L22 C594. The later
+table, exclusions and redemption terms stay unreviewed; missing context can be
+reported explicitly. No natural detector outputs or native revisions have been
+generated. Initial batch freeze, broader annotation, double review and
+effectiveness gates remain open. The bounded formatter has 28 passing synthetic
+cases; repository gates passed with 3,513 tests at preparation commit `b93b509`.
+
+The accepted scoped records passed source, index, contract and reviewer validation.
+Focused scorer/presenter tests and authored-document checks passed. Review data
+changes do not alter detector behavior or satisfy the independent evidence gates.

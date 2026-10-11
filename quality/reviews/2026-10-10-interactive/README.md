@@ -18,16 +18,41 @@ preserving every character and the original line endings in the map.
 `index.json`, `contracts.json` and `annotations.unreviewed.json` mirror the fresh
 version 3 packet under the ignored cache directory:
 `downloads/evaluation/blind/interactive-2026-10-10-v1/`.
-The full original lives at `originals/0000.md` beneath that root. Its provenance,
+R001’s full original lives at `originals/0000.md` beneath that root. Its provenance,
 license URL and attribution remain in the selection and reading records.
 The source material is available under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 The original pilot and extension manifests are unchanged.
 
-Reviewer identity and previous prediction exposure have been requested.
-No human answer, accepted label or reviewed coverage has been recorded yet.
-One user supplies one review; a second independent reviewer remains unassigned.
-Human replies will be retained literally and separately from proposed mappings.
-Any inferred interpretation or issue coordinates require human confirmation.
+`reviewer.json` identifies the actual session user with an opaque identifier.
+A display name and previous prediction exposure are unknown; independence is
+unverified. A second independent reviewer remains unassigned.
+
+`R001.response.json` preserves the literal three-rule no-issue response, including
+`No Issure`. Its normalization changes spelling only; no alternative meaning or
+issue coordinates were inferred. `annotations.R001.reviewed.json` validates one
+reviewed region, L19 C1 through L21 C330, for G038/V015/V016 only. Whole-file
+review, other rules and purpose-written negatives remain undeclared.
+`guidance.v1.md` captures the invented training examples provided before the
+answer; its checksum is linked from the response.
+
+`R002.json` binds the next seeded source reading, presented in 76 lines of at
+most 80 characters. `R002.response.json` retains the user's literal clean answer
+for all three rules. `R002/annotations.reviewed.json` validates only L16 C1
+through L40 C260 for those rules. Its separate packet lives under
+`downloads/evaluation/blind/interactive-2026-10-10-R002-v1/`; tracked index,
+contracts and unchanged unreviewed template remain in `R002/`.
+
+`R003.json` is submitted with 51 lines of at most 80 characters. It shows the
+opening section of the next seeded source, an archived service-level agreement.
+The displayed region is L14 C1 through L22 C594; later tables, exclusions and
+redemption terms remain unreviewed. The question permits missing-context
+judgments. Its separate packet lives under
+`downloads/evaluation/blind/interactive-2026-10-10-R003-v1/`; tracked index,
+contracts and unreviewed template are in `R003/`. Its answer is pending.
+
+Each packet uses the same unchanged contract snapshot. Earlier packet indexes
+and initially unreviewed templates remain unchanged. No natural detector
+predictions or native revisions have been shown.
 
 A clean judgment covers only the displayed region and declared rules. Other
 regions and rules remain unreviewed. Detector output and native revisions stay
