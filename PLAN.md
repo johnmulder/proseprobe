@@ -1,6 +1,6 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-10. Human development review has resumed by user request.
+Updated: 2026-10-11. Human development review has resumed by user request.
 Each interactive reading is limited to 80 lines of 80 characters, including
 instructions and questions. Labels, paired reviews and effectiveness reports
 retain their prerequisites; reserved holdout material remains protected.
@@ -160,21 +160,21 @@ Development-only source order is seeded independently of detector output.
 The first cohort uses licensed GitHub Docs prose and three declared claim rules.
 Syntax-only eligibility screening excludes sources with no exposed prose.
 
-R001 and R002 received no-issue judgments for all three rules from the actual
-session user. Literal answers are retained separately, with R001's V016 spelling
-typo preserved. Version 3 annotations validate G038/V015/V016 only within
-R001 L19 C1–L21 C330 and R002 L16 C1–L40 C260. Other text and rules stay
-unreviewed. The reviewer has an opaque identifier; name and prior prediction
-exposure remain unknown, and independence is unverified. A second human reviewer
-is not assigned.
+R001, R002 and R003 received no-issue judgments for all three rules from the
+actual session user. Literal answers are retained separately, with R001's V016
+spelling typo preserved. Version 3 annotations validate G038/V015/V016 only
+within R001 L19 C1–L21 C330, R002 L16 C1–L40 C260 and R003 L14 C1–L22 C594.
+Other text and rules stay unreviewed. The reviewer has an opaque identifier;
+name and prior prediction exposure remain unknown, and independence is
+unverified. A second human reviewer is not assigned.
 
-R003 is submitted with 51 lines of at most 80 characters and awaits an answer.
-It covers the next seeded source's opening section, L14 C1–L22 C594. The later
-table, exclusions and redemption terms stay unreviewed; missing context can be
-reported explicitly. No natural detector outputs or native revisions have been
-generated. Initial batch freeze, broader annotation, double review and
-effectiveness gates remain open. The bounded formatter has 28 passing synthetic
-cases; repository gates passed with 3,513 tests at preparation commit `b93b509`.
+R004 is submitted with 72 lines of at most 80 characters and awaits an answer.
+It continues R003's source through the complete table and exclusions section,
+L23 C1–L32 C389. The remaining redemption section, L33–L38, needs a later
+reading. No natural detector outputs or native revisions have been generated.
+Initial batch freeze, broader annotation, double review and effectiveness gates
+remain open. The bounded formatter has 28 passing synthetic cases; repository
+gates passed with 3,513 tests at preparation commit `b93b509`.
 
 The accepted scoped records passed source, index, contract and reviewer validation.
 Focused scorer/presenter tests and authored-document checks passed. Review data

@@ -1,0 +1,548 @@
+{
+  "cached_text_path": "downloads/evaluation/blind/interactive-2026-10-10-R004-v1/R004.txt",
+  "context_readings": [
+    "R003"
+  ],
+  "contracts_sha256": "44574c524e1f13596b150e5e38f44f47bc4690abced12be954e34c810d5da657",
+  "format": "markdown",
+  "guidance_sha256": "84595a91a337156caa08e449035a6bd818c3360827c74982b2f8183e25495920",
+  "packet_path": "originals/0000.md",
+  "packet_root": "downloads/evaluation/blind/interactive-2026-10-10-R004-v1",
+  "pair_group": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md",
+  "phase": "initial-blind",
+  "reading_id": "R004",
+  "region": {
+    "column": 1,
+    "end_column": 389,
+    "end_line": 32,
+    "line": 23
+  },
+  "remaining_source_lines": [
+    {
+      "end_line": 38,
+      "line": 33,
+      "status": "unreviewed; not shown"
+    }
+  ],
+  "rendered_sha256": "5349909bdc01867fb14f9ab20a478ac407e8375bf01811b1bd51626de897398a",
+  "rendered_text": "Blind reading R004: archived GitHub Docs, development split.\nAttribution: GitHub, Inc. and GitHub Docs contributors; CC BY 4.0.\nContinue the historical agreement from R003; these are not current terms.\nG038: comparisons should identify their comparison target.\nV015: best/fastest claims should identify a comparison scope.\nV016: absolute reliability/security claims need stated tested bounds.\nTable and HTML markup below are literal original source.\nUse earlier guidance; omitted text and other rules stay unreviewed.\nRules: G038, V015, V016\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL23 C  1-  1 | \nL24 C  1- 66 | | **Service Feature** | **Uptime Calculation** | **Definitions** \nL24 C 66-101 | | **Service Credits Calculation** |\nL25 C  1- 18 | |---|---|---|---|\nL26 C  1-  3 | | \nL26 C  3- 68 | **Issues**,<br>**Pull&nbsp;Requests**,<br>**Git&nbsp;Operations**\nL26 C 68-115 | ,<br>**API&nbsp;Requests (for Service Features \nL26 C115-176 | only)**,<br>**Webhooks**,<br>**Pages** | (total minutes in a \nL26 C176-235 | calendar quarter - Downtime) / total minutes in a calendar \nL26 C235-297 | quarter | \u201c**Downtime**\u201d is a period of time where either (a) \nL26 C297-360 | the error rate exceeds five percent (5%) in a given minute for \nL26 C360-418 | any Service Feature or (b) the Service was unavailable as \nL26 C418-480 | determined by a combination of GitHub's internal and external \nL26 C480-542 | monitoring systems. | A Service Credits claim may be based on \nL26 C542-606 | either (not both) of the following calculations: <ul><li>10% of \nL26 C606-667 | the amount Customer paid for a Service Feature in a calendar \nL26 C667-731 | quarter where the Uptime for that Service Feature was less than \nL26 C731-785 | or equal to 99.9%, but greater than 99.0%. <BR><BR>OR \nL26 C785-848 | <BR><BR></li><li>25% of the amount Customer paid for a Service \nL26 C848-911 | Feature in a calendar quarter where the Uptime of that Service \nL26 C911-951 | Feature was less than 99.0%.</li></ul> |\nL27 C  1- 59 | | **Actions** | (Total Triggered Executions \u2013 Unavailable \nL27 C 59-119 | Executions) / (Total Triggered Executions) x 100 | \u201c**Total \nL27 C119-178 | Triggered Executions**\u201d is the total number of all Actions \nL27 C178-243 | executions triggered by Customer in a calendar quarter. <br><br> \nL27 C243-306 | \u201c**Unavailable Executions**\u201d is the total number of executions \nL27 C306-365 | within Total Triggered Executions which failed to run in a \nL27 C365-427 | calendar quarter. An execution failed to run when the Actions \nL27 C427-489 | history log did not capture any output five (5) minutes after \nL27 C489-542 | the trigger was successfully fired. | Same as above |\nL28 C  1- 63 | | **Packages** | Transfers Uptime = same as Actions <br> <br> \nL28 C 63-127 | Storage Uptime = 100% - Average Error Rate*<br> <br>*The Uptime \nL28 C127-191 | Calculation excludes public usage and storage transactions that \nL28 C191-255 | do not count toward either Total Storage Transactions or Failed \nL28 C255-316 | Storage Transactions (including pre-authentication failures; \nL28 C316-376 | authentication failures; attempted transactions for storage \nL28 C376-438 | accounts over their prescribed quotas). | \u201c**Error Rate**\u201d is \nL28 C438-501 | the total number of Failed Storage Transactions divided by the \nL28 C501-566 | Total Storage Transactions during a set time interval (currently \nL28 C566-629 | set at one hour). If the Total Storage Transactions in a given \nL28 C629-692 | one-hour interval is zero, the error rate for that interval is \nL28 C692-756 | 0%. <br><br> \u201c**Average Error Rate**\u201d is the sum of Error Rates \nL28 C756-820 | for each hour in a calendar quarter divided by the total number \nL28 C820-869 | of hours in a calendar quarter. | Same as above |\nL29 C  1-  1 | \nL30 C  1- 14 | ## Exclusions\nL31 C  1-  1 | \nL32 C  1- 58 | Excluded from the Uptime Calculation are Service Feature \nL32 C 58-117 | failures resulting from (i) Customer\u2019s acts, omissions, or \nL32 C117-181 | misuse of the applicable GitHub service including violations of \nL32 C181-246 | the Agreement; (ii) failure of Customer\u2019s internet connectivity; \nL32 C246-307 | (iii) factors outside GitHub's reasonable control, including \nL32 C307-372 | force majeure events; or (iv) Customer\u2019s equipment, services, or \nL32 C372-389 | other technology.\n```\n\nReply for G038, V015 and V016: no issue; or quote and explain an issue;\nor say context needed. If you did not check a rule, say not reviewed.\nYour answer covers only this displayed region and these three rules.\n",
+  "review_status": "submitted to user; response pending",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 23,
+      "line": 23,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 24,
+      "line": 24,
+      "reading_line": 15,
+      "source_line_ending": "",
+      "text": "| **Service Feature** | **Uptime Calculation** | **Definitions** "
+    },
+    {
+      "column": 66,
+      "end_column": 101,
+      "end_line": 24,
+      "line": 24,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "| **Service Credits Calculation** |"
+    },
+    {
+      "column": 1,
+      "end_column": 18,
+      "end_line": 25,
+      "line": 25,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "|---|---|---|---|"
+    },
+    {
+      "column": 1,
+      "end_column": 3,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 18,
+      "source_line_ending": "",
+      "text": "| "
+    },
+    {
+      "column": 3,
+      "end_column": 68,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 19,
+      "source_line_ending": "",
+      "text": "**Issues**,<br>**Pull&nbsp;Requests**,<br>**Git&nbsp;Operations**"
+    },
+    {
+      "column": 68,
+      "end_column": 115,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 20,
+      "source_line_ending": "",
+      "text": ",<br>**API&nbsp;Requests (for Service Features "
+    },
+    {
+      "column": 115,
+      "end_column": 176,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 21,
+      "source_line_ending": "",
+      "text": "only)**,<br>**Webhooks**,<br>**Pages** | (total minutes in a "
+    },
+    {
+      "column": 176,
+      "end_column": 235,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 22,
+      "source_line_ending": "",
+      "text": "calendar quarter - Downtime) / total minutes in a calendar "
+    },
+    {
+      "column": 235,
+      "end_column": 297,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 23,
+      "source_line_ending": "",
+      "text": "quarter | \u201c**Downtime**\u201d is a period of time where either (a) "
+    },
+    {
+      "column": 297,
+      "end_column": 360,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 24,
+      "source_line_ending": "",
+      "text": "the error rate exceeds five percent (5%) in a given minute for "
+    },
+    {
+      "column": 360,
+      "end_column": 418,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 25,
+      "source_line_ending": "",
+      "text": "any Service Feature or (b) the Service was unavailable as "
+    },
+    {
+      "column": 418,
+      "end_column": 480,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 26,
+      "source_line_ending": "",
+      "text": "determined by a combination of GitHub's internal and external "
+    },
+    {
+      "column": 480,
+      "end_column": 542,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 27,
+      "source_line_ending": "",
+      "text": "monitoring systems. | A Service Credits claim may be based on "
+    },
+    {
+      "column": 542,
+      "end_column": 606,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 28,
+      "source_line_ending": "",
+      "text": "either (not both) of the following calculations: <ul><li>10% of "
+    },
+    {
+      "column": 606,
+      "end_column": 667,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 29,
+      "source_line_ending": "",
+      "text": "the amount Customer paid for a Service Feature in a calendar "
+    },
+    {
+      "column": 667,
+      "end_column": 731,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 30,
+      "source_line_ending": "",
+      "text": "quarter where the Uptime for that Service Feature was less than "
+    },
+    {
+      "column": 731,
+      "end_column": 785,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 31,
+      "source_line_ending": "",
+      "text": "or equal to 99.9%, but greater than 99.0%. <BR><BR>OR "
+    },
+    {
+      "column": 785,
+      "end_column": 848,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 32,
+      "source_line_ending": "",
+      "text": "<BR><BR></li><li>25% of the amount Customer paid for a Service "
+    },
+    {
+      "column": 848,
+      "end_column": 911,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 33,
+      "source_line_ending": "",
+      "text": "Feature in a calendar quarter where the Uptime of that Service "
+    },
+    {
+      "column": 911,
+      "end_column": 951,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "Feature was less than 99.0%.</li></ul> |"
+    },
+    {
+      "column": 1,
+      "end_column": 59,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 35,
+      "source_line_ending": "",
+      "text": "| **Actions** | (Total Triggered Executions \u2013 Unavailable "
+    },
+    {
+      "column": 59,
+      "end_column": 119,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 36,
+      "source_line_ending": "",
+      "text": "Executions) / (Total Triggered Executions) x 100 | \u201c**Total "
+    },
+    {
+      "column": 119,
+      "end_column": 178,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 37,
+      "source_line_ending": "",
+      "text": "Triggered Executions**\u201d is the total number of all Actions "
+    },
+    {
+      "column": 178,
+      "end_column": 243,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 38,
+      "source_line_ending": "",
+      "text": "executions triggered by Customer in a calendar quarter. <br><br> "
+    },
+    {
+      "column": 243,
+      "end_column": 306,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 39,
+      "source_line_ending": "",
+      "text": "\u201c**Unavailable Executions**\u201d is the total number of executions "
+    },
+    {
+      "column": 306,
+      "end_column": 365,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 40,
+      "source_line_ending": "",
+      "text": "within Total Triggered Executions which failed to run in a "
+    },
+    {
+      "column": 365,
+      "end_column": 427,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 41,
+      "source_line_ending": "",
+      "text": "calendar quarter. An execution failed to run when the Actions "
+    },
+    {
+      "column": 427,
+      "end_column": 489,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 42,
+      "source_line_ending": "",
+      "text": "history log did not capture any output five (5) minutes after "
+    },
+    {
+      "column": 489,
+      "end_column": 542,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "the trigger was successfully fired. | Same as above |"
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 44,
+      "source_line_ending": "",
+      "text": "| **Packages** | Transfers Uptime = same as Actions <br> <br> "
+    },
+    {
+      "column": 63,
+      "end_column": 127,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 45,
+      "source_line_ending": "",
+      "text": "Storage Uptime = 100% - Average Error Rate*<br> <br>*The Uptime "
+    },
+    {
+      "column": 127,
+      "end_column": 191,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 46,
+      "source_line_ending": "",
+      "text": "Calculation excludes public usage and storage transactions that "
+    },
+    {
+      "column": 191,
+      "end_column": 255,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 47,
+      "source_line_ending": "",
+      "text": "do not count toward either Total Storage Transactions or Failed "
+    },
+    {
+      "column": 255,
+      "end_column": 316,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 48,
+      "source_line_ending": "",
+      "text": "Storage Transactions (including pre-authentication failures; "
+    },
+    {
+      "column": 316,
+      "end_column": 376,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 49,
+      "source_line_ending": "",
+      "text": "authentication failures; attempted transactions for storage "
+    },
+    {
+      "column": 376,
+      "end_column": 438,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 50,
+      "source_line_ending": "",
+      "text": "accounts over their prescribed quotas). | \u201c**Error Rate**\u201d is "
+    },
+    {
+      "column": 438,
+      "end_column": 501,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 51,
+      "source_line_ending": "",
+      "text": "the total number of Failed Storage Transactions divided by the "
+    },
+    {
+      "column": 501,
+      "end_column": 566,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 52,
+      "source_line_ending": "",
+      "text": "Total Storage Transactions during a set time interval (currently "
+    },
+    {
+      "column": 566,
+      "end_column": 629,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 53,
+      "source_line_ending": "",
+      "text": "set at one hour). If the Total Storage Transactions in a given "
+    },
+    {
+      "column": 629,
+      "end_column": 692,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 54,
+      "source_line_ending": "",
+      "text": "one-hour interval is zero, the error rate for that interval is "
+    },
+    {
+      "column": 692,
+      "end_column": 756,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 55,
+      "source_line_ending": "",
+      "text": "0%. <br><br> \u201c**Average Error Rate**\u201d is the sum of Error Rates "
+    },
+    {
+      "column": 756,
+      "end_column": 820,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 56,
+      "source_line_ending": "",
+      "text": "for each hour in a calendar quarter divided by the total number "
+    },
+    {
+      "column": 820,
+      "end_column": 869,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 57,
+      "source_line_ending": "\n",
+      "text": "of hours in a calendar quarter. | Same as above |"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 29,
+      "line": 29,
+      "reading_line": 58,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 14,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 59,
+      "source_line_ending": "\n",
+      "text": "## Exclusions"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 31,
+      "line": 31,
+      "reading_line": 60,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 58,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 61,
+      "source_line_ending": "",
+      "text": "Excluded from the Uptime Calculation are Service Feature "
+    },
+    {
+      "column": 58,
+      "end_column": 117,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 62,
+      "source_line_ending": "",
+      "text": "failures resulting from (i) Customer\u2019s acts, omissions, or "
+    },
+    {
+      "column": 117,
+      "end_column": 181,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 63,
+      "source_line_ending": "",
+      "text": "misuse of the applicable GitHub service including violations of "
+    },
+    {
+      "column": 181,
+      "end_column": 246,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 64,
+      "source_line_ending": "",
+      "text": "the Agreement; (ii) failure of Customer\u2019s internet connectivity; "
+    },
+    {
+      "column": 246,
+      "end_column": 307,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 65,
+      "source_line_ending": "",
+      "text": "(iii) factors outside GitHub's reasonable control, including "
+    },
+    {
+      "column": 307,
+      "end_column": 372,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 66,
+      "source_line_ending": "",
+      "text": "force majeure events; or (iv) Customer\u2019s equipment, services, or "
+    },
+    {
+      "column": 372,
+      "end_column": 389,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 67,
+      "source_line_ending": "\n",
+      "text": "other technology."
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "V015",
+    "V016"
+  ],
+  "selection_basis": "continue the same development source after R003, with complete table and exclusions section fitting the display budget; no detector output used",
+  "sha256": "4fe410984681f95a867f894f67523cfa461e039a9b7d43fc7bce297178c7dec1",
+  "source_group": "github/docs",
+  "source_id": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md",
+  "source_provenance": {
+    "attribution": "GitHub, Inc. and GitHub Docs contributors",
+    "format": "markdown",
+    "id": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md",
+    "license": "CC-BY-4.0",
+    "license_url": "https://github.com/github/docs/blob/be38ec5d78e24172587e61b3c6ff40ace1865c71/LICENSE",
+    "locator": "content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md",
+    "native_labels": "none",
+    "pair_group": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md",
+    "path": "markdown/github/docs/content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md",
+    "review_status": "unreviewed",
+    "revision": "be38ec5d78e24172587e61b3c6ff40ace1865c71",
+    "sha256": "4fe410984681f95a867f894f67523cfa461e039a9b7d43fc7bce297178c7dec1",
+    "source_group": "github/docs",
+    "split": "development",
+    "transformation": "none; full raw Markdown document",
+    "url": "https://raw.githubusercontent.com/github/docs/be38ec5d78e24172587e61b3c6ff40ace1865c71/content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md"
+  },
+  "split": "development",
+  "tracked_unreviewed_manifest": "quality/reviews/2026-10-10-interactive/R004/annotations.unreviewed.json",
+  "version": 1
+}

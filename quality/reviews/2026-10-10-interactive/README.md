@@ -1,6 +1,6 @@
 # Interactive development review
 
-Session date: 2026-10-10. The user resumed human review and requested readings
+Session started: 2026-10-10. Last activity: 2026-10-11. The user resumed human review and requested readings
 of at most 80 lines of 80 characters, including instructions and questions.
 
 `selection.json` declares the source-order seed, unchanged manifest identities,
@@ -45,10 +45,19 @@ contracts and unchanged unreviewed template remain in `R002/`.
 `R003.json` is submitted with 51 lines of at most 80 characters. It shows the
 opening section of the next seeded source, an archived service-level agreement.
 The displayed region is L14 C1 through L22 C594; later tables, exclusions and
-redemption terms remain unreviewed. The question permits missing-context
-judgments. Its separate packet lives under
+redemption terms remained unreviewed in that reading. The question permits
+missing-context judgments. Its separate packet lives under
 `downloads/evaluation/blind/interactive-2026-10-10-R003-v1/`; tracked index,
-contracts and unreviewed template are in `R003/`. Its answer is pending.
+contracts and unreviewed template are in `R003/`. `R003.response.json` retains
+the user's literal no-issue answer for all three rules. The version 3 annotation
+in `R003/annotations.reviewed.json` validates only the displayed region.
+
+`R004.json` continues the same source with the complete table and exclusions
+section, L23 C1 through L32 C389, presented in 72 lines of at most 80 characters.
+Earlier context comes from R003. The remaining redemption section, L33–L38,
+needs a later reading. The separate packet lives under
+`downloads/evaluation/blind/interactive-2026-10-10-R004-v1/`; tracked index,
+contracts and unreviewed template are in `R004/`. Its answer is pending.
 
 Each packet uses the same unchanged contract snapshot. Earlier packet indexes
 and initially unreviewed templates remain unchanged. No natural detector
