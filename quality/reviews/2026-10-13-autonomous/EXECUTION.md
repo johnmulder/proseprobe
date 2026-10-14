@@ -77,3 +77,19 @@ defaults and experimental status. The convenience sample supplies no basis for
 promotion, threshold tuning, factual validation or independent effectiveness.
 G039, C004, C009, C010, M011 and M012 natural assessments remain unavailable;
 no labels for those contracts were inferred from these three-rule reviews.
+
+A07/P33.9: Candidate `da85375176693a609419abbe1c90425b1a079816` passed
+[Ubuntu CI](https://github.com/johnmulder/proseprobe/actions/runs/38501135502),
+including Python 3.11, 3.12 and 3.13, documentation/regression checks and package
+build. `ci.json` records the exact head SHA, every successful job and result URL.
+[Draft PR #1](https://github.com/johnmulder/proseprobe/pull/1) holds the review
+branch. The superseded earlier run was cancelled and supplies no passing claim.
+No default-branch merge or release publication occurred.
+
+A08: The unattended track is complete. PLAN.md now contains only conditional
+prerequisites. Frozen judgments, predictions, policy decisions and execution
+records remain separate. Independent human annotation, suggestion usefulness,
+natural evidence for unreviewed contracts, M012 target binding, reserved holdout
+claims and conditionally licensed acquisition remain deferred. No further user
+questions or scheduled work were created. Later evidence-only recording does
+not alter the evaluated implementation or frozen labels.

@@ -1,71 +1,119 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-13. The user requested completion without further interaction.
-Use the existing evaluators and CI. Preserve actual human judgments, identify
-agent judgments separately, and keep unsupported independent claims deferred.
-Earlier engineering work and execution records remain in Git history.
+Updated: 2026-10-13. The unattended development track is complete; results,
+limits and exact candidate CI evidence are in the
+[execution record](quality/reviews/2026-10-13-autonomous/EXECUTION.md).
+Only conditional work remains. No further interactive review is requested.
 
 ## Working rules
 
 - For behavior changes, start with a failing test, make the smallest correction,
   then run related tests and repository gates. Data-only work uses existing
   schema, source-binding and coverage validators.
-- Commit each completed stage with a one-line message; remove completed actions
-  from this plan and retain results in the session execution record.
-- Preserve frozen original/extension sources, split assignments, exact source
-  bytes, contracts, baseline, native pair groups and all raw mismatches.
-- Select development records from metadata before opening bytes. Never use a
-  whole-manifest loader that reads reserved holdout sources before filtering.
-- Use the [review protocol](quality/external/review-protocol.md). Agent reviews
-  cannot satisfy human independence or meaning-preservation requirements.
-- Keep the effective default policy and experimental status unchanged unless
-  sufficient development evidence justifies a documented proposal.
-- Include a direct reading link if any future review request is made. The
-  existing interactive length limit remains 80 lines of 80 characters.
+- Commit each completed stage with a one-line message, update this document and
+  keep completed actions in execution records rather than this checklist.
+- Preserve original/extension source bytes, split freezes, contracts, baseline,
+  pair groups, reviewer provenance and every raw mismatch.
+- Select development records from metadata before reading bytes. Never use a
+  whole-manifest loader that opens reserved holdout sources before filtering.
+- Follow the [review protocol](quality/external/review-protocol.md). Agent
+  judgments remain development evidence; they cannot replace independent human
+  annotation, agreement or semantic-usefulness evidence.
+- Keep defaults and experimental status unchanged without sufficient evidence.
+- If a future review is requested, include its direct reading link and limit it
+  to 80 lines of 80 characters, including instructions and questions.
 
-## Unattended execution
+## Independent human annotation — deferred
 
-Session: `quality/reviews/2026-10-13-autonomous/`.
-R001–R003 retain three human clean scopes for G038/V015/V016, with unknown prior
-exposure and unverified independence. R004 supplied a clarification request,
-not a judgment; its human scope remains unreviewed. The agent pilot covers five
-licensed development Markdown sources in three source groups. It is a declared
-convenience sample and does not establish representative population quality.
+Prerequisites: eligible actual human reviewers and permitted source access.
+The three previous human scopes remain limited; prior exposure is unknown and
+independence unverified. Agent annotations are separately identified.
 
-- [ ] A07 Freeze the candidate, push a review branch and create a draft PR to
-  trigger Ubuntu Python 3.11–3.13 CI. Record exact-SHA evidence for P33.9.
-- [ ] A08 Publish an execution record, prune completed actions and leave only
-  conditional work requiring genuinely unavailable evidence or release intent.
+- [ ] P32B.1 Record eligible reviewer identifiers, exposure and permitted access.
+- [ ] P32B.5 Provide fresh blind originals, contracts and supported context.
+- [ ] P32B.6 Collect exhaustive issue spans and reviewed coverage, including
+  genuine clean regions and detector misses.
+- [ ] P32B.7 Obtain a second independent human annotation of the existing
+  metadata-selected subset; retain both original judgments.
+- [ ] P32B.8a Report agreement/disagreement counts and actual denominators.
+- [ ] P32B.8b Adjudicate disagreements with identity and rationale; preserve
+  unresolved cases as context-dependent.
+- [ ] P32B.9 Freeze accepted independent labels and coverage before predictions.
+- [ ] P32B.10 Review triggered findings separately from exhaustive blind labels.
+- [ ] P32B.11 Obtain independent sparse positives and near misses; identify their
+  population separately from natural text.
+- [ ] P32B.12 Validate accepted version 3 bindings, spans, provenance and coverage;
+  report reviewed quantities and gaps.
 
-## Deferred independent evidence
+## Suggestion and revision usefulness — deferred
 
-These requirements remain valid, but they cannot be fulfilled by fabricating
-human reviewers or treating native edits or agent judgments as writing truth.
-No further user questions are needed for the unattended development track.
+Prerequisite: accepted initial independent labels are frozen.
 
-- [ ] P32B.1/.5/.6/.7/.8a/.8b/.9/.10/.11/.12 Obtain eligible independent human
-  reviewers, exhaustive blind labels, double annotation, disagreements,
-  adjudication and frozen coverage; then separately review triggered findings
-  and sparse positives. Preserve identity, exposure and access provenance.
-- [ ] P31.13 and P32C.4/.6a/.6b/.7 After frozen initial labels, obtain the four
-  human suggestion judgments and native-pair correspondence/outcomes. Keep
-  JFLEG/ASSET alternatives together; warning changes are mechanical evidence.
-- [ ] P32D.1/.5/.6a/.6b/.6c/.7, P27.13, P29.12 and P15.9 Complete independent
-  per-rule/profile/format/context development evidence before calibration or
-  promotion. G039, C004, C009, C010 and M011 need their own supported labels.
-- [ ] P30.18 Preserve and bind native Markdown source paths, pinned complete
-  target inventories and referenced target bytes/verified absence before M012
-  independent review. A missing local cached target cannot establish absence.
-- [ ] P32D.8/.9a/.9b/.10/.11 Predeclare independent targets and support, freeze
-  the candidate and labels, then evaluate reserved holdout once. If results
-  prompt tuning, reserve fresh source groups before a further independent claim.
+- [ ] P32C.4 Provide all four JFLEG and ten ASSET references within their original
+  source/pair groups and access terms.
+- [ ] P31.13 Collect separate human judgments for finding helpfulness, sentence
+  fit, meaning preservation and acceptance; preserve missing/contextual answers.
+- [ ] P32C.6a Bind exact original/reference identities and reviewed diagnostic
+  correspondence for each evaluated pair.
+- [ ] P32C.6b Obtain human revision-usefulness and meaning-preservation judgments,
+  including retained valid warnings and newly incorrect warnings.
+- [ ] P32C.7 Report mechanical warning transitions beside human outcomes and
+  actual denominators; fewer warnings do not establish semantic quality.
+
+## Independent development calibration — deferred
+
+Prerequisites: supported contexts and accepted independent development labels.
+
+- [ ] P32D.1 Generate all-rules and unchanged production reports with raw counts,
+  misses, full-span accuracy, exclusions, coverage and usefulness judgments.
+- [ ] P32D.5 Publish per-rule/profile/format/context/source-group results with
+  denominators and declared whole-group uncertainty; retain unavailable metrics.
+- [ ] P32D.6a Assess technical terminology and exact quotations, preserving
+  genuine generic positives.
+- [ ] P32D.6b Assess G039 repeated-word precision on independently reviewed prose.
+- [ ] P32D.6c Assess C004 executable placeholders and C009 parameter-kind checks
+  in supported Python contexts.
+- [ ] P27.13 Assess G038 on untouched independent development examples.
+- [ ] P29.12 Assess C010 precision/usefulness under its narrow return contract;
+  retain unsupported types and disagreements.
+- [ ] P15.9 Assess M011 under each document's declared renderer; retain unsupported
+  dialects explicitly.
+- [ ] P30.18 Before M012 independent review, bind native source paths, complete
+  pinned target inventories and referenced target bytes or verified absence.
+  Add failing tests for stale/incomplete bindings and path/symlink escapes before
+  any binding implementation. A missing cached target cannot prove absence.
+- [ ] P32D.7 Propose thresholds, confidence, severity, defaults or promotion only
+  from sufficient development evidence; promotion remains optional.
+
+## Reserved holdout — deferred
+
+Prerequisites: independent development review and candidate decisions frozen.
+Reserved holdout material remains unopened.
+
+- [ ] P32D.8 Predeclare targets, supported populations, minimum sample/group
+  support and unavailable-metric handling before opening holdout.
+- [ ] P32D.9a Freeze the independent candidate implementation and effective policy.
+- [ ] P32D.9b Evaluate once using the same validated source-bound report path;
+  preserve raw false positives and misses.
+- [ ] P32D.10 Obtain human holdout usefulness judgments; publish agreement,
+  unresolved cases and source-correlated uncertainty.
+- [ ] P32D.11 If inspected holdout prompts tuning, reclassify it as development
+  and reserve fresh source groups before any further independent claim.
 
 ## Conditional acquisition and release
 
-- [ ] P32C.10a/.10b/.10c/.10d Acquire the excluded README revision package only
-  after explicit reuse terms permit it; add failing adapter tests if necessary,
-  verify revisions and freeze new groups separately. Article licensing and
-  native commit categories cannot establish corpus reuse or clarity truth.
+The 2026-10-13 primary-source check still found unresolved reuse terms for the
+README revision package. No package or adapter was acquired; LOCNESS remains
+excluded. Current evidence is in the execution record and `dataset-terms.json`.
+
+- [ ] P32C.10a Obtain explicit permitted reuse terms, attribution and provenance
+  before accepting the excluded README package.
+- [ ] P32C.10b Add failing adapter tests for any newly needed behavior, then reuse
+  existing revision-pair contracts when possible.
+- [ ] P32C.10c Verify sampled revisions; keep native commit/edit labels separate
+  from independently reviewed clarity judgments.
+- [ ] P32C.10d Freeze accepted new sources/pairs/groups separately from the
+  existing source and split freezes before detector-based evaluation.
 - [ ] P33.14 When a release is explicitly requested, complete every gate in
   [RELEASE_BLOCKERS.md](RELEASE_BLOCKERS.md) for that exact release candidate,
-  including package, legal/publication identity and trusted-publishing checks.
+  including package, legal/publication identity and trusted publishing.
