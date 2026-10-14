@@ -104,3 +104,61 @@ Prepared 16 linked post-freeze diagnostic readings in `trigger-prompts.json`.
 They bind complete diagnostic, report, source and displayed-text identities;
 the largest is 24 lines of 80 characters. All are from authored populations.
 No natural diagnostic was relabeled through this triggered stage.
+
+A13, completed 2026-10-14: Fresh `/root/agent_usefulness_a` and
+`/root/agent_usefulness_b` reviewed the same 16 triggered authored findings in
+separate contexts. They saw exact diagnostic output, source bytes and declared
+native inventory context, without initial labels or the other agent's feedback.
+They supplied 32 rating records bound to full diagnostic, source, report and
+displayed-reading hashes. Initial labels remain unchanged.
+
+| Question | Agent A | Agent B |
+| --- | --- | --- |
+| Finding helpful | 13 yes, 3 contextual | 12 yes, 4 contextual |
+| Advice fits | 10 yes, 4 contextual, 2 unreviewed | 14 yes, 2 unreviewed |
+| Advice accepted | 10 yes, 4 contextual, 2 unreviewed | 10 yes, 4 contextual, 2 unreviewed |
+| Meaning preserved | 16 unresolved | 16 unresolved |
+
+The two C004 suggestions are null, so fit and acceptance stay unreviewed for
+those diagnostics. No concrete revision was supplied; no preservation success
+is inferred from advice, likely edits or apparent typo repairs. Helpfulness and
+acceptance concerns include adjacent comparison/testing context and generic
+anchor advice. Python windows omit some owning signatures, and local-link
+windows omit target documents and inventory; the reviewers used the complete
+permitted source/context to judge those cases. C009's highlighted name omits
+the stars that distinguish parameter kinds.
+
+`usefulness-summary.json` preserves counts by reviewer, cohort and question,
+including contextual, unresolved and unreviewed answers. It declares any yes/no
+denominator separately. There are 16 distinct findings, one shared author group,
+zero natural usefulness judgments and zero revised texts. The descriptive
+question-status agreement does not establish human reliability or independent
+source support; unresolved answers are not affirmative meaning judgments.
+
+A14, completed 2026-10-14: `policy-decision.json` retains rule implementations,
+thresholds, confidence, severity, defaults and experimental status. Authored
+examples exercise detection and native source binding but cannot justify
+promotion. The intentional-rejection contract and diagnostic highlight/context
+questions remain explicit follow-ups in PLAN.md. Independent human and semantic
+effectiveness prerequisites remain deferred.
+
+The full local `make check dogfood rule-quality-regression` gate passed:
+3640 tests, package typing across 31 files, documentation checks and curated
+regression gates. The curated counts remain 366 TP/6 FP/0 FN for all-rules and
+106 TP/4 FP/0 FN for unchanged production; all known mismatches remain visible.
+No full strict benchmark typing claim is made. `local-checks.json` binds the
+preserved gate log and frozen runtime identity. Authored documentation passes
+the explicit baseline prose check; review originals were not prose-linted.
+
+A separate final agent audited artifact hashes, raw counts, source rows,
+diagnostic bindings, feedback and location observations. It found summary
+ambiguities around source-group counts and missing span denominators; both were
+corrected before commit. The summary now distinguishes corpus, reviewed and
+metric-contributing groups and retains group-interval unavailability reasons.
+
+Inputs, accepted labels and reports were committed separately as `2426eeb`,
+`8601af5` and `3cdf4ca`. Completed agent actions have left PLAN.md. Earlier
+human/agent freezes, original source manifests, split freezes and the baseline
+remain unchanged. No reserved external holdout was opened. These results have
+local validation; prior CI does not validate these new commits. No new push,
+merge, release or independent effectiveness claim is recorded.

@@ -1,9 +1,8 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-14. The user requested agents as reviewers. The active
-[agent review batch](quality/reviews/2026-10-13-agent-resume/README.md) uses
-separate blind contexts and bounded readings. Earlier human/agent records and
-independent human prerequisites remain preserved.
+Updated: 2026-10-14. The delegated agent review is complete; its results and
+policy decision are in the [execution record](quality/reviews/2026-10-13-agent-resume/EXECUTION.md).
+This checklist contains only outstanding work and its prerequisites.
 
 ## Working rules
 
@@ -22,19 +21,6 @@ independent human prerequisites remain preserved.
 - Keep defaults and experimental status unchanged without sufficient evidence.
 - If a future review is requested, include its direct reading link and limit it
   to 80 lines of 80 characters, including instructions and questions.
-
-## Agent-assisted development review — active
-
-Nine source units: six natural originals, two authored challenge originals and
-one authored native-link source. Thirty linked readings fit the 80-by-80 limit.
-Author familiarity, source groups and populations stay explicit. No predictions
-are supplied to the initial reviewers; no human answer is required for this track.
-
-- [ ] A13 Obtain separate agent judgments for targeted finding helpfulness,
-  suggestion fit, meaning preservation and acceptance. Bind full diagnostic
-  hashes; keep these outside human-usefulness records.
-- [ ] A14 Record the policy decision, pass repository gates, commit the results
-  and remove completed agent actions from this checklist.
 
 ## Independent human annotation — deferred
 
@@ -81,6 +67,12 @@ Prerequisites: supported contexts and accepted independent development labels.
   misses, full-span accuracy, exclusions, coverage and usefulness judgments.
 - [ ] P32D.5 Publish per-rule/profile/format/context/source-group results with
   denominators and declared whole-group uncertainty; retain unavailable metrics.
+- [ ] P32D.5a Declare the intended highlight unit for G038, V015, C004 and C009
+  before assessing the four recorded endpoint differences. Keep exact-span
+  accuracy separate from semantic event matches; do not refresh accepted labels.
+- [ ] P32D.5b Bind required owning signatures, heading inventories and target
+  context beside future bounded diagnostic readings. Start with failing row-map,
+  context-selection and size-limit tests if packet generation needs a change.
 - [ ] P32D.6a Assess technical terminology and exact quotations, preserving
   genuine generic positives.
 - [ ] P32D.6b Assess G039 repeated-word precision on independently reviewed prose.

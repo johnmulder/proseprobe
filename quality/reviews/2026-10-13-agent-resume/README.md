@@ -1,9 +1,14 @@
 # Agent-assisted development review
 
-The user requested agents as reviewers. Two fresh agents review the declared
+The delegated review is complete. Two fresh agents reviewed the declared
 batch with detector outputs and each other's judgments withheld. Their actual
 IDs and exposure records remain separate. This is agent development evidence;
 human annotation, agreement and usefulness are not inferred.
+
+The [execution record](EXECUTION.md) reports all stages and limitations.
+The [policy decision](policy-decision.json) retains current rules and defaults.
+All 16 accepted authored events matched; natural precision and recall are
+unavailable, and the natural intentional-rejection guard remains unresolved.
 
 `selection.json` precedes source reads and labels. It selects six licensed
 natural originals from development metadata: R005's original limited scope,
@@ -28,11 +33,20 @@ Unexpanded GitHub content and unsupported renderer/return contracts retain their
 limitations. The local-link cohort uses bound GitHub-style static Markdown;
 reviewers inspect target text and inventory evidence before labeling links.
 
-Each reviewer writes separate version 3 annotations and raw reasons. Validate
-source bindings and coverage, report disagreements, and preserve any adjudication
-before freezing accepted labels. Generate predictions only after that committed
-freeze. Reports keep natural and authored populations separate and retain raw
-unreviewed findings, misses, exclusions and unavailable metrics.
+Each reviewer wrote separate version 3 annotations and raw reasons. Source
+bindings and coverage were validated, disagreement counts recorded and a third
+agent's adjudication preserved before the accepted-label freeze. Predictions
+were generated after freeze commit `8601af5`. The
+[report summary](report-summary.json) binds all 18 reports; natural and authored
+populations stay separate. Raw original mismatches, unreviewed findings and
+unavailable metrics remain visible.
+
+Two additional agents judged the 16 linked triggered diagnostics separately.
+The [usefulness summary](usefulness-summary.json) retains each agent's four
+question counts and raw feedback hashes. Both relied on full permitted context
+where a bounded window was insufficient. No concrete revision was supplied;
+every meaning-preservation answer remains unresolved. These records stay outside
+the human-usefulness annotation schema.
 
 `licenses.json` retains pinned source license bytes, Requests NOTICE, full
 attribution and project terms for authored materials. Cached natural originals
