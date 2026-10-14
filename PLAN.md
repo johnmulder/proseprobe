@@ -27,12 +27,9 @@ Preserve earlier frozen human/agent evidence and independent prerequisites.
 
 Use synthetic Git repositories first; no natural predictions or holdout access.
 The existing unbound-context rejection remains a required acceptance gate.
-Declared-target preparation passed 55 synthetic cases and the 3,568-test
-repository gate; details are in the [execution record](quality/reviews/2026-10-13-human-resume/EXECUTION.md).
+Native preparation and reference integration passed the 3,640-test repository
+gate; details are in the [execution record](quality/reviews/2026-10-13-human-resume/EXECUTION.md).
 
-- [ ] P30.18b Add failing tests for complete reference enumeration and evaluator
-  integration. Accept strict local-link context only after every required target
-  is bound or proven absent; retain the existing rejection for missing context.
 - [ ] P30.18c Prepare a separately versioned development-only native context at
   its pinned repository revision, with permitted target access and supported
   renderer. Preserve original manifests and split freezes.

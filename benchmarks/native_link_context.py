@@ -14,7 +14,7 @@ import os
 import re
 import stat
 import subprocess
-from collections.abc import Iterator, Mapping, Sequence
+from collections.abc import Callable, Iterator, Mapping, Sequence
 from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
@@ -437,6 +437,7 @@ def _verify_bytes(
     sources: dict[str, dict[str, str]],
     targets: dict[str, dict[str, str]],
     reserved_paths: set[str],
+    metadata_guard: Callable[[], None] | None = None,
 ) -> tuple[tuple[NativeSource, ...], tuple[NativeTarget, ...]]:
     for binding in [*sources.values(), *targets.values()]:
         if "cache_path" in binding:
@@ -445,6 +446,8 @@ def _verify_bytes(
             _cache_path(root, binding["cache_path"])
     source_bytes = []
     for identity, binding in sources.items():
+        if metadata_guard is not None:
+            metadata_guard()
         raw = _read_cache_file(root, binding["cache_path"])
         if hashlib.sha256(raw).hexdigest() != binding["sha256"]:
             raise NativeContextError("source SHA-256 differs from frozen metadata")
@@ -456,6 +459,8 @@ def _verify_bytes(
         if binding["status"] == "absent":
             target_bytes.append(NativeTarget(name, None))
             continue
+        if metadata_guard is not None:
+            metadata_guard()
         raw = _read_cache_file(root, binding["cache_path"])
         digest = hashlib.sha256(raw).hexdigest()
         if "sha256" in binding and digest != binding["sha256"]:
@@ -501,7 +506,12 @@ def build_native_context(
 
 
 def validate_native_context(
-    bundle: Mapping[str, Any], manifest: Path, corpus_root: Path, repository: Path
+    bundle: Mapping[str, Any],
+    manifest: Path,
+    corpus_root: Path,
+    repository: Path,
+    *,
+    metadata_guard: Callable[[], None] | None = None,
 ) -> VerifiedNativeContext:
     """Reprove frozen metadata, complete trees and declared target bytes."""
     data = _keys(
@@ -548,7 +558,7 @@ def validate_native_context(
         )
     targets = _target_bindings(data["targets"], inventory, frozen=True)
     source_bytes, target_bytes = _verify_bytes(
-        _cache_root(corpus_root), sources, targets, reserved_paths
+        _cache_root(corpus_root), sources, targets, reserved_paths, metadata_guard
     )
     return VerifiedNativeContext(
         manifest_hash,

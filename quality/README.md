@@ -246,11 +246,10 @@ link coverage unsupported until native paths and required targets are preserved
 and bound. Their existing source-byte binding alone cannot establish cross-file
 link truth or independent M012 effectiveness.
 
-Enabled local-link reports explicitly declare target/native-context binding
-unavailable. `--require-bound` and source-bound version 3 strict gates reject
-that enabled context until a target/native-path binding contract is available,
-even with zero cross-file findings. Curated report-only optional measurements
-remain available; the default reviewed gates keep the feature off.
+Local-link reports using only `--project-root` declare target/native-context
+binding unavailable. `--require-bound` rejects that unbound context even with
+zero cross-file findings. Curated report-only optional measurements remain
+available; the default reviewed gates keep the feature off.
 
 `benchmarks/native_link_context.py` prepares offline native context for a single
 development repository at an exact SHA-1 Git commit. Its builder binds source
@@ -261,11 +260,42 @@ private tree with native paths and removes it afterward. Cache symlinks,
 unsupported Git contexts, stale bytes and filesystem aliases fail explicitly.
 Confined cache reads require POSIX directory-descriptor support.
 
-This helper does not enumerate all references, attach context to version 3
-annotations or enable strict M012 scoring. Those integration steps and supported
-renderer review remain prerequisites. An omitted declared target is not proof
-that a document's complete reference context was reviewed. The evaluator's
-existing unbound-context rejection remains unchanged.
+The version 1 preparation artifact proves only explicitly declared targets.
+`benchmarks/native_reference_context.py` adds a version 2 artifact with every
+supported literal local Markdown reference, its original source coordinates,
+normalized native target and renderer, plus extracted resolver exclusions.
+Validation recomputes the complete reference map; each required target must
+have verified bytes or pinned inventory absence. Sources and GitHub fragment
+targets with generated markup fail as unsupported. LF and CRLF parser input is
+normalized while exact byte bindings remain; bare-CR sources are unsupported.
+Remote URLs, queries, images, escaping paths and non-Markdown targets retain
+M012's existing scope exclusions. No renderer expansion or target recursion is
+performed.
+
+An optional version 3 `review.native_context` reference names the version 2
+artifact using the existing `path`/`sha256` artifact contract. Its presence
+requires all three offline validation inputs:
+
+```sh
+rtk proxy .venv/bin/python -m benchmarks.rule_quality \
+  --manifest review/annotations.json --root review/originals-root \
+  --require-bound --format json --native-repository cache/repository.git \
+  --source-manifest acquisition/sources.json --native-cache-root cache
+```
+
+The evaluator checks development metadata and exact source IDs, hashes and
+groups before reading native or packet source bytes. It materializes a private
+native tree, scans immutable source snapshots and maps findings back to reviewed
+packet paths. It records renderer, artifact/inventory identities,
+reference and target counts, and resolver exclusions. The temporary directory
+does not become the report's reproducibility identity. Bound native context
+cannot combine with a separate `--project-root` or curated regression gate.
+Existing version 3 packets without this artifact keep their original behavior.
+Late changes to the native-bound annotation manifest or its index, contracts
+and context artifact reject publication of the report.
+
+Verified target evidence enables a supported scan; human reviewed coverage and
+independent usefulness evidence remain separate prerequisites.
 
 ## Human suggestion usefulness
 
