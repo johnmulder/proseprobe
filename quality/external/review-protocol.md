@@ -7,6 +7,17 @@ review prerequisites. Use unchanged original source identities and frozen split
 assignments. Implementers must not inspect holdout prose, labels or predictions
 while tuning the candidate.
 
+On 2026-10-13 the user requested unattended completion. Preserve the three
+recorded human scopes and retire unanswered requests without inferred labels.
+Separate blind agent reviews may supply development evidence, with actual agent
+identifiers, exposure records and immutable original judgments. Multiple agents
+do not supply independent human annotation, agreement or semantic-usefulness
+evidence. Freeze each declared development batch before showing predictions.
+Keep independent claims and the reserved holdout deferred when their human
+prerequisites remain unavailable. The unattended session records the selection,
+bindings, reports and policy decisions under
+`quality/reviews/2026-10-13-autonomous/`.
+
 ## First pass
 
 Give reviewers a fresh source-bound version 3 packet, declared rule contracts,

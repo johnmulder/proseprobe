@@ -1,0 +1,90 @@
+{
+  "files": {
+    "originals/0000.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [
+        "G038",
+        "V015",
+        "V016"
+      ],
+      "sha256": "4fe410984681f95a867f894f67523cfa461e039a9b7d43fc7bce297178c7dec1",
+      "source_group": "github/docs",
+      "source_id": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md"
+    },
+    "originals/0001.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [
+        "G038",
+        "V015",
+        "V016"
+      ],
+      "sha256": "ce22f56c8242cabb991427c29cb84164eae5e821b1b05879717417e55fa7e8a8",
+      "source_group": "github/docs",
+      "source_id": "github/docs:content/support/contacting-github-support/using-copilot-in-github-support.md"
+    },
+    "originals/0002.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [
+        "G038",
+        "V015",
+        "V016"
+      ],
+      "sha256": "f763443413e14d3a4b744989d95dc28a7f29dca62eb5764e0f88cd5a32312bb6",
+      "source_group": "github/docs",
+      "source_id": "github/docs:content/copilot/how-tos/copilot-on-github/customize-copilot/customize-copilot-overview.md"
+    },
+    "originals/0003.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [
+        "G038",
+        "V015",
+        "V016"
+      ],
+      "sha256": "4f7bfa1b3f7c87268767235307d0bcae78997a96ca00a3b31062e5b9a295ed7c",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:README.md"
+    },
+    "originals/0004.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [
+        "G038",
+        "V015",
+        "V016"
+      ],
+      "sha256": "4fd6beb4d1c0bbe7c3ff56b18a3d106efaa7edd33f6c13ed357bd8a4e942a7f6",
+      "source_group": "fastapi/fastapi",
+      "source_id": "fastapi/fastapi:40e33e492dbf4af6172997f4e3238a32e56cbe26:README.md"
+    }
+  },
+  "review": {
+    "packet_index": {
+      "path": "index.json",
+      "sha256": "b386a9c5da110157871858411c15fc946d8f10797569f5aa3ce3446086e1531e"
+    },
+    "policy": {
+      "min_confidence": "low",
+      "mode": "all-rules",
+      "profile": "default",
+      "severity": "info"
+    },
+    "protocol_revision": "agent-assisted-blind-development-v1",
+    "reviewers": [
+      "codex-agent:/root/blind_agent_b"
+    ],
+    "rule_contracts": {
+      "path": "contracts.json",
+      "sha256": "44574c524e1f13596b150e5e38f44f47bc4690abced12be954e34c810d5da657"
+    }
+  },
+  "version": 3
+}

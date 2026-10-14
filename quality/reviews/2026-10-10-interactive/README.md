@@ -57,7 +57,10 @@ section, L23 C1 through L32 C389, presented in 72 lines of at most 80 characters
 Earlier context comes from R003. The remaining redemption section, L33–L38,
 needs a later reading. The separate packet lives under
 `downloads/evaluation/blind/interactive-2026-10-10-R004-v1/`; tracked index,
-contracts and unreviewed template are in `R004/`. Its answer is pending.
+contracts and unreviewed template are in `R004/`. R004's response asked for
+the region; `R004.clarification.json` preserves it without assigning a judgment.
+On 2026-10-13 the user requested unattended work, so this request was retired.
+The separate agent-assisted session is `quality/reviews/2026-10-13-autonomous/`.
 
 Each packet uses the same unchanged contract snapshot. Earlier packet indexes
 and initially unreviewed templates remain unchanged. No natural detector

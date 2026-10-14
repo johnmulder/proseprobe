@@ -1,0 +1,21 @@
+{
+  "holdout": "not opened; independent claims deferred",
+  "human_accepted_readings": [
+    "R001",
+    "R002",
+    "R003"
+  ],
+  "human_session": "quality/reviews/2026-10-10-interactive",
+  "human_unreviewed_readings": [
+    "R004"
+  ],
+  "literal_authorization": "figure out how to do the rest without my interaction.",
+  "mode": "unattended development evaluation",
+  "predictions": "withheld until original agent judgments and human scopes frozen",
+  "previous_link_preference": "give a link each time",
+  "recorded_at_utc": "2026-10-14T02:14:40.712497+00:00",
+  "reviewer_provenance": "actual human identifiers preserved; agent task identifiers stored separately; no independence fabricated",
+  "runtime_policy": "unchanged; no promotion based on this convenience sample",
+  "session_date": "2026-10-13",
+  "version": 1
+}
