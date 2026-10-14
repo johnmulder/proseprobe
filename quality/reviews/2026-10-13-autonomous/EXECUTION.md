@@ -56,9 +56,13 @@ reports by checksum. Labels, source bytes and baseline remain unchanged.
 
 | Evidence | Unique reviewed coverage | All-rules TP / FP / FN |
 |---|---|---|
-| Human R001–R003 | 3 regions, 517 prose words, 1 group | 0 / 0 / 0 |
-| Agent A | 5 files, 4,377 prose words, 3 groups | 0 / 0 / 0 |
-| Agent B, same sources | 5 files, 4,377 prose words, 3 groups | 0 / 0 / 0 |
+| Human R001–R003 | 3 regions, 517 extracted words, 1 group | 0 / 0 / 0 |
+| Agent A | 5 files, 4,377 extracted words, 3 groups | 0 / 0 / 0 |
+| Agent B, same sources | 5 files, 4,377 extracted words, 3 groups | 0 / 0 / 0 |
+
+The word counts use the shared parser and reviewed source scopes. They include
+headings and other extracted text even when a claim contract excludes it; they
+are not counts of claim-bearing or rule-applicable words.
 
 There are no annotated positives or detection events, so precision and recall
 are unavailable. Repeated agents do not add independent sources. Group

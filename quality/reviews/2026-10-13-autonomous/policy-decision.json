@@ -101,5 +101,6 @@
   },
   "session_date": "2026-10-13",
   "tuning_performed": false,
-  "version": 1
+  "version": 1,
+  "word_count_scope": "shared parser-extracted reviewed-source words, including headings/examples/literal template tokens; not per-rule claim-applicable words"
 }
