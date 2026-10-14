@@ -252,6 +252,21 @@ that enabled context until a target/native-path binding contract is available,
 even with zero cross-file findings. Curated report-only optional measurements
 remain available; the default reviewed gates keep the feature off.
 
+`benchmarks/native_link_context.py` prepares offline native context for a single
+development repository at an exact SHA-1 Git commit. Its builder binds source
+metadata, native locators, complete tree inventory and explicitly declared
+Markdown target bytes or verified upstream absence. Validation checks the
+frozen bindings again and retains immutable bytes; materialization creates a
+private tree with native paths and removes it afterward. Cache symlinks,
+unsupported Git contexts, stale bytes and filesystem aliases fail explicitly.
+Confined cache reads require POSIX directory-descriptor support.
+
+This helper does not enumerate all references, attach context to version 3
+annotations or enable strict M012 scoring. Those integration steps and supported
+renderer review remain prerequisites. An omitted declared target is not proof
+that a document's complete reference context was reviewed. The evaluator's
+existing unbound-context rejection remains unchanged.
+
 ## Human suggestion usefulness
 
 Version 3 files may add a `usefulness` list. Each row names its review ID and a
