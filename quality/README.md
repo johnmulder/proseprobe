@@ -297,6 +297,10 @@ and context artifact reject publication of the report.
 Verified target evidence enables a supported scan; human reviewed coverage and
 independent usefulness evidence remain separate prerequisites.
 
+The [Requests development snapshot](reviews/2026-10-13-human-resume/native-context/README.md)
+has complete structural closure but zero supported local references. It has no
+human M012 labels or natural predictions and cannot supply effectiveness rates.
+
 ## Human suggestion usefulness
 
 Version 3 files may add a `usefulness` list. Each row names its review ID and a

@@ -1,0 +1,102 @@
+{
+  "artifact": "quality/reviews/2026-10-13-human-resume/native-context/requests-context-v1.json",
+  "artifact_sha256": "4ecf27ff6a7f873e5a778050e9bb0d876c1cf5d8bac8eeb409dbd5bb37f32592",
+  "eligibility": "zero supported local Markdown references; no M012 effectiveness denominator",
+  "evidence": {
+    "artifact_sha256": "4ecf27ff6a7f873e5a778050e9bb0d876c1cf5d8bac8eeb409dbd5bb37f32592",
+    "enabled": true,
+    "excluded_destinations": {
+      "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:README.md": [
+        {
+          "column": 164,
+          "destination": "https://github.com/psf/requests/network/dependents?package_id=UGFja2FnZS01NzA4OTExNg%3D%3D",
+          "end_column": 254,
+          "line": 22,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 63,
+          "destination": "https://pepy.tech/project/requests",
+          "end_column": 97,
+          "line": 24,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 78,
+          "destination": "https://pypi.org/project/requests",
+          "end_column": 111,
+          "line": 25,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 80,
+          "destination": "https://github.com/psf/requests/graphs/contributors",
+          "end_column": 131,
+          "line": 26,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 62,
+          "destination": "https://requests.readthedocs.io",
+          "end_column": 93,
+          "line": 56,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 84,
+          "destination": "https://requests.readthedocs.io",
+          "end_column": 115,
+          "line": 58,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 14,
+          "destination": "https://github.com/psf/requests/issues/2690",
+          "end_column": 57,
+          "line": 64,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 84,
+          "destination": "https://kennethreitz.org",
+          "end_column": 108,
+          "line": 78,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 207,
+          "destination": "https://www.python.org/psf",
+          "end_column": 233,
+          "line": 78,
+          "reason": "production-resolver-exclusion"
+        }
+      ]
+    },
+    "excluded_destinations_count": 9,
+    "inventory_sha256": "85ca40bc9d9f04a7c686b908ab1605f64938630c44190bdfe8e62020db8b017e",
+    "reason": null,
+    "reference_scope": "production-static-local-markdown-v1",
+    "references_count": 0,
+    "renderer": "github",
+    "revision": "0e322af87745eff34caffe4df68456ebc20d9068",
+    "root": null,
+    "source_group": "psf/requests",
+    "source_manifest_sha256": "1f3a26861f1321747802a9e5b574ae78201b996cdd70ccec9a18094fe052cbbf",
+    "sources_count": 1,
+    "target_binding": "verified-native-reference-closure",
+    "targets_count": 0
+  },
+  "historical_freeze_artifacts_unchanged": true,
+  "holdout_opened": false,
+  "human_labels_generated": false,
+  "native_source_bytes_match_original": true,
+  "original_manifest_changed": false,
+  "original_split_freezes_changed": false,
+  "predictions_generated": false,
+  "purpose": "development-only context preparation and structural validation",
+  "r005_canonical_views_unchanged": true,
+  "stage": "P30.18c",
+  "validated_at_utc": "2026-10-14T05:28:18.079059+00:00",
+  "validated_implementation_commit": "3c2ca0f",
+  "version": 1
+}

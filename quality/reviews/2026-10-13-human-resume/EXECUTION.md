@@ -79,3 +79,29 @@ Remote publication remains pending explicit approval. Automatic approval review
 rejected the attempted GitHub push because exporting repository contents was
 not explicitly authorized. Local work and requested commits continued; the
 existing draft PR and previous CI evidence were not updated for these changes.
+
+P30.18b was committed as `3c2ca0f` after the exact final repository gate.
+
+P30.18c: Selected the existing Requests README from development metadata before
+native reads. All six Requests records/pair groups are development; no selected
+source hash matches a known reserved hash. Acquired only its public pinned Git
+revision into an ignored bare cache and verified the complete 154-entry
+inventory. Pinned Apache-2.0 license and NOTICE bytes match their Git blobs.
+
+The separately versioned context binds the original manifest, source path/hash,
+Git blob, complete inventory, renderer and reference map. All nine extracted
+destinations are resolver exclusions, so required local target closure is empty.
+This is an eligibility observation, not a human clean label or an effectiveness
+result. No M012 precision/recall denominator exists for this source. Future
+natural M012 review requires additional permitted eligible development originals.
+
+`native-context/validation.json` records successful offline revalidation and
+the exact artifact hash. Native prose remains cached; only bindings and hashes
+are committed. Original manifests, source/split freezes, baseline and historical
+review artifacts remain unchanged. R005's linked text views still match its
+canonical 50-line question; both human questions remain pending.
+
+Completed preparation tasks were removed from PLAN.md. Remaining M012 source
+selection, target binding and human review actions are separate checklist items
+under the independent-calibration prerequisites. No natural prediction, default
+policy change, holdout inspection, merge or release occurred.

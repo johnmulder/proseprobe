@@ -23,17 +23,6 @@ Preserve earlier frozen human/agent evidence and independent prerequisites.
 - If a future review is requested, include its direct reading link and limit it
   to 80 lines of 80 characters, including instructions and questions.
 
-## Native Markdown context preparation — active
-
-Use synthetic Git repositories first; no natural predictions or holdout access.
-The existing unbound-context rejection remains a required acceptance gate.
-Native preparation and reference integration passed the 3,640-test repository
-gate; details are in the [execution record](quality/reviews/2026-10-13-human-resume/EXECUTION.md).
-
-- [ ] P30.18c Prepare a separately versioned development-only native context at
-  its pinned repository revision, with permitted target access and supported
-  renderer. Preserve original manifests and split freezes.
-
 ## Independent human annotation — active
 
 Prerequisites: eligible actual human reviewers and permitted source access.
@@ -89,9 +78,15 @@ Prerequisites: supported contexts and accepted independent development labels.
   retain unsupported types and disagreements.
 - [ ] P15.9 Assess M011 under each document's declared renderer; retain unsupported
   dialects explicitly.
-- [ ] P30.18d Obtain independent M012 review only after native paths, complete
-  pinned inventories, referenced target bytes/verified absence and evaluation
-  integration are bound and supported.
+- [ ] P30.18d.1 Select further permitted development originals from metadata;
+  enumerate supported local Markdown references without predictions and retain
+  eligibility skips. The first Requests context has zero eligible references.
+- [ ] P30.18d.2 Bind complete pinned native inventories, required target bytes or
+  verified absence and renderer context for each eligible new reading. Preserve
+  original manifests/splits; freeze new artifacts separately.
+- [ ] P30.18d.3 Obtain independent human M012 judgments and validate their source
+  and target scopes before bound evaluation. Report actual denominators; empty
+  reference populations cannot supply effectiveness estimates.
 - [ ] P32D.7 Propose thresholds, confidence, severity, defaults or promotion only
   from sufficient development evidence; promotion remains optional.
 
