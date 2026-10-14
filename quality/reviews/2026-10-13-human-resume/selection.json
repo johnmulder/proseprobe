@@ -1,0 +1,57 @@
+{
+  "authorization": "execute the plan. Interact with me to answer review questions.",
+  "declared_batch": [
+    {
+      "reading_id": "R005",
+      "region": {
+        "column": 1,
+        "end_column": 117,
+        "end_line": 38,
+        "line": 18
+      },
+      "sha256": "ab4a60280784e5b915bb2b1353ceb0a5cffefcbe5148c53b901d7861d41c52a1",
+      "source_id": "github/docs:content/actions/how-tos/write-workflows/choose-what-workflows-do/use-jobs.md"
+    }
+  ],
+  "excluded_exposed_sources": {
+    "fastapi/fastapi:40e33e492dbf4af6172997f4e3238a32e56cbe26:README.md": "4fd6beb4d1c0bbe7c3ff56b18a3d106efaa7edd33f6c13ed357bd8a4e942a7f6",
+    "github/docs:content/copilot/how-tos/copilot-on-github/customize-copilot/customize-copilot-overview.md": "f763443413e14d3a4b744989d95dc28a7f29dca62eb5764e0f88cd5a32312bb6",
+    "github/docs:content/rest/about-the-rest-api/about-the-openapi-description-for-the-rest-api.md": "5bbbf5299d36f473d32424e20294e120ac575a5b92093730ce99f365705e1683",
+    "github/docs:content/rest/codespaces/repository-secrets.md": "6e7b819515fb72b89f1e16a3c7c7b31039b684b9f4adb8bed0c618a7806ec186",
+    "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md": "4fe410984681f95a867f894f67523cfa461e039a9b7d43fc7bce297178c7dec1",
+    "github/docs:content/support/contacting-github-support/using-copilot-in-github-support.md": "ce22f56c8242cabb991427c29cb84164eae5e821b1b05879717417e55fa7e8a8",
+    "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:README.md": "4f7bfa1b3f7c87268767235307d0bcae78997a96ca00a3b31062e5b9a295ed7c"
+  },
+  "holdout_status": "not opened",
+  "independence": "unverified",
+  "limitations": "Raw native Markdown only; rendered reusable expansions unavailable; no population quality claim.",
+  "manifest_sha256": {
+    "quality/external/extension-sources.json": "1f3a26861f1321747802a9e5b574ae78201b996cdd70ccec9a18094fe052cbbf",
+    "quality/sources.json": "2dcadd8fb3bb278ee09a9ff2685b00c7a7c6efde3f0221ae69efcccc825d3ade"
+  },
+  "phase": "initial-blind-human-resume",
+  "prediction_status": "no predictions generated for this source; withheld until batch labels frozen",
+  "previous_autonomous_session": "quality/reviews/2026-10-13-autonomous",
+  "previous_human_session": "quality/reviews/2026-10-10-interactive",
+  "prior_prediction_exposure": "unknown; requested",
+  "reviewer_id": "human-session-user-2026-10-10",
+  "rules": [
+    "G038",
+    "V015",
+    "V016"
+  ],
+  "second_human_reviewer": "not assigned",
+  "session_date": "2026-10-13",
+  "skipped_no_prose": [
+    {
+      "source_id": "github/docs:content/rest/licenses/index.md",
+      "status": "syntax-only eligibility skip; no human labels inferred"
+    },
+    {
+      "source_id": "github/docs:content/copilot/tutorials/cloud-agent/index.md",
+      "status": "syntax-only eligibility skip; no human labels inferred"
+    }
+  ],
+  "source_order": "unchanged original seeded order; entire detector-exposed source IDs and SHA-256 bytes excluded",
+  "version": 1
+}

@@ -1,9 +1,9 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-13. The unattended development track is complete; results,
-limits and exact candidate CI evidence are in the
-[execution record](quality/reviews/2026-10-13-autonomous/EXECUTION.md).
-Only conditional work remains. No further interactive review is requested.
+Updated: 2026-10-13. Human review resumed by user request after the completed
+[unattended track](quality/reviews/2026-10-13-autonomous/EXECUTION.md).
+Each reading includes a direct link and at most 80 lines of 80 characters.
+Preserve earlier frozen human/agent evidence and independent prerequisites.
 
 ## Working rules
 
@@ -23,7 +23,22 @@ Only conditional work remains. No further interactive review is requested.
 - If a future review is requested, include its direct reading link and limit it
   to 80 lines of 80 characters, including instructions and questions.
 
-## Independent human annotation — deferred
+## Native Markdown context preparation — active
+
+Use synthetic Git repositories first; no natural predictions or holdout access.
+The existing unbound-context rejection remains a required acceptance gate.
+
+- [ ] P30.18a Add failing synthetic source/inventory/target/path/symlink/split
+  binding tests; build and validate an offline context bundle and private
+  native-path materialization for explicitly declared targets.
+- [ ] P30.18b Add failing tests for complete reference enumeration and evaluator
+  integration. Accept strict local-link context only after every required target
+  is bound or proven absent; retain the existing rejection for missing context.
+- [ ] P30.18c Prepare a separately versioned development-only native context at
+  its pinned repository revision, with permitted target access and supported
+  renderer. Preserve original manifests and split freezes.
+
+## Independent human annotation — active
 
 Prerequisites: eligible actual human reviewers and permitted source access.
 The three previous human scopes remain limited; prior exposure is unknown and
@@ -78,10 +93,9 @@ Prerequisites: supported contexts and accepted independent development labels.
   retain unsupported types and disagreements.
 - [ ] P15.9 Assess M011 under each document's declared renderer; retain unsupported
   dialects explicitly.
-- [ ] P30.18 Before M012 independent review, bind native source paths, complete
-  pinned target inventories and referenced target bytes or verified absence.
-  Add failing tests for stale/incomplete bindings and path/symlink escapes before
-  any binding implementation. A missing cached target cannot prove absence.
+- [ ] P30.18d Obtain independent M012 review only after native paths, complete
+  pinned inventories, referenced target bytes/verified absence and evaluation
+  integration are bound and supported.
 - [ ] P32D.7 Propose thresholds, confidence, severity, defaults or promotion only
   from sufficient development evidence; promotion remains optional.
 
@@ -117,3 +131,13 @@ excluded. Current evidence is in the execution record and `dataset-terms.json`.
 - [ ] P33.14 When a release is explicitly requested, complete every gate in
   [RELEASE_BLOCKERS.md](RELEASE_BLOCKERS.md) for that exact release candidate,
   including package, legal/publication identity and trusted publishing.
+
+## Current human review batch
+
+Session: `quality/reviews/2026-10-13-human-resume/selection.json`.
+R005 is submitted: 50 lines, maximum width 80, covering the workflow-jobs
+source at L18 C1–L38 C117 for G038/V015/V016. Reusable expansions and linked
+pages stay unreviewed. Reviewer alias and passage-specific prior exposure await
+answers; independence remains unverified. No second human is assigned.
+The seven detector-exposed original sources are excluded by ID and native hash.
+The fresh packet and exact reading map validate without predictions.

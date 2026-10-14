@@ -18,6 +18,15 @@ prerequisites remain unavailable. The unattended session records the selection,
 bindings, reports and policy decisions under
 `quality/reviews/2026-10-13-autonomous/`.
 
+The user subsequently resumed interactive human review. Keep the unattended
+records frozen and start a fresh declared development batch. Exclude previously
+scanned source IDs and native byte hashes when selecting fresh blind readings.
+Record the returning human's alias and passage-specific prior prediction
+exposure; unknown exposure remains unknown. Include a direct reading link within
+the presentation limit. The resumed batch and source bindings are recorded in
+`quality/reviews/2026-10-13-human-resume/`. Do not generate predictions for its
+source until accepted initial batch labels are frozen.
+
 ## First pass
 
 Give reviewers a fresh source-bound version 3 packet, declared rule contracts,

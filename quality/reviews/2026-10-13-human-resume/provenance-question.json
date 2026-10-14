@@ -1,0 +1,11 @@
+{
+  "combined_question_lines": 55,
+  "kind": "reviewer alias and passage-specific prediction exposure",
+  "limits": "Both question titles independently and together fit 80 lines; each physical line is at most 80 characters.",
+  "question_sha256": "99881d583e5807ee82b244eb2824059b6e78f10726192a0e969c0ab9aec9d189",
+  "question_text": "Reviewer provenance for this resumed batch:\nKeep the existing session ID, or give a name/alias to record.\nHave you previously seen ProseProbe detector outputs for the R005\nworkflow-jobs passage linked below: yes, no, or unsure?\nPlease answer with your alias choice and exposure status.",
+  "reading_id": "R005",
+  "response_status": "pending",
+  "submitted_together_with": "R005",
+  "version": 1
+}
