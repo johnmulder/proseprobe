@@ -48,3 +48,28 @@ remain 366 TP / 6 FP / 0 FN; production remains 106 TP / 4 FP / 0 FN. Both
 exact-mismatch gates pass and retain every known mismatch. These are engineering
 regression counts, not independent effectiveness estimates. `local-checks.json`
 records the command, results and full local log digest.
+
+A04: Generated ten unchanged-policy version 3 reports after freeze commit
+`34dfd37`: each of the three human readings and two agent reviews, under both
+all-rules and default production policy. `report-summary.json` binds the full
+reports by checksum. Labels, source bytes and baseline remain unchanged.
+
+| Evidence | Unique reviewed coverage | All-rules TP / FP / FN |
+|---|---|---|
+| Human R001–R003 | 3 regions, 517 prose words, 1 group | 0 / 0 / 0 |
+| Agent A | 5 files, 4,377 prose words, 3 groups | 0 / 0 / 0 |
+| Agent B, same sources | 5 files, 4,377 prose words, 3 groups | 0 / 0 / 0 |
+
+There are no annotated positives or detection events, so precision and recall
+are unavailable. Repeated agents do not add independent sources. Group
+intervals are unavailable under the declared five-group minimum. The three
+claim rules are informational and excluded by default warning/medium production
+policy; that track has zero eligible reviewed coverage. Zero false-warning
+density counts warning/error findings only and cannot establish the precision
+of informational claims. Other-rule findings remain explicitly unreviewed.
+
+`policy-decision.json` retains current implementation, confidence, severity,
+defaults and experimental status. The convenience sample supplies no basis for
+promotion, threshold tuning, factual validation or independent effectiveness.
+G039, C004, C009, C010, M011 and M012 natural assessments remain unavailable;
+no labels for those contracts were inferred from these three-rule reviews.

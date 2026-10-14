@@ -1,0 +1,105 @@
+{
+  "agent_scope_per_reviewer": {
+    "expected_positive_spans": 0,
+    "files": 5,
+    "independent_human_evidence": false,
+    "prose_words": 4377,
+    "source_groups": 3
+  },
+  "all_rules_result": "zero TP/FP/FN in reviewed coverage; precision and recall unavailable with zero event denominators",
+  "decision": "retain implementation, confidence, severity, defaults and experimental status unchanged",
+  "holdout_opened": false,
+  "human_scope": {
+    "expected_positive_spans": 0,
+    "independence": "unverified",
+    "prose_words": 517,
+    "regions": 3,
+    "source_groups": 1
+  },
+  "interval_result": "unavailable; fewer than five contributing source groups and no precision/recall events",
+  "other_assessments": {
+    "C004": "unavailable; no eligible natural labels collected for this contract",
+    "C009": "unavailable; no eligible natural labels collected for this contract",
+    "C010": "unavailable; no eligible natural labels collected for this contract",
+    "G039": "unavailable; no eligible natural labels collected for this contract",
+    "M011": "unavailable; no eligible natural labels collected for this contract",
+    "M012": "unavailable; no eligible natural labels collected for this contract"
+  },
+  "other_rules": "findings outside declared three-rule coverage remain unreviewed; they are not clean evidence",
+  "production_result": "three informational rules excluded by unchanged warning/medium policy; eligible reviewed coverage unavailable",
+  "promotion_justified": false,
+  "rules": [
+    "G038",
+    "V015",
+    "V016"
+  ],
+  "runtime": {
+    "git": {
+      "head": "34dfd37178af15c602df37b7322e0ef2cd889f14",
+      "scope": [
+        "benchmarks",
+        "src/proseprobe"
+      ],
+      "staged_dirty": false,
+      "tracked_worktree_dirty": false,
+      "untracked_python_files": []
+    },
+    "identity_scope": "package and evaluator Python source names and exact bytes; caches, corpora and documents excluded",
+    "package_version": "0.1.0",
+    "source_files": [
+      "evaluator/__init__.py",
+      "evaluator/bench_rules.py",
+      "evaluator/corpora.py",
+      "evaluator/evaluation_identity.py",
+      "evaluator/memory_probe.py",
+      "evaluator/paired_quality.py",
+      "evaluator/quality_scoring.py",
+      "evaluator/regression_gate.py",
+      "evaluator/review_readings.py",
+      "evaluator/rule_quality.py",
+      "evaluator/source_intervals.py",
+      "evaluator/startup_probe.py",
+      "evaluator/usefulness.py",
+      "package/__init__.py",
+      "package/__main__.py",
+      "package/_ansi.py",
+      "package/_rule_docs.py",
+      "package/cli.py",
+      "package/config.py",
+      "package/core/__init__.py",
+      "package/core/baseline.py",
+      "package/core/linter.py",
+      "package/core/policy.py",
+      "package/core/reporter.py",
+      "package/data/__init__.py",
+      "package/data/code_patterns.py",
+      "package/data/patterns.py",
+      "package/data/phrases.py",
+      "package/data/style_patterns.py",
+      "package/data/vocabulary.py",
+      "package/parsers/__init__.py",
+      "package/parsers/markdown.py",
+      "package/parsers/prose.py",
+      "package/parsers/python.py",
+      "package/profiles.py",
+      "package/rules/__init__.py",
+      "package/rules/_phrases.py",
+      "package/rules/base.py",
+      "package/rules/code.py",
+      "package/rules/grammar.py",
+      "package/rules/markup.py",
+      "package/rules/struct.py",
+      "package/rules/style.py",
+      "package/rules/vocab.py"
+    ],
+    "source_files_count": 44,
+    "source_roots": {
+      "evaluator": "/Users/johnmulder/Experiments/proseprobe/benchmarks",
+      "package": "/Users/johnmulder/Experiments/proseprobe/src/proseprobe"
+    },
+    "source_sha256": "30bfc8f451d15b00342a9e48f3da9fe8e859c0832961f1838be74c20a6e84d3d"
+  },
+  "session_date": "2026-10-13",
+  "tuning_performed": false,
+  "version": 1
+}

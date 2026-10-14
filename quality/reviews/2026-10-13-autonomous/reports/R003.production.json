@@ -1,0 +1,1153 @@
+{
+  "annotation_completeness": "explicit-scopes",
+  "annotation_scopes": [
+    {
+      "note": "The session user reported no issues for all three declared rules in R003. The literal answer is preserved in ../R003.response.json. No omitted text or other rules were reviewed.",
+      "path": "originals/0000.md",
+      "rules": [
+        "G038",
+        "V015",
+        "V016"
+      ],
+      "span": {
+        "column": 1,
+        "end_column": 594,
+        "end_line": 22,
+        "line": 14
+      },
+      "status": "reviewed"
+    }
+  ],
+  "breakdowns": {
+    "confidence": {
+      "high": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": null,
+        "recall": null,
+        "recall_denominator": null,
+        "recall_interval_95": null,
+        "recall_unavailable_reason": "missed expectations have no predicted confidence; use policy-threshold recall",
+        "true_positives": 0,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "low": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": null,
+        "recall": null,
+        "recall_denominator": null,
+        "recall_interval_95": null,
+        "recall_unavailable_reason": "missed expectations have no predicted confidence; use policy-threshold recall",
+        "true_positives": 0,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "medium": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": null,
+        "recall": null,
+        "recall_denominator": null,
+        "recall_interval_95": null,
+        "recall_unavailable_reason": "missed expectations have no predicted confidence; use policy-threshold recall",
+        "true_positives": 0,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "unassigned": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": null,
+        "recall": null,
+        "recall_denominator": null,
+        "recall_interval_95": null,
+        "recall_unavailable_reason": "missed expectations have no predicted confidence; use policy-threshold recall",
+        "true_positives": 0,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      }
+    },
+    "context": {},
+    "format": {},
+    "profile": {},
+    "severity": {},
+    "source_group": {}
+  },
+  "cluster_interval": null,
+  "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: no eligible denominator observations",
+  "context_dependent": [],
+  "context_dependent_count": 0,
+  "corpus": {
+    "expected_count": 0,
+    "files": {
+      "originals/0000.md": "4fe410984681f95a867f894f67523cfa461e039a9b7d43fc7bce297178c7dec1"
+    },
+    "files_count": 1,
+    "manifest_sha256": "ff313e9eed2e3a0821a5047283b206c68796fddeea676f7202781d73a7910bc2",
+    "negative_count": 0,
+    "reviewed_source_identities": {
+      "originals/0000.md": {
+        "sha256": "4fe410984681f95a867f894f67523cfa461e039a9b7d43fc7bce297178c7dec1",
+        "source_id": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md"
+      }
+    }
+  },
+  "exact_start_rules": {
+    "C001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S016": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S025": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    }
+  },
+  "exact_start_totals": {
+    "false_negatives": 0,
+    "false_positives": 0,
+    "negatives_passed": 0,
+    "negatives_total": 0,
+    "true_positives": 0
+  },
+  "excluded_expected": 0,
+  "excluded_negatives": 0,
+  "false_negatives": [],
+  "false_positives": [],
+  "gate": null,
+  "local_link_context": {
+    "enabled": false,
+    "reason": null,
+    "root": null,
+    "target_binding": "not-required"
+  },
+  "locations": {
+    "C001": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "C003": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G003": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M001": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M002": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M003": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M004": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M005": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M006": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M007": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M008": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M010": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S003": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S005": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S006": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S010": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S016": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S025": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V001": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V002": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V004": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V006": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    }
+  },
+  "macro_precision": null,
+  "macro_recall": null,
+  "matches": [],
+  "metric_source_group_counts": {
+    "density": 0,
+    "precision": 0,
+    "recall": 0
+  },
+  "metrics": {
+    "false_warnings_per_1000_prose_words": null,
+    "precision": null,
+    "precision_denominator": 0,
+    "precision_interval_95": null,
+    "prose_words": 0,
+    "recall": null,
+    "recall_denominator": 0,
+    "recall_interval_95": null,
+    "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+  },
+  "mode": "production",
+  "policy": {
+    "exclude": [
+      "venv/**",
+      ".venv/**",
+      "node_modules/**",
+      ".git/**"
+    ],
+    "ignore": [],
+    "include": [
+      "*.md",
+      "*.mdx",
+      "*.markdown",
+      "*.py"
+    ],
+    "local_link_exclude": [],
+    "local_links": false,
+    "markdown_anchor_style": "off",
+    "min_confidence": "low",
+    "per_file_ignores": [],
+    "profile": null,
+    "project_root": null,
+    "select": [
+      "V",
+      "S",
+      "T",
+      "G",
+      "C",
+      "M"
+    ],
+    "severity": "warning",
+    "severity_overrides": {},
+    "source_path": null,
+    "thresholds": {
+      "anaphora_abuse": 3,
+      "bold_overuse": 3,
+      "citation_name_drop": 3,
+      "em_dash_overuse": 5,
+      "gerund_fragment_litany": 3,
+      "historical_analogy_stacking": 3,
+      "inline_header_lists": 3,
+      "invented_concept_labels": 2,
+      "nominalization_overload": 3,
+      "passive_voice_overuse": 5,
+      "rule_of_three": 3,
+      "sentence_length_max": 40,
+      "short_punchy_fragments": 3,
+      "wall_of_text_sentences": 6
+    },
+    "vocabulary": {
+      "additional": [],
+      "allowed": [],
+      "allowed_phrases": [
+        "All notable changes",
+        "Critical issue"
+      ]
+    }
+  },
+  "precision_rules_count": 0,
+  "prose_words_by_context": {
+    "comment": 0,
+    "docstring": 0,
+    "markdown": 0
+  },
+  "recall_rules_count": 0,
+  "review_provenance": {
+    "packet_index": {
+      "path": "index.json",
+      "sha256": "1de0d574337a5ffdd7c4e9b86a73b931baf754c2a31941e1b36ab9ba3b1601a6"
+    },
+    "policy": {
+      "min_confidence": "low",
+      "mode": "all-rules",
+      "profile": "default",
+      "severity": "info"
+    },
+    "protocol_revision": "interactive-blind-development-v1",
+    "reviewers": [
+      "human-session-user-2026-10-10"
+    ],
+    "rule_contracts": {
+      "path": "contracts.json",
+      "sha256": "44574c524e1f13596b150e5e38f44f47bc4690abced12be954e34c810d5da657"
+    }
+  },
+  "reviewed_coverage": {},
+  "reviewed_source_group_count": 0,
+  "revision": "34dfd37178af15c602df37b7322e0ef2cd889f14",
+  "rule_metrics": {
+    "C001": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "C003": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G003": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M001": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M002": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M003": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M004": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M005": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M006": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M007": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M008": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M010": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S003": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S005": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S006": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S010": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S016": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S025": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V001": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V002": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V004": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V006": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    }
+  },
+  "rules": {
+    "C001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S016": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S025": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    }
+  },
+  "runtime": {
+    "git": {
+      "head": "34dfd37178af15c602df37b7322e0ef2cd889f14",
+      "scope": [
+        "benchmarks",
+        "src/proseprobe"
+      ],
+      "staged_dirty": false,
+      "tracked_worktree_dirty": false,
+      "untracked_python_files": []
+    },
+    "identity_scope": "package and evaluator Python source names and exact bytes; caches, corpora and documents excluded",
+    "package_version": "0.1.0",
+    "source_files": [
+      "evaluator/__init__.py",
+      "evaluator/bench_rules.py",
+      "evaluator/corpora.py",
+      "evaluator/evaluation_identity.py",
+      "evaluator/memory_probe.py",
+      "evaluator/paired_quality.py",
+      "evaluator/quality_scoring.py",
+      "evaluator/regression_gate.py",
+      "evaluator/review_readings.py",
+      "evaluator/rule_quality.py",
+      "evaluator/source_intervals.py",
+      "evaluator/startup_probe.py",
+      "evaluator/usefulness.py",
+      "package/__init__.py",
+      "package/__main__.py",
+      "package/_ansi.py",
+      "package/_rule_docs.py",
+      "package/cli.py",
+      "package/config.py",
+      "package/core/__init__.py",
+      "package/core/baseline.py",
+      "package/core/linter.py",
+      "package/core/policy.py",
+      "package/core/reporter.py",
+      "package/data/__init__.py",
+      "package/data/code_patterns.py",
+      "package/data/patterns.py",
+      "package/data/phrases.py",
+      "package/data/style_patterns.py",
+      "package/data/vocabulary.py",
+      "package/parsers/__init__.py",
+      "package/parsers/markdown.py",
+      "package/parsers/prose.py",
+      "package/parsers/python.py",
+      "package/profiles.py",
+      "package/rules/__init__.py",
+      "package/rules/_phrases.py",
+      "package/rules/base.py",
+      "package/rules/code.py",
+      "package/rules/grammar.py",
+      "package/rules/markup.py",
+      "package/rules/struct.py",
+      "package/rules/style.py",
+      "package/rules/vocab.py"
+    ],
+    "source_files_count": 44,
+    "source_roots": {
+      "evaluator": "/Users/johnmulder/Experiments/proseprobe/benchmarks",
+      "package": "/Users/johnmulder/Experiments/proseprobe/src/proseprobe"
+    },
+    "source_sha256": "30bfc8f451d15b00342a9e48f3da9fe8e859c0832961f1838be74c20a6e84d3d"
+  },
+  "schema_version": 3,
+  "scoring": "exact-start",
+  "source_binding": "sha256-utf8",
+  "source_group_count": 1,
+  "source_group_intervals": {
+    "density": {
+      "confidence_level": 0.95,
+      "contributing_groups_count": 0,
+      "dominant_denominator_share": null,
+      "group_counts": {},
+      "interval_95": null,
+      "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+      "minimum_contributing_groups": 5,
+      "point_estimate": null,
+      "replicates": 2000,
+      "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+      "seed": 20261010,
+      "unavailable_reason": "no eligible denominator observations"
+    },
+    "precision": {
+      "confidence_level": 0.95,
+      "contributing_groups_count": 0,
+      "dominant_denominator_share": null,
+      "group_counts": {},
+      "interval_95": null,
+      "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+      "minimum_contributing_groups": 5,
+      "point_estimate": null,
+      "replicates": 2000,
+      "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+      "seed": 20261010,
+      "unavailable_reason": "no eligible denominator observations"
+    },
+    "recall": {
+      "confidence_level": 0.95,
+      "contributing_groups_count": 0,
+      "dominant_denominator_share": null,
+      "group_counts": {},
+      "interval_95": null,
+      "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+      "minimum_contributing_groups": 5,
+      "point_estimate": null,
+      "replicates": 2000,
+      "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+      "seed": 20261010,
+      "unavailable_reason": "no eligible denominator observations"
+    }
+  },
+  "span_accuracy": null,
+  "span_accuracy_denominator": 0,
+  "totals": {
+    "false_negatives": 0,
+    "false_positives": 0,
+    "negatives_passed": 0,
+    "negatives_total": 0,
+    "true_positives": 0
+  },
+  "unreviewed": [],
+  "unreviewed_count": 0,
+  "unscored_expected": [],
+  "unsupported": [],
+  "unsupported_count": 0,
+  "usefulness": {
+    "automatic_rescan": {
+      "evidence_kind": "recorded observations with declared policy/runtime hashes; no current run verified",
+      "new_warning_count": 0,
+      "observations_count": 0,
+      "semantic_usefulness_inferred": false,
+      "targeted_issue_resolved_count": 0
+    },
+    "dimensions": {
+      "finding_helpful": {
+        "binary_denominator": 0,
+        "context_dependent_count": 0,
+        "no_count": 0,
+        "positive_rate": null,
+        "unresolved_count": 0,
+        "unreviewed_count": 0,
+        "yes_count": 0
+      },
+      "meaning_preserved": {
+        "binary_denominator": 0,
+        "context_dependent_count": 0,
+        "no_count": 0,
+        "positive_rate": null,
+        "unresolved_count": 0,
+        "unreviewed_count": 0,
+        "yes_count": 0
+      },
+      "reviewer_accepts": {
+        "binary_denominator": 0,
+        "context_dependent_count": 0,
+        "no_count": 0,
+        "positive_rate": null,
+        "unresolved_count": 0,
+        "unreviewed_count": 0,
+        "yes_count": 0
+      },
+      "suggestion_fits_sentence": {
+        "binary_denominator": 0,
+        "context_dependent_count": 0,
+        "no_count": 0,
+        "positive_rate": null,
+        "unresolved_count": 0,
+        "unreviewed_count": 0,
+        "yes_count": 0
+      }
+    },
+    "distinct_prompts_count": 0,
+    "emitted_findings_count": 0,
+    "linked_findings_count": 0,
+    "linked_ratings_count": 0,
+    "ratings": [],
+    "responding_reviewers_count": 0,
+    "unavailable_reason": "no current-linked source-bound human ratings",
+    "unlinked_ratings_count": 0,
+    "unreviewed_findings_count": 0
+  },
+  "version": "0.1.0"
+}

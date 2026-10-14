@@ -32,12 +32,6 @@ not a judgment; its human scope remains unreviewed. The agent pilot covers five
 licensed development Markdown sources in three source groups. It is a declared
 convenience sample and does not establish representative population quality.
 
-- [ ] A04a Run source-bound all-rules and unchanged production reports for each
-  human reading and each agent review, using the existing report path.
-- [ ] A04b Summarize raw counts, policy exclusions, eligible reviewed words,
-  source-group support and unavailable metrics. Separate human and agent rows.
-- [ ] A04c Record a development decision for the three claim rules. Keep other
-  rule assessments unavailable where no eligible labels were collected.
 - [ ] A07 Freeze the candidate, push a review branch and create a draft PR to
   trigger Ubuntu Python 3.11–3.13 CI. Record exact-SHA evidence for P33.9.
 - [ ] A08 Publish an execution record, prune completed actions and leave only
