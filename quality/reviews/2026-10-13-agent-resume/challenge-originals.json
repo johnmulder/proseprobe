@@ -1,0 +1,26 @@
+{
+  "author": "codex-agent:/root",
+  "author_implementation_familiarity": true,
+  "license": "MIT; repository LICENSE applies",
+  "license_sha256": "c494ee58615ec0749317bd65ea74f8fb24bbfaaaad9e94a1813198adb4fa2812",
+  "population": "root-authored development challenges",
+  "sources": {
+    "claims.md": {
+      "sha256": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48",
+      "text": "# Client notes\n\nThe Nova parser is faster.\nThe Nova parser is faster than the Atlas parser.\nThe Nova parser remains the best.\nAmong the three parsers in our benchmark, Nova is the best.\nThe Nova deployment never fails.\nAcross 1,000 test runs, the Nova deployment never fails.\nWe ran 1,000 tests. The Nova deployment never fails.\nIn tests, the Nova deployment always succeeds.\nRead the the configuration before starting Nova.\nThe editor had had enough time to revise the note.\nIs Nova faster?\nIf Nova were faster, we would select it.\nThe phrase \"Nova is faster\" does not state a comparison target.\n\nRead [scope](#scope) and [limits](#limits).\n\n## Scope\n\nThis note describes a fictional parser and deployment.\n"
+    },
+    "documentation.py": {
+      "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+      "text": "from abc import ABC, abstractmethod\n\n\ndef fetch(target, *extras) -> None:\n    \"\"\"Fetch a record.\n\n    :param attempts: Number of attempts.\n    :param **extras: Additional positional values.\n    :rtype: int\n    \"\"\"\n    # TODO\n    raise NotImplementedError(\"Add logic here\")\n\n\nclass Reader(ABC):\n    @abstractmethod\n    def read(self) -> None:\n        \"\"\"Read a record.\n\n        :rtype: None\n        \"\"\"\n        ...\n\n\ndef checked(path, *extras, **options) -> None:\n    \"\"\"Read the the input file.\n\n    :param path: Input path.\n    :param *extras: Additional positional values.\n    :param **options: Additional keyword values.\n    :param timeout: Forwarded keyword option.\n    :rtype: None\n    \"\"\"\n    # TODO: Add retry logic for network failures (issue #42)\n    return None\n\n\ndef decode(payload) -> str:\n    \"\"\"Decode a payload.\n\n    :param payload: Input bytes.\n    :rtype: int\n    \"\"\"\n    return str(payload)\n"
+    },
+    "entry.md": {
+      "sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+      "text": "# Workflow\n\nRead [installation](setup.md#install) before running the client.\nRead [configuration](setup.md#configuration) for additional settings.\nRead [migration](missing.md) before upgrading.\nRead [overview](#workflow) to return to this page.\nRead [limitations](#limitations) before changing the configuration.\n"
+    },
+    "setup.md": {
+      "sha256": "30e40d742a09cb169b0abac6b3fb5a5fc1cafd287b3c61d7cad9a6cee1decfbb",
+      "text": "# Install\n\nInstall the client with the package manager.\n\n```markdown\n# Configuration\n```\n\n## Configuration notes\n\nThe configuration heading inside the example does not create a section.\n"
+    }
+  },
+  "version": 1
+}

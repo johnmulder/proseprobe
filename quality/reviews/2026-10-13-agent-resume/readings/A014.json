@@ -1,0 +1,428 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A014.txt",
+  "packet_path": "originals/0005.py",
+  "pair_group": "psf/requests:src/requests/cookies.py",
+  "reading_id": "A014",
+  "region": {
+    "column": 1,
+    "end_column": 32,
+    "end_line": 120,
+    "line": 81
+  },
+  "rendered_sha256": "159c0d9b20d9061c6637479ed9ddd5fc6265d09d85f292d83a13a062f8f9c073",
+  "rendered_text": "Blind agent reading A014: natural.\nReading file: [A014](/private/tmp/proseprobe-A014.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL 81 C 1-50 |             \"Cookie headers should be added with \nL 81 C50-76 | add_unredirected_header()\"\nL 82 C 1-10 |         )\nL 83 C 1- 1 | \nL 84 C 1-52 |     def add_unredirected_header(self, name, value):\nL 85 C 1-40 |         self._new_headers[name] = value\nL 86 C 1- 1 | \nL 87 C 1-31 |     def get_new_headers(self):\nL 88 C 1-33 |         return self._new_headers\nL 89 C 1- 1 | \nL 90 C 1-14 |     @property\nL 91 C 1-28 |     def unverifiable(self):\nL 92 C 1-38 |         return self.is_unverifiable()\nL 93 C 1- 1 | \nL 94 C 1-14 |     @property\nL 95 C 1-31 |     def origin_req_host(self):\nL 96 C 1-42 |         return self.get_origin_req_host()\nL 97 C 1- 1 | \nL 98 C 1-14 |     @property\nL 99 C 1-20 |     def host(self):\nL100 C 1-31 |         return self.get_host()\nL101 C 1- 1 | \nL102 C 1- 1 | \nL103 C 1-20 | class MockResponse:\nL104 C 1-49 |     \"\"\"Wraps a `httplib.HTTPMessage` to mimic a \nL104 C49-69 | `urllib.addinfourl`.\nL105 C 1- 1 | \nL106 C 1-65 |     ...what? Basically, expose the parsed HTTP headers from the \nL106 C65-80 | server response\nL107 C 1-50 |     the way `http.cookiejar` expects to see them.\nL108 C 1- 8 |     \"\"\"\nL109 C 1- 1 | \nL110 C 1-33 |     def __init__(self, headers):\nL111 C 1-56 |         \"\"\"Make a MockResponse for `cookiejar` to read.\nL112 C 1- 1 | \nL113 C 1-60 |         :param headers: a httplib.HTTPMessage or analogous \nL113 C60-80 | carrying the headers\nL114 C 1-12 |         \"\"\"\nL115 C 1-32 |         self._headers = headers\nL116 C 1- 1 | \nL117 C 1-20 |     def info(self):\nL118 C 1-29 |         return self._headers\nL119 C 1- 1 | \nL120 C 1-32 |     def getheaders(self, name):\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 50,
+      "end_line": 81,
+      "line": 81,
+      "reading_line": 13,
+      "source_line_ending": "",
+      "text": "            \"Cookie headers should be added with "
+    },
+    {
+      "column": 50,
+      "end_column": 76,
+      "end_line": 81,
+      "line": 81,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "add_unredirected_header()\""
+    },
+    {
+      "column": 1,
+      "end_column": 10,
+      "end_line": 82,
+      "line": 82,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "        )"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 83,
+      "line": 83,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 52,
+      "end_line": 84,
+      "line": 84,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "    def add_unredirected_header(self, name, value):"
+    },
+    {
+      "column": 1,
+      "end_column": 40,
+      "end_line": 85,
+      "line": 85,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "        self._new_headers[name] = value"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 86,
+      "line": 86,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 31,
+      "end_line": 87,
+      "line": 87,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "    def get_new_headers(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 88,
+      "line": 88,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "        return self._new_headers"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 89,
+      "line": 89,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 14,
+      "end_line": 90,
+      "line": 90,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "    @property"
+    },
+    {
+      "column": 1,
+      "end_column": 28,
+      "end_line": 91,
+      "line": 91,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "    def unverifiable(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 38,
+      "end_line": 92,
+      "line": 92,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": "        return self.is_unverifiable()"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 93,
+      "line": 93,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 14,
+      "end_line": 94,
+      "line": 94,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "    @property"
+    },
+    {
+      "column": 1,
+      "end_column": 31,
+      "end_line": 95,
+      "line": 95,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "    def origin_req_host(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 42,
+      "end_line": 96,
+      "line": 96,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": "        return self.get_origin_req_host()"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 97,
+      "line": 97,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 14,
+      "end_line": 98,
+      "line": 98,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "    @property"
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 99,
+      "line": 99,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "    def host(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 31,
+      "end_line": 100,
+      "line": 100,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "        return self.get_host()"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 101,
+      "line": 101,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 102,
+      "line": 102,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 103,
+      "line": 103,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "class MockResponse:"
+    },
+    {
+      "column": 1,
+      "end_column": 49,
+      "end_line": 104,
+      "line": 104,
+      "reading_line": 37,
+      "source_line_ending": "",
+      "text": "    \"\"\"Wraps a `httplib.HTTPMessage` to mimic a "
+    },
+    {
+      "column": 49,
+      "end_column": 69,
+      "end_line": 104,
+      "line": 104,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "`urllib.addinfourl`."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 105,
+      "line": 105,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 106,
+      "line": 106,
+      "reading_line": 40,
+      "source_line_ending": "",
+      "text": "    ...what? Basically, expose the parsed HTTP headers from the "
+    },
+    {
+      "column": 65,
+      "end_column": 80,
+      "end_line": 106,
+      "line": 106,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "server response"
+    },
+    {
+      "column": 1,
+      "end_column": 50,
+      "end_line": 107,
+      "line": 107,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": "    the way `http.cookiejar` expects to see them."
+    },
+    {
+      "column": 1,
+      "end_column": 8,
+      "end_line": 108,
+      "line": 108,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "    \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 109,
+      "line": 109,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 110,
+      "line": 110,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": "    def __init__(self, headers):"
+    },
+    {
+      "column": 1,
+      "end_column": 56,
+      "end_line": 111,
+      "line": 111,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "        \"\"\"Make a MockResponse for `cookiejar` to read."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 112,
+      "line": 112,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 60,
+      "end_line": 113,
+      "line": 113,
+      "reading_line": 48,
+      "source_line_ending": "",
+      "text": "        :param headers: a httplib.HTTPMessage or analogous "
+    },
+    {
+      "column": 60,
+      "end_column": 80,
+      "end_line": 113,
+      "line": 113,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": "carrying the headers"
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 114,
+      "line": 114,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 32,
+      "end_line": 115,
+      "line": 115,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "        self._headers = headers"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 116,
+      "line": 116,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 117,
+      "line": 117,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": "    def info(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 29,
+      "end_line": 118,
+      "line": 118,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "        return self._headers"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 119,
+      "line": 119,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 32,
+      "end_line": 120,
+      "line": 120,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": "    def getheaders(self, name):"
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+  "split": "development",
+  "version": 1
+}

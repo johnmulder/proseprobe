@@ -1,0 +1,419 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A023.txt",
+  "packet_path": "originals/0005.py",
+  "pair_group": "psf/requests:src/requests/cookies.py",
+  "reading_id": "A023",
+  "region": {
+    "column": 1,
+    "end_column": 81,
+    "end_line": 480,
+    "line": 441
+  },
+  "rendered_sha256": "f1306d356a0b74a533b89f43156b9d405381fc0c3a216cb154a2753a39c0413f",
+  "rendered_text": "Blind agent reading A023: natural.\nReading file: [A023](/private/tmp/proseprobe-A023.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL441 C 1-20 |     if jar is None:\nL442 C 1-20 |         return None\nL443 C 1- 1 | \nL444 C 1-29 |     if hasattr(jar, \"copy\"):\nL445 C 1-62 |         # We're dealing with an instance of RequestsCookieJar\nL446 C 1-26 |         return jar.copy()\nL447 C 1-54 |     # We're dealing with a generic CookieJar instance\nL448 C 1-29 |     new_jar = copy.copy(jar)\nL449 C 1-20 |     new_jar.clear()\nL450 C 1-23 |     for cookie in jar:\nL451 C 1-46 |         new_jar.set_cookie(copy.copy(cookie))\nL452 C 1-19 |     return new_jar\nL453 C 1- 1 | \nL454 C 1- 1 | \nL455 C 1-42 | def create_cookie(name, value, **kwargs):\nL456 C 1-53 |     \"\"\"Make a cookie from underspecified parameters.\nL457 C 1- 1 | \nL458 C 1-64 |     By default, the pair of `name` and `value` will be set for \nL458 C64-77 | the domain ''\nL459 C 1-59 |     and sent on every request (this is sometimes called a \nL459 C59-74 | \"supercookie\").\nL460 C 1- 8 |     \"\"\"\nL461 C 1-15 |     result = {\nL462 C 1-22 |         \"version\": 0,\nL463 C 1-22 |         \"name\": name,\nL464 C 1-24 |         \"value\": value,\nL465 C 1-22 |         \"port\": None,\nL466 C 1-22 |         \"domain\": \"\",\nL467 C 1-21 |         \"path\": \"/\",\nL468 C 1-25 |         \"secure\": False,\nL469 C 1-25 |         \"expires\": None,\nL470 C 1-25 |         \"discard\": True,\nL471 C 1-25 |         \"comment\": None,\nL472 C 1-29 |         \"comment_url\": None,\nL473 C 1-36 |         \"rest\": {\"HttpOnly\": None},\nL474 C 1-26 |         \"rfc2109\": False,\nL475 C 1- 6 |     }\nL476 C 1- 1 | \nL477 C 1-40 |     badargs = set(kwargs) - set(result)\nL478 C 1-16 |     if badargs:\nL479 C 1-25 |         raise TypeError(\nL480 C 1-65 |             f\"create_cookie() got unexpected keyword arguments: \nL480 C65-81 | {list(badargs)}\"\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 441,
+      "line": 441,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "    if jar is None:"
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 442,
+      "line": 442,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "        return None"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 443,
+      "line": 443,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 29,
+      "end_line": 444,
+      "line": 444,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "    if hasattr(jar, \"copy\"):"
+    },
+    {
+      "column": 1,
+      "end_column": 62,
+      "end_line": 445,
+      "line": 445,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "        # We're dealing with an instance of RequestsCookieJar"
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 446,
+      "line": 446,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "        return jar.copy()"
+    },
+    {
+      "column": 1,
+      "end_column": 54,
+      "end_line": 447,
+      "line": 447,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "    # We're dealing with a generic CookieJar instance"
+    },
+    {
+      "column": 1,
+      "end_column": 29,
+      "end_line": 448,
+      "line": 448,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "    new_jar = copy.copy(jar)"
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 449,
+      "line": 449,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "    new_jar.clear()"
+    },
+    {
+      "column": 1,
+      "end_column": 23,
+      "end_line": 450,
+      "line": 450,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "    for cookie in jar:"
+    },
+    {
+      "column": 1,
+      "end_column": 46,
+      "end_line": 451,
+      "line": 451,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "        new_jar.set_cookie(copy.copy(cookie))"
+    },
+    {
+      "column": 1,
+      "end_column": 19,
+      "end_line": 452,
+      "line": 452,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "    return new_jar"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 453,
+      "line": 453,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 454,
+      "line": 454,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 42,
+      "end_line": 455,
+      "line": 455,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "def create_cookie(name, value, **kwargs):"
+    },
+    {
+      "column": 1,
+      "end_column": 53,
+      "end_line": 456,
+      "line": 456,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "    \"\"\"Make a cookie from underspecified parameters."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 457,
+      "line": 457,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 458,
+      "line": 458,
+      "reading_line": 30,
+      "source_line_ending": "",
+      "text": "    By default, the pair of `name` and `value` will be set for "
+    },
+    {
+      "column": 64,
+      "end_column": 77,
+      "end_line": 458,
+      "line": 458,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "the domain ''"
+    },
+    {
+      "column": 1,
+      "end_column": 59,
+      "end_line": 459,
+      "line": 459,
+      "reading_line": 32,
+      "source_line_ending": "",
+      "text": "    and sent on every request (this is sometimes called a "
+    },
+    {
+      "column": 59,
+      "end_column": 74,
+      "end_line": 459,
+      "line": 459,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "\"supercookie\")."
+    },
+    {
+      "column": 1,
+      "end_column": 8,
+      "end_line": 460,
+      "line": 460,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "    \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 15,
+      "end_line": 461,
+      "line": 461,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "    result = {"
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 462,
+      "line": 462,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "        \"version\": 0,"
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 463,
+      "line": 463,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": "        \"name\": name,"
+    },
+    {
+      "column": 1,
+      "end_column": 24,
+      "end_line": 464,
+      "line": 464,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "        \"value\": value,"
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 465,
+      "line": 465,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": "        \"port\": None,"
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 466,
+      "line": 466,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": "        \"domain\": \"\","
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 467,
+      "line": 467,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "        \"path\": \"/\","
+    },
+    {
+      "column": 1,
+      "end_column": 25,
+      "end_line": 468,
+      "line": 468,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": "        \"secure\": False,"
+    },
+    {
+      "column": 1,
+      "end_column": 25,
+      "end_line": 469,
+      "line": 469,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "        \"expires\": None,"
+    },
+    {
+      "column": 1,
+      "end_column": 25,
+      "end_line": 470,
+      "line": 470,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "        \"discard\": True,"
+    },
+    {
+      "column": 1,
+      "end_column": 25,
+      "end_line": 471,
+      "line": 471,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": "        \"comment\": None,"
+    },
+    {
+      "column": 1,
+      "end_column": 29,
+      "end_line": 472,
+      "line": 472,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "        \"comment_url\": None,"
+    },
+    {
+      "column": 1,
+      "end_column": 36,
+      "end_line": 473,
+      "line": 473,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "        \"rest\": {\"HttpOnly\": None},"
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 474,
+      "line": 474,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "        \"rfc2109\": False,"
+    },
+    {
+      "column": 1,
+      "end_column": 6,
+      "end_line": 475,
+      "line": 475,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": "    }"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 476,
+      "line": 476,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 40,
+      "end_line": 477,
+      "line": 477,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "    badargs = set(kwargs) - set(result)"
+    },
+    {
+      "column": 1,
+      "end_column": 16,
+      "end_line": 478,
+      "line": 478,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": "    if badargs:"
+    },
+    {
+      "column": 1,
+      "end_column": 25,
+      "end_line": 479,
+      "line": 479,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": "        raise TypeError("
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 480,
+      "line": 480,
+      "reading_line": 54,
+      "source_line_ending": "",
+      "text": "            f\"create_cookie() got unexpected keyword arguments: "
+    },
+    {
+      "column": 65,
+      "end_column": 81,
+      "end_line": 480,
+      "line": 480,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": "{list(badargs)}\""
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+  "split": "development",
+  "version": 1
+}

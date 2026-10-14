@@ -1,0 +1,428 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A022.txt",
+  "packet_path": "originals/0005.py",
+  "pair_group": "psf/requests:src/requests/cookies.py",
+  "reading_id": "A022",
+  "region": {
+    "column": 1,
+    "end_column": 27,
+    "end_line": 440,
+    "line": 401
+  },
+  "rendered_sha256": "dbc0d13cc675366cc22cbae007816a9ef93b4e016d08685b1260a00a1287d5bc",
+  "rendered_text": "Blind agent reading A022: natural.\nReading file: [A022](/private/tmp/proseprobe-A022.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL401 C 1-62 |                 if domain is None or cookie.domain == domain:\nL402 C 1-60 |                     if path is None or cookie.path == path:\nL403 C 1-49 |                         if toReturn is not None:\nL404 C 1-66 |                             # if there are multiple cookies that \nL404 C66-89 | meet passed in criteria\nL405 C 1-55 |                             raise CookieConflictError(\nL406 C 1-67 |                                 f\"There are multiple cookies with \nL406 C67-82 | name, {name!r}\"\nL407 C 1-30 |                             )\nL408 C 1-66 |                         # we will eventually return this as long \nL408 C66-87 | as no cookie conflict\nL409 C 1-48 |                         toReturn = cookie.value\nL410 C 1- 1 | \nL411 C 1-21 |         if toReturn:\nL412 C 1-28 |             return toReturn\nL413 C 1-60 |         raise KeyError(f\"name={name!r}, domain={domain!r}, \nL413 C60-75 | path={path!r}\")\nL414 C 1- 1 | \nL415 C 1-28 |     def __getstate__(self):\nL416 C 1-67 |         \"\"\"Unlike a normal CookieJar, this class is pickleable.\"\"\"\nL417 C 1-37 |         state = self.__dict__.copy()\nL418 C 1-47 |         # remove the unpickleable RLock object\nL419 C 1-35 |         state.pop(\"_cookies_lock\")\nL420 C 1-21 |         return state\nL421 C 1- 1 | \nL422 C 1-35 |     def __setstate__(self, state):\nL423 C 1-67 |         \"\"\"Unlike a normal CookieJar, this class is pickleable.\"\"\"\nL424 C 1-36 |         self.__dict__.update(state)\nL425 C 1-49 |         if \"_cookies_lock\" not in self.__dict__:\nL426 C 1-51 |             self._cookies_lock = threading.RLock()\nL427 C 1- 1 | \nL428 C 1-20 |     def copy(self):\nL429 C 1-55 |         \"\"\"Return a copy of this RequestsCookieJar.\"\"\"\nL430 C 1-37 |         new_cj = RequestsCookieJar()\nL431 C 1-45 |         new_cj.set_policy(self.get_policy())\nL432 C 1-28 |         new_cj.update(self)\nL433 C 1-22 |         return new_cj\nL434 C 1- 1 | \nL435 C 1-26 |     def get_policy(self):\nL436 C 1-53 |         \"\"\"Return the CookiePolicy instance used.\"\"\"\nL437 C 1-28 |         return self._policy\nL438 C 1- 1 | \nL439 C 1- 1 | \nL440 C 1-27 | def _copy_cookie_jar(jar):\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 62,
+      "end_line": 401,
+      "line": 401,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "                if domain is None or cookie.domain == domain:"
+    },
+    {
+      "column": 1,
+      "end_column": 60,
+      "end_line": 402,
+      "line": 402,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "                    if path is None or cookie.path == path:"
+    },
+    {
+      "column": 1,
+      "end_column": 49,
+      "end_line": 403,
+      "line": 403,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "                        if toReturn is not None:"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 404,
+      "line": 404,
+      "reading_line": 16,
+      "source_line_ending": "",
+      "text": "                            # if there are multiple cookies that "
+    },
+    {
+      "column": 66,
+      "end_column": 89,
+      "end_line": 404,
+      "line": 404,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "meet passed in criteria"
+    },
+    {
+      "column": 1,
+      "end_column": 55,
+      "end_line": 405,
+      "line": 405,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "                            raise CookieConflictError("
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 406,
+      "line": 406,
+      "reading_line": 19,
+      "source_line_ending": "",
+      "text": "                                f\"There are multiple cookies with "
+    },
+    {
+      "column": 67,
+      "end_column": 82,
+      "end_line": 406,
+      "line": 406,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "name, {name!r}\""
+    },
+    {
+      "column": 1,
+      "end_column": 30,
+      "end_line": 407,
+      "line": 407,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "                            )"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 408,
+      "line": 408,
+      "reading_line": 22,
+      "source_line_ending": "",
+      "text": "                        # we will eventually return this as long "
+    },
+    {
+      "column": 66,
+      "end_column": 87,
+      "end_line": 408,
+      "line": 408,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "as no cookie conflict"
+    },
+    {
+      "column": 1,
+      "end_column": 48,
+      "end_line": 409,
+      "line": 409,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "                        toReturn = cookie.value"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 410,
+      "line": 410,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 411,
+      "line": 411,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "        if toReturn:"
+    },
+    {
+      "column": 1,
+      "end_column": 28,
+      "end_line": 412,
+      "line": 412,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "            return toReturn"
+    },
+    {
+      "column": 1,
+      "end_column": 60,
+      "end_line": 413,
+      "line": 413,
+      "reading_line": 28,
+      "source_line_ending": "",
+      "text": "        raise KeyError(f\"name={name!r}, domain={domain!r}, "
+    },
+    {
+      "column": 60,
+      "end_column": 75,
+      "end_line": 413,
+      "line": 413,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": "path={path!r}\")"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 414,
+      "line": 414,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 28,
+      "end_line": 415,
+      "line": 415,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "    def __getstate__(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 416,
+      "line": 416,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "        \"\"\"Unlike a normal CookieJar, this class is pickleable.\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 37,
+      "end_line": 417,
+      "line": 417,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "        state = self.__dict__.copy()"
+    },
+    {
+      "column": 1,
+      "end_column": 47,
+      "end_line": 418,
+      "line": 418,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "        # remove the unpickleable RLock object"
+    },
+    {
+      "column": 1,
+      "end_column": 35,
+      "end_line": 419,
+      "line": 419,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "        state.pop(\"_cookies_lock\")"
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 420,
+      "line": 420,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "        return state"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 421,
+      "line": 421,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 35,
+      "end_line": 422,
+      "line": 422,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "    def __setstate__(self, state):"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 423,
+      "line": 423,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": "        \"\"\"Unlike a normal CookieJar, this class is pickleable.\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 36,
+      "end_line": 424,
+      "line": 424,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": "        self.__dict__.update(state)"
+    },
+    {
+      "column": 1,
+      "end_column": 49,
+      "end_line": 425,
+      "line": 425,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "        if \"_cookies_lock\" not in self.__dict__:"
+    },
+    {
+      "column": 1,
+      "end_column": 51,
+      "end_line": 426,
+      "line": 426,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": "            self._cookies_lock = threading.RLock()"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 427,
+      "line": 427,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 428,
+      "line": 428,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "    def copy(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 55,
+      "end_line": 429,
+      "line": 429,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": "        \"\"\"Return a copy of this RequestsCookieJar.\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 37,
+      "end_line": 430,
+      "line": 430,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "        new_cj = RequestsCookieJar()"
+    },
+    {
+      "column": 1,
+      "end_column": 45,
+      "end_line": 431,
+      "line": 431,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "        new_cj.set_policy(self.get_policy())"
+    },
+    {
+      "column": 1,
+      "end_column": 28,
+      "end_line": 432,
+      "line": 432,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "        new_cj.update(self)"
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 433,
+      "line": 433,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": "        return new_cj"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 434,
+      "line": 434,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 435,
+      "line": 435,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "    def get_policy(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 53,
+      "end_line": 436,
+      "line": 436,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": "        \"\"\"Return the CookiePolicy instance used.\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 28,
+      "end_line": 437,
+      "line": 437,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": "        return self._policy"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 438,
+      "line": 438,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 439,
+      "line": 439,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 27,
+      "end_line": 440,
+      "line": 440,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": "def _copy_cookie_jar(jar):"
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+  "split": "development",
+  "version": 1
+}

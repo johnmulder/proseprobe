@@ -1,0 +1,122 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A011.txt",
+  "packet_path": "originals/0004.py",
+  "pair_group": "psf/requests:src/requests/_internal_utils.py",
+  "reading_id": "A011",
+  "region": {
+    "column": 1,
+    "end_column": 21,
+    "end_line": 50,
+    "line": 41
+  },
+  "rendered_sha256": "99b9bdf7b9d27bbbdbbe4c4debacfea52816f0fa8c139d02ab5604249a381cc0",
+  "rendered_text": "Blind agent reading A011: natural.\nReading file: [A011](/private/tmp/proseprobe-A011.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL41 C 1-66 |     :param str u_string: unicode string to check. Must be unicode\nL42 C 1-32 |         and not Python 2 `str`.\nL43 C 1-17 |     :rtype: bool\nL44 C 1- 8 |     \"\"\"\nL45 C 1-37 |     assert isinstance(u_string, str)\nL46 C 1- 9 |     try:\nL47 C 1-33 |         u_string.encode(\"ascii\")\nL48 C 1-20 |         return True\nL49 C 1-31 |     except UnicodeEncodeError:\nL50 C 1-21 |         return False\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 41,
+      "line": 41,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "    :param str u_string: unicode string to check. Must be unicode"
+    },
+    {
+      "column": 1,
+      "end_column": 32,
+      "end_line": 42,
+      "line": 42,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "        and not Python 2 `str`."
+    },
+    {
+      "column": 1,
+      "end_column": 17,
+      "end_line": 43,
+      "line": 43,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "    :rtype: bool"
+    },
+    {
+      "column": 1,
+      "end_column": 8,
+      "end_line": 44,
+      "line": 44,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "    \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 37,
+      "end_line": 45,
+      "line": 45,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "    assert isinstance(u_string, str)"
+    },
+    {
+      "column": 1,
+      "end_column": 9,
+      "end_line": 46,
+      "line": 46,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "    try:"
+    },
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 47,
+      "line": 47,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "        u_string.encode(\"ascii\")"
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 48,
+      "line": 48,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "        return True"
+    },
+    {
+      "column": 1,
+      "end_column": 31,
+      "end_line": 49,
+      "line": 49,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "    except UnicodeEncodeError:"
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 50,
+      "line": 50,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "        return False"
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "9cc4329abe21b37d93a95a3901b0ab99c24486f3d487bc57965bb2ab0b252e24",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/_internal_utils.py",
+  "split": "development",
+  "version": 1
+}

@@ -1,0 +1,446 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A020.txt",
+  "packet_path": "originals/0005.py",
+  "pair_group": "psf/requests:src/requests/cookies.py",
+  "reading_id": "A020",
+  "region": {
+    "column": 1,
+    "end_column": 51,
+    "end_line": 360,
+    "line": 321
+  },
+  "rendered_sha256": "3eb9027d52b7a3d1d9111f980554a118b77a1ef4e0f85f4af1f58de60af82178",
+  "rendered_text": "Blind agent reading A020: natural.\nReading file: [A020](/private/tmp/proseprobe-A020.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL321 C 1-34 |     def __contains__(self, name):\nL322 C 1-13 |         try:\nL323 C 1-46 |             return super().__contains__(name)\nL324 C 1-36 |         except CookieConflictError:\nL325 C 1-24 |             return True\nL326 C 1- 1 | \nL327 C 1-33 |     def __getitem__(self, name):\nL328 C 1-66 |         \"\"\"Dict-like __getitem__() for compatibility with client \nL328 C66-78 | code. Throws\nL329 C 1-67 |         exception if there are more than one cookie with name. In \nL329 C67-77 | that case,\nL330 C 1-52 |         use the more explicit get() method instead.\nL331 C 1- 1 | \nL332 C 1-50 |         .. warning:: operation is O(n), not O(1).\nL333 C 1-12 |         \"\"\"\nL334 C 1-46 |         return self._find_no_duplicates(name)\nL335 C 1- 1 | \nL336 C 1-40 |     def __setitem__(self, name, value):\nL337 C 1-64 |         \"\"\"Dict-like __setitem__ for compatibility with client \nL337 C64-76 | code. Throws\nL338 C 1-64 |         exception if there is already a cookie of that name in \nL338 C64-80 | the jar. In that\nL339 C 1-58 |         case, use the more explicit set() method instead.\nL340 C 1-12 |         \"\"\"\nL341 C 1-30 |         self.set(name, value)\nL342 C 1- 1 | \nL343 C 1-33 |     def __delitem__(self, name):\nL344 C 1-49 |         \"\"\"Deletes a cookie given a name. Wraps \nL344 C49-79 | ``http.cookiejar.CookieJar``'s\nL345 C 1-37 |         ``remove_cookie_by_name()``.\nL346 C 1-12 |         \"\"\"\nL347 C 1-42 |         remove_cookie_by_name(self, name)\nL348 C 1- 1 | \nL349 C 1-51 |     def set_cookie(self, cookie, *args, **kwargs):\nL350 C 1-13 |         if (\nL351 C 1-48 |             hasattr(cookie.value, \"startswith\")\nL352 C 1-45 |             and cookie.value.startswith('\"')\nL353 C 1-43 |             and cookie.value.endswith('\"')\nL354 C 1-11 |         ):\nL355 C 1-59 |             cookie.value = cookie.value.replace('\\\\\"', \"\")\nL356 C 1-59 |         return super().set_cookie(cookie, *args, **kwargs)\nL357 C 1- 1 | \nL358 C 1-29 |     def update(self, other):\nL359 C 1-65 |         \"\"\"Updates this jar with cookies from another CookieJar \nL359 C65-80 | or dict-like\"\"\"\nL360 C 1-51 |         if isinstance(other, cookielib.CookieJar):\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 34,
+      "end_line": 321,
+      "line": 321,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "    def __contains__(self, name):"
+    },
+    {
+      "column": 1,
+      "end_column": 13,
+      "end_line": 322,
+      "line": 322,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "        try:"
+    },
+    {
+      "column": 1,
+      "end_column": 46,
+      "end_line": 323,
+      "line": 323,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "            return super().__contains__(name)"
+    },
+    {
+      "column": 1,
+      "end_column": 36,
+      "end_line": 324,
+      "line": 324,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "        except CookieConflictError:"
+    },
+    {
+      "column": 1,
+      "end_column": 24,
+      "end_line": 325,
+      "line": 325,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "            return True"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 326,
+      "line": 326,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 327,
+      "line": 327,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "    def __getitem__(self, name):"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 328,
+      "line": 328,
+      "reading_line": 20,
+      "source_line_ending": "",
+      "text": "        \"\"\"Dict-like __getitem__() for compatibility with client "
+    },
+    {
+      "column": 66,
+      "end_column": 78,
+      "end_line": 328,
+      "line": 328,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "code. Throws"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 329,
+      "line": 329,
+      "reading_line": 22,
+      "source_line_ending": "",
+      "text": "        exception if there are more than one cookie with name. In "
+    },
+    {
+      "column": 67,
+      "end_column": 77,
+      "end_line": 329,
+      "line": 329,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "that case,"
+    },
+    {
+      "column": 1,
+      "end_column": 52,
+      "end_line": 330,
+      "line": 330,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "        use the more explicit get() method instead."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 331,
+      "line": 331,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 50,
+      "end_line": 332,
+      "line": 332,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "        .. warning:: operation is O(n), not O(1)."
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 333,
+      "line": 333,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 46,
+      "end_line": 334,
+      "line": 334,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "        return self._find_no_duplicates(name)"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 335,
+      "line": 335,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 40,
+      "end_line": 336,
+      "line": 336,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": "    def __setitem__(self, name, value):"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 337,
+      "line": 337,
+      "reading_line": 31,
+      "source_line_ending": "",
+      "text": "        \"\"\"Dict-like __setitem__ for compatibility with client "
+    },
+    {
+      "column": 64,
+      "end_column": 76,
+      "end_line": 337,
+      "line": 337,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "code. Throws"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 338,
+      "line": 338,
+      "reading_line": 33,
+      "source_line_ending": "",
+      "text": "        exception if there is already a cookie of that name in "
+    },
+    {
+      "column": 64,
+      "end_column": 80,
+      "end_line": 338,
+      "line": 338,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "the jar. In that"
+    },
+    {
+      "column": 1,
+      "end_column": 58,
+      "end_line": 339,
+      "line": 339,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "        case, use the more explicit set() method instead."
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 340,
+      "line": 340,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 30,
+      "end_line": 341,
+      "line": 341,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": "        self.set(name, value)"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 342,
+      "line": 342,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 343,
+      "line": 343,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": "    def __delitem__(self, name):"
+    },
+    {
+      "column": 1,
+      "end_column": 49,
+      "end_line": 344,
+      "line": 344,
+      "reading_line": 40,
+      "source_line_ending": "",
+      "text": "        \"\"\"Deletes a cookie given a name. Wraps "
+    },
+    {
+      "column": 49,
+      "end_column": 79,
+      "end_line": 344,
+      "line": 344,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "``http.cookiejar.CookieJar``'s"
+    },
+    {
+      "column": 1,
+      "end_column": 37,
+      "end_line": 345,
+      "line": 345,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": "        ``remove_cookie_by_name()``."
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 346,
+      "line": 346,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 42,
+      "end_line": 347,
+      "line": 347,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "        remove_cookie_by_name(self, name)"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 348,
+      "line": 348,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 51,
+      "end_line": 349,
+      "line": 349,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "    def set_cookie(self, cookie, *args, **kwargs):"
+    },
+    {
+      "column": 1,
+      "end_column": 13,
+      "end_line": 350,
+      "line": 350,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "        if ("
+    },
+    {
+      "column": 1,
+      "end_column": 48,
+      "end_line": 351,
+      "line": 351,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "            hasattr(cookie.value, \"startswith\")"
+    },
+    {
+      "column": 1,
+      "end_column": 45,
+      "end_line": 352,
+      "line": 352,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": "            and cookie.value.startswith('\"')"
+    },
+    {
+      "column": 1,
+      "end_column": 43,
+      "end_line": 353,
+      "line": 353,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": "            and cookie.value.endswith('\"')"
+    },
+    {
+      "column": 1,
+      "end_column": 11,
+      "end_line": 354,
+      "line": 354,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "        ):"
+    },
+    {
+      "column": 1,
+      "end_column": 59,
+      "end_line": 355,
+      "line": 355,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": "            cookie.value = cookie.value.replace('\\\\\"', \"\")"
+    },
+    {
+      "column": 1,
+      "end_column": 59,
+      "end_line": 356,
+      "line": 356,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": "        return super().set_cookie(cookie, *args, **kwargs)"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 357,
+      "line": 357,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 29,
+      "end_line": 358,
+      "line": 358,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": "    def update(self, other):"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 359,
+      "line": 359,
+      "reading_line": 56,
+      "source_line_ending": "",
+      "text": "        \"\"\"Updates this jar with cookies from another CookieJar "
+    },
+    {
+      "column": 65,
+      "end_column": 80,
+      "end_line": 359,
+      "line": 359,
+      "reading_line": 57,
+      "source_line_ending": "\n",
+      "text": "or dict-like\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 51,
+      "end_line": 360,
+      "line": 360,
+      "reading_line": 58,
+      "source_line_ending": "\n",
+      "text": "        if isinstance(other, cookielib.CookieJar):"
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+  "split": "development",
+  "version": 1
+}

@@ -1,0 +1,17 @@
+{
+  "context": {
+    "originals/0000.md": {
+      "format": "markdown",
+      "pair_group": "agent-authored-pilot:entry.md",
+      "source_group": "agent-authored-pilot",
+      "split": "development"
+    }
+  },
+  "files": {
+    "originals/0000.md": {
+      "sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+      "source_id": "agent-authored-pilot:entry.md"
+    }
+  },
+  "version": 1
+}

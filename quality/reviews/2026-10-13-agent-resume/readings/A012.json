@@ -1,0 +1,446 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A012.txt",
+  "packet_path": "originals/0005.py",
+  "pair_group": "psf/requests:src/requests/cookies.py",
+  "reading_id": "A012",
+  "region": {
+    "column": 1,
+    "end_column": 24,
+    "end_line": 40,
+    "line": 1
+  },
+  "rendered_sha256": "cf92d03aa7afbf716d5f7fcabae72c027a1f300ebebc58f3e42ea46c00564e7f",
+  "rendered_text": "Blind agent reading A012: natural.\nReading file: [A012](/private/tmp/proseprobe-A012.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL 1 C 1- 4 | \"\"\"\nL 2 C 1-17 | requests.cookies\nL 3 C 1-17 | ~~~~~~~~~~~~~~~~\nL 4 C 1- 1 | \nL 5 C 1-65 | Compatibility code to be able to use `http.cookiejar.CookieJar` \nL 5 C65-79 | with requests.\nL 6 C 1- 1 | \nL 7 C 1-62 | requests.utils imports from here, so be careful with imports.\nL 8 C 1- 4 | \"\"\"\nL 9 C 1- 1 | \nL10 C 1-16 | import calendar\nL11 C 1-12 | import copy\nL12 C 1-12 | import time\nL13 C 1- 1 | \nL14 C 1-46 | from ._internal_utils import to_native_string\nL15 C 1-66 | from .compat import Morsel, MutableMapping, cookielib, urlparse, \nL15 C66-76 | urlunparse\nL16 C 1- 1 | \nL17 C 1- 5 | try:\nL18 C 1-21 |     import threading\nL19 C 1-20 | except ImportError:\nL20 C 1-40 |     import dummy_threading as threading\nL21 C 1- 1 | \nL22 C 1- 1 | \nL23 C 1-19 | class MockRequest:\nL24 C 1-64 |     \"\"\"Wraps a `requests.Request` to mimic a `urllib2.Request`.\nL25 C 1- 1 | \nL26 C 1-67 |     The code in `http.cookiejar.CookieJar` expects this interface \nL26 C67-88 | in order to correctly\nL27 C 1-66 |     manage cookie policies, i.e., determine whether a cookie can \nL27 C66-83 | be set, given the\nL28 C 1-43 |     domains of the request and the cookie.\nL29 C 1- 1 | \nL30 C 1-61 |     The original request object is read-only. The client is \nL30 C61-87 | responsible for collecting\nL31 C 1-67 |     the new headers via `get_new_headers()` and interpreting them \nL31 C67-85 | appropriately. You\nL32 C 1-54 |     probably want `get_cookie_header`, defined below.\nL33 C 1- 8 |     \"\"\"\nL34 C 1- 1 | \nL35 C 1-33 |     def __init__(self, request):\nL36 C 1-26 |         self._r = request\nL37 C 1-31 |         self._new_headers = {}\nL38 C 1-49 |         self.type = urlparse(self._r.url).scheme\nL39 C 1- 1 | \nL40 C 1-24 |     def get_type(self):\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 4,
+      "end_line": 1,
+      "line": 1,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 17,
+      "end_line": 2,
+      "line": 2,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "requests.cookies"
+    },
+    {
+      "column": 1,
+      "end_column": 17,
+      "end_line": 3,
+      "line": 3,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "~~~~~~~~~~~~~~~~"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 4,
+      "line": 4,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 5,
+      "line": 5,
+      "reading_line": 17,
+      "source_line_ending": "",
+      "text": "Compatibility code to be able to use `http.cookiejar.CookieJar` "
+    },
+    {
+      "column": 65,
+      "end_column": 79,
+      "end_line": 5,
+      "line": 5,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "with requests."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 6,
+      "line": 6,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 62,
+      "end_line": 7,
+      "line": 7,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "requests.utils imports from here, so be careful with imports."
+    },
+    {
+      "column": 1,
+      "end_column": 4,
+      "end_line": 8,
+      "line": 8,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 9,
+      "line": 9,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 16,
+      "end_line": 10,
+      "line": 10,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "import calendar"
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 11,
+      "line": 11,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "import copy"
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 12,
+      "line": 12,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": "import time"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 13,
+      "line": 13,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 46,
+      "end_line": 14,
+      "line": 14,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "from ._internal_utils import to_native_string"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 15,
+      "line": 15,
+      "reading_line": 28,
+      "source_line_ending": "",
+      "text": "from .compat import Morsel, MutableMapping, cookielib, urlparse, "
+    },
+    {
+      "column": 66,
+      "end_column": 76,
+      "end_line": 15,
+      "line": 15,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": "urlunparse"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 5,
+      "end_line": 17,
+      "line": 17,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "try:"
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "    import threading"
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 19,
+      "line": 19,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "except ImportError:"
+    },
+    {
+      "column": 1,
+      "end_column": 40,
+      "end_line": 20,
+      "line": 20,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "    import dummy_threading as threading"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 21,
+      "line": 21,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 19,
+      "end_line": 23,
+      "line": 23,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": "class MockRequest:"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 24,
+      "line": 24,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "    \"\"\"Wraps a `requests.Request` to mimic a `urllib2.Request`."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 25,
+      "line": 25,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 40,
+      "source_line_ending": "",
+      "text": "    The code in `http.cookiejar.CookieJar` expects this interface "
+    },
+    {
+      "column": 67,
+      "end_column": 88,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "in order to correctly"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 42,
+      "source_line_ending": "",
+      "text": "    manage cookie policies, i.e., determine whether a cookie can "
+    },
+    {
+      "column": 66,
+      "end_column": 83,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "be set, given the"
+    },
+    {
+      "column": 1,
+      "end_column": 43,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "    domains of the request and the cookie."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 29,
+      "line": 29,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 61,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 46,
+      "source_line_ending": "",
+      "text": "    The original request object is read-only. The client is "
+    },
+    {
+      "column": 61,
+      "end_column": 87,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "responsible for collecting"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 31,
+      "line": 31,
+      "reading_line": 48,
+      "source_line_ending": "",
+      "text": "    the new headers via `get_new_headers()` and interpreting them "
+    },
+    {
+      "column": 67,
+      "end_column": 85,
+      "end_line": 31,
+      "line": 31,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": "appropriately. You"
+    },
+    {
+      "column": 1,
+      "end_column": 54,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": "    probably want `get_cookie_header`, defined below."
+    },
+    {
+      "column": 1,
+      "end_column": 8,
+      "end_line": 33,
+      "line": 33,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "    \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 34,
+      "line": 34,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 35,
+      "line": 35,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": "    def __init__(self, request):"
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 36,
+      "line": 36,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "        self._r = request"
+    },
+    {
+      "column": 1,
+      "end_column": 31,
+      "end_line": 37,
+      "line": 37,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": "        self._new_headers = {}"
+    },
+    {
+      "column": 1,
+      "end_column": 49,
+      "end_line": 38,
+      "line": 38,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": "        self.type = urlparse(self._r.url).scheme"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 39,
+      "line": 39,
+      "reading_line": 57,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 24,
+      "end_line": 40,
+      "line": 40,
+      "reading_line": 58,
+      "source_line_ending": "\n",
+      "text": "    def get_type(self):"
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+  "split": "development",
+  "version": 1
+}

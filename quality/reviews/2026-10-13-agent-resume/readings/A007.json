@@ -1,0 +1,399 @@
+{
+  "cohort": "natural",
+  "format": "markdown",
+  "linked_text_path": "/private/tmp/proseprobe-A007.txt",
+  "packet_path": "originals/0001.md",
+  "pair_group": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md",
+  "reading_id": "A007",
+  "region": {
+    "column": 1,
+    "end_column": 27,
+    "end_line": 236,
+    "line": 201
+  },
+  "rendered_sha256": "15369a849aeb6a481f697ac9b76989357b211f8153eace8689954f79de878c2d",
+  "rendered_text": "Blind agent reading A007: natural.\nReading file: [A007](/private/tmp/proseprobe-A007.txt)\nAttribution: GitHub Docs contributors; CC BY 4.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, M011\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL201 C 1-56 | \\[Advanced] Give option to the JVM running the command.\nL202 C 1- 1 | \nL203 C 1-60 | (Beware that options containing spaces will not be handled \nL203 C60-71 | correctly.)\nL204 C 1- 1 | \nL205 C 1-21 | #### `-v, --verbose`\nL206 C 1- 1 | \nL207 C 1-64 | Incrementally increase the number of progress messages printed.\nL208 C 1- 1 | \nL209 C 1-19 | #### `-q, --quiet`\nL210 C 1- 1 | \nL211 C 1-64 | Incrementally decrease the number of progress messages printed.\nL212 C 1- 1 | \nL213 C 1-27 | #### `--verbosity=<level>`\nL214 C 1- 1 | \nL215 C 1-65 | \\[Advanced] Explicitly set the verbosity level to one of errors,\nL216 C 1-67 | warnings, progress, progress+, progress++, progress+++. Overrides \nL216 C67-71 | `-v`\nL217 C 1-10 | and `-q`.\nL218 C 1- 1 | \nL219 C 1-22 | #### `--logdir=<dir>`\nL220 C 1- 1 | \nL221 C 1-66 | \\[Advanced] Write detailed logs to one or more files in the given\nL222 C 1-65 | directory, with generated names that include timestamps and the \nL222 C65-72 | name of\nL223 C 1-24 | the running subcommand.\nL224 C 1- 1 | \nL225 C 1-62 | (To write a log file with a name you have full control over, \nL225 C62-69 | instead\nL226 C 1-56 | give `--log-to-stderr` and redirect stderr as desired.)\nL227 C 1- 1 | \nL228 C 1-29 | #### `--common-caches=<dir>`\nL229 C 1- 1 | \nL230 C 1-67 | \\[Advanced] Controls the location of cached data on disk that will\nL231 C 1-64 | persist between several runs of the CLI, such as downloaded QL \nL231 C64-73 | packs and\nL232 C 1-64 | compiled query plans. If not set explicitly, this defaults to a\nL233 C 1-67 | directory named `.codeql` in the user's home directory; it will be\nL234 C 1-37 | created if it doesn't already exist.\nL235 C 1- 1 | \nL236 C 1-27 | Available since `v2.15.2`.\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 56,
+      "end_line": 201,
+      "line": 201,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "\\[Advanced] Give option to the JVM running the command."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 202,
+      "line": 202,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 60,
+      "end_line": 203,
+      "line": 203,
+      "reading_line": 15,
+      "source_line_ending": "",
+      "text": "(Beware that options containing spaces will not be handled "
+    },
+    {
+      "column": 60,
+      "end_column": 71,
+      "end_line": 203,
+      "line": 203,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "correctly.)"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 204,
+      "line": 204,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 205,
+      "line": 205,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "#### `-v, --verbose`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 206,
+      "line": 206,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 207,
+      "line": 207,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "Incrementally increase the number of progress messages printed."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 208,
+      "line": 208,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 19,
+      "end_line": 209,
+      "line": 209,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "#### `-q, --quiet`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 210,
+      "line": 210,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 211,
+      "line": 211,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "Incrementally decrease the number of progress messages printed."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 212,
+      "line": 212,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 27,
+      "end_line": 213,
+      "line": 213,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "#### `--verbosity=<level>`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 214,
+      "line": 214,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 215,
+      "line": 215,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "\\[Advanced] Explicitly set the verbosity level to one of errors,"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 216,
+      "line": 216,
+      "reading_line": 29,
+      "source_line_ending": "",
+      "text": "warnings, progress, progress+, progress++, progress+++. Overrides "
+    },
+    {
+      "column": 67,
+      "end_column": 71,
+      "end_line": 216,
+      "line": 216,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": "`-v`"
+    },
+    {
+      "column": 1,
+      "end_column": 10,
+      "end_line": 217,
+      "line": 217,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "and `-q`."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 218,
+      "line": 218,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 219,
+      "line": 219,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "#### `--logdir=<dir>`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 220,
+      "line": 220,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 221,
+      "line": 221,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "\\[Advanced] Write detailed logs to one or more files in the given"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 222,
+      "line": 222,
+      "reading_line": 36,
+      "source_line_ending": "",
+      "text": "directory, with generated names that include timestamps and the "
+    },
+    {
+      "column": 65,
+      "end_column": 72,
+      "end_line": 222,
+      "line": 222,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": "name of"
+    },
+    {
+      "column": 1,
+      "end_column": 24,
+      "end_line": 223,
+      "line": 223,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "the running subcommand."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 224,
+      "line": 224,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 62,
+      "end_line": 225,
+      "line": 225,
+      "reading_line": 40,
+      "source_line_ending": "",
+      "text": "(To write a log file with a name you have full control over, "
+    },
+    {
+      "column": 62,
+      "end_column": 69,
+      "end_line": 225,
+      "line": 225,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "instead"
+    },
+    {
+      "column": 1,
+      "end_column": 56,
+      "end_line": 226,
+      "line": 226,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": "give `--log-to-stderr` and redirect stderr as desired.)"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 227,
+      "line": 227,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 29,
+      "end_line": 228,
+      "line": 228,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "#### `--common-caches=<dir>`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 229,
+      "line": 229,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 230,
+      "line": 230,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "\\[Advanced] Controls the location of cached data on disk that will"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 231,
+      "line": 231,
+      "reading_line": 47,
+      "source_line_ending": "",
+      "text": "persist between several runs of the CLI, such as downloaded QL "
+    },
+    {
+      "column": 64,
+      "end_column": 73,
+      "end_line": 231,
+      "line": 231,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "packs and"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 232,
+      "line": 232,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": "compiled query plans. If not set explicitly, this defaults to a"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 233,
+      "line": 233,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": "directory named `.codeql` in the user's home directory; it will be"
+    },
+    {
+      "column": 1,
+      "end_column": 37,
+      "end_line": 234,
+      "line": 234,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "created if it doesn't already exist."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 235,
+      "line": 235,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 27,
+      "end_line": 236,
+      "line": 236,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": "Available since `v2.15.2`."
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "M011"
+  ],
+  "sha256": "e4656dfdd2cff448e23fd8115b70b78efd0ac8863897b9df161ffc26dec12ded",
+  "source_group": "github/docs",
+  "source_id": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md",
+  "split": "development",
+  "version": 1
+}

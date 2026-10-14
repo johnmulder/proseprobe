@@ -1,0 +1,437 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A018.txt",
+  "packet_path": "originals/0005.py",
+  "pair_group": "psf/requests:src/requests/cookies.py",
+  "reading_id": "A018",
+  "region": {
+    "column": 1,
+    "end_column": 34,
+    "end_line": 280,
+    "line": 241
+  },
+  "rendered_sha256": "a6da00aca1bb70bcc07b183fb8d694a00555aa16b47405dbd3e6e942f62df100",
+  "rendered_text": "Blind agent reading A018: natural.\nReading file: [A018](/private/tmp/proseprobe-A018.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL241 C 1- 1 | \nL242 C 1-26 |     def itervalues(self):\nL243 C 1-63 |         \"\"\"Dict-like itervalues() that returns an iterator of \nL243 C63-80 | values of cookies\nL244 C 1-22 |         from the jar.\nL245 C 1- 1 | \nL246 C 1-49 |         .. seealso:: iterkeys() and iteritems().\nL247 C 1-12 |         \"\"\"\nL248 C 1-34 |         for cookie in iter(self):\nL249 C 1-31 |             yield cookie.value\nL250 C 1- 1 | \nL251 C 1-22 |     def values(self):\nL252 C 1-64 |         \"\"\"Dict-like values() that returns a list of values of \nL252 C64-80 | cookies from the\nL253 C 1-13 |         jar.\nL254 C 1- 1 | \nL255 C 1-41 |         .. seealso:: keys() and items().\nL256 C 1-12 |         \"\"\"\nL257 C 1-39 |         return list(self.itervalues())\nL258 C 1- 1 | \nL259 C 1-25 |     def iteritems(self):\nL260 C 1-62 |         \"\"\"Dict-like iteritems() that returns an iterator of \nL260 C62-79 | name-value tuples\nL261 C 1-22 |         from the jar.\nL262 C 1- 1 | \nL263 C 1-50 |         .. seealso:: iterkeys() and itervalues().\nL264 C 1-12 |         \"\"\"\nL265 C 1-34 |         for cookie in iter(self):\nL266 C 1-44 |             yield cookie.name, cookie.value\nL267 C 1- 1 | \nL268 C 1-21 |     def items(self):\nL269 C 1-64 |         \"\"\"Dict-like items() that returns a list of name-value \nL269 C64-79 | tuples from the\nL270 C 1-41 |         jar. Allows client-code to call \nL270 C41-78 | ``dict(RequestsCookieJar)`` and get a\nL271 C 1-48 |         vanilla python dict of key value pairs.\nL272 C 1- 1 | \nL273 C 1-42 |         .. seealso:: keys() and values().\nL274 C 1-12 |         \"\"\"\nL275 C 1-38 |         return list(self.iteritems())\nL276 C 1- 1 | \nL277 C 1-28 |     def list_domains(self):\nL278 C 1-65 |         \"\"\"Utility method to list all the domains in the jar.\"\"\"\nL279 C 1-21 |         domains = []\nL280 C 1-34 |         for cookie in iter(self):\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 241,
+      "line": 241,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 242,
+      "line": 242,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "    def itervalues(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 243,
+      "line": 243,
+      "reading_line": 15,
+      "source_line_ending": "",
+      "text": "        \"\"\"Dict-like itervalues() that returns an iterator of "
+    },
+    {
+      "column": 63,
+      "end_column": 80,
+      "end_line": 243,
+      "line": 243,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "values of cookies"
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 244,
+      "line": 244,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "        from the jar."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 245,
+      "line": 245,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 49,
+      "end_line": 246,
+      "line": 246,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "        .. seealso:: iterkeys() and iteritems()."
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 247,
+      "line": 247,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 34,
+      "end_line": 248,
+      "line": 248,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "        for cookie in iter(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 31,
+      "end_line": 249,
+      "line": 249,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "            yield cookie.value"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 250,
+      "line": 250,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 251,
+      "line": 251,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "    def values(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 252,
+      "line": 252,
+      "reading_line": 25,
+      "source_line_ending": "",
+      "text": "        \"\"\"Dict-like values() that returns a list of values of "
+    },
+    {
+      "column": 64,
+      "end_column": 80,
+      "end_line": 252,
+      "line": 252,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "cookies from the"
+    },
+    {
+      "column": 1,
+      "end_column": 13,
+      "end_line": 253,
+      "line": 253,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "        jar."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 254,
+      "line": 254,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 41,
+      "end_line": 255,
+      "line": 255,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": "        .. seealso:: keys() and items()."
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 256,
+      "line": 256,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 39,
+      "end_line": 257,
+      "line": 257,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "        return list(self.itervalues())"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 258,
+      "line": 258,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 25,
+      "end_line": 259,
+      "line": 259,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "    def iteritems(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 62,
+      "end_line": 260,
+      "line": 260,
+      "reading_line": 34,
+      "source_line_ending": "",
+      "text": "        \"\"\"Dict-like iteritems() that returns an iterator of "
+    },
+    {
+      "column": 62,
+      "end_column": 79,
+      "end_line": 260,
+      "line": 260,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "name-value tuples"
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 261,
+      "line": 261,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "        from the jar."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 262,
+      "line": 262,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 50,
+      "end_line": 263,
+      "line": 263,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "        .. seealso:: iterkeys() and itervalues()."
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 264,
+      "line": 264,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 34,
+      "end_line": 265,
+      "line": 265,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": "        for cookie in iter(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 44,
+      "end_line": 266,
+      "line": 266,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "            yield cookie.name, cookie.value"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 267,
+      "line": 267,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 268,
+      "line": 268,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "    def items(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 269,
+      "line": 269,
+      "reading_line": 44,
+      "source_line_ending": "",
+      "text": "        \"\"\"Dict-like items() that returns a list of name-value "
+    },
+    {
+      "column": 64,
+      "end_column": 79,
+      "end_line": 269,
+      "line": 269,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": "tuples from the"
+    },
+    {
+      "column": 1,
+      "end_column": 41,
+      "end_line": 270,
+      "line": 270,
+      "reading_line": 46,
+      "source_line_ending": "",
+      "text": "        jar. Allows client-code to call "
+    },
+    {
+      "column": 41,
+      "end_column": 78,
+      "end_line": 270,
+      "line": 270,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "``dict(RequestsCookieJar)`` and get a"
+    },
+    {
+      "column": 1,
+      "end_column": 48,
+      "end_line": 271,
+      "line": 271,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "        vanilla python dict of key value pairs."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 272,
+      "line": 272,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 42,
+      "end_line": 273,
+      "line": 273,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": "        .. seealso:: keys() and values()."
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 274,
+      "line": 274,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 38,
+      "end_line": 275,
+      "line": 275,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": "        return list(self.iteritems())"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 276,
+      "line": 276,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 28,
+      "end_line": 277,
+      "line": 277,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "    def list_domains(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 278,
+      "line": 278,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": "        \"\"\"Utility method to list all the domains in the jar.\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 279,
+      "line": 279,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": "        domains = []"
+    },
+    {
+      "column": 1,
+      "end_column": 34,
+      "end_line": 280,
+      "line": 280,
+      "reading_line": 57,
+      "source_line_ending": "\n",
+      "text": "        for cookie in iter(self):"
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+  "split": "development",
+  "version": 1
+}

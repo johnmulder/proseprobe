@@ -27,6 +27,14 @@ the presentation limit. The resumed batch and source bindings are recorded in
 `quality/reviews/2026-10-13-human-resume/`. Do not generate predictions for its
 source until accepted initial batch labels are frozen.
 
+The user then requested agents as reviewers. Retire pending human questions
+without inferring answers and reuse R005's exact scope in separate agent records.
+Use two fresh contexts with predictions and other judgments withheld, preserve
+original labels, and record any third-agent adjudication separately. Keep
+root-authored challenges distinct from natural sources and document author
+implementation familiarity. Agent suggestion judgments stay outside the human
+usefulness schema. Independent human claims and holdout prerequisites remain.
+
 ## First pass
 
 Give reviewers a fresh source-bound version 3 packet, declared rule contracts,

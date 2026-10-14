@@ -1,0 +1,90 @@
+{
+  "excluded_destinations": {
+    "agent-authored-pilot:entry.md": [
+      {
+        "column": 17,
+        "destination": "#workflow",
+        "end_column": 26,
+        "line": 6,
+        "reason": "production-resolver-exclusion"
+      },
+      {
+        "column": 20,
+        "destination": "#limitations",
+        "end_column": 32,
+        "line": 7,
+        "reason": "production-resolver-exclusion"
+      }
+    ]
+  },
+  "native_context": {
+    "inventory": [
+      {
+        "mode": "100644",
+        "object_id": "8233e653618005cd5534e2f2d62713e268531799",
+        "path": "entry.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "480ef4c912d038e51a273411f8923ffa629eb024",
+        "path": "setup.md"
+      }
+    ],
+    "inventory_sha256": "c44fa8f57f5c69e06f90e8d9a015e52073836bc1aab165d4df4762ecbbba9c92",
+    "manifest_sha256": "6d905cfe606c2b55818a3e3e457244271b0ce893aedcdd10559ccfc5d7dbcb7a",
+    "revision": "ce2e2844bd9a3ca5b5a74ae41828c65f454c973b",
+    "source_group": "agent-authored-pilot",
+    "sources": {
+      "agent-authored-pilot:entry.md": {
+        "blob_id": "8233e653618005cd5534e2f2d62713e268531799",
+        "cache_path": "agent-authored/agent-resume-2026-10-13-v1/entry.md",
+        "native_path": "entry.md",
+        "sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1"
+      }
+    },
+    "target_scope": "explicitly-declared",
+    "targets": {
+      "missing.md": {
+        "status": "absent"
+      },
+      "setup.md": {
+        "blob_id": "480ef4c912d038e51a273411f8923ffa629eb024",
+        "cache_path": "agent-authored/agent-resume-2026-10-13-v1/setup.md",
+        "sha256": "30e40d742a09cb169b0abac6b3fb5a5fc1cafd287b3c61d7cad9a6cee1decfbb",
+        "status": "present"
+      }
+    },
+    "version": 1
+  },
+  "reference_scope": "production-static-local-markdown-v1",
+  "references": {
+    "agent-authored-pilot:entry.md": [
+      {
+        "column": 21,
+        "destination": "setup.md#install",
+        "end_column": 37,
+        "fragment": "install",
+        "line": 3,
+        "native_path": "setup.md"
+      },
+      {
+        "column": 22,
+        "destination": "setup.md#configuration",
+        "end_column": 44,
+        "fragment": "configuration",
+        "line": 4,
+        "native_path": "setup.md"
+      },
+      {
+        "column": 18,
+        "destination": "missing.md",
+        "end_column": 28,
+        "fragment": "",
+        "line": 5,
+        "native_path": "missing.md"
+      }
+    ]
+  },
+  "renderer": "github",
+  "version": 2
+}

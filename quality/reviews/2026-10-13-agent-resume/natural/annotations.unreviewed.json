@@ -1,0 +1,77 @@
+{
+  "files": {
+    "originals/0000.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [],
+      "sha256": "ab4a60280784e5b915bb2b1353ceb0a5cffefcbe5148c53b901d7861d41c52a1",
+      "source_group": "github/docs",
+      "source_id": "github/docs:content/actions/how-tos/write-workflows/choose-what-workflows-do/use-jobs.md"
+    },
+    "originals/0001.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [],
+      "sha256": "e4656dfdd2cff448e23fd8115b70b78efd0ac8863897b9df161ffc26dec12ded",
+      "source_group": "github/docs",
+      "source_id": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md"
+    },
+    "originals/0002.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [],
+      "sha256": "d85335cdf9f9c882db139b6653bd77e640dda92eca9bc6e8136a5a0bf5ae0ef2",
+      "source_group": "github/docs",
+      "source_id": "github/docs:content/migrations/overview/mannequins-and-user-activity.md"
+    },
+    "originals/0003.py": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [],
+      "sha256": "67d49be35d009efea35054f2b2cd23145854eb1b2df1cb442ea7f2f04bf6de0c",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/certs.py"
+    },
+    "originals/0004.py": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [],
+      "sha256": "9cc4329abe21b37d93a95a3901b0ab99c24486f3d487bc57965bb2ab0b252e24",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/_internal_utils.py"
+    },
+    "originals/0005.py": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [],
+      "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py"
+    }
+  },
+  "review": {
+    "packet_index": {
+      "path": "index.json",
+      "sha256": "e3c970e0eefb5864fb8bb8b89ecdf93fc5708182faa4b49ed91c4e7bc5256546"
+    },
+    "policy": {
+      "min_confidence": "low",
+      "mode": "all-rules",
+      "profile": "default",
+      "severity": "info"
+    },
+    "protocol_revision": "agent-resume-development-v1",
+    "reviewers": [],
+    "rule_contracts": {
+      "path": "contracts.json",
+      "sha256": "059a18caf770f2d388e9902d1e0647bc0d6e5eaba6be5409f4b31af126634887"
+    }
+  },
+  "version": 3
+}

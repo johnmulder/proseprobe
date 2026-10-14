@@ -1,0 +1,27 @@
+{
+  "context": {
+    "originals/0000.md": {
+      "format": "markdown",
+      "pair_group": "agent-authored-pilot:claims.md",
+      "source_group": "agent-authored-pilot",
+      "split": "development"
+    },
+    "originals/0001.py": {
+      "format": "python",
+      "pair_group": "agent-authored-pilot:documentation.py",
+      "source_group": "agent-authored-pilot",
+      "split": "development"
+    }
+  },
+  "files": {
+    "originals/0000.md": {
+      "sha256": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48",
+      "source_id": "agent-authored-pilot:claims.md"
+    },
+    "originals/0001.py": {
+      "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+      "source_id": "agent-authored-pilot:documentation.py"
+    }
+  },
+  "version": 1
+}

@@ -1,0 +1,437 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A013.txt",
+  "packet_path": "originals/0005.py",
+  "pair_group": "psf/requests:src/requests/cookies.py",
+  "reading_id": "A013",
+  "region": {
+    "column": 1,
+    "end_column": 35,
+    "end_line": 80,
+    "line": 41
+  },
+  "rendered_sha256": "bbf49bdc2628e74fe1ef1adc6dad12a127facbf1a52b15558bea8cd437fa3e55",
+  "rendered_text": "Blind agent reading A013: natural.\nReading file: [A013](/private/tmp/proseprobe-A013.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL41 C 1-25 |         return self.type\nL42 C 1- 1 | \nL43 C 1-24 |     def get_host(self):\nL44 C 1-44 |         return urlparse(self._r.url).netloc\nL45 C 1- 1 | \nL46 C 1-35 |     def get_origin_req_host(self):\nL47 C 1-31 |         return self.get_host()\nL48 C 1- 1 | \nL49 C 1-28 |     def get_full_url(self):\nL50 C 1-65 |         # Only return the response's URL if the user hadn't set \nL50 C65-73 | the Host\nL51 C 1-17 |         # header\nL52 C 1-44 |         if not self._r.headers.get(\"Host\"):\nL53 C 1-31 |             return self._r.url\nL54 C 1-63 |         # If they did set it, retrieve it and reconstruct the \nL54 C63-78 | expected domain\nL55 C 1-58 |         host = to_native_string(self._r.headers[\"Host\"], \nL55 C58-75 | encoding=\"utf-8\")\nL56 C 1-39 |         parsed = urlparse(self._r.url)\nL57 C 1-46 |         # Reconstruct the URL as we expect it\nL58 C 1-27 |         return urlunparse(\nL59 C 1-14 |             [\nL60 C 1-31 |                 parsed.scheme,\nL61 C 1-22 |                 host,\nL62 C 1-29 |                 parsed.path,\nL63 C 1-31 |                 parsed.params,\nL64 C 1-30 |                 parsed.query,\nL65 C 1-33 |                 parsed.fragment,\nL66 C 1-14 |             ]\nL67 C 1-10 |         )\nL68 C 1- 1 | \nL69 C 1-31 |     def is_unverifiable(self):\nL70 C 1-20 |         return True\nL71 C 1- 1 | \nL72 C 1-32 |     def has_header(self, name):\nL73 C 1-68 |         return name in self._r.headers or name in self._new_headers\nL74 C 1- 1 | \nL75 C 1-46 |     def get_header(self, name, default=None):\nL76 C 1-42 |         return self._r.headers.get(name, \nL76 C42-79 | self._new_headers.get(name, default))\nL77 C 1- 1 | \nL78 C 1-36 |     def add_header(self, key, val):\nL79 C 1-68 |         \"\"\"cookiejar has no legitimate use for this method; add it \nL79 C68-92 | back if you find one.\"\"\"\nL80 C 1-35 |         raise NotImplementedError(\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 25,
+      "end_line": 41,
+      "line": 41,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "        return self.type"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 42,
+      "line": 42,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 24,
+      "end_line": 43,
+      "line": 43,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "    def get_host(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 44,
+      "end_line": 44,
+      "line": 44,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "        return urlparse(self._r.url).netloc"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 45,
+      "line": 45,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 35,
+      "end_line": 46,
+      "line": 46,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "    def get_origin_req_host(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 31,
+      "end_line": 47,
+      "line": 47,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "        return self.get_host()"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 48,
+      "line": 48,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 28,
+      "end_line": 49,
+      "line": 49,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "    def get_full_url(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 50,
+      "line": 50,
+      "reading_line": 22,
+      "source_line_ending": "",
+      "text": "        # Only return the response's URL if the user hadn't set "
+    },
+    {
+      "column": 65,
+      "end_column": 73,
+      "end_line": 50,
+      "line": 50,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "the Host"
+    },
+    {
+      "column": 1,
+      "end_column": 17,
+      "end_line": 51,
+      "line": 51,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "        # header"
+    },
+    {
+      "column": 1,
+      "end_column": 44,
+      "end_line": 52,
+      "line": 52,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": "        if not self._r.headers.get(\"Host\"):"
+    },
+    {
+      "column": 1,
+      "end_column": 31,
+      "end_line": 53,
+      "line": 53,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "            return self._r.url"
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 54,
+      "line": 54,
+      "reading_line": 27,
+      "source_line_ending": "",
+      "text": "        # If they did set it, retrieve it and reconstruct the "
+    },
+    {
+      "column": 63,
+      "end_column": 78,
+      "end_line": 54,
+      "line": 54,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "expected domain"
+    },
+    {
+      "column": 1,
+      "end_column": 58,
+      "end_line": 55,
+      "line": 55,
+      "reading_line": 29,
+      "source_line_ending": "",
+      "text": "        host = to_native_string(self._r.headers[\"Host\"], "
+    },
+    {
+      "column": 58,
+      "end_column": 75,
+      "end_line": 55,
+      "line": 55,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": "encoding=\"utf-8\")"
+    },
+    {
+      "column": 1,
+      "end_column": 39,
+      "end_line": 56,
+      "line": 56,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "        parsed = urlparse(self._r.url)"
+    },
+    {
+      "column": 1,
+      "end_column": 46,
+      "end_line": 57,
+      "line": 57,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "        # Reconstruct the URL as we expect it"
+    },
+    {
+      "column": 1,
+      "end_column": 27,
+      "end_line": 58,
+      "line": 58,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "        return urlunparse("
+    },
+    {
+      "column": 1,
+      "end_column": 14,
+      "end_line": 59,
+      "line": 59,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "            ["
+    },
+    {
+      "column": 1,
+      "end_column": 31,
+      "end_line": 60,
+      "line": 60,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "                parsed.scheme,"
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 61,
+      "line": 61,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "                host,"
+    },
+    {
+      "column": 1,
+      "end_column": 29,
+      "end_line": 62,
+      "line": 62,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": "                parsed.path,"
+    },
+    {
+      "column": 1,
+      "end_column": 31,
+      "end_line": 63,
+      "line": 63,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "                parsed.params,"
+    },
+    {
+      "column": 1,
+      "end_column": 30,
+      "end_line": 64,
+      "line": 64,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": "                parsed.query,"
+    },
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 65,
+      "line": 65,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": "                parsed.fragment,"
+    },
+    {
+      "column": 1,
+      "end_column": 14,
+      "end_line": 66,
+      "line": 66,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "            ]"
+    },
+    {
+      "column": 1,
+      "end_column": 10,
+      "end_line": 67,
+      "line": 67,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": "        )"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 68,
+      "line": 68,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 31,
+      "end_line": 69,
+      "line": 69,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "    def is_unverifiable(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 70,
+      "line": 70,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": "        return True"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 71,
+      "line": 71,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 32,
+      "end_line": 72,
+      "line": 72,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "    def has_header(self, name):"
+    },
+    {
+      "column": 1,
+      "end_column": 68,
+      "end_line": 73,
+      "line": 73,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "        return name in self._r.headers or name in self._new_headers"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 74,
+      "line": 74,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 46,
+      "end_line": 75,
+      "line": 75,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": "    def get_header(self, name, default=None):"
+    },
+    {
+      "column": 1,
+      "end_column": 42,
+      "end_line": 76,
+      "line": 76,
+      "reading_line": 51,
+      "source_line_ending": "",
+      "text": "        return self._r.headers.get(name, "
+    },
+    {
+      "column": 42,
+      "end_column": 79,
+      "end_line": 76,
+      "line": 76,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": "self._new_headers.get(name, default))"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 77,
+      "line": 77,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 36,
+      "end_line": 78,
+      "line": 78,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "    def add_header(self, key, val):"
+    },
+    {
+      "column": 1,
+      "end_column": 68,
+      "end_line": 79,
+      "line": 79,
+      "reading_line": 55,
+      "source_line_ending": "",
+      "text": "        \"\"\"cookiejar has no legitimate use for this method; add it "
+    },
+    {
+      "column": 68,
+      "end_column": 92,
+      "end_line": 79,
+      "line": 79,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": "back if you find one.\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 35,
+      "end_line": 80,
+      "line": 80,
+      "reading_line": 57,
+      "source_line_ending": "\n",
+      "text": "        raise NotImplementedError("
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+  "split": "development",
+  "version": 1
+}

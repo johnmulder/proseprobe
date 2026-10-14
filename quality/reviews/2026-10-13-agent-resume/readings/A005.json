@@ -1,0 +1,462 @@
+{
+  "cohort": "natural",
+  "format": "markdown",
+  "linked_text_path": "/private/tmp/proseprobe-A005.txt",
+  "packet_path": "originals/0001.md",
+  "pair_group": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md",
+  "reading_id": "A005",
+  "region": {
+    "column": 1,
+    "end_column": 63,
+    "end_line": 160,
+    "line": 121
+  },
+  "rendered_sha256": "b6688766077172f4e5af788e1b7f40d99625c66a511cf857ba1cf94d0e3220f7",
+  "rendered_text": "Blind agent reading A005: natural.\nReading file: [A005](/private/tmp/proseprobe-A005.txt)\nAttribution: GitHub Docs contributors; CC BY 4.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, M011\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL121 C 1-67 | you're using QL libraries that have not been packaged as QL packs.\nL122 C 1- 1 | \nL123 C 1-46 | (Note: On Windows the path separator is `;`).\nL124 C 1- 1 | \nL125 C 1-25 | #### `--dbscheme=<file>`\nL126 C 1- 1 | \nL127 C 1-64 | \\[Advanced] Explicitly define which dbscheme queries should be \nL127 C64-72 | compiled\nL128 C 1-66 | against. This should only be given by callers that are extremely \nL128 C66-70 | sure\nL129 C 1-20 | what they're doing.\nL130 C 1- 1 | \nL131 C 1-33 | #### `--compilation-cache=<dir>`\nL132 C 1- 1 | \nL133 C 1-57 | \\[Advanced] Specify an additional directory to use as a \nL133 C57-68 | compilation\nL134 C 1- 7 | cache.\nL135 C 1- 1 | \nL136 C 1-38 | #### `--no-default-compilation-cache`\nL137 C 1- 1 | \nL138 C 1-64 | \\[Advanced] Don't use compilation caches in standard locations \nL138 C64-71 | such as\nL139 C 1-63 | in the QL pack containing the query or in the CodeQL toolchain\nL140 C 1-11 | directory.\nL141 C 1- 1 | \nL142 C 1-55 | ### Options for configuring the CodeQL package manager\nL143 C 1- 1 | \nL144 C 1-31 | #### `--registries-auth-stdin`\nL145 C 1- 1 | \nL146 C 1-66 | Authenticate to GitHub Enterprise Server Container registries by \nL146 C66-73 | passing\nL147 C 1-59 | a comma-separated list of \\<registry\\_url>=\\<token> pairs.\nL148 C 1- 1 | \nL149 C 1-26 | For example, you can pass\nL150 C 1-67 | `https://containers.GHEHOSTNAME1/v2/=TOKEN1,https://containers.GHE\nL150 C67-88 | HOSTNAME2/v2/=TOKEN2`\nL151 C 1-59 | to authenticate to two GitHub Enterprise Server instances.\nL152 C 1- 1 | \nL153 C 1-63 | This overrides the CODEQL\\_REGISTRIES\\_AUTH and GITHUB\\_TOKEN \nL153 C63-74 | environment\nL154 C 1-63 | variables. If you only need to authenticate to the github.com \nL154 C63-72 | Container\nL155 C 1-57 | registry, you can instead authenticate using the simpler\nL156 C 1-30 | `--github-auth-stdin` option.\nL157 C 1- 1 | \nL158 C 1-27 | #### `--github-auth-stdin`\nL159 C 1- 1 | \nL160 C 1-63 | Authenticate to the github.com Container registry by passing a\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 121,
+      "line": 121,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "you're using QL libraries that have not been packaged as QL packs."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 122,
+      "line": 122,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 46,
+      "end_line": 123,
+      "line": 123,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "(Note: On Windows the path separator is `;`)."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 124,
+      "line": 124,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 25,
+      "end_line": 125,
+      "line": 125,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "#### `--dbscheme=<file>`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 126,
+      "line": 126,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 127,
+      "line": 127,
+      "reading_line": 19,
+      "source_line_ending": "",
+      "text": "\\[Advanced] Explicitly define which dbscheme queries should be "
+    },
+    {
+      "column": 64,
+      "end_column": 72,
+      "end_line": 127,
+      "line": 127,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "compiled"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 128,
+      "line": 128,
+      "reading_line": 21,
+      "source_line_ending": "",
+      "text": "against. This should only be given by callers that are extremely "
+    },
+    {
+      "column": 66,
+      "end_column": 70,
+      "end_line": 128,
+      "line": 128,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "sure"
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 129,
+      "line": 129,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "what they're doing."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 130,
+      "line": 130,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 131,
+      "line": 131,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": "#### `--compilation-cache=<dir>`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 132,
+      "line": 132,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 57,
+      "end_line": 133,
+      "line": 133,
+      "reading_line": 27,
+      "source_line_ending": "",
+      "text": "\\[Advanced] Specify an additional directory to use as a "
+    },
+    {
+      "column": 57,
+      "end_column": 68,
+      "end_line": 133,
+      "line": 133,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "compilation"
+    },
+    {
+      "column": 1,
+      "end_column": 7,
+      "end_line": 134,
+      "line": 134,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": "cache."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 135,
+      "line": 135,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 38,
+      "end_line": 136,
+      "line": 136,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "#### `--no-default-compilation-cache`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 137,
+      "line": 137,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 138,
+      "line": 138,
+      "reading_line": 33,
+      "source_line_ending": "",
+      "text": "\\[Advanced] Don't use compilation caches in standard locations "
+    },
+    {
+      "column": 64,
+      "end_column": 71,
+      "end_line": 138,
+      "line": 138,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "such as"
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 139,
+      "line": 139,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "in the QL pack containing the query or in the CodeQL toolchain"
+    },
+    {
+      "column": 1,
+      "end_column": 11,
+      "end_line": 140,
+      "line": 140,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "directory."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 141,
+      "line": 141,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 55,
+      "end_line": 142,
+      "line": 142,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "### Options for configuring the CodeQL package manager"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 143,
+      "line": 143,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 31,
+      "end_line": 144,
+      "line": 144,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": "#### `--registries-auth-stdin`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 145,
+      "line": 145,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 146,
+      "line": 146,
+      "reading_line": 42,
+      "source_line_ending": "",
+      "text": "Authenticate to GitHub Enterprise Server Container registries by "
+    },
+    {
+      "column": 66,
+      "end_column": 73,
+      "end_line": 146,
+      "line": 146,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "passing"
+    },
+    {
+      "column": 1,
+      "end_column": 59,
+      "end_line": 147,
+      "line": 147,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "a comma-separated list of \\<registry\\_url>=\\<token> pairs."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 148,
+      "line": 148,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 149,
+      "line": 149,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "For example, you can pass"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 150,
+      "line": 150,
+      "reading_line": 47,
+      "source_line_ending": "",
+      "text": "`https://containers.GHEHOSTNAME1/v2/=TOKEN1,https://containers.GHE"
+    },
+    {
+      "column": 67,
+      "end_column": 88,
+      "end_line": 150,
+      "line": 150,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "HOSTNAME2/v2/=TOKEN2`"
+    },
+    {
+      "column": 1,
+      "end_column": 59,
+      "end_line": 151,
+      "line": 151,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": "to authenticate to two GitHub Enterprise Server instances."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 152,
+      "line": 152,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 153,
+      "line": 153,
+      "reading_line": 51,
+      "source_line_ending": "",
+      "text": "This overrides the CODEQL\\_REGISTRIES\\_AUTH and GITHUB\\_TOKEN "
+    },
+    {
+      "column": 63,
+      "end_column": 74,
+      "end_line": 153,
+      "line": 153,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": "environment"
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 154,
+      "line": 154,
+      "reading_line": 53,
+      "source_line_ending": "",
+      "text": "variables. If you only need to authenticate to the github.com "
+    },
+    {
+      "column": 63,
+      "end_column": 72,
+      "end_line": 154,
+      "line": 154,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "Container"
+    },
+    {
+      "column": 1,
+      "end_column": 57,
+      "end_line": 155,
+      "line": 155,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": "registry, you can instead authenticate using the simpler"
+    },
+    {
+      "column": 1,
+      "end_column": 30,
+      "end_line": 156,
+      "line": 156,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": "`--github-auth-stdin` option."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 157,
+      "line": 157,
+      "reading_line": 57,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 27,
+      "end_line": 158,
+      "line": 158,
+      "reading_line": 58,
+      "source_line_ending": "\n",
+      "text": "#### `--github-auth-stdin`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 159,
+      "line": 159,
+      "reading_line": 59,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 160,
+      "line": 160,
+      "reading_line": 60,
+      "source_line_ending": "\n",
+      "text": "Authenticate to the github.com Container registry by passing a"
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "M011"
+  ],
+  "sha256": "e4656dfdd2cff448e23fd8115b70b78efd0ac8863897b9df161ffc26dec12ded",
+  "source_group": "github/docs",
+  "source_id": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md",
+  "split": "development",
+  "version": 1
+}

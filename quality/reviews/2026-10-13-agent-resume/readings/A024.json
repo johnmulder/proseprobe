@@ -1,0 +1,428 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A024.txt",
+  "packet_path": "originals/0005.py",
+  "pair_group": "psf/requests:src/requests/cookies.py",
+  "reading_id": "A024",
+  "region": {
+    "column": 1,
+    "end_column": 1,
+    "end_line": 520,
+    "line": 481
+  },
+  "rendered_sha256": "b2dbe4a8d3172412dd3c2ea90b3ab56fc0d51713f1aa1806ded1d1c39a4ed6b3",
+  "rendered_text": "Blind agent reading A024: natural.\nReading file: [A024](/private/tmp/proseprobe-A024.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL481 C 1-10 |         )\nL482 C 1- 1 | \nL483 C 1-26 |     result.update(kwargs)\nL484 C 1-52 |     result[\"port_specified\"] = bool(result[\"port\"])\nL485 C 1-56 |     result[\"domain_specified\"] = bool(result[\"domain\"])\nL486 C 1-36 |     result[\"domain_initial_dot\"] = \nL486 C36-68 | result[\"domain\"].startswith(\".\")\nL487 C 1-52 |     result[\"path_specified\"] = bool(result[\"path\"])\nL488 C 1- 1 | \nL489 C 1-38 |     return cookielib.Cookie(**result)\nL490 C 1- 1 | \nL491 C 1- 1 | \nL492 C 1-30 | def morsel_to_cookie(morsel):\nL493 C 1-65 |     \"\"\"Convert a Morsel object into a Cookie containing the one \nL493 C65-77 | k/v pair.\"\"\"\nL494 C 1- 1 | \nL495 C 1-19 |     expires = None\nL496 C 1-26 |     if morsel[\"max-age\"]:\nL497 C 1-13 |         try:\nL498 C 1-64 |             expires = int(time.time() + int(morsel[\"max-age\"]))\nL499 C 1-27 |         except ValueError:\nL500 C 1-65 |             raise TypeError(f\"max-age: {morsel['max-age']} must \nL500 C65-77 | be integer\")\nL501 C 1-28 |     elif morsel[\"expires\"]:\nL502 C 1-52 |         time_template = \"%a, %d-%b-%Y %H:%M:%S GMT\"\nL503 C 1-19 |         expires = \nL503 C19-83 | calendar.timegm(time.strptime(morsel[\"expires\"], time_template))\nL504 C 1-26 |     return create_cookie(\nL505 C 1-35 |         comment=morsel[\"comment\"],\nL506 C 1-45 |         comment_url=bool(morsel[\"comment\"]),\nL507 C 1-23 |         discard=False,\nL508 C 1-33 |         domain=morsel[\"domain\"],\nL509 C 1-25 |         expires=expires,\nL510 C 1-25 |         name=morsel.key,\nL511 C 1-29 |         path=morsel[\"path\"],\nL512 C 1-19 |         port=None,\nL513 C 1-47 |         rest={\"HttpOnly\": morsel[\"httponly\"]},\nL514 C 1-23 |         rfc2109=False,\nL515 C 1-39 |         secure=bool(morsel[\"secure\"]),\nL516 C 1-28 |         value=morsel.value,\nL517 C 1-40 |         version=morsel[\"version\"] or 0,\nL518 C 1- 6 |     )\nL519 C 1- 1 | \nL520 C 1- 1 | \n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 10,
+      "end_line": 481,
+      "line": 481,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "        )"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 482,
+      "line": 482,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 483,
+      "line": 483,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "    result.update(kwargs)"
+    },
+    {
+      "column": 1,
+      "end_column": 52,
+      "end_line": 484,
+      "line": 484,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "    result[\"port_specified\"] = bool(result[\"port\"])"
+    },
+    {
+      "column": 1,
+      "end_column": 56,
+      "end_line": 485,
+      "line": 485,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "    result[\"domain_specified\"] = bool(result[\"domain\"])"
+    },
+    {
+      "column": 1,
+      "end_column": 36,
+      "end_line": 486,
+      "line": 486,
+      "reading_line": 18,
+      "source_line_ending": "",
+      "text": "    result[\"domain_initial_dot\"] = "
+    },
+    {
+      "column": 36,
+      "end_column": 68,
+      "end_line": 486,
+      "line": 486,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "result[\"domain\"].startswith(\".\")"
+    },
+    {
+      "column": 1,
+      "end_column": 52,
+      "end_line": 487,
+      "line": 487,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "    result[\"path_specified\"] = bool(result[\"path\"])"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 488,
+      "line": 488,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 38,
+      "end_line": 489,
+      "line": 489,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "    return cookielib.Cookie(**result)"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 490,
+      "line": 490,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 491,
+      "line": 491,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 30,
+      "end_line": 492,
+      "line": 492,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": "def morsel_to_cookie(morsel):"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 493,
+      "line": 493,
+      "reading_line": 26,
+      "source_line_ending": "",
+      "text": "    \"\"\"Convert a Morsel object into a Cookie containing the one "
+    },
+    {
+      "column": 65,
+      "end_column": 77,
+      "end_line": 493,
+      "line": 493,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "k/v pair.\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 494,
+      "line": 494,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 19,
+      "end_line": 495,
+      "line": 495,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": "    expires = None"
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 496,
+      "line": 496,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": "    if morsel[\"max-age\"]:"
+    },
+    {
+      "column": 1,
+      "end_column": 13,
+      "end_line": 497,
+      "line": 497,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "        try:"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 498,
+      "line": 498,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "            expires = int(time.time() + int(morsel[\"max-age\"]))"
+    },
+    {
+      "column": 1,
+      "end_column": 27,
+      "end_line": 499,
+      "line": 499,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "        except ValueError:"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 500,
+      "line": 500,
+      "reading_line": 34,
+      "source_line_ending": "",
+      "text": "            raise TypeError(f\"max-age: {morsel['max-age']} must "
+    },
+    {
+      "column": 65,
+      "end_column": 77,
+      "end_line": 500,
+      "line": 500,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "be integer\")"
+    },
+    {
+      "column": 1,
+      "end_column": 28,
+      "end_line": 501,
+      "line": 501,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "    elif morsel[\"expires\"]:"
+    },
+    {
+      "column": 1,
+      "end_column": 52,
+      "end_line": 502,
+      "line": 502,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": "        time_template = \"%a, %d-%b-%Y %H:%M:%S GMT\""
+    },
+    {
+      "column": 1,
+      "end_column": 19,
+      "end_line": 503,
+      "line": 503,
+      "reading_line": 38,
+      "source_line_ending": "",
+      "text": "        expires = "
+    },
+    {
+      "column": 19,
+      "end_column": 83,
+      "end_line": 503,
+      "line": 503,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": "calendar.timegm(time.strptime(morsel[\"expires\"], time_template))"
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 504,
+      "line": 504,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": "    return create_cookie("
+    },
+    {
+      "column": 1,
+      "end_column": 35,
+      "end_line": 505,
+      "line": 505,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "        comment=morsel[\"comment\"],"
+    },
+    {
+      "column": 1,
+      "end_column": 45,
+      "end_line": 506,
+      "line": 506,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": "        comment_url=bool(morsel[\"comment\"]),"
+    },
+    {
+      "column": 1,
+      "end_column": 23,
+      "end_line": 507,
+      "line": 507,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "        discard=False,"
+    },
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 508,
+      "line": 508,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "        domain=morsel[\"domain\"],"
+    },
+    {
+      "column": 1,
+      "end_column": 25,
+      "end_line": 509,
+      "line": 509,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": "        expires=expires,"
+    },
+    {
+      "column": 1,
+      "end_column": 25,
+      "end_line": 510,
+      "line": 510,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "        name=morsel.key,"
+    },
+    {
+      "column": 1,
+      "end_column": 29,
+      "end_line": 511,
+      "line": 511,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "        path=morsel[\"path\"],"
+    },
+    {
+      "column": 1,
+      "end_column": 19,
+      "end_line": 512,
+      "line": 512,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "        port=None,"
+    },
+    {
+      "column": 1,
+      "end_column": 47,
+      "end_line": 513,
+      "line": 513,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": "        rest={\"HttpOnly\": morsel[\"httponly\"]},"
+    },
+    {
+      "column": 1,
+      "end_column": 23,
+      "end_line": 514,
+      "line": 514,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": "        rfc2109=False,"
+    },
+    {
+      "column": 1,
+      "end_column": 39,
+      "end_line": 515,
+      "line": 515,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "        secure=bool(morsel[\"secure\"]),"
+    },
+    {
+      "column": 1,
+      "end_column": 28,
+      "end_line": 516,
+      "line": 516,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": "        value=morsel.value,"
+    },
+    {
+      "column": 1,
+      "end_column": 40,
+      "end_line": 517,
+      "line": 517,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": "        version=morsel[\"version\"] or 0,"
+    },
+    {
+      "column": 1,
+      "end_column": 6,
+      "end_line": 518,
+      "line": 518,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "    )"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 519,
+      "line": 519,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 520,
+      "line": 520,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": ""
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+  "split": "development",
+  "version": 1
+}

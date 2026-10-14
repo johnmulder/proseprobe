@@ -1,0 +1,36 @@
+{
+  "files": {
+    "originals/0000.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [],
+      "sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+      "source_group": "agent-authored-pilot",
+      "source_id": "agent-authored-pilot:entry.md"
+    }
+  },
+  "review": {
+    "native_context": {
+      "path": "native-context.json",
+      "sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528"
+    },
+    "packet_index": {
+      "path": "index.json",
+      "sha256": "e82569b45e40a826b380bc580e60907f9ec2b98c93a9dcc6097f35a5f4a399f7"
+    },
+    "policy": {
+      "min_confidence": "low",
+      "mode": "all-rules",
+      "profile": "default",
+      "severity": "info"
+    },
+    "protocol_revision": "agent-resume-development-v1",
+    "reviewers": [],
+    "rule_contracts": {
+      "path": "contracts.json",
+      "sha256": "27650a79822ed908ff5e31d443cd1a7cc9171ee0a673abb93df095116b7b5800"
+    }
+  },
+  "version": 3
+}

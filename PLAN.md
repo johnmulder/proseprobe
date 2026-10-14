@@ -1,9 +1,9 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-13. Human review resumed by user request after the completed
-[unattended track](quality/reviews/2026-10-13-autonomous/EXECUTION.md).
-Each reading includes a direct link and at most 80 lines of 80 characters.
-Preserve earlier frozen human/agent evidence and independent prerequisites.
+Updated: 2026-10-13. The user requested agents as reviewers. The active
+[agent review batch](quality/reviews/2026-10-13-agent-resume/README.md) uses
+separate blind contexts and bounded readings. Earlier human/agent records and
+independent human prerequisites remain preserved.
 
 ## Working rules
 
@@ -23,7 +23,29 @@ Preserve earlier frozen human/agent evidence and independent prerequisites.
 - If a future review is requested, include its direct reading link and limit it
   to 80 lines of 80 characters, including instructions and questions.
 
-## Independent human annotation — active
+## Agent-assisted development review — active
+
+Nine source units: six natural originals, two authored challenge originals and
+one authored native-link source. Thirty linked readings fit the 80-by-80 limit.
+Author familiarity, source groups and populations stay explicit. No predictions
+are supplied to the initial reviewers; no human answer is required for this track.
+
+- [ ] A09 Preserve both actual agent reviews and validate version 3 annotations
+  for the declared source/rule matrix, including unsupported contexts.
+- [ ] A10 Report issue/scope agreement with denominators. Adjudicate differences
+  using a third agent, retaining originals and unresolved cases.
+- [ ] A11 Freeze raw reviews, accepted labels, contracts, source bytes, renderer
+  context and runtime identity before predictions; commit the freeze.
+- [ ] A12 Generate all-rules and unchanged production reports. Keep natural and
+  authored populations separate, preserve raw misses/exclusions, and report
+  unavailable rates and group uncertainty explicitly.
+- [ ] A13 Obtain separate agent judgments for targeted finding helpfulness,
+  suggestion fit, meaning preservation and acceptance. Bind full diagnostic
+  hashes; keep these outside human-usefulness records.
+- [ ] A14 Record the policy decision, pass repository gates, commit the results
+  and remove completed agent actions from this checklist.
+
+## Independent human annotation — deferred
 
 Prerequisites: eligible actual human reviewers and permitted source access.
 The three previous human scopes remain limited; prior exposure is unknown and
@@ -123,12 +145,10 @@ excluded. Current evidence is in the execution record and `dataset-terms.json`.
   [RELEASE_BLOCKERS.md](RELEASE_BLOCKERS.md) for that exact release candidate,
   including package, legal/publication identity and trusted publishing.
 
-## Current human review batch
+## Superseded human questions
 
-Session: `quality/reviews/2026-10-13-human-resume/selection.json`.
-R005 is submitted: 50 lines, maximum width 80, covering the workflow-jobs
-source at L18 C1–L38 C117 for G038/V015/V016. Reusable expansions and linked
-pages stay unreviewed. Reviewer alias and passage-specific prior exposure await
-answers; independence remains unverified. No second human is assigned.
-The seven detector-exposed original sources are excluded by ID and native hash.
-The fresh packet and exact reading map validate without predictions.
+The user delegated review to agents. R005 and its alias/exposure questions remain
+human-unanswered; no response or identity was inferred. Its exact original
+L18 C1–L38 C117 scope and three-rule contract are reused in separate agent
+records. Seven previously detector-exposed originals remain excluded by ID and
+hash. Further actual human review and independent claims retain their prerequisites.

@@ -1,0 +1,453 @@
+{
+  "cohort": "natural",
+  "format": "markdown",
+  "linked_text_path": "/private/tmp/proseprobe-A003.txt",
+  "packet_path": "originals/0001.md",
+  "pair_group": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md",
+  "reading_id": "A003",
+  "region": {
+    "column": 1,
+    "end_column": 72,
+    "end_line": 80,
+    "line": 41
+  },
+  "rendered_sha256": "f70d6e610c788b1be823c8b0b795f7ac6439a41a69c2947ea2a89e85f3604800",
+  "rendered_text": "Blind agent reading A003: natural.\nReading file: [A003](/private/tmp/proseprobe-A003.txt)\nAttribution: GitHub Docs contributors; CC BY 4.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, M011\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL41 C 1- 8 | needed.\nL42 C 1- 1 | \nL43 C 1-67 | The command will also detect a language and dbscheme to compile a \nL43 C67-72 | query\nL44 C 1-68 | against, as these may also depend on autodetecting the language of \nL44 C68-72 | a QL\nL45 C 1- 7 | query.\nL46 C 1- 1 | \nL47 C 1-67 | **The command is deeply internal and its behavior or existence may\nL48 C 1-67 | change without much notice as the QL language ecosystem evolves.**\nL49 C 1- 1 | \nL50 C 1-11 | ## Options\nL51 C 1- 1 | \nL52 C 1-20 | ### Primary Options\nL53 C 1- 1 | \nL54 C 1-30 | #### `--[no-]find-extractors`\nL55 C 1- 1 | \nL56 C 1-67 | \\[Advanced] Include in the output a summary of `extractor` fields \nL56 C67-71 | from\nL57 C 1-65 | the QL packs that the query depends on. This is used only for a \nL57 C65-73 | few rare\nL58 C 1-65 | internal cases, and may require more work to compute, so is not \nL58 C65-71 | turned\nL59 C 1-15 | on by default.\nL60 C 1- 1 | \nL61 C 1-22 | #### `--format=<fmt>`\nL62 C 1- 1 | \nL63 C 1-39 | Select output format. Choices include:\nL64 C 1- 1 | \nL65 C 1-68 | `lines` _(default)_: Print command line arguments on one line each.\nL66 C 1- 1 | \nL67 C 1-47 | `json`: Print a JSON object with all the data.\nL68 C 1- 1 | \nL69 C 1-46 | `path`: Print just the computed library path.\nL70 C 1- 1 | \nL71 C 1-46 | `dbscheme`: Print just the detected dbscheme.\nL72 C 1- 1 | \nL73 C 1-67 | `cache`: Print the default compilation cache location, or nothing \nL73 C67-69 | if\nL74 C 1- 6 | none.\nL75 C 1- 1 | \nL76 C 1-53 | ### Options from the invoking command's command line\nL77 C 1- 1 | \nL78 C 1-38 | #### `--search-path=<dir>[:<dir>...]`\nL79 C 1- 1 | \nL80 C 1-63 | A list of directories under which QL packs may be found. Each \nL80 C63-72 | directory\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 8,
+      "end_line": 41,
+      "line": 41,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "needed."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 42,
+      "line": 42,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 43,
+      "line": 43,
+      "reading_line": 15,
+      "source_line_ending": "",
+      "text": "The command will also detect a language and dbscheme to compile a "
+    },
+    {
+      "column": 67,
+      "end_column": 72,
+      "end_line": 43,
+      "line": 43,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "query"
+    },
+    {
+      "column": 1,
+      "end_column": 68,
+      "end_line": 44,
+      "line": 44,
+      "reading_line": 17,
+      "source_line_ending": "",
+      "text": "against, as these may also depend on autodetecting the language of "
+    },
+    {
+      "column": 68,
+      "end_column": 72,
+      "end_line": 44,
+      "line": 44,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "a QL"
+    },
+    {
+      "column": 1,
+      "end_column": 7,
+      "end_line": 45,
+      "line": 45,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "query."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 46,
+      "line": 46,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 47,
+      "line": 47,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "**The command is deeply internal and its behavior or existence may"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 48,
+      "line": 48,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "change without much notice as the QL language ecosystem evolves.**"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 49,
+      "line": 49,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 11,
+      "end_line": 50,
+      "line": 50,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "## Options"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 51,
+      "line": 51,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 52,
+      "line": 52,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "### Primary Options"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 53,
+      "line": 53,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 30,
+      "end_line": 54,
+      "line": 54,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "#### `--[no-]find-extractors`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 55,
+      "line": 55,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 56,
+      "line": 56,
+      "reading_line": 30,
+      "source_line_ending": "",
+      "text": "\\[Advanced] Include in the output a summary of `extractor` fields "
+    },
+    {
+      "column": 67,
+      "end_column": 71,
+      "end_line": 56,
+      "line": 56,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "from"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 57,
+      "line": 57,
+      "reading_line": 32,
+      "source_line_ending": "",
+      "text": "the QL packs that the query depends on. This is used only for a "
+    },
+    {
+      "column": 65,
+      "end_column": 73,
+      "end_line": 57,
+      "line": 57,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "few rare"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 58,
+      "line": 58,
+      "reading_line": 34,
+      "source_line_ending": "",
+      "text": "internal cases, and may require more work to compute, so is not "
+    },
+    {
+      "column": 65,
+      "end_column": 71,
+      "end_line": 58,
+      "line": 58,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "turned"
+    },
+    {
+      "column": 1,
+      "end_column": 15,
+      "end_line": 59,
+      "line": 59,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "on by default."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 60,
+      "line": 60,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 61,
+      "line": 61,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "#### `--format=<fmt>`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 62,
+      "line": 62,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 39,
+      "end_line": 63,
+      "line": 63,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": "Select output format. Choices include:"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 64,
+      "line": 64,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 68,
+      "end_line": 65,
+      "line": 65,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": "`lines` _(default)_: Print command line arguments on one line each."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 66,
+      "line": 66,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 47,
+      "end_line": 67,
+      "line": 67,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "`json`: Print a JSON object with all the data."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 68,
+      "line": 68,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 46,
+      "end_line": 69,
+      "line": 69,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "`path`: Print just the computed library path."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 70,
+      "line": 70,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 46,
+      "end_line": 71,
+      "line": 71,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "`dbscheme`: Print just the detected dbscheme."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 72,
+      "line": 72,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 73,
+      "line": 73,
+      "reading_line": 50,
+      "source_line_ending": "",
+      "text": "`cache`: Print the default compilation cache location, or nothing "
+    },
+    {
+      "column": 67,
+      "end_column": 69,
+      "end_line": 73,
+      "line": 73,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "if"
+    },
+    {
+      "column": 1,
+      "end_column": 6,
+      "end_line": 74,
+      "line": 74,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": "none."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 75,
+      "line": 75,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 53,
+      "end_line": 76,
+      "line": 76,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "### Options from the invoking command's command line"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 77,
+      "line": 77,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 38,
+      "end_line": 78,
+      "line": 78,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": "#### `--search-path=<dir>[:<dir>...]`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 79,
+      "line": 79,
+      "reading_line": 57,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 80,
+      "line": 80,
+      "reading_line": 58,
+      "source_line_ending": "",
+      "text": "A list of directories under which QL packs may be found. Each "
+    },
+    {
+      "column": 63,
+      "end_column": 72,
+      "end_line": 80,
+      "line": 80,
+      "reading_line": 59,
+      "source_line_ending": "\n",
+      "text": "directory"
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "M011"
+  ],
+  "sha256": "e4656dfdd2cff448e23fd8115b70b78efd0ac8863897b9df161ffc26dec12ded",
+  "source_group": "github/docs",
+  "source_id": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md",
+  "split": "development",
+  "version": 1
+}
