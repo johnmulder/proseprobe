@@ -1,0 +1,87 @@
+{
+  "files": {
+    "originals/0000.md": {
+      "expected": [
+        {
+          "id": "agent-b-authored-local-links-0000-M012-001",
+          "rule_id": "M012",
+          "line": 4,
+          "column": 22,
+          "end_line": 4,
+          "end_column": 44,
+          "note": "setup.md exists, but its # Configuration heading is inside a fenced code example and creates no target. The actual native headings yield install and configuration-notes; configuration is unresolved under GitHub policy.",
+          "match_region": {
+            "line": 4,
+            "column": 22,
+            "end_line": 4,
+            "end_column": 44
+          }
+        },
+        {
+          "id": "agent-b-authored-local-links-0000-M012-002",
+          "rule_id": "M012",
+          "line": 5,
+          "column": 18,
+          "end_line": 5,
+          "end_column": 28,
+          "note": "The complete pinned synthetic inventory contains entry.md and setup.md, and explicitly declares missing.md absent. This literal relative Markdown target is unresolved.",
+          "match_region": {
+            "line": 5,
+            "column": 18,
+            "end_line": 5,
+            "end_column": 28
+          }
+        },
+        {
+          "id": "agent-b-authored-local-links-0000-M011-001",
+          "rule_id": "M011",
+          "line": 7,
+          "column": 20,
+          "end_line": 7,
+          "end_column": 32,
+          "note": "The complete source has a Workflow heading and no Limitations heading or supported HTML anchor, so this same-document destination is unresolved.",
+          "match_region": {
+            "line": 7,
+            "column": 20,
+            "end_line": 7,
+            "end_column": 32
+          }
+        }
+      ],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [
+        "M011",
+        "M012"
+      ],
+      "sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+      "source_group": "agent-authored-pilot",
+      "source_id": "agent-authored-pilot:entry.md"
+    }
+  },
+  "review": {
+    "native_context": {
+      "path": "native-context.json",
+      "sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528"
+    },
+    "packet_index": {
+      "path": "index.json",
+      "sha256": "e82569b45e40a826b380bc580e60907f9ec2b98c93a9dcc6097f35a5f4a399f7"
+    },
+    "policy": {
+      "min_confidence": "low",
+      "mode": "all-rules",
+      "profile": "default",
+      "severity": "info"
+    },
+    "protocol_revision": "agent-resume-blind-v1",
+    "reviewers": [
+      "codex-agent:/root/blind_resume_b"
+    ],
+    "rule_contracts": {
+      "path": "contracts.json",
+      "sha256": "27650a79822ed908ff5e31d443cd1a7cc9171ee0a673abb93df095116b7b5800"
+    }
+  },
+  "version": 3
+}

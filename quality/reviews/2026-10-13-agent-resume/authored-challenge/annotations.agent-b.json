@@ -1,0 +1,276 @@
+{
+  "files": {
+    "originals/0000.md": {
+      "expected": [
+        {
+          "id": "agent-b-authored-challenge-0000-G038-001",
+          "rule_id": "G038",
+          "line": 3,
+          "column": 17,
+          "end_line": 3,
+          "end_column": 26,
+          "note": "No comparison target is attached to this predicate comparative; the following sentence is a separate assertion.",
+          "match_region": {
+            "line": 3,
+            "column": 17,
+            "end_line": 3,
+            "end_column": 26
+          }
+        },
+        {
+          "id": "agent-b-authored-challenge-0000-V015-001",
+          "rule_id": "V015",
+          "line": 5,
+          "column": 17,
+          "end_line": 5,
+          "end_column": 33,
+          "note": "The claim names no comparison set or scope. The following bounded benchmark claim does not scope this separate sentence.",
+          "match_region": {
+            "line": 5,
+            "column": 17,
+            "end_line": 5,
+            "end_column": 33
+          }
+        },
+        {
+          "id": "agent-b-authored-challenge-0000-V016-001",
+          "rule_id": "V016",
+          "line": 7,
+          "column": 21,
+          "end_line": 7,
+          "end_column": 32,
+          "note": "Universal reliability assertion with no own numbered test population or explicitly tested configuration.",
+          "match_region": {
+            "line": 7,
+            "column": 21,
+            "end_line": 7,
+            "end_column": 32
+          }
+        },
+        {
+          "id": "agent-b-authored-challenge-0000-V016-002",
+          "rule_id": "V016",
+          "line": 9,
+          "column": 41,
+          "end_line": 9,
+          "end_column": 52,
+          "note": "The neighboring sentence We ran 1,000 tests. cannot qualify the separate universal assertion.",
+          "match_region": {
+            "line": 9,
+            "column": 41,
+            "end_line": 9,
+            "end_column": 52
+          }
+        },
+        {
+          "id": "agent-b-authored-challenge-0000-V016-003",
+          "rule_id": "V016",
+          "line": 10,
+          "column": 31,
+          "end_line": 10,
+          "end_column": 46,
+          "note": "In tests is a vague testing scope rather than a numbered population or explicitly tested configuration; the contract retains a review prompt.",
+          "match_region": {
+            "line": 10,
+            "column": 31,
+            "end_line": 10,
+            "end_column": 46
+          }
+        },
+        {
+          "id": "agent-b-authored-challenge-0000-G039-001",
+          "rule_id": "G039",
+          "line": 11,
+          "column": 10,
+          "end_line": 11,
+          "end_column": 13,
+          "note": "The second adjacent the duplicates a word in the closed function-word vocabulary.",
+          "match_region": {
+            "line": 11,
+            "column": 10,
+            "end_line": 11,
+            "end_column": 13
+          }
+        },
+        {
+          "id": "agent-b-authored-challenge-0000-M011-001",
+          "rule_id": "M011",
+          "line": 17,
+          "column": 35,
+          "end_line": 17,
+          "end_column": 42,
+          "note": "The static same-document destination has no heading or supported HTML anchor in this complete native Markdown file. #scope resolves to the Scope heading.",
+          "match_region": {
+            "line": 17,
+            "column": 35,
+            "end_line": 17,
+            "end_column": 42
+          }
+        }
+      ],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "M011"
+      ],
+      "sha256": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48",
+      "source_group": "agent-authored-pilot",
+      "source_id": "agent-authored-pilot:claims.md"
+    },
+    "originals/0001.py": {
+      "expected": [
+        {
+          "id": "agent-b-authored-challenge-0001-C009-001",
+          "rule_id": "C009",
+          "line": 7,
+          "column": 12,
+          "end_line": 7,
+          "end_column": 20,
+          "note": "fetch has source parameters target and variadic positional extras; attempts is absent and no variadic keyword parameter can forward it.",
+          "match_region": {
+            "line": 7,
+            "column": 12,
+            "end_line": 7,
+            "end_column": 20
+          }
+        },
+        {
+          "id": "agent-b-authored-challenge-0001-C009-002",
+          "rule_id": "C009",
+          "line": 8,
+          "column": 12,
+          "end_line": 8,
+          "end_column": 20,
+          "note": "The field explicitly declares variadic keyword extras, but fetch declares variadic positional *extras. The explicit star kind must agree with the source signature.",
+          "match_region": {
+            "line": 8,
+            "column": 12,
+            "end_line": 8,
+            "end_column": 20
+          }
+        },
+        {
+          "id": "agent-b-authored-challenge-0001-C010-001",
+          "rule_id": "C010",
+          "line": 9,
+          "column": 13,
+          "end_line": 9,
+          "end_column": 16,
+          "note": "fetch has an unquoted -> None annotation and a physical, single Sphinx :rtype: int field. This is the one supported explicit contradiction; check both declarations without inferring a return value.",
+          "match_region": {
+            "line": 9,
+            "column": 13,
+            "end_line": 9,
+            "end_column": 16
+          }
+        },
+        {
+          "id": "agent-b-authored-challenge-0001-C004-001",
+          "rule_id": "C004",
+          "line": 11,
+          "column": 5,
+          "end_line": 11,
+          "end_column": 11,
+          "note": "Context-free TODO comment has no specific maintenance action or reason.",
+          "match_region": {
+            "line": 11,
+            "column": 5,
+            "end_line": 11,
+            "end_column": 11
+          }
+        },
+        {
+          "id": "agent-b-authored-challenge-0001-C004-002",
+          "rule_id": "C004",
+          "line": 12,
+          "column": 5,
+          "end_line": 12,
+          "end_column": 48,
+          "note": "This real raise statement uses a formulaic placeholder message in concrete fetch. No abstract or typing-stub declaration exempts the body; the comment and executable placeholder are distinct issues.",
+          "match_region": {
+            "line": 12,
+            "column": 5,
+            "end_line": 12,
+            "end_column": 48
+          }
+        },
+        {
+          "id": "agent-b-authored-challenge-0001-G039-001",
+          "rule_id": "G039",
+          "line": 26,
+          "column": 17,
+          "end_line": 26,
+          "end_column": 20,
+          "note": "The second adjacent the in the owning docstring duplicates a closed-vocabulary function word.",
+          "match_region": {
+            "line": 26,
+            "column": 17,
+            "end_line": 26,
+            "end_column": 20
+          }
+        }
+      ],
+      "negative_cases": [],
+      "regions": [
+        {
+          "rules": [
+            "C010"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 37,
+          "end_column": 1,
+          "note": "Reviewed complete owner/binding context for fetch, Reader.read, and checked. fetch contains the supported None/int conflict; the physical None fields of read and checked do not conflict."
+        },
+        {
+          "rules": [
+            "C010"
+          ],
+          "status": "unsupported",
+          "line": 38,
+          "column": 1,
+          "end_line": 44,
+          "end_column": 24,
+          "note": "decode declares -> str with :rtype: int. This scalar pair is explicitly outside the initial C010 contract; it is not a supported C010 positive or a supported clean contradiction case."
+        }
+      ],
+      "reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009"
+      ],
+      "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+      "source_group": "agent-authored-pilot",
+      "source_id": "agent-authored-pilot:documentation.py"
+    }
+  },
+  "review": {
+    "packet_index": {
+      "path": "index.json",
+      "sha256": "2eef722e1bc2794bff37ed83e7520d46965dc1bcc3c0c469ac8cb77984b6c25f"
+    },
+    "policy": {
+      "min_confidence": "low",
+      "mode": "all-rules",
+      "profile": "default",
+      "severity": "info"
+    },
+    "protocol_revision": "agent-resume-blind-v1",
+    "reviewers": [
+      "codex-agent:/root/blind_resume_b"
+    ],
+    "rule_contracts": {
+      "path": "contracts.json",
+      "sha256": "059a18caf770f2d388e9902d1e0647bc0d6e5eaba6be5409f4b31af126634887"
+    }
+  },
+  "version": 3
+}

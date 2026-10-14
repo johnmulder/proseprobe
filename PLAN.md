@@ -30,12 +30,6 @@ one authored native-link source. Thirty linked readings fit the 80-by-80 limit.
 Author familiarity, source groups and populations stay explicit. No predictions
 are supplied to the initial reviewers; no human answer is required for this track.
 
-- [ ] A09 Preserve both actual agent reviews and validate version 3 annotations
-  for the declared source/rule matrix, including unsupported contexts.
-- [ ] A10 Report issue/scope agreement with denominators. Adjudicate differences
-  using a third agent, retaining originals and unresolved cases.
-- [ ] A11 Freeze raw reviews, accepted labels, contracts, source bytes, renderer
-  context and runtime identity before predictions; commit the freeze.
 - [ ] A12 Generate all-rules and unchanged production reports. Keep natural and
   authored populations separate, preserve raw misses/exclusions, and report
   unavailable rates and group uncertainty explicitly.
@@ -95,6 +89,9 @@ Prerequisites: supported contexts and accepted independent development labels.
 - [ ] P32D.6b Assess G039 repeated-word precision on independently reviewed prose.
 - [ ] P32D.6c Assess C004 executable placeholders and C009 parameter-kind checks
   in supported Python contexts.
+- [ ] P32D.6d Clarify C004's intentional unsupported-operation boundary with
+  accepted contract examples before labeling the unresolved Requests guard.
+  Start with failing tests for any resulting behavior change.
 - [ ] P27.13 Assess G038 on untouched independent development examples.
 - [ ] P29.12 Assess C010 precision/usefulness under its narrow return contract;
   retain unsupported types and disagreements.

@@ -1,0 +1,840 @@
+{
+  "actor_type": "agent",
+  "cohorts": {
+    "authored-challenge": {
+      "coverage_a": {
+        "agent-authored-pilot": {
+          "files_count": 2,
+          "prose_words": 182,
+          "prose_words_by_context": {
+            "comment": 10,
+            "docstring": 55,
+            "markdown": 117
+          },
+          "reviewed_regions_count": 3
+        }
+      },
+      "coverage_b": {
+        "agent-authored-pilot": {
+          "files_count": 2,
+          "prose_words": 182,
+          "prose_words_by_context": {
+            "comment": 10,
+            "docstring": 55,
+            "markdown": 117
+          },
+          "reviewed_regions_count": 3
+        }
+      },
+      "exact_endpoint_events_in_both": 12,
+      "location_disagreements": [
+        {
+          "line": 11,
+          "path": "originals/0001.py",
+          "rule_id": "C004",
+          "span_a": [
+            7,
+            11,
+            11
+          ],
+          "span_b": [
+            5,
+            11,
+            11
+          ]
+        }
+      ],
+      "original_annotations": {
+        "a": {
+          "path": "quality/reviews/2026-10-13-agent-resume/authored-challenge/annotations.agent-a.json",
+          "sha256": "860ef36ac41fb6a781ba8bd99370bf4acb041fcff3147b44dea09e6f3a3d05a8"
+        },
+        "b": {
+          "path": "quality/reviews/2026-10-13-agent-resume/authored-challenge/annotations.agent-b.json",
+          "sha256": "4b211109d80fd0f482e1e36ec4b53c1d38242fc1571c2e2e0007ff72a1c109fe"
+        }
+      },
+      "semantic_event_union": 13,
+      "semantic_events_in_both": 13,
+      "source_rule_dispositions": [
+        {
+          "path": "originals/0000.md",
+          "positive_events_a": 1,
+          "positive_events_b": 1,
+          "rule_id": "G038",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0000.md",
+          "positive_events_a": 1,
+          "positive_events_b": 1,
+          "rule_id": "G039",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0000.md",
+          "positive_events_a": 1,
+          "positive_events_b": 1,
+          "rule_id": "V015",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0000.md",
+          "positive_events_a": 3,
+          "positive_events_b": 3,
+          "rule_id": "V016",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0000.md",
+          "positive_events_a": 1,
+          "positive_events_b": 1,
+          "rule_id": "M011",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0001.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "G038",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0001.py",
+          "positive_events_a": 1,
+          "positive_events_b": 1,
+          "rule_id": "G039",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0001.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V015",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0001.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V016",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0001.py",
+          "positive_events_a": 2,
+          "positive_events_b": 2,
+          "rule_id": "C004",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0001.py",
+          "positive_events_a": 2,
+          "positive_events_b": 2,
+          "rule_id": "C009",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0001.py",
+          "positive_events_a": 1,
+          "positive_events_b": 1,
+          "rule_id": "C010",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed",
+            "unsupported"
+          ],
+          "statuses_b": [
+            "reviewed",
+            "unsupported"
+          ]
+        }
+      ],
+      "source_rule_pairs": 12,
+      "status_set_agreement_pairs": 12
+    },
+    "authored-local-links": {
+      "coverage_a": {
+        "agent-authored-pilot": {
+          "files_count": 1,
+          "prose_words": 29,
+          "prose_words_by_context": {
+            "comment": 0,
+            "docstring": 0,
+            "markdown": 29
+          },
+          "reviewed_regions_count": 1
+        }
+      },
+      "coverage_b": {
+        "agent-authored-pilot": {
+          "files_count": 1,
+          "prose_words": 29,
+          "prose_words_by_context": {
+            "comment": 0,
+            "docstring": 0,
+            "markdown": 29
+          },
+          "reviewed_regions_count": 1
+        }
+      },
+      "exact_endpoint_events_in_both": 3,
+      "location_disagreements": [],
+      "original_annotations": {
+        "a": {
+          "path": "quality/reviews/2026-10-13-agent-resume/authored-local-links/annotations.agent-a.json",
+          "sha256": "6b0b6caf350841eb92244534b74293da94f2540df9ad2278f586a0807c38bdcd"
+        },
+        "b": {
+          "path": "quality/reviews/2026-10-13-agent-resume/authored-local-links/annotations.agent-b.json",
+          "sha256": "1c6da72645a09f47eb53c57dd955b39daf89e88e20ec9504024bbfbdc7088e54"
+        }
+      },
+      "semantic_event_union": 3,
+      "semantic_events_in_both": 3,
+      "source_rule_dispositions": [
+        {
+          "path": "originals/0000.md",
+          "positive_events_a": 1,
+          "positive_events_b": 1,
+          "rule_id": "M011",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0000.md",
+          "positive_events_a": 2,
+          "positive_events_b": 2,
+          "rule_id": "M012",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        }
+      ],
+      "source_rule_pairs": 2,
+      "status_set_agreement_pairs": 2
+    },
+    "natural": {
+      "coverage_a": {
+        "github/docs": {
+          "files_count": 3,
+          "prose_words": 1203,
+          "prose_words_by_context": {
+            "comment": 0,
+            "docstring": 0,
+            "markdown": 1203
+          },
+          "reviewed_regions_count": 9
+        },
+        "psf/requests": {
+          "files_count": 3,
+          "prose_words": 1171,
+          "prose_words_by_context": {
+            "comment": 113,
+            "docstring": 1058,
+            "markdown": 0
+          },
+          "reviewed_regions_count": 3
+        }
+      },
+      "coverage_b": {
+        "github/docs": {
+          "files_count": 3,
+          "prose_words": 1197,
+          "prose_words_by_context": {
+            "comment": 0,
+            "docstring": 0,
+            "markdown": 1197
+          },
+          "reviewed_regions_count": 9
+        },
+        "psf/requests": {
+          "files_count": 3,
+          "prose_words": 1171,
+          "prose_words_by_context": {
+            "comment": 113,
+            "docstring": 1058,
+            "markdown": 0
+          },
+          "reviewed_regions_count": 5
+        }
+      },
+      "exact_endpoint_events_in_both": 0,
+      "location_disagreements": [],
+      "original_annotations": {
+        "a": {
+          "path": "quality/reviews/2026-10-13-agent-resume/natural/annotations.agent-a.json",
+          "sha256": "6f341565336f57da5d5cdc4030851130e0f204590cb6dad7e6d406031703faca"
+        },
+        "b": {
+          "path": "quality/reviews/2026-10-13-agent-resume/natural/annotations.agent-b.json",
+          "sha256": "78ef88a20671c636bba6d650d4295baa8a0e194af04e1fa5fe867e050aec97a4"
+        }
+      },
+      "semantic_event_union": 0,
+      "semantic_events_in_both": 0,
+      "source_rule_dispositions": [
+        {
+          "path": "originals/0000.md",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "G038",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "statuses_b": [
+            "context-dependent",
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0000.md",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V015",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "statuses_b": [
+            "context-dependent",
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0000.md",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V016",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "statuses_b": [
+            "context-dependent",
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0001.md",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "G038",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "statuses_b": [
+            "context-dependent",
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0001.md",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "G039",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "statuses_b": [
+            "context-dependent",
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0001.md",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V015",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "statuses_b": [
+            "context-dependent",
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0001.md",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V016",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "statuses_b": [
+            "context-dependent",
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0001.md",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "M011",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "unsupported"
+          ],
+          "statuses_b": [
+            "unsupported"
+          ]
+        },
+        {
+          "path": "originals/0002.md",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "G038",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "statuses_b": [
+            "context-dependent",
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0002.md",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "G039",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "statuses_b": [
+            "context-dependent",
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0002.md",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V015",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "statuses_b": [
+            "context-dependent",
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0002.md",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V016",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "statuses_b": [
+            "context-dependent",
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0002.md",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "M011",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "unsupported"
+          ],
+          "statuses_b": [
+            "unsupported"
+          ]
+        },
+        {
+          "path": "originals/0003.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "G038",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0003.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "G039",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0003.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V015",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0003.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V016",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0003.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "C004",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0003.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "C009",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0003.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "C010",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0004.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "G038",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0004.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "G039",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0004.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V015",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0004.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V016",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0004.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "C004",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0004.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "C009",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0004.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "C010",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0005.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "G038",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0005.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "G039",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0005.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V015",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0005.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "V016",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0005.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "C004",
+          "status_set_agreement": false,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "context-dependent",
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0005.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "C009",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        },
+        {
+          "path": "originals/0005.py",
+          "positive_events_a": 0,
+          "positive_events_b": 0,
+          "rule_id": "C010",
+          "status_set_agreement": true,
+          "statuses_a": [
+            "reviewed"
+          ],
+          "statuses_b": [
+            "reviewed"
+          ]
+        }
+      ],
+      "source_rule_pairs": 34,
+      "status_set_agreement_pairs": 33
+    }
+  },
+  "human_agreement": false,
+  "limits": [
+    "same-model/context correlation not quantified",
+    "coarse disposition agreement does not establish independent effectiveness"
+  ],
+  "method": "source/rule/start-line semantic event alignment where at most one event per such key; exact endpoint agreement separately reported",
+  "phase": "before adjudication and predictions",
+  "repeated_reviewers_add_source_support": false,
+  "totals": {
+    "authored_sources": 3,
+    "exact_endpoint_events_in_both": 15,
+    "natural_sources": 6,
+    "semantic_positive_events_in_both": 16,
+    "source_rule_pairs": 48,
+    "status_set_agreement_pairs": 47,
+    "unique_sources": 9
+  },
+  "version": 1
+}
