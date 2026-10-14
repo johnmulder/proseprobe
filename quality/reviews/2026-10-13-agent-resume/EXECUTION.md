@@ -32,14 +32,15 @@ status-set agreement does not claim identical exhaustive character coverage.
 
 The natural C004 guard in `MockRequest.add_header` remains a substantive
 uncertainty: A judged an intentional rejection clean with a caveat, while B
-kept it context-dependent. A third agent adjudicates this and presentation
-differences before accepted labels are frozen. Original judgments stay intact.
+kept it context-dependent. A third agent adjudicated this and presentation
+differences before accepted labels were frozen. Original judgments stay intact.
 Generated M011 context and the authored C010 `str/int` pair remain unsupported.
 
 These are agent editorial judgments. Repeated agents add no independent source
 support; natural and authored populations remain separate. The author knows the
 implementation. No human agreement, factual validation, population effectiveness
-or candidate promotion is inferred. Predictions remain withheld during review.
+or candidate promotion is inferred. Predictions were withheld during initial
+review and adjudication.
 
 A10: `/root/agent_review_adjudicator` preserved both initial reviews and accepted
 all 16 semantic events. It chose the lexical TODO token with a narrow whole
@@ -62,3 +63,44 @@ changed. Four original synthetic Git objects are retained in `git-objects.json`;
 offline restoration and complete context validation succeeded in a fresh
 temporary object store. This preserves the authored pinned context if its ignored
 cache is lost.
+
+A12, completed 2026-10-14: Generated 18 reports after the accepted-label freeze
+commit `8601af5`: three cohorts, three preserved annotation sets and two modes.
+Every report binds the same frozen runtime source digest. The unchanged
+production mode excludes all selected INFO rules, leaving zero eligible review
+coverage; its precision, recall and density remain unavailable.
+
+The accepted all-rules results are:
+
+| Population | TP | FP | FN | Prose words | Source groups | Exact spans |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Natural originals | 0 | 0 | 0 | 2368 | 2 | Unavailable |
+| Authored challenge | 13 | 0 | 0 | 182 | 1 | 9/13 |
+| Authored native links | 3 | 0 | 0 | 29 | 1 | 3/3 |
+
+Natural precision and recall have zero eligible denominators. Its C004
+intentional-rejection finding remains context-dependent, and 21 other findings
+remain unreviewed. The authored reports retain four and one unreviewed findings,
+respectively. Unsupported source/rule regions stay excluded even when no emitted
+finding intersects them; zero emitted unsupported findings does not establish
+complete supported coverage.
+
+The original A reports retain their raw disagreements. The narrow TODO match
+region produces 12 TP, one FP and one FN in the authored challenge report.
+A's natural report records one C004 FP; B and the pre-prediction adjudication
+retain it as context-dependent. No original review was edited to fit predictions.
+Prose-density denominators cover extracted Markdown, comments and docstrings;
+executable Python findings are reported separately by the scorer and do not
+enter that density. These words are not a count of applicable claims.
+
+`location-observations.json` preserves four exact-boundary differences for G038,
+V015, C004 and C009 beside the accepted semantic matches. `report-summary.json`
+binds every raw report. Whole-source-group intervals remain unavailable: each
+authored cohort shares the same author group and natural text has only two
+groups. Raw per-event Wilson intervals assume independence and cannot establish
+population effectiveness or account for correlated agent judgments.
+
+Prepared 16 linked post-freeze diagnostic readings in `trigger-prompts.json`.
+They bind complete diagnostic, report, source and displayed-text identities;
+the largest is 24 lines of 80 characters. All are from authored populations.
+No natural diagnostic was relabeled through this triggered stage.

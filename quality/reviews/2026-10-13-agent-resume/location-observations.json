@@ -1,0 +1,82 @@
+{
+  "authored_challenge_exact_spans": 9,
+  "authored_challenge_span_denominator": 13,
+  "local_link_exact_spans": 3,
+  "local_link_span_denominator": 3,
+  "scope": "exact endpoints beside semantic event matching; no label refresh",
+  "span_differences": [
+    {
+      "actual_span": {
+        "column": 20,
+        "end_column": 26,
+        "end_line": 3
+      },
+      "cohort": "authored-challenge",
+      "expected_span": {
+        "column": 17,
+        "end_column": 26,
+        "end_line": 3
+      },
+      "labels_refreshed": false,
+      "line": 3,
+      "path": "originals/0000.md",
+      "rule_id": "G038",
+      "semantic_matched": true
+    },
+    {
+      "actual_span": {
+        "column": 25,
+        "end_column": 33,
+        "end_line": 5
+      },
+      "cohort": "authored-challenge",
+      "expected_span": {
+        "column": 17,
+        "end_column": 33,
+        "end_line": 5
+      },
+      "labels_refreshed": false,
+      "line": 5,
+      "path": "originals/0000.md",
+      "rule_id": "V015",
+      "semantic_matched": true
+    },
+    {
+      "actual_span": {
+        "column": 5,
+        "end_column": 11,
+        "end_line": null
+      },
+      "cohort": "authored-challenge",
+      "expected_span": {
+        "column": 7,
+        "end_column": 11,
+        "end_line": 11
+      },
+      "labels_refreshed": false,
+      "line": 11,
+      "path": "originals/0001.py",
+      "rule_id": "C004",
+      "semantic_matched": true
+    },
+    {
+      "actual_span": {
+        "column": 14,
+        "end_column": 20,
+        "end_line": null
+      },
+      "cohort": "authored-challenge",
+      "expected_span": {
+        "column": 12,
+        "end_column": 20,
+        "end_line": 8
+      },
+      "labels_refreshed": false,
+      "line": 8,
+      "path": "originals/0001.py",
+      "rule_id": "C009",
+      "semantic_matched": true
+    }
+  ],
+  "version": 1
+}

@@ -1,6 +1,6 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-13. The user requested agents as reviewers. The active
+Updated: 2026-10-14. The user requested agents as reviewers. The active
 [agent review batch](quality/reviews/2026-10-13-agent-resume/README.md) uses
 separate blind contexts and bounded readings. Earlier human/agent records and
 independent human prerequisites remain preserved.
@@ -30,9 +30,6 @@ one authored native-link source. Thirty linked readings fit the 80-by-80 limit.
 Author familiarity, source groups and populations stay explicit. No predictions
 are supplied to the initial reviewers; no human answer is required for this track.
 
-- [ ] A12 Generate all-rules and unchanged production reports. Keep natural and
-  authored populations separate, preserve raw misses/exclusions, and report
-  unavailable rates and group uncertainty explicitly.
 - [ ] A13 Obtain separate agent judgments for targeted finding helpfulness,
   suggestion fit, meaning preservation and acceptance. Bind full diagnostic
   hashes; keep these outside human-usefulness records.

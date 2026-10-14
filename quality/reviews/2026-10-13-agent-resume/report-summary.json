@@ -1,0 +1,2136 @@
+{
+  "actor_type": "agent",
+  "freeze_commit": "8601af5",
+  "holdout_opened": false,
+  "independent_human_evidence": false,
+  "limitations": [
+    "Accepted adjudicated counts do not erase original agent A mismatches: one TODO FP/FN pair and one natural C004 FP are preserved in raw reports.",
+    "Natural accepted precision and recall have zero eligible denominators. One C004 intentional rejection remains context-dependent; unreviewed findings are not clean judgments.",
+    "Production uses unchanged severity selection; selected INFO rules supply zero eligible review coverage and no effectiveness rates.",
+    "Reviewed word counts cover extracted text, not claim-bearing or rule-applicable words. Python executable findings do not enter prose density.",
+    "Unsupported source/rule coverage is retained in annotations even when no emitted finding enters the report unsupported bucket.",
+    "Authored challenge and authored native-link sources share one root-author group; the two cohorts are reported separately and add no independent group support.",
+    "Source-group intervals are unavailable below five contributing groups. Raw event-level Wilson intervals assume independence and are not correlated-source or population estimates.",
+    "Agent judgments cannot establish independent human annotation, human usefulness, or representative population effectiveness."
+  ],
+  "policy_changes": false,
+  "populations_separate": true,
+  "reports": [
+    {
+      "cluster_interval_reason": "precision: too few contributing source groups (1 < 5); recall: too few contributing source groups (1 < 5); density: too few contributing source groups (1 < 5)",
+      "cohort": "authored-challenge",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metric_source_group_counts": {
+        "density": 1,
+        "precision": 1,
+        "recall": 1
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": 0.0,
+        "precision": 0.9230769230769231,
+        "precision_denominator": 13,
+        "precision_interval_95": [
+          0.6668604907890041,
+          0.9862895787574435
+        ],
+        "prose_words": 182,
+        "recall": 0.9230769230769231,
+        "recall_denominator": 13,
+        "recall_interval_95": [
+          0.6668604907890041,
+          0.9862895787574435
+        ],
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "all-rules",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/authored-challenge.agent-a.all-rules.json",
+      "review": "agent-a",
+      "reviewed_coverage": {
+        "agent-authored-pilot": {
+          "files_count": 2,
+          "prose_words": 182,
+          "prose_words_by_context": {
+            "comment": 10,
+            "docstring": 55,
+            "markdown": 117
+          },
+          "reviewed_regions_count": 3
+        }
+      },
+      "reviewed_source_group_count": 1,
+      "sha256": "fd2f5f0ac84b16dce44ccf11f8b8a468948c289371b10cf0ecc53ac043c9a950",
+      "source_group_count": 1,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 182,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 0.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 13,
+              "numerator": 12
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 0.9230769230769231,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 13,
+              "numerator": 12
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 0.9230769230769231,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        }
+      },
+      "span_accuracy": 0.75,
+      "span_accuracy_denominator": 12,
+      "totals": {
+        "false_negatives": 1,
+        "false_positives": 1,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 12
+      },
+      "unreviewed": 4,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: no eligible denominator observations",
+      "cohort": "authored-challenge",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metric_source_group_counts": {
+        "density": 0,
+        "precision": 0,
+        "recall": 0
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 0,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "production",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/authored-challenge.agent-a.production.json",
+      "review": "agent-a",
+      "reviewed_coverage": {},
+      "reviewed_source_group_count": 0,
+      "sha256": "1d202efd0f1d0dca93a83bb6e620b97fe12d0183e94b30a7d74678a6ec89d3bc",
+      "source_group_count": 1,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 2,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: too few contributing source groups (1 < 5); recall: too few contributing source groups (1 < 5); density: too few contributing source groups (1 < 5)",
+      "cohort": "authored-challenge",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metric_source_group_counts": {
+        "density": 1,
+        "precision": 1,
+        "recall": 1
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": 0.0,
+        "precision": 1.0,
+        "precision_denominator": 13,
+        "precision_interval_95": [
+          0.7719046276458016,
+          0.9999999999999999
+        ],
+        "prose_words": 182,
+        "recall": 1.0,
+        "recall_denominator": 13,
+        "recall_interval_95": [
+          0.7719046276458016,
+          0.9999999999999999
+        ],
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "all-rules",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/authored-challenge.agent-b.all-rules.json",
+      "review": "agent-b",
+      "reviewed_coverage": {
+        "agent-authored-pilot": {
+          "files_count": 2,
+          "prose_words": 182,
+          "prose_words_by_context": {
+            "comment": 10,
+            "docstring": 55,
+            "markdown": 117
+          },
+          "reviewed_regions_count": 3
+        }
+      },
+      "reviewed_source_group_count": 1,
+      "sha256": "587b28dd514860e9ba3e25fe6461e4bdf6a629528ce4d557e6ca36aa2a965ee7",
+      "source_group_count": 1,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 182,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 0.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 13,
+              "numerator": 13
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 1.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 13,
+              "numerator": 13
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 1.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        }
+      },
+      "span_accuracy": 0.7692307692307693,
+      "span_accuracy_denominator": 13,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 13
+      },
+      "unreviewed": 4,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: no eligible denominator observations",
+      "cohort": "authored-challenge",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metric_source_group_counts": {
+        "density": 0,
+        "precision": 0,
+        "recall": 0
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 0,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "production",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/authored-challenge.agent-b.production.json",
+      "review": "agent-b",
+      "reviewed_coverage": {},
+      "reviewed_source_group_count": 0,
+      "sha256": "405257e88668c79e17707322fea17e416d29a5d026fb7edc4ec144e3985cc446",
+      "source_group_count": 1,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 2,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: too few contributing source groups (1 < 5); recall: too few contributing source groups (1 < 5); density: too few contributing source groups (1 < 5)",
+      "cohort": "authored-challenge",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metric_source_group_counts": {
+        "density": 1,
+        "precision": 1,
+        "recall": 1
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": 0.0,
+        "precision": 1.0,
+        "precision_denominator": 13,
+        "precision_interval_95": [
+          0.7719046276458016,
+          0.9999999999999999
+        ],
+        "prose_words": 182,
+        "recall": 1.0,
+        "recall_denominator": 13,
+        "recall_interval_95": [
+          0.7719046276458016,
+          0.9999999999999999
+        ],
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "all-rules",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/authored-challenge.adjudicated.all-rules.json",
+      "review": "adjudicated",
+      "reviewed_coverage": {
+        "agent-authored-pilot": {
+          "files_count": 2,
+          "prose_words": 182,
+          "prose_words_by_context": {
+            "comment": 10,
+            "docstring": 55,
+            "markdown": 117
+          },
+          "reviewed_regions_count": 3
+        }
+      },
+      "reviewed_source_group_count": 1,
+      "sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "source_group_count": 1,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 182,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 0.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 13,
+              "numerator": 13
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 1.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 13,
+              "numerator": 13
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 1.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        }
+      },
+      "span_accuracy": 0.6923076923076923,
+      "span_accuracy_denominator": 13,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 13
+      },
+      "unreviewed": 4,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: no eligible denominator observations",
+      "cohort": "authored-challenge",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metric_source_group_counts": {
+        "density": 0,
+        "precision": 0,
+        "recall": 0
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 0,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "production",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/authored-challenge.adjudicated.production.json",
+      "review": "adjudicated",
+      "reviewed_coverage": {},
+      "reviewed_source_group_count": 0,
+      "sha256": "bde402f10f0a97a770c8d109be3b3a3732c6fb50b7195066c70992c724dbffdd",
+      "source_group_count": 1,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 2,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: too few contributing source groups (1 < 5); recall: too few contributing source groups (1 < 5); density: too few contributing source groups (1 < 5)",
+      "cohort": "authored-local-links",
+      "context_dependent": 0,
+      "local_link_context": {
+        "artifact_sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528",
+        "enabled": true,
+        "excluded_destinations": {
+          "agent-authored-pilot:entry.md": [
+            {
+              "column": 17,
+              "destination": "#workflow",
+              "end_column": 26,
+              "line": 6,
+              "reason": "production-resolver-exclusion"
+            },
+            {
+              "column": 20,
+              "destination": "#limitations",
+              "end_column": 32,
+              "line": 7,
+              "reason": "production-resolver-exclusion"
+            }
+          ]
+        },
+        "excluded_destinations_count": 2,
+        "inventory_sha256": "c44fa8f57f5c69e06f90e8d9a015e52073836bc1aab165d4df4762ecbbba9c92",
+        "reason": null,
+        "reference_scope": "production-static-local-markdown-v1",
+        "references_count": 3,
+        "renderer": "github",
+        "revision": "ce2e2844bd9a3ca5b5a74ae41828c65f454c973b",
+        "root": null,
+        "source_group": "agent-authored-pilot",
+        "source_manifest_sha256": "6d905cfe606c2b55818a3e3e457244271b0ce893aedcdd10559ccfc5d7dbcb7a",
+        "sources_count": 1,
+        "target_binding": "verified-native-reference-closure",
+        "targets_count": 2
+      },
+      "metric_source_group_counts": {
+        "density": 1,
+        "precision": 1,
+        "recall": 1
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": 0.0,
+        "precision": 1.0,
+        "precision_denominator": 3,
+        "precision_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "prose_words": 29,
+        "recall": 1.0,
+        "recall_denominator": 3,
+        "recall_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "all-rules",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/authored-local-links.agent-a.all-rules.json",
+      "review": "agent-a",
+      "reviewed_coverage": {
+        "agent-authored-pilot": {
+          "files_count": 1,
+          "prose_words": 29,
+          "prose_words_by_context": {
+            "comment": 0,
+            "docstring": 0,
+            "markdown": 29
+          },
+          "reviewed_regions_count": 1
+        }
+      },
+      "reviewed_source_group_count": 1,
+      "sha256": "eb53ef03f2917cb8e329ae2580f91f59d70eabefb0b43e81dd98889feae0741a",
+      "source_group_count": 1,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 29,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 0.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 3,
+              "numerator": 3
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 1.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 3,
+              "numerator": 3
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 1.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        }
+      },
+      "span_accuracy": 1.0,
+      "span_accuracy_denominator": 3,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 3
+      },
+      "unreviewed": 1,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: no eligible denominator observations",
+      "cohort": "authored-local-links",
+      "context_dependent": 0,
+      "local_link_context": {
+        "artifact_sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528",
+        "enabled": true,
+        "excluded_destinations": {
+          "agent-authored-pilot:entry.md": [
+            {
+              "column": 17,
+              "destination": "#workflow",
+              "end_column": 26,
+              "line": 6,
+              "reason": "production-resolver-exclusion"
+            },
+            {
+              "column": 20,
+              "destination": "#limitations",
+              "end_column": 32,
+              "line": 7,
+              "reason": "production-resolver-exclusion"
+            }
+          ]
+        },
+        "excluded_destinations_count": 2,
+        "inventory_sha256": "c44fa8f57f5c69e06f90e8d9a015e52073836bc1aab165d4df4762ecbbba9c92",
+        "reason": null,
+        "reference_scope": "production-static-local-markdown-v1",
+        "references_count": 3,
+        "renderer": "github",
+        "revision": "ce2e2844bd9a3ca5b5a74ae41828c65f454c973b",
+        "root": null,
+        "source_group": "agent-authored-pilot",
+        "source_manifest_sha256": "6d905cfe606c2b55818a3e3e457244271b0ce893aedcdd10559ccfc5d7dbcb7a",
+        "sources_count": 1,
+        "target_binding": "verified-native-reference-closure",
+        "targets_count": 2
+      },
+      "metric_source_group_counts": {
+        "density": 0,
+        "precision": 0,
+        "recall": 0
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 0,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "production",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/authored-local-links.agent-a.production.json",
+      "review": "agent-a",
+      "reviewed_coverage": {},
+      "reviewed_source_group_count": 0,
+      "sha256": "4853ead34549f8f562de98773c707ae04761f2086fa0d753e084abfc7b630377",
+      "source_group_count": 1,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 1,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: too few contributing source groups (1 < 5); recall: too few contributing source groups (1 < 5); density: too few contributing source groups (1 < 5)",
+      "cohort": "authored-local-links",
+      "context_dependent": 0,
+      "local_link_context": {
+        "artifact_sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528",
+        "enabled": true,
+        "excluded_destinations": {
+          "agent-authored-pilot:entry.md": [
+            {
+              "column": 17,
+              "destination": "#workflow",
+              "end_column": 26,
+              "line": 6,
+              "reason": "production-resolver-exclusion"
+            },
+            {
+              "column": 20,
+              "destination": "#limitations",
+              "end_column": 32,
+              "line": 7,
+              "reason": "production-resolver-exclusion"
+            }
+          ]
+        },
+        "excluded_destinations_count": 2,
+        "inventory_sha256": "c44fa8f57f5c69e06f90e8d9a015e52073836bc1aab165d4df4762ecbbba9c92",
+        "reason": null,
+        "reference_scope": "production-static-local-markdown-v1",
+        "references_count": 3,
+        "renderer": "github",
+        "revision": "ce2e2844bd9a3ca5b5a74ae41828c65f454c973b",
+        "root": null,
+        "source_group": "agent-authored-pilot",
+        "source_manifest_sha256": "6d905cfe606c2b55818a3e3e457244271b0ce893aedcdd10559ccfc5d7dbcb7a",
+        "sources_count": 1,
+        "target_binding": "verified-native-reference-closure",
+        "targets_count": 2
+      },
+      "metric_source_group_counts": {
+        "density": 1,
+        "precision": 1,
+        "recall": 1
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": 0.0,
+        "precision": 1.0,
+        "precision_denominator": 3,
+        "precision_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "prose_words": 29,
+        "recall": 1.0,
+        "recall_denominator": 3,
+        "recall_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "all-rules",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/authored-local-links.agent-b.all-rules.json",
+      "review": "agent-b",
+      "reviewed_coverage": {
+        "agent-authored-pilot": {
+          "files_count": 1,
+          "prose_words": 29,
+          "prose_words_by_context": {
+            "comment": 0,
+            "docstring": 0,
+            "markdown": 29
+          },
+          "reviewed_regions_count": 1
+        }
+      },
+      "reviewed_source_group_count": 1,
+      "sha256": "b15d7ee8a9c8537a93f29eb4d7fd54f37e42223485dd76a3db13de64838a6e43",
+      "source_group_count": 1,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 29,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 0.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 3,
+              "numerator": 3
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 1.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 3,
+              "numerator": 3
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 1.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        }
+      },
+      "span_accuracy": 1.0,
+      "span_accuracy_denominator": 3,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 3
+      },
+      "unreviewed": 1,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: no eligible denominator observations",
+      "cohort": "authored-local-links",
+      "context_dependent": 0,
+      "local_link_context": {
+        "artifact_sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528",
+        "enabled": true,
+        "excluded_destinations": {
+          "agent-authored-pilot:entry.md": [
+            {
+              "column": 17,
+              "destination": "#workflow",
+              "end_column": 26,
+              "line": 6,
+              "reason": "production-resolver-exclusion"
+            },
+            {
+              "column": 20,
+              "destination": "#limitations",
+              "end_column": 32,
+              "line": 7,
+              "reason": "production-resolver-exclusion"
+            }
+          ]
+        },
+        "excluded_destinations_count": 2,
+        "inventory_sha256": "c44fa8f57f5c69e06f90e8d9a015e52073836bc1aab165d4df4762ecbbba9c92",
+        "reason": null,
+        "reference_scope": "production-static-local-markdown-v1",
+        "references_count": 3,
+        "renderer": "github",
+        "revision": "ce2e2844bd9a3ca5b5a74ae41828c65f454c973b",
+        "root": null,
+        "source_group": "agent-authored-pilot",
+        "source_manifest_sha256": "6d905cfe606c2b55818a3e3e457244271b0ce893aedcdd10559ccfc5d7dbcb7a",
+        "sources_count": 1,
+        "target_binding": "verified-native-reference-closure",
+        "targets_count": 2
+      },
+      "metric_source_group_counts": {
+        "density": 0,
+        "precision": 0,
+        "recall": 0
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 0,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "production",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/authored-local-links.agent-b.production.json",
+      "review": "agent-b",
+      "reviewed_coverage": {},
+      "reviewed_source_group_count": 0,
+      "sha256": "147b09ea11b819802531711fe1c8073bda080f184b4daab9e131c8bb5cfc12b3",
+      "source_group_count": 1,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 1,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: too few contributing source groups (1 < 5); recall: too few contributing source groups (1 < 5); density: too few contributing source groups (1 < 5)",
+      "cohort": "authored-local-links",
+      "context_dependent": 0,
+      "local_link_context": {
+        "artifact_sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528",
+        "enabled": true,
+        "excluded_destinations": {
+          "agent-authored-pilot:entry.md": [
+            {
+              "column": 17,
+              "destination": "#workflow",
+              "end_column": 26,
+              "line": 6,
+              "reason": "production-resolver-exclusion"
+            },
+            {
+              "column": 20,
+              "destination": "#limitations",
+              "end_column": 32,
+              "line": 7,
+              "reason": "production-resolver-exclusion"
+            }
+          ]
+        },
+        "excluded_destinations_count": 2,
+        "inventory_sha256": "c44fa8f57f5c69e06f90e8d9a015e52073836bc1aab165d4df4762ecbbba9c92",
+        "reason": null,
+        "reference_scope": "production-static-local-markdown-v1",
+        "references_count": 3,
+        "renderer": "github",
+        "revision": "ce2e2844bd9a3ca5b5a74ae41828c65f454c973b",
+        "root": null,
+        "source_group": "agent-authored-pilot",
+        "source_manifest_sha256": "6d905cfe606c2b55818a3e3e457244271b0ce893aedcdd10559ccfc5d7dbcb7a",
+        "sources_count": 1,
+        "target_binding": "verified-native-reference-closure",
+        "targets_count": 2
+      },
+      "metric_source_group_counts": {
+        "density": 1,
+        "precision": 1,
+        "recall": 1
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": 0.0,
+        "precision": 1.0,
+        "precision_denominator": 3,
+        "precision_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "prose_words": 29,
+        "recall": 1.0,
+        "recall_denominator": 3,
+        "recall_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "all-rules",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/authored-local-links.adjudicated.all-rules.json",
+      "review": "adjudicated",
+      "reviewed_coverage": {
+        "agent-authored-pilot": {
+          "files_count": 1,
+          "prose_words": 29,
+          "prose_words_by_context": {
+            "comment": 0,
+            "docstring": 0,
+            "markdown": 29
+          },
+          "reviewed_regions_count": 1
+        }
+      },
+      "reviewed_source_group_count": 1,
+      "sha256": "f60c36da37c0f3b8b2ab557147612f7200d002a9cea20f8398558dfd77958eb7",
+      "source_group_count": 1,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 29,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 0.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 3,
+              "numerator": 3
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 1.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "agent-authored-pilot": {
+              "denominator": 3,
+              "numerator": 3
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 1.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        }
+      },
+      "span_accuracy": 1.0,
+      "span_accuracy_denominator": 3,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 3
+      },
+      "unreviewed": 1,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: no eligible denominator observations",
+      "cohort": "authored-local-links",
+      "context_dependent": 0,
+      "local_link_context": {
+        "artifact_sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528",
+        "enabled": true,
+        "excluded_destinations": {
+          "agent-authored-pilot:entry.md": [
+            {
+              "column": 17,
+              "destination": "#workflow",
+              "end_column": 26,
+              "line": 6,
+              "reason": "production-resolver-exclusion"
+            },
+            {
+              "column": 20,
+              "destination": "#limitations",
+              "end_column": 32,
+              "line": 7,
+              "reason": "production-resolver-exclusion"
+            }
+          ]
+        },
+        "excluded_destinations_count": 2,
+        "inventory_sha256": "c44fa8f57f5c69e06f90e8d9a015e52073836bc1aab165d4df4762ecbbba9c92",
+        "reason": null,
+        "reference_scope": "production-static-local-markdown-v1",
+        "references_count": 3,
+        "renderer": "github",
+        "revision": "ce2e2844bd9a3ca5b5a74ae41828c65f454c973b",
+        "root": null,
+        "source_group": "agent-authored-pilot",
+        "source_manifest_sha256": "6d905cfe606c2b55818a3e3e457244271b0ce893aedcdd10559ccfc5d7dbcb7a",
+        "sources_count": 1,
+        "target_binding": "verified-native-reference-closure",
+        "targets_count": 2
+      },
+      "metric_source_group_counts": {
+        "density": 0,
+        "precision": 0,
+        "recall": 0
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 0,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "production",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/authored-local-links.adjudicated.production.json",
+      "review": "adjudicated",
+      "reviewed_coverage": {},
+      "reviewed_source_group_count": 0,
+      "sha256": "97b3b7caaf09c6934c591edd57a4314b80960fc3114573b94271a22c57608ca5",
+      "source_group_count": 1,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 1,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: too few contributing source groups (1 < 5); recall: no eligible denominator observations; density: too few contributing source groups (2 < 5)",
+      "cohort": "natural",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metric_source_group_counts": {
+        "density": 2,
+        "precision": 1,
+        "recall": 0
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": 0.0,
+        "precision": 0.0,
+        "precision_denominator": 1,
+        "precision_interval_95": [
+          0,
+          0.7934506856227626
+        ],
+        "prose_words": 2374,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "all-rules",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/natural.agent-a.all-rules.json",
+      "review": "agent-a",
+      "reviewed_coverage": {
+        "github/docs": {
+          "files_count": 3,
+          "prose_words": 1203,
+          "prose_words_by_context": {
+            "comment": 0,
+            "docstring": 0,
+            "markdown": 1203
+          },
+          "reviewed_regions_count": 9
+        },
+        "psf/requests": {
+          "files_count": 3,
+          "prose_words": 1171,
+          "prose_words_by_context": {
+            "comment": 113,
+            "docstring": 1058,
+            "markdown": 0
+          },
+          "reviewed_regions_count": 3
+        }
+      },
+      "reviewed_source_group_count": 2,
+      "sha256": "061c032af15402e3c2d0ccc41a8caeb43d4e355c3822631fb02195117ea20f2a",
+      "source_group_count": 2,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 2,
+          "dominant_denominator_share": 0.5067396798652064,
+          "group_counts": {
+            "github/docs": {
+              "denominator": 1203,
+              "numerator": 0
+            },
+            "psf/requests": {
+              "denominator": 1171,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 0.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (2 < 5)"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "github/docs": {
+              "denominator": 0,
+              "numerator": 0
+            },
+            "psf/requests": {
+              "denominator": 1,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 0.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {
+            "github/docs": {
+              "denominator": 0,
+              "numerator": 0
+            },
+            "psf/requests": {
+              "denominator": 0,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 1,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 21,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: no eligible denominator observations",
+      "cohort": "natural",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metric_source_group_counts": {
+        "density": 0,
+        "precision": 0,
+        "recall": 0
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 0,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "production",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/natural.agent-a.production.json",
+      "review": "agent-a",
+      "reviewed_coverage": {},
+      "reviewed_source_group_count": 0,
+      "sha256": "ec9d577fd73331c5e8c9cea02b97ce3edbcd950c35d571df89f1a4b68694030a",
+      "source_group_count": 2,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 9,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: too few contributing source groups (2 < 5)",
+      "cohort": "natural",
+      "context_dependent": 1,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metric_source_group_counts": {
+        "density": 2,
+        "precision": 0,
+        "recall": 0
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": 0.0,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 2368,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "all-rules",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/natural.agent-b.all-rules.json",
+      "review": "agent-b",
+      "reviewed_coverage": {
+        "github/docs": {
+          "files_count": 3,
+          "prose_words": 1197,
+          "prose_words_by_context": {
+            "comment": 0,
+            "docstring": 0,
+            "markdown": 1197
+          },
+          "reviewed_regions_count": 9
+        },
+        "psf/requests": {
+          "files_count": 3,
+          "prose_words": 1171,
+          "prose_words_by_context": {
+            "comment": 113,
+            "docstring": 1058,
+            "markdown": 0
+          },
+          "reviewed_regions_count": 5
+        }
+      },
+      "reviewed_source_group_count": 2,
+      "sha256": "73c0452e0607867e35fa5592eb7875c2c04a87b3ffc6b283c82e39f8272cb722",
+      "source_group_count": 2,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 2,
+          "dominant_denominator_share": 0.5054898648648649,
+          "group_counts": {
+            "github/docs": {
+              "denominator": 1197,
+              "numerator": 0
+            },
+            "psf/requests": {
+              "denominator": 1171,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 0.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (2 < 5)"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {
+            "github/docs": {
+              "denominator": 0,
+              "numerator": 0
+            },
+            "psf/requests": {
+              "denominator": 0,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {
+            "github/docs": {
+              "denominator": 0,
+              "numerator": 0
+            },
+            "psf/requests": {
+              "denominator": 0,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 21,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: no eligible denominator observations",
+      "cohort": "natural",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metric_source_group_counts": {
+        "density": 0,
+        "precision": 0,
+        "recall": 0
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 0,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "production",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/natural.agent-b.production.json",
+      "review": "agent-b",
+      "reviewed_coverage": {},
+      "reviewed_source_group_count": 0,
+      "sha256": "cdaa418ef5b5f666a46c6ce8c5068f2549d7cdce3bdaa7e4815dd3d1e5d551e5",
+      "source_group_count": 2,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 9,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: too few contributing source groups (2 < 5)",
+      "cohort": "natural",
+      "context_dependent": 1,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metric_source_group_counts": {
+        "density": 2,
+        "precision": 0,
+        "recall": 0
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": 0.0,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 2368,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "all-rules",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/natural.adjudicated.all-rules.json",
+      "review": "adjudicated",
+      "reviewed_coverage": {
+        "github/docs": {
+          "files_count": 3,
+          "prose_words": 1197,
+          "prose_words_by_context": {
+            "comment": 0,
+            "docstring": 0,
+            "markdown": 1197
+          },
+          "reviewed_regions_count": 9
+        },
+        "psf/requests": {
+          "files_count": 3,
+          "prose_words": 1171,
+          "prose_words_by_context": {
+            "comment": 113,
+            "docstring": 1058,
+            "markdown": 0
+          },
+          "reviewed_regions_count": 5
+        }
+      },
+      "reviewed_source_group_count": 2,
+      "sha256": "8d4bf7209d953000cf208c145f6af2d3fc0c507ba3ffd5a3a1e7cc744eb27f95",
+      "source_group_count": 2,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 2,
+          "dominant_denominator_share": 0.5054898648648649,
+          "group_counts": {
+            "github/docs": {
+              "denominator": 1197,
+              "numerator": 0
+            },
+            "psf/requests": {
+              "denominator": 1171,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 0.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (2 < 5)"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {
+            "github/docs": {
+              "denominator": 0,
+              "numerator": 0
+            },
+            "psf/requests": {
+              "denominator": 0,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {
+            "github/docs": {
+              "denominator": 0,
+              "numerator": 0
+            },
+            "psf/requests": {
+              "denominator": 0,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 21,
+      "unsupported": 0
+    },
+    {
+      "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: no eligible denominator observations",
+      "cohort": "natural",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metric_source_group_counts": {
+        "density": 0,
+        "precision": 0,
+        "recall": 0
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 0,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "production",
+      "path": "quality/reviews/2026-10-13-agent-resume/reports/natural.adjudicated.production.json",
+      "review": "adjudicated",
+      "reviewed_coverage": {},
+      "reviewed_source_group_count": 0,
+      "sha256": "cba6efabfe0c9ac74a872fde2f0cbad51715a4e9286a2b2bf80c16eb6996c099",
+      "source_group_count": 2,
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 9,
+      "unsupported": 0
+    }
+  ],
+  "version": 1
+}
