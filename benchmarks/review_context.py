@@ -9,17 +9,22 @@ import json
 import re
 import tokenize
 from collections.abc import Sequence
+from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
 from benchmarks.corpora import CorpusError, Source, _checked_bytes
+from benchmarks.native_link_context import NativeSource, NativeTarget
+from benchmarks.native_reference_context import VerifiedReferenceContext
 from benchmarks.review_readings import (
     _caller_lines,
     _display_chunks,
     _line_parts,
     _source_rows,
 )
+from proseprobe.parsers.markdown import MarkdownParser
 from proseprobe.parsers.python import PythonParser
+from proseprobe.rules.markup import SameDocumentFragmentRule
 
 
 def _digest(value: Any) -> str:
@@ -69,8 +74,6 @@ def _python_owners(
     for node in ast.walk(tree):
         if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
             continue
-        if (node.end_lineno or node.lineno) < start:
-            continue
         line, column, _, _ = parser.get_node_span(node)
         header_start = line
         if node.decorator_list:
@@ -100,12 +103,34 @@ def _python_owners(
                 colon = token
         if colon is None:
             raise CorpusError("owning signature colon unavailable")
+        scope_end = node.end_lineno or node.lineno
+        trailing_comments = []
+        owner_indent = len(physical[line - 1][0][: column - 1].expandtabs(8))
+        if first_body[0] > colon.end[0]:
+            for token in tokens:
+                if token.start[0] <= scope_end:
+                    continue
+                if token.type == tokenize.COMMENT:
+                    comment_indent = len(
+                        physical[token.start[0] - 1][0][: token.start[1]].expandtabs(8)
+                    )
+                    if comment_indent > owner_indent:
+                        trailing_comments.append(token.start[0])
+                elif token.type not in {tokenize.NL, tokenize.NEWLINE}:
+                    break
+        if scope_end < start and not any(
+            start <= line <= end for line in trailing_comments
+        ):
+            continue
         owners.append(
             {
                 "name": node.name,
                 "node_type": "class" if isinstance(node, ast.ClassDef) else "function",
                 "header_region": _region(physical, header_start, colon.end[0]),
-                "scope_region": {"line": node.lineno, "end_line": node.end_lineno},
+                "scope_region": {
+                    "line": node.lineno,
+                    "end_line": max([scope_end, *trailing_comments]),
+                },
             }
         )
     return sorted(
@@ -125,7 +150,125 @@ def _source_items(
 
 def _metadata_items(value: Any) -> list[tuple[str, dict[str, Any] | None]]:
     text = json.dumps(value, sort_keys=True, ensure_ascii=True)
-    return [(chunk, None) for chunk in _display_chunks(text, 80)]
+    return [(chunk, None) for chunk in _display_chunks(text, 75)]
+
+
+def _markdown_document(
+    raw: bytes, identity: str, role: str
+) -> tuple[dict[str, Any], list[tuple[str, list[tuple[str, dict[str, Any] | None]]]]]:
+    text, physical = _physical(raw)
+    parsed = text.replace("\r\n", "\n")
+    document = SameDocumentFragmentRule._document(parsed)
+    if document is None:
+        raise CorpusError("generated or unsupported Markdown inventory context")
+    checksum = hashlib.sha256(raw).hexdigest()
+    inventory = {
+        "role": role,
+        "source_id": identity,
+        "sha256": checksum,
+        "status": "supported",
+        "scope": "complete supported static headings and anchor-ID membership",
+        "renderer": "github",
+        "headings": [
+            {
+                "title": heading.title,
+                "line": heading.start_line,
+                "column": heading.column,
+                "end_column": heading.end_column,
+                "level": heading.level,
+            }
+            for heading in MarkdownParser(parsed).get_headings()
+        ],
+        "anchors": sorted(document[0]),
+    }
+    body = (
+        _source_items(physical, 1, len(physical), identity, checksum)
+        if physical
+        else _metadata_items(
+            {"source_id": identity, "sha256": checksum, "empty_document": True}
+        )
+    )
+    return inventory, [
+        (f"markdown-{role}", body),
+        ("markdown-inventory", _metadata_items(inventory)),
+    ]
+
+
+def _native_targets(
+    source: Source, raw: bytes, verified: VerifiedReferenceContext
+) -> tuple[
+    dict[str, Any],
+    list[dict[str, Any]],
+    list[tuple[str, list[tuple[str, dict[str, Any] | None]]]],
+]:
+    # This internal boundary accepts only immutable objects returned by the
+    # offline reference validator. It does not authenticate arbitrary objects.
+    if not isinstance(verified, VerifiedReferenceContext):
+        raise CorpusError("local target context requires verified native references")
+    native = verified.native
+    originals = [item for item in native.sources if item.source_id == source.identity]
+    if (
+        len(originals) != 1
+        or originals[0].raw != raw
+        or native.source_group != source.source_group
+    ):
+        raise CorpusError("native source identity, group or bytes differ")
+    if verified.renderer != "github":
+        raise CorpusError("native renderer differs from selected GitHub anchor style")
+    reference_map = dict(verified.references)
+    if (
+        len(reference_map) != len(verified.references)
+        or source.identity not in reference_map
+    ):
+        raise CorpusError("native source reference map unavailable or duplicated")
+    references = sorted(
+        reference_map[source.identity],
+        key=lambda item: (
+            item.line,
+            item.column,
+            item.end_column,
+            item.destination,
+            item.native_path,
+            item.fragment,
+        ),
+    )
+    bound: dict[str, bytes | None] = {}
+    items: tuple[NativeSource | NativeTarget, ...] = (*native.sources, *native.targets)
+    for item in items:
+        if item.native_path in bound and bound[item.native_path] != item.raw:
+            raise CorpusError("conflicting bytes for duplicate native path")
+        bound[item.native_path] = item.raw
+    documents = []
+    sections = []
+    targets = []
+    for path in sorted({item.native_path for item in references}):
+        if path not in bound:
+            raise CorpusError("required native target is not bound")
+        target = bound[path]
+        if target is None:
+            targets.append({"native_path": path, "status": "absent"})
+        else:
+            targets.append(
+                {
+                    "native_path": path,
+                    "status": "present",
+                    "sha256": hashlib.sha256(target).hexdigest(),
+                }
+            )
+            document, pieces = _markdown_document(target, path, "target")
+            documents.append(document)
+            sections.extend(pieces)
+    proof = {
+        "manifest_sha256": native.manifest_sha256,
+        "source_group": native.source_group,
+        "revision": native.revision,
+        "inventory_sha256": native.inventory_sha256,
+        "source_native_path": originals[0].native_path,
+        "references": {source.identity: [asdict(item) for item in references]},
+        "targets": targets,
+        "absence_scope": "pinned inventory from the offline reference validator",
+    }
+    return proof, documents, [("native-context", _metadata_items(proof)), *sections]
 
 
 def _pages(
@@ -214,12 +357,15 @@ def build_contextual_readings(
     reading_id: str,
     link_directory: Path,
     markdown_anchor_style: str | None = None,
-    native_context: Any = None,
+    native_context: VerifiedReferenceContext | None = None,
 ) -> dict[str, Any]:
     """Return linked readings with static evidence; never execute reviewed code.
 
     Callers persist the exact rendered texts at the returned absolute paths.
     Every page repeats the caller's review scope; context grants no coverage.
+    M012 requires the existing offline validator's immutable reference context;
+    target paths are never reopened or resolved here. Arbitrary caller-created
+    context objects do not constitute an absence proof.
     """
     if source.split != "development" or source.format not in {"python", "markdown"}:
         raise CorpusError(
@@ -240,10 +386,18 @@ def build_contextual_readings(
         or re.fullmatch(r"[A-Za-z0-9_-]{1,32}", reading_id) is None
     ):
         raise CorpusError("invalid reading ID")
-    if not link_directory.is_absolute() or re.search(
-        r"[\x00-\x1f<>]", str(link_directory)
+    if (
+        not link_directory.is_absolute()
+        or str(link_directory).startswith("//")
+        or re.search(r"[\x00-\x1f\x7f-\x9f\u2028\u2029<>#?%&\\]", str(link_directory))
     ):
         raise CorpusError("reading links require a plain absolute directory")
+    if source.format == "python" and (
+        {"M011", "M012"}.intersection(rule_ids)
+        or markdown_anchor_style is not None
+        or native_context is not None
+    ):
+        raise CorpusError("Markdown context cannot be supplied for Python source")
     before, after = (
         _caller_lines(instructions, "instructions"),
         _caller_lines(questions, "questions"),
@@ -309,7 +463,21 @@ def build_contextual_readings(
         or markdown_anchor_style is not None
         or native_context is not None
     ):
-        raise CorpusError("Markdown link context is not yet supported")
+        if markdown_anchor_style != "github":
+            raise CorpusError(
+                "Markdown inventory requires explicit GitHub anchor renderer"
+            )
+        document, pieces = _markdown_document(raw, source.identity, "source")
+        context["markdown_documents"].append(document)
+        context["markdown_anchor_style"] = markdown_anchor_style
+        sections.extend(pieces)
+        if "M012" in rule_ids and native_context is None:
+            raise CorpusError("M012 requires verified native target context")
+        if native_context is not None:
+            proof, documents, pieces = _native_targets(source, raw, native_context)
+            context["native"] = proof
+            context["markdown_documents"].extend(documents)
+            sections.extend(pieces)
     context["section_roles"] = [role for role, _ in sections]
     readings = _pages(sections, context, before, after, reading_id, link_directory)
     bundle = {

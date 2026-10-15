@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "scope": "pytest -o addopts= tests/test_review_readings.py tests/test_review_context.py tests/test_review_markdown_context.py tests/test_native_reference_context.py -q",
+  "stdout": "........................................................................ [ 42%]\n........................................................................ [ 85%]\n.........................                                                [100%]\n169 passed in 10.17s\n",
+  "stdout_sha256": "b6285a70f27aadd40dbefb810181b5ba2147d6b31f25c0729267899d52bcda6c",
+  "version": 1
+}

@@ -1,0 +1,7 @@
+{
+  "exit_code": 1,
+  "scope": "Entity-spelling destination;1failed,4passed",
+  "stdout": "....F                                                                    [100%]\n=================================== FAILURES ===================================\n__ test_directory_characters_that_change_link_destinations_are_refused[&amp;] __\n\ntmp_path = PosixPath('/private/var/folders/_w/2hhnnvfn0t35trg9pykzr5yw0000gn/T/pytest-of-johnmulder/pytest-682/test_directory_characters_that4')\ncharacter = '&amp;'\n\n    @pytest.mark.parametrize(\"character\", [\"#\", \"?\", \"%\", \"\\\\\", \"&amp;\"])\n    def test_directory_characters_that_change_link_destinations_are_refused(\n        tmp_path: Path, character: str\n    ) -> None:\n        source = _source(tmp_path, b\"value = 1\\n\")\n    \n>       with pytest.raises(CorpusError, match=r\"directory|link\"):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE CorpusError\n\ntests/test_review_context.py:468: Failed\n=========================== short test summary info ============================\nFAILED tests/test_review_context.py::test_directory_characters_that_change_link_destinations_are_refused[&amp;]\n1 failed, 4 passed, 34 deselected in 0.70s\n",
+  "stdout_sha256": "b6b7947253c4fbe729f72e8c6b10195adf4d12a60bba706a6720b52a1a24fb7c",
+  "version": 1
+}

@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "review_kind": "engineering_implementation_review",
+  "what_this_change_does": "Adds a benchmark-only builder for linked source readings with raw Python owner headers, complete Markdown companions and derived inventories, and validated native target evidence. It preserves the original reading builder through a mechanical source-row helper extraction.",
+  "verdict": "fix_1_2_and_3_first",
+  "review_snapshot": {
+    "comparison_base": "42ab414",
+    "benchmarks/review_context.py": "2e4aaea77ec02d8660d75fff2386642976fe1a9ad4a5f0d67ddc952a6488af58",
+    "benchmarks/review_readings.py": "b94278520cc7bd4f52a14de29602660c99210a7048023273acf73d13257f4536",
+    "tests/test_review_context.py": "ca1e92a8b0c102a7a439c0201689e18b392f6101f6c5b15e906d2af81947b088",
+    "tests/test_review_markdown_context.py": "5c5d245f1cb8fd114478ab4ff9a39956280ca8d586211d08e7bc61cf52013d64",
+    "tests/test_native_reference_context.py": "84cdf1de16358325639455eb352ede014403d0f7a4091790e112abecdf45d088"
+  },
+  "must_fix": [
+    {
+      "number": 1,
+      "priority": "P2",
+      "title": "Trailing suite comments lose their Python owner",
+      "file": "benchmarks/review_context.py",
+      "start_line": 77,
+      "end_line": 78,
+      "what_this_is": "The builder uses each AST statement's end line to decide whether its function or class owns the focus.",
+      "problem": "For `def send(value):\n    return value\n    # Review this comment.\n`, focusing on line 3 drops send because its AST end_lineno is line 2. The returned context labels this indented function comment as module scope and omits the owning signature. Trailing method and class comments have the same problem.",
+      "fix": "Use token-aware lexical suite boundaries, or equivalent explicit comment ownership, when determining owner intersection. Keep raw header extraction unchanged and ensure a dedented module comment does not inherit the preceding owner.",
+      "if_skipped": "Readings for ordinary trailing Python comments omit required owning signatures and state the wrong scope.",
+      "regression_tests": [
+        "An indented trailing comment after the last statement at EOF retains its function owner.",
+        "Trailing comments before a sibling definition or dedent retain the correct enclosing class/function owners.",
+        "A dedented module comment after a function remains module scope."
+      ],
+      "evidence_method": "Static control-flow trace; reproduction was not executed."
+    },
+    {
+      "number": 2,
+      "priority": "P2",
+      "title": "Accepted directory names can produce links to another destination",
+      "file": "benchmarks/review_context.py",
+      "start_line": 289,
+      "end_line": 297,
+      "what_this_is": "Each rendered page places its filesystem path directly into Markdown link destinations.",
+      "problem": "The directory validation accepts `/tmp/context#pages`, but a rendered destination such as `</tmp/context#pages/id-0001.txt>` treats `#pages/id-0001.txt` as a URI fragment. The link therefore does not identify the returned filesystem path. Query markers, percent escapes and backslashes before Markdown punctuation can cause similar mismatches.",
+      "fix": "Encode filesystem paths for link destinations consistently while retaining exact filesystem paths in bindings, or explicitly reject path characters the current link format cannot represent. Apply the same policy to current, previous and next links.",
+      "if_skipped": "The builder returns apparently valid bounded readings whose direct links cannot open their associated files for accepted output directories.",
+      "regression_tests": [
+        "A directory containing `#` is either rejected explicitly or produces a link destination that resolves to the exact returned path.",
+        "Cover query markers, literal percent escapes and backslash punctuation under the same policy."
+      ],
+      "evidence_method": "Static rendering and URI/Markdown destination analysis; reproduction was not executed."
+    },
+    {
+      "number": 3,
+      "priority": "P2",
+      "title": "Long backtick metadata makes a supported document unrenderable",
+      "file": "benchmarks/review_context.py",
+      "start_line": 131,
+      "end_line": 133,
+      "related_lines": [263, 272, 301, 304],
+      "what_this_is": "Derived metadata is split into rows up to 80 characters wide, and all pages share a backtick fence longer than any backtick run in those rows.",
+      "problem": "A supported Markdown heading formed as `# Heading ` plus 160 consecutive backticks retains those backticks in its title metadata. Splitting that JSON at width 80 creates a row with 80 consecutive backticks. The builder chooses an 81-backtick fence and appends `text`, then rejects the resulting 85-character opening line. This source can be represented within the bounds; the renderer's delimiter choice causes the failure.",
+      "fix": "Leave delimiter headroom when chunking metadata, or choose a fence strategy that fits bounded rows. For the current backtick strategy, metadata chunks no wider than 75 leave room for a 76-character fence plus `text`.",
+      "if_skipped": "Valid static Markdown context can fail despite finite lossless pagination being possible.",
+      "regression_tests": [
+        "A heading with at least 160 consecutive backticks produces a complete bundle whose pages remain within both 80 limits.",
+        "The returned inventory preserves the exact title and the full-source rows still reconstruct the original bytes."
+      ],
+      "evidence_method": "Static parser, metadata chunking and fence-budget trace; reproduction was not executed."
+    }
+  ],
+  "checked_without_additional_findings": [
+    "The original build_reading source-row loop is extracted verbatim into _source_rows. Its validation, selected-line endpoint, fencing, reading-line positions, returned fields and hashes are unchanged by static comparison against 42ab414.",
+    "Python headers retain decorators, async syntax and complete multiline raw source. Suite-colon selection stops before the first body statement and includes annotation/default colons without normalizing signatures.",
+    "Markdown heading metadata and computed anchor membership use the same production parser and document policy. Full original companions retain examples and explicit-anchor evidence without inventing occurrence positions.",
+    "Under the approved validator-produced immutable VerifiedReferenceContext precondition, selected native source identity/bytes/group and renderer are checked; all declared referenced targets are bound to exact bytes and hashes or pinned absence provenance, without reopening targets or resolving new references.",
+    "Source chunks include reversible Unicode-column spans and original line endings. Page hashes bind rendered text, while the canonical bundle hash also binds context, ordered roles, links and row maps.",
+    "The fixed page envelope accounts for instructions, questions, navigation, scope labels and fence rows, and impossible repeated caller metadata or ordinary overlong paths fail rather than truncate or return a partial bundle."
+  ],
+  "lean": "No simplification warranted beyond the concrete corrections above.",
+  "actual_exposure": {
+    "reviewed_files": [
+      "benchmarks/review_context.py",
+      "benchmarks/review_readings.py",
+      "tests/test_review_context.py",
+      "tests/test_review_markdown_context.py",
+      "tests/test_native_reference_context.py"
+    ],
+    "connected_code_read": [
+      "benchmarks/native_reference_context.py",
+      "benchmarks/corpora.py:Source and _checked_bytes",
+      "src/proseprobe/parsers/python.py:PythonParser and get_node_span",
+      "src/proseprobe/parsers/markdown.py:heading extraction, inline-code masks and generated-markup detection",
+      "src/proseprobe/rules/markup.py:SameDocumentFragmentRule document extraction and anchor inventory"
+    ],
+    "prior_design_exposure": [
+      "quality/reviews/2026-10-14-reading-context/design-reading.md",
+      "quality/reviews/2026-10-14-reading-context/inputs.json",
+      "/private/tmp/proseprobe-D001.txt"
+    ],
+    "instructions_and_skills_read": [
+      "/Users/johnmulder/.codex/RTK.md",
+      "/Users/johnmulder/.codex/plugins/cache/ponytail/ponytail/5.2.0/skills/ponytail-review/SKILL.md",
+      "/Users/johnmulder/.agents/skills/proseprobe/SKILL.md"
+    ],
+    "parallel_review": "A read-only subagent independently checked benchmarks/review_readings.py, its diff against 42ab414, and unchanged tests/test_review_readings.py. It reported no compatibility bugs and executed no project code.",
+    "project_code_or_tests_executed": false,
+    "old_labels_read": false,
+    "external_manifests_read": false,
+    "reserved_holdout_opened": false,
+    "implementation_or_git_changes_made": false,
+    "only_written_path": "quality/reviews/2026-10-14-reading-context/code-review.json",
+    "assumed_load": "Offline benchmark preparation of finite development-source context bundles.",
+    "not_checked": "No tests or proseprobe scan were executed because the review explicitly prohibits reviewed project code execution. The root agent's reported focused-test and typing results were not independently rerun. This is engineering review, not blind labeling or evidence of human effectiveness."
+  }
+}

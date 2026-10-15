@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "review_kind": "engineering_implementation_followup",
+  "prior_review": "quality/reviews/2026-10-14-reading-context/code-review.json",
+  "what_this_change_does": "Corrects trailing Python comment ownership and rejects directory forms that cannot be represented faithfully as the generated local Markdown links. It also leaves metadata-fence headroom so supported long-backtick headings remain renderable.",
+  "verdict": "ship_from_static_review",
+  "remaining_findings": [],
+  "review_snapshot": {
+    "benchmarks/review_context.py": "edd49ad852c0f67dfef5ab74d7678041114a535ab97f1eb2320d144ad38e8533",
+    "benchmarks/review_readings.py": "b94278520cc7bd4f52a14de29602660c99210a7048023273acf73d13257f4536",
+    "tests/test_review_context.py": "228be3f7b3a1448553a2079b74ad320edbc8cde0761dafa750e8aa68ff9e5e09",
+    "tests/test_review_markdown_context.py": "48d299a371318733c041fce99bcd20ee0f07453367a7ad7b2f504f17ea3d91e1",
+    "tests/test_native_reference_context.py": "84cdf1de16358325639455eb352ede014403d0f7a4091790e112abecdf45d088"
+  },
+  "resolved_findings": [
+    {
+      "prior_number": 1,
+      "status": "resolved",
+      "assessment": "Comment tokens beyond an AST endpoint are included only for multiline suites and only when indented beyond the owner. Scanning stops at the next non-comment, non-newline token. Comparing expanded raw indentation prefixes with Python's eight-column tab stops fixes the follow-up mixed-tabs case while preserving original code-point coordinates.",
+      "regression_tests_read": "The parameterized trailing-comment test covers function EOF comments, method comments before a sibling, class-only comments after a method, dedented module comments, inline suites and mixed tab/space indentation."
+    },
+    {
+      "prior_number": 2,
+      "status": "resolved",
+      "assessment": "The builder now rejects fragment/query markers, percent escapes, backslashes and ampersands, including Markdown entity spellings. It also rejects a leading double slash, which would create a scheme-relative URI. The one directory guard applies to current, previous and next links because all share the validated directory and restricted reading ID.",
+      "regression_tests_read": "The directory-character test covers #, ?, %, backslash and &amp;. A separate test rejects //tmp/context."
+    },
+    {
+      "prior_number": 3,
+      "status": "resolved",
+      "assessment": "Metadata chunks are now at most 75 code points. A maximum 75-backtick run therefore requires at most a 76-backtick fence, leaving four code points for text within the 80-character opening line. Source chunks already leave more headroom through their coordinate prefixes.",
+      "regression_tests_read": "A supported heading containing 160 consecutive backticks retains its exact title and full-source reconstruction while every returned page satisfies both bounds."
+    }
+  ],
+  "compatibility": "The prior independent static comparison found the original build_reading source-row extraction mechanically equivalent to 42ab414. benchmarks/review_readings.py has the same hash in this follow-up snapshot, so that conclusion remains applicable.",
+  "lean": "No simplification warranted. The corrections address concrete ownership, link-fidelity and page-budget failures without adding public verification machinery.",
+  "actual_exposure": {
+    "newly_read": [
+      "benchmarks/review_context.py:complete final implementation and subsequent correction blocks",
+      "tests/test_review_context.py:appended ownership and link regression tests",
+      "tests/test_review_markdown_context.py:appended long-backtick regression test"
+    ],
+    "prior_exposure": "The implementation, connected parser/native code, tests, design and skills listed in code-review.json remain part of this review's actual exposure.",
+    "project_code_or_tests_executed": false,
+    "old_labels_read": false,
+    "external_manifests_read": false,
+    "reserved_holdout_opened": false,
+    "implementation_or_git_changes_made": false,
+    "only_written_path_this_followup": "quality/reviews/2026-10-14-reading-context/code-review-followup.json",
+    "test_evidence": "The root agent reported actual failing regression runs followed by passing runs for the original three corrections, mixed indentation, entity-spelling directories and leading double slashes. This reviewer inspected the code and tests but did not independently execute them.",
+    "not_checked": "Repository acceptance gates and runtime behavior were not independently rerun because this review prohibits project execution. The static verdict does not replace the repository gate or establish blind-label independence or human effectiveness."
+  }
+}

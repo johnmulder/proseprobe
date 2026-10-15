@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "scope": "Agent findings corrected;10passed",
+  "stdout": "..........                                                               [100%]\n10 passed, 55 deselected in 0.35s\n",
+  "stdout_sha256": "223340aa8021571c9faecc0c66b76772d6de91f779fbb998d800bf8535590661",
+  "version": 1
+}

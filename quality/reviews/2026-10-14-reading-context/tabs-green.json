@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "scope": "Mixed indentation corrected;6passed",
+  "stdout": "......                                                                   [100%]\n6 passed, 32 deselected in 0.37s\n",
+  "stdout_sha256": "f3df63a0cd97a1154c23e0c55caec45c53c9f62f96cf54a85892701938c1f79d",
+  "version": 1
+}

@@ -136,6 +136,52 @@ Preserve source bytes during annotation. After a deliberate source or contract
 change, review affected labels and issue a new versioned packet with its real
 review provenance. Do not refresh checksums to make an old review appear current.
 
+## Bounded context readings
+
+`benchmarks.review_context.build_contextual_readings()` adds linked context
+pages beside a selected development-source region. The original
+`benchmarks.review_readings.build_reading()` keeps its version 1 behavior.
+Each new page repeats the declared rules, instructions and questions, and has
+an absolute reading link, adjacent links, role, ordinal and context digest.
+Every page fits 80 lines of 80 Unicode code points, including that envelope.
+
+For Python, the context includes raw enclosing class/function headers,
+decorators, async declarations and multiline signatures. Trailing indented
+suite comments retain their owners; module scope is explicit. These are lexical
+headers, not proof of imported bindings or runtime behavior. Reviewed code is
+never executed. Unsupported syntax or physical line separators are refused;
+supported source bytes use LF or CRLF.
+
+For M011/M012, pass `markdown_anchor_style="github"`. The builder includes
+the complete original Markdown source, an ordered heading inventory and sorted
+anchor-ID membership under the production static parser. Membership does not
+claim anchor occurrence counts. Full companions retain fenced examples and
+explicit-anchor evidence. Generated or unsupported inventories are refused.
+
+M012 also requires `native_context` from the existing offline
+`validate_reference_context()` validator. The builder checks the selected
+source identity, group, bytes and renderer, then includes every referenced
+target's immutable bytes and inventory, or its pinned absence provenance.
+Empty files remain present. The builder never reopens target paths or resolves
+new references. This internal API trusts validator-produced immutable objects;
+constructing a context object yourself does not establish absence.
+
+Pass a short absolute `link_directory` and a short `reading_id`. Directory
+names with control characters, angle brackets, URI delimiters, percent escapes,
+ampersands, backslashes or a leading double slash are rejected. Context paginates
+without truncation. Oversized repeated instructions, questions or links fail before a
+bundle is returned. Source rows retain reversible original columns and endings;
+derived inventory rows are labeled separately.
+
+Persist every page's exact `rendered_text` at its returned `path` and freeze
+the complete JSON bundle, including its ordered page list and canonical hashes.
+Use JSON to preserve exact trailing spaces through repository hooks.
+The builder returns text and does not write files. Context pages grant no
+reviewed coverage or clean labels. The
+[P32D.5b record](reviews/2026-10-14-reading-context/README.md) retains examples,
+agent reviews and test evidence; none supplies independent human effectiveness
+evidence.
+
 ## Updating the corpus
 
 1. Add or edit the smallest source excerpt that covers the behavior.

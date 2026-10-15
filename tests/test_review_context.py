@@ -392,3 +392,85 @@ def test_every_linked_page_repeats_canonical_rule_scope(tmp_path: Path) -> None:
     assert len(bundle["readings"]) > 1
     for page in bundle["readings"]:
         assert all(rule in page["rendered_text"] for rule in rules)
+
+
+@pytest.mark.parametrize("separator", ["\x85", "\u2028"])
+def test_link_directory_cannot_hide_physical_line_breaks(
+    tmp_path: Path, separator: str
+) -> None:
+    source = _source(tmp_path, b"value = 1\n")
+
+    with pytest.raises(CorpusError, match=r"directory|link"):
+        _bundle(source, tmp_path, link_directory=Path(f"/tmp/context{separator}pages"))
+
+
+@pytest.mark.parametrize(
+    "options",
+    [
+        {"rule_ids": ["M012"], "markdown_anchor_style": "github"},
+        {"markdown_anchor_style": "github"},
+    ],
+)
+def test_python_does_not_silently_ignore_required_markdown_context(
+    tmp_path: Path, options: dict
+) -> None:
+    source = _source(tmp_path, b"value = 1\n")
+
+    with pytest.raises(CorpusError, match="Markdown"):
+        _bundle(source, tmp_path, **options)
+
+
+@pytest.mark.parametrize(
+    ("text", "focus", "names"),
+    [
+        ("def send(value):\n    return value\n    # Review.\n", 3, ["send"]),
+        (
+            "class Client:\n    def send(self):\n        return 1\n"
+            "        # Review.\n    def next(self):\n        return 2\n",
+            4,
+            ["Client", "send"],
+        ),
+        (
+            "class Client:\n    def send(self):\n        return 1\n"
+            "    # Review.\nvalue = 2\n",
+            4,
+            ["Client"],
+        ),
+        ("def send(value):\n    return value\n# Review.\n", 3, []),
+        ("def send(): return 1\n    # Module comment.\n", 2, []),
+        (
+            "class Client:\n\tdef send(self):\n\t\treturn 1\n"
+            "        # Review.\nvalue = 2\n",
+            4,
+            ["Client"],
+        ),
+    ],
+)
+def test_trailing_comments_retain_only_their_lexical_suite_owners(
+    tmp_path: Path, text: str, focus: int, names: list[str]
+) -> None:
+    source = _source(tmp_path, text.encode())
+    bundle = _bundle(source, tmp_path, start_line=focus, end_line=focus)
+
+    assert [item["name"] for item in bundle["context"]["python_owners"]] == names
+    assert bundle["context"]["python_scope"] == (
+        "lexical-owners" if names else "module"
+    )
+    _assert_pages(bundle, source, text)
+
+
+@pytest.mark.parametrize("character", ["#", "?", "%", "\\", "&amp;"])
+def test_directory_characters_that_change_link_destinations_are_refused(
+    tmp_path: Path, character: str
+) -> None:
+    source = _source(tmp_path, b"value = 1\n")
+
+    with pytest.raises(CorpusError, match=r"directory|link"):
+        _bundle(source, tmp_path, link_directory=Path(f"/tmp/context{character}pages"))
+
+
+def test_scheme_relative_directory_is_not_a_local_absolute_link(tmp_path: Path) -> None:
+    source = _source(tmp_path, b"value = 1\n")
+
+    with pytest.raises(CorpusError, match=r"directory|link"):
+        _bundle(source, tmp_path, link_directory=Path("//tmp/context"))

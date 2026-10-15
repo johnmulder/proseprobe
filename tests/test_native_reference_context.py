@@ -844,3 +844,61 @@ def test_non_native_manifest_errors_preserve_path_specific_diagnostics(
         f"Rule quality error: {manifest}: invalid JSON or unreadable manifest:"
         in output.err
     )
+
+
+def test_contextual_reading_accepts_revalidated_native_reference_proof(
+    reference_fixture: dict[str, Any],
+) -> None:
+    from benchmarks.corpora import Source
+    from benchmarks.review_context import build_contextual_readings
+
+    verified = _validate(_build(reference_fixture), reference_fixture)
+    source = Source(
+        reference_fixture["identity"],
+        "synthetic/docs",
+        reference_fixture["identity"],
+        "source.md",
+        hashlib.sha256(reference_fixture["source"]).hexdigest(),
+        "development",
+        "markdown",
+        {},
+    )
+    bundle = build_contextual_readings(
+        source,
+        reference_fixture["cache"],
+        start_line=2,
+        end_line=2,
+        rule_ids=["M012"],
+        instructions="Read the source and its complete verified native context.",
+        questions="Identify unresolved local Markdown targets, or say none.",
+        reading_id="native",
+        link_directory=Path("/tmp/p32d5b"),
+        markdown_anchor_style="github",
+        native_context=verified,
+    )
+
+    native = bundle["context"]["native"]
+    assert native["manifest_sha256"] == reference_fixture["native"]["manifest_sha256"]
+    assert native["revision"] == reference_fixture["native"]["revision"]
+    assert native["inventory_sha256"] == reference_fixture["native"]["inventory_sha256"]
+    targets = {item["native_path"]: item for item in native["targets"]}
+    assert targets["docs/guide.md"]["status"] == "present"
+    assert (
+        targets["docs/guide.md"]["sha256"]
+        == hashlib.sha256(reference_fixture["target"]).hexdigest()
+    )
+    assert targets["docs/absent.md"]["status"] == "absent"
+    assert len(native["references"][source.identity]) == 3
+    target_rows = [
+        row
+        for reading in bundle["readings"]
+        if reading["role"] == "markdown-target"
+        for row in reading["rows"]
+        if row["source_id"] == "docs/guide.md"
+    ]
+    assert (
+        "".join(row["text"] + row["source_line_ending"] for row in target_rows).encode(
+            "utf-8"
+        )
+        == reference_fixture["target"]
+    )

@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "scope": "Markdown/native focused tests;28passed",
+  "stdout": "............................                                             [100%]\n28 passed in 0.28s\n",
+  "stdout_sha256": "fbd4a434ac33afea99abe2716f51a257280d1b0be37cb42ccdddd32dcd0ebbff",
+  "version": 1
+}

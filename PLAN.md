@@ -1,6 +1,6 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-14. Bounded diagnostic context is active in the
+Updated: 2026-10-15. Bounded diagnostic context is active in the
 [reading-context record](quality/reviews/2026-10-14-reading-context/README.md).
 Earlier frozen reviews stay unchanged. This checklist contains only outstanding
 work and its prerequisites.
@@ -25,8 +25,6 @@ work and its prerequisites.
 
 ## Bounded diagnostic context — active
 
-- [ ] R02 Pin complete Markdown inventories and native target/absence bindings
-  with failing tests. Add supported context without new target filesystem reads.
 - [ ] R03 Have agents review generated bounded examples and the final change;
   fix concrete defects test first and retain their actual judgments.
 - [ ] R04 Pass repository gates, validate evidence and preserved historical

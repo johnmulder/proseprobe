@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "scope": "Entity-spelling destination rejected;5passed",
+  "stdout": ".....                                                                    [100%]\n5 passed, 34 deselected in 0.10s\n",
+  "stdout_sha256": "6e441cdc7c1552804911bc03e1ca7de7eaa6d195352cf168b83032e44c3752ea",
+  "version": 1
+}
