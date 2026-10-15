@@ -1,7 +1,7 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-14. Contract resolution is active in the
-[contract review record](quality/reviews/2026-10-14-contracts/README.md).
+Updated: 2026-10-14. The C004 contract and four highlight questions are resolved
+in the [contract review record](quality/reviews/2026-10-14-contracts/README.md).
 Earlier frozen reviews stay unchanged. This checklist contains only outstanding
 work and its prerequisites.
 
@@ -22,14 +22,6 @@ work and its prerequisites.
 - Keep defaults and experimental status unchanged without sufficient evidence.
 - If a future review is requested, include its direct reading link and limit it
   to 80 lines of 80 characters, including instructions and questions.
-
-## C004 and diagnostic highlights — active
-
-- [ ] K04 Validate the candidate against historical fixed development labels
-  without rewriting them. Keep semantic matching separate from exact spans and
-  report any remaining annotation-contract differences explicitly.
-- [ ] K05 Obtain agent review of the final changes, pass repository gates,
-  record the decisions and remove completed actions from this checklist.
 
 ## Independent human annotation — deferred
 

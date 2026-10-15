@@ -87,3 +87,46 @@ generated rule-doc checks, documentation checks and both bound regression
 policies. Curated counts remain 366 TP/6 FP/0 FN for all-rules and 106 TP/4 FP/0 FN
 for production. All existing known mismatches remain visible. The exact log and
 runtime identity are bound in `tdd-highlights.json`.
+
+K04: Committed the executable criterion as `478f71b` and the highlight contracts
+and reviewed curated migration as `81b9ee3`. Bound the clean candidate runtime
+and unchanged historical accepted labels before generating six new reports.
+No earlier report or frozen label was replaced. The candidate source digest is
+`2ca3c350f213c5205c581fe2ec123f13e558727ad5203f010637165ec898e0f3`.
+
+Accepted all-rules challenge counts remain 13 TP/0 FP/0 FN; native-link counts
+remain 3 TP/0 FP/0 FN. Exact challenge spans increase from 9/13 to 10/13 because
+the TODO marker now matches the frozen lexical span. Native spans remain 3/3.
+The other three historical endpoint differences remain visible: the G038/V015
+expected predicates and C009 starred name are wider than their retained public
+highlight contracts. They are resolved contract dispositions, not hidden or
+rewritten labels. `resolution.json` records each old expected, previous actual
+and candidate span beside its exact source text.
+
+The Requests guard no longer emits executable C004 under the finite criterion.
+Its historical context-dependent annotation remains untouched; a missing
+emission does not convert that coverage into a clean label. Natural precision
+and recall remain unavailable, and other-rule emissions remain unreviewed.
+Unchanged production excludes the selected INFO rules and has zero eligible
+coverage. Authored cohorts remain separate from natural text, share one author
+group, and cannot establish population effectiveness. These comparisons use
+exposed development material and add no independent human evidence.
+
+K05: A final fresh agent, `/root/contract_evidence_audit`, checked seven candidate
+freeze bindings, all 72 historical frozen artifacts by hash, the raw contract
+review hashes, six candidate/baseline report pairs, metric denominators, exact
+spans, source groups, the narrow curated migration and TDD output provenance.
+It found no actionable inconsistency. Its audit is in `evidence-review.json`.
+It did not rerun the detector or tests, inspect reserved holdout, or re-slice
+original source bytes; root separately verified the four selected source slices.
+
+All five questions are resolved for the declared development contract. The
+Requests rejection needs no executable C004 finding; TODO now selects its
+marker; G038/V015 retain their comparative/superlative phrases; C009 retains its
+identifier and states the star-kind conflict in its message. Root revalidated
+the actual candidate source digest, all report and TDD bindings, and unchanged
+historical files. Authored Markdown passed the explicit baseline check. Completed
+actions have left PLAN.md; independent effectiveness prerequisites remain.
+
+The work is committed locally. No push, merge, release or independent human
+effectiveness claim is part of this task.

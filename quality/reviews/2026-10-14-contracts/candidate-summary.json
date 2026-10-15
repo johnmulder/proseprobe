@@ -1,0 +1,377 @@
+{
+  "candidate_commit": "81b9ee393718b66b687fa6f3d63b02b20e53d6c7",
+  "candidate_freeze_sha256": "984b85ffe71eccd02b549c203e38db5a47fbb6a2388f218691693c653ab102a9",
+  "candidate_source_sha256": "2ca3c350f213c5205c581fe2ec123f13e558727ad5203f010637165ec898e0f3",
+  "historical_labels_modified": false,
+  "independent_human_evidence": false,
+  "limits": [
+    "Authored events are root-authored and share one author group; no population estimates are inferred.",
+    "Natural precision and recall remain unavailable; missing emissions do not turn excluded contextual coverage into clean labels.",
+    "Production excludes selected INFO rules and has zero eligible coverage.",
+    "Three retained historical expected highlights differ from the accepted public phrase/name contracts; raw span accuracy remains visible.",
+    "Original review reports and frozen annotations are unchanged."
+  ],
+  "phase": "development comparison against unchanged historical accepted labels",
+  "population_effectiveness_claim": false,
+  "reports": [
+    {
+      "baseline_context_dependent": 0,
+      "baseline_report": "quality/reviews/2026-10-13-agent-resume/reports/authored-challenge.adjudicated.all-rules.json",
+      "baseline_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "baseline_span_accuracy": 0.6923076923076923,
+      "baseline_totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 13
+      },
+      "cohort": "authored-challenge",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": 0.0,
+        "precision": 1.0,
+        "precision_denominator": 13,
+        "precision_interval_95": [
+          0.7719046276458016,
+          0.9999999999999999
+        ],
+        "prose_words": 182,
+        "recall": 1.0,
+        "recall_denominator": 13,
+        "recall_interval_95": [
+          0.7719046276458016,
+          0.9999999999999999
+        ],
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "all-rules",
+      "path": "quality/reviews/2026-10-14-contracts/candidate-reports/authored-challenge.all-rules.json",
+      "reviewed_source_group_count": 1,
+      "sha256": "717ab2e99824fb406de967d6f449b6ecd52989e7d9d209707261647345e923b0",
+      "source_group_count": 1,
+      "span_accuracy": 0.7692307692307693,
+      "span_accuracy_denominator": 13,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 13
+      },
+      "unreviewed": 4,
+      "unsupported": 0
+    },
+    {
+      "baseline_context_dependent": 0,
+      "baseline_report": "quality/reviews/2026-10-13-agent-resume/reports/authored-challenge.adjudicated.production.json",
+      "baseline_sha256": "bde402f10f0a97a770c8d109be3b3a3732c6fb50b7195066c70992c724dbffdd",
+      "baseline_span_accuracy": null,
+      "baseline_totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "cohort": "authored-challenge",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 0,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "production",
+      "path": "quality/reviews/2026-10-14-contracts/candidate-reports/authored-challenge.production.json",
+      "reviewed_source_group_count": 0,
+      "sha256": "2b813aaaff3799dc74099e13b64d4255cc0e5c63f8b1540e328f2feeb8f72fce",
+      "source_group_count": 1,
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 2,
+      "unsupported": 0
+    },
+    {
+      "baseline_context_dependent": 0,
+      "baseline_report": "quality/reviews/2026-10-13-agent-resume/reports/authored-local-links.adjudicated.all-rules.json",
+      "baseline_sha256": "f60c36da37c0f3b8b2ab557147612f7200d002a9cea20f8398558dfd77958eb7",
+      "baseline_span_accuracy": 1.0,
+      "baseline_totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 3
+      },
+      "cohort": "authored-local-links",
+      "context_dependent": 0,
+      "local_link_context": {
+        "artifact_sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528",
+        "enabled": true,
+        "excluded_destinations": {
+          "agent-authored-pilot:entry.md": [
+            {
+              "column": 17,
+              "destination": "#workflow",
+              "end_column": 26,
+              "line": 6,
+              "reason": "production-resolver-exclusion"
+            },
+            {
+              "column": 20,
+              "destination": "#limitations",
+              "end_column": 32,
+              "line": 7,
+              "reason": "production-resolver-exclusion"
+            }
+          ]
+        },
+        "excluded_destinations_count": 2,
+        "inventory_sha256": "c44fa8f57f5c69e06f90e8d9a015e52073836bc1aab165d4df4762ecbbba9c92",
+        "reason": null,
+        "reference_scope": "production-static-local-markdown-v1",
+        "references_count": 3,
+        "renderer": "github",
+        "revision": "ce2e2844bd9a3ca5b5a74ae41828c65f454c973b",
+        "root": null,
+        "source_group": "agent-authored-pilot",
+        "source_manifest_sha256": "6d905cfe606c2b55818a3e3e457244271b0ce893aedcdd10559ccfc5d7dbcb7a",
+        "sources_count": 1,
+        "target_binding": "verified-native-reference-closure",
+        "targets_count": 2
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": 0.0,
+        "precision": 1.0,
+        "precision_denominator": 3,
+        "precision_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "prose_words": 29,
+        "recall": 1.0,
+        "recall_denominator": 3,
+        "recall_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "all-rules",
+      "path": "quality/reviews/2026-10-14-contracts/candidate-reports/authored-local-links.all-rules.json",
+      "reviewed_source_group_count": 1,
+      "sha256": "335ad216dae46c84f70a4d07182abf554c51454fc30e76c47cc7f28a3be9ba7f",
+      "source_group_count": 1,
+      "span_accuracy": 1.0,
+      "span_accuracy_denominator": 3,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 3
+      },
+      "unreviewed": 1,
+      "unsupported": 0
+    },
+    {
+      "baseline_context_dependent": 0,
+      "baseline_report": "quality/reviews/2026-10-13-agent-resume/reports/authored-local-links.adjudicated.production.json",
+      "baseline_sha256": "97b3b7caaf09c6934c591edd57a4314b80960fc3114573b94271a22c57608ca5",
+      "baseline_span_accuracy": null,
+      "baseline_totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "cohort": "authored-local-links",
+      "context_dependent": 0,
+      "local_link_context": {
+        "artifact_sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528",
+        "enabled": true,
+        "excluded_destinations": {
+          "agent-authored-pilot:entry.md": [
+            {
+              "column": 17,
+              "destination": "#workflow",
+              "end_column": 26,
+              "line": 6,
+              "reason": "production-resolver-exclusion"
+            },
+            {
+              "column": 20,
+              "destination": "#limitations",
+              "end_column": 32,
+              "line": 7,
+              "reason": "production-resolver-exclusion"
+            }
+          ]
+        },
+        "excluded_destinations_count": 2,
+        "inventory_sha256": "c44fa8f57f5c69e06f90e8d9a015e52073836bc1aab165d4df4762ecbbba9c92",
+        "reason": null,
+        "reference_scope": "production-static-local-markdown-v1",
+        "references_count": 3,
+        "renderer": "github",
+        "revision": "ce2e2844bd9a3ca5b5a74ae41828c65f454c973b",
+        "root": null,
+        "source_group": "agent-authored-pilot",
+        "source_manifest_sha256": "6d905cfe606c2b55818a3e3e457244271b0ce893aedcdd10559ccfc5d7dbcb7a",
+        "sources_count": 1,
+        "target_binding": "verified-native-reference-closure",
+        "targets_count": 2
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 0,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "production",
+      "path": "quality/reviews/2026-10-14-contracts/candidate-reports/authored-local-links.production.json",
+      "reviewed_source_group_count": 0,
+      "sha256": "730f556e4f615b86b97cbfd6c28e5d8d6ca28711123aacc1fc37ad527b4c6f56",
+      "source_group_count": 1,
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 1,
+      "unsupported": 0
+    },
+    {
+      "baseline_context_dependent": 1,
+      "baseline_report": "quality/reviews/2026-10-13-agent-resume/reports/natural.adjudicated.all-rules.json",
+      "baseline_sha256": "8d4bf7209d953000cf208c145f6af2d3fc0c507ba3ffd5a3a1e7cc744eb27f95",
+      "baseline_span_accuracy": null,
+      "baseline_totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "cohort": "natural",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": 0.0,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 2368,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "all-rules",
+      "path": "quality/reviews/2026-10-14-contracts/candidate-reports/natural.all-rules.json",
+      "reviewed_source_group_count": 2,
+      "sha256": "31435fe5556d51303a90e7042d09692499a46694a5d4130754c6d718382bd9f0",
+      "source_group_count": 2,
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 21,
+      "unsupported": 0
+    },
+    {
+      "baseline_context_dependent": 0,
+      "baseline_report": "quality/reviews/2026-10-13-agent-resume/reports/natural.adjudicated.production.json",
+      "baseline_sha256": "cba6efabfe0c9ac74a872fde2f0cbad51715a4e9286a2b2bf80c16eb6996c099",
+      "baseline_span_accuracy": null,
+      "baseline_totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "cohort": "natural",
+      "context_dependent": 0,
+      "local_link_context": {
+        "enabled": false,
+        "reason": null,
+        "root": null,
+        "target_binding": "not-required"
+      },
+      "metrics": {
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 0,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "mode": "production",
+      "path": "quality/reviews/2026-10-14-contracts/candidate-reports/natural.production.json",
+      "reviewed_source_group_count": 0,
+      "sha256": "384aac1b2b97b360b66a844e44377d1a11a3a58a0baa4773fdf06e5ca3232b8e",
+      "source_group_count": 2,
+      "span_accuracy": null,
+      "span_accuracy_denominator": 0,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "unreviewed": 9,
+      "unsupported": 0
+    }
+  ],
+  "version": 1
+}

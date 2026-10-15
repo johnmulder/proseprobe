@@ -1,0 +1,47 @@
+{
+  "bindings": {
+    "quality/reviews/2026-10-14-contracts/adjudication.json": "091d3bb6eb4fb22d810f43b261de395534f6a3df94fa17ddd4bdf62efd10a650",
+    "quality/reviews/2026-10-14-contracts/candidate-freeze.json": "984b85ffe71eccd02b549c203e38db5a47fbb6a2388f218691693c653ab102a9",
+    "quality/reviews/2026-10-14-contracts/candidate-summary.json": "a916af42fe8c78c8efbfc8a965f66267277f8ad5d540597bda084d8ab1eecf01",
+    "quality/reviews/2026-10-14-contracts/curated-migration.json": "3e2d8cae9d46504e952394def81162fa4a6519b8b87fe7d78db8ff1fe219de7e",
+    "quality/reviews/2026-10-14-contracts/curated-migration.review.json": "8658c27b2f2d81332771cb6d1c03925a2f799b0b6cabac0874144603746e1802",
+    "quality/reviews/2026-10-14-contracts/engineering-review.json": "baba8c323c1867fc66e1392575c1c4a2b20b49f5cafb0ddb6251a9014592c8e9",
+    "quality/reviews/2026-10-14-contracts/evidence-review.json": "3554a453d1008f4d8dfb61a9fe190559c778f5bc9b697725cc793740d968cb57",
+    "quality/reviews/2026-10-14-contracts/resolution.json": "ee1e7a688487d2fcfe435c2c447ae5c18b877b3c7feb39ec40a11a9a0cabe3bc",
+    "quality/reviews/2026-10-14-contracts/tdd-c004.json": "3b686df90e28ec2915131d7edb2ef87cbbaa67d0c0369a9cf65e0e6379c432d5",
+    "quality/reviews/2026-10-14-contracts/tdd-highlights.json": "f085bcfba4b51fba9caf96cbea48f1cfab4d66ce80546fa9faf4e0c5d2da85da"
+  },
+  "candidate_commit": "81b9ee3",
+  "candidate_source_sha256": "2ca3c350f213c5205c581fe2ec123f13e558727ad5203f010637165ec898e0f3",
+  "completed": true,
+  "human_evidence_created": false,
+  "local_only": true,
+  "population_effectiveness_claim": false,
+  "reserved_holdout_opened": false,
+  "task": "Resolve C004 contract and four highlight differences using agent reviewers",
+  "tests": {
+    "all_rules_known_mismatches_retained": 6,
+    "before_change_red_cases": 19,
+    "focused_C004_passed": 471,
+    "focused_highlight_passed": 1414,
+    "full_suite_passed": 3686,
+    "marker_red_cases": 8,
+    "normalization_red_cases": 1,
+    "package_typing_files": 31,
+    "production_known_mismatches_retained": 4
+  },
+  "validation": {
+    "baseline_unchanged": true,
+    "bounded_readings": 5,
+    "candidate_report_pairs": 6,
+    "completed_actions_removed_from_PLAN": true,
+    "curated_start_edits": 3,
+    "external_frozen_labels_unchanged": true,
+    "gate_hash_only_edits": 2,
+    "historical_frozen_artifacts": 72,
+    "source_bytes_unchanged": true,
+    "split_freezes_unchanged": true,
+    "thresholds_confidence_severity_defaults_unchanged": true
+  },
+  "version": 1
+}

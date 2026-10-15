@@ -1,7 +1,7 @@
 # C004 and highlight contracts
 
-The user requested agent review to resolve C004's intentional-rejection boundary
-and four diagnostic highlight differences. This is exposed development contract
+The C004 intentional-rejection boundary and four diagnostic highlight questions
+are resolved. This is exposed development contract
 review. It does not create human judgments or independent effectiveness evidence.
 
 Two fresh agents review the same four bounded readings separately, without
@@ -31,3 +31,19 @@ Three maintained curated C004 start columns were separately reviewed against
 the new marker contract. The [migration record](curated-migration.json) binds
 those exact edits and the two gate-manifest hash changes. Known mismatches,
 source bytes and frozen external review artifacts remain unchanged.
+
+The [resolution](resolution.json) records the four final outcomes: G038 selects
+`faster`, V015 selects `the best`, C004 selects `TODO`, and C009 selects `extras`
+while its diagnostic states the star-kind conflict. The Requests rejection is
+outside the new finite executable-placeholder criterion. These decisions do not
+infer author intent or code completeness.
+
+The [candidate comparison](candidate-summary.json) binds six fresh reports from
+commit `81b9ee3`. Accepted authored detection counts remain unchanged; exact
+challenge spans are 10/13, retaining the three historical annotation-contract
+differences. Natural effectiveness and independent human evidence remain
+unavailable. Historical reports and labels are preserved.
+
+Fresh engineering and evidence agents found no actionable issue in the accepted
+changes or bound results. The final repository gate passed all 3686 tests and
+both curated regression policies. Completed actions have left PLAN.md.
