@@ -29,6 +29,10 @@ COLLABORATIVE_COMMENT_PATTERNS: Final[list[tuple[str, str]]] = [
 ]
 
 # Formulaic placeholder patterns (C004)
+AI_PLACEHOLDER_MESSAGES: Final[frozenset[str]] = frozenset(
+    {"todo", "fixme", "xxx", "add logic here", "unfinished", "not implemented yet"}
+)
+
 # Comment-only patterns: (regex_pattern, kind_description)
 AI_PLACEHOLDER_COMMENT_PATTERNS: Final[list[tuple[str, str]]] = [
     (r"#\s*(?:TODO|FIXME|XXX)(?:\s*:)?(?=\s*$)", "marker without context"),

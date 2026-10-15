@@ -2061,8 +2061,22 @@ def helper():
 Detects context-free `TODO`, `FIXME`, and `XXX` comments, formulaic TODO
 patterns, and placeholder code. Specific maintenance comments remain valid.
 
-Code-only findings require a parsed raise statement; strings and comments that
-mention that statement remain valid. Inline `pass` and ellipsis checks require
+Code-only findings require a parsed `raise NotImplementedError(...)` with exactly
+one positional string literal and no keyword arguments. Its complete message
+must match `todo`, `fixme`, `xxx`, `add logic here`, `unfinished`, or
+`not implemented yet` after ASCII whitespace is collapsed and trimmed, case is
+folded, and at most one final period is removed. No further trimming occurs.
+Substring matches, bare/empty errors, computed messages and other call shapes
+remain outside this branch. Implicitly joined and escaped literals use their
+decoded value; the highlight retains the complete original raise/call and
+excludes any `from` cause. Recognition is syntactic and does not prove a runtime
+exception binding or an author's intent.
+
+A `NotImplementedError` alone does not establish unfinished work. Detailed
+rejection messages such as `Use add_unredirected_header() for cookie headers`
+and issue-specific work descriptions remain outside the finite message set.
+A nonmatch does not prove a complete implementation. Strings and comments that
+mention a raise remain valid. Inline `pass` and ellipsis checks require
 the actual statement beside the comment. Source spans use character columns
 and cover multiline calls. Malformed source retains recognized comment markers
 without guessing executable placeholders.

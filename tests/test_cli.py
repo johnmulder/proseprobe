@@ -243,9 +243,9 @@ class TestCheckCommand:
     ) -> None:
         source = (
             "from abc import abstractmethod\n"
-            "example = \"raise NotImplementedError('example')\"\n"
+            "example = \"raise NotImplementedError('unfinished')\"\n"
             "class Contract:\n    @abstractmethod\n"
-            '    def declared(self):\n        raise NotImplementedError("contract")\n'
+            '    def declared(self):\n        raise NotImplementedError("unfinished")\n'
             '    def concrete(self):\n        raise NotImplementedError("unfinished")\n'
         )
 
@@ -275,6 +275,50 @@ class TestCheckCommand:
         line = source.splitlines()[record["line"] - 1]
         assert line[record["column"] - 1 : record["end_column"] - 1] == (
             'raise NotImplementedError("unfinished")'
+        )
+
+    def test_placeholder_contract_distinguishes_intentional_rejection(self) -> None:
+        source = (
+            "from abc import abstractmethod\n"
+            "class Reader:\n"
+            "    def seek(self, offset):\n"
+            '        raise NotImplementedError("Streaming readers cannot seek; use read_next()")\n'
+            "    def pending(self):\n"
+            '        raise NotImplementedError("Add logic here")\n'
+            "    @abstractmethod\n"
+            "    def declared(self):\n"
+            '        raise NotImplementedError("Add logic here")\n'
+        )
+
+        result = run_cli(
+            "check",
+            "-",
+            "--filename",
+            "reader.py",
+            "--select",
+            "C004",
+            "--severity",
+            "info",
+            "--format",
+            "jsonl",
+            stdin=source,
+        )
+
+        assert result.exit_code == 0
+        assert result.stderr == ""
+        records = [json.loads(line) for line in result.stdout.splitlines()]
+        assert len(records) == 1
+        [record] = records
+        assert record["rule_id"] == "C004"
+        assert record["path"] == "reader.py"
+        assert record["severity"] == "info"
+        assert record["confidence"] == "medium"
+        assert record["message"] == "Formulaic placeholder: template error"
+        assert (record["line"], record["column"], record["end_line"]) == (6, 9, None)
+        line = source.splitlines()[record["line"] - 1]
+        assert record["end_column"] == len(line) + 1
+        assert line[record["column"] - 1 : record["end_column"] - 1] == (
+            'raise NotImplementedError("Add logic here")'
         )
 
     @pytest.mark.parametrize(

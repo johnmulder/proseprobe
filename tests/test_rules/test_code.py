@@ -45,8 +45,8 @@ from proseprobe.rules.code import (
         ),
         (
             AIPlaceholdersRule(),
-            "raise NotImplementedError('later')",
-            "raise NotImplementedError('later')",
+            "raise NotImplementedError('unfinished')",
+            "raise NotImplementedError('unfinished')",
         ),
         (
             CommentRestatesCodeRule(),
@@ -244,6 +244,112 @@ class TestAIPlaceholders:
         rule = AIPlaceholdersRule()
         assert rule.id == "C004"
 
+    @pytest.mark.parametrize(
+        "message",
+        [
+            "Cookie headers should be added with add_unredirected_header()",
+            "This backend is read-only; use the writer backend",
+            "Retry logic is planned after issue #42",
+            "The word unfinished describes the input record",
+            "Later protocol versions require a different decoder",
+            "unsupported",
+            "one",
+            "",
+        ],
+    )
+    def test_specific_or_ambiguous_errors_are_not_placeholder_evidence(
+        self, message: str
+    ) -> None:
+        source = f"def reject():\n    raise NotImplementedError({message!r})\n"
+
+        assert AIPlaceholdersRule().check(source, "test.py") == []
+
+    @pytest.mark.parametrize(
+        "message",
+        [
+            "todo",
+            "fixme",
+            "xxx",
+            "add logic here",
+            "unfinished",
+            "not implemented yet",
+            "  NOT\tIMPLEMENTED\nyet.  ",
+        ],
+    )
+    def test_detects_complete_literal_placeholder_messages(self, message: str) -> None:
+        source = f"raise NotImplementedError({message!r})"
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert issue.message == "Formulaic placeholder: template error"
+        assert (issue.line, issue.column, issue.end_column) == (1, 1, len(source) + 1)
+
+    @pytest.mark.parametrize(
+        "message",
+        [
+            "not implemented",
+            "unfinished!",
+            "unfinished..",
+            "Unfinished .",
+            "\N{NO-BREAK SPACE}unfinished",
+            "not implemented yet for streaming",
+            "TODO: implement streaming after issue #42",
+            "later",
+        ],
+    )
+    def test_message_normalization_does_not_broaden_the_contract(
+        self, message: str
+    ) -> None:
+        source = f"raise NotImplementedError({message!r})"
+
+        assert AIPlaceholdersRule().check(source, "test.py") == []
+
+    @pytest.mark.parametrize(
+        "expression",
+        [
+            'NotImplementedError("unfinished", "details")',
+            'NotImplementedError("unfinished", code=42)',
+            'NotImplementedError(message="unfinished")',
+            'NotImplementedError(f"unfinished")',
+            'NotImplementedError("un" + "finished")',
+            'NotImplementedError(b"unfinished")',
+            "NotImplementedError(reason)",
+            "NotImplementedError(*messages)",
+            "NotImplementedError()",
+            "NotImplementedError",
+            'errors.NotImplementedError("unfinished")',
+        ],
+    )
+    def test_executable_message_requires_one_static_positional_string(
+        self, expression: str
+    ) -> None:
+        assert AIPlaceholdersRule().check(f"raise {expression}", "test.py") == []
+
+    @pytest.mark.parametrize(
+        "literal",
+        ['"un" "finished"', '"un\\x66inished"', '"""not\nimplemented yet"""'],
+    )
+    def test_decoded_literal_keeps_original_raise_span(self, literal: str) -> None:
+        statement = f"raise NotImplementedError({literal})"
+        source = f"{statement} from cause"
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        lines = source.splitlines(keepends=True)
+        start = sum(map(len, lines[: issue.line - 1])) + issue.column - 1
+        end_line = issue.end_line or issue.line
+        end = sum(map(len, lines[: end_line - 1])) + issue.end_column - 1
+        assert source[start:end] == statement
+
+    def test_excluded_raise_does_not_consume_the_line(self) -> None:
+        positive = 'raise NotImplementedError("unfinished")'
+        source = f'raise NotImplementedError("unsupported"); {positive}'
+
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        assert source[issue.column - 1 : issue.end_column - 1] == positive
+        assert issue.column == source.index(positive) + 1
+
     def test_ignores_placeholder_in_strings(self) -> None:
         """Test placeholder patterns inside strings are ignored."""
         text = 'value = "# TODO: Implement"'
@@ -254,11 +360,11 @@ class TestAIPlaceholders:
     @pytest.mark.parametrize(
         "source",
         [
-            "example = \"raise NotImplementedError('example')\"",
-            '"""raise NotImplementedError(\'example\')"""',
-            "# raise NotImplementedError('example')",
-            'example = """raise NotImplementedError(\'example\')"""',
-            "example = f\"raise NotImplementedError('example') {name}\"",
+            "example = \"raise NotImplementedError('unfinished')\"",
+            '"""raise NotImplementedError(\'unfinished\')"""',
+            "# raise NotImplementedError('unfinished')",
+            'example = """raise NotImplementedError(\'unfinished\')"""',
+            "example = f\"raise NotImplementedError('unfinished') {name}\"",
             'message = "pass"  # TODO: document this message',
             'message = "..."  # TODO: document this message',
             'pass; message = "value"  # TODO: document this message',
@@ -268,9 +374,7 @@ class TestAIPlaceholders:
         assert AIPlaceholdersRule().check(source, "test.py") == []
 
     def test_multiline_raise_has_original_source_span(self) -> None:
-        source = (
-            'def résumé():\n    raise NotImplementedError(\n        "later"\n    )\n'
-        )
+        source = 'def résumé():\n    raise NotImplementedError(\n        "unfinished"\n    )\n'
 
         [issue] = AIPlaceholdersRule().check(source, "test.py")
 
@@ -279,7 +383,7 @@ class TestAIPlaceholders:
         assert (issue.end_line, issue.end_column) == (4, 6)
 
     def test_raise_after_unicode_statement_has_character_columns(self) -> None:
-        source = 'résumé = 1; raise NotImplementedError("later")'
+        source = 'résumé = 1; raise NotImplementedError("unfinished")'
 
         [issue] = AIPlaceholdersRule().check(source, "test.py")
 
@@ -298,16 +402,16 @@ class TestAIPlaceholders:
         )
 
     def test_code_placeholder_preserves_first_occurrence_per_line(self) -> None:
-        source = 'raise NotImplementedError("one"); raise NotImplementedError("two")'
+        source = 'raise NotImplementedError("unfinished"); raise NotImplementedError("Add logic here")'
 
         [issue] = AIPlaceholdersRule().check(source, "test.py")
 
         assert source[issue.column - 1 : issue.end_column - 1] == (
-            'raise NotImplementedError("one")'
+            'raise NotImplementedError("unfinished")'
         )
 
     def test_invalid_python_keeps_comment_markers_without_guessing_code(self) -> None:
-        source = "def broken(\nraise NotImplementedError('later')\n# TODO:\n"
+        source = "def broken(\nraise NotImplementedError('unfinished')\n# TODO:\n"
 
         [issue] = AIPlaceholdersRule().check(source, "test.py")
 
@@ -338,7 +442,7 @@ class TestAIPlaceholders:
             f"{imports}\nclass Contract:\n"
             f"    @{decorator}\n"
             "    def declared(self):\n"
-            '        raise NotImplementedError("contract")\n'
+            '        raise NotImplementedError("unfinished")\n'
             "    def concrete(self):\n"
             '        raise NotImplementedError("unfinished")\n'
         )
@@ -373,7 +477,7 @@ class TestAIPlaceholders:
     ) -> None:
         source = (
             f"{prefix}class Contract:\n    @{decorator}\n"
-            '    def declared(self):\n        raise NotImplementedError("later")\n'
+            '    def declared(self):\n        raise NotImplementedError("unfinished")\n'
         )
 
         [issue] = AIPlaceholdersRule().check(source, "test.py")
@@ -384,7 +488,7 @@ class TestAIPlaceholders:
         source = (
             "from abc import abstractmethod\nclass Contract:\n"
             "    @abstractmethod\n    async def declared(self):\n"
-            '        # TODO: Implement\n        raise NotImplementedError("contract")\n'
+            '        # TODO: Implement\n        raise NotImplementedError("unfinished")\n'
         )
 
         [issue] = AIPlaceholdersRule().check(source, "test.py")
@@ -405,7 +509,7 @@ class TestAIPlaceholders:
     ) -> None:
         source = (
             f"{imports}\n@{decorator}\n"
-            'def load(value: str):\n    raise NotImplementedError("stub")\n'
+            'def load(value: str):\n    raise NotImplementedError("unfinished")\n'
             'def load(value):\n    raise NotImplementedError("unfinished")\n'
         )
 
@@ -438,7 +542,7 @@ class TestAIPlaceholders:
         source = (
             "from abc import abstractmethod\nclass Contract:\n"
             "    abstractmethod = replacement\n    @abstractmethod\n"
-            '    def declared(self):\n        raise NotImplementedError("later")\n'
+            '    def declared(self):\n        raise NotImplementedError("unfinished")\n'
         )
 
         assert len(AIPlaceholdersRule().check(source, "test.py")) == 1
@@ -456,7 +560,7 @@ class TestAIPlaceholders:
     ) -> None:
         source = (
             f"{imports}\nclass Contract({base}):\n"
-            '    def declared(self):\n        raise NotImplementedError("stub")\n'
+            '    def declared(self):\n        raise NotImplementedError("unfinished")\n'
             "    def concrete(self):\n        value = 1\n"
             '        raise NotImplementedError("unfinished")\n'
         )
@@ -491,7 +595,7 @@ class TestAIPlaceholders:
         source = (
             "from abc import abstractmethod\nclass Contract:\n"
             "    @abstractmethod\n    def declared(self):\n"
-            '        def concrete():\n            raise NotImplementedError("later")\n'
+            '        def concrete():\n            raise NotImplementedError("unfinished")\n'
             "        return concrete\n"
         )
 
@@ -514,7 +618,7 @@ class TestAIPlaceholders:
         source = (
             "from typing import Protocol\nclass Contract(Protocol):\n"
             "    @Protocol\n"
-            '    def declared(self):\n        raise NotImplementedError("later")\n'
+            '    def declared(self):\n        raise NotImplementedError("unfinished")\n'
         )
 
         assert len(AIPlaceholdersRule().check(source, "test.py")) == 1
@@ -532,7 +636,7 @@ class TestAIPlaceholders:
     ) -> None:
         source = (
             f"{imports}\nclass Contract:\n    @{wrapper}\n    @{marker}\n"
-            '    def declared(value):\n        raise NotImplementedError("contract")\n'
+            '    def declared(value):\n        raise NotImplementedError("unfinished")\n'
         )
 
         assert AIPlaceholdersRule().check(source, "test.py") == []
@@ -1188,6 +1292,6 @@ def test_placeholder_contracts_refuse_pep695_shadowed_markers(
 def test_generic_contract_keeps_unshadowed_protocol_marker() -> None:
     source = (
         "from typing import Protocol\nclass Contract[T](Protocol):\n"
-        '    def read(self):\n        raise NotImplementedError("contract")\n'
+        '    def read(self):\n        raise NotImplementedError("unfinished")\n'
     )
     assert AIPlaceholdersRule().check(source, "doc.py") == []

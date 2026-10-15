@@ -16,7 +16,13 @@ license and attribution remain in the earlier session's
 [license record](../2026-10-13-agent-resume/licenses.json). No additional external
 or reserved holdout source is opened.
 
-Accepted decisions will precede behavior changes. Tests must first show
+The [agent adjudication](adjudication.json) accepts finite positive C004 message
+evidence and a marker-only comment highlight. G038/V015 retain their phrase
+highlights. C009 retains its published identifier-only span after the agents
+disagreed about a possible amendment. The
+[execution record](EXECUTION.md) preserves the reasoning and test evidence.
+
+Accepted decisions precede behavior changes. Tests first show
 any contract defect; implementation, docs and exact location checks follow.
 Historical annotations, report bytes, freezes, baseline and splits stay intact.
 Any candidate evaluation receives separate artifacts and an actual runtime hash.

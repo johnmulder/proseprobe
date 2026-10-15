@@ -25,10 +25,6 @@ work and its prerequisites.
 
 ## C004 and diagnostic highlights — active
 
-- [ ] K01 Obtain separate agent decisions for the C004 rejection boundary and
-  all four highlight differences; record rationale and resolve disagreements.
-- [ ] K02 Pin accepted C004 positive and negative examples with failing tests;
-  make the smallest justified correction, document the contract and commit.
 - [ ] K03 Pin the accepted G038, V015, C004 and C009 highlight units with exact
   source-slice tests for parameter stars, wrapped text and Unicode. Change
   implementation only where the agreed contract requires it; commit the stage.

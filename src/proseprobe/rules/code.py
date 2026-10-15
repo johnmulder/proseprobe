@@ -10,6 +10,7 @@ from typing import ClassVar
 from proseprobe.data.code_patterns import (
     AI_PLACEHOLDER_COMMENT_PATTERNS,
     AI_PLACEHOLDER_INLINE_PATTERNS,
+    AI_PLACEHOLDER_MESSAGES,
     COLLABORATIVE_COMMENT_PATTERNS,
     VERBOSE_COMMENT_PATTERNS,
 )
@@ -404,11 +405,18 @@ class AIPlaceholdersRule(Rule):
                 or not isinstance(node.exc, ast.Call)
                 or not isinstance(node.exc.func, ast.Name)
                 or node.exc.func.id != "NotImplementedError"
-                or not node.exc.args
+                or len(node.exc.args) != 1
+                or node.exc.keywords
                 or not isinstance(node.exc.args[0], ast.Constant)
                 or not isinstance(node.exc.args[0].value, str)
                 or node.lineno in reported_lines
             ):
+                continue
+            message = re.sub(r"\s+", " ", node.exc.args[0].value, flags=re.ASCII).strip(
+                " "
+            )
+            message = message.casefold().removesuffix(".")
+            if message not in AI_PLACEHOLDER_MESSAGES:
                 continue
             start_line, start_column, _, _ = parser.get_node_span(node)
             end_line, end_column = parser.get_node_span(node.exc)[2:]
