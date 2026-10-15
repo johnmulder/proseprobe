@@ -1,0 +1,116 @@
+{
+  "bundle_sha256": "79833a9b3de9e1bb68a2952ce3ca44f0dc05245ccf013c03ef379cc77bbe35b2",
+  "context": {
+    "format": "python",
+    "instructions": "Review the focus using every linked context page.\nRoot-authored development text; engineering review only.",
+    "link_directory": "/private/tmp",
+    "markdown_documents": [],
+    "pair_group": "agent-authored-pilot:documentation.py",
+    "python_evidence": "Raw headers only; module bindings and runtime behavior are not verified.",
+    "python_owners": [
+      {
+        "header_region": {
+          "column": 1,
+          "end_column": 36,
+          "end_line": 4,
+          "line": 4
+        },
+        "name": "fetch",
+        "node_type": "function",
+        "scope_region": {
+          "end_line": 12,
+          "line": 4
+        }
+      }
+    ],
+    "python_scope": "lexical-owners",
+    "questions": "Does this context supply the owner, headings or target facts you need?\nName any remaining context gaps; no human effectiveness claim.",
+    "reading_id": "p32d5b-python",
+    "region": {
+      "column": 1,
+      "end_column": 16,
+      "end_line": 9,
+      "line": 7
+    },
+    "rule_ids": [
+      "C009",
+      "C010"
+    ],
+    "section_roles": [
+      "focus",
+      "python-owner"
+    ],
+    "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+    "source_group": "agent-authored-pilot",
+    "source_id": "agent-authored-pilot:documentation.py",
+    "split": "development"
+  },
+  "context_sha256": "5e0f14ab7cbb657cba76e478deceb2832e4fe8066680ea5884b24de6a6dda913",
+  "readings": [
+    {
+      "index": 1,
+      "path": "/private/tmp/p32d5b-python-0001.txt",
+      "rendered_sha256": "31d24cf5a55185aeb12bb4e89518d1c15a6b5ac028f4ba0a1c40f7c6bef52325",
+      "rendered_text": "Review the focus using every linked context page.\nRoot-authored development text; engineering review only.\nContext reading 1/2: focus\nRead: [this reading](</private/tmp/p32d5b-python-0001.txt>)\nContext: 5e0f14ab7cbb657cba76e478deceb2832e4fe8066680ea5884b24de6a6dda913\nRules: C009, C010\nPrevious: none\nNext: [reading](</private/tmp/p32d5b-python-0002.txt>)\nSource rows: original code points; other rows: derived metadata.\nContext supplies evidence, not reviewed or clean coverage.\n```text\nL7 C 1-41 |     :param attempts: Number of attempts.\nL8 C 1-51 |     :param **extras: Additional positional values.\nL9 C 1-16 |     :rtype: int\n```\n\nDoes this context supply the owner, headings or target facts you need?\nName any remaining context gaps; no human effectiveness claim.\n",
+      "role": "focus",
+      "rows": [
+        {
+          "column": 1,
+          "end_column": 41,
+          "end_line": 7,
+          "line": 7,
+          "reading_line": 12,
+          "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+          "source_id": "agent-authored-pilot:documentation.py",
+          "source_line_ending": "\n",
+          "text": "    :param attempts: Number of attempts."
+        },
+        {
+          "column": 1,
+          "end_column": 51,
+          "end_line": 8,
+          "line": 8,
+          "reading_line": 13,
+          "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+          "source_id": "agent-authored-pilot:documentation.py",
+          "source_line_ending": "\n",
+          "text": "    :param **extras: Additional positional values."
+        },
+        {
+          "column": 1,
+          "end_column": 16,
+          "end_line": 9,
+          "line": 9,
+          "reading_line": 14,
+          "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+          "source_id": "agent-authored-pilot:documentation.py",
+          "source_line_ending": "\n",
+          "text": "    :rtype: int"
+        }
+      ],
+      "total": 2
+    },
+    {
+      "index": 2,
+      "path": "/private/tmp/p32d5b-python-0002.txt",
+      "rendered_sha256": "31d0acfb35791c29eef7497de12d5fb154afe9cca2356fb1669531858c01dbef",
+      "rendered_text": "Review the focus using every linked context page.\nRoot-authored development text; engineering review only.\nContext reading 2/2: python-owner\nRead: [this reading](</private/tmp/p32d5b-python-0002.txt>)\nContext: 5e0f14ab7cbb657cba76e478deceb2832e4fe8066680ea5884b24de6a6dda913\nRules: C009, C010\nPrevious: [reading](</private/tmp/p32d5b-python-0001.txt>)\nNext: none\nSource rows: original code points; other rows: derived metadata.\nContext supplies evidence, not reviewed or clean coverage.\n```text\n{\"header_region\": {\"column\": 1, \"end_column\": 36, \"end_line\": 4, \"line\": \n4}, \"name\": \"fetch\", \"node_type\": \"function\", \"scope_region\": {\"end_line\": \n12, \"line\": 4}}\nL4 C 1-36 | def fetch(target, *extras) -> None:\n```\n\nDoes this context supply the owner, headings or target facts you need?\nName any remaining context gaps; no human effectiveness claim.\n",
+      "role": "python-owner",
+      "rows": [
+        {
+          "column": 1,
+          "end_column": 36,
+          "end_line": 4,
+          "line": 4,
+          "reading_line": 15,
+          "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+          "source_id": "agent-authored-pilot:documentation.py",
+          "source_line_ending": "\n",
+          "text": "def fetch(target, *extras) -> None:"
+        }
+      ],
+      "total": 2
+    }
+  ],
+  "version": 1
+}

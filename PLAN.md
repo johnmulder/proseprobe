@@ -1,6 +1,6 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-15. Bounded diagnostic context is active in the
+Updated: 2026-10-15. P32D.5b is complete; evidence is in the
 [reading-context record](quality/reviews/2026-10-14-reading-context/README.md).
 Earlier frozen reviews stay unchanged. This checklist contains only outstanding
 work and its prerequisites.
@@ -22,13 +22,6 @@ work and its prerequisites.
 - Keep defaults and experimental status unchanged without sufficient evidence.
 - If a future review is requested, include its direct reading link and limit it
   to 80 lines of 80 characters, including instructions and questions.
-
-## Bounded diagnostic context — active
-
-- [ ] R03 Have agents review generated bounded examples and the final change;
-  fix concrete defects test first and retain their actual judgments.
-- [ ] R04 Pass repository gates, validate evidence and preserved historical
-  artifacts, commit results and remove completed actions from this checklist.
 
 ## Independent human annotation — deferred
 

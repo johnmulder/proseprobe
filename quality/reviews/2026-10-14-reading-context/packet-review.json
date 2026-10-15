@@ -1,0 +1,436 @@
+{
+  "version": 1,
+  "reviewed_at_utc": "2026-10-15T06:09:31.376959+00:00",
+  "reviewer_identity": {
+    "kind": "Codex AI subagent",
+    "task_name": "/root/bounded_context_packet_reader",
+    "parent_task": "/root",
+    "model_identity": "Exact model identifier is not exposed in this reviewer context; no model name inferred",
+    "human_reviewer": false,
+    "source_author": false
+  },
+  "exposure": {
+    "population": "Previously exposed root-authored development challenges; engineering context review only",
+    "source_attribution": "Codex root agent for the ProseProbe project",
+    "independence": "Engineering reading of previously exposed root-authored development challenges; not independent human or end-user evidence",
+    "read_scope": "Only RTK instructions, the two supplied first readings and every linked adjacent page, and the four explicitly allowed example metadata files",
+    "implementation_tests_prior_labels_detector_outputs_external_manifests_holdout_read": false,
+    "project_code_executed_or_imported": false,
+    "analysis_tools": "Standalone Python standard library for hashes, code-point and physical-line counts, link/row comparisons, and JSON report writing",
+    "final_rule_annotations_performed": false
+  },
+  "reviewed_files": [
+    {
+      "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-14-reading-context/examples/selection.json",
+      "sha256": "3136dcc4ca60ec84a55a3a0499740b728347d8b1b654e6724611e46db9506f88",
+      "purpose": "Allowed mapping and binding metadata; no prediction labels"
+    },
+    {
+      "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-14-reading-context/examples/index.json",
+      "sha256": "52e8ef0f83c8a6a58f16c4bfa22dd0d5bb5a9e4524951a4b615e51ea5a083f59",
+      "purpose": "Allowed mapping and binding metadata; no prediction labels"
+    },
+    {
+      "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-14-reading-context/examples/p32d5b-python.json",
+      "sha256": "a7f42823181d19d8af4ae955e91c0016846393e786e9d9704f819cc48c27f984",
+      "purpose": "Allowed mapping and binding metadata; no prediction labels"
+    },
+    {
+      "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-14-reading-context/examples/p32d5b-links.json",
+      "sha256": "0e2d247fd3a247dbf3629b80cb79f77bab73f7f9878557e20173cebb0f546f51",
+      "purpose": "Allowed mapping and binding metadata; no prediction labels"
+    },
+    {
+      "path": "/private/tmp/p32d5b-python-0001.txt",
+      "sha256": "31d24cf5a55185aeb12bb4e89518d1c15a6b5ac028f4ba0a1c40f7c6bef52325",
+      "purpose": "Actual bounded context reading; read via linked page sequence"
+    },
+    {
+      "path": "/private/tmp/p32d5b-python-0002.txt",
+      "sha256": "31d0acfb35791c29eef7497de12d5fb154afe9cca2356fb1669531858c01dbef",
+      "purpose": "Actual bounded context reading; read via linked page sequence"
+    },
+    {
+      "path": "/private/tmp/p32d5b-links-0001.txt",
+      "sha256": "ada0fd4a9a15cedcffbe94bce9fc057bbecc562571bd196a9dc0b2953b17075d",
+      "purpose": "Actual bounded context reading; read via linked page sequence"
+    },
+    {
+      "path": "/private/tmp/p32d5b-links-0002.txt",
+      "sha256": "55d9a1fee0c9794b67fc365dec967925ef490747cdfc74da52e4537cd35223ec",
+      "purpose": "Actual bounded context reading; read via linked page sequence"
+    },
+    {
+      "path": "/private/tmp/p32d5b-links-0003.txt",
+      "sha256": "8302b47b60650f24a9f9dfc239e3c53308f20310ee97947df303d6b2b39c4a9a",
+      "purpose": "Actual bounded context reading; read via linked page sequence"
+    },
+    {
+      "path": "/private/tmp/p32d5b-links-0004.txt",
+      "sha256": "ac74fb949def23e85c8ed042e9ce73f20d754fe146f866ed152d62eb1c50ca18",
+      "purpose": "Actual bounded context reading; read via linked page sequence"
+    },
+    {
+      "path": "/private/tmp/p32d5b-links-0005.txt",
+      "sha256": "d9f9153e94681cd64a8b7c342fd97bc510f89d178d588858ccd0ed55610d2284",
+      "purpose": "Actual bounded context reading; read via linked page sequence"
+    },
+    {
+      "path": "/private/tmp/p32d5b-links-0006.txt",
+      "sha256": "a12f54192f106d5b7402629e7ec4a7817b4cd5888faff904d85297b76052fd01",
+      "purpose": "Actual bounded context reading; read via linked page sequence"
+    }
+  ],
+  "subject_runtime_identity_recorded_in_index": {
+    "git": {
+      "head": "06e5613925e267b493fbec5e72090e5657b93b21",
+      "scope": [
+        "benchmarks",
+        "src/proseprobe"
+      ],
+      "staged_dirty": false,
+      "tracked_worktree_dirty": true,
+      "untracked_python_files": []
+    },
+    "identity_scope": "package and evaluator Python source names and exact bytes; caches, corpora and documents excluded",
+    "package_version": "0.1.0",
+    "source_files": [
+      "evaluator/__init__.py",
+      "evaluator/bench_rules.py",
+      "evaluator/corpora.py",
+      "evaluator/evaluation_identity.py",
+      "evaluator/memory_probe.py",
+      "evaluator/native_link_context.py",
+      "evaluator/native_reference_context.py",
+      "evaluator/paired_quality.py",
+      "evaluator/quality_scoring.py",
+      "evaluator/regression_gate.py",
+      "evaluator/review_context.py",
+      "evaluator/review_readings.py",
+      "evaluator/rule_quality.py",
+      "evaluator/source_intervals.py",
+      "evaluator/startup_probe.py",
+      "evaluator/usefulness.py",
+      "package/__init__.py",
+      "package/__main__.py",
+      "package/_ansi.py",
+      "package/_rule_docs.py",
+      "package/cli.py",
+      "package/config.py",
+      "package/core/__init__.py",
+      "package/core/baseline.py",
+      "package/core/linter.py",
+      "package/core/policy.py",
+      "package/core/reporter.py",
+      "package/data/__init__.py",
+      "package/data/code_patterns.py",
+      "package/data/patterns.py",
+      "package/data/phrases.py",
+      "package/data/style_patterns.py",
+      "package/data/vocabulary.py",
+      "package/parsers/__init__.py",
+      "package/parsers/markdown.py",
+      "package/parsers/prose.py",
+      "package/parsers/python.py",
+      "package/profiles.py",
+      "package/rules/__init__.py",
+      "package/rules/_phrases.py",
+      "package/rules/base.py",
+      "package/rules/code.py",
+      "package/rules/grammar.py",
+      "package/rules/markup.py",
+      "package/rules/struct.py",
+      "package/rules/style.py",
+      "package/rules/vocab.py"
+    ],
+    "source_files_count": 47,
+    "source_roots": {
+      "evaluator": "/Users/johnmulder/Experiments/proseprobe/benchmarks",
+      "package": "/Users/johnmulder/Experiments/proseprobe/src/proseprobe"
+    },
+    "source_sha256": "b471e21df1ccbc55ff64bc3ef5ec1dcd33c051d22cdff2ce2302c24d89fa2dd4"
+  },
+  "runtime_identity_verification_scope": "Copied from allowed index metadata, which records runtime identity rather than predictions. No implementation bytes were read or rehashed, so this review does not independently establish the current implementation identity.",
+  "selection_sha256_matches_index": true,
+  "packets": [
+    {
+      "reading_id": "p32d5b-python",
+      "source_id": "agent-authored-pilot:documentation.py",
+      "source_sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+      "context_sha256": "5e0f14ab7cbb657cba76e478deceb2832e4fe8066680ea5884b24de6a6dda913",
+      "binding_checks": {
+        "actual_bundle_file_sha256_matches_index_record_sha256": true,
+        "bundle_digest_field_matches_index": true,
+        "context_identifier_matches_index_and_all_page_headers": true,
+        "selection_source_identity_matches_bundle": true,
+        "page_paths_roles_and_count_match_index": true
+      },
+      "pages": [
+        {
+          "path": "/private/tmp/p32d5b-python-0001.txt",
+          "sha256": "31d24cf5a55185aeb12bb4e89518d1c15a6b5ac028f4ba0a1c40f7c6bef52325",
+          "role": "focus",
+          "physical_lines": 18,
+          "max_unicode_codepoints_per_line": 73,
+          "within_80_by_80": true,
+          "rendered_text_and_sha256_match_bundle": true,
+          "direct_and_adjacent_links": {
+            "Read": "/private/tmp/p32d5b-python-0001.txt",
+            "Previous": null,
+            "Next": "/private/tmp/p32d5b-python-0002.txt"
+          },
+          "links_match_expected_self_previous_next": true,
+          "printed_source_rows_and_half_open_column_lengths_match_bundle": true
+        },
+        {
+          "path": "/private/tmp/p32d5b-python-0002.txt",
+          "sha256": "31d0acfb35791c29eef7497de12d5fb154afe9cca2356fb1669531858c01dbef",
+          "role": "python-owner",
+          "physical_lines": 19,
+          "max_unicode_codepoints_per_line": 75,
+          "within_80_by_80": true,
+          "rendered_text_and_sha256_match_bundle": true,
+          "direct_and_adjacent_links": {
+            "Read": "/private/tmp/p32d5b-python-0002.txt",
+            "Previous": "/private/tmp/p32d5b-python-0001.txt",
+            "Next": null
+          },
+          "links_match_expected_self_previous_next": true,
+          "printed_source_rows_and_half_open_column_lengths_match_bundle": true
+        }
+      ],
+      "reconstructed_markdown_sources": []
+    },
+    {
+      "reading_id": "p32d5b-links",
+      "source_id": "agent-authored-pilot:entry.md",
+      "source_sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+      "context_sha256": "15f792e65b3b9ee7d10ca078393f4c699cfcf9df0ab4cbf5168bd5b19d83c0f4",
+      "binding_checks": {
+        "actual_bundle_file_sha256_matches_index_record_sha256": true,
+        "bundle_digest_field_matches_index": true,
+        "context_identifier_matches_index_and_all_page_headers": true,
+        "selection_source_identity_matches_bundle": true,
+        "page_paths_roles_and_count_match_index": true
+      },
+      "pages": [
+        {
+          "path": "/private/tmp/p32d5b-links-0001.txt",
+          "sha256": "ada0fd4a9a15cedcffbe94bce9fc057bbecc562571bd196a9dc0b2953b17075d",
+          "role": "focus",
+          "physical_lines": 20,
+          "max_unicode_codepoints_per_line": 79,
+          "within_80_by_80": true,
+          "rendered_text_and_sha256_match_bundle": true,
+          "direct_and_adjacent_links": {
+            "Read": "/private/tmp/p32d5b-links-0001.txt",
+            "Previous": null,
+            "Next": "/private/tmp/p32d5b-links-0002.txt"
+          },
+          "links_match_expected_self_previous_next": true,
+          "printed_source_rows_and_half_open_column_lengths_match_bundle": true
+        },
+        {
+          "path": "/private/tmp/p32d5b-links-0002.txt",
+          "sha256": "55d9a1fee0c9794b67fc365dec967925ef490747cdfc74da52e4537cd35223ec",
+          "role": "markdown-source",
+          "physical_lines": 23,
+          "max_unicode_codepoints_per_line": 79,
+          "within_80_by_80": true,
+          "rendered_text_and_sha256_match_bundle": true,
+          "direct_and_adjacent_links": {
+            "Read": "/private/tmp/p32d5b-links-0002.txt",
+            "Previous": "/private/tmp/p32d5b-links-0001.txt",
+            "Next": "/private/tmp/p32d5b-links-0003.txt"
+          },
+          "links_match_expected_self_previous_next": true,
+          "printed_source_rows_and_half_open_column_lengths_match_bundle": true
+        },
+        {
+          "path": "/private/tmp/p32d5b-links-0003.txt",
+          "sha256": "8302b47b60650f24a9f9dfc239e3c53308f20310ee97947df303d6b2b39c4a9a",
+          "role": "markdown-inventory",
+          "physical_lines": 21,
+          "max_unicode_codepoints_per_line": 73,
+          "within_80_by_80": true,
+          "rendered_text_and_sha256_match_bundle": true,
+          "direct_and_adjacent_links": {
+            "Read": "/private/tmp/p32d5b-links-0003.txt",
+            "Previous": "/private/tmp/p32d5b-links-0002.txt",
+            "Next": "/private/tmp/p32d5b-links-0004.txt"
+          },
+          "links_match_expected_self_previous_next": true,
+          "printed_source_rows_and_half_open_column_lengths_match_bundle": true
+        },
+        {
+          "path": "/private/tmp/p32d5b-links-0004.txt",
+          "sha256": "ac74fb949def23e85c8ed042e9ce73f20d754fe146f866ed152d62eb1c50ca18",
+          "role": "native-context",
+          "physical_lines": 33,
+          "max_unicode_codepoints_per_line": 75,
+          "within_80_by_80": true,
+          "rendered_text_and_sha256_match_bundle": true,
+          "direct_and_adjacent_links": {
+            "Read": "/private/tmp/p32d5b-links-0004.txt",
+            "Previous": "/private/tmp/p32d5b-links-0003.txt",
+            "Next": "/private/tmp/p32d5b-links-0005.txt"
+          },
+          "links_match_expected_self_previous_next": true,
+          "printed_source_rows_and_half_open_column_lengths_match_bundle": true
+        },
+        {
+          "path": "/private/tmp/p32d5b-links-0005.txt",
+          "sha256": "d9f9153e94681cd64a8b7c342fd97bc510f89d178d588858ccd0ed55610d2284",
+          "role": "markdown-target",
+          "physical_lines": 27,
+          "max_unicode_codepoints_per_line": 76,
+          "within_80_by_80": true,
+          "rendered_text_and_sha256_match_bundle": true,
+          "direct_and_adjacent_links": {
+            "Read": "/private/tmp/p32d5b-links-0005.txt",
+            "Previous": "/private/tmp/p32d5b-links-0004.txt",
+            "Next": "/private/tmp/p32d5b-links-0006.txt"
+          },
+          "links_match_expected_self_previous_next": true,
+          "printed_source_rows_and_half_open_column_lengths_match_bundle": true
+        },
+        {
+          "path": "/private/tmp/p32d5b-links-0006.txt",
+          "sha256": "a12f54192f106d5b7402629e7ec4a7817b4cd5888faff904d85297b76052fd01",
+          "role": "markdown-inventory",
+          "physical_lines": 22,
+          "max_unicode_codepoints_per_line": 75,
+          "within_80_by_80": true,
+          "rendered_text_and_sha256_match_bundle": true,
+          "direct_and_adjacent_links": {
+            "Read": "/private/tmp/p32d5b-links-0006.txt",
+            "Previous": "/private/tmp/p32d5b-links-0005.txt",
+            "Next": null
+          },
+          "links_match_expected_self_previous_next": true,
+          "printed_source_rows_and_half_open_column_lengths_match_bundle": true
+        }
+      ],
+      "reconstructed_markdown_sources": [
+        {
+          "role": "markdown-source",
+          "source_id": "agent-authored-pilot:entry.md",
+          "sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+          "matches_declared_source_sha256": true,
+          "source_physical_lines": 7,
+          "method": "Concatenate mapped source rows with their declared original line endings; no original source file read"
+        },
+        {
+          "role": "markdown-target",
+          "source_id": "setup.md",
+          "sha256": "30e40d742a09cb169b0abac6b3fb5a5fc1cafd287b3c61d7cad9a6cee1decfbb",
+          "matches_declared_source_sha256": true,
+          "source_physical_lines": 11,
+          "method": "Concatenate mapped source rows with their declared original line endings; no original source file read"
+        }
+      ]
+    }
+  ],
+  "acceptance": [
+    {
+      "area": "Physical page limits",
+      "status": "accepted_for_reviewed_pages",
+      "rationale": "All eight actual files satisfy at most 80 physical lines and at most 80 Unicode code points per physical line, excluding line terminators. Observed maxima are 33 physical lines and 79 code points."
+    },
+    {
+      "area": "Direct and adjacent navigation",
+      "status": "accepted_for_reviewed_pages",
+      "rationale": "Every Read link targets its own actual file. Previous and Next form the expected two-page and six-page sequences with none at the ends; each linked page was opened. No linked reading was omitted.",
+      "verified": true
+    },
+    {
+      "area": "Mapping and binding",
+      "status": "accepted_for_supplied_bindings",
+      "rationale": "Actual reading bytes and SHA-256 values match bundle rendered_text and rendered_sha256; actual bundle file hashes match index record sha256. Source identities and context identifiers agree across the allowed selection, index, bundles, and page headers. All printed row text and end-exclusive code-point widths match the row mappings. Digest algorithms for context_sha256 and bundle_sha256 were not rederived.",
+      "source_rows_match": true
+    },
+    {
+      "area": "Python owning signature",
+      "status": "accepted_with_context_limit",
+      "rationale": "The owner page supplies def fetch(target, *extras) -> None: at source line 4 and a derived lexical scope of lines 4-12 containing the focus at lines 7-9. That supports identifying the selected owner signature and comparing its explicit parameters and return annotation with the focus. The docstring opener and intervening/body source are absent, so raw source alone does not independently prove the lexical ownership relationship."
+    },
+    {
+      "area": "Markdown whole-source headings and fenced example",
+      "status": "accepted_for_selected_source_and_target",
+      "rationale": "Mapped source rows reconstruct all seven lines of entry.md and match its declared SHA-256. Mapped target rows reconstruct all eleven lines of setup.md and match its declared SHA-256. The target exposes both fences around # Configuration at lines 5-7 and the real headings # Install at line 1 and ## Configuration notes at line 9. The supplied static GitHub-style inventories distinguish the fenced example from heading/anchor membership."
+    },
+    {
+      "area": "Source and target anchor membership",
+      "status": "accepted_with_declared_static_scope",
+      "rationale": "The source inventory supplies workflow, and the target inventory supplies install and configuration-notes, with complete supported static heading/anchor-ID membership explicitly declared. Together with the reconstructed raw documents, this supplies membership evidence for the focus fragments workflow, limitations, and configuration, plus the adjacent install reference. This acceptance is confined to those exposed static documents and their declared renderer scope."
+    },
+    {
+      "area": "Present target versus pinned absence",
+      "status": "accepted_as_pinned_metadata_evidence",
+      "rationale": "The native-context page explicitly distinguishes present setup.md, bound to the reconstructed target hash, from absent missing.md. Its absence_scope, revision, inventory hash, and manifest hash limit the absence claim to a pinned offline inventory. No external manifest or live filesystem target check was performed."
+    }
+  ],
+  "findings": [
+    {
+      "id": "PCR-001",
+      "kind": "missing_raw_context",
+      "severity": "limitation",
+      "area": "Python owner verification",
+      "pages": [
+        "/private/tmp/p32d5b-python-0001.txt",
+        "/private/tmp/p32d5b-python-0002.txt"
+      ],
+      "detail": "The focus contains documentation fields, and the owner page contains only a raw function header plus derived owner metadata. Neither page shows the docstring opener or source connecting that header to the documentation fields.",
+      "implication": "A reader can identify the supplied owning signature but cannot independently verify the lexical/docstring association from raw page source alone.",
+      "acceptance_effect": "Accept only with the derived lexical-owner binding; do not present this as a standalone raw-source proof."
+    },
+    {
+      "id": "PCR-002",
+      "kind": "display_ambiguity",
+      "severity": "nonblocking",
+      "area": "Source column boundaries",
+      "pages": [
+        "/private/tmp/p32d5b-links-0001.txt",
+        "/private/tmp/p32d5b-links-0002.txt",
+        "/private/tmp/p32d5b-links-0005.txt"
+      ],
+      "detail": "A wrapped source line is shown as C 1-61 followed by C61-70, but the page does not state that the end column is exclusive. The allowed mappings establish that the widths equal end_column minus column and that adjoining chunks do not overlap.",
+      "implication": "A page-only reader could interpret the shared boundary column as overlap when reconstructing or locating text.",
+      "acceptance_effect": "The allowlisted mappings resolve the ambiguity for this review; the raw source text remains intact."
+    },
+    {
+      "id": "PCR-003",
+      "kind": "display_ambiguity",
+      "severity": "nonblocking",
+      "area": "Wrapped derived metadata",
+      "pages": [
+        "/private/tmp/p32d5b-links-0003.txt",
+        "/private/tmp/p32d5b-links-0004.txt",
+        "/private/tmp/p32d5b-links-0006.txt"
+      ],
+      "detail": "Derived JSON-like metadata is hard-wrapped inside string values without a continuation marker. For example, the Configuration notes title is split between two physical lines on the target inventory page.",
+      "implication": "The displayed block is useful for human inspection but cannot be treated as independently parseable JSON or as evidence that those inserted display line breaks occur in the metadata values.",
+      "acceptance_effect": "The allowed bundle confirms the unsplit value and exact binding. No target/source content is missing because of this wrapping."
+    },
+    {
+      "id": "PCR-004",
+      "kind": "provenance_limit",
+      "severity": "limitation",
+      "area": "Absence evidence",
+      "pages": [
+        "/private/tmp/p32d5b-links-0004.txt"
+      ],
+      "detail": "The absent status for missing.md is asserted by supplied pinned-inventory metadata; the underlying inventory and manifest were deliberately not opened.",
+      "implication": "The page supports a scoped pinned absence statement, not independent verification of that inventory or a claim about the current filesystem.",
+      "acceptance_effect": "Preserve the explicit absence_scope and hashes when citing this evidence."
+    }
+  ],
+  "overall_assessment": "Accepted as a bounded engineering context demonstration for these two exposed development examples, subject to the stated context and provenance limits. The packet supplies owner-signature and selected Markdown heading/target facts, while preserving a visible distinction between raw source and derived metadata.",
+  "claims_not_supported": [
+    "Independent human usefulness or effectiveness",
+    "Representative coverage or clean coverage",
+    "Rule precision, recall, or final correctness annotations",
+    "Current live target existence or independent pinned-manifest validation",
+    "Independent revalidation of Python lexical parsing or the recorded implementation identity"
+  ]
+}

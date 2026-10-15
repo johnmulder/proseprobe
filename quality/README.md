@@ -169,9 +169,17 @@ constructing a context object yourself does not establish absence.
 Pass a short absolute `link_directory` and a short `reading_id`. Directory
 names with control characters, angle brackets, URI delimiters, percent escapes,
 ampersands, backslashes or a leading double slash are rejected. Context paginates
-without truncation. Oversized repeated instructions, questions or links fail before a
-bundle is returned. Source rows retain reversible original columns and endings;
-derived inventory rows are labeled separately.
+without truncation. Oversized repeated instructions, questions or links fail
+before a bundle is returned. Source rows retain reversible original columns
+and endings; derived inventory rows are labeled separately.
+
+Source columns start at 1 and their endpoints are exclusive; adjacent chunks
+share a boundary without overlapping. Derived metadata wraps for display and
+must be read through the bundle's structured fields when exact values matter.
+Include these conventions in the caller's review instructions when asking for
+precise spans. Python owner association is derived parser evidence; header-only
+companions do not show the intervening body. Pinned target absence describes
+the validated inventory, not a live filesystem check.
 
 Persist every page's exact `rendered_text` at its returned `path` and freeze
 the complete JSON bundle, including its ordered page list and canonical hashes.

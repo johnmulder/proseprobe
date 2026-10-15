@@ -59,3 +59,30 @@ mismatches. Strict typing also passes for both reading helpers with dependency
 imports silent. Exact RED/GREEN logs and final runtime identity are retained
 in `tdd-markdown.json`; historical logs are not rebound to the final runtime.
 No production rule, default, baseline, frozen label or source split changed.
+
+The Python milestone was committed as `06e5613`; the Markdown/native milestone
+and tested review corrections were committed as `36b36f2`.
+
+R03: The new example selection names two previously exposed root-authored
+development sources. The source IDs, hashes and split/group metadata were
+recorded before opening those bytes for this task. The existing offline native
+validator rechecked the declared authored context. No external whole-manifest
+loader or reserved holdout source was used.
+
+The examples contain two Python pages and six Markdown/native pages. A fresh
+agent read all eight actual linked files and their allowed binding metadata,
+without implementation, tests, prior labels or detector outputs. It verified
+their bounds, page bytes, row mappings and navigation, and reconstructed both
+complete Markdown documents to their declared hashes. Its exact scoped
+acceptance and limitations remain in `packet-review.json`. These are exposed
+engineering judgments, not independent annotation or usefulness measurements.
+
+R04: The root separately validated canonical context/bundle hashes, exact page
+bytes, adjacent links, mapped source slices/endings and full Markdown
+reconstruction against the selected immutable originals/targets. It rechecked
+the native validator's complete authored reference proof, every final code
+review hash and all 13 RED/GREEN log envelopes. Both retained final runtime
+digests match the committed implementation bytes. Git comparison against
+`42ab414` confirms that prior review directories, external freezes, curated
+corpora, production code and the baseline have no changes. The final evidence
+inventory is retained in `validation.json`; completed actions leave `PLAN.md`.

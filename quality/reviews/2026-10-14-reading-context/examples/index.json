@@ -1,0 +1,116 @@
+{
+  "native_inputs": {
+    "native_context": {
+      "path": "quality/reviews/2026-10-13-agent-resume/authored-local-links/native-context.json",
+      "sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528"
+    },
+    "native_source_manifest": {
+      "path": "quality/reviews/2026-10-13-agent-resume/authored-native-sources.json",
+      "sha256": "6d905cfe606c2b55818a3e3e457244271b0ce893aedcdd10559ccfc5d7dbcb7a"
+    }
+  },
+  "population": "Previously exposed root-authored development challenges; engineering context review only",
+  "records": [
+    {
+      "bundle": "quality/reviews/2026-10-14-reading-context/examples/p32d5b-python.json",
+      "bundle_sha256": "79833a9b3de9e1bb68a2952ce3ca44f0dc05245ccf013c03ef379cc77bbe35b2",
+      "context_sha256": "5e0f14ab7cbb657cba76e478deceb2832e4fe8066680ea5884b24de6a6dda913",
+      "first_reading": "/private/tmp/p32d5b-python-0001.txt",
+      "pages": 2,
+      "roles": [
+        "focus",
+        "python-owner"
+      ],
+      "sha256": "a7f42823181d19d8af4ae955e91c0016846393e786e9d9704f819cc48c27f984",
+      "source_id": "agent-authored-pilot:documentation.py"
+    },
+    {
+      "bundle": "quality/reviews/2026-10-14-reading-context/examples/p32d5b-links.json",
+      "bundle_sha256": "616d13d7a4b94890fd8a15ebc61f0ed4d050183267304421f1162338a13d1a55",
+      "context_sha256": "15f792e65b3b9ee7d10ca078393f4c699cfcf9df0ab4cbf5168bd5b19d83c0f4",
+      "first_reading": "/private/tmp/p32d5b-links-0001.txt",
+      "pages": 6,
+      "roles": [
+        "focus",
+        "markdown-source",
+        "markdown-inventory",
+        "native-context",
+        "markdown-target",
+        "markdown-inventory"
+      ],
+      "sha256": "0e2d247fd3a247dbf3629b80cb79f77bab73f7f9878557e20173cebb0f546f51",
+      "source_id": "agent-authored-pilot:entry.md"
+    }
+  ],
+  "runtime": {
+    "git": {
+      "head": "06e5613925e267b493fbec5e72090e5657b93b21",
+      "scope": [
+        "benchmarks",
+        "src/proseprobe"
+      ],
+      "staged_dirty": false,
+      "tracked_worktree_dirty": true,
+      "untracked_python_files": []
+    },
+    "identity_scope": "package and evaluator Python source names and exact bytes; caches, corpora and documents excluded",
+    "package_version": "0.1.0",
+    "source_files": [
+      "evaluator/__init__.py",
+      "evaluator/bench_rules.py",
+      "evaluator/corpora.py",
+      "evaluator/evaluation_identity.py",
+      "evaluator/memory_probe.py",
+      "evaluator/native_link_context.py",
+      "evaluator/native_reference_context.py",
+      "evaluator/paired_quality.py",
+      "evaluator/quality_scoring.py",
+      "evaluator/regression_gate.py",
+      "evaluator/review_context.py",
+      "evaluator/review_readings.py",
+      "evaluator/rule_quality.py",
+      "evaluator/source_intervals.py",
+      "evaluator/startup_probe.py",
+      "evaluator/usefulness.py",
+      "package/__init__.py",
+      "package/__main__.py",
+      "package/_ansi.py",
+      "package/_rule_docs.py",
+      "package/cli.py",
+      "package/config.py",
+      "package/core/__init__.py",
+      "package/core/baseline.py",
+      "package/core/linter.py",
+      "package/core/policy.py",
+      "package/core/reporter.py",
+      "package/data/__init__.py",
+      "package/data/code_patterns.py",
+      "package/data/patterns.py",
+      "package/data/phrases.py",
+      "package/data/style_patterns.py",
+      "package/data/vocabulary.py",
+      "package/parsers/__init__.py",
+      "package/parsers/markdown.py",
+      "package/parsers/prose.py",
+      "package/parsers/python.py",
+      "package/profiles.py",
+      "package/rules/__init__.py",
+      "package/rules/_phrases.py",
+      "package/rules/base.py",
+      "package/rules/code.py",
+      "package/rules/grammar.py",
+      "package/rules/markup.py",
+      "package/rules/struct.py",
+      "package/rules/style.py",
+      "package/rules/vocab.py"
+    ],
+    "source_files_count": 47,
+    "source_roots": {
+      "evaluator": "/Users/johnmulder/Experiments/proseprobe/benchmarks",
+      "package": "/Users/johnmulder/Experiments/proseprobe/src/proseprobe"
+    },
+    "source_sha256": "b471e21df1ccbc55ff64bc3ef5ec1dcd33c051d22cdff2ce2302c24d89fa2dd4"
+  },
+  "selection_sha256": "3136dcc4ca60ec84a55a3a0499740b728347d8b1b654e6724611e46db9506f88",
+  "version": 1
+}

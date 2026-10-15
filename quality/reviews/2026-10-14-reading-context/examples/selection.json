@@ -1,0 +1,63 @@
+{
+  "attribution": "Codex root agent for the ProseProbe project",
+  "cache_base": "downloads/evaluation/blind/agent-resume-2026-10-13-v1",
+  "license": "MIT",
+  "link_directory": "/private/tmp",
+  "native_cache_root": "downloads/evaluation",
+  "native_context": "quality/reviews/2026-10-13-agent-resume/authored-local-links/native-context.json",
+  "native_repository": "downloads/evaluation/agent-authored/agent-resume-2026-10-13-v1/repository",
+  "native_source_manifest": "quality/reviews/2026-10-13-agent-resume/authored-native-sources.json",
+  "population": "Previously exposed root-authored development challenges; engineering context review only",
+  "reserved_holdout_opened": false,
+  "selected_before_new_source_reads": true,
+  "selections": [
+    {
+      "cohort": "authored-challenge",
+      "context": {
+        "format": "python",
+        "pair_group": "agent-authored-pilot:documentation.py",
+        "source_group": "agent-authored-pilot",
+        "split": "development"
+      },
+      "end_line": 9,
+      "index": "quality/reviews/2026-10-13-agent-resume/authored-challenge/index.json",
+      "index_sha256": "2eef722e1bc2794bff37ed83e7520d46965dc1bcc3c0c469ac8cb77984b6c25f",
+      "path": "originals/0001.py",
+      "reading_id": "p32d5b-python",
+      "rule_ids": [
+        "C009",
+        "C010"
+      ],
+      "source": {
+        "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+        "source_id": "agent-authored-pilot:documentation.py"
+      },
+      "start_line": 7
+    },
+    {
+      "cohort": "authored-local-links",
+      "context": {
+        "format": "markdown",
+        "pair_group": "agent-authored-pilot:entry.md",
+        "source_group": "agent-authored-pilot",
+        "split": "development"
+      },
+      "end_line": 7,
+      "index": "quality/reviews/2026-10-13-agent-resume/authored-local-links/index.json",
+      "index_sha256": "e82569b45e40a826b380bc580e60907f9ec2b98c93a9dcc6097f35a5f4a399f7",
+      "path": "originals/0000.md",
+      "reading_id": "p32d5b-links",
+      "rule_ids": [
+        "M011",
+        "M012"
+      ],
+      "source": {
+        "sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+        "source_id": "agent-authored-pilot:entry.md"
+      },
+      "start_line": 4
+    }
+  ],
+  "stage": "R03",
+  "version": 1
+}
