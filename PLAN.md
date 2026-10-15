@@ -1,8 +1,9 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-14. The delegated agent review is complete; its results and
-policy decision are in the [execution record](quality/reviews/2026-10-13-agent-resume/EXECUTION.md).
-This checklist contains only outstanding work and its prerequisites.
+Updated: 2026-10-14. Contract resolution is active in the
+[contract review record](quality/reviews/2026-10-14-contracts/README.md).
+Earlier frozen reviews stay unchanged. This checklist contains only outstanding
+work and its prerequisites.
 
 ## Working rules
 
@@ -21,6 +22,21 @@ This checklist contains only outstanding work and its prerequisites.
 - Keep defaults and experimental status unchanged without sufficient evidence.
 - If a future review is requested, include its direct reading link and limit it
   to 80 lines of 80 characters, including instructions and questions.
+
+## C004 and diagnostic highlights — active
+
+- [ ] K01 Obtain separate agent decisions for the C004 rejection boundary and
+  all four highlight differences; record rationale and resolve disagreements.
+- [ ] K02 Pin accepted C004 positive and negative examples with failing tests;
+  make the smallest justified correction, document the contract and commit.
+- [ ] K03 Pin the accepted G038, V015, C004 and C009 highlight units with exact
+  source-slice tests for parameter stars, wrapped text and Unicode. Change
+  implementation only where the agreed contract requires it; commit the stage.
+- [ ] K04 Validate the candidate against historical fixed development labels
+  without rewriting them. Keep semantic matching separate from exact spans and
+  report any remaining annotation-contract differences explicitly.
+- [ ] K05 Obtain agent review of the final changes, pass repository gates,
+  record the decisions and remove completed actions from this checklist.
 
 ## Independent human annotation — deferred
 
@@ -67,9 +83,6 @@ Prerequisites: supported contexts and accepted independent development labels.
   misses, full-span accuracy, exclusions, coverage and usefulness judgments.
 - [ ] P32D.5 Publish per-rule/profile/format/context/source-group results with
   denominators and declared whole-group uncertainty; retain unavailable metrics.
-- [ ] P32D.5a Declare the intended highlight unit for G038, V015, C004 and C009
-  before assessing the four recorded endpoint differences. Keep exact-span
-  accuracy separate from semantic event matches; do not refresh accepted labels.
 - [ ] P32D.5b Bind required owning signatures, heading inventories and target
   context beside future bounded diagnostic readings. Start with failing row-map,
   context-selection and size-limit tests if packet generation needs a change.
@@ -78,9 +91,6 @@ Prerequisites: supported contexts and accepted independent development labels.
 - [ ] P32D.6b Assess G039 repeated-word precision on independently reviewed prose.
 - [ ] P32D.6c Assess C004 executable placeholders and C009 parameter-kind checks
   in supported Python contexts.
-- [ ] P32D.6d Clarify C004's intentional unsupported-operation boundary with
-  accepted contract examples before labeling the unresolved Requests guard.
-  Start with failing tests for any resulting behavior change.
 - [ ] P27.13 Assess G038 on untouched independent development examples.
 - [ ] P29.12 Assess C010 precision/usefulness under its narrow return contract;
   retain unsupported types and disagreements.

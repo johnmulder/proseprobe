@@ -1,0 +1,66 @@
+{
+  "artifacts": {
+    "docs/rules.md": {
+      "sha256": "e6b0f4aa70ba085842cb846d0e65038ba2ab914fe06c5cd0d27e71ef9076fcbc"
+    },
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/natural/originals/0005.py": {
+      "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c"
+    },
+    "quality/reviews/2026-10-13-agent-resume/challenge-originals.json": {
+      "sha256": "065868c38a6ffb5476ed15a3fea019513eb2b4c05dfd0325bb8c7aa3505ce8d0"
+    },
+    "quality/reviews/2026-10-13-agent-resume/freeze.json": {
+      "sha256": "5d234b2877a646ea51164db038ffef04cdd89474de29dbb69a3012699fdb6b94"
+    },
+    "quality/reviews/2026-10-13-agent-resume/guidance.json": {
+      "sha256": "2d5025be7d2a121223f4f0659a4454fb33f0c243605dae896bd35d3c74587821"
+    },
+    "quality/reviews/2026-10-13-agent-resume/location-observations.json": {
+      "sha256": "b817d335fa80e5bdad94bad376d2d364e9e481ef266361f3ba4afb565e925cdc"
+    }
+  },
+  "historical_labels_mutable": false,
+  "holdout_opened": false,
+  "human_review": false,
+  "limits": [
+    "Agent contract judgments are informed development decisions after diagnostic exposure.",
+    "Wrapped Requests docstring is display context only; the byte-bound original remains unchanged.",
+    "Any new labels or candidate reports must be separate from historical frozen artifacts."
+  ],
+  "phase": "contract resolution after exposed development review",
+  "readings": [
+    {
+      "id": "K001",
+      "lines": 46,
+      "linked_view": "/private/tmp/proseprobe-K001.txt",
+      "max_columns": 77,
+      "path": "quality/reviews/2026-10-14-contracts/readings/K001.md",
+      "sha256": "c920ae7acc3312991e05c8f918f6d258a1a98eb289964eae2a95aac4bc033e4e"
+    },
+    {
+      "id": "K002",
+      "lines": 27,
+      "linked_view": "/private/tmp/proseprobe-K002.txt",
+      "max_columns": 76,
+      "path": "quality/reviews/2026-10-14-contracts/readings/K002.md",
+      "sha256": "8b1ff0a6452bef0cfd66fa573656e019ba802819a3b23b78c662ca863ca262f3"
+    },
+    {
+      "id": "K003",
+      "lines": 27,
+      "linked_view": "/private/tmp/proseprobe-K003.txt",
+      "max_columns": 76,
+      "path": "quality/reviews/2026-10-14-contracts/readings/K003.md",
+      "sha256": "16abb51cfcf1f22b2ea3aa592224039c5e24f1e6eb6a2994ce304d21ca52bbc5"
+    },
+    {
+      "id": "K004",
+      "lines": 33,
+      "linked_view": "/private/tmp/proseprobe-K004.txt",
+      "max_columns": 75,
+      "path": "quality/reviews/2026-10-14-contracts/readings/K004.md",
+      "sha256": "8c2270bab0bc9e2dd6e54dcd99be9cfcdb9044bcd2c89e61f9bfc3ac0f0e6bde"
+    }
+  ],
+  "version": 1
+}
