@@ -25,8 +25,6 @@ work and its prerequisites.
 
 ## Bounded diagnostic context — active
 
-- [ ] R01 Pin linked pagination, exact row maps and lexical owning headers with
-  failing tests. Add the benchmark-only builder and preserve v1 readings.
 - [ ] R02 Pin complete Markdown inventories and native target/absence bindings
   with failing tests. Add supported context without new target filesystem reads.
 - [ ] R03 Have agents review generated bounded examples and the final change;

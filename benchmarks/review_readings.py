@@ -40,6 +40,43 @@ def _display_chunks(body: str, width: int) -> list[str]:
     return chunks or [""]
 
 
+def _source_rows(
+    physical: list[tuple[str, str]], start_line: int, end_line: int
+) -> tuple[list[str], list[dict[str, Any]]]:
+    """Render exact source chunks before their reading positions are assigned."""
+    selected = physical[start_line - 1 : end_line]
+    line_digits = len(str(end_line))
+    column_digits = len(str(max(len(body) + 1 for body, _ending in selected)))
+    rows: list[dict[str, Any]] = []
+    displayed: list[str] = []
+    for number, (body, ending) in enumerate(selected, start=start_line):
+        prefix_width = line_digits + column_digits * 2 + 7
+        width = 80 - prefix_width
+        if width < 1:
+            raise CorpusError("source coordinate labels exceed 80 characters")
+        chunks = _display_chunks(body, width)
+        column = 1
+        for index, chunk in enumerate(chunks):
+            end_column = column + len(chunk)
+            prefix = (
+                f"L{number:>{line_digits}} "
+                f"C{column:>{column_digits}}-{end_column:>{column_digits}} | "
+            )
+            displayed.append(prefix + chunk)
+            rows.append(
+                {
+                    "line": number,
+                    "column": column,
+                    "end_line": number,
+                    "end_column": end_column,
+                    "text": chunk,
+                    "source_line_ending": ending if index == len(chunks) - 1 else "",
+                }
+            )
+            column = end_column
+    return displayed, rows
+
+
 def build_reading(
     source: Source,
     cache_root: Path,
@@ -84,35 +121,7 @@ def build_reading(
     ):
         raise CorpusError("invalid source line region")
     selected = physical[start_line - 1 : end_line]
-    line_digits = len(str(end_line))
-    column_digits = len(str(max(len(body) + 1 for body, _ending in selected)))
-    rows: list[dict[str, Any]] = []
-    displayed: list[str] = []
-    for number, (body, ending) in enumerate(selected, start=start_line):
-        prefix_width = line_digits + column_digits * 2 + 7
-        width = 80 - prefix_width
-        if width < 1:
-            raise CorpusError("source coordinate labels exceed 80 characters")
-        chunks = _display_chunks(body, width)
-        column = 1
-        for index, chunk in enumerate(chunks):
-            end_column = column + len(chunk)
-            prefix = (
-                f"L{number:>{line_digits}} "
-                f"C{column:>{column_digits}}-{end_column:>{column_digits}} | "
-            )
-            displayed.append(prefix + chunk)
-            rows.append(
-                {
-                    "line": number,
-                    "column": column,
-                    "end_line": number,
-                    "end_column": end_column,
-                    "text": chunk,
-                    "source_line_ending": ending if index == len(chunks) - 1 else "",
-                }
-            )
-            column = end_column
+    displayed, rows = _source_rows(physical, start_line, end_line)
     fence_length = max(
         (
             len(match.group()) + 1
