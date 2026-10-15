@@ -1,7 +1,7 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-14. The C004 contract and four highlight questions are resolved
-in the [contract review record](quality/reviews/2026-10-14-contracts/README.md).
+Updated: 2026-10-14. Bounded diagnostic context is active in the
+[reading-context record](quality/reviews/2026-10-14-reading-context/README.md).
 Earlier frozen reviews stay unchanged. This checklist contains only outstanding
 work and its prerequisites.
 
@@ -22,6 +22,17 @@ work and its prerequisites.
 - Keep defaults and experimental status unchanged without sufficient evidence.
 - If a future review is requested, include its direct reading link and limit it
   to 80 lines of 80 characters, including instructions and questions.
+
+## Bounded diagnostic context — active
+
+- [ ] R01 Pin linked pagination, exact row maps and lexical owning headers with
+  failing tests. Add the benchmark-only builder and preserve v1 readings.
+- [ ] R02 Pin complete Markdown inventories and native target/absence bindings
+  with failing tests. Add supported context without new target filesystem reads.
+- [ ] R03 Have agents review generated bounded examples and the final change;
+  fix concrete defects test first and retain their actual judgments.
+- [ ] R04 Pass repository gates, validate evidence and preserved historical
+  artifacts, commit results and remove completed actions from this checklist.
 
 ## Independent human annotation — deferred
 
@@ -68,9 +79,6 @@ Prerequisites: supported contexts and accepted independent development labels.
   misses, full-span accuracy, exclusions, coverage and usefulness judgments.
 - [ ] P32D.5 Publish per-rule/profile/format/context/source-group results with
   denominators and declared whole-group uncertainty; retain unavailable metrics.
-- [ ] P32D.5b Bind required owning signatures, heading inventories and target
-  context beside future bounded diagnostic readings. Start with failing row-map,
-  context-selection and size-limit tests if packet generation needs a change.
 - [ ] P32D.6a Assess technical terminology and exact quotations, preserving
   genuine generic positives.
 - [ ] P32D.6b Assess G039 repeated-word precision on independently reviewed prose.
