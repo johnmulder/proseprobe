@@ -212,9 +212,9 @@ class TestAIPlaceholders:
 
         assert issue.message == "Formulaic placeholder: marker without context"
         assert issue.line == 1
-        assert issue.column == 5
-        assert issue.end_column == len(source) + 1
-        assert source[issue.column - 1 : issue.end_column - 1] == f"# {marker}"
+        assert issue.column == 7
+        assert issue.end_column == 7 + len(marker.rstrip(":"))
+        assert source[issue.column - 1 : issue.end_column - 1] == marker.rstrip(":")
 
     def test_reports_one_finding_for_inline_bare_marker(self) -> None:
         source = "def pending():\n    pass  # TODO"
@@ -222,9 +222,26 @@ class TestAIPlaceholders:
         [issue] = AIPlaceholdersRule().check(source, "test.py")
 
         assert issue.line == 2
-        assert (
-            source.splitlines()[1][issue.column - 1 : issue.end_column - 1] == "# TODO"
-        )
+        assert source.splitlines()[1][issue.column - 1 : issue.end_column - 1] == "TODO"
+
+    @pytest.mark.parametrize(
+        ("source", "marker"),
+        [
+            ("résumé = 1  # \tFixMe:  ", "FixMe"),
+            ("\t# xxx\t", "xxx"),
+            ("# TODO: \t", "TODO"),
+            ("def broken(\n    # TODO:\n", "TODO"),
+        ],
+    )
+    def test_bare_marker_span_excludes_syntax_and_whitespace(
+        self, source: str, marker: str
+    ) -> None:
+        [issue] = AIPlaceholdersRule().check(source, "test.py")
+
+        line = source.splitlines()[issue.line - 1]
+        assert issue.column == line.index(marker) + 1
+        assert issue.end_column == issue.column + len(marker)
+        assert line[issue.column - 1 : issue.end_column - 1] == marker
 
     @pytest.mark.parametrize(
         "source",
@@ -906,6 +923,22 @@ def fetch(url, timeout):
         )
         assert issue.severity is Severity.INFO
         assert issue.confidence is Confidence.HIGH
+
+    def test_multiline_kind_conflict_keeps_identifier_only_span(self) -> None:
+        source = (
+            'def fetch(target, *extras):\n    """Fetch a record.\n\n'
+            '    :param **extras: Additional values.\n    """\n'
+        )
+
+        [issue] = code.StaleDocstringParameterRule().check(source, "test.py")
+
+        assert (issue.line, issue.column, issue.end_column) == (4, 14, 20)
+        assert source.splitlines()[3][issue.column - 1 : issue.end_column - 1] == (
+            "extras"
+        )
+        assert "'**extras'" in issue.message
+        assert "variadic keyword" in issue.message
+        assert "variadic positional" in issue.message
 
     @pytest.mark.parametrize(
         ("signature", "field", "declared_kind", "actual_kind"),

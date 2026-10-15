@@ -347,13 +347,18 @@ class AIPlaceholdersRule(Rule):
             for pattern, kind in AI_PLACEHOLDER_COMMENT_PATTERNS:
                 match = re.search(pattern, source_comment, re.IGNORECASE)
                 if match:
+                    start, end = (
+                        match.span("marker")
+                        if "marker" in match.re.groupindex
+                        else match.span()
+                    )
                     issues.append(
                         Issue(
                             rule_id=self.id,
                             message=f"Formulaic placeholder: {kind}",
                             line=comment.line,
-                            column=comment.column + match.start(),
-                            end_column=comment.column + match.end(),
+                            column=comment.column + start,
+                            end_column=comment.column + end,
                             severity=self.severity,
                         )
                     )

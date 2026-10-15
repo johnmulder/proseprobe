@@ -25,9 +25,6 @@ work and its prerequisites.
 
 ## C004 and diagnostic highlights — active
 
-- [ ] K03 Pin the accepted G038, V015, C004 and C009 highlight units with exact
-  source-slice tests for parameter stars, wrapped text and Unicode. Change
-  implementation only where the agreed contract requires it; commit the stage.
 - [ ] K04 Validate the candidate against historical fixed development labels
   without rewriting them. Keep semantic matching separate from exact spans and
   report any remaining annotation-contract differences explicitly.

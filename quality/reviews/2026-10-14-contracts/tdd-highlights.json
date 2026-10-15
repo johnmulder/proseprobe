@@ -1,0 +1,118 @@
+{
+  "adjudication_sha256": "091d3bb6eb4fb22d810f43b261de395534f6a3df94fa17ddd4bdf62efd10a650",
+  "behavior_change": "C004 context-free comment marker span only",
+  "curated_gate_before_amendment": {
+    "artificial_fp_fn_pairs": 3,
+    "exit_code": 2,
+    "failed_tests": 1,
+    "log": "quality/reviews/2026-10-14-contracts/tdd-logs/curated-starts-red.json",
+    "log_sha256": "4f584c222ee262696f0fd85405acf0f8ddebca33d30be794957c23e15315a92c",
+    "passed_tests": 3685,
+    "reason": "Maintained curated exact starts still select the comment hash instead of the approved marker token."
+  },
+  "focused_tests_passed": 1414,
+  "full_gate": {
+    "all_rules_known_mismatches": 6,
+    "command": "rtk proxy make check dogfood rule-quality-regression",
+    "exit_code": 0,
+    "log": "quality/reviews/2026-10-14-contracts/tdd-logs/final-gates.json",
+    "log_sha256": "8124702d22b7b8a76531cb985b55bae316fa6b2cd551198b0637eb1f49eb89d0",
+    "package_mypy_files": 31,
+    "production_known_mismatches": 4,
+    "pytest_passed": 3686
+  },
+  "historical_labels_modified": false,
+  "records": [
+    {
+      "command": "rtk proxy .venv/bin/pytest -o addopts='' tests/test_rules/test_code.py -q -k 'context_free_comment_markers or inline_bare_marker or bare_marker_span'",
+      "exit_code": 1,
+      "log": "quality/reviews/2026-10-14-contracts/tdd-logs/marker-red.json",
+      "log_sha256": "00a1e59f5795a03f6628bf874635a18d9524f3c3f7d947a1a1d22cbcfc4a43c9",
+      "stage": "marker-red",
+      "stdout_sha256": "dfe1340b48e28d798a8be40c08e767b71f597e158910299b72b0804951f5ce4f"
+    },
+    {
+      "command": "rtk proxy .venv/bin/pytest -o addopts='' tests/test_rules/test_code.py tests/test_rules/test_grammar.py tests/test_rules/test_vocab.py tests/test_source_predicate_integration.py -q",
+      "exit_code": 0,
+      "log": "quality/reviews/2026-10-14-contracts/tdd-logs/highlights-green.json",
+      "log_sha256": "fd56936283045d27d96dfc89ddb220a98cf6554e6f7f70eea3abb9388b31e656",
+      "stage": "highlights-green",
+      "stdout_sha256": "82e31f8e2460b72deefc58c16cf91acfb446ce2913e8bc957ded395785e99c04"
+    }
+  ],
+  "red_tests_failed": 8,
+  "retained_highlights": [
+    "G038 comparative phrase",
+    "V015 superlative phrase",
+    "C009 declared identifier without stars"
+  ],
+  "runtime": {
+    "git": {
+      "head": "478f71bed064519afbf50ab730a6c3503421194b",
+      "scope": [
+        "benchmarks",
+        "src/proseprobe"
+      ],
+      "staged_dirty": false,
+      "tracked_worktree_dirty": true,
+      "untracked_python_files": []
+    },
+    "identity_scope": "package and evaluator Python source names and exact bytes; caches, corpora and documents excluded",
+    "package_version": "0.1.0",
+    "source_files": [
+      "evaluator/__init__.py",
+      "evaluator/bench_rules.py",
+      "evaluator/corpora.py",
+      "evaluator/evaluation_identity.py",
+      "evaluator/memory_probe.py",
+      "evaluator/native_link_context.py",
+      "evaluator/native_reference_context.py",
+      "evaluator/paired_quality.py",
+      "evaluator/quality_scoring.py",
+      "evaluator/regression_gate.py",
+      "evaluator/review_readings.py",
+      "evaluator/rule_quality.py",
+      "evaluator/source_intervals.py",
+      "evaluator/startup_probe.py",
+      "evaluator/usefulness.py",
+      "package/__init__.py",
+      "package/__main__.py",
+      "package/_ansi.py",
+      "package/_rule_docs.py",
+      "package/cli.py",
+      "package/config.py",
+      "package/core/__init__.py",
+      "package/core/baseline.py",
+      "package/core/linter.py",
+      "package/core/policy.py",
+      "package/core/reporter.py",
+      "package/data/__init__.py",
+      "package/data/code_patterns.py",
+      "package/data/patterns.py",
+      "package/data/phrases.py",
+      "package/data/style_patterns.py",
+      "package/data/vocabulary.py",
+      "package/parsers/__init__.py",
+      "package/parsers/markdown.py",
+      "package/parsers/prose.py",
+      "package/parsers/python.py",
+      "package/profiles.py",
+      "package/rules/__init__.py",
+      "package/rules/_phrases.py",
+      "package/rules/base.py",
+      "package/rules/code.py",
+      "package/rules/grammar.py",
+      "package/rules/markup.py",
+      "package/rules/struct.py",
+      "package/rules/style.py",
+      "package/rules/vocab.py"
+    ],
+    "source_files_count": 46,
+    "source_roots": {
+      "evaluator": "/Users/johnmulder/Experiments/proseprobe/benchmarks",
+      "package": "/Users/johnmulder/Experiments/proseprobe/src/proseprobe"
+    },
+    "source_sha256": "2ca3c350f213c5205c581fe2ec123f13e558727ad5203f010637165ec898e0f3"
+  },
+  "version": 1
+}

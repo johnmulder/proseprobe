@@ -2182,6 +2182,19 @@ class TestUndefinedComparativeRule:
         assert issue.confidence is Confidence.LOW
         assert issue.suggestion == "Name the comparison target"
 
+    def test_reviewed_sentence_excludes_the_predicate_verb(self) -> None:
+        source = "The Nova parser is faster."
+
+        [issue] = UndefinedComparativeRule().check(source, "guide.md")
+
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            20,
+            1,
+            26,
+        )
+        assert source[issue.column - 1 : issue.end_column - 1] == "faster"
+
     def test_preserves_a_wrapped_source_span(self) -> None:
         source = "The fallback remains more\nreliable."
 

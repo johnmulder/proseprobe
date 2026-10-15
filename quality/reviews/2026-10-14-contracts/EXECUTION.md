@@ -47,3 +47,43 @@ stage. Test commands and exact red/green logs are retained in `tdd-c004.json`.
 The complete `make check dogfood rule-quality-regression` gate passed 3679 tests,
 package typing across 31 files and both curated regression policies. All six
 all-rules and four production known mismatches remain unchanged.
+
+K03: Eight marker-span tests failed before the source highlight changed. Bare
+context-free TODO/FIXME/XXX findings now select the marker token alone, without
+the hash, colon or whitespace. Case, inline comments, tabs, malformed Python and
+Unicode before the comment retain original code-point positions. Other formulaic
+comment phrases and code-attached hints keep their existing spans.
+
+The exact G038/V015 example spans are now pinned alongside existing wrapped and
+Unicode source-mapping tests. The C009 example pins the identifier-only span
+while asserting that its diagnostic names `**extras` and both parameter kinds.
+These three contracts were retained; their wider historical expected spans are
+annotation-contract differences, not evidence requiring wider code highlights.
+The published rule documentation now distinguishes recognition/ownership
+evidence from the highlighted unit and makes all four outcomes explicit.
+
+The focused code, grammar, vocabulary and source-predicate suite passed 1414
+tests. `tdd-highlights.json` retains the red/green output and exact runtime hash.
+A fresh engineering agent, `/root/contract_change_review`, reviewed the accepted
+criteria, code diff, docs and changed tests without finding an actionable issue.
+It ran no tests and opened no source manifests, prior labels or holdout.
+
+The first complete highlight gate exposed three maintained curated expectations
+that still selected the comment hash at column 5. The accepted marker starts at
+column 7. This created three artificial FP/FN pairs without changing detection.
+The failing gate is preserved in `tdd-highlights.json`; it was not allowlisted.
+
+The agent reviewed a separate linked 32-line reading, K005, and approved each
+coordinate under the accepted contract. Only the three current curated C004
+starts at `python-docs.py` lines 38–40 changed to column 7. The two current gate
+manifest hashes were rebound to that amended maintained manifest. All other
+entries, semantic labels, source hashes, policies, counts and known-mismatch
+lists remain identical. `curated-migration.json` preserves before/after values,
+hashes and the prior Git commit. Frozen external labels and historical report
+artifacts were not amended.
+
+The final complete gate passed all 3686 tests, package typing across 31 files,
+generated rule-doc checks, documentation checks and both bound regression
+policies. Curated counts remain 366 TP/6 FP/0 FN for all-rules and 106 TP/4 FP/0 FN
+for production. All existing known mismatches remain visible. The exact log and
+runtime identity are bound in `tdd-highlights.json`.

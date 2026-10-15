@@ -24,5 +24,10 @@ disagreed about a possible amendment. The
 
 Accepted decisions precede behavior changes. Tests first show
 any contract defect; implementation, docs and exact location checks follow.
-Historical annotations, report bytes, freezes, baseline and splits stay intact.
+Historical frozen annotations, report bytes, baseline and splits stay intact.
 Any candidate evaluation receives separate artifacts and an actual runtime hash.
+
+Three maintained curated C004 start columns were separately reviewed against
+the new marker contract. The [migration record](curated-migration.json) binds
+those exact edits and the two gate-manifest hash changes. Known mismatches,
+source bytes and frozen external review artifacts remain unchanged.

@@ -1,0 +1,22 @@
+{
+  "actual_response": "Implementation and changed tests match the accepted contract, preserve existing exemptions and spans, and contain no identified source-mapping regression or vacuous replacement tests.",
+  "adjudication_sha256": "091d3bb6eb4fb22d810f43b261de395534f6a3df94fa17ddd4bdf62efd10a650",
+  "code_edits_by_reviewer": false,
+  "human": false,
+  "limits": "Engineering inspection; not independent human or population effectiveness evidence. Curated coordinate migration is reviewed separately.",
+  "record_kind": "Parent transcription of actual engineering reviewer response",
+  "recorded_by": "codex-agent:/root",
+  "reserved_holdout_opened": false,
+  "result": "No actionable issues found",
+  "review_scope": [
+    "src/proseprobe/data/code_patterns.py",
+    "src/proseprobe/rules/code.py",
+    "docs/rules.md",
+    "changed code/grammar/vocabulary/CLI tests",
+    "new adjudication and TDD record"
+  ],
+  "reviewer": "codex-agent:/root/contract_change_review",
+  "runtime_source_sha256": "2ca3c350f213c5205c581fe2ec123f13e558727ad5203f010637165ec898e0f3",
+  "tests_run_by_reviewer": false,
+  "version": 1
+}

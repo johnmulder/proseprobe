@@ -79,7 +79,7 @@
       "tests/fixtures/stale_docstring_parameters.py": "dcf479307c47ebb4d6606f646340d8211160867ce6a5f6d9f1a33107bdcc38bb",
       "tests/fixtures/unicode_docstrings.py": "14ba1e2389d2f873b6adf7d3537b43b9a8ec55f4bf51f7961b3e94463fad8a3d"
     },
-    "manifest_sha256": "d4dd393c6219a0782689860a0ce55eae03c26955e6e95c56fdaff6f6e361eeb3"
+    "manifest_sha256": "10d9f7dface45352076b3187c7b027d105ea56bfc0aba4f406e0e988446316b6"
   },
   "created_runtime": {
     "git": {

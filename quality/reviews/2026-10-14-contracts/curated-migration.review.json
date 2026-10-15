@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "actor": {
+    "id": "/root/contract_change_review",
+    "role": "bounded curated-coordinate migration reviewer",
+    "human_review": false,
+    "independent_effectiveness_evidence": false,
+    "implementation_exposure_before_this_review": true
+  },
+  "purpose": "Assess a proposed migration of three maintained curated C004 coordinates against the already accepted marker-only contract before the migration is made. This is an exposed engineering maintenance review, not a blind label review or effectiveness result.",
+  "input_packet": {
+    "path": "quality/reviews/2026-10-14-contracts/curated-migration-inputs.json",
+    "sha256": "badc8b27587a85889b7cc6de6641d58be6ed55ac3fbdab47a04508df7f2f9743",
+    "reading": "quality/reviews/2026-10-14-contracts/readings/K005.md",
+    "reading_sha256": "d0f175f92d14108f377dfd7f931daaa456e8655aa6920be5a5538386c16221b6",
+    "linked_reading": "/private/tmp/proseprobe-K005.txt",
+    "linked_reading_sha256": "d0f175f92d14108f377dfd7f931daaa456e8655aa6920be5a5538386c16221b6",
+    "reading_hash_matches_packet": true,
+    "linked_reading_matches_packet_reading": true,
+    "proposed_base_commit_from_packet": "478f71b"
+  },
+  "actual_exposure": {
+    "instruction_files_read": [
+      "/Users/johnmulder/.codex/RTK.md"
+    ],
+    "files_read_for_this_migration_review": [
+      "quality/reviews/2026-10-14-contracts/readings/K005.md",
+      "quality/reviews/2026-10-14-contracts/curated-migration-inputs.json",
+      "/private/tmp/proseprobe-K005.txt"
+    ],
+    "previously_read_accepted_contract": "quality/reviews/2026-10-14-contracts/adjudication.json",
+    "prior_engineering_review_exposure": [
+      "Diff from f2b46ec of src/proseprobe/data/code_patterns.py, src/proseprobe/rules/code.py, docs/rules.md, tests/test_cli.py, tests/test_rules/test_code.py, tests/test_rules/test_grammar.py and tests/test_rules/test_vocab.py.",
+      "Relevant current implementation and test sections in src/proseprobe/rules/code.py and the changed test files.",
+      "quality/reviews/2026-10-14-contracts/tdd-c004.json and a diff stat listing changed artifact names."
+    ],
+    "parent_summary_exposure": "The parent reported that the full gate exposed three curated legacy C5 starts versus the new C7 marker starts, and proposed changing only those maintained coordinates plus the two manifest-hash bindings.",
+    "curated_source_original_opened": false,
+    "curated_annotations_opened": false,
+    "regression_gate_files_opened": false,
+    "frozen_external_labels_or_reports_opened": false,
+    "source_manifests_or_corpus_bytes_opened": false,
+    "reserved_holdout_opened": false,
+    "detector_executed": false,
+    "tests_run": false,
+    "git_mutations": false,
+    "other_file_edits": false,
+    "tooling": "Read the two bounded packet files and linked temporary reading, compute their SHA-256 hashes, and write this new review only.",
+    "limits": "The source excerpt, current coordinates, artifact hashes, and gate outcome are supplied packet evidence. The underlying curated source, labels and gates were not opened or independently verified."
+  },
+  "coordinate_decisions": [
+    {
+      "rule_id": "C004",
+      "line": 38,
+      "decision": "approve",
+      "current_column": 5,
+      "accepted_column": 7,
+      "accepted_end_column_exclusive": 11,
+      "accepted_text": "TODO",
+      "reason": "In the supplied unchanged line, four spaces occupy C1-C4, # occupies C5, and the following space occupies C6. The marker occupies C7-C10. C7 applies the accepted marker-only contract."
+    },
+    {
+      "rule_id": "C004",
+      "line": 39,
+      "decision": "approve",
+      "current_column": 5,
+      "accepted_column": 7,
+      "accepted_end_column_exclusive": 12,
+      "accepted_text": "FIXME",
+      "reason": "The same six-character prefix places FIXME at C7-C11. The colon at C12 is excluded by the accepted marker-only contract."
+    },
+    {
+      "rule_id": "C004",
+      "line": 40,
+      "decision": "approve",
+      "current_column": 5,
+      "accepted_column": 7,
+      "accepted_end_column_exclusive": 10,
+      "accepted_text": "XXX",
+      "reason": "The same six-character prefix places XXX at C7-C9. C7 selects the marker and excludes the comment introducer."
+    }
+  ],
+  "manifest_hash_rebinding": {
+    "decision": "approve_narrow_rebinding",
+    "gate_paths": [
+      "quality/regression-gates/all-rules.json",
+      "quality/regression-gates/production.json"
+    ],
+    "scope": "Rebind only the existing expected curated-manifest SHA values to the SHA-256 of the manifest after the three approved coordinate edits.",
+    "weakens_gate": false,
+    "reason": "A content hash pins the maintained manifest's identity. Updating that binding for a separately justified and recorded contract migration does not itself relax the gate's thresholds or mismatch checks. Production may still need the common manifest binding updated even though the packet says it excludes C004.",
+    "required_invariants": [
+      "The maintained manifest changes only C004 columns at lines 38, 39 and 40 from 5 to 7; expected counts and source bytes remain fixed.",
+      "Both gates retain all other fields, counts, thresholds, baseline bindings and known-mismatch allowlists unchanged.",
+      "The separate migration record retains the exact before/after entries and hashes, the prior Git commit, the bounded packet, and this review.",
+      "Frozen external labels, historical reports, raw reports, splits and baselines remain unchanged."
+    ],
+    "verification_limit": "This approval evaluates the proposed operation. It does not certify the final diff or independently verify the current gates because those files were outside this review's permitted reading scope."
+  },
+  "gate_interpretation": {
+    "finding": "The three reported curated exact-start disagreements are stale maintained expectations under the accepted new marker-only contract, given the supplied excerpt and coordinates.",
+    "not_authorized": "A gate failure does not authorize manufacturing clean external labels, changing frozen reports or baselines, adding mismatch allowances, or using new detector predictions to redefine truth.",
+    "effectiveness_claim": false,
+    "historical_mismatch_policy": "The packet's six earlier known mismatches remain unchanged; resolving these three maintained coordinate disagreements is not evidence that those historical mismatches disappeared."
+  },
+  "actionable_issues": [],
+  "output": "quality/reviews/2026-10-14-contracts/curated-migration.review.json"
+}
