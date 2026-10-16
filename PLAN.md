@@ -25,8 +25,8 @@ work and its prerequisites.
 
 ## Remaining development preparation — active
 
-- [ ] N02b Prepare the separately declared Markdown-it README and its supported
-  pinned target closure; do not infer labels from context preparation.
+- [ ] N02b Prepare the separately declared Markdown-it documentation index and
+  its supported pinned targets; retain the root README's zero-reference result.
 - [ ] N03 Have agents review bounded preparation evidence and any eligible
   contexts, retaining actual judgments and limits.
 - [ ] N04 Run applicable validators and repository gates, commit results and
