@@ -25,10 +25,6 @@ work and its prerequisites.
 
 ## Remaining development preparation — active
 
-- [ ] N01 Validate the metadata-declared Requests supplement and FastAPI README
-  bytes, keeping original manifests/splits and reserved sources unchanged.
-- [ ] N02 Enumerate supported local references without predictions; bind
-  complete pinned target contexts or retain explicit eligibility skips.
 - [ ] N03 Have agents review bounded preparation evidence and any eligible
   contexts, retaining actual judgments and limits.
 - [ ] N04 Run applicable validators and repository gates, commit results and
@@ -60,8 +56,9 @@ independence unverified. Agent annotations are separately identified.
 
 Prerequisite: accepted initial independent labels are frozen.
 
-- [ ] P32C.4 Provide all four JFLEG and ten ASSET references within their original
-  source/pair groups and access terms.
+- [ ] P32C.4 Once holdout prerequisites permit access, provide all four JFLEG
+  and ten ASSET references within their original source/pair groups and terms.
+  All 40+40 frozen units are holdout; no development pair is eligible now.
 - [ ] P31.13 Collect separate human judgments for finding helpfulness, sentence
   fit, meaning preservation and acceptance; preserve missing/contextual answers.
 - [ ] P32C.6a Bind exact original/reference identities and reviewed diagnostic
