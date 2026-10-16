@@ -1,7 +1,7 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-15. P32D.5b is complete; evidence is in the
-[reading-context record](quality/reviews/2026-10-14-reading-context/README.md).
+Updated: 2026-10-15. P32D.5b is complete. Remaining preparation and prerequisite
+review is in the [continuation record](quality/reviews/2026-10-15-remaining/README.md).
 Earlier frozen reviews stay unchanged. This checklist contains only outstanding
 work and its prerequisites.
 
@@ -22,6 +22,17 @@ work and its prerequisites.
 - Keep defaults and experimental status unchanged without sufficient evidence.
 - If a future review is requested, include its direct reading link and limit it
   to 80 lines of 80 characters, including instructions and questions.
+
+## Remaining development preparation — active
+
+- [ ] N01 Validate the metadata-declared Requests supplement and FastAPI README
+  bytes, keeping original manifests/splits and reserved sources unchanged.
+- [ ] N02 Enumerate supported local references without predictions; bind
+  complete pinned target contexts or retain explicit eligibility skips.
+- [ ] N03 Have agents review bounded preparation evidence and any eligible
+  contexts, retaining actual judgments and limits.
+- [ ] N04 Run applicable validators and repository gates, commit results and
+  leave only genuine prerequisites in this document.
 
 ## Independent human annotation — deferred
 
