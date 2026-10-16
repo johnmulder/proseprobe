@@ -1,0 +1,53 @@
+{
+  "eligible_reference_count": 2,
+  "excluded_destination_count": 2,
+  "excluded_destinations": [
+    {
+      "column": 10,
+      "destination": "https://github.com/markdown-it/markdown-it#markdown-it",
+      "end_column": 64,
+      "line": 4,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 12,
+      "destination": "https://markdown-it.github.io/markdown-it/",
+      "end_column": 54,
+      "line": 5,
+      "reason": "production-resolver-exclusion"
+    }
+  ],
+  "no_predictions_or_labels": true,
+  "references": [
+    {
+      "column": 45,
+      "destination": "architecture.md",
+      "end_column": 60,
+      "fragment": "",
+      "line": 9,
+      "native_path": "docs/architecture.md"
+    },
+    {
+      "column": 43,
+      "destination": "development.md",
+      "end_column": 57,
+      "fragment": "",
+      "line": 10,
+      "native_path": "docs/development.md"
+    }
+  ],
+  "required_targets": [
+    "docs/architecture.md",
+    "docs/development.md"
+  ],
+  "selection_sha256": "18caeb12c2bc676b477ec3f6331bad64ea4f39848176b29125c9f65d5b6b0ec1",
+  "source_blob_id": "4a3ef556c8fd23eeb8bc5e44e734ddf7e66c88f6",
+  "source_bytes": 363,
+  "source_exact_reserved_hash_match": false,
+  "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+  "source_lines": 10,
+  "source_sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68",
+  "static_context": "supported",
+  "targets_selected_before_bytes": true,
+  "version": 1
+}
