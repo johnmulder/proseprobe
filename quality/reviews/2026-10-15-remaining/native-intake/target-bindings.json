@@ -1,0 +1,25 @@
+{
+  "selection_sha256": "d7bbe17324803a217c3151f13e0192dd30f25112ce89998279913e0437c70892",
+  "targets": [
+    {
+      "blob_id": "a3cccdbb69208e81a02da7d4404f026682da983a",
+      "bytes": 7381,
+      "exact_reserved_hash_match": false,
+      "lines": 186,
+      "native_path": "docs/architecture.md",
+      "sha256": "12b59d2ffc60b698c2d87a16c012c076a79f45ca92e8a2205f43576c253f94d0",
+      "status": "present"
+    },
+    {
+      "blob_id": "782b75c447d5938209348a7efc4da95f1737533f",
+      "bytes": 3967,
+      "exact_reserved_hash_match": false,
+      "lines": 87,
+      "native_path": "docs/development.md",
+      "sha256": "25304c0e7d38b35ad8ee97a2ee68b6fecc371110ba938b98cf52bbc2ac9ec8d6",
+      "status": "present"
+    }
+  ],
+  "targets_selected_before_read": true,
+  "version": 1
+}
