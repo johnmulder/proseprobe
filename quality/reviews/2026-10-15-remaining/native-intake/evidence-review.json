@@ -1,0 +1,1089 @@
+{
+  "version": 1,
+  "review_kind": "agent_engineering_provenance_audit",
+  "reviewer": {
+    "agent": "/root/remaining_evidence_validator",
+    "human_reviewer": false,
+    "independent_human_annotation": false
+  },
+  "scope": "Separate native-intake source, target, license, reserved-metadata and bounded-reading provenance only.",
+  "status": "passed_with_scope_limits",
+  "findings": [],
+  "conclusions": [
+    "All declared native-intake artifact hashes checked against validation.json match.",
+    "The metadata view contains exactly 147 unchanged reserved rows and one new wholly-development markdown-it source. Neither that source hash nor either declared target hash matches reserved metadata.",
+    "The existing offline reference-context validator accepts the complete pinned 174-entry Git inventory, the one source and exactly two present targets. All source/target SHA-256, Git blob identities, sizes and line counts match.",
+    "The selected ten-line docs/README.md reproduces exactly two eligible local Markdown references, to docs/architecture.md and docs/development.md, plus its two resolver exclusions at the declared coordinates.",
+    "The original root README declaration and result remain byte-for-byte unchanged from their recorded commits: zero eligible references, 53 exclusions and no required targets. Its corpus bytes were not reopened in this audit.",
+    "The retained MIT LICENSE has its declared SHA-256, matches the pinned LICENSE blob identity, and preserves its copyright, permission and warranty text.",
+    "All thirteen saved reading files match their rendered hashes and embedded text; each remains within 80 physical lines and 80 Unicode code points per line.",
+    "Both canonical context/bundle hashes match. The existing context-reading builder reproduces the whole bundle exactly, and the focus/source rows and both target row sets reconstruct the complete original bytes without gaps or altered line endings.",
+    "No actionable engineering provenance defect was identified within this audit scope."
+  ],
+  "limits": [
+    "This is engineering provenance evidence from an agent. It provides no independent human issue labels, clean annotations, calibration, usefulness assessment, precision/recall or population-effectiveness metric.",
+    "The commits establish declaration-to-binding ordering and exact frozen content. Historical first source/target byte-read timing cannot be independently proven from Git alone.",
+    "Normalized cross-split duplication remains unknown because reserved bytes were not opened.",
+    "The original root README result was checked for committed preservation and declared counts, rather than re-enumerated from its source cache.",
+    "The helper-based reproduction checks reproducibility and bindings; it is not an independent semantic evaluation of the rule.",
+    "The whole-package runtime digest and other-agent reviews were outside this audit and were not read or used."
+  ],
+  "observed_head": "8dfe5d8b487909169c2293e3c7d4d02b8cd83d11",
+  "final_input_file_sha256": {
+    "quality/reviews/2026-10-15-remaining/native-intake/LICENSE": "792c48c5a849a15fdf9e37e8bcf9e6d1dd13b32b46c642a748a0a46a9919d473",
+    "quality/reviews/2026-10-15-remaining/native-intake/attribution.json": "082ea550a1fda162130d9829e79cc3cf4c3dc5cec70c9e14429b67203f173af1",
+    "quality/reviews/2026-10-15-remaining/native-intake/docs-reference-selection.json": "d7bbe17324803a217c3151f13e0192dd30f25112ce89998279913e0437c70892",
+    "quality/reviews/2026-10-15-remaining/native-intake/docs-selection.json": "18caeb12c2bc676b477ec3f6331bad64ea4f39848176b29125c9f65d5b6b0ec1",
+    "quality/reviews/2026-10-15-remaining/native-intake/inventory.json": "b74d85e58356021559e1e1e3eb1a8e6eecb9493315d86e3c7fd8c89efd8c6f43",
+    "quality/reviews/2026-10-15-remaining/native-intake/native-context-v1.json": "ad02d614546d3d4a63ac6d54425f2b1a02722fa112c290737420ffd1d10ae9e9",
+    "quality/reviews/2026-10-15-remaining/native-intake/readings.json": "c0caa2ba8bac0541d87638e1c057caedf99410f9bc4b2be62a72c28a36020c33",
+    "quality/reviews/2026-10-15-remaining/native-intake/reference-selection.json": "33274b524ae5c8dc76fd04ea4c584cf191fda29d20b368aaa873839c01e192fa",
+    "quality/reviews/2026-10-15-remaining/native-intake/selection.json": "7e3ca1224804240c97320f4d60851fc7289c03f4df0aa3f25222340e62c45e4c",
+    "quality/reviews/2026-10-15-remaining/native-intake/source-metadata.json": "458da9b4e6646e9fef275852f844d637f13eca1b64b338dae26e06c3f1d73adb",
+    "quality/reviews/2026-10-15-remaining/native-intake/target-bindings.json": "7eb6d5d8230283202dc2662330290f7bb5ee8087fada1e2dab1a618d2b7d85c3",
+    "quality/reviews/2026-10-15-remaining/native-intake/validation.json": "e876105700ad0b54a6e997096824930e4f235fee8e7c8040530e56f881937454"
+  },
+  "input_metadata_hashes": [
+    {
+      "path": "quality/external/extension-sources.json",
+      "sha256": "1f3a26861f1321747802a9e5b574ae78201b996cdd70ccec9a18094fe052cbbf"
+    },
+    {
+      "path": "quality/sources.json",
+      "sha256": "2dcadd8fb3bb278ee09a9ff2685b00c7a7c6efde3f0221ae69efcccc825d3ade"
+    }
+  ],
+  "source_metadata": {
+    "development_source": {
+      "attribution": "Vitaly Puzrin, Alex Kocharin and markdown-it contributors",
+      "format": "markdown",
+      "id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+      "license": "MIT",
+      "license_url": "https://raw.githubusercontent.com/markdown-it/markdown-it/0fe7ccb4b7f30236fb05f623be6924961d296d3d/LICENSE",
+      "locator": "docs/README.md",
+      "pair_group": "markdown-it/markdown-it:docs/README.md",
+      "path": "native-continuation/2026-10-15/markdown-it/docs/README.md",
+      "renderer": "GitHub Markdown",
+      "review_status": "unreviewed",
+      "revision": "0fe7ccb4b7f30236fb05f623be6924961d296d3d",
+      "sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68",
+      "source_group": "markdown-it/markdown-it",
+      "split": "development",
+      "transformation": "none; complete pinned UTF-8 Markdown source"
+    },
+    "reserved_metadata": {
+      "groups": {
+        "Textualize/rich": 6,
+        "facebookresearch/asset": 40,
+        "keisks/jfleg": 40,
+        "psf/black": 6,
+        "python/cpython": 5,
+        "rust-lang/book": 50
+      },
+      "normalized_duplication": "unknown; reserved bytes unopened",
+      "related_group_conflicts": [],
+      "rows_preserved_exactly": 147,
+      "source_or_target_exact_hash_matches": 0
+    }
+  },
+  "root_readme_preservation": {
+    "committed_result_unchanged": true,
+    "eligible_references": 0,
+    "excluded_destinations": 53,
+    "git_blob_id": "6c79f3c5d8b361ffd120fa9df367d4da26170de3",
+    "source_bytes_reopened": false,
+    "source_sha256": "20f360aac0f6640b04a731c93de7e23889c4db5255e2ebc32594c184814abd51"
+  },
+  "selection_commit_evidence": {
+    "chain": [
+      "f6570d64e3c23d154a69ed1b3a248253b13d9405",
+      "bf579f07b0fc6a04e728aba7fe2f9881375b76ac",
+      "c85ca113658fe14c68310679e41639055a1e0123",
+      "8dfe5d8b487909169c2293e3c7d4d02b8cd83d11"
+    ],
+    "checks": [
+      {
+        "commit": "f6570d64e3c23d154a69ed1b3a248253b13d9405",
+        "matches_current": true,
+        "path": "quality/reviews/2026-10-15-remaining/native-intake/selection.json",
+        "sha256": "7e3ca1224804240c97320f4d60851fc7289c03f4df0aa3f25222340e62c45e4c"
+      },
+      {
+        "commit": "bf579f07b0fc6a04e728aba7fe2f9881375b76ac",
+        "matches_current": true,
+        "path": "quality/reviews/2026-10-15-remaining/native-intake/docs-selection.json",
+        "sha256": "18caeb12c2bc676b477ec3f6331bad64ea4f39848176b29125c9f65d5b6b0ec1"
+      },
+      {
+        "commit": "c85ca113658fe14c68310679e41639055a1e0123",
+        "matches_current": true,
+        "path": "quality/reviews/2026-10-15-remaining/native-intake/docs-reference-selection.json",
+        "sha256": "d7bbe17324803a217c3151f13e0192dd30f25112ce89998279913e0437c70892"
+      },
+      {
+        "commit": "bf579f07b0fc6a04e728aba7fe2f9881375b76ac",
+        "matches_current": true,
+        "path": "quality/reviews/2026-10-15-remaining/native-intake/reference-selection.json",
+        "sha256": "33274b524ae5c8dc76fd04ea4c584cf191fda29d20b368aaa873839c01e192fa"
+      },
+      {
+        "commit": "8dfe5d8b487909169c2293e3c7d4d02b8cd83d11",
+        "matches_current": true,
+        "path": "quality/reviews/2026-10-15-remaining/native-intake/target-bindings.json",
+        "sha256": "7eb6d5d8230283202dc2662330290f7bb5ee8087fada1e2dab1a618d2b7d85c3"
+      }
+    ],
+    "proof_limit": "Committed declarations precede later committed bindings; historical first byte-read timing is not independently observable from Git."
+  },
+  "license": {
+    "bytes": 1073,
+    "git_blob_id": "7ffa058cb78f8fb9beb974d9fd429004d2d2e585",
+    "matches_pinned_inventory": true,
+    "permission_and_copyright_text_preserved": true,
+    "sha256": "792c48c5a849a15fdf9e37e8bcf9e6d1dd13b32b46c642a748a0a46a9919d473"
+  },
+  "native_context_validation": {
+    "accepted": true,
+    "eligible_references": 2,
+    "excluded_destinations": 2,
+    "function": "benchmarks.native_reference_context.validate_reference_context",
+    "inventory_sha256": "64fc8326ff39f0a2db702acd1a1b6fa7511b9cdfcbe69d093ca6566f44fd2188",
+    "manifest_sha256": "458da9b4e6646e9fef275852f844d637f13eca1b64b338dae26e06c3f1d73adb",
+    "revision": "0fe7ccb4b7f30236fb05f623be6924961d296d3d",
+    "source_group": "markdown-it/markdown-it",
+    "sources": 1,
+    "targets": 2,
+    "complete_inventory_entries": 174,
+    "corpus_root": "downloads/evaluation",
+    "repository": "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+    "manifest": "quality/reviews/2026-10-15-remaining/native-intake/source-metadata.json",
+    "independent_source_extraction_matches": true
+  },
+  "source_and_target_bytes": [
+    {
+      "bytes": 363,
+      "git_blob_id": "4a3ef556c8fd23eeb8bc5e44e734ddf7e66c88f6",
+      "identity": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+      "lines": 10,
+      "native_path": "docs/README.md",
+      "sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68"
+    },
+    {
+      "bytes": 7381,
+      "git_blob_id": "a3cccdbb69208e81a02da7d4404f026682da983a",
+      "identity": "docs/architecture.md",
+      "lines": 186,
+      "native_path": "docs/architecture.md",
+      "sha256": "12b59d2ffc60b698c2d87a16c012c076a79f45ca92e8a2205f43576c253f94d0"
+    },
+    {
+      "bytes": 3967,
+      "git_blob_id": "782b75c447d5938209348a7efc4da95f1737533f",
+      "identity": "docs/development.md",
+      "lines": 87,
+      "native_path": "docs/development.md",
+      "sha256": "25304c0e7d38b35ad8ee97a2ee68b6fecc371110ba938b98cf52bbc2ac9ec8d6"
+    }
+  ],
+  "bounded_readings": {
+    "page_count": 13,
+    "max_lines": 80,
+    "max_codepoints": 80,
+    "canonical_context_sha256": "bb0f0c82da2a783f1e9288667796ffd607f675459014365d5ed308a5a40b6ec4",
+    "canonical_bundle_sha256": "cb2b2ca592f60f59ccda0a5f542bef71a5c736b8a3ee81869fcbbe6a6458c73e",
+    "existing_builder_exact_match": true,
+    "pages": [
+      {
+        "index": 1,
+        "lines": 27,
+        "mapped_rows": 11,
+        "max_codepoints": 78,
+        "path": "/private/tmp/remain-md-0001.txt",
+        "role": "focus",
+        "sha256": "0dd528969f9d560b2c375aba0b82ae4a979161bc756d7c804bc4185b459fdb74"
+      },
+      {
+        "index": 2,
+        "lines": 27,
+        "mapped_rows": 11,
+        "max_codepoints": 78,
+        "path": "/private/tmp/remain-md-0002.txt",
+        "role": "markdown-source",
+        "sha256": "a2d3f435875bff41fd96c11c8a99c3a7f402ea9faf26eed55322cd152f64d0eb"
+      },
+      {
+        "index": 3,
+        "lines": 23,
+        "mapped_rows": 0,
+        "max_codepoints": 75,
+        "path": "/private/tmp/remain-md-0003.txt",
+        "role": "markdown-inventory",
+        "sha256": "0f0d7a08deb3572cdde55ce4108a1499d061d5a70c5a42a12cae5dbd4acf5f5c"
+      },
+      {
+        "index": 4,
+        "lines": 34,
+        "mapped_rows": 0,
+        "max_codepoints": 75,
+        "path": "/private/tmp/remain-md-0004.txt",
+        "role": "native-context",
+        "sha256": "cfd3a4be9ec2749e7b0db257ddfec4db0ddcf7c6bb11a08c557835022071f8bc"
+      },
+      {
+        "index": 5,
+        "lines": 80,
+        "mapped_rows": 64,
+        "max_codepoints": 80,
+        "path": "/private/tmp/remain-md-0005.txt",
+        "role": "markdown-target",
+        "sha256": "73b5abe6a56ac00854db86b1679ac3fa63e62f90ff2afbfb791d5d765cbcee54"
+      },
+      {
+        "index": 6,
+        "lines": 80,
+        "mapped_rows": 64,
+        "max_codepoints": 80,
+        "path": "/private/tmp/remain-md-0006.txt",
+        "role": "markdown-target",
+        "sha256": "5c242d678c155ffef2791abee51d5c58410d82915ae4c0a85882c9e775c962e0"
+      },
+      {
+        "index": 7,
+        "lines": 80,
+        "mapped_rows": 64,
+        "max_codepoints": 80,
+        "path": "/private/tmp/remain-md-0007.txt",
+        "role": "markdown-target",
+        "sha256": "642a491d57ed74ec88698777bf6d59ab5b8cc224cb6146b13961f3ebaf79f091"
+      },
+      {
+        "index": 8,
+        "lines": 80,
+        "mapped_rows": 64,
+        "max_codepoints": 80,
+        "path": "/private/tmp/remain-md-0008.txt",
+        "role": "markdown-target",
+        "sha256": "608aec93a76676a1250e13efb66a58f813f0e327536bc9991a4ba6e0f38ed1ab"
+      },
+      {
+        "index": 9,
+        "lines": 18,
+        "mapped_rows": 2,
+        "max_codepoints": 80,
+        "path": "/private/tmp/remain-md-0009.txt",
+        "role": "markdown-target",
+        "sha256": "f18b1f6542d2d6ef6b05c54475c6410aeecd2111ffb655ba04a9b5f5d1a08ca5"
+      },
+      {
+        "index": 10,
+        "lines": 29,
+        "mapped_rows": 0,
+        "max_codepoints": 75,
+        "path": "/private/tmp/remain-md-0010.txt",
+        "role": "markdown-inventory",
+        "sha256": "c5f35141fa1b0c98f72c50aa86c323df417e9c2537f3592c86af2107bc1b318a"
+      },
+      {
+        "index": 11,
+        "lines": 80,
+        "mapped_rows": 64,
+        "max_codepoints": 80,
+        "path": "/private/tmp/remain-md-0011.txt",
+        "role": "markdown-target",
+        "sha256": "fb74b43c6c04c8566a0b3e3fc3ac99f5333d7534b0202cf187798c76c36ddd21"
+      },
+      {
+        "index": 12,
+        "lines": 76,
+        "mapped_rows": 60,
+        "max_codepoints": 80,
+        "path": "/private/tmp/remain-md-0012.txt",
+        "role": "markdown-target",
+        "sha256": "929b3c2fa316798c8439719b32cae063f854100a2b460865bd9e67413aff7056"
+      },
+      {
+        "index": 13,
+        "lines": 37,
+        "mapped_rows": 0,
+        "max_codepoints": 75,
+        "path": "/private/tmp/remain-md-0013.txt",
+        "role": "markdown-inventory",
+        "sha256": "5c1d24cf193bc79ca0b6b2358ebc2036496c1355db187e426c6928f3eb153f25"
+      }
+    ],
+    "complete_original_reconstructions": [
+      {
+        "bytes": 363,
+        "complete_original_reconstructed": true,
+        "identity": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+        "role": "focus",
+        "rows": 11,
+        "sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68"
+      },
+      {
+        "bytes": 363,
+        "complete_original_reconstructed": true,
+        "identity": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+        "role": "markdown-source",
+        "rows": 11,
+        "sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68"
+      },
+      {
+        "bytes": 7381,
+        "complete_original_reconstructed": true,
+        "identity": "docs/architecture.md",
+        "role": "markdown-target",
+        "rows": 258,
+        "sha256": "12b59d2ffc60b698c2d87a16c012c076a79f45ca92e8a2205f43576c253f94d0"
+      },
+      {
+        "bytes": 3967,
+        "complete_original_reconstructed": true,
+        "identity": "docs/development.md",
+        "role": "markdown-target",
+        "rows": 124,
+        "sha256": "25304c0e7d38b35ad8ee97a2ee68b6fecc371110ba938b98cf52bbc2ac9ec8d6"
+      }
+    ]
+  },
+  "helper_runtime_identity": {
+    "helper_files_sha256": {
+      "benchmarks/corpora.py": "6767f936761e64c9219c872a3459e913bc275d81115d297eae239861aa58411e",
+      "benchmarks/native_link_context.py": "b0cbbfbdd865d74e31bb817d137126cf9d335cda8f1632910853d074b8dd9c81",
+      "benchmarks/native_reference_context.py": "78db0226bac5ef77d20a48b27851ceaf438e595646e8ca84e3648bde51f6b4d2",
+      "benchmarks/review_context.py": "edd49ad852c0f67dfef5ab74d7678041114a535ab97f1eb2320d144ad38e8533",
+      "benchmarks/review_readings.py": "b94278520cc7bd4f52a14de29602660c99210a7048023273acf73d13257f4536",
+      "src/proseprobe/rules/markup.py": "9397067c3114c4b418b2d3b2d80842975c29ef4c73c4b7a313b4b69fe1bd82b3"
+    },
+    "python": "3.13.16 (main, Sep 30 2026, 18:57:20) [Clang 21.0.0 (clang-2100.3.34.2)]"
+  },
+  "exposure": {
+    "artifact_content_read": [
+      "quality/reviews/2026-10-15-remaining/native-intake/LICENSE",
+      "quality/reviews/2026-10-15-remaining/native-intake/attribution.json",
+      "quality/reviews/2026-10-15-remaining/native-intake/docs-reference-selection.json",
+      "quality/reviews/2026-10-15-remaining/native-intake/docs-selection.json",
+      "quality/reviews/2026-10-15-remaining/native-intake/inventory.json",
+      "quality/reviews/2026-10-15-remaining/native-intake/native-context-v1.json",
+      "quality/reviews/2026-10-15-remaining/native-intake/readings.json",
+      "quality/reviews/2026-10-15-remaining/native-intake/reference-selection.json",
+      "quality/reviews/2026-10-15-remaining/native-intake/selection.json",
+      "quality/reviews/2026-10-15-remaining/native-intake/source-metadata.json",
+      "quality/reviews/2026-10-15-remaining/native-intake/target-bindings.json",
+      "quality/reviews/2026-10-15-remaining/native-intake/validation.json"
+    ],
+    "input_metadata_only_read": [
+      "quality/external/extension-sources.json",
+      "quality/sources.json"
+    ],
+    "reserved_source_or_reference_bytes_read": false,
+    "new_corpus_source_cache_reads": [
+      {
+        "native_path": "docs/README.md",
+        "reads": 2,
+        "purpose": "one existing validator read and one existing reading-builder read"
+      }
+    ],
+    "new_corpus_target_cache_reads": [
+      {
+        "native_path": "docs/architecture.md",
+        "reads": 1
+      },
+      {
+        "native_path": "docs/development.md",
+        "reads": 1
+      }
+    ],
+    "corpus_cache_read_total": 4,
+    "saved_reading_files_read": [
+      "/private/tmp/remain-md-0001.txt",
+      "/private/tmp/remain-md-0002.txt",
+      "/private/tmp/remain-md-0003.txt",
+      "/private/tmp/remain-md-0004.txt",
+      "/private/tmp/remain-md-0005.txt",
+      "/private/tmp/remain-md-0006.txt",
+      "/private/tmp/remain-md-0007.txt",
+      "/private/tmp/remain-md-0008.txt",
+      "/private/tmp/remain-md-0009.txt",
+      "/private/tmp/remain-md-0010.txt",
+      "/private/tmp/remain-md-0011.txt",
+      "/private/tmp/remain-md-0012.txt",
+      "/private/tmp/remain-md-0013.txt"
+    ],
+    "reading_bundle_embeds_complete_source_and_target_text": true,
+    "source_target_row_text_displayed": true,
+    "display_event": "An initial shape-inspection command printed nested reading-row maps, including source/target text, instead of only row counts. The tool truncated its 28,184-token output. Later verification emitted only metadata and hashes. This exposure involved only the already declared development source and its two targets.",
+    "license_artifact_bytes_read": true,
+    "root_readme_corpus_bytes_read": false,
+    "targets_not_declared_read": false,
+    "whole_manifest_loader_invoked": false,
+    "check_methods_invoked": false,
+    "detector_predictions_generated": false,
+    "external_reviewed_code_executed": false,
+    "human_labels_or_metrics_generated": false,
+    "network_used": false,
+    "other_agent_review_read": false,
+    "cached_batch_evidence_review_read_or_modified": false,
+    "persistent_writes": [
+      "quality/reviews/2026-10-15-remaining/native-intake/evidence-review.json"
+    ],
+    "temporary_writes": "The existing native validator materialized only its one source and two targets in its disposable context directory and removed it. The additional resolver root remained empty.",
+    "helper_text_newly_read": [
+      {
+        "path": "benchmarks/review_readings.py",
+        "lines": "complete file"
+      },
+      {
+        "path": "benchmarks/review_context.py",
+        "lines": "1-70 and 110-490; named symbol matches"
+      },
+      {
+        "path": "benchmarks/corpora.py",
+        "lines": "Source declaration and adjacent context, 22-49"
+      }
+    ],
+    "previous_helper_context": "Previously inspected native-reference, native-link and named production extraction/resolver helper code was retained from the earlier assigned audit; it was not reread for this scope.",
+    "actual_absolute_corpus_open_events": {
+      "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation/native-continuation/2026-10-15/markdown-it/docs/README.md": 1
+    },
+    "actual_relative_descriptor_open_events": [
+      {
+        "flags": 17826048,
+        "path": "native-continuation"
+      },
+      {
+        "flags": 17826048,
+        "path": "2026-10-15"
+      },
+      {
+        "flags": 17826048,
+        "path": "markdown-it"
+      },
+      {
+        "flags": 17826048,
+        "path": "docs"
+      },
+      {
+        "flags": 16777476,
+        "path": "README.md"
+      },
+      {
+        "flags": 17826048,
+        "path": "native-continuation"
+      },
+      {
+        "flags": 17826048,
+        "path": "2026-10-15"
+      },
+      {
+        "flags": 17826048,
+        "path": "markdown-it"
+      },
+      {
+        "flags": 17826048,
+        "path": "docs"
+      },
+      {
+        "flags": 16777476,
+        "path": "architecture.md"
+      },
+      {
+        "flags": 17826048,
+        "path": "native-continuation"
+      },
+      {
+        "flags": 17826048,
+        "path": "2026-10-15"
+      },
+      {
+        "flags": 17826048,
+        "path": "markdown-it"
+      },
+      {
+        "flags": 17826048,
+        "path": "docs"
+      },
+      {
+        "flags": 16777476,
+        "path": "development.md"
+      },
+      {
+        "flags": 16777220,
+        "path": "docs"
+      }
+    ],
+    "open_audit_limit": "Absolute corpus opens were restricted to the three declared byte paths plus their ancestor directories. The existing validator reads its bound source/targets through relative directory-descriptor opens, which are recorded separately."
+  },
+  "failures": {
+    "command_failures": [],
+    "assertion_failures": [],
+    "inspection_output_truncation": "The initial nested row-map dump exceeded the requested output budget; this did not affect subsequent verification or page-bound checks."
+  },
+  "actual_commands": {
+    "summary": ["Inspected only native-intake declarations, metadata, retained license and existing helpers.", "Recomputed artifact/input hashes, reserved metadata equality and commit-content ordering.", "Ran the existing offline reference-context validator and an independent empty-root extraction.", "Rebuilt the reading bundle with the existing builder, checked all 13 saved page hashes/bounds, and reconstructed all original source/target bytes.", "Recorded exact helper identities and validated the final JSON and unchanged input file hashes."],
+    "post_write_validation": {"command":"rtk proxy python - <<'PY'\nimport hashlib,json\nfrom pathlib import Path\npath=Path('quality/reviews/2026-10-15-remaining/native-intake/evidence-review.json')\nreport=json.loads(path.read_text())\nassert report['findings']==[] and report['native_context_validation']['accepted']\nassert report['native_context_validation']['complete_inventory_entries']==174\nassert report['native_context_validation']['sources']==1 and report['native_context_validation']['targets']==2\nassert report['bounded_readings']['page_count']==13 and report['bounded_readings']['existing_builder_exact_match']\nassert report['bounded_readings']['max_lines']<=80 and report['bounded_readings']['max_codepoints']<=80\nassert report['exposure']['corpus_cache_read_total']==4\nfor name,expected in report['final_input_file_sha256'].items():\n    assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==expected\nprint(json.dumps({'path':str(path),'json_valid':True,'input_file_hashes_unchanged':True,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()},sort_keys=True))\nPY"},
+    "shell_commands": [
+      {
+        "command": "rtk proxy python - <<'PY'\nfrom pathlib import Path\nroot=Path('quality/reviews/2026-10-15-remaining/native-intake')\nfor path in sorted(root.rglob('*')):\n    if path.is_file(): print(str(path),path.stat().st_size)\nPY",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk read quality/reviews/2026-10-15-remaining/native-intake/selection.json quality/reviews/2026-10-15-remaining/native-intake/docs-selection.json quality/reviews/2026-10-15-remaining/native-intake/docs-reference-selection.json quality/reviews/2026-10-15-remaining/native-intake/attribution.json quality/reviews/2026-10-15-remaining/native-intake/target-bindings.json quality/reviews/2026-10-15-remaining/native-intake/validation.json quality/reviews/2026-10-15-remaining/native-intake/reference-selection.json",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy python - <<'PY'\nimport json\nfrom pathlib import Path\nroot=Path('quality/reviews/2026-10-15-remaining/native-intake')\nfor name in ('inventory.json','native-context-v1.json','source-metadata.json','readings.json'):\n    obj=json.loads((root/name).read_text())\n    print(name, 'keys',list(obj))\n    for key,value in obj.items():\n        if isinstance(value,list): print(key,'count',len(value),'first keys',list(value[0]) if value and isinstance(value[0],dict) else None)\n        elif isinstance(value,dict): print(key,'count',len(value),'keys',list(value)[:12])\n        elif key not in {'rendered_text'}: print(key,value)\n    if name=='readings.json':\n        print('row metadata', [{k:v for k,v in row.items() if k not in {'rendered_text','source_text','text'}} for row in obj.get('readings',[])])\nPY",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk rg -n '^def |canonical|rendered_sha256|bundle_sha256|source_text|source_start|source_end|segments|reconstruct' benchmarks/review_readings.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy git log --format='%H %s' --reverse -- quality/reviews/2026-10-15-remaining/native-intake/selection.json quality/reviews/2026-10-15-remaining/native-intake/docs-selection.json quality/reviews/2026-10-15-remaining/native-intake/docs-reference-selection.json quality/reviews/2026-10-15-remaining/native-intake/reference-selection.json quality/reviews/2026-10-15-remaining/native-intake/target-bindings.json quality/reviews/2026-10-15-remaining/native-intake/native-context-v1.json",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk read benchmarks/review_readings.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk rg -n 'bundle_sha256|context_sha256|canonical|readings|build_reading' benchmarks/review_context.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy python - <<'PY'\nimport json\nfrom pathlib import Path\nroot=Path('quality/reviews/2026-10-15-remaining/native-intake')\ncontext=json.loads((root/'native-context-v1.json').read_text())['native_context']\nreadings=json.loads((root/'readings.json').read_text())\nprint(json.dumps({'native_sources':context['sources'],'native_targets':context['targets'],'inventory_sha256':context['inventory_sha256'],'manifest_sha256':context['manifest_sha256'],'context_keys':list(readings['context']),'reading_pages':[{'index':p['index'],'path':p['path'],'role':p['role'],'rows':len(p['rows'])} for p in readings['readings']]},sort_keys=True))\nPY",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy git show --format=fuller --stat f6570d64e3c23d154a69ed1b3a248253b13d9405 bf579f07b0fc6a04e728aba7fe2f9881375b76ac c85ca113658fe14c68310679e41639055a1e0123 8dfe5d8b487909169c2293e3c7d4d02b8cd83d11 -- quality/reviews/2026-10-15-remaining/native-intake",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy sed -n '1,70p' benchmarks/review_context.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy sed -n '270,347p' benchmarks/review_context.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy sed -n '348,490p' benchmarks/review_context.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python - <<'PY'\nimport hashlib,json,subprocess\nfrom collections import Counter\nfrom pathlib import Path\nbase=Path('quality/reviews/2026-10-15-remaining/native-intake')\nsha=lambda raw:hashlib.sha256(raw).hexdigest()\nblob=lambda raw:hashlib.sha1(f'blob {len(raw)}\\0'.encode('ascii')+raw,usedforsecurity=False).hexdigest()\nnames=['selection','docs-selection','docs-reference-selection','attribution','target-bindings','validation','reference-selection','inventory','native-context-v1','source-metadata','readings']\nraw={name:(base/(name+'.json')).read_bytes() for name in names}\nobj={name:json.loads(value) for name,value in raw.items()}\nhashes={str(base/(name+'.json')):sha(value) for name,value in raw.items()}\nlicense_raw=(base/'LICENSE').read_bytes(); hashes[str(base/'LICENSE')]=sha(license_raw)\nfor path,expected in obj['validation']['artifacts_sha256'].items():\n    assert hashes[path]==expected\nsel=obj['selection']; docs=obj['docs-selection']; refs=obj['docs-reference-selection']; targets=obj['target-bindings']; native=obj['native-context-v1']['native_context']; metadata=obj['source-metadata']; inv=obj['inventory']\ninputs=[]; original_rows=[]\nfor path,expected in sel['original_metadata_sha256'].items():\n    value=Path(path).read_bytes(); assert sha(value)==expected\n    inputs.append({'path':path,'sha256':sha(value)})\n    original_rows.extend(json.loads(value)['samples'])\nassert metadata['input_metadata_sha256']==sel['original_metadata_sha256']\noriginal_reserved={r['id']:r for r in original_rows if r['split']=='holdout'}\nreserved=[r for r in metadata['samples'] if r['split']=='holdout']\ndevelopment=[r for r in metadata['samples'] if r['split']=='development']\nassert len(metadata['samples'])==148 and len(reserved)==len(original_reserved)==147 and len(development)==1\nassert {r['id']:r for r in reserved}==original_reserved\nassert len({r['id'] for r in metadata['samples']})==148\nassert all(r['source_group']!=sel['source_group'] for r in original_rows)\nsource=development[0]\nassert source['id']==docs['source_id']==refs['source_id'] and source['source_group']==sel['source_group'] and source['split']==sel['split']==docs['split']=='development'\nassert source['revision']==sel['revision']==docs['revision']==inv['revision']==native['revision']\nassert docs['original_selection_sha256']==sha(raw['selection'])\nassert refs['selection_sha256']==sha(raw['docs-selection'])\nassert targets['selection_sha256']==sha(raw['docs-reference-selection'])\nassert docs['inventory_artifact_sha256']==sha(raw['inventory'])\nassert native['manifest_sha256']==sha(raw['source-metadata'])\nassert inv['inventory']==native['inventory'] and len(inv['inventory'])==174\nassert set(native['sources'])=={source['id']}\nassert native['sources'][source['id']]['sha256']==source['sha256']==refs['source_sha256']\nassert native['sources'][source['id']]['blob_id']==docs['native_inventory_entry']['object_id']==refs['source_blob_id']\nassert obj['native-context-v1']['references']=={source['id']:refs['references']}\nassert obj['native-context-v1']['excluded_destinations']=={source['id']:refs['excluded_destinations']}\nassert refs['eligible_reference_count']==len(refs['references'])==2 and refs['excluded_destination_count']==len(refs['excluded_destinations'])==2\nassert refs['required_targets']==sorted(native['targets'])==['docs/architecture.md','docs/development.md']\nassert {r['native_path'] for r in targets['targets']}==set(native['targets'])\nfor row in targets['targets']:\n    bound=native['targets'][row['native_path']]\n    assert all(bound[k]==row[k] for k in ('blob_id','sha256','status'))\nreserved_hashes={r['sha256'] for r in reserved}\nselected_hashes=[source['sha256']]+[r['sha256'] for r in targets['targets']]\nassert all(value not in reserved_hashes for value in selected_hashes)\nrelated_conflicts=[]\nfor field in ('pair_group','near_duplicate_group'):\n    if source.get(field) is not None:\n        related_conflicts.extend(r['id'] for r in reserved if r.get(field)==source[field])\nassert not related_conflicts\nlicense_info=obj['attribution']\nassert license_info['sha256']==sha(license_raw) and license_info['blob_id']==blob(license_raw)\nassert next(r for r in inv['inventory'] if r['path']=='LICENSE')['object_id']==blob(license_raw)\nlicense_text=license_raw.decode('utf-8')\nassert 'Permission is hereby granted, free of charge' in license_text and 'THE SOFTWARE IS PROVIDED' in license_text and 'Copyright' in license_text\ncommits={'selection.json':'f6570d64e3c23d154a69ed1b3a248253b13d9405','docs-selection.json':'bf579f07b0fc6a04e728aba7fe2f9881375b76ac','docs-reference-selection.json':'c85ca113658fe14c68310679e41639055a1e0123','reference-selection.json':'bf579f07b0fc6a04e728aba7fe2f9881375b76ac','target-bindings.json':'8dfe5d8b487909169c2293e3c7d4d02b8cd83d11'}\ngit_commands=[]\ndef git(args):\n    command=['rtk','proxy','git',*args]; git_commands.append(command)\n    return subprocess.run(command,capture_output=True,check=True).stdout\ncommit_checks=[]\nfor name,commit in commits.items():\n    value=git(['show',commit+':'+str(base/name)])\n    assert sha(value)==hashes[str(base/name)]\n    commit_checks.append({'path':str(base/name),'commit':commit,'sha256':sha(value),'matches_current':True})\nchain=['f6570d64e3c23d154a69ed1b3a248253b13d9405','bf579f07b0fc6a04e728aba7fe2f9881375b76ac','c85ca113658fe14c68310679e41639055a1e0123','8dfe5d8b487909169c2293e3c7d4d02b8cd83d11']\nfor first,second in zip(chain,chain[1:]): git(['merge-base','--is-ancestor',first,second])\nhead=git(['rev-parse','HEAD']).decode().strip();git(['merge-base','--is-ancestor',chain[-1],head])\nroot=obj['reference-selection']\nassert root['source_id']==sel['source_id'] and root['selection_sha256']==sha(raw['selection'])\nassert root['eligible_reference_count']==len(root['references'])==len(root['required_targets'])==0\nassert root['excluded_destination_count']==len(root['excluded_destinations'])==53\nprint(json.dumps({'artifact_hashes':hashes,'input_metadata_hashes':inputs,'reserved_metadata':{'rows_preserved_exactly':147,'groups':dict(Counter(r['source_group'] for r in reserved)),'source_or_target_exact_hash_matches':0,'related_group_conflicts':related_conflicts,'normalized_duplication':'unknown; reserved bytes unopened'},'development_source':source,'root_readme_preservation':{'eligible_references':0,'excluded_destinations':53,'source_sha256':root['source_sha256'],'git_blob_id':root['source_blob_id'],'committed_result_unchanged':True,'source_bytes_reopened':False},'commit_checks':commit_checks,'commit_chain':chain,'observed_head':head,'commit_evidence_limit':'Committed declarations precede later committed bindings; historical first byte-read timing is not independently observable from Git.','license':{'sha256':sha(license_raw),'git_blob_id':blob(license_raw),'bytes':len(license_raw),'matches_pinned_inventory':True,'permission_and_copyright_text_preserved':True},'inventory_entries':174,'git_child_commands':git_commands},sort_keys=True))\nPY",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy sed -n '110,165p' benchmarks/review_context.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy sed -n '165,274p' benchmarks/review_context.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk rg -n -A 27 '^class Source:' benchmarks/corpora.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python - <<'PY'\nimport hashlib,json,os,re,sys,tempfile\nfrom collections import Counter,defaultdict\nfrom pathlib import Path\nbase=Path('quality/reviews/2026-10-15-remaining/native-intake')\nbundle=json.loads((base/'native-context-v1.json').read_text())\nmetadata=json.loads((base/'source-metadata.json').read_text())\nreference_selection=json.loads((base/'docs-reference-selection.json').read_text())\ntarget_bindings=json.loads((base/'target-bindings.json').read_text())\nreadings=json.loads((base/'readings.json').read_text())\nvalidation=json.loads((base/'validation.json').read_text())\nsource=next(row for row in metadata['samples'] if row['split']=='development')\ncorpus=Path('downloads/evaluation').resolve()\nallowed={(corpus/bound['cache_path']).resolve() for bound in [*bundle['native_context']['sources'].values(),*bundle['native_context']['targets'].values()]}\ndirectories={parent for path in allowed for parent in path.parents if parent==corpus or corpus in parent.parents}\ncorpus_opens=[];relative_opens=[];git_commands=[]\ndef audit(event,args):\n    if event=='open' and isinstance(args[0],(str,bytes)):\n        path=Path(args[0]); resolved=path.resolve()\n        if not path.is_absolute() and args[1] is None: relative_opens.append({'path':str(path),'flags':args[2]})\n        try: resolved.relative_to(corpus)\n        except ValueError: return\n        if resolved in directories and args[2] & os.O_DIRECTORY: return\n        if resolved not in allowed: raise RuntimeError('undeclared corpus open prohibited: '+str(resolved))\n        corpus_opens.append(str(resolved))\n    elif event=='subprocess.Popen': git_commands.append(list(args[1]))\nsys.addaudithook(audit)\nfrom benchmarks.corpora import Source\nfrom benchmarks.native_reference_context import validate_reference_context\nfrom benchmarks.review_context import build_contextual_readings\nfrom proseprobe.rules.markup import LocalMarkdownLinkRule,SameDocumentFragmentRule\nverified=validate_reference_context(bundle,base/'source-metadata.json',Path('downloads/evaluation'),Path('downloads/evaluation/native-context/markdown-it-14.1.0-v1.git'))\nassert len(verified.native.sources)==1 and len(verified.native.targets)==2\nassert sum(len(rows) for _,rows in verified.references)==2\nassert sum(len(rows) for _,rows in verified.excluded)==2\nraw_by_id={item.source_id:item.raw for item in verified.native.sources}\nraw_by_id.update({item.native_path:item.raw for item in verified.native.targets})\nsha=lambda raw:hashlib.sha256(raw).hexdigest()\nblob=lambda raw:hashlib.sha1(f'blob {len(raw)}\\0'.encode('ascii')+raw,usedforsecurity=False).hexdigest()\nbyte_checks=[]\nfor identity,value in raw_by_id.items():\n    assert value is not None\n    if identity==source['id']:\n        expected=reference_selection;expected_sha=expected['source_sha256'];expected_blob=expected['source_blob_id'];expected_bytes=expected['source_bytes'];expected_lines=expected['source_lines'];native_path='docs/README.md'\n    else:\n        expected=next(row for row in target_bindings['targets'] if row['native_path']==identity)\n        expected_sha=expected['sha256'];expected_blob=expected['blob_id'];expected_bytes=expected['bytes'];expected_lines=expected['lines'];native_path=identity\n    assert sha(value)==expected_sha and blob(value)==expected_blob and len(value)==expected_bytes and len(value.decode('utf-8').splitlines())==expected_lines\n    byte_checks.append({'identity':identity,'native_path':native_path,'sha256':sha(value),'git_blob_id':blob(value),'bytes':len(value),'lines':expected_lines})\nwith tempfile.TemporaryDirectory(prefix='proseprobe-intake-empty-') as directory:\n    root=Path(directory).resolve();resolver=LocalMarkdownLinkRule(True,str(root),'github')\n    document=SameDocumentFragmentRule._document(raw_by_id[source['id']].decode('utf-8'))\n    assert document is not None\n    supported=[];excluded=[]\n    for destination,line,column,end_column in sorted(document[1],key=lambda item:(item[1],item[2],item[3],item[0])):\n        item={'destination':destination,'line':line,'column':column,'end_column':end_column}\n        resolved=resolver._resolve_target(root/'docs/README.md',destination)\n        if resolved is None: item['reason']='production-resolver-exclusion';excluded.append(item)\n        else:\n            target,fragment=resolved;item.update(native_path=target.relative_to(root).as_posix(),fragment=fragment);supported.append(item)\n    assert supported==reference_selection['references'] and excluded==reference_selection['excluded_destinations']\n    assert list(root.iterdir())==[]\ncanonical=lambda value:hashlib.sha256(json.dumps(value,sort_keys=True,ensure_ascii=False,separators=(',',':')).encode('utf-8')).hexdigest()\nassert readings['context_sha256']==canonical(readings['context'])\nassert readings['bundle_sha256']==canonical({key:value for key,value in readings.items() if key!='bundle_sha256'})==validation['reading_bundle_sha256']\nassert len(readings['readings'])==validation['reading_pages']==13\ncontext=readings['context']\nsource_object=Source(identity=source['id'],source_group=source['source_group'],pair_group=source['pair_group'],path=source['path'],sha256=source['sha256'],split=source['split'],format=source['format'],provenance=source)\nrebuilt=build_contextual_readings(source_object,Path('downloads/evaluation'),start_line=context['region']['line'],end_line=context['region']['end_line'],rule_ids=context['rule_ids'],instructions=context['instructions'],questions=context['questions'],reading_id=context['reading_id'],link_directory=Path(context['link_directory']),markdown_anchor_style=context['markdown_anchor_style'],native_context=verified)\nassert rebuilt==readings\npage_checks=[];by_role_identity=defaultdict(list)\nfor index,page in enumerate(readings['readings'],1):\n    assert page['index']==index and page['total']==13\n    raw_page=Path(page['path']).read_bytes();text=raw_page.decode('utf-8');lines=text.splitlines()\n    assert text==page['rendered_text'] and sha(raw_page)==page['rendered_sha256']\n    assert len(lines)<=80 and max(map(len,lines))<=80\n    for row in page['rows']:\n        assert row['end_line']==row['line'] and row['end_column']-row['column']==len(row['text'])\n        assert row['sha256']==sha(raw_by_id[row['source_id']])\n        match=re.fullmatch(r'L\\s*(\\d+) C\\s*(\\d+)-\\s*(\\d+) \\| (.*)',lines[row['reading_line']-1])\n        assert match and tuple(map(int,match.group(1,2,3)))==(row['line'],row['column'],row['end_column']) and match.group(4)==row['text']\n        by_role_identity[(page['role'],row['source_id'])].append(row)\n    page_checks.append({'index':index,'path':page['path'],'role':page['role'],'sha256':sha(raw_page),'lines':len(lines),'max_codepoints':max(map(len,lines)),'mapped_rows':len(page['rows'])})\nreconstructions=[]\nfor (role,identity),rows in by_role_identity.items():\n    pieces=[];next_line=1;next_column=1\n    for row in rows:\n        assert row['line']==next_line and row['column']==next_column\n        pieces.append(row['text']+row['source_line_ending'])\n        if row['source_line_ending']: next_line+=1;next_column=1\n        else: next_column=row['end_column']\n    rebuilt_raw=''.join(pieces).encode('utf-8')\n    assert rebuilt_raw==raw_by_id[identity]\n    reconstructions.append({'role':role,'identity':identity,'sha256':sha(rebuilt_raw),'bytes':len(rebuilt_raw),'rows':len(rows),'complete_original_reconstructed':True})\nassert {(role,identity) for role,identity in by_role_identity}=={('focus',source['id']),('markdown-source',source['id']),('markdown-target','docs/architecture.md'),('markdown-target','docs/development.md')}\nprint(json.dumps({'validator':{'accepted':True,'function':'benchmarks.native_reference_context.validate_reference_context','manifest_sha256':verified.native.manifest_sha256,'inventory_sha256':verified.native.inventory_sha256,'revision':verified.native.revision,'source_group':verified.native.source_group,'sources':1,'targets':2,'eligible_references':2,'excluded_destinations':2},'source_target_bytes':byte_checks,'independent_source_extraction_matches':True,'canonical_reading_context_sha256':readings['context_sha256'],'canonical_reading_bundle_sha256':readings['bundle_sha256'],'existing_reading_builder_exact_match':True,'pages':page_checks,'reconstructions':reconstructions,'absolute_corpus_open_events':dict(Counter(corpus_opens)),'relative_descriptor_open_events':relative_opens,'git_child_commands':git_commands,'reserved_bytes_read':False,'predictions_generated':False,'external_code_executed':False,'network_used':False},sort_keys=True))\nPY",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 python - <<'PY'\nimport hashlib,json,sys\nfrom pathlib import Path\npaths=['benchmarks/native_reference_context.py','benchmarks/native_link_context.py','benchmarks/review_context.py','benchmarks/review_readings.py','benchmarks/corpora.py','src/proseprobe/rules/markup.py']\nprint(json.dumps({'python':sys.version,'helper_files_sha256':{path:hashlib.sha256(Path(path).read_bytes()).hexdigest() for path in paths}},sort_keys=True))\nPY",
+        "exit_code": 0
+      }
+    ],
+    "metadata_git_child_commands": [
+      [
+        "rtk",
+        "proxy",
+        "git",
+        "show",
+        "f6570d64e3c23d154a69ed1b3a248253b13d9405:quality/reviews/2026-10-15-remaining/native-intake/selection.json"
+      ],
+      [
+        "rtk",
+        "proxy",
+        "git",
+        "show",
+        "bf579f07b0fc6a04e728aba7fe2f9881375b76ac:quality/reviews/2026-10-15-remaining/native-intake/docs-selection.json"
+      ],
+      [
+        "rtk",
+        "proxy",
+        "git",
+        "show",
+        "c85ca113658fe14c68310679e41639055a1e0123:quality/reviews/2026-10-15-remaining/native-intake/docs-reference-selection.json"
+      ],
+      [
+        "rtk",
+        "proxy",
+        "git",
+        "show",
+        "bf579f07b0fc6a04e728aba7fe2f9881375b76ac:quality/reviews/2026-10-15-remaining/native-intake/reference-selection.json"
+      ],
+      [
+        "rtk",
+        "proxy",
+        "git",
+        "show",
+        "8dfe5d8b487909169c2293e3c7d4d02b8cd83d11:quality/reviews/2026-10-15-remaining/native-intake/target-bindings.json"
+      ],
+      [
+        "rtk",
+        "proxy",
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "f6570d64e3c23d154a69ed1b3a248253b13d9405",
+        "bf579f07b0fc6a04e728aba7fe2f9881375b76ac"
+      ],
+      [
+        "rtk",
+        "proxy",
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "bf579f07b0fc6a04e728aba7fe2f9881375b76ac",
+        "c85ca113658fe14c68310679e41639055a1e0123"
+      ],
+      [
+        "rtk",
+        "proxy",
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "c85ca113658fe14c68310679e41639055a1e0123",
+        "8dfe5d8b487909169c2293e3c7d4d02b8cd83d11"
+      ],
+      [
+        "rtk",
+        "proxy",
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      [
+        "rtk",
+        "proxy",
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "8dfe5d8b487909169c2293e3c7d4d02b8cd83d11",
+        "8dfe5d8b487909169c2293e3c7d4d02b8cd83d11"
+      ]
+    ],
+    "existing_validator_git_child_commands": [
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "config",
+        "--get-regexp",
+        "^(extensions\\.partialclone|remote\\..*\\.promisor)$"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "commit",
+        "0fe7ccb4b7f30236fb05f623be6924961d296d3d"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "5303e819b6e2914f90d3bab2bb6544e3d36c37ee"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "ls-tree",
+        "-r",
+        "-t",
+        "-z",
+        "--full-tree",
+        "0fe7ccb4b7f30236fb05f623be6924961d296d3d"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "ad67ee093faa825a2598da9e361860be6336dace"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "d7fb71a73af3c0b84018a535f4a32b8abd44f433"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "b90696ff447c8576bccc8da9a1fef60ca737748f"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "d089a0090bcb7ad1687741df7e168d29c7a88f17"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "eccfd64bfc563dfff91da9361b548ed6e8cbfd37"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "e9db98368db5b3c69626c46f03f3a5407e71c46e"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "58fde00f73702ce971598531cd8dc09fa1927a82"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "0bdc051a3cfefe8a4f967edb3e08524d3ec18b14"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "e7fce3fb045848ac3ece571f60538402fc6ad94c"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "60f29442cfa4f098848eb66916ded464d2af0652"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "474caa3deb65d74b82e53f705436d43ea4dd2118"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "983cbf76163aaf1ebd775ffd465d2b229b6d1837"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "3178e8be1c81c8fc5ca15d9d5c3e9d97d8a9ada0"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "aa5d4c116495626355fb06fae76bc39223784add"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "7bcb2c91a50b5410296525d4a8997370210e393d"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "cdee7f2d89f1d57d66a686b63f15aa39c9b508b1"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "435888e18e8e5dd88bd3757a867956b76cb5d7ed"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "c5931411b61e747fdcb48b5ede764e7e985a7e41"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "a59315f9a5b4f9949e2cd168d85c10e5c404b0af"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "fb674b1d39efb2510334be8c2431096ce92f6268"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "b7da8db7b83e223a1539f0e866c3c56d79cfe23d"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "458f2e72d0398a214c8b7bbb2c1ba13cb2e9bbaa"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "863397075bb209ba8cfeaa1124bbbb8fd047e215"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "6d8bf7952a0e6679a6bc35aa7778059948673b7d"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "71db06116560cf5c13471b5a47a9ac8974763cfc"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "c77218e647ad0137b725863c9a01a2fb867bc4f4"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+        "cat-file",
+        "tree",
+        "bb7fe81a9c8d66240e23402a214d577fcb040615"
+      ]
+    ],
+    "nested_git_note": "The existing validator directly invokes offline Git subprocesses with protocol.allow=never, replacement objects disabled and no-lazy-fetch guards. These subprocesses do not execute reviewed project code."
+  }
+}

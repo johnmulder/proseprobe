@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "reviewer_id": "/root/remaining_completion_review",
+  "reviewer_kind": "agent",
+  "review_kind": "cached-batch engineering completion and prerequisite audit",
+  "reviewed_on": "2026-10-15",
+  "batch_commit": "094377d",
+  "selection_commit": "72d4f18",
+  "disposition": "accepted within the recorded scope; no actionable defect found",
+  "accepted_scope": [
+    "Metadata-selected cached batch of eleven additional Requests Markdown sources and the frozen FastAPI development README",
+    "Consistency of source counts, eligibility counts, declared bindings, native inventory, target closure, bounded reading and documented claim limits",
+    "Completion is limited to this preparation batch; independent annotation, effectiveness, calibration, holdout, conditional acquisition and release retain their prerequisites",
+    "This review does not audit future source intake or replace final root validation and repository gates"
+  ],
+  "actual_exposure": {
+    "first_evidence_reading": "/private/tmp/remain-audit-0001.txt",
+    "instruction_files_read": [
+      "/Users/johnmulder/.codex/RTK.md",
+      "/Users/johnmulder/.agents/skills/proseprobe/SKILL.md"
+    ],
+    "project_prose_read": [
+      "PLAN.md",
+      "quality/external/review-protocol.md",
+      "quality/reviews/2026-10-15-remaining/README.md",
+      "quality/reviews/2026-10-15-remaining/EXECUTION.md"
+    ],
+    "preparation_metadata_read": [
+      "selection.json",
+      "eligibility.json",
+      "preparation-validation.json",
+      "prerequisite-audit.json",
+      "audit-reading.json",
+      "review-inputs.json",
+      "requests-context-v1.json",
+      "native-source-metadata.json"
+    ],
+    "display_limit": "The combined full context/metadata display was truncated by the tool output budget. Subsequent standard-library parsing checked complete JSON structures and displayed selected fields, bindings and counts; this is not a claim of line-by-line inspection of every historical metadata row.",
+    "other_agent_exposure": "The required prerequisite-audit.json contains root summaries of prior agent conclusions and one prior exposure disclosure. No standalone agent review or new peer judgment was read. These summaries are disclosed context, not independent confirmation of this audit.",
+    "source_metadata_exposure": "Source identities, hashes, coordinates, excluded destination strings, split metadata and Git tree entries only",
+    "original_or_reference_prose_opened": false,
+    "reserved_holdout_bytes_opened": false,
+    "detector_predictions_opened": false,
+    "network_used": false,
+    "project_code_executed": false,
+    "verification_execution": "Standard-library JSON/hash/count checks and read-only Git commit/tree metadata commands; no project imports, loaders, validators or tests",
+    "human_independence_claim": false
+  },
+  "file_sha256_scope": "Reviewed cached-batch bytes; every repository file hash below matches commit 094377d. A final hash-only check observed PLAN.md had advanced concurrently; the updated PLAN text was not read or accepted by this review.",
+  "file_sha256": {
+    "PLAN.md": "18100a7f027929577e1144ab5a1ca571d9c185a748774ef843dc4e5288966d42",
+    "quality/external/review-protocol.md": "18daa6665d5ab36f5c68abd5ce2f9f2cf43ae17b1fb6c47e3e9d47c8f2076a86",
+    "quality/reviews/2026-10-15-remaining/README.md": "5e34627cf40513eca2a2b1948267c4b0f485519f4e6b6e27a5eb6de2b1d592c2",
+    "quality/reviews/2026-10-15-remaining/EXECUTION.md": "9508daa7a55cc1f473fbee6881b0ea110775006b64278dc025a1f8234c23d1ef",
+    "quality/reviews/2026-10-15-remaining/selection.json": "1ccd1fd8c1a805e3b22e6d3dd8991bdd88c646bd8bce5d8f9d6ca06699f95116",
+    "quality/reviews/2026-10-15-remaining/eligibility.json": "85a7723e916ebe4d9bd8256e8eaf52a000f47f7832dbb3820b5eccdc4f90f66c",
+    "quality/reviews/2026-10-15-remaining/preparation-validation.json": "7693201c09970ad755f42bd9163995aa70719e05dc0b35cf7d1198427f456de4",
+    "quality/reviews/2026-10-15-remaining/prerequisite-audit.json": "25642c64240504377e0827474a464b60a697c56fd69d2aba138841f8049e551f",
+    "quality/reviews/2026-10-15-remaining/audit-reading.json": "7d8ea185dd5f92a2b9e095dcb3470f36404961e21179ef1994f0f14855507dcf",
+    "quality/reviews/2026-10-15-remaining/review-inputs.json": "792487e82472470e6e3c12c9cd9d0712de059c00658f7d6332c073cea037211c",
+    "quality/reviews/2026-10-15-remaining/native-source-metadata.json": "3797e099cf7b64217800d964f6f1741fc04563b9b50099c3a63cb0ae1775fddd",
+    "quality/reviews/2026-10-15-remaining/requests-context-v1.json": "223408124b3998f3a810b2384d6862800bd9edf2a60f3097e3997967857aa15a",
+    "/private/tmp/remain-audit-0001.txt": "6a89c4030c57315c98dfe8ccae76ef48f06cc0db2eb267bb780716c4f9c05bf8"
+  },
+  "checks": {
+    "bounded_reading": {
+      "lines": 42,
+      "maximum_line_codepoints": 77,
+      "within_80_by_80": true,
+      "direct_reading_link_matches_actual_path": true,
+      "actual_text_matches_audit_rendered_text": true,
+      "actual_sha256_matches_audit_and_review_inputs": true
+    },
+    "all_review_inputs_artifact_hashes_match": true,
+    "all_preparation_validation_artifact_hashes_match": true,
+    "selection_bytes_match_commit_72d4f18": true,
+    "original_metadata_hashes_match_selection_and_native_view": true,
+    "eligibility_selection_binding_matches": true,
+    "native_context_manifest_binding_matches": true,
+    "selected_source_rows_match_development_metadata": 12,
+    "selected_exact_reserved_hash_collisions": 0,
+    "normalized_cross_split_duplication": "unavailable; no reserved bytes opened",
+    "source_counts": {
+      "selected": 12,
+      "supported_static_contexts": 12,
+      "requests": 11,
+      "fastapi": 1,
+      "eligible_references": 0,
+      "excluded_destinations": 35
+    },
+    "requests_inventory": {
+      "entries": 154,
+      "path_mode_and_object_mapping_matches_cached_pinned_git_tree": true,
+      "duplicate_declared_paths": false,
+      "all_selected_paths_match_pinned_inventory": true,
+      "markdown_population_is_selected_eleven_plus_prior_readme": true,
+      "ordering_note": "Declared inventory order differs from Git traversal order; the complete path/mode/object mapping agrees.",
+      "required_target_count": 0,
+      "absence_truth_inferred": false
+    },
+    "fastapi_native_inventory_or_absence_claimed": false,
+    "reserved_pair_metadata": {
+      "jfleg_development": 0,
+      "jfleg_holdout": 40,
+      "asset_development": 0,
+      "asset_holdout": 40
+    },
+    "unsupported_clean_coverage_or_effectiveness_claim_found": false
+  },
+  "prerequisites_preserved": [
+    "Eligible actual human reviewers, permitted access and recorded exposure for independent annotation",
+    "Frozen accepted initial labels before semantic suggestion/revision usefulness and independent calibration claims",
+    "Frozen development candidate decisions and predeclared targets before reserved holdout access",
+    "Explicit permitted reuse terms and provenance before acquisition of the excluded README revision package",
+    "Explicit release request and exact-candidate release gates before release"
+  ],
+  "pending_root_actions_at_snapshot": [
+    "Complete N03 by retaining the actual scoped review artifacts and limits",
+    "Complete N04 with applicable validators and repository gates, commit results and update outstanding-plan status",
+    "Keep any later intake and its review/validation separate from this cached-batch acceptance"
+  ],
+  "engineering_gap_assessment": "No concrete unconditional implementation gap was established by this metadata/document audit. Empty eligible-reference populations cannot support M012 effectiveness estimates or imply clean labels. No new framework or behavior change is warranted by these counts alone.",
+  "findings": []
+}

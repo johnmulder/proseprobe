@@ -1,0 +1,20 @@
+{
+  "curated_known_mismatches": {
+    "all_rules": 6,
+    "production": 4
+  },
+  "logs": [
+    {
+      "passed": 3755,
+      "path": "quality/reviews/2026-10-15-remaining/gates.json",
+      "sha256": "ab5bf94effc869b8d83e45392799db2dde1e4bb403b7e83805cc1ab8f4db9779"
+    },
+    {
+      "passed": 224,
+      "path": "quality/reviews/2026-10-15-remaining/focused.json",
+      "sha256": "29214302a61af3407d53b59dbd3f910dd8b02dd8e9874d0255028b0f193b463d"
+    }
+  ],
+  "no_behavior_change_or_red_claim": true,
+  "version": 1
+}

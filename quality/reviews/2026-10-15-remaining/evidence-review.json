@@ -1,0 +1,1381 @@
+{
+  "version": 1,
+  "review_kind": "agent_engineering_evidence_audit",
+  "reviewer": {
+    "agent": "/root/remaining_evidence_validator",
+    "human_reviewer": false,
+    "independent_human_annotation": false
+  },
+  "scope": "Verify declared metadata/source bindings, development splits, selected-source static eligibility and pinned Requests reference closure only.",
+  "status": "passed_with_scope_limits",
+  "findings": [],
+  "conclusions": [
+    "All twelve selected documents support the existing static extraction contract and reproduce zero eligible M012 references and all 35 resolver exclusions, including exact source coordinates.",
+    "Requests contributes eleven sources and 34 exclusions; FastAPI contributes one source and one exclusion. All supported-source, source-count and reference-count declarations agree.",
+    "All in-scope artifact bindings and all selection-declared input/prior metadata hashes checked here match. The 335-row metadata view preserves all 324 original rows exactly and adds only the eleven declared Requests rows.",
+    "The selected source groups are wholly development in the complete metadata view and their original extension-selection declaration. None of the twelve selected hashes matches the 147 reserved metadata rows; selected pair/near-duplicate groups do not cross into holdout.",
+    "The existing reference-context validator accepts the selected eleven Requests sources, proves the pinned 154-entry inventory, matches source SHA-256 and Git blob identities, and recomputes an empty required target closure.",
+    "Zero eligible references supplies no precision/recall, clean coverage, target absence, target correctness or population-effectiveness evidence. No such stronger claim is accepted by this audit.",
+    "No unconditional engineering defect or missing engineering task was identified within this assigned evidence scope."
+  ],
+  "limits": [
+    "This is agent engineering evidence, not independent human annotation, calibration, usefulness judgment or a holdout evaluation.",
+    "Normalized cross-split duplication remains unknown because reserved bytes were not opened.",
+    "FastAPI was checked only against its frozen selected source hash and static extraction. No FastAPI native repository, complete inventory or absence proof was acquired or inferred.",
+    "Git proves the exact selection was committed at 72d4f1823eb70e4bdd67b66fa2ee72a69be1aaf9 and is an ancestor of the observed HEAD. Git alone does not independently prove the historical first-read ordering.",
+    "The prerequisite-audit.json binding and the whole-package runtime source digest were outside this assigned artifact/content audit. License/NOTICE source bytes and reuse-permission evidence were not independently rechecked here.",
+    "The structural recomputation uses the same production extraction/resolver contract as preparation; agreement verifies binding and reproducibility rather than independent semantic truth."
+  ],
+  "observed_head": "094377dddf476640234e451e90e4a9ce3cf82b03",
+  "reading": {
+    "lines": 42,
+    "matches_embedded_text": true,
+    "max_codepoints": 77,
+    "path": "/private/tmp/remain-audit-0001.txt",
+    "sha256": "6a89c4030c57315c98dfe8ccae76ef48f06cc0db2eb267bb780716c4f9c05bf8"
+  },
+  "artifact_hashes": {
+    "quality/reviews/2026-10-15-remaining/audit-reading.json": "7d8ea185dd5f92a2b9e095dcb3470f36404961e21179ef1994f0f14855507dcf",
+    "quality/reviews/2026-10-15-remaining/eligibility.json": "85a7723e916ebe4d9bd8256e8eaf52a000f47f7832dbb3820b5eccdc4f90f66c",
+    "quality/reviews/2026-10-15-remaining/native-source-metadata.json": "3797e099cf7b64217800d964f6f1741fc04563b9b50099c3a63cb0ae1775fddd",
+    "quality/reviews/2026-10-15-remaining/preparation-validation.json": "7693201c09970ad755f42bd9163995aa70719e05dc0b35cf7d1198427f456de4",
+    "quality/reviews/2026-10-15-remaining/requests-context-v1.json": "223408124b3998f3a810b2384d6862800bd9edf2a60f3097e3997967857aa15a",
+    "quality/reviews/2026-10-15-remaining/review-inputs.json": "792487e82472470e6e3c12c9cd9d0712de059c00658f7d6332c073cea037211c",
+    "quality/reviews/2026-10-15-remaining/selection.json": "1ccd1fd8c1a805e3b22e6d3dd8991bdd88c646bd8bce5d8f9d6ca06699f95116",
+    "quality/reviews/2026-10-15-remaining/EXECUTION.md": "9508daa7a55cc1f473fbee6881b0ea110775006b64278dc025a1f8234c23d1ef"
+  },
+  "artifact_binding_checks": [
+    {
+      "actual": "85a7723e916ebe4d9bd8256e8eaf52a000f47f7832dbb3820b5eccdc4f90f66c",
+      "declared_by": "preparation-validation",
+      "expected": "85a7723e916ebe4d9bd8256e8eaf52a000f47f7832dbb3820b5eccdc4f90f66c",
+      "matches": true,
+      "path": "quality/reviews/2026-10-15-remaining/eligibility.json"
+    },
+    {
+      "actual": "3797e099cf7b64217800d964f6f1741fc04563b9b50099c3a63cb0ae1775fddd",
+      "declared_by": "preparation-validation",
+      "expected": "3797e099cf7b64217800d964f6f1741fc04563b9b50099c3a63cb0ae1775fddd",
+      "matches": true,
+      "path": "quality/reviews/2026-10-15-remaining/native-source-metadata.json"
+    },
+    {
+      "actual": "223408124b3998f3a810b2384d6862800bd9edf2a60f3097e3997967857aa15a",
+      "declared_by": "preparation-validation",
+      "expected": "223408124b3998f3a810b2384d6862800bd9edf2a60f3097e3997967857aa15a",
+      "matches": true,
+      "path": "quality/reviews/2026-10-15-remaining/requests-context-v1.json"
+    },
+    {
+      "actual": "1ccd1fd8c1a805e3b22e6d3dd8991bdd88c646bd8bce5d8f9d6ca06699f95116",
+      "declared_by": "preparation-validation",
+      "expected": "1ccd1fd8c1a805e3b22e6d3dd8991bdd88c646bd8bce5d8f9d6ca06699f95116",
+      "matches": true,
+      "path": "quality/reviews/2026-10-15-remaining/selection.json"
+    },
+    {
+      "actual": "7d8ea185dd5f92a2b9e095dcb3470f36404961e21179ef1994f0f14855507dcf",
+      "declared_by": "review-inputs",
+      "expected": "7d8ea185dd5f92a2b9e095dcb3470f36404961e21179ef1994f0f14855507dcf",
+      "matches": true,
+      "path": "quality/reviews/2026-10-15-remaining/audit-reading.json"
+    },
+    {
+      "actual": "85a7723e916ebe4d9bd8256e8eaf52a000f47f7832dbb3820b5eccdc4f90f66c",
+      "declared_by": "review-inputs",
+      "expected": "85a7723e916ebe4d9bd8256e8eaf52a000f47f7832dbb3820b5eccdc4f90f66c",
+      "matches": true,
+      "path": "quality/reviews/2026-10-15-remaining/eligibility.json"
+    },
+    {
+      "actual": "3797e099cf7b64217800d964f6f1741fc04563b9b50099c3a63cb0ae1775fddd",
+      "declared_by": "review-inputs",
+      "expected": "3797e099cf7b64217800d964f6f1741fc04563b9b50099c3a63cb0ae1775fddd",
+      "matches": true,
+      "path": "quality/reviews/2026-10-15-remaining/native-source-metadata.json"
+    },
+    {
+      "actual": "7693201c09970ad755f42bd9163995aa70719e05dc0b35cf7d1198427f456de4",
+      "declared_by": "review-inputs",
+      "expected": "7693201c09970ad755f42bd9163995aa70719e05dc0b35cf7d1198427f456de4",
+      "matches": true,
+      "path": "quality/reviews/2026-10-15-remaining/preparation-validation.json"
+    },
+    {
+      "actual": "223408124b3998f3a810b2384d6862800bd9edf2a60f3097e3997967857aa15a",
+      "declared_by": "review-inputs",
+      "expected": "223408124b3998f3a810b2384d6862800bd9edf2a60f3097e3997967857aa15a",
+      "matches": true,
+      "path": "quality/reviews/2026-10-15-remaining/requests-context-v1.json"
+    },
+    {
+      "actual": "1ccd1fd8c1a805e3b22e6d3dd8991bdd88c646bd8bce5d8f9d6ca06699f95116",
+      "declared_by": "review-inputs",
+      "expected": "1ccd1fd8c1a805e3b22e6d3dd8991bdd88c646bd8bce5d8f9d6ca06699f95116",
+      "matches": true,
+      "path": "quality/reviews/2026-10-15-remaining/selection.json"
+    }
+  ],
+  "input_metadata_hashes": {
+    "quality/external/extension-selection.json": {
+      "actual": "71ee3fa89ada0d184fee22fdda76fcd72a934c10839f6be12e114868e63f432a",
+      "expected": "71ee3fa89ada0d184fee22fdda76fcd72a934c10839f6be12e114868e63f432a",
+      "matches": true
+    },
+    "quality/external/extension-sources.json": {
+      "actual": "1f3a26861f1321747802a9e5b574ae78201b996cdd70ccec9a18094fe052cbbf",
+      "expected": "1f3a26861f1321747802a9e5b574ae78201b996cdd70ccec9a18094fe052cbbf",
+      "matches": true
+    },
+    "quality/external/split-freeze.json": {
+      "actual": "0c078a48b7d8545241141c0eb4efaab25c705a78b03962d99394e60bfd1b97d0",
+      "expected": "0c078a48b7d8545241141c0eb4efaab25c705a78b03962d99394e60bfd1b97d0",
+      "matches": true
+    },
+    "quality/sources.json": {
+      "actual": "2dcadd8fb3bb278ee09a9ff2685b00c7a7c6efde3f0221ae69efcccc825d3ade",
+      "expected": "2dcadd8fb3bb278ee09a9ff2685b00c7a7c6efde3f0221ae69efcccc825d3ade",
+      "matches": true
+    }
+  },
+  "prior_metadata_checks": {
+    "checks": [
+      {
+        "matches_declared": true,
+        "path": "quality/reviews/2026-10-13-human-resume/native-context/requests-context-v1.json",
+        "read_kind": "metadata only",
+        "sha256": "4ecf27ff6a7f873e5a778050e9bb0d876c1cf5d8bac8eeb409dbd5bb37f32592"
+      },
+      {
+        "matches_declared": true,
+        "path": "quality/reviews/2026-10-13-human-resume/native-context/attribution.json",
+        "read_kind": "metadata only",
+        "sha256": "6e5c65d85a633b091622bf71eebd3cb7ef77b9f7f2be546bf6439e69f76ef89a"
+      }
+    ],
+    "inventory_entries": 154,
+    "original_pinned_inventory_preserved": true
+  },
+  "metadata_preservation": {
+    "original_rows_preserved": 324,
+    "supplement_rows": 11,
+    "total_rows": 335
+  },
+  "reserved_metadata_check": {
+    "count": 147,
+    "normalized_duplication": "unknown; reserved bytes unopened",
+    "related_group_conflicts": [],
+    "selected_exact_hash_matches": 0,
+    "source_groups": {
+      "Textualize/rich": 6,
+      "facebookresearch/asset": 40,
+      "keisks/jfleg": 40,
+      "psf/black": 6,
+      "python/cpython": 5,
+      "rust-lang/book": 50
+    }
+  },
+  "source_group_splits": {
+    "fastapi/fastapi": {
+      "development": 1
+    },
+    "psf/requests": {
+      "development": 17
+    }
+  },
+  "first_extension_split_declarations": [
+    {
+      "dialect": "README; no template processing",
+      "markdown_count": 1,
+      "markdown_path": "README.md",
+      "python_count": 5,
+      "python_prefix": "src/requests/",
+      "ref": "v2.32.3",
+      "renderer": "GitHub Markdown",
+      "repository": "psf/requests",
+      "split": "development"
+    },
+    {
+      "dialect": "README; embedded HTML supported only by extraction contract",
+      "markdown_count": 1,
+      "markdown_path": "README.md",
+      "python_count": 0,
+      "ref": "0.115.0",
+      "renderer": "GitHub Markdown",
+      "repository": "fastapi/fastapi",
+      "split": "development"
+    }
+  ],
+  "second_extension_split_freeze_selected_groups": [],
+  "selection_commit": {
+    "ancestor_of_head": true,
+    "before_source_read_ordering": "not independently provable from Git alone",
+    "commit": "72d4f1823eb70e4bdd67b66fa2ee72a69be1aaf9",
+    "matches_worktree": true,
+    "selection_sha256": "1ccd1fd8c1a805e3b22e6d3dd8991bdd88c646bd8bce5d8f9d6ca06699f95116"
+  },
+  "inventory_selection": {
+    "entries": 154,
+    "all_other_requests_markdown_selected": true,
+    "required_targets": 0
+  },
+  "per_group_counts": {
+    "fastapi/fastapi": {
+      "eligible": 0,
+      "excluded": 1,
+      "sources": 1
+    },
+    "psf/requests": {
+      "eligible": 0,
+      "excluded": 34,
+      "sources": 11
+    }
+  },
+  "structural_recomputation": {
+    "check_methods_invoked": false,
+    "eligible_reference_count": 0,
+    "excluded_destination_count": 35,
+    "root_remained_empty": true,
+    "sources": [
+      {
+        "anchor_membership_count": 1,
+        "bytes": 346,
+        "cache_path": "native-continuation/2026-10-15/requests/.github/CODE_OF_CONDUCT.md",
+        "eligible_reference_count": 0,
+        "excluded_destination_count": 1,
+        "git_blob_id": "ff7f10665a52188f3483981c57b5827058b29c4b",
+        "lines": 6,
+        "matches_frozen_coordinates_and_destinations": true,
+        "native_path": ".github/CODE_OF_CONDUCT.md",
+        "sha256": "0216c86755ca264f605593cc82deadc13c3e84b97a60bf461fcda7b4b8b23242",
+        "source_group": "psf/requests",
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/CODE_OF_CONDUCT.md",
+        "static_context": "supported"
+      },
+      {
+        "anchor_membership_count": 3,
+        "bytes": 2885,
+        "cache_path": "native-continuation/2026-10-15/requests/.github/CONTRIBUTING.md",
+        "eligible_reference_count": 0,
+        "excluded_destination_count": 2,
+        "git_blob_id": "3470dfee835a73525fdc118574ed18d3385c432b",
+        "lines": 54,
+        "matches_frozen_coordinates_and_destinations": true,
+        "native_path": ".github/CONTRIBUTING.md",
+        "sha256": "6ce203a20b7bc3c87eccdb9be5888bded1bcb7743a598b3cf91b7be65f41f4e0",
+        "source_group": "psf/requests",
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/CONTRIBUTING.md",
+        "static_context": "supported"
+      },
+      {
+        "anchor_membership_count": 4,
+        "bytes": 394,
+        "cache_path": "native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE.md",
+        "eligible_reference_count": 0,
+        "excluded_destination_count": 0,
+        "git_blob_id": "060d9262a5e763c78a707222600a02f4c3b5fd66",
+        "lines": 28,
+        "matches_frozen_coordinates_and_destinations": true,
+        "native_path": ".github/ISSUE_TEMPLATE.md",
+        "sha256": "24ac47c35e70fb3c7dfb2b768ac3ae49f6ea997b96beca4fe489f279429509ca",
+        "source_group": "psf/requests",
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/ISSUE_TEMPLATE.md",
+        "static_context": "supported"
+      },
+      {
+        "anchor_membership_count": 4,
+        "bytes": 548,
+        "cache_path": "native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE/Bug_report.md",
+        "eligible_reference_count": 0,
+        "excluded_destination_count": 0,
+        "git_blob_id": "cb87bd6b67572c2d25d1fb94e17fe483dbc0da9b",
+        "lines": 36,
+        "matches_frozen_coordinates_and_destinations": true,
+        "native_path": ".github/ISSUE_TEMPLATE/Bug_report.md",
+        "sha256": "4887dbec17c9e2fd703c0c8ae3e20882f9be53f7fe4a36d61c130838576afe35",
+        "source_group": "psf/requests",
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/ISSUE_TEMPLATE/Bug_report.md",
+        "static_context": "supported"
+      },
+      {
+        "anchor_membership_count": 0,
+        "bytes": 249,
+        "cache_path": "native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE/Custom.md",
+        "eligible_reference_count": 0,
+        "excluded_destination_count": 1,
+        "git_blob_id": "332c3aea9764662b5efdb9a325d5359f6be4bf86",
+        "lines": 10,
+        "matches_frozen_coordinates_and_destinations": true,
+        "native_path": ".github/ISSUE_TEMPLATE/Custom.md",
+        "sha256": "3f1a2a5591714c25485a4ce6679cec328962f4fd223ce02e2ddeaf43c86f1496",
+        "source_group": "psf/requests",
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/ISSUE_TEMPLATE/Custom.md",
+        "static_context": "supported"
+      },
+      {
+        "anchor_membership_count": 0,
+        "bytes": 194,
+        "cache_path": "native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE/Feature_request.md",
+        "eligible_reference_count": 0,
+        "excluded_destination_count": 0,
+        "git_blob_id": "544113ae1c5c2a67d27cbfbbe9b405ff47e6ebba",
+        "lines": 10,
+        "matches_frozen_coordinates_and_destinations": true,
+        "native_path": ".github/ISSUE_TEMPLATE/Feature_request.md",
+        "sha256": "97d416c863d8090ae33909cbf90693aca37a23108d5d8e30003b28eaa7b64e40",
+        "source_group": "psf/requests",
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/ISSUE_TEMPLATE/Feature_request.md",
+        "static_context": "supported"
+      },
+      {
+        "anchor_membership_count": 3,
+        "bytes": 4209,
+        "cache_path": "native-continuation/2026-10-15/requests/.github/SECURITY.md",
+        "eligible_reference_count": 0,
+        "excluded_destination_count": 5,
+        "git_blob_id": "9021d429d8615902efbf2cd206823f25df6c8d6a",
+        "lines": 93,
+        "matches_frozen_coordinates_and_destinations": true,
+        "native_path": ".github/SECURITY.md",
+        "sha256": "d829bca715473cd6460083460346f8f4dd223fc282908fa5f001f8bc0f594892",
+        "source_group": "psf/requests",
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/SECURITY.md",
+        "static_context": "supported"
+      },
+      {
+        "anchor_membership_count": 158,
+        "bytes": 60368,
+        "cache_path": "native-continuation/2026-10-15/requests/HISTORY.md",
+        "eligible_reference_count": 0,
+        "excluded_destination_count": 20,
+        "git_blob_id": "e51a7ee2c231c6f1ed0adcd16c198e6a412a9c75",
+        "lines": 1982,
+        "matches_frozen_coordinates_and_destinations": true,
+        "native_path": "HISTORY.md",
+        "sha256": "0eb3e62434380d747997cd019e03d4a502e5e77021554735db19b1cde419a679",
+        "source_group": "psf/requests",
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:HISTORY.md",
+        "static_context": "supported"
+      },
+      {
+        "anchor_membership_count": 1,
+        "bytes": 343,
+        "cache_path": "native-continuation/2026-10-15/requests/tests/certs/README.md",
+        "eligible_reference_count": 0,
+        "excluded_destination_count": 3,
+        "git_blob_id": "4bf7002e0b17e14449cd116daf2406760022eebb",
+        "lines": 10,
+        "matches_frozen_coordinates_and_destinations": true,
+        "native_path": "tests/certs/README.md",
+        "sha256": "a902fe53d4cc6224b59532e47d94fc42726b2227462e801538aa50a7888d38f3",
+        "source_group": "psf/requests",
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:tests/certs/README.md",
+        "static_context": "supported"
+      },
+      {
+        "anchor_membership_count": 1,
+        "bytes": 228,
+        "cache_path": "native-continuation/2026-10-15/requests/tests/certs/expired/README.md",
+        "eligible_reference_count": 0,
+        "excluded_destination_count": 2,
+        "git_blob_id": "f7234f8820f7ffc749eb45ba12529647704ab297",
+        "lines": 11,
+        "matches_frozen_coordinates_and_destinations": true,
+        "native_path": "tests/certs/expired/README.md",
+        "sha256": "80690554d2353ab1c348bee8df833bdf7b3cd1cb8d728b4380221f34b5881eeb",
+        "source_group": "psf/requests",
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:tests/certs/expired/README.md",
+        "static_context": "supported"
+      },
+      {
+        "anchor_membership_count": 1,
+        "bytes": 180,
+        "cache_path": "native-continuation/2026-10-15/requests/tests/certs/mtls/README.md",
+        "eligible_reference_count": 0,
+        "excluded_destination_count": 0,
+        "git_blob_id": "9a3df4623eedff71c276ecfa7f0c46f485f649a0",
+        "lines": 4,
+        "matches_frozen_coordinates_and_destinations": true,
+        "native_path": "tests/certs/mtls/README.md",
+        "sha256": "57dd4ec5bd44f1d2e1bc2de7e6cb292eb62f2236d34fd889a46d81a19dbde9f7",
+        "source_group": "psf/requests",
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:tests/certs/mtls/README.md",
+        "static_context": "supported"
+      },
+      {
+        "anchor_membership_count": 21,
+        "bytes": 24131,
+        "cache_path": "extension/sources/fastapi/fastapi/README.md",
+        "eligible_reference_count": 0,
+        "excluded_destination_count": 1,
+        "git_blob_id": null,
+        "lines": 499,
+        "matches_frozen_coordinates_and_destinations": true,
+        "native_path": "README.md",
+        "sha256": "4fd6beb4d1c0bbe7c3ff56b18a3d106efaa7edd33f6c13ed357bd8a4e942a7f6",
+        "source_group": "fastapi/fastapi",
+        "source_id": "fastapi/fastapi:40e33e492dbf4af6172997f4e3238a32e56cbe26:README.md",
+        "static_context": "supported"
+      }
+    ],
+    "supported_source_count": 12,
+    "target_bytes_read": false
+  },
+  "existing_reference_context_validator": {
+    "accepted": true,
+    "corpus_root": "downloads/evaluation",
+    "eligible": 0,
+    "excluded": 34,
+    "function": "benchmarks.native_reference_context.validate_reference_context",
+    "inventory_sha256": "85ca40bc9d9f04a7c686b908ab1605f64938630c44190bdfe8e62020db8b017e",
+    "manifest": "quality/reviews/2026-10-15-remaining/native-source-metadata.json",
+    "manifest_sha256": "3797e099cf7b64217800d964f6f1741fc04563b9b50099c3a63cb0ae1775fddd",
+    "repository": "downloads/evaluation/native-context/requests-0e322af-v1.git",
+    "revision": "0e322af87745eff34caffe4df68456ebc20d9068",
+    "source_group": "psf/requests",
+    "sources": 11,
+    "targets": 0
+  },
+  "helper_runtime_identity": {
+    "helper_files_sha256": {
+      "benchmarks/native_link_context.py": "b0cbbfbdd865d74e31bb817d137126cf9d335cda8f1632910853d074b8dd9c81",
+      "benchmarks/native_reference_context.py": "78db0226bac5ef77d20a48b27851ceaf438e595646e8ca84e3648bde51f6b4d2",
+      "src/proseprobe/rules/markup.py": "9397067c3114c4b418b2d3b2d80842975c29ef4c73c4b7a313b4b69fe1bd82b3"
+    },
+    "python": "3.13.16 (main, Sep 30 2026, 18:57:20) [Clang 21.0.0 (clang-2100.3.34.2)]"
+  },
+  "exposure": {
+    "bounded_reading_opened_first": true,
+    "metadata_content_read": [
+      "quality/reviews/2026-10-15-remaining/selection.json",
+      "quality/reviews/2026-10-15-remaining/eligibility.json",
+      "quality/reviews/2026-10-15-remaining/native-source-metadata.json",
+      "quality/reviews/2026-10-15-remaining/requests-context-v1.json",
+      "quality/reviews/2026-10-15-remaining/preparation-validation.json",
+      "quality/reviews/2026-10-15-remaining/audit-reading.json",
+      "quality/reviews/2026-10-15-remaining/review-inputs.json",
+      "quality/reviews/2026-10-15-remaining/EXECUTION.md",
+      "quality/external/extension-selection.json",
+      "quality/external/extension-sources.json",
+      "quality/external/split-freeze.json",
+      "quality/sources.json",
+      "quality/reviews/2026-10-13-human-resume/native-context/requests-context-v1.json",
+      "quality/reviews/2026-10-13-human-resume/native-context/attribution.json"
+    ],
+    "helper_text_read": [
+      {
+        "path": "benchmarks/native_reference_context.py",
+        "lines": "1-242"
+      },
+      {
+        "path": "benchmarks/native_link_context.py",
+        "lines": "153-255, 280-367, 397-590; symbol matches also inspected"
+      },
+      {
+        "path": "src/proseprobe/rules/markup.py",
+        "lines": "300-386, 998-1060; named method symbol matches also inspected"
+      }
+    ],
+    "source_content": "12 selected development source files structurally parsed; 11 Requests files reread and materialized by the existing validator; no raw source text displayed",
+    "selected_source_identities_and_hashes": [
+      {
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/CODE_OF_CONDUCT.md",
+        "cache_path": "native-continuation/2026-10-15/requests/.github/CODE_OF_CONDUCT.md",
+        "sha256": "0216c86755ca264f605593cc82deadc13c3e84b97a60bf461fcda7b4b8b23242",
+        "git_blob_id": "ff7f10665a52188f3483981c57b5827058b29c4b",
+        "bytes": 346,
+        "structural_source_reads": 2,
+        "additional_native_validator_reads": 1
+      },
+      {
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/CONTRIBUTING.md",
+        "cache_path": "native-continuation/2026-10-15/requests/.github/CONTRIBUTING.md",
+        "sha256": "6ce203a20b7bc3c87eccdb9be5888bded1bcb7743a598b3cf91b7be65f41f4e0",
+        "git_blob_id": "3470dfee835a73525fdc118574ed18d3385c432b",
+        "bytes": 2885,
+        "structural_source_reads": 2,
+        "additional_native_validator_reads": 1
+      },
+      {
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/ISSUE_TEMPLATE.md",
+        "cache_path": "native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE.md",
+        "sha256": "24ac47c35e70fb3c7dfb2b768ac3ae49f6ea997b96beca4fe489f279429509ca",
+        "git_blob_id": "060d9262a5e763c78a707222600a02f4c3b5fd66",
+        "bytes": 394,
+        "structural_source_reads": 2,
+        "additional_native_validator_reads": 1
+      },
+      {
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/ISSUE_TEMPLATE/Bug_report.md",
+        "cache_path": "native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE/Bug_report.md",
+        "sha256": "4887dbec17c9e2fd703c0c8ae3e20882f9be53f7fe4a36d61c130838576afe35",
+        "git_blob_id": "cb87bd6b67572c2d25d1fb94e17fe483dbc0da9b",
+        "bytes": 548,
+        "structural_source_reads": 2,
+        "additional_native_validator_reads": 1
+      },
+      {
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/ISSUE_TEMPLATE/Custom.md",
+        "cache_path": "native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE/Custom.md",
+        "sha256": "3f1a2a5591714c25485a4ce6679cec328962f4fd223ce02e2ddeaf43c86f1496",
+        "git_blob_id": "332c3aea9764662b5efdb9a325d5359f6be4bf86",
+        "bytes": 249,
+        "structural_source_reads": 2,
+        "additional_native_validator_reads": 1
+      },
+      {
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/ISSUE_TEMPLATE/Feature_request.md",
+        "cache_path": "native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE/Feature_request.md",
+        "sha256": "97d416c863d8090ae33909cbf90693aca37a23108d5d8e30003b28eaa7b64e40",
+        "git_blob_id": "544113ae1c5c2a67d27cbfbbe9b405ff47e6ebba",
+        "bytes": 194,
+        "structural_source_reads": 2,
+        "additional_native_validator_reads": 1
+      },
+      {
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/SECURITY.md",
+        "cache_path": "native-continuation/2026-10-15/requests/.github/SECURITY.md",
+        "sha256": "d829bca715473cd6460083460346f8f4dd223fc282908fa5f001f8bc0f594892",
+        "git_blob_id": "9021d429d8615902efbf2cd206823f25df6c8d6a",
+        "bytes": 4209,
+        "structural_source_reads": 2,
+        "additional_native_validator_reads": 1
+      },
+      {
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:HISTORY.md",
+        "cache_path": "native-continuation/2026-10-15/requests/HISTORY.md",
+        "sha256": "0eb3e62434380d747997cd019e03d4a502e5e77021554735db19b1cde419a679",
+        "git_blob_id": "e51a7ee2c231c6f1ed0adcd16c198e6a412a9c75",
+        "bytes": 60368,
+        "structural_source_reads": 2,
+        "additional_native_validator_reads": 1
+      },
+      {
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:tests/certs/README.md",
+        "cache_path": "native-continuation/2026-10-15/requests/tests/certs/README.md",
+        "sha256": "a902fe53d4cc6224b59532e47d94fc42726b2227462e801538aa50a7888d38f3",
+        "git_blob_id": "4bf7002e0b17e14449cd116daf2406760022eebb",
+        "bytes": 343,
+        "structural_source_reads": 2,
+        "additional_native_validator_reads": 1
+      },
+      {
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:tests/certs/expired/README.md",
+        "cache_path": "native-continuation/2026-10-15/requests/tests/certs/expired/README.md",
+        "sha256": "80690554d2353ab1c348bee8df833bdf7b3cd1cb8d728b4380221f34b5881eeb",
+        "git_blob_id": "f7234f8820f7ffc749eb45ba12529647704ab297",
+        "bytes": 228,
+        "structural_source_reads": 2,
+        "additional_native_validator_reads": 1
+      },
+      {
+        "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:tests/certs/mtls/README.md",
+        "cache_path": "native-continuation/2026-10-15/requests/tests/certs/mtls/README.md",
+        "sha256": "57dd4ec5bd44f1d2e1bc2de7e6cb292eb62f2236d34fd889a46d81a19dbde9f7",
+        "git_blob_id": "9a3df4623eedff71c276ecfa7f0c46f485f649a0",
+        "bytes": 180,
+        "structural_source_reads": 2,
+        "additional_native_validator_reads": 1
+      },
+      {
+        "source_id": "fastapi/fastapi:40e33e492dbf4af6172997f4e3238a32e56cbe26:README.md",
+        "cache_path": "extension/sources/fastapi/fastapi/README.md",
+        "sha256": "4fd6beb4d1c0bbe7c3ff56b18a3d106efaa7edd33f6c13ed357bd8a4e942a7f6",
+        "git_blob_id": null,
+        "bytes": 24131,
+        "structural_source_reads": 2,
+        "additional_native_validator_reads": 0
+      }
+    ],
+    "total_selected_source_read_operations": 35,
+    "raw_source_text_displayed": false,
+    "temporary_source_materialization": "Only the successful existing validator copied its eleven selected Requests source byte strings into its disposable native-context directory and removed it. The reviewer's independent resolver root remained empty.",
+    "reserved_holdout_bytes_opened": false,
+    "reserved_reference_bytes_opened": false,
+    "targets_not_declared_opened": false,
+    "target_bytes_opened": false,
+    "detector_predictions_generated": false,
+    "check_methods_invoked": false,
+    "broad_corpus_loader_invoked": false,
+    "network_used": false,
+    "commits_created": false,
+    "persistent_writes": [
+      "quality/reviews/2026-10-15-remaining/evidence-review.json"
+    ],
+    "successful_run_audit": {
+      "absolute_corpus_reads": {
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation/extension/sources/fastapi/fastapi/README.md": 1,
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation/native-continuation/2026-10-15/requests/.github/CODE_OF_CONDUCT.md": 1,
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation/native-continuation/2026-10-15/requests/.github/CONTRIBUTING.md": 1,
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation/native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE.md": 1,
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation/native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE/Bug_report.md": 1,
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation/native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE/Custom.md": 1,
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation/native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE/Feature_request.md": 1,
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation/native-continuation/2026-10-15/requests/.github/SECURITY.md": 1,
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation/native-continuation/2026-10-15/requests/HISTORY.md": 1,
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation/native-continuation/2026-10-15/requests/tests/certs/README.md": 1,
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation/native-continuation/2026-10-15/requests/tests/certs/expired/README.md": 1,
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation/native-continuation/2026-10-15/requests/tests/certs/mtls/README.md": 1
+      },
+      "directory_opens": [
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation",
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation",
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation",
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation",
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation",
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation",
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation",
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation",
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation",
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation",
+        "/Users/johnmulder/Experiments/proseprobe/downloads/evaluation"
+      ],
+      "relative_descriptor_opens": [
+        {
+          "flags": 17826048,
+          "path": "native-continuation"
+        },
+        {
+          "flags": 17826048,
+          "path": "2026-10-15"
+        },
+        {
+          "flags": 17826048,
+          "path": "requests"
+        },
+        {
+          "flags": 17826048,
+          "path": ".github"
+        },
+        {
+          "flags": 16777476,
+          "path": "CODE_OF_CONDUCT.md"
+        },
+        {
+          "flags": 17826048,
+          "path": "native-continuation"
+        },
+        {
+          "flags": 17826048,
+          "path": "2026-10-15"
+        },
+        {
+          "flags": 17826048,
+          "path": "requests"
+        },
+        {
+          "flags": 17826048,
+          "path": ".github"
+        },
+        {
+          "flags": 16777476,
+          "path": "CONTRIBUTING.md"
+        },
+        {
+          "flags": 17826048,
+          "path": "native-continuation"
+        },
+        {
+          "flags": 17826048,
+          "path": "2026-10-15"
+        },
+        {
+          "flags": 17826048,
+          "path": "requests"
+        },
+        {
+          "flags": 17826048,
+          "path": ".github"
+        },
+        {
+          "flags": 16777476,
+          "path": "ISSUE_TEMPLATE.md"
+        },
+        {
+          "flags": 17826048,
+          "path": "native-continuation"
+        },
+        {
+          "flags": 17826048,
+          "path": "2026-10-15"
+        },
+        {
+          "flags": 17826048,
+          "path": "requests"
+        },
+        {
+          "flags": 17826048,
+          "path": ".github"
+        },
+        {
+          "flags": 17826048,
+          "path": "ISSUE_TEMPLATE"
+        },
+        {
+          "flags": 16777476,
+          "path": "Bug_report.md"
+        },
+        {
+          "flags": 17826048,
+          "path": "native-continuation"
+        },
+        {
+          "flags": 17826048,
+          "path": "2026-10-15"
+        },
+        {
+          "flags": 17826048,
+          "path": "requests"
+        },
+        {
+          "flags": 17826048,
+          "path": ".github"
+        },
+        {
+          "flags": 17826048,
+          "path": "ISSUE_TEMPLATE"
+        },
+        {
+          "flags": 16777476,
+          "path": "Custom.md"
+        },
+        {
+          "flags": 17826048,
+          "path": "native-continuation"
+        },
+        {
+          "flags": 17826048,
+          "path": "2026-10-15"
+        },
+        {
+          "flags": 17826048,
+          "path": "requests"
+        },
+        {
+          "flags": 17826048,
+          "path": ".github"
+        },
+        {
+          "flags": 17826048,
+          "path": "ISSUE_TEMPLATE"
+        },
+        {
+          "flags": 16777476,
+          "path": "Feature_request.md"
+        },
+        {
+          "flags": 17826048,
+          "path": "native-continuation"
+        },
+        {
+          "flags": 17826048,
+          "path": "2026-10-15"
+        },
+        {
+          "flags": 17826048,
+          "path": "requests"
+        },
+        {
+          "flags": 17826048,
+          "path": ".github"
+        },
+        {
+          "flags": 16777476,
+          "path": "SECURITY.md"
+        },
+        {
+          "flags": 17826048,
+          "path": "native-continuation"
+        },
+        {
+          "flags": 17826048,
+          "path": "2026-10-15"
+        },
+        {
+          "flags": 17826048,
+          "path": "requests"
+        },
+        {
+          "flags": 16777476,
+          "path": "HISTORY.md"
+        },
+        {
+          "flags": 17826048,
+          "path": "native-continuation"
+        },
+        {
+          "flags": 17826048,
+          "path": "2026-10-15"
+        },
+        {
+          "flags": 17826048,
+          "path": "requests"
+        },
+        {
+          "flags": 17826048,
+          "path": "tests"
+        },
+        {
+          "flags": 17826048,
+          "path": "certs"
+        },
+        {
+          "flags": 16777476,
+          "path": "README.md"
+        },
+        {
+          "flags": 17826048,
+          "path": "native-continuation"
+        },
+        {
+          "flags": 17826048,
+          "path": "2026-10-15"
+        },
+        {
+          "flags": 17826048,
+          "path": "requests"
+        },
+        {
+          "flags": 17826048,
+          "path": "tests"
+        },
+        {
+          "flags": 17826048,
+          "path": "certs"
+        },
+        {
+          "flags": 17826048,
+          "path": "expired"
+        },
+        {
+          "flags": 16777476,
+          "path": "README.md"
+        },
+        {
+          "flags": 17826048,
+          "path": "native-continuation"
+        },
+        {
+          "flags": 17826048,
+          "path": "2026-10-15"
+        },
+        {
+          "flags": 17826048,
+          "path": "requests"
+        },
+        {
+          "flags": 17826048,
+          "path": "tests"
+        },
+        {
+          "flags": 17826048,
+          "path": "certs"
+        },
+        {
+          "flags": 17826048,
+          "path": "mtls"
+        },
+        {
+          "flags": 16777476,
+          "path": "README.md"
+        },
+        {
+          "flags": 16777220,
+          "path": ".github"
+        },
+        {
+          "flags": 16777220,
+          "path": "ISSUE_TEMPLATE"
+        },
+        {
+          "flags": 16777220,
+          "path": "tests"
+        },
+        {
+          "flags": 16777220,
+          "path": "certs"
+        },
+        {
+          "flags": 16777220,
+          "path": "expired"
+        },
+        {
+          "flags": 16777220,
+          "path": "mtls"
+        }
+      ],
+      "limit": "Absolute corpus opens were restricted to the selected 12 paths plus their directories. Existing validator uses relative descriptor opens; its accepted bound source list establishes the additional 11 source reads."
+    }
+  },
+  "actual_commands": {
+    "post_write_validation": {"command":"rtk proxy python - <<'PY'\nimport hashlib,json\nfrom pathlib import Path\npath=Path('quality/reviews/2026-10-15-remaining/evidence-review.json')\nreport=json.loads(path.read_text())\nassert report['findings']==[]\nassert report['structural_recomputation']['supported_source_count']==12\nassert report['structural_recomputation']['eligible_reference_count']==0\nassert report['structural_recomputation']['excluded_destination_count']==35\nassert report['existing_reference_context_validator']['accepted']\nassert report['exposure']['total_selected_source_read_operations']==35\nfor name,expected in report['artifact_hashes'].items():\n    assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==expected\nprint(json.dumps({'path':str(path),'json_valid':True,'frozen_artifact_hashes_unchanged':True,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()},sort_keys=True))\nPY"},
+    "inspection": [
+      {
+        "command": "rtk read /Users/johnmulder/.codex/RTK.md",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk read /private/tmp/remain-audit-0001.txt",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy wc -lc quality/reviews/2026-10-15-remaining/selection.json quality/reviews/2026-10-15-remaining/eligibility.json quality/reviews/2026-10-15-remaining/native-source-metadata.json quality/reviews/2026-10-15-remaining/requests-context-v1.json quality/reviews/2026-10-15-remaining/preparation-validation.json quality/reviews/2026-10-15-remaining/audit-reading.json quality/reviews/2026-10-15-remaining/review-inputs.json quality/reviews/2026-10-15-remaining/EXECUTION.md",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk read quality/reviews/2026-10-15-remaining/selection.json quality/reviews/2026-10-15-remaining/eligibility.json quality/reviews/2026-10-15-remaining/preparation-validation.json quality/reviews/2026-10-15-remaining/audit-reading.json quality/reviews/2026-10-15-remaining/review-inputs.json quality/reviews/2026-10-15-remaining/EXECUTION.md",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk rg -n 'def validate_reference_context|def main|argparse|manifest|selected|source_ids|def _document|def _resolve_target' benchmarks/native_reference_context.py src/proseprobe/rules/markup.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy python - <<'PY'\nimport json\nfrom pathlib import Path\nroot = Path('quality/reviews/2026-10-15-remaining')\nfor name in ('native-source-metadata.json','requests-context-v1.json'):\n    obj=json.loads((root/name).read_text())\n    print(name, 'keys', list(obj))\n    for key,value in obj.items():\n        if isinstance(value,list):\n            print(key, 'list length',len(value), 'first item keys',list(value[0]) if value and isinstance(value[0],dict) else None)\n        elif isinstance(value,dict):\n            print(key,'dict keys',list(value)[:25], 'length',len(value))\n        else:\n            print(key,value)\nPY",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy sed -n '1,242p' benchmarks/native_reference_context.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy sed -n '300,386p' src/proseprobe/rules/markup.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy sed -n '998,1060p' src/proseprobe/rules/markup.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy python - <<'PY'\nimport json\nfrom pathlib import Path\nroot=Path('quality/reviews/2026-10-15-remaining')\na=json.loads((root/'requests-context-v1.json').read_text())['native_context']\nfor k,v in a.items():\n    if k=='inventory':\n        print(k,'count',len(v),'first',v[:2])\n    else:\n        print(k,v)\nPY",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk rg -n '^def |subprocess|read_bytes|read_text|_source_metadata|reserved' benchmarks/native_link_context.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy python - <<'PY'\nimport json\nfrom pathlib import Path\nfor name in ('quality/sources.json','quality/external/extension-sources.json','quality/external/split-freeze.json','quality/external/extension-selection.json'):\n    obj=json.loads(Path(name).read_text())\n    print(name,'keys',list(obj))\n    for k,v in obj.items():\n        if isinstance(v,list): print(k,'count',len(v),'item keys',list(v[0]) if v and isinstance(v[0],dict) else '')\n        elif isinstance(v,dict): print(k,'keys',list(v)[:8],'count',len(v))\nPY",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy sed -n '153,255p' benchmarks/native_link_context.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy sed -n '280,367p' benchmarks/native_link_context.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy sed -n '397,523p' benchmarks/native_link_context.py",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk git show --format=fuller --stat 72d4f1823eb70e4bdd67b66fa2ee72a69be1aaf9 -- quality/reviews/2026-10-15-remaining/selection.json",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy git rev-parse HEAD",
+        "exit_code": 0
+      },
+      {
+        "command": "rtk proxy sed -n '523,590p' benchmarks/native_link_context.py",
+        "exit_code": 0
+      }
+    ],
+    "verification": [
+      {
+        "command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python - <<'PY'\nimport hashlib,json,subprocess\nfrom collections import Counter\nfrom pathlib import Path\nbase=Path('quality/reviews/2026-10-15-remaining')\nnames=['selection','eligibility','native-source-metadata','requests-context-v1','preparation-validation','audit-reading','review-inputs']\nfiles={name:base/(name+'.json') for name in names}\nraw={name:path.read_bytes() for name,path in files.items()}\nobj={name:json.loads(value) for name,value in raw.items()}\nsha=lambda value:hashlib.sha256(value).hexdigest()\nchecks=[]\nfor owner in ('preparation-validation','review-inputs'):\n    for name,expected in obj[owner]['artifacts_sha256'].items():\n        path=Path(name)\n        if path in files.values():\n            actual=sha(path.read_bytes())\n            checks.append({'declared_by':owner,'path':name,'expected':expected,'actual':actual,'matches':actual==expected})\n            assert actual==expected\nreading=Path('/private/tmp/remain-audit-0001.txt').read_bytes()\nreading_text=reading.decode('utf-8')\nreading_result={'path':'/private/tmp/remain-audit-0001.txt','sha256':sha(reading),'lines':len(reading_text.splitlines()),'max_codepoints':max(map(len,reading_text.splitlines())),'matches_embedded_text':reading_text==obj['audit-reading']['rendered_text']}\nassert reading_result['sha256']==obj['audit-reading']['rendered_sha256']==obj['review-inputs']['reading_sha256']\nassert reading_result['lines']==42 and reading_result['max_codepoints']==77 and reading_result['matches_embedded_text']\nselection=obj['selection']; eligibility=obj['eligibility']; metadata=obj['native-source-metadata']; native=obj['requests-context-v1']['native_context']\ninputs={}\ninput_objects={}\nfor name,expected in selection['input_metadata_sha256'].items():\n    content=Path(name).read_bytes(); actual=sha(content)\n    inputs[name]={'expected':expected,'actual':actual,'matches':actual==expected}\n    assert actual==expected\n    input_objects[name]=json.loads(content)\nassert metadata['input_metadata_sha256']==selection['input_metadata_sha256']\noriginal=input_objects['quality/sources.json']['samples']+input_objects['quality/external/extension-sources.json']['samples']\nrows=metadata['samples']; by_id={r['id']:r for r in rows}\nassert len(by_id)==len(rows)==335\nassert all(by_id[r['id']]==r for r in original)\nadded=[r for r in rows if r['id'] not in {x['id'] for x in original}]\nassert len(added)==11\nselected=[by_id[r['source_id']] for r in eligibility['sources']]\nassert len(selected)==12 and len({r['id'] for r in selected})==12\nassert {r['id'] for r in added}==set(native['sources'])\nassert selection['fastapi']['sample']==by_id[selection['fastapi']['sample']['id']]\nreserved=[r for r in rows if r['split']=='holdout']\nreserved_hashes={r['sha256'] for r in reserved}\nassert all(r['sha256'] not in reserved_hashes for r in selected)\ngroups=sorted({r['source_group'] for r in selected})\ngroup_splits={g:dict(Counter(r['split'] for r in rows if r['source_group']==g)) for g in groups}\nassert all(set(splits)=={'development'} for splits in group_splits.values())\nrelated_conflicts=[]\nfor selected_row in selected:\n    for field in ('pair_group','near_duplicate_group'):\n        if selected_row.get(field) is not None:\n            related_conflicts.extend({'source_id':selected_row['id'],'field':field,'reserved_id':r['id']} for r in reserved if r.get(field)==selected_row[field])\nassert not related_conflicts\nfreeze=input_objects['quality/external/split-freeze.json']\nfreeze_rows=[r for r in freeze['groups'] if r['source_group'] in groups]\nassert {r['source_group'] for r in freeze_rows}==set(groups)\nassert all(r['split']=='development' for r in freeze_rows)\nassert eligibility['selection_sha256']==sha(raw['selection'])\nassert len(eligibility['sources'])==eligibility['source_count']==eligibility['supported_source_count']==12\nassert sum(len(r['references']) for r in eligibility['sources'])==eligibility['eligible_reference_count']==0\nassert sum(len(r['excluded_destinations']) for r in eligibility['sources'])==eligibility['excluded_destination_count']==35\nassert all(r['static_context']=='supported' for r in eligibility['sources'])\nper_group={g:{'sources':sum(r['source_group']==g for r in eligibility['sources']),'eligible':sum(len(r['references']) for r in eligibility['sources'] if r['source_group']==g),'excluded':sum(len(r['excluded_destinations']) for r in eligibility['sources'] if r['source_group']==g)} for g in groups}\nassert per_group['psf/requests']=={'sources':11,'eligible':0,'excluded':34}\nassert per_group['fastapi/fastapi']=={'sources':1,'eligible':0,'excluded':1}\nassert native['targets']=={}\nassert set(native['sources'])==set(obj['requests-context-v1']['references'])==set(obj['requests-context-v1']['excluded_destinations'])\nassert sorted(r['native_path'] for r in eligibility['sources'] if r['source_group']=='psf/requests')==sorted(r['path'] for r in selection['requests']['selected'])\nassert sorted(r['path'] for r in native['inventory'] if r['mode'] in {'100644','100755'} and Path(r['path']).suffix.lower() in {'.md','.markdown'} and r['path']!='README.md')==sorted(r['path'] for r in selection['requests']['selected'])\npin='72d4f1823eb70e4bdd67b66fa2ee72a69be1aaf9'\npinned=subprocess.run(['rtk','proxy','git','show',pin+':'+str(files['selection'])],capture_output=True,check=True).stdout\nassert sha(pinned)==sha(raw['selection'])\nancestor=subprocess.run(['rtk','proxy','git','merge-base','--is-ancestor',pin,'HEAD'],capture_output=True,check=True)\nprint(json.dumps({'artifact_hash_checks':checks,'artifact_hashes':{str(path):sha(raw[name]) for name,path in files.items()},'execution_sha256':sha((base/'EXECUTION.md').read_bytes()),'reading':reading_result,'input_metadata_hashes':inputs,'metadata_copy':{'original_rows_preserved':len(original),'supplement_rows':len(added),'total_rows':len(rows)},'reserved_metadata':{'count':len(reserved),'source_groups':dict(Counter(r['source_group'] for r in reserved)),'selected_exact_hash_matches':0,'related_group_conflicts':related_conflicts,'normalized_duplication':'unknown; reserved bytes unopened'},'group_splits':group_splits,'split_freeze_rows':freeze_rows,'per_group_declared_counts':per_group,'selection_commit':{'commit':pin,'selection_sha256':sha(pinned),'matches_worktree':True,'ancestor_of_head':True,'before_source_read_ordering':'not independently provable from Git alone'},'selected':selected,'inventory_entries':len(native['inventory']),'required_targets':len(native['targets']),'all_other_requests_markdown_selected':True},sort_keys=True))\nPY",
+        "exit_code": 1,
+        "result": "Reviewer assumption failed: the second-extension split-freeze does not list these first-extension groups. No selected source bytes read."
+      },
+      {
+        "command": "rtk proxy python - <<'PY'\nimport json\nfrom pathlib import Path\nfreeze=json.loads(Path('quality/external/split-freeze.json').read_text())\nprint(json.dumps(freeze['groups'],sort_keys=True))\noriginal=json.loads(Path('quality/sources.json').read_text())\nprint(json.dumps({'selected_group_counts':{g:sum(r['source_group']==g for r in original['samples']) for g in ('psf/requests','fastapi/fastapi')}},sort_keys=True))\nPY",
+        "exit_code": 0,
+        "result": "Split-freeze groups inspected as metadata; selected groups belong to extension-selection.json."
+      },
+      {
+        "command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python - <<'PY'\nimport hashlib,json,subprocess\nfrom collections import Counter\nfrom pathlib import Path\nbase=Path('quality/reviews/2026-10-15-remaining')\nnames=['selection','eligibility','native-source-metadata','requests-context-v1','preparation-validation','audit-reading','review-inputs']\nfiles={name:base/(name+'.json') for name in names}\nraw={name:path.read_bytes() for name,path in files.items()}\nobj={name:json.loads(value) for name,value in raw.items()}\nsha=lambda value:hashlib.sha256(value).hexdigest()\nchecks=[]\nfor owner in ('preparation-validation','review-inputs'):\n    for name,expected in obj[owner]['artifacts_sha256'].items():\n        path=Path(name)\n        if path in files.values():\n            actual=sha(path.read_bytes())\n            checks.append({'declared_by':owner,'path':name,'expected':expected,'actual':actual,'matches':actual==expected})\n            assert actual==expected\nreading=Path('/private/tmp/remain-audit-0001.txt').read_bytes()\nreading_text=reading.decode('utf-8')\nreading_result={'path':'/private/tmp/remain-audit-0001.txt','sha256':sha(reading),'lines':len(reading_text.splitlines()),'max_codepoints':max(map(len,reading_text.splitlines())),'matches_embedded_text':reading_text==obj['audit-reading']['rendered_text']}\nassert reading_result['sha256']==obj['audit-reading']['rendered_sha256']==obj['review-inputs']['reading_sha256']\nassert reading_result['lines']==42 and reading_result['max_codepoints']==77 and reading_result['matches_embedded_text']\nselection=obj['selection']; eligibility=obj['eligibility']; metadata=obj['native-source-metadata']; native=obj['requests-context-v1']['native_context']\ninputs={}\ninput_objects={}\nfor name,expected in selection['input_metadata_sha256'].items():\n    content=Path(name).read_bytes(); actual=sha(content)\n    inputs[name]={'expected':expected,'actual':actual,'matches':actual==expected}\n    assert actual==expected\n    input_objects[name]=json.loads(content)\nassert metadata['input_metadata_sha256']==selection['input_metadata_sha256']\noriginal=input_objects['quality/sources.json']['samples']+input_objects['quality/external/extension-sources.json']['samples']\nrows=metadata['samples']; by_id={r['id']:r for r in rows}\nassert len(by_id)==len(rows)==335\nassert all(by_id[r['id']]==r for r in original)\nadded=[r for r in rows if r['id'] not in {x['id'] for x in original}]\nassert len(added)==11\nselected=[by_id[r['source_id']] for r in eligibility['sources']]\nassert len(selected)==12 and len({r['id'] for r in selected})==12\nassert {r['id'] for r in added}==set(native['sources'])\nassert selection['fastapi']['sample']==by_id[selection['fastapi']['sample']['id']]\nreserved=[r for r in rows if r['split']=='holdout']\nreserved_hashes={r['sha256'] for r in reserved}\nassert all(r['sha256'] not in reserved_hashes for r in selected)\ngroups=sorted({r['source_group'] for r in selected})\ngroup_splits={g:dict(Counter(r['split'] for r in rows if r['source_group']==g)) for g in groups}\nassert all(set(splits)=={'development'} for splits in group_splits.values())\nrelated_conflicts=[]\nfor selected_row in selected:\n    for field in ('pair_group','near_duplicate_group'):\n        if selected_row.get(field) is not None:\n            related_conflicts.extend({'source_id':selected_row['id'],'field':field,'reserved_id':r['id']} for r in reserved if r.get(field)==selected_row[field])\nassert not related_conflicts\nfreeze=input_objects['quality/external/split-freeze.json']\nfreeze_rows=[r for r in freeze['groups'] if r['source_group'] in groups]\nassert all(r['split']=='development' for r in freeze_rows)\nextension_selection_rows=[r for r in input_objects['quality/external/extension-selection.json']['groups'] if r['repository'] in groups]\nassert {r['repository'] for r in extension_selection_rows}==set(groups)\nassert all(r['split']=='development' for r in extension_selection_rows)\nassert eligibility['selection_sha256']==sha(raw['selection'])\nassert len(eligibility['sources'])==eligibility['source_count']==eligibility['supported_source_count']==12\nassert sum(len(r['references']) for r in eligibility['sources'])==eligibility['eligible_reference_count']==0\nassert sum(len(r['excluded_destinations']) for r in eligibility['sources'])==eligibility['excluded_destination_count']==35\nassert all(r['static_context']=='supported' for r in eligibility['sources'])\nper_group={g:{'sources':sum(r['source_group']==g for r in eligibility['sources']),'eligible':sum(len(r['references']) for r in eligibility['sources'] if r['source_group']==g),'excluded':sum(len(r['excluded_destinations']) for r in eligibility['sources'] if r['source_group']==g)} for g in groups}\nassert per_group['psf/requests']=={'sources':11,'eligible':0,'excluded':34}\nassert per_group['fastapi/fastapi']=={'sources':1,'eligible':0,'excluded':1}\nassert native['targets']=={}\nassert set(native['sources'])==set(obj['requests-context-v1']['references'])==set(obj['requests-context-v1']['excluded_destinations'])\nassert sorted(r['native_path'] for r in eligibility['sources'] if r['source_group']=='psf/requests')==sorted(r['path'] for r in selection['requests']['selected'])\nassert sorted(r['path'] for r in native['inventory'] if r['mode'] in {'100644','100755'} and Path(r['path']).suffix.lower() in {'.md','.markdown'} and r['path']!='README.md')==sorted(r['path'] for r in selection['requests']['selected'])\npin='72d4f1823eb70e4bdd67b66fa2ee72a69be1aaf9'\npinned=subprocess.run(['rtk','proxy','git','show',pin+':'+str(files['selection'])],capture_output=True,check=True).stdout\nassert sha(pinned)==sha(raw['selection'])\nancestor=subprocess.run(['rtk','proxy','git','merge-base','--is-ancestor',pin,'HEAD'],capture_output=True,check=True)\nprint(json.dumps({'artifact_hash_checks':checks,'artifact_hashes':{str(path):sha(raw[name]) for name,path in files.items()},'execution_sha256':sha((base/'EXECUTION.md').read_bytes()),'reading':reading_result,'input_metadata_hashes':inputs,'metadata_copy':{'original_rows_preserved':len(original),'supplement_rows':len(added),'total_rows':len(rows)},'reserved_metadata':{'count':len(reserved),'source_groups':dict(Counter(r['source_group'] for r in reserved)),'selected_exact_hash_matches':0,'related_group_conflicts':related_conflicts,'normalized_duplication':'unknown; reserved bytes unopened'},'group_splits':group_splits,'split_freeze_rows':freeze_rows,'selected_groups_extension_selection':extension_selection_rows,'per_group_declared_counts':per_group,'selection_commit':{'commit':pin,'selection_sha256':sha(pinned),'matches_worktree':True,'ancestor_of_head':True,'before_source_read_ordering':'not independently provable from Git alone'},'selected':selected,'inventory_entries':len(native['inventory']),'required_targets':len(native['targets']),'all_other_requests_markdown_selected':True},sort_keys=True))\nPY",
+        "exit_code": 0,
+        "result": "All metadata, hash, copy-preservation, source-group split, reserved-hash, inventory-selection and committed-selection assertions passed."
+      },
+      {
+        "command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python - <<'PY'\nimport hashlib,json,sys,tempfile\nfrom collections import Counter\nfrom pathlib import Path\nbase=Path('quality/reviews/2026-10-15-remaining')\neligibility=json.loads((base/'eligibility.json').read_text())\nmetadata=json.loads((base/'native-source-metadata.json').read_text())\nbundle=json.loads((base/'requests-context-v1.json').read_text())\nselection=json.loads((base/'selection.json').read_text())\nby_id={r['id']:r for r in metadata['samples']}\nselected=eligibility['sources']\ncorpus=Path('downloads/evaluation').resolve()\nallowed={(corpus/r['cache_path']).resolve() for r in selected}\nreads=[]; git_commands=[]\ndef audit(event,args):\n    if event=='open' and isinstance(args[0],(str,bytes)):\n        p=Path(args[0]).resolve()\n        try: p.relative_to(corpus)\n        except ValueError: return\n        if p not in allowed: raise RuntimeError('undeclared corpus open prohibited: '+str(p))\n        reads.append({'path':str(p),'mode':args[1]})\n    elif event=='subprocess.Popen':\n        git_commands.append(list(args[1]) if isinstance(args[1],(list,tuple)) else args[1])\nsys.addaudithook(audit)\nfrom proseprobe.rules.markup import LocalMarkdownLinkRule,SameDocumentFragmentRule\nfrom benchmarks.native_reference_context import validate_reference_context\nsource_results=[]\nwith tempfile.TemporaryDirectory(prefix='proseprobe-evidence-empty-') as temporary:\n    root=Path(temporary).resolve()\n    resolver=LocalMarkdownLinkRule(True,str(root),'github')\n    for row in selected:\n        bound=by_id[row['source_id']]\n        assert bound['path']==row['cache_path'] and bound['split']=='development'\n        raw=(corpus/row['cache_path']).read_bytes()\n        digest=hashlib.sha256(raw).hexdigest()\n        assert digest==row['sha256']==bound['sha256'] and len(raw)==row['bytes']\n        content=raw.decode('utf-8')\n        assert '\\r' not in content.replace('\\r\\n','')\n        content=content.replace('\\r\\n','\\n')\n        document=SameDocumentFragmentRule._document(content)\n        assert document is not None\n        eligible=[]; excluded=[]\n        for destination,line,column,end_column in sorted(document[1],key=lambda item:(item[1],item[2],item[3],item[0])):\n            resolved=resolver._resolve_target(root/row['native_path'],destination)\n            item={'destination':destination,'line':line,'column':column,'end_column':end_column}\n            if resolved is None:\n                item['reason']='production-resolver-exclusion'; excluded.append(item)\n            else:\n                target,fragment=resolved\n                item.update(native_path=target.relative_to(root).as_posix(),fragment=fragment)\n                eligible.append(item)\n        assert eligible==row['references'] and excluded==row['excluded_destinations']\n        assert len(document[0])==row['anchor_membership_count']\n        assert len(content.splitlines())==row['lines']\n        git_blob=None\n        if row['source_group']=='psf/requests':\n            git_blob=hashlib.sha1(f'blob {len(raw)}\\0'.encode('ascii')+raw,usedforsecurity=False).hexdigest()\n            assert git_blob==bundle['native_context']['sources'][row['source_id']]['blob_id']\n            assert git_blob==next(r['object_id'] for r in selection['requests']['selected'] if r['path']==row['native_path'])\n        source_results.append({'source_id':row['source_id'],'source_group':row['source_group'],'native_path':row['native_path'],'cache_path':row['cache_path'],'sha256':digest,'bytes':len(raw),'lines':len(content.splitlines()),'git_blob_id':git_blob,'static_context':'supported','anchor_membership_count':len(document[0]),'eligible_reference_count':len(eligible),'excluded_destination_count':len(excluded),'matches_frozen_coordinates_and_destinations':True})\n    assert list(root.iterdir())==[]\ncontext=validate_reference_context(bundle,base/'native-source-metadata.json',Path('downloads/evaluation'),Path('downloads/evaluation/native-context/requests-0e322af-v1.git'))\nassert len(context.native.sources)==11 and len(context.native.targets)==0\nassert sum(len(rows) for _,rows in context.references)==0\nassert sum(len(rows) for _,rows in context.excluded)==34\nread_counts=Counter(r['path'] for r in reads)\nassert set(read_counts)=={str(p) for p in allowed}\nprint(json.dumps({'structural_recomputation':{'sources':source_results,'supported_source_count':12,'eligible_reference_count':sum(r['eligible_reference_count'] for r in source_results),'excluded_destination_count':sum(r['excluded_destination_count'] for r in source_results),'root_remained_empty':True,'check_methods_invoked':False,'target_bytes_read':False},'existing_reference_context_validator':{'function':'benchmarks.native_reference_context.validate_reference_context','accepted':True,'manifest':str(base/'native-source-metadata.json'),'manifest_sha256':context.native.manifest_sha256,'corpus_root':'downloads/evaluation','repository':'downloads/evaluation/native-context/requests-0e322af-v1.git','source_group':context.native.source_group,'revision':context.native.revision,'inventory_sha256':context.native.inventory_sha256,'sources':len(context.native.sources),'targets':len(context.native.targets),'eligible':0,'excluded':34},'actual_corpus_read_counts':dict(sorted(read_counts.items())),'actual_git_child_commands':git_commands,'source_exposure':'12 selected development source files structurally parsed; 11 Requests files reread and materialized by the existing validator; no raw source text displayed','reserved_holdout_bytes_opened':False,'target_bytes_opened':False,'network_used':False},sort_keys=True))\nPY",
+        "exit_code": 1,
+        "result": "All 12 selected-source structural/hash/coordinate assertions completed. Existing validator then stopped when the reviewer's audit hook rejected its directory open of downloads/evaluation; no validator source bytes were read before this hook error. No detector call occurred."
+      },
+      {
+        "command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python - <<'PY'\nimport hashlib,json,os,sys,tempfile\nfrom collections import Counter\nfrom pathlib import Path\nbase=Path('quality/reviews/2026-10-15-remaining')\neligibility=json.loads((base/'eligibility.json').read_text())\nmetadata=json.loads((base/'native-source-metadata.json').read_text())\nbundle=json.loads((base/'requests-context-v1.json').read_text())\nselection=json.loads((base/'selection.json').read_text())\nby_id={r['id']:r for r in metadata['samples']}\nselected=eligibility['sources']\ncorpus=Path('downloads/evaluation').resolve()\nallowed={(corpus/r['cache_path']).resolve() for r in selected}\nreads=[]; git_commands=[]; directory_opens=[]; relative_opens=[]\nallowed_directories={parent for selected_path in allowed for parent in selected_path.parents if parent==corpus or corpus in parent.parents}\ndef audit(event,args):\n    if event=='open' and isinstance(args[0],(str,bytes)):\n        p=Path(args[0]).resolve()\n        if not Path(args[0]).is_absolute() and args[1] is None:\n            relative_opens.append({'path':str(args[0]),'flags':args[2]})\n        try: p.relative_to(corpus)\n        except ValueError: return\n        if p in allowed_directories and args[2] & os.O_DIRECTORY:\n            directory_opens.append(str(p)); return\n        if p not in allowed: raise RuntimeError('undeclared corpus open prohibited: '+str(p))\n        reads.append({'path':str(p),'mode':args[1]})\n    elif event=='subprocess.Popen':\n        git_commands.append(list(args[1]) if isinstance(args[1],(list,tuple)) else args[1])\nsys.addaudithook(audit)\nfrom proseprobe.rules.markup import LocalMarkdownLinkRule,SameDocumentFragmentRule\nfrom benchmarks.native_reference_context import validate_reference_context\nsource_results=[]\nwith tempfile.TemporaryDirectory(prefix='proseprobe-evidence-empty-') as temporary:\n    root=Path(temporary).resolve()\n    resolver=LocalMarkdownLinkRule(True,str(root),'github')\n    for row in selected:\n        bound=by_id[row['source_id']]\n        assert bound['path']==row['cache_path'] and bound['split']=='development'\n        raw=(corpus/row['cache_path']).read_bytes()\n        digest=hashlib.sha256(raw).hexdigest()\n        assert digest==row['sha256']==bound['sha256'] and len(raw)==row['bytes']\n        content=raw.decode('utf-8')\n        assert '\\r' not in content.replace('\\r\\n','')\n        content=content.replace('\\r\\n','\\n')\n        document=SameDocumentFragmentRule._document(content)\n        assert document is not None\n        eligible=[]; excluded=[]\n        for destination,line,column,end_column in sorted(document[1],key=lambda item:(item[1],item[2],item[3],item[0])):\n            resolved=resolver._resolve_target(root/row['native_path'],destination)\n            item={'destination':destination,'line':line,'column':column,'end_column':end_column}\n            if resolved is None:\n                item['reason']='production-resolver-exclusion'; excluded.append(item)\n            else:\n                target,fragment=resolved\n                item.update(native_path=target.relative_to(root).as_posix(),fragment=fragment)\n                eligible.append(item)\n        assert eligible==row['references'] and excluded==row['excluded_destinations']\n        assert len(document[0])==row['anchor_membership_count']\n        assert len(content.splitlines())==row['lines']\n        git_blob=None\n        if row['source_group']=='psf/requests':\n            git_blob=hashlib.sha1(f'blob {len(raw)}\\0'.encode('ascii')+raw,usedforsecurity=False).hexdigest()\n            assert git_blob==bundle['native_context']['sources'][row['source_id']]['blob_id']\n            assert git_blob==next(r['object_id'] for r in selection['requests']['selected'] if r['path']==row['native_path'])\n        source_results.append({'source_id':row['source_id'],'source_group':row['source_group'],'native_path':row['native_path'],'cache_path':row['cache_path'],'sha256':digest,'bytes':len(raw),'lines':len(content.splitlines()),'git_blob_id':git_blob,'static_context':'supported','anchor_membership_count':len(document[0]),'eligible_reference_count':len(eligible),'excluded_destination_count':len(excluded),'matches_frozen_coordinates_and_destinations':True})\n    assert list(root.iterdir())==[]\ncontext=validate_reference_context(bundle,base/'native-source-metadata.json',Path('downloads/evaluation'),Path('downloads/evaluation/native-context/requests-0e322af-v1.git'))\nassert len(context.native.sources)==11 and len(context.native.targets)==0\nassert sum(len(rows) for _,rows in context.references)==0\nassert sum(len(rows) for _,rows in context.excluded)==34\nread_counts=Counter(r['path'] for r in reads)\nassert set(read_counts)=={str(p) for p in allowed}\nprint(json.dumps({'structural_recomputation':{'sources':source_results,'supported_source_count':12,'eligible_reference_count':sum(r['eligible_reference_count'] for r in source_results),'excluded_destination_count':sum(r['excluded_destination_count'] for r in source_results),'root_remained_empty':True,'check_methods_invoked':False,'target_bytes_read':False},'existing_reference_context_validator':{'function':'benchmarks.native_reference_context.validate_reference_context','accepted':True,'manifest':str(base/'native-source-metadata.json'),'manifest_sha256':context.native.manifest_sha256,'corpus_root':'downloads/evaluation','repository':'downloads/evaluation/native-context/requests-0e322af-v1.git','source_group':context.native.source_group,'revision':context.native.revision,'inventory_sha256':context.native.inventory_sha256,'sources':len(context.native.sources),'targets':len(context.native.targets),'eligible':0,'excluded':34},'audited_absolute_corpus_read_counts':dict(sorted(read_counts.items())),'audited_corpus_directory_opens':directory_opens,'audited_relative_descriptor_opens':relative_opens,'audit_hook_limit':'Absolute corpus opens were restricted to the selected 12 paths plus their directories. Existing validator uses relative descriptor opens; its accepted bound source list establishes the additional 11 source reads.','actual_git_child_commands':git_commands,'source_exposure':'12 selected development source files structurally parsed; 11 Requests files reread and materialized by the existing validator; no raw source text displayed','reserved_holdout_bytes_opened':False,'target_bytes_opened':False,'network_used':False},sort_keys=True))\nPY",
+        "exit_code": 0,
+        "result": "Allowed directory-descriptor opens, retained the selected-source absolute-read allowlist, and passed complete structural and reference-context validation."
+      },
+      {
+        "command": "rtk proxy python - <<'PY'\nimport hashlib,json\nfrom pathlib import Path\nbase=Path('quality/reviews/2026-10-15-remaining')\nselection=json.loads((base/'selection.json').read_text())\ncurrent=json.loads((base/'requests-context-v1.json').read_text())['native_context']\nchecks=[]\nfor field in ('inventory_artifact','attribution_artifact'):\n    path=selection['requests'][field]\n    raw=Path(path).read_bytes()\n    digest=hashlib.sha256(raw).hexdigest()\n    assert digest==selection['requests'][field+'_sha256']\n    checks.append({'path':path,'sha256':digest,'matches_declared':True,'read_kind':'metadata only'})\n    if field=='inventory_artifact':\n        old=json.loads(raw)['native_context']\n        assert old['inventory']==current['inventory']\n        assert old['inventory_sha256']==selection['requests']['inventory_sha256']==current['inventory_sha256']\n        assert old['revision']==selection['requests']['revision']==current['revision']\nprint(json.dumps({'checks':checks,'original_pinned_inventory_preserved':True,'inventory_entries':len(current['inventory'])},sort_keys=True))\nPY",
+        "exit_code": 0,
+        "result": "Declared prior inventory/attribution metadata hashes match; full original pinned inventory preserved."
+      },
+      {
+        "command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 python - <<'PY'\nimport hashlib,json,sys\nfrom pathlib import Path\npaths=['benchmarks/native_reference_context.py','benchmarks/native_link_context.py','src/proseprobe/rules/markup.py']\nprint(json.dumps({'python':sys.version,'helper_files_sha256':{path:hashlib.sha256(Path(path).read_bytes()).hexdigest() for path in paths}},sort_keys=True))\nPY",
+        "exit_code": 0,
+        "result": "Recorded interpreter and exact helper-file SHA-256 identities."
+      }
+    ],
+    "successful_validator_child_processes": [
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "config",
+        "--get-regexp",
+        "^(extensions\\.partialclone|remote\\..*\\.promisor)$"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "commit",
+        "0e322af87745eff34caffe4df68456ebc20d9068"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "9474485f84c7244930abc1b8023f847486572091"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "ls-tree",
+        "-r",
+        "-t",
+        "-z",
+        "--full-tree",
+        "0e322af87745eff34caffe4df68456ebc20d9068"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "275aee12adc60bb8ea537ec6c83ef2ca0333d805"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "c2719e4895fd0a9b188c924635043900a8069040"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "f91c2b608526a7090e25eb4a8d593ebde0e76efd"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "71429b4ec9488c8ab07a3709dcfa537cc3abbc64"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "f9aa5f5e821074d5008bd1997ba6315072844db8"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "9dd40a2ec5a826aaac5acd7042c9e34d1ca4febc"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "2504b45699ab70d3d8ea4c0975f2dc036588f2cb"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "0cb4d1e10531f2cb8541a788e65fe080262d0992"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "59f538a7ffddaeeb1d2ed4944aedf1475dcfcb5a"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "67d4e00ecf8e55f206fd48a3dc2aa0bd54b6a5a8"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "39b04299670e5b43bfbe489756eeaba58418e655"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "50439f3461064d263722d14b3f65c4795f0a28f1"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "f07354fd754ceaccb1ea0e96a6cc5a6e2451f197"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "3dc191e29f9a4c9a94bad4972206e114b8322338"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "2de454fdef3809710d40c52582f9562ccd9ae9e2"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "46fda79dcefdabd6d6330727487efcfcc9afd487"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "c7dfa811af48c9a35472c94330dac308e18cf304"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "4832c537476ea082da0832e67c67081cc7ba66bb"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "ed64fbd5245799ae22432381111ab0464d56a068"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "0ba852ca13676139b5e590aa73a6a46618892ca1"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "ad95826e39998bcc74c2671322f1c5a4193e4c90"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "bbeab754023bd5df9353f437cac7d81db06ae45a"
+      ],
+      [
+        "git",
+        "--no-replace-objects",
+        "-c",
+        "protocol.allow=never",
+        "-c",
+        "core.fsmonitor=false",
+        "-C",
+        "downloads/evaluation/native-context/requests-0e322af-v1.git",
+        "cat-file",
+        "tree",
+        "50bdac0e6a7cfebffa450f1757efdd704e754d19"
+      ]
+    ],
+    "nested_git_note": "These Git subprocesses are issued by the existing offline validator, not a shell. The prior validator attempt reached the same inventory stage before its cache-directory audit-hook rejection. The successful subprocess argv are recorded above."
+  }
+}

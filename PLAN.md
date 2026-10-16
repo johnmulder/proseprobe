@@ -1,7 +1,7 @@
 # ProseProbe outstanding work
 
-Updated: 2026-10-15. P32D.5b is complete. Remaining preparation and prerequisite
-review is in the [continuation record](quality/reviews/2026-10-15-remaining/README.md).
+Updated: 2026-10-15. All currently executable preparation is complete; evidence
+is in the [continuation record](quality/reviews/2026-10-15-remaining/README.md).
 Earlier frozen reviews stay unchanged. This checklist contains only outstanding
 work and its prerequisites.
 
@@ -22,15 +22,6 @@ work and its prerequisites.
 - Keep defaults and experimental status unchanged without sufficient evidence.
 - If a future review is requested, include its direct reading link and limit it
   to 80 lines of 80 characters, including instructions and questions.
-
-## Remaining development preparation — active
-
-- [ ] N02b Prepare the separately declared Markdown-it documentation index and
-  its supported pinned targets; retain the root README's zero-reference result.
-- [ ] N03 Have agents review bounded preparation evidence and any eligible
-  contexts, retaining actual judgments and limits.
-- [ ] N04 Run applicable validators and repository gates, commit results and
-  leave only genuine prerequisites in this document.
 
 ## Independent human annotation — deferred
 
@@ -88,15 +79,10 @@ Prerequisites: supported contexts and accepted independent development labels.
   retain unsupported types and disagreements.
 - [ ] P15.9 Assess M011 under each document's declared renderer; retain unsupported
   dialects explicitly.
-- [ ] P30.18d.1 Select further permitted development originals from metadata;
-  enumerate supported local Markdown references without predictions and retain
-  eligibility skips. The first Requests context has zero eligible references.
-- [ ] P30.18d.2 Bind complete pinned native inventories, required target bytes or
-  verified absence and renderer context for each eligible new reading. Preserve
-  original manifests/splits; freeze new artifacts separately.
 - [ ] P30.18d.3 Obtain independent human M012 judgments and validate their source
-  and target scopes before bound evaluation. Report actual denominators; empty
-  reference populations cannot supply effectiveness estimates.
+  and target scopes before bound evaluation. The prepared Markdown-it index has
+  two references with pinned target context; the cached batch has none. Report
+  actual denominators; context preparation supplies no annotation or accuracy.
 - [ ] P32D.7 Propose thresholds, confidence, severity, defaults or promotion only
   from sufficient development evidence; promotion remains optional.
 

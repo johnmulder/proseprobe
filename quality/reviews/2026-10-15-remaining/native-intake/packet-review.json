@@ -1,0 +1,414 @@
+{
+  "version": 1,
+  "review_kind": "bounded engineering review of source and target context delivery",
+  "reviewer": {
+    "agent": "/root/natural_context_reader",
+    "parent_agent": "/root",
+    "identity": "Codex delegated agent; exact backend model identifier not exposed",
+    "independent_human_review": false
+  },
+  "scope": {
+    "source_group": "markdown-it/markdown-it",
+    "revision": "0fe7ccb4b7f30236fb05f623be6924961d296d3d",
+    "native_path": "docs/README.md",
+    "first_reading": "/private/tmp/remain-md-0001.txt",
+    "reading_count": 13,
+    "context_sha256": "bb0f0c82da2a783f1e9288667796ffd607f675459014365d5ed308a5a40b6ec4",
+    "bundle_sha256_as_declared": "cb2b2ca592f60f59ccda0a5f542bef71a5c736b8a3ee81869fcbbe6a6458c73e",
+    "bundle_hash_algorithm_not_independently_recomputed": true
+  },
+  "exposure": {
+    "all_13_texts_read_in_adjacent_link_order": true,
+    "files_read": [
+      {
+        "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-15-remaining/native-intake/readings.json",
+        "sha256": "c0caa2ba8bac0541d87638e1c057caedf99410f9bc4b2be62a72c28a36020c33",
+        "kind": "permitted metadata"
+      },
+      {
+        "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-15-remaining/native-intake/validation.json",
+        "sha256": "e876105700ad0b54a6e997096824930e4f235fee8e7c8040530e56f881937454",
+        "kind": "permitted metadata"
+      },
+      {
+        "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-15-remaining/native-intake/target-bindings.json",
+        "sha256": "7eb6d5d8230283202dc2662330290f7bb5ee8087fada1e2dab1a618d2b7d85c3",
+        "kind": "permitted metadata"
+      },
+      {
+        "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-15-remaining/native-intake/docs-reference-selection.json",
+        "sha256": "d7bbe17324803a217c3151f13e0192dd30f25112ce89998279913e0437c70892",
+        "kind": "permitted metadata"
+      },
+      {
+        "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-15-remaining/native-intake/docs-selection.json",
+        "sha256": "18caeb12c2bc676b477ec3f6331bad64ea4f39848176b29125c9f65d5b6b0ec1",
+        "kind": "permitted metadata"
+      },
+      {
+        "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-15-remaining/native-intake/attribution.json",
+        "sha256": "082ea550a1fda162130d9829e79cc3cf4c3dc5cec70c9e14429b67203f173af1",
+        "kind": "permitted metadata"
+      },
+      {
+        "path": "/Users/johnmulder/.codex/RTK.md",
+        "sha256": "49c368c302c6f63d089f4c1085b242fc50fe22ce5bc34dada6478083000e7c6f",
+        "kind": "required command instructions"
+      },
+      {
+        "path": "/private/tmp/remain-md-0001.txt",
+        "sha256": "0dd528969f9d560b2c375aba0b82ae4a979161bc756d7c804bc4185b459fdb74",
+        "bytes": 1245,
+        "lines": 27,
+        "max_unicode_codepoints_per_line": 78,
+        "role": "focus"
+      },
+      {
+        "path": "/private/tmp/remain-md-0002.txt",
+        "sha256": "a2d3f435875bff41fd96c11c8a99c3a7f402ea9faf26eed55322cd152f64d0eb",
+        "bytes": 1295,
+        "lines": 27,
+        "max_unicode_codepoints_per_line": 78,
+        "role": "markdown-source"
+      },
+      {
+        "path": "/private/tmp/remain-md-0003.txt",
+        "sha256": "0f0d7a08deb3572cdde55ce4108a1499d061d5a70c5a42a12cae5dbd4acf5f5c",
+        "bytes": 1138,
+        "lines": 23,
+        "max_unicode_codepoints_per_line": 75,
+        "role": "markdown-inventory"
+      },
+      {
+        "path": "/private/tmp/remain-md-0004.txt",
+        "sha256": "cfd3a4be9ec2749e7b0db257ddfec4db0ddcf7c6bb11a08c557835022071f8bc",
+        "bytes": 1853,
+        "lines": 34,
+        "max_unicode_codepoints_per_line": 75,
+        "role": "native-context"
+      },
+      {
+        "path": "/private/tmp/remain-md-0005.txt",
+        "sha256": "73b5abe6a56ac00854db86b1679ac3fa63e62f90ff2afbfb791d5d765cbcee54",
+        "bytes": 3428,
+        "lines": 80,
+        "max_unicode_codepoints_per_line": 80,
+        "role": "markdown-target"
+      },
+      {
+        "path": "/private/tmp/remain-md-0006.txt",
+        "sha256": "5c242d678c155ffef2791abee51d5c58410d82915ae4c0a85882c9e775c962e0",
+        "bytes": 4028,
+        "lines": 80,
+        "max_unicode_codepoints_per_line": 80,
+        "role": "markdown-target"
+      },
+      {
+        "path": "/private/tmp/remain-md-0007.txt",
+        "sha256": "642a491d57ed74ec88698777bf6d59ab5b8cc224cb6146b13961f3ebaf79f091",
+        "bytes": 3500,
+        "lines": 80,
+        "max_unicode_codepoints_per_line": 80,
+        "role": "markdown-target"
+      },
+      {
+        "path": "/private/tmp/remain-md-0008.txt",
+        "sha256": "608aec93a76676a1250e13efb66a58f813f0e327536bc9991a4ba6e0f38ed1ab",
+        "bytes": 3655,
+        "lines": 80,
+        "max_unicode_codepoints_per_line": 80,
+        "role": "markdown-target"
+      },
+      {
+        "path": "/private/tmp/remain-md-0009.txt",
+        "sha256": "f18b1f6542d2d6ef6b05c54475c6410aeecd2111ffb655ba04a9b5f5d1a08ca5",
+        "bytes": 910,
+        "lines": 18,
+        "max_unicode_codepoints_per_line": 80,
+        "role": "markdown-target"
+      },
+      {
+        "path": "/private/tmp/remain-md-0010.txt",
+        "sha256": "c5f35141fa1b0c98f72c50aa86c323df417e9c2537f3592c86af2107bc1b318a",
+        "bytes": 1664,
+        "lines": 29,
+        "max_unicode_codepoints_per_line": 75,
+        "role": "markdown-inventory"
+      },
+      {
+        "path": "/private/tmp/remain-md-0011.txt",
+        "sha256": "fb74b43c6c04c8566a0b3e3fc3ac99f5333d7534b0202cf187798c76c36ddd21",
+        "bytes": 3812,
+        "lines": 80,
+        "max_unicode_codepoints_per_line": 80,
+        "role": "markdown-target"
+      },
+      {
+        "path": "/private/tmp/remain-md-0012.txt",
+        "sha256": "929b3c2fa316798c8439719b32cae063f854100a2b460865bd9e67413aff7056",
+        "bytes": 3630,
+        "lines": 76,
+        "max_unicode_codepoints_per_line": 80,
+        "role": "markdown-target"
+      },
+      {
+        "path": "/private/tmp/remain-md-0013.txt",
+        "sha256": "5c1d24cf193bc79ca0b6b2358ebc2036496c1355db187e426c6928f3eb153f25",
+        "bytes": 2103,
+        "lines": 37,
+        "max_unicode_codepoints_per_line": 75,
+        "role": "markdown-inventory"
+      }
+    ],
+    "metadata_exposure": [
+      "Allowed docs-selection.json contains prior_source_scope asserting a prior root README eligibility result of 0 supported local references and 53 exclusions. This incidental prior structural result was not used to assess the current source or to infer coverage.",
+      "Allowed validation.json contains package/evaluator identity metadata, source file names, and assertions that no predictions or labels were generated. No listed source file or detector output was opened.",
+      "Packet headers name M012. No rule judgment, final annotation, or human effectiveness label is produced."
+    ],
+    "not_accessed": [
+      "repository code or tests",
+      "detector outputs",
+      "previous review reports or final judgments",
+      "external manifests",
+      "network",
+      "source caches",
+      "holdout bytes",
+      "project execution"
+    ],
+    "verification_execution": "Standalone Python standard library only, for counts, hashes, coordinate and navigation comparisons, and reconstruction from permitted rows. No project modules imported or commands executed."
+  },
+  "acceptance": {
+    "status": "accepted for the stated engineering context-delivery scope",
+    "bounds": {
+      "verified": true,
+      "includes_instructions_and_navigation": true,
+      "maximum_lines_per_reading": 80,
+      "maximum_unicode_codepoints_per_line": 80,
+      "limit_lines": 80,
+      "limit_codepoints": 80
+    },
+    "navigation": {
+      "verified": true,
+      "self_previous_next_links": "All 13 self links and the complete 1-to-13 bidirectional chain match the actual supplied paths; endpoints are none.",
+      "indices_roles_and_shared_context": "match permitted readings metadata"
+    },
+    "actual_rendered_text_and_page_hashes_match_readings_metadata": true,
+    "canonical_context_sha256_recomputed": true,
+    "permitted_artifact_hashes_and_selection_hash_chain_match": true,
+    "both_selected_local_references_receive_complete_supported_target_context": true,
+    "selected_reference_count": 2,
+    "selected_references": [
+      {
+        "column": 45,
+        "destination": "architecture.md",
+        "end_column": 60,
+        "fragment": "",
+        "line": 9,
+        "native_path": "docs/architecture.md"
+      },
+      {
+        "column": 43,
+        "destination": "development.md",
+        "end_column": 57,
+        "fragment": "",
+        "line": 10,
+        "native_path": "docs/development.md"
+      }
+    ],
+    "reference_destination_coordinates_match_source": true,
+    "source_link_scope": "All four source Markdown destinations are visible. The two local Markdown references at lines 9 and 10 are selected; the two HTTPS references at lines 4 and 5 are declared exclusions in allowed selection metadata.",
+    "reconstructed_documents": [
+      {
+        "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+        "sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68",
+        "git_blob_id": "4a3ef556c8fd23eeb8bc5e44e734ddf7e66c88f6",
+        "bytes": 363,
+        "lines": 10,
+        "text_and_coordinates_match_actual_readings": true,
+        "row_coverage_contiguous_from_start_to_end": true,
+        "line_endings_from": "permitted readings.json row metadata; LF throughout",
+        "hash_and_blob_id_match_supplied_bindings": true,
+        "heading_inventory": {
+          "anchors": [],
+          "headings": [],
+          "renderer": "github",
+          "role": "source",
+          "scope": "complete supported static headings and anchor-ID membership",
+          "sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68",
+          "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+          "status": "supported"
+        }
+      },
+      {
+        "source_id": "docs/architecture.md",
+        "sha256": "12b59d2ffc60b698c2d87a16c012c076a79f45ca92e8a2205f43576c253f94d0",
+        "git_blob_id": "a3cccdbb69208e81a02da7d4404f026682da983a",
+        "bytes": 7381,
+        "lines": 186,
+        "text_and_coordinates_match_actual_readings": true,
+        "row_coverage_contiguous_from_start_to_end": true,
+        "line_endings_from": "permitted readings.json row metadata; LF throughout",
+        "hash_and_blob_id_match_supplied_bindings": true,
+        "heading_inventory": {
+          "anchors": [
+            "data-flow",
+            "markdown-it-design-principles",
+            "renderer",
+            "rules",
+            "summary",
+            "token-stream"
+          ],
+          "headings": [
+            {
+              "column": 3,
+              "end_column": 32,
+              "level": 1,
+              "line": 1,
+              "title": "markdown-it design principles"
+            },
+            {
+              "column": 4,
+              "end_column": 13,
+              "level": 2,
+              "line": 3,
+              "title": "Data flow"
+            },
+            {
+              "column": 4,
+              "end_column": 16,
+              "level": 2,
+              "line": 41,
+              "title": "Token stream"
+            },
+            {
+              "column": 4,
+              "end_column": 9,
+              "level": 2,
+              "line": 74,
+              "title": "Rules"
+            },
+            {
+              "column": 4,
+              "end_column": 12,
+              "level": 2,
+              "line": 94,
+              "title": "Renderer"
+            },
+            {
+              "column": 4,
+              "end_column": 11,
+              "level": 2,
+              "line": 170,
+              "title": "Summary"
+            }
+          ],
+          "renderer": "github",
+          "role": "target",
+          "scope": "complete supported static headings and anchor-ID membership",
+          "sha256": "12b59d2ffc60b698c2d87a16c012c076a79f45ca92e8a2205f43576c253f94d0",
+          "source_id": "docs/architecture.md",
+          "status": "supported"
+        }
+      },
+      {
+        "source_id": "docs/development.md",
+        "sha256": "25304c0e7d38b35ad8ee97a2ee68b6fecc371110ba938b98cf52bbc2ac9ec8d6",
+        "git_blob_id": "782b75c447d5938209348a7efc4da95f1737533f",
+        "bytes": 3967,
+        "lines": 87,
+        "text_and_coordinates_match_actual_readings": true,
+        "row_coverage_contiguous_from_start_to_end": true,
+        "line_endings_from": "permitted readings.json row metadata; LF throughout",
+        "hash_and_blob_id_match_supplied_bindings": true,
+        "heading_inventory": {
+          "anchors": [
+            "development-recommendations",
+            "faq",
+            "general-considerations-for-plugins",
+            "how-to-replace-part-of-text-token-with-link",
+            "i-need-async-rule-how-to-do-it",
+            "notes-for-npm-packages",
+            "why-do-you-reject-some-useful-things",
+            "why-my-inline-rule-is-not-executed"
+          ],
+          "headings": [
+            {
+              "column": 3,
+              "end_column": 30,
+              "level": 1,
+              "line": 1,
+              "title": "Development recommendations"
+            },
+            {
+              "column": 4,
+              "end_column": 39,
+              "level": 2,
+              "line": 10,
+              "title": "General considerations for plugins."
+            },
+            {
+              "column": 4,
+              "end_column": 26,
+              "level": 2,
+              "line": 37,
+              "title": "Notes for NPM packages"
+            },
+            {
+              "column": 4,
+              "end_column": 7,
+              "level": 2,
+              "line": 45,
+              "title": "FAQ"
+            },
+            {
+              "column": 6,
+              "end_column": 38,
+              "level": 4,
+              "line": 48,
+              "title": "I need async rule, how to do it?"
+            },
+            {
+              "column": 6,
+              "end_column": 50,
+              "level": 4,
+              "line": 62,
+              "title": "How to replace part of text token with link?"
+            },
+            {
+              "column": 6,
+              "end_column": 41,
+              "level": 4,
+              "line": 72,
+              "title": "Why my inline rule is not executed?"
+            },
+            {
+              "column": 6,
+              "end_column": 43,
+              "level": 4,
+              "line": 80,
+              "title": "Why do you reject some useful things?"
+            }
+          ],
+          "renderer": "github",
+          "role": "target",
+          "scope": "complete supported static headings and anchor-ID membership",
+          "sha256": "25304c0e7d38b35ad8ee97a2ee68b6fecc371110ba938b98cf52bbc2ac9ec8d6",
+          "source_id": "docs/development.md",
+          "status": "supported"
+        }
+      }
+    ],
+    "inventories": "The full supplied target texts support all 6 architecture headings/anchors and all 8 development headings/anchors. Heading titles and coordinates match the reconstructed text. The source has no static heading or anchor IDs. Inventories use the declared GitHub style.",
+    "context_missing_for_selected_references": [],
+    "misleading_absence_or_clean_coverage_claims_found_in_readings": false,
+    "coverage_claim_basis": "Every reading explicitly says context supplies evidence, not reviewed or clean coverage. Both selected targets are present. The native absence_scope is an inventory provenance assertion; this review makes no absence inference from it."
+  },
+  "findings": [],
+  "limits": [
+    "Acceptance concerns the supplied source, exactly its two selected local Markdown targets, and their supported static heading/anchor inventories. It does not recursively validate references inside target documents or external HTTPS destinations.",
+    "Exact reconstructed bytes, byte counts, line counts, SHA-256 values, Git blob IDs, source coordinates, context digest, and permitted artifact binding chains were checked locally. Membership of the supplied Git blobs in the declared remote commit relies on supplied metadata; no commit/tree object, external manifest, cache, or network provenance was opened.",
+    "Attribution is visible in every reading and in allowed attribution.json. MIT license inclusion and copyright/permission preservation are metadata assertions here; LICENSE contents were outside the allowed reading set and were not independently inspected.",
+    "Target-selection-before-bytes and reserved-hash nonmatch flags are supplied metadata assertions. This reader did not access selection timing history or reserved/holdout bytes.",
+    "No independent human review, human labels, detector effectiveness result, final rule annotation, or reviewed-clean coverage is established by this engineering review."
+  ]
+}
