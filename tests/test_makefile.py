@@ -66,6 +66,7 @@ def test_help_target_lists_common_workflows() -> None:
         "dev",
         "test",
         "check",
+        "merge-check",
         "clean",
         "build",
         "dogfood",
@@ -83,6 +84,45 @@ def test_standard_checks_reject_stale_rule_documentation() -> None:
 
     assert re.search(r"^check:.*\brule-docs-check\b", makefile, re.M)
     assert re.search(r"^doc-audit:.*\brule-docs-check\b", makefile, re.M)
+
+
+def test_merge_check_runs_deterministic_acceptance_gates_once() -> None:
+    """The merge gate should run one suite and all portable acceptance checks."""
+    result = subprocess.run(
+        ["make", "-n", "merge-check"],
+        cwd=ROOT,
+        check=False,
+        text=True,
+        capture_output=True,
+    )
+
+    assert result.returncode == 0, result.stderr
+    script = result.stdout
+    for command in (
+        "-m proseprobe._rule_docs --check",
+        "ruff check src/ tests/",
+        "mypy src/",
+        "--cov-fail-under=90",
+        "--baseline .proseprobe-baseline.json",
+        "--mode all-rules --gate quality/regression-gates/all-rules.json",
+        "--mode production --gate quality/regression-gates/production.json",
+        "Checking README.md structure...",
+        "Verifying CLI commands match SPEC.md...",
+    ):
+        assert command in script
+    assert script.count("-m proseprobe._rule_docs --check") == 1
+    assert script.count("pytest tests/") == 1
+    for excluded in (
+        "benchmarks.startup_probe",
+        "benchmarks.bench_rules",
+        "benchmarks.memory_probe",
+    ):
+        assert excluded not in script
+    quality_commands = [
+        line for line in script.splitlines() if "-m benchmarks.rule_quality" in line
+    ]
+    assert len(quality_commands) == 2
+    assert all("--gate " in line for line in quality_commands)
 
 
 def test_dogfood_scans_public_documentation_only() -> None:
@@ -160,6 +200,7 @@ def test_ci_uses_make_targets_for_local_parity() -> None:
         "make coverage-analyze",
         "make dogfood",
         "make rule-quality",
+        "make doc-audit spec-verify",
         "make build",
     ]:
         assert command in workflow

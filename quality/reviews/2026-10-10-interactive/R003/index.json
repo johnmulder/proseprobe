@@ -1,0 +1,17 @@
+{
+  "context": {
+    "originals/0000.md": {
+      "format": "markdown",
+      "pair_group": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md",
+      "source_group": "github/docs",
+      "split": "development"
+    }
+  },
+  "files": {
+    "originals/0000.md": {
+      "sha256": "4fe410984681f95a867f894f67523cfa461e039a9b7d43fc7bce297178c7dec1",
+      "source_id": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md"
+    }
+  },
+  "version": 1
+}

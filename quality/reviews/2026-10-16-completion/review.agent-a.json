@@ -1,0 +1,337 @@
+{
+  "version": 1,
+  "reviewer_id": "codex-agent:/root/blind_m012_a",
+  "actor_type": "agent",
+  "rule_ids": [
+    "M012"
+  ],
+  "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+  "source_sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68",
+  "inputs": [
+    {
+      "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-16-completion/natural/contracts.json",
+      "sha256": "0de847c5f043e60c0eb24bfa1e063cd7337713d4783cb6fa454247b828506f90",
+      "role": "rule contract"
+    },
+    {
+      "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-16-completion/natural/index.json",
+      "sha256": "9bbf0a3a5a9dd3b09cd9d1beccf8b716100bbe634bf2d9ffda50ed3a5c3a8286",
+      "role": "selected source identity"
+    },
+    {
+      "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-15-remaining/native-intake/LICENSE",
+      "sha256": "792c48c5a849a15fdf9e37e8bcf9e6d1dd13b32b46c642a748a0a46a9919d473",
+      "role": "MIT licensing provenance"
+    }
+  ],
+  "pages_read": [
+    {
+      "path": "/private/tmp/remain-md-0001.txt",
+      "sha256": "0dd528969f9d560b2c375aba0b82ae4a979161bc756d7c804bc4185b459fdb74",
+      "role": "focus",
+      "reading": 1,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/remain-md-0002.txt",
+      "sha256": "a2d3f435875bff41fd96c11c8a99c3a7f402ea9faf26eed55322cd152f64d0eb",
+      "role": "markdown-source",
+      "reading": 2,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/remain-md-0003.txt",
+      "sha256": "0f0d7a08deb3572cdde55ce4108a1499d061d5a70c5a42a12cae5dbd4acf5f5c",
+      "role": "source heading and anchor inventory",
+      "reading": 3,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/remain-md-0004.txt",
+      "sha256": "cfd3a4be9ec2749e7b0db257ddfec4db0ddcf7c6bb11a08c557835022071f8bc",
+      "role": "native-context",
+      "reading": 4,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/remain-md-0005.txt",
+      "sha256": "73b5abe6a56ac00854db86b1679ac3fa63e62f90ff2afbfb791d5d765cbcee54",
+      "role": "architecture target lines 1-51",
+      "reading": 5,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/remain-md-0006.txt",
+      "sha256": "5c242d678c155ffef2791abee51d5c58410d82915ae4c0a85882c9e775c962e0",
+      "role": "architecture target lines 52-90 part",
+      "reading": 6,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/remain-md-0007.txt",
+      "sha256": "642a491d57ed74ec88698777bf6d59ab5b8cc224cb6146b13961f3ebaf79f091",
+      "role": "architecture target line 90 continuation through 139",
+      "reading": 7,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/remain-md-0008.txt",
+      "sha256": "608aec93a76676a1250e13efb66a58f813f0e327536bc9991a4ba6e0f38ed1ab",
+      "role": "architecture target lines 140-186 part",
+      "reading": 8,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/remain-md-0009.txt",
+      "sha256": "f18b1f6542d2d6ef6b05c54475c6410aeecd2111ffb655ba04a9b5f5d1a08ca5",
+      "role": "architecture target line 186 continuation",
+      "reading": 9,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/remain-md-0010.txt",
+      "sha256": "c5f35141fa1b0c98f72c50aa86c323df417e9c2537f3592c86af2107bc1b318a",
+      "role": "architecture target heading and anchor inventory",
+      "reading": 10,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/remain-md-0011.txt",
+      "sha256": "fb74b43c6c04c8566a0b3e3fc3ac99f5333d7534b0202cf187798c76c36ddd21",
+      "role": "development target lines 1-48",
+      "reading": 11,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/remain-md-0012.txt",
+      "sha256": "929b3c2fa316798c8439719b32cae063f854100a2b460865bd9e67413aff7056",
+      "role": "development target lines 49-87",
+      "reading": 12,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/remain-md-0013.txt",
+      "sha256": "5c1d24cf193bc79ca0b6b2358ebc2036496c1355db187e426c6928f3eb153f25",
+      "role": "development target heading and anchor inventory",
+      "reading": 13,
+      "read_in_full": true
+    }
+  ],
+  "hash_references": {
+    "declared_context_sha256": "bb0f0c82da2a783f1e9288667796ffd607f675459014365d5ed308a5a40b6ec4",
+    "declared_inventory_sha256": "64fc8326ff39f0a2db702acd1a1b6fa7511b9cdfcbe69d093ca6566f44fd2188",
+    "declared_manifest_sha256": "458da9b4e6646e9fef275852f844d637f13eca1b64b338dae26e06c3f1d73adb",
+    "limits": "These context/inventory/manifest hashes are declarations in the supplied pages. The underlying context serialization, inventory file and source manifest were not inspected or independently hashed."
+  },
+  "exposure": {
+    "reviewed_material": "All 13 linked readings in order, contracts.json, index.json and LICENSE; RTK.md read solely as operating instructions.",
+    "not_exposed": [
+      "detector implementation",
+      "detector predictions or reports",
+      "other reviewer judgments",
+      "annotation templates",
+      "external source manifests",
+      "live upstream repository or rendered GitHub pages"
+    ],
+    "method": "Read every source and target row. Reconstructed the source and both targets by their displayed original line and column positions; checked segment continuity and lengths; encoded UTF-8 with final newline and recomputed SHA-256. Enumerated every Markdown link in the complete 10-line selected source and independently assessed local destinations against the supplied target text.",
+    "human_effectiveness_claim": false,
+    "provenance_limits": "This is an agent judgment over supplied static evidence. Target and source bytes are independently hash-consistent with the declared pinned revision, but their attribution to that upstream revision is supplied provenance and was not fetched independently. No claim is made about live network reachability or current upstream content."
+  },
+  "whole_source_scope": {
+    "format": "markdown",
+    "native_path": "docs/README.md",
+    "revision": "0fe7ccb4b7f30236fb05f623be6924961d296d3d",
+    "source_lines_read": [
+      1,
+      10
+    ],
+    "coverage_decision": "complete_supported_static_M012_scope_reviewed",
+    "reason": "The complete source has four Markdown links. Two are literal relative Markdown files (lines 9 and 10), both fully supported by pinned target bytes and independently judged. The two HTTPS destinations (lines 4 and 5) are outside local-target scope. There are no source fragment-only references, local fragments, reference definitions, images, HTML links, fenced blocks or additional local destinations.",
+    "supported_reference_count": 2,
+    "supported_reference_judgments_complete": true,
+    "expected_issue_count": 0,
+    "clean_supported_reference_count": 2,
+    "unresolved_supported_reference_count": 0,
+    "recursive_target_review": false,
+    "target_scope_note": "The 186-line architecture and 87-line development documents were read in full as existence/fragment evidence for selected source links. Their own outgoing links are not additional selected sources and are not included in the selected-source issue count."
+  },
+  "reconstructed_bytes": [
+    {
+      "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+      "line_count": 10,
+      "sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68",
+      "matches_declared_sha256": true,
+      "evidence_readings": [
+        2
+      ]
+    },
+    {
+      "native_path": "docs/architecture.md",
+      "line_count": 186,
+      "sha256": "12b59d2ffc60b698c2d87a16c012c076a79f45ca92e8a2205f43576c253f94d0",
+      "matches_declared_sha256": true,
+      "evidence_readings": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "native_path": "docs/development.md",
+      "line_count": 87,
+      "sha256": "25304c0e7d38b35ad8ee97a2ee68b6fecc371110ba938b98cf52bbc2ac9ec8d6",
+      "matches_declared_sha256": true,
+      "evidence_readings": [
+        11,
+        12
+      ]
+    }
+  ],
+  "span_convention": "Original source code points, 1-based columns, exclusive end columns.",
+  "supported_references": [
+    {
+      "rule_id": "M012",
+      "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+      "source_sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68",
+      "destination": "architecture.md",
+      "span": {
+        "line": 9,
+        "column": 45,
+        "end_line": 9,
+        "end_column": 60
+      },
+      "link_span": {
+        "line": 9,
+        "column": 3,
+        "end_line": 9,
+        "end_column": 61
+      },
+      "native_path": "docs/architecture.md",
+      "fragment": "",
+      "judgment": "clean",
+      "exists": true,
+      "fragment_judgment": "not_applicable_no_fragment",
+      "target_sha256": "12b59d2ffc60b698c2d87a16c012c076a79f45ca92e8a2205f43576c253f94d0",
+      "reason": "Literal sibling path resolves from docs/README.md to docs/architecture.md. Full target text is supplied, starts with the markdown-it design principles heading, and independently reconstructs to the declared pinned hash. There is no fragment to validate; no unresolved local target exists at this span.",
+      "evidence_readings": [
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "rule_id": "M012",
+      "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+      "source_sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68",
+      "destination": "development.md",
+      "span": {
+        "line": 10,
+        "column": 43,
+        "end_line": 10,
+        "end_column": 57
+      },
+      "link_span": {
+        "line": 10,
+        "column": 3,
+        "end_line": 10,
+        "end_column": 58
+      },
+      "native_path": "docs/development.md",
+      "fragment": "",
+      "judgment": "clean",
+      "exists": true,
+      "fragment_judgment": "not_applicable_no_fragment",
+      "target_sha256": "25304c0e7d38b35ad8ee97a2ee68b6fecc371110ba938b98cf52bbc2ac9ec8d6",
+      "reason": "Literal sibling path resolves from docs/README.md to docs/development.md. Full target text is supplied, starts with the Development recommendations heading, and independently reconstructs to the declared pinned hash. There is no fragment to validate; no unresolved local target exists at this span.",
+      "evidence_readings": [
+        2,
+        4,
+        11,
+        12,
+        13
+      ]
+    }
+  ],
+  "expected_issues": [],
+  "independent_issue_spans": [],
+  "misses": {
+    "expected_issue_spans": [],
+    "detector_comparison_performed": false,
+    "reason": "No independently expected issue was found in the supported source scope. Detector output was not inspected, so no detector precision or recall conclusion is recorded."
+  },
+  "clean_negative_cases": [
+    {
+      "destination": "architecture.md",
+      "line": 9,
+      "column": 45,
+      "end_column": 60,
+      "kind": "existing_literal_local_markdown_file_without_fragment",
+      "expected_M012": false
+    },
+    {
+      "destination": "development.md",
+      "line": 10,
+      "column": 43,
+      "end_column": 57,
+      "kind": "existing_literal_local_markdown_file_without_fragment",
+      "expected_M012": false
+    }
+  ],
+  "exclusions": [
+    {
+      "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+      "destination": "https://github.com/markdown-it/markdown-it#markdown-it",
+      "span": {
+        "line": 4,
+        "column": 10,
+        "end_line": 4,
+        "end_column": 64
+      },
+      "reason": "Absolute HTTPS repository URL, not a literal local Markdown target. The remote fragment and remote README contents are not supplied target evidence for local M012 scope; no remote validity judgment is made."
+    },
+    {
+      "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+      "destination": "https://markdown-it.github.io/markdown-it/",
+      "span": {
+        "line": 5,
+        "column": 12,
+        "end_line": 5,
+        "end_column": 54
+      },
+      "reason": "Absolute HTTPS website URL, outside literal local Markdown target scope. No live website validity judgment is made."
+    },
+    {
+      "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+      "regions": [
+        {
+          "start_line": 1,
+          "end_line": 3
+        },
+        {
+          "start_line": 6,
+          "end_line": 8
+        }
+      ],
+      "reason": "No Markdown link destination occurs in these lines. The markdown-it inline code in line 3 is non-link code content and is outside the non_code rule contract."
+    },
+    {
+      "native_paths": [
+        "docs/architecture.md",
+        "docs/development.md"
+      ],
+      "reason": "Their outgoing destinations, code examples and prose are supplied target context, not selected source destinations. Reading them does not expand the selected docs/README.md source annotation scope."
+    }
+  ],
+  "unresolved": [],
+  "limitations": [
+    "No fragment-bearing local destination occurs in the selected source, so this review supplies no positive or negative fragment-membership test case for M012.",
+    "Existence is judged under the supplied pinned static repository context; live hosting behavior and independent upstream provenance were not tested."
+  ]
+}

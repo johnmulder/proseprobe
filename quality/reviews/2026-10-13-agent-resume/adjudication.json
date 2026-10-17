@@ -1,0 +1,3022 @@
+{
+  "version": 1,
+  "actor_type": "agent",
+  "human": false,
+  "reviewer_id": "codex-agent:/root/agent_review_adjudicator",
+  "protocol_revision": "agent-resume-adjudicated-v1",
+  "judgment_complete": true,
+  "independent_blind_initial_reviewer": false,
+  "independent_human_evidence": false,
+  "predictions_exposed": false,
+  "detector_execution": false,
+  "holdout_opened": false,
+  "reviewers": [
+    "codex-agent:/root/blind_resume_a",
+    "codex-agent:/root/blind_resume_b",
+    "codex-agent:/root/agent_review_adjudicator"
+  ],
+  "exposure": {
+    "primary": "Third-agent adjudication exposed to the completed A and B annotations and raw reviews, their uncertainties, and parent summaries of agreement and differences before any detector predictions. Decisions used published contracts and permitted original source context. No implementation, tests, detector predictions/reports, old review sessions or reserved holdout were read. Reviewed Python modules were not executed or imported.",
+    "parent_context": [
+      "16 agreed semantic issue events across 9 source units",
+      "C004 TODO span difference and MockRequest.add_header contract ambiguity",
+      "scope/whitespace/generated-line boundary differences",
+      "preserve unsupported generated M011 and C010 str/int; retain R005 limits"
+    ],
+    "permitted_source_context": "Complete static Python originals, complete other matrix-declared native originals, only R005 L18 C1-L38 C117, published guidance/contracts, input/matrix/reading metadata and bounded reading source, template/index provenance, native_context.inventory/sources/targets and original setup.md target text.",
+    "auxiliary": {
+      "actor_id": "codex-agent:/root/agent_review_adjudicator/coverage_check",
+      "actor_type": "agent",
+      "blindness_claim": false,
+      "artifact": "quality/reviews/2026-10-13-agent-resume/authored-local-links/native-context.json",
+      "incident": "A delegated read-only coverage checker reported printing the full native-context JSON rather than the bounded inventory/sources/targets extraction. This also displayed references and excluded_destinations structural fields. The checker was interrupted; its source recommendations were discarded and did not contribute to labels. No field values or findings from that overread were conveyed to the primary adjudicator.",
+      "root_disposition": "Root authorized the primary adjudicator to continue while disclosing this auxiliary exposure. The primary adjudicator independently extracted only the permitted native_context sections and used setup.md original text.",
+      "field_paths_displayed_beyond_permitted_subtrees": [
+        "$.excluded_destinations",
+        "$.excluded_destinations[\"agent-authored-pilot:entry.md\"]",
+        "$.excluded_destinations[\"agent-authored-pilot:entry.md\"][0].column",
+        "$.excluded_destinations[\"agent-authored-pilot:entry.md\"][0].destination",
+        "$.excluded_destinations[\"agent-authored-pilot:entry.md\"][0].end_column",
+        "$.excluded_destinations[\"agent-authored-pilot:entry.md\"][0].line",
+        "$.excluded_destinations[\"agent-authored-pilot:entry.md\"][0].reason",
+        "$.excluded_destinations[\"agent-authored-pilot:entry.md\"][1].column",
+        "$.excluded_destinations[\"agent-authored-pilot:entry.md\"][1].destination",
+        "$.excluded_destinations[\"agent-authored-pilot:entry.md\"][1].end_column",
+        "$.excluded_destinations[\"agent-authored-pilot:entry.md\"][1].line",
+        "$.excluded_destinations[\"agent-authored-pilot:entry.md\"][1].reason",
+        "$.native_context.inventory_sha256",
+        "$.native_context.manifest_sha256",
+        "$.native_context.revision",
+        "$.native_context.source_group",
+        "$.native_context.target_scope",
+        "$.native_context.version",
+        "$.reference_scope",
+        "$.references",
+        "$.references[\"agent-authored-pilot:entry.md\"]",
+        "$.references[\"agent-authored-pilot:entry.md\"][0].column",
+        "$.references[\"agent-authored-pilot:entry.md\"][0].destination",
+        "$.references[\"agent-authored-pilot:entry.md\"][0].end_column",
+        "$.references[\"agent-authored-pilot:entry.md\"][0].fragment",
+        "$.references[\"agent-authored-pilot:entry.md\"][0].line",
+        "$.references[\"agent-authored-pilot:entry.md\"][0].native_path",
+        "$.references[\"agent-authored-pilot:entry.md\"][1].column",
+        "$.references[\"agent-authored-pilot:entry.md\"][1].destination",
+        "$.references[\"agent-authored-pilot:entry.md\"][1].end_column",
+        "$.references[\"agent-authored-pilot:entry.md\"][1].fragment",
+        "$.references[\"agent-authored-pilot:entry.md\"][1].line",
+        "$.references[\"agent-authored-pilot:entry.md\"][1].native_path",
+        "$.references[\"agent-authored-pilot:entry.md\"][2].column",
+        "$.references[\"agent-authored-pilot:entry.md\"][2].destination",
+        "$.references[\"agent-authored-pilot:entry.md\"][2].end_column",
+        "$.references[\"agent-authored-pilot:entry.md\"][2].fragment",
+        "$.references[\"agent-authored-pilot:entry.md\"][2].line",
+        "$.references[\"agent-authored-pilot:entry.md\"][2].native_path",
+        "$.renderer",
+        "$.version"
+      ],
+      "exposure_receipt": "The interrupted child supplied only exact displayed field paths and an exposure audit, with no field values, link findings, source advice or recommendations. It reported no detector implementation, predictions, score reports or detector-run results displayed, and no further inspection after the exposure-audit instruction.",
+      "resolver_derived_metadata_exposed": true,
+      "source_judgments_or_label_contribution": false,
+      "predictions_or_implementation_exposed": false
+    }
+  },
+  "original_review_artifact_sha256": {
+    "quality/reviews/2026-10-13-agent-resume/review.agent-a.json": "71423d6059f085f420b3b34492176a0ee9b9fcc0cca9e4bf0992cf36087face7",
+    "quality/reviews/2026-10-13-agent-resume/review.agent-b.json": "c21ce3aea315b2033f69f60daa72a40b1b0f9ccb293d1409e91facb487040141",
+    "quality/reviews/2026-10-13-agent-resume/authored-challenge/annotations.agent-a.json": "860ef36ac41fb6a781ba8bd99370bf4acb041fcff3147b44dea09e6f3a3d05a8",
+    "quality/reviews/2026-10-13-agent-resume/authored-challenge/annotations.agent-b.json": "4b211109d80fd0f482e1e36ec4b53c1d38242fc1571c2e2e0007ff72a1c109fe",
+    "quality/reviews/2026-10-13-agent-resume/authored-local-links/annotations.agent-a.json": "6b0b6caf350841eb92244534b74293da94f2540df9ad2278f586a0807c38bdcd",
+    "quality/reviews/2026-10-13-agent-resume/authored-local-links/annotations.agent-b.json": "1c6da72645a09f47eb53c57dd955b39daf89e88e20ec9504024bbfbdc7088e54",
+    "quality/reviews/2026-10-13-agent-resume/natural/annotations.agent-a.json": "6f341565336f57da5d5cdc4030851130e0f204590cb6dad7e6d406031703faca",
+    "quality/reviews/2026-10-13-agent-resume/natural/annotations.agent-b.json": "78ef88a20671c636bba6d650d4295baa8a0e194af04e1fa5fe867e050aec97a4"
+  },
+  "template_sha256": {
+    "authored-challenge": "fc41447c58b45b96ae56deabc0d2eb5c18402bc0fa29870c733bbdbbf10dae52",
+    "authored-local-links": "a1281ae79ed1ee5490bcc5e0ee3aa506bf7318a2ad229337428dbab00ac5265e",
+    "natural": "5cc36ca0b4bd2f1e8099b4fe91adf6438a19e157e34920cf697bd85cd3071e83"
+  },
+  "source_artifact_sha256": {
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0000.md": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48",
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0001.py": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-local-links/originals/0000.md": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/natural/originals/0000.md": "ab4a60280784e5b915bb2b1353ceb0a5cffefcbe5148c53b901d7861d41c52a1",
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/natural/originals/0001.md": "e4656dfdd2cff448e23fd8115b70b78efd0ac8863897b9df161ffc26dec12ded",
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/natural/originals/0002.md": "d85335cdf9f9c882db139b6653bd77e640dda92eca9bc6e8136a5a0bf5ae0ef2",
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/natural/originals/0003.py": "67d49be35d009efea35054f2b2cd23145854eb1b2df1cb442ea7f2f04bf6de0c",
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/natural/originals/0004.py": "9cc4329abe21b37d93a95a3901b0ab99c24486f3d487bc57965bb2ab0b252e24",
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/natural/originals/0005.py": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c"
+  },
+  "accepted_events": [
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:claims.md",
+      "accepted_id": "adjudicated-authored-challenge-0000-G038-3-17",
+      "rule_id": "G038",
+      "agent_a_id": "A-authored-challenge-0000.md-G038-3-17",
+      "agent_b_id": "agent-b-authored-challenge-0000-G038-001",
+      "lexical_span": {
+        "line": 3,
+        "column": 17,
+        "end_line": 3,
+        "end_column": 26
+      },
+      "match_region": {
+        "line": 3,
+        "column": 17,
+        "end_line": 3,
+        "end_column": 26
+      },
+      "rationale": "The declarative claim supplies no comparison target; the next sentence is a separate claim, not an attached comparator."
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:claims.md",
+      "accepted_id": "adjudicated-authored-challenge-0000-V015-5-17",
+      "rule_id": "V015",
+      "agent_a_id": "A-authored-challenge-0000.md-V015-5-17",
+      "agent_b_id": "agent-b-authored-challenge-0000-V015-001",
+      "lexical_span": {
+        "line": 5,
+        "column": 17,
+        "end_line": 5,
+        "end_column": 33
+      },
+      "match_region": {
+        "line": 5,
+        "column": 17,
+        "end_line": 5,
+        "end_column": 33
+      },
+      "rationale": "This superlative names no local comparison set; the following benchmark sentence qualifies its own separate claim."
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:claims.md",
+      "accepted_id": "adjudicated-authored-challenge-0000-V016-7-21",
+      "rule_id": "V016",
+      "agent_a_id": "A-authored-challenge-0000.md-V016-7-21",
+      "agent_b_id": "agent-b-authored-challenge-0000-V016-001",
+      "lexical_span": {
+        "line": 7,
+        "column": 21,
+        "end_line": 7,
+        "end_column": 32
+      },
+      "match_region": {
+        "line": 7,
+        "column": 21,
+        "end_line": 7,
+        "end_column": 32
+      },
+      "rationale": "An absolute reliability claim with no numbered test population or explicitly tested configuration in its own sentence."
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:claims.md",
+      "accepted_id": "adjudicated-authored-challenge-0000-V016-9-41",
+      "rule_id": "V016",
+      "agent_a_id": "A-authored-challenge-0000.md-V016-9-41",
+      "agent_b_id": "agent-b-authored-challenge-0000-V016-002",
+      "lexical_span": {
+        "line": 9,
+        "column": 41,
+        "end_line": 9,
+        "end_column": 52
+      },
+      "match_region": {
+        "line": 9,
+        "column": 41,
+        "end_line": 9,
+        "end_column": 52
+      },
+      "rationale": "The preceding sentence reports 1,000 tests but does not qualify the separate universal assertion."
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:claims.md",
+      "accepted_id": "adjudicated-authored-challenge-0000-V016-10-31",
+      "rule_id": "V016",
+      "agent_a_id": "A-authored-challenge-0000.md-V016-10-31",
+      "agent_b_id": "agent-b-authored-challenge-0000-V016-003",
+      "lexical_span": {
+        "line": 10,
+        "column": 31,
+        "end_line": 10,
+        "end_column": 46
+      },
+      "match_region": {
+        "line": 10,
+        "column": 31,
+        "end_line": 10,
+        "end_column": 46
+      },
+      "rationale": "In tests is vague local testing scope rather than a numbered population or explicitly tested configuration; retain a low-confidence review prompt."
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:claims.md",
+      "accepted_id": "adjudicated-authored-challenge-0000-G039-11-10",
+      "rule_id": "G039",
+      "agent_a_id": "A-authored-challenge-0000.md-G039-11-10",
+      "agent_b_id": "agent-b-authored-challenge-0000-G039-001",
+      "lexical_span": {
+        "line": 11,
+        "column": 10,
+        "end_line": 11,
+        "end_column": 13
+      },
+      "match_region": {
+        "line": 11,
+        "column": 10,
+        "end_line": 11,
+        "end_column": 13
+      },
+      "rationale": "Adjacent repeated function word the; the finding covers the duplicated tail."
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:claims.md",
+      "accepted_id": "adjudicated-authored-challenge-0000-M011-17-35",
+      "rule_id": "M011",
+      "agent_a_id": "A-authored-challenge-0000.md-M011-17-35",
+      "agent_b_id": "agent-b-authored-challenge-0000-M011-001",
+      "lexical_span": {
+        "line": 17,
+        "column": 35,
+        "end_line": 17,
+        "end_column": 42
+      },
+      "match_region": {
+        "line": 17,
+        "column": 35,
+        "end_line": 17,
+        "end_column": 42
+      },
+      "rationale": "No heading or supported explicit anchor creates limits in this native Markdown document; Scope resolves the separate #scope link."
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0001.py",
+      "source_id": "agent-authored-pilot:documentation.py",
+      "accepted_id": "adjudicated-authored-challenge-0001-C009-7-12",
+      "rule_id": "C009",
+      "agent_a_id": "A-authored-challenge-0001.py-C009-7-12",
+      "agent_b_id": "agent-b-authored-challenge-0001-C009-001",
+      "lexical_span": {
+        "line": 7,
+        "column": 12,
+        "end_line": 7,
+        "end_column": 20
+      },
+      "match_region": {
+        "line": 7,
+        "column": 12,
+        "end_line": 7,
+        "end_column": 20
+      },
+      "rationale": "fetch declares target and variadic positional extras; attempts is absent from its owning signature and there is no **kwargs delegation."
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0001.py",
+      "source_id": "agent-authored-pilot:documentation.py",
+      "accepted_id": "adjudicated-authored-challenge-0001-C009-8-12",
+      "rule_id": "C009",
+      "agent_a_id": "A-authored-challenge-0001.py-C009-8-12",
+      "agent_b_id": "agent-b-authored-challenge-0001-C009-002",
+      "lexical_span": {
+        "line": 8,
+        "column": 12,
+        "end_line": 8,
+        "end_column": 20
+      },
+      "match_region": {
+        "line": 8,
+        "column": 12,
+        "end_line": 8,
+        "end_column": 20
+      },
+      "rationale": "The explicit ** kind contradicts the signature, where extras is variadic positional *extras. Both the name and its declared kind are part of the semantic issue."
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0001.py",
+      "source_id": "agent-authored-pilot:documentation.py",
+      "accepted_id": "adjudicated-authored-challenge-0001-C010-9-13",
+      "rule_id": "C010",
+      "agent_a_id": "A-authored-challenge-0001.py-C010-9-13",
+      "agent_b_id": "agent-b-authored-challenge-0001-C010-001",
+      "lexical_span": {
+        "line": 9,
+        "column": 13,
+        "end_line": 9,
+        "end_column": 16
+      },
+      "match_region": {
+        "line": 9,
+        "column": 13,
+        "end_line": 9,
+        "end_column": 16
+      },
+      "rationale": "The physical Sphinx int return field conflicts with fetch's unquoted -> None annotation. No decorator, generator or rebinding blocks this supported pair; neither declaration is assumed to be intended."
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0001.py",
+      "source_id": "agent-authored-pilot:documentation.py",
+      "accepted_id": "adjudicated-authored-challenge-0001-C004-11-7",
+      "rule_id": "C004",
+      "agent_a_id": "A-authored-challenge-0001.py-C004-11-7",
+      "agent_b_id": "agent-b-authored-challenge-0001-C004-001",
+      "lexical_span": {
+        "line": 11,
+        "column": 7,
+        "end_line": 11,
+        "end_column": 11
+      },
+      "match_region": {
+        "line": 11,
+        "column": 5,
+        "end_line": 11,
+        "end_column": 11
+      },
+      "rationale": "The context-free TODO marker has no specific maintenance action. The lexical expected span covers TODO; the narrow semantic match region covers its complete # TODO comment, excluding indentation and the separate raise on the next line."
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0001.py",
+      "source_id": "agent-authored-pilot:documentation.py",
+      "accepted_id": "adjudicated-authored-challenge-0001-C004-12-5",
+      "rule_id": "C004",
+      "agent_a_id": "A-authored-challenge-0001.py-C004-12-5",
+      "agent_b_id": "agent-b-authored-challenge-0001-C004-002",
+      "lexical_span": {
+        "line": 12,
+        "column": 5,
+        "end_line": 12,
+        "end_column": 48
+      },
+      "match_region": {
+        "line": 12,
+        "column": 5,
+        "end_line": 12,
+        "end_column": 48
+      },
+      "rationale": "This is an actual executable raise statement in a concrete undecorated function, with a formulaic implementation message; it is separate from the preceding TODO comment."
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0001.py",
+      "source_id": "agent-authored-pilot:documentation.py",
+      "accepted_id": "adjudicated-authored-challenge-0001-G039-26-17",
+      "rule_id": "G039",
+      "agent_a_id": "A-authored-challenge-0001.py-G039-26-17",
+      "agent_b_id": "agent-b-authored-challenge-0001-G039-001",
+      "lexical_span": {
+        "line": 26,
+        "column": 17,
+        "end_line": 26,
+        "end_column": 20
+      },
+      "match_region": {
+        "line": 26,
+        "column": 17,
+        "end_line": 26,
+        "end_column": 20
+      },
+      "rationale": "The function docstring repeats adjacent function word the; the finding covers the duplicated tail."
+    },
+    {
+      "cohort": "authored-local-links",
+      "path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:entry.md",
+      "accepted_id": "adjudicated-authored-local-links-0000-M012-4-22",
+      "rule_id": "M012",
+      "agent_a_id": "A-authored-local-links-0000.md-M012-4-22",
+      "agent_b_id": "agent-b-authored-local-links-0000-M012-001",
+      "lexical_span": {
+        "line": 4,
+        "column": 22,
+        "end_line": 4,
+        "end_column": 44
+      },
+      "match_region": {
+        "line": 4,
+        "column": 22,
+        "end_line": 4,
+        "end_column": 44
+      },
+      "rationale": "setup.md exists. Its real headings create install and configuration-notes; Configuration appears only in a fenced Markdown example and creates no configuration target."
+    },
+    {
+      "cohort": "authored-local-links",
+      "path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:entry.md",
+      "accepted_id": "adjudicated-authored-local-links-0000-M012-5-18",
+      "rule_id": "M012",
+      "agent_a_id": "A-authored-local-links-0000.md-M012-5-18",
+      "agent_b_id": "agent-b-authored-local-links-0000-M012-002",
+      "lexical_span": {
+        "line": 5,
+        "column": 18,
+        "end_line": 5,
+        "end_column": 28
+      },
+      "match_region": {
+        "line": 5,
+        "column": 18,
+        "end_line": 5,
+        "end_column": 28
+      },
+      "rationale": "The pinned synthetic inventory contains only entry.md and setup.md, and the permitted target metadata verifies missing.md is absent."
+    },
+    {
+      "cohort": "authored-local-links",
+      "path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:entry.md",
+      "accepted_id": "adjudicated-authored-local-links-0000-M011-7-20",
+      "rule_id": "M011",
+      "agent_a_id": "A-authored-local-links-0000.md-M011-7-20",
+      "agent_b_id": "agent-b-authored-local-links-0000-M011-001",
+      "lexical_span": {
+        "line": 7,
+        "column": 20,
+        "end_line": 7,
+        "end_column": 32
+      },
+      "match_region": {
+        "line": 7,
+        "column": 20,
+        "end_line": 7,
+        "end_column": 32
+      },
+      "rationale": "The source has the Workflow heading and no limitations heading or supported explicit anchor; this same-document destination is unresolved."
+    }
+  ],
+  "disagreements": [
+    {
+      "id": "D001",
+      "kind": "lexical_location_and_semantic_match_region",
+      "cohort": "authored-challenge",
+      "path": "originals/0001.py",
+      "rule_id": "C004",
+      "agent_a_expected": {
+        "line": 11,
+        "column": 7,
+        "end_line": 11,
+        "end_column": 11
+      },
+      "agent_b_expected": {
+        "line": 11,
+        "column": 5,
+        "end_line": 11,
+        "end_column": 11
+      },
+      "accepted_expected": {
+        "line": 11,
+        "column": 7,
+        "end_line": 11,
+        "end_column": 11
+      },
+      "accepted_match_region": {
+        "line": 11,
+        "column": 5,
+        "end_line": 11,
+        "end_column": 11
+      },
+      "disposition": "same semantic issue; canonical lexical marker with narrow whole-comment semantic matching",
+      "rationale": "The source is exactly an indented # TODO comment. TODO is the reviewed lexical word; # TODO is the complete narrow comment containing that issue. Both regions are justified from source and the context-free comment-marker contract. The match region includes punctuation belonging to that comment, no indentation or unrelated statement. This location policy was fixed without detector output."
+    },
+    {
+      "id": "D002",
+      "kind": "contract_disposition",
+      "cohort": "natural",
+      "path": "originals/0005.py",
+      "rule_id": "C004",
+      "agent_a_disposition": "reviewed clean with explicit ambiguity",
+      "agent_b_disposition": "context-dependent",
+      "accepted_disposition": "context-dependent",
+      "accepted_region": {
+        "line": 78,
+        "column": 1,
+        "end_line": 82,
+        "end_column": 10
+      },
+      "rationale": "A judged the intentional add_header rejection clean while disclosing the contract ambiguity; B withheld both positive and clean labels. Accepted coverage follows the conservative context-dependent disposition for the owning L78 C1-L82 C10 span. Other reviewed source and whitespace are covered; no abstract-method exemption is claimed."
+    }
+  ],
+  "coverage_status_disagreements": [
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0001.py",
+      "rule_id": "C010",
+      "span": {
+        "line": 37,
+        "column": 1,
+        "end_line": 38,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A included the blank line 37 through L38 C1; B stopped at L37 C1. The separator has no declaration, so accepted coverage includes the reviewed whitespace without entering decode. The scalar str/int owner remains unsupported."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 23,
+        "column": 1,
+        "end_line": 24,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 24,
+        "column": 70,
+        "end_line": 25,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 27,
+        "column": 1,
+        "end_line": 28,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 28,
+        "column": 72,
+        "end_line": 29,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 31,
+        "column": 1,
+        "end_line": 32,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 32,
+        "column": 73,
+        "end_line": 33,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 23,
+        "column": 1,
+        "end_line": 24,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 24,
+        "column": 70,
+        "end_line": 25,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 27,
+        "column": 1,
+        "end_line": 28,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 28,
+        "column": 72,
+        "end_line": 29,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 31,
+        "column": 1,
+        "end_line": 32,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 32,
+        "column": 73,
+        "end_line": 33,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 23,
+        "column": 1,
+        "end_line": 24,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 24,
+        "column": 70,
+        "end_line": 25,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 27,
+        "column": 1,
+        "end_line": 28,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 28,
+        "column": 72,
+        "end_line": 29,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 31,
+        "column": 1,
+        "end_line": 32,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 32,
+        "column": 73,
+        "end_line": 33,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "R005 remains confined to L18 C1-L38 C117 and its three rules. A included whitespace beside reusable lines; B left blank separators and line endings undeclared. Accepted native coverage includes those reviewed whitespace gaps; all three unavailable reusable lines remain context-dependent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 6,
+        "column": 12,
+        "end_line": 7,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 7,
+        "column": 1,
+        "end_line": 7,
+        "end_column": 54
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "context-dependent",
+      "accepted_status": "context-dependent",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 7,
+        "column": 54,
+        "end_line": 8,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 23,
+        "column": 1,
+        "end_line": 24,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 24,
+        "column": 55,
+        "end_line": 25,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "G039",
+      "span": {
+        "line": 6,
+        "column": 12,
+        "end_line": 7,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "G039",
+      "span": {
+        "line": 7,
+        "column": 1,
+        "end_line": 7,
+        "end_column": 54
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "context-dependent",
+      "accepted_status": "context-dependent",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "G039",
+      "span": {
+        "line": 7,
+        "column": 54,
+        "end_line": 8,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "G039",
+      "span": {
+        "line": 23,
+        "column": 1,
+        "end_line": 24,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "G039",
+      "span": {
+        "line": 24,
+        "column": 55,
+        "end_line": 25,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 6,
+        "column": 12,
+        "end_line": 7,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 7,
+        "column": 1,
+        "end_line": 7,
+        "end_column": 54
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "context-dependent",
+      "accepted_status": "context-dependent",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 7,
+        "column": 54,
+        "end_line": 8,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 23,
+        "column": 1,
+        "end_line": 24,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 24,
+        "column": 55,
+        "end_line": 25,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 6,
+        "column": 12,
+        "end_line": 7,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 7,
+        "column": 1,
+        "end_line": 7,
+        "end_column": 54
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "context-dependent",
+      "accepted_status": "context-dependent",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 7,
+        "column": 54,
+        "end_line": 8,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 23,
+        "column": 1,
+        "end_line": 24,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 24,
+        "column": 55,
+        "end_line": 25,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A treated L7 product metadata as reviewed native source and excluded only the L24 reusable; B neutralized both generated source lines and left some whitespace undeclared. Accepted coverage conservatively keeps complete L7 and L24 lines context-dependent, even though frontmatter itself is ineligible claim prose, and reviews only source/whitespace outside those lines. Generated expansions are absent."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 14,
+        "column": 64,
+        "end_line": 15,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 21,
+        "column": 1,
+        "end_line": 22,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 22,
+        "column": 38,
+        "end_line": 23,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 25,
+        "column": 1,
+        "end_line": 26,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 26,
+        "column": 63,
+        "end_line": 26,
+        "end_column": 340
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "context-dependent",
+      "accepted_status": "context-dependent",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 26,
+        "column": 340,
+        "end_line": 27,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G038",
+      "span": {
+        "line": 31,
+        "column": 1,
+        "end_line": 32,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G039",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G039",
+      "span": {
+        "line": 14,
+        "column": 64,
+        "end_line": 15,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G039",
+      "span": {
+        "line": 21,
+        "column": 1,
+        "end_line": 22,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G039",
+      "span": {
+        "line": 22,
+        "column": 38,
+        "end_line": 23,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G039",
+      "span": {
+        "line": 25,
+        "column": 1,
+        "end_line": 26,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G039",
+      "span": {
+        "line": 26,
+        "column": 63,
+        "end_line": 26,
+        "end_column": 340
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "context-dependent",
+      "accepted_status": "context-dependent",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G039",
+      "span": {
+        "line": 26,
+        "column": 340,
+        "end_line": 27,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "G039",
+      "span": {
+        "line": 31,
+        "column": 1,
+        "end_line": 32,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 14,
+        "column": 64,
+        "end_line": 15,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 21,
+        "column": 1,
+        "end_line": 22,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 22,
+        "column": 38,
+        "end_line": 23,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 25,
+        "column": 1,
+        "end_line": 26,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 26,
+        "column": 63,
+        "end_line": 26,
+        "end_column": 340
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "context-dependent",
+      "accepted_status": "context-dependent",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 26,
+        "column": 340,
+        "end_line": 27,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V015",
+      "span": {
+        "line": 31,
+        "column": 1,
+        "end_line": 32,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 14,
+        "column": 64,
+        "end_line": 15,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 21,
+        "column": 1,
+        "end_line": 22,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 22,
+        "column": 38,
+        "end_line": 23,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 25,
+        "column": 1,
+        "end_line": 26,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 26,
+        "column": 63,
+        "end_line": 26,
+        "end_column": 340
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "context-dependent",
+      "accepted_status": "context-dependent",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 26,
+        "column": 340,
+        "end_line": 27,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rule_id": "V016",
+      "span": {
+        "line": 31,
+        "column": 1,
+        "end_line": 32,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A excluded the reusable prefix at L26 but reviewed its trailing literal instruction; B kept the complete generated line neutral. Accepted coverage keeps the complete L26 line context-dependent because unavailable expansion can affect attachment and prose boundaries. It retains complete L14/L22/L32 generated lines as neutral and includes reviewed whitespace gaps. M011 remains unsupported for the whole file."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0005.py",
+      "rule_id": "C004",
+      "span": {
+        "line": 77,
+        "column": 1,
+        "end_line": 78,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A judged the intentional add_header rejection clean while disclosing the contract ambiguity; B withheld both positive and clean labels. Accepted coverage follows the conservative context-dependent disposition for the owning L78 C1-L82 C10 span. Other reviewed source and whitespace are covered; no abstract-method exemption is claimed."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0005.py",
+      "rule_id": "C004",
+      "span": {
+        "line": 78,
+        "column": 1,
+        "end_line": 82,
+        "end_column": 10
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "context-dependent",
+      "accepted_status": "context-dependent",
+      "rationale": "A judged the intentional add_header rejection clean while disclosing the contract ambiguity; B withheld both positive and clean labels. Accepted coverage follows the conservative context-dependent disposition for the owning L78 C1-L82 C10 span. Other reviewed source and whitespace are covered; no abstract-method exemption is claimed."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0005.py",
+      "rule_id": "C004",
+      "span": {
+        "line": 82,
+        "column": 10,
+        "end_line": 83,
+        "end_column": 1
+      },
+      "agent_a_status": "reviewed",
+      "agent_b_status": "unreviewed",
+      "accepted_status": "reviewed",
+      "rationale": "A judged the intentional add_header rejection clean while disclosing the contract ambiguity; B withheld both positive and clean labels. Accepted coverage follows the conservative context-dependent disposition for the owning L78 C1-L82 C10 span. Other reviewed source and whitespace are covered; no abstract-method exemption is claimed."
+    }
+  ],
+  "coverage_and_location_changes": [
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:claims.md",
+      "authorized_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "M011"
+      ],
+      "authorized_region": null,
+      "full_file_reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "M011"
+      ],
+      "accepted_regions": [],
+      "coverage_changed_or_normalized": false,
+      "agent_a_regions": [],
+      "agent_b_regions": []
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0001.py",
+      "source_id": "agent-authored-pilot:documentation.py",
+      "authorized_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009",
+        "C010"
+      ],
+      "authorized_region": null,
+      "full_file_reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009"
+      ],
+      "accepted_regions": [
+        {
+          "rules": [
+            "C010"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 38,
+          "end_column": 1,
+          "note": "Reviewed the supported declarations in fetch, Reader.read and checked with complete static owner/import/binding context. The blank separator before decode is included; decode is excluded below."
+        },
+        {
+          "rules": [
+            "C010"
+          ],
+          "status": "unsupported",
+          "line": 38,
+          "column": 1,
+          "end_line": 44,
+          "end_column": 24,
+          "note": "decode declares -> str and :rtype: int. The published C010 contract supports only unquoted -> None versus physical :rtype: int; this broader scalar pair is unsupported."
+        }
+      ],
+      "coverage_changed_or_normalized": true,
+      "agent_a_regions": [
+        {
+          "rules": [
+            "C010"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 38,
+          "end_column": 1,
+          "note": "Reviewed the supported return declarations in fetch, Reader.read and checked with complete static import/binding context."
+        },
+        {
+          "rules": [
+            "C010"
+          ],
+          "status": "unsupported",
+          "line": 38,
+          "column": 1,
+          "end_line": 44,
+          "end_column": 24,
+          "note": "decode has -> str and :rtype: int, an excluded scalar pair; C010 supports only unquoted -> None versus physical :rtype: int."
+        }
+      ],
+      "agent_b_regions": [
+        {
+          "rules": [
+            "C010"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 37,
+          "end_column": 1,
+          "note": "Reviewed complete owner/binding context for fetch, Reader.read, and checked. fetch contains the supported None/int conflict; the physical None fields of read and checked do not conflict."
+        },
+        {
+          "rules": [
+            "C010"
+          ],
+          "status": "unsupported",
+          "line": 38,
+          "column": 1,
+          "end_line": 44,
+          "end_column": 24,
+          "note": "decode declares -> str with :rtype: int. This scalar pair is explicitly outside the initial C010 contract; it is not a supported C010 positive or a supported clean contradiction case."
+        }
+      ]
+    },
+    {
+      "cohort": "authored-local-links",
+      "path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:entry.md",
+      "authorized_rules": [
+        "M011",
+        "M012"
+      ],
+      "authorized_region": null,
+      "full_file_reviewed_rules": [
+        "M011",
+        "M012"
+      ],
+      "accepted_regions": [],
+      "coverage_changed_or_normalized": false,
+      "agent_a_regions": [],
+      "agent_b_regions": []
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "source_id": "github/docs:content/actions/how-tos/write-workflows/choose-what-workflows-do/use-jobs.md",
+      "authorized_rules": [
+        "G038",
+        "V015",
+        "V016"
+      ],
+      "authorized_region": {
+        "column": 1,
+        "end_column": 117,
+        "end_line": 38,
+        "line": 18
+      },
+      "full_file_reviewed_rules": [],
+      "accepted_regions": [
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 18,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 24,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 70,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 24,
+          "column": 70,
+          "end_line": 28,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 28,
+          "column": 1,
+          "end_line": 28,
+          "end_column": 72,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 28,
+          "column": 72,
+          "end_line": 32,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 32,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 73,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 32,
+          "column": 73,
+          "end_line": 38,
+          "end_column": 117,
+          "note": "Reviewed remaining eligible literal native source and intervening whitespace through the authorized exclusive endpoint; no supported issue. No generated expansion is included."
+        }
+      ],
+      "coverage_changed_or_normalized": true,
+      "agent_a_regions": [
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 18,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 1,
+          "note": "Reviewed the literal native source in the declared R005 region; no supported claims."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 24,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 70,
+          "note": "The Liquid reusable is unexpanded; its generated prose is unavailable."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 24,
+          "column": 70,
+          "end_line": 28,
+          "end_column": 1,
+          "note": "Reviewed literal headings and whitespace; no supported claims."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 28,
+          "column": 1,
+          "end_line": 28,
+          "end_column": 72,
+          "note": "The Liquid reusable is unexpanded; its generated prose is unavailable."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 28,
+          "column": 72,
+          "end_line": 32,
+          "end_column": 1,
+          "note": "Reviewed literal headings and whitespace; no supported claims."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 32,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 73,
+          "note": "The Liquid reusable is unexpanded; its generated prose is unavailable."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 32,
+          "column": 73,
+          "end_line": 38,
+          "end_column": 117,
+          "note": "Reviewed the native matrix-strategy instruction and link through the exclusive declared endpoint; no supported claims."
+        }
+      ],
+      "agent_b_regions": [
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 18,
+          "column": 1,
+          "end_line": 23,
+          "end_column": 1,
+          "note": "Reviewed native source within the authorized R005 region; no eligible comparative, superlative, or absolute-reliability claim. Headings and inline code are excluded."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 25,
+          "column": 1,
+          "end_line": 27,
+          "end_column": 1,
+          "note": "Reviewed native source within the authorized R005 region; no eligible comparative, superlative, or absolute-reliability claim. Headings and inline code are excluded."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 29,
+          "column": 1,
+          "end_line": 31,
+          "end_column": 1,
+          "note": "Reviewed native source within the authorized R005 region; no eligible comparative, superlative, or absolute-reliability claim. Headings and inline code are excluded."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 33,
+          "column": 1,
+          "end_line": 38,
+          "end_column": 117,
+          "note": "Reviewed native source within the authorized R005 region; no eligible comparative, superlative, or absolute-reliability claim. Headings and inline code are excluded."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 24,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 70,
+          "note": "Unexpanded reusable directive '{% data reusables.actions.jobs.section-using-jobs-in-a-workflow-id %}'; its generated prose was not supplied and is not claimed reviewed."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 28,
+          "column": 1,
+          "end_line": 28,
+          "end_column": 72,
+          "note": "Unexpanded reusable directive '{% data reusables.actions.jobs.section-using-jobs-in-a-workflow-name %}'; its generated prose was not supplied and is not claimed reviewed."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 32,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 73,
+          "note": "Unexpanded reusable directive '{% data reusables.actions.jobs.section-using-jobs-in-a-workflow-needs %}'; its generated prose was not supplied and is not claimed reviewed."
+        }
+      ]
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "source_id": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md",
+      "authorized_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "M011"
+      ],
+      "authorized_region": null,
+      "full_file_reviewed_rules": [],
+      "accepted_regions": [
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 7,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 7,
+          "column": 1,
+          "end_line": 7,
+          "end_column": 54,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 7,
+          "column": 54,
+          "end_line": 24,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 24,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 55,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 24,
+          "column": 55,
+          "end_line": 236,
+          "end_column": 27,
+          "note": "Reviewed remaining eligible literal native source and intervening whitespace through the authorized exclusive endpoint; no supported issue. No generated expansion is included."
+        },
+        {
+          "rules": [
+            "M011"
+          ],
+          "status": "unsupported",
+          "line": 1,
+          "column": 1,
+          "end_line": 236,
+          "end_column": 27,
+          "note": "The complete native document has Liquid/generated-content cues and is conservatively unsupported for M011 under the published contract. No generated heading or anchor targets are inferred."
+        }
+      ],
+      "coverage_changed_or_normalized": true,
+      "agent_a_regions": [
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 1,
+          "note": "Reviewed all eligible native text before the reusable; frontmatter, headings, code and markup are excluded by each contract as applicable."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 24,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 55,
+          "note": "The version-note Liquid reusable is absent as rendered prose; no claim about its expansion is made."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 24,
+          "column": 55,
+          "end_line": 236,
+          "end_column": 27,
+          "note": "Reviewed all remaining eligible native prose, including wrapped sentence boundaries; no supported selected claim or repeated-word findings."
+        },
+        {
+          "rules": [
+            "M011"
+          ],
+          "status": "unsupported",
+          "line": 1,
+          "column": 1,
+          "end_line": 236,
+          "end_column": 27,
+          "note": "Liquid and generated-content cues make the complete document unsupported for M011; rendered target expansion is unavailable."
+        }
+      ],
+      "agent_b_regions": [
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 6,
+          "end_column": 12,
+          "note": "Reviewed the supplied native text exhaustively for the four prose rules; no eligible claim or adjacent duplicated function word. Generated expansion content is outside this region."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 7,
+          "column": 1,
+          "end_line": 7,
+          "end_column": 54,
+          "note": "This source line contains unexpanded Liquid data or variable content. Its expansion was not available; no judgment about generated prose is inferred."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 8,
+          "column": 1,
+          "end_line": 23,
+          "end_column": 1,
+          "note": "Reviewed the supplied native text exhaustively for the four prose rules; no eligible claim or adjacent duplicated function word. Generated expansion content is outside this region."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 24,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 55,
+          "note": "This source line contains unexpanded Liquid data or variable content. Its expansion was not available; no judgment about generated prose is inferred."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 25,
+          "column": 1,
+          "end_line": 236,
+          "end_column": 27,
+          "note": "Reviewed the supplied native text exhaustively for the four prose rules; no eligible claim or adjacent duplicated function word."
+        },
+        {
+          "rules": [
+            "M011"
+          ],
+          "status": "unsupported",
+          "line": 1,
+          "column": 1,
+          "end_line": 236,
+          "end_column": 27,
+          "note": "The native document contains Liquid/generated-content cues. M011 conservatively skips this document under its published contract; no generated heading/anchor expansion was supplied."
+        }
+      ]
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "source_id": "github/docs:content/migrations/overview/mannequins-and-user-activity.md",
+      "authorized_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "M011"
+      ],
+      "authorized_region": null,
+      "full_file_reviewed_rules": [],
+      "accepted_regions": [
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 14,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 14,
+          "column": 1,
+          "end_line": 14,
+          "end_column": 64,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 14,
+          "column": 64,
+          "end_line": 22,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 22,
+          "column": 1,
+          "end_line": 22,
+          "end_column": 38,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 22,
+          "column": 38,
+          "end_line": 26,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 26,
+          "column": 1,
+          "end_line": 26,
+          "end_column": 340,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 26,
+          "column": 340,
+          "end_line": 32,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 32,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 272,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "M011"
+          ],
+          "status": "unsupported",
+          "line": 1,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 272,
+          "note": "The complete native document has Liquid/generated-content cues and is conservatively unsupported for M011 under the published contract. No generated heading or anchor targets are inferred."
+        }
+      ],
+      "coverage_changed_or_normalized": true,
+      "agent_a_regions": [
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 14,
+          "end_column": 1,
+          "note": "Reviewed eligible native text before the first reusable; no supported findings."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 14,
+          "column": 1,
+          "end_line": 14,
+          "end_column": 64,
+          "note": "The about-mannequins Liquid reusable is unexpanded."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 14,
+          "column": 64,
+          "end_line": 22,
+          "end_column": 1,
+          "note": "Reviewed eligible native prose and screenshot alt text; no supported findings."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 22,
+          "column": 1,
+          "end_line": 22,
+          "end_column": 38,
+          "note": "The git-activity Liquid reusable is unexpanded."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 22,
+          "column": 38,
+          "end_line": 26,
+          "end_column": 1,
+          "note": "Reviewed native heading and intervening markup; no supported findings."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 26,
+          "column": 1,
+          "end_line": 26,
+          "end_column": 63,
+          "note": "The how-to-reclaim Liquid reusable is unexpanded; following literal instruction remains reviewed separately."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 26,
+          "column": 63,
+          "end_line": 32,
+          "end_column": 1,
+          "note": "Reviewed native instruction, attribution invitation and reclamation prose; no supported findings."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 32,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 272,
+          "note": "The final conditional contains two unavailable Liquid product-name expansions; no rendered-prose coverage is claimed."
+        },
+        {
+          "rules": [
+            "M011"
+          ],
+          "status": "unsupported",
+          "line": 1,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 272,
+          "note": "The document has Liquid generated-content cues; M011 cannot establish complete rendered targets under its published contract."
+        }
+      ],
+      "agent_b_regions": [
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 13,
+          "end_column": 1,
+          "note": "Reviewed the supplied native text exhaustively for the four prose rules; no eligible claim or adjacent duplicated function word. Generated expansion content is outside this region."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 14,
+          "column": 1,
+          "end_line": 14,
+          "end_column": 64,
+          "note": "This source line contains unexpanded Liquid data or variable content. Its expansion was not available; no judgment about generated prose is inferred."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 15,
+          "column": 1,
+          "end_line": 21,
+          "end_column": 1,
+          "note": "Reviewed the supplied native text exhaustively for the four prose rules; no eligible claim or adjacent duplicated function word. Generated expansion content is outside this region."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 22,
+          "column": 1,
+          "end_line": 22,
+          "end_column": 38,
+          "note": "This source line contains unexpanded Liquid data or variable content. Its expansion was not available; no judgment about generated prose is inferred."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 23,
+          "column": 1,
+          "end_line": 25,
+          "end_column": 1,
+          "note": "Reviewed the supplied native text exhaustively for the four prose rules; no eligible claim or adjacent duplicated function word. Generated expansion content is outside this region."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 26,
+          "column": 1,
+          "end_line": 26,
+          "end_column": 340,
+          "note": "This source line contains unexpanded Liquid data or variable content. Its expansion was not available; no judgment about generated prose is inferred."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 27,
+          "column": 1,
+          "end_line": 31,
+          "end_column": 1,
+          "note": "Reviewed the supplied native text exhaustively for the four prose rules; no eligible claim or adjacent duplicated function word. Generated expansion content is outside this region."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 32,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 272,
+          "note": "This source line contains unexpanded Liquid data or variable content. Its expansion was not available; no judgment about generated prose is inferred."
+        },
+        {
+          "rules": [
+            "M011"
+          ],
+          "status": "unsupported",
+          "line": 1,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 272,
+          "note": "The native document contains Liquid/generated-content cues. M011 conservatively skips this document under its published contract; no generated heading/anchor expansion was supplied."
+        }
+      ]
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0003.py",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/certs.py",
+      "authorized_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009",
+        "C010"
+      ],
+      "authorized_region": null,
+      "full_file_reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009",
+        "C010"
+      ],
+      "accepted_regions": [],
+      "coverage_changed_or_normalized": false,
+      "agent_a_regions": [],
+      "agent_b_regions": []
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0004.py",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/_internal_utils.py",
+      "authorized_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009",
+        "C010"
+      ],
+      "authorized_region": null,
+      "full_file_reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009",
+        "C010"
+      ],
+      "accepted_regions": [],
+      "coverage_changed_or_normalized": false,
+      "agent_a_regions": [],
+      "agent_b_regions": []
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0005.py",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+      "authorized_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009",
+        "C010"
+      ],
+      "authorized_region": null,
+      "full_file_reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C009",
+        "C010"
+      ],
+      "accepted_regions": [
+        {
+          "rules": [
+            "C004"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 78,
+          "end_column": 1,
+          "note": "Reviewed comments and actual executable statements before MockRequest.add_header with complete static module context; no context-free marker or incomplete placeholder. Intervening whitespace is included."
+        },
+        {
+          "rules": [
+            "C004"
+          ],
+          "status": "context-dependent",
+          "line": 78,
+          "column": 1,
+          "end_line": 82,
+          "end_column": 10,
+          "note": "MockRequest.add_header is a real concrete NotImplementedError, but its owning docstring declares deliberate interface rejection and its message names the implemented add_unredirected_header alternative. The published placeholder contract does not settle whether this intentional rejection counts. No positive or clean label is assigned pending contract clarification."
+        },
+        {
+          "rules": [
+            "C004"
+          ],
+          "status": "reviewed",
+          "line": 82,
+          "column": 10,
+          "end_line": 561,
+          "end_column": 21,
+          "note": "Reviewed all remaining comments and actual executable statements, including the line ending and separator after add_header; no context-free marker or incomplete placeholder. Specific implemented error paths do not establish an incomplete placeholder."
+        }
+      ],
+      "coverage_changed_or_normalized": true,
+      "agent_a_regions": [],
+      "agent_b_regions": [
+        {
+          "rules": [
+            "C004"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 77,
+          "end_column": 1,
+          "note": "Reviewed comments and executable statements; no context-free TODO/FIXME/XXX or incomplete placeholder."
+        },
+        {
+          "rules": [
+            "C004"
+          ],
+          "status": "context-dependent",
+          "line": 78,
+          "column": 1,
+          "end_line": 82,
+          "end_column": 10,
+          "note": "MockRequest.add_header deliberately rejects this interface: its docstring says cookiejar has no legitimate use for it and its real NotImplementedError directs callers to add_unredirected_header(). The published placeholder contract does not resolve whether this intentional API rejection counts as placeholder code. No supported positive or clean label is assigned to this span."
+        },
+        {
+          "rules": [
+            "C004"
+          ],
+          "status": "reviewed",
+          "line": 83,
+          "column": 1,
+          "end_line": 561,
+          "end_column": 21,
+          "note": "Reviewed all remaining comments and executable statements; specific error paths and fully implemented methods are not incomplete placeholders."
+        }
+      ]
+    }
+  ],
+  "normalized_nonsemantic_differences": "Reviewer-specific issue IDs, reviewer headers and phrasing are provenance differences. Each accepted event maps both original IDs. Full-file declarations describe eligible supported source under each contract, not all textual/code tokens or missing expansion coverage. Blank separator normalization does not create additional semantic cases.",
+  "unresolved_cases": [
+    {
+      "cohort": "natural",
+      "path": "originals/0005.py",
+      "rules": [
+        "C004"
+      ],
+      "region": {
+        "line": 78,
+        "column": 1,
+        "end_line": 82,
+        "end_column": 10
+      },
+      "status": "context-dependent",
+      "reason": "Published contract ambiguity for deliberate concrete NotImplementedError interface rejection; needs contract clarification before a positive or clean judgment."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0000.md",
+      "rules": [
+        "G038",
+        "V015",
+        "V016"
+      ],
+      "lines": [
+        24,
+        28,
+        32
+      ],
+      "status": "context-dependent",
+      "reason": "Missing rendered job reusable expansions; only authorized R005 native source is reviewed."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0001.md",
+      "rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016"
+      ],
+      "lines": [
+        7,
+        24
+      ],
+      "status": "context-dependent",
+      "reason": "Missing product/reusable expansions; complete generated source lines are conservatively neutral."
+    },
+    {
+      "cohort": "natural",
+      "path": "originals/0002.md",
+      "rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016"
+      ],
+      "lines": [
+        14,
+        22,
+        26,
+        32
+      ],
+      "status": "context-dependent",
+      "reason": "Missing reusable/product-name expansions and unresolved attachment on mixed generated/native lines."
+    },
+    {
+      "cohort": "natural",
+      "paths": [
+        "originals/0001.md",
+        "originals/0002.md"
+      ],
+      "rules": [
+        "M011"
+      ],
+      "status": "unsupported",
+      "reason": "Generated-content cues make each complete document ineligible for static same-document target validation under the published contract."
+    },
+    {
+      "cohort": "authored-challenge",
+      "path": "originals/0001.py",
+      "rules": [
+        "C010"
+      ],
+      "region": {
+        "line": 38,
+        "column": 1,
+        "end_line": 44,
+        "end_column": 24
+      },
+      "status": "unsupported",
+      "reason": "str/int pair is outside the only supported explicit None/int contradiction."
+    }
+  ],
+  "counts": {
+    "sources": 9,
+    "authorized_source_rule_pairs": 48,
+    "accepted_events": 16,
+    "accepted_by_cohort": {
+      "authored-challenge": 13,
+      "authored-local-links": 3,
+      "natural": 0
+    },
+    "accepted_by_rule": {
+      "C004": 2,
+      "C009": 2,
+      "C010": 1,
+      "G038": 1,
+      "G039": 2,
+      "M011": 2,
+      "M012": 2,
+      "V015": 1,
+      "V016": 3
+    },
+    "full_file_reviewed_rule_declarations": 33,
+    "regions_by_cohort": {
+      "authored-challenge": 2,
+      "authored-local-links": 0,
+      "natural": 25
+    },
+    "region_status_counts": {
+      "reviewed": 14,
+      "unsupported": 3,
+      "context-dependent": 10
+    },
+    "negative_cases": 0
+  },
+  "population_limits": {
+    "natural": "Development natural text only; zero accepted positives in this selected packet. R005 remains limited to L18 C1-L38 C117 and G038/V015/V016. Missing rendered expansions and unresolved contract contexts are neutral.",
+    "authored": "Root-authored sparse development positives and near misses remain a separate population and source group. The author has implementation familiarity; no general natural-text effectiveness or independent human validation is implied.",
+    "replication": "A/B initial reviews were independent agents; this third agent was explicitly exposed to them. Original judgments are preserved. Agreement does not establish human correctness.",
+    "denominators": "No additional negative cases or usefulness ratings were invented. Unsupported and context-dependent source is excluded from positive/clean coverage.",
+    "local_links": "Only the pinned inventory/source/target context and original setup.md text informed the primary judgment; GitHub renderer policy is required."
+  },
+  "annotation_paths": {
+    "authored-challenge": "quality/reviews/2026-10-13-agent-resume/authored-challenge/annotations.adjudicated.json",
+    "authored-local-links": "quality/reviews/2026-10-13-agent-resume/authored-local-links/annotations.adjudicated.json",
+    "natural": "quality/reviews/2026-10-13-agent-resume/natural/annotations.adjudicated.json"
+  },
+  "annotation_sha256": {
+    "authored-challenge": "5a9476bf68beb379887a7565a5234825390d8e9bccba57d86d370306b5d2c9cf",
+    "authored-local-links": "5cf95f8cb54c4acc85f94aa2f5e0683429f0a9d453adce07967d2b38452b5425",
+    "natural": "fa1f3c704c3b429935724b2cb9ebdfdf782da91abec83a5f19431bc4a997d920"
+  },
+  "validation": {
+    "status": "passed",
+    "authorized_function": "benchmarks.quality_scoring.load_annotations",
+    "runtime": ".venv/bin/python",
+    "arguments": "absolute tracked adjudicated manifest path, absolute matrix-declared cohort cache root, set(guidance.rules)",
+    "results": [
+      {
+        "cohort": "authored-challenge",
+        "manifest": "quality/reviews/2026-10-13-agent-resume/authored-challenge/annotations.adjudicated.json",
+        "status": "passed"
+      },
+      {
+        "cohort": "authored-local-links",
+        "manifest": "quality/reviews/2026-10-13-agent-resume/authored-local-links/annotations.adjudicated.json",
+        "status": "passed"
+      },
+      {
+        "cohort": "natural",
+        "manifest": "quality/reviews/2026-10-13-agent-resume/natural/annotations.adjudicated.json",
+        "status": "passed"
+      }
+    ],
+    "source_inspection": false,
+    "detector_or_scorer_runs": false,
+    "judgment_changed_after_validation": false,
+    "structural_checks": [
+      "same-rule regions are disjoint",
+      "region-bearing rules have no full-file declaration",
+      "all three required reviewers and adjudicated protocol present",
+      "original review and source artifact hashes unchanged",
+      "completed annotation hashes unchanged by validation"
+    ]
+  },
+  "original_review_artifacts_unchanged": true,
+  "source_artifacts_unchanged": true,
+  "freeze_state": "Adjudicated labels complete and unchanged after validation; root will freeze these accepted labels before any predictions."
+}

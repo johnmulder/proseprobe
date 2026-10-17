@@ -1,0 +1,453 @@
+{
+  "cohort": "natural",
+  "format": "markdown",
+  "linked_text_path": "/private/tmp/proseprobe-A006.txt",
+  "packet_path": "originals/0001.md",
+  "pair_group": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md",
+  "reading_id": "A006",
+  "region": {
+    "column": 1,
+    "end_column": 1,
+    "end_line": 200,
+    "line": 161
+  },
+  "rendered_sha256": "d383bc22b4aef3a96bd970d32c8207e3babf2dcd853c9114fce357e4cd8bfd83",
+  "rendered_text": "Blind agent reading A006: natural.\nReading file: [A006](/private/tmp/proseprobe-A006.txt)\nAttribution: GitHub Docs contributors; CC BY 4.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, M011\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL161 C 1-67 | github.com GitHub Apps token or personal access token via standard\nL162 C 1- 7 | input.\nL163 C 1- 1 | \nL164 C 1-67 | To authenticate to GitHub Enterprise Server Container registries, \nL164 C67-71 | pass\nL165 C 1-63 | `--registries-auth-stdin` or use the CODEQL\\_REGISTRIES\\_AUTH \nL165 C63-74 | environment\nL166 C 1-10 | variable.\nL167 C 1- 1 | \nL168 C 1-55 | This overrides the GITHUB\\_TOKEN environment variable.\nL169 C 1- 1 | \nL170 C 1-55 | ### Options for specifying what we're about to compile\nL171 C 1- 1 | \nL172 C 1-44 | Exactly one of these options must be given.\nL173 C 1- 1 | \nL174 C 1-24 | #### `--query=<qlfile>`\nL175 C 1- 1 | \nL176 C 1-63 | The path to the QL file we want to compile. Its directory and \nL176 C63-69 | parent\nL177 C 1-67 | directories will be searched for qlpack.yml or legacy queries.xml \nL177 C67-72 | files\nL178 C 1-30 | to determine necessary packs.\nL179 C 1- 1 | \nL180 C 1-19 | #### `--dir=<dir>`\nL181 C 1- 1 | \nL182 C 1-62 | The root directory of the pack containing queries to compile.\nL183 C 1- 1 | \nL184 C 1-29 | #### `--root-pack=<pkgname>`\nL185 C 1- 1 | \nL186 C 1-60 | \\[Advanced] The declared name of a pack to use as root for \nL186 C60-70 | dependency\nL187 C 1-12 | resolution.\nL188 C 1- 1 | \nL189 C 1-66 | This is used when the pack can be found by name somewhere in the \nL189 C66-72 | search\nL190 C 1-60 | path. If you know the _disk location_ of your desired root \nL190 C60-68 | package,\nL191 C 1-58 | pretend it contains a .ql file and use `--query` instead.\nL192 C 1- 1 | \nL193 C 1-19 | ### Common options\nL194 C 1- 1 | \nL195 C 1-18 | #### `-h, --help`\nL196 C 1- 1 | \nL197 C 1-21 | Show this help text.\nL198 C 1- 1 | \nL199 C 1-16 | #### `-J=<opt>`\nL200 C 1- 1 | \n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 161,
+      "line": 161,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "github.com GitHub Apps token or personal access token via standard"
+    },
+    {
+      "column": 1,
+      "end_column": 7,
+      "end_line": 162,
+      "line": 162,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "input."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 163,
+      "line": 163,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 164,
+      "line": 164,
+      "reading_line": 16,
+      "source_line_ending": "",
+      "text": "To authenticate to GitHub Enterprise Server Container registries, "
+    },
+    {
+      "column": 67,
+      "end_column": 71,
+      "end_line": 164,
+      "line": 164,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "pass"
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 165,
+      "line": 165,
+      "reading_line": 18,
+      "source_line_ending": "",
+      "text": "`--registries-auth-stdin` or use the CODEQL\\_REGISTRIES\\_AUTH "
+    },
+    {
+      "column": 63,
+      "end_column": 74,
+      "end_line": 165,
+      "line": 165,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "environment"
+    },
+    {
+      "column": 1,
+      "end_column": 10,
+      "end_line": 166,
+      "line": 166,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "variable."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 167,
+      "line": 167,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 55,
+      "end_line": 168,
+      "line": 168,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "This overrides the GITHUB\\_TOKEN environment variable."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 169,
+      "line": 169,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 55,
+      "end_line": 170,
+      "line": 170,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "### Options for specifying what we're about to compile"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 171,
+      "line": 171,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 44,
+      "end_line": 172,
+      "line": 172,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "Exactly one of these options must be given."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 173,
+      "line": 173,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 24,
+      "end_line": 174,
+      "line": 174,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "#### `--query=<qlfile>`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 175,
+      "line": 175,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 176,
+      "line": 176,
+      "reading_line": 30,
+      "source_line_ending": "",
+      "text": "The path to the QL file we want to compile. Its directory and "
+    },
+    {
+      "column": 63,
+      "end_column": 69,
+      "end_line": 176,
+      "line": 176,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "parent"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 177,
+      "line": 177,
+      "reading_line": 32,
+      "source_line_ending": "",
+      "text": "directories will be searched for qlpack.yml or legacy queries.xml "
+    },
+    {
+      "column": 67,
+      "end_column": 72,
+      "end_line": 177,
+      "line": 177,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "files"
+    },
+    {
+      "column": 1,
+      "end_column": 30,
+      "end_line": 178,
+      "line": 178,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "to determine necessary packs."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 179,
+      "line": 179,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 19,
+      "end_line": 180,
+      "line": 180,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "#### `--dir=<dir>`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 181,
+      "line": 181,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 62,
+      "end_line": 182,
+      "line": 182,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "The root directory of the pack containing queries to compile."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 183,
+      "line": 183,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 29,
+      "end_line": 184,
+      "line": 184,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": "#### `--root-pack=<pkgname>`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 185,
+      "line": 185,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 60,
+      "end_line": 186,
+      "line": 186,
+      "reading_line": 42,
+      "source_line_ending": "",
+      "text": "\\[Advanced] The declared name of a pack to use as root for "
+    },
+    {
+      "column": 60,
+      "end_column": 70,
+      "end_line": 186,
+      "line": 186,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "dependency"
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 187,
+      "line": 187,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "resolution."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 188,
+      "line": 188,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 189,
+      "line": 189,
+      "reading_line": 46,
+      "source_line_ending": "",
+      "text": "This is used when the pack can be found by name somewhere in the "
+    },
+    {
+      "column": 66,
+      "end_column": 72,
+      "end_line": 189,
+      "line": 189,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "search"
+    },
+    {
+      "column": 1,
+      "end_column": 60,
+      "end_line": 190,
+      "line": 190,
+      "reading_line": 48,
+      "source_line_ending": "",
+      "text": "path. If you know the _disk location_ of your desired root "
+    },
+    {
+      "column": 60,
+      "end_column": 68,
+      "end_line": 190,
+      "line": 190,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": "package,"
+    },
+    {
+      "column": 1,
+      "end_column": 58,
+      "end_line": 191,
+      "line": 191,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": "pretend it contains a .ql file and use `--query` instead."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 192,
+      "line": 192,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 19,
+      "end_line": 193,
+      "line": 193,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": "### Common options"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 194,
+      "line": 194,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 18,
+      "end_line": 195,
+      "line": 195,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "#### `-h, --help`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 196,
+      "line": 196,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 197,
+      "line": 197,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": "Show this help text."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 198,
+      "line": 198,
+      "reading_line": 57,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 16,
+      "end_line": 199,
+      "line": 199,
+      "reading_line": 58,
+      "source_line_ending": "\n",
+      "text": "#### `-J=<opt>`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 200,
+      "line": 200,
+      "reading_line": 59,
+      "source_line_ending": "\n",
+      "text": ""
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "M011"
+  ],
+  "sha256": "e4656dfdd2cff448e23fd8115b70b78efd0ac8863897b9df161ffc26dec12ded",
+  "source_group": "github/docs",
+  "source_id": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md",
+  "split": "development",
+  "version": 1
+}

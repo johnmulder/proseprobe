@@ -1,0 +1,408 @@
+{
+  "version": 1,
+  "actor": {
+    "id": "/root/contract_evidence_audit",
+    "role": "bounded final evidence auditor",
+    "human_review": false,
+    "independent_effectiveness_evidence": false
+  },
+  "result": "pass_with_scope_limits",
+  "purpose": "Verify development evidence integrity, report arithmetic, historical preservation and the narrow maintained-coordinate migration. This is an exposed engineering evidence audit, not blind evaluation or evidence of human or population effectiveness.",
+  "actual_exposure": {
+    "instruction_files_read": [
+      "/Users/johnmulder/.codex/RTK.md"
+    ],
+    "new_session_json_records_parsed": [
+      "quality/reviews/2026-10-14-contracts/inputs.json",
+      "quality/reviews/2026-10-14-contracts/candidate-freeze.json",
+      "quality/reviews/2026-10-14-contracts/candidate-summary.json",
+      "quality/reviews/2026-10-14-contracts/adjudication.json",
+      "quality/reviews/2026-10-14-contracts/curated-migration-inputs.json",
+      "quality/reviews/2026-10-14-contracts/curated-migration.json",
+      "quality/reviews/2026-10-14-contracts/curated-migration.review.json",
+      "quality/reviews/2026-10-14-contracts/tdd-c004.json",
+      "quality/reviews/2026-10-14-contracts/tdd-highlights.json",
+      "quality/reviews/2026-10-14-contracts/resolution.json"
+    ],
+    "candidate_report_files_parsed": [
+      "quality/reviews/2026-10-14-contracts/candidate-reports/authored-challenge.all-rules.json",
+      "quality/reviews/2026-10-14-contracts/candidate-reports/authored-challenge.production.json",
+      "quality/reviews/2026-10-14-contracts/candidate-reports/authored-local-links.all-rules.json",
+      "quality/reviews/2026-10-14-contracts/candidate-reports/authored-local-links.production.json",
+      "quality/reviews/2026-10-14-contracts/candidate-reports/natural.all-rules.json",
+      "quality/reviews/2026-10-14-contracts/candidate-reports/natural.production.json"
+    ],
+    "historical_report_files_parsed": [
+      "quality/reviews/2026-10-13-agent-resume/reports/authored-challenge.adjudicated.all-rules.json",
+      "quality/reviews/2026-10-13-agent-resume/reports/authored-challenge.adjudicated.production.json",
+      "quality/reviews/2026-10-13-agent-resume/reports/authored-local-links.adjudicated.all-rules.json",
+      "quality/reviews/2026-10-13-agent-resume/reports/authored-local-links.adjudicated.production.json",
+      "quality/reviews/2026-10-13-agent-resume/reports/natural.adjudicated.all-rules.json",
+      "quality/reviews/2026-10-13-agent-resume/reports/natural.adjudicated.production.json"
+    ],
+    "historical_freeze_parsed": "quality/reviews/2026-10-13-agent-resume/freeze.json",
+    "tdd_log_files_parsed": [
+      "quality/reviews/2026-10-14-contracts/tdd-logs/c004-expanded-red.json",
+      "quality/reviews/2026-10-14-contracts/tdd-logs/c004-gates.json",
+      "quality/reviews/2026-10-14-contracts/tdd-logs/c004-green.json",
+      "quality/reviews/2026-10-14-contracts/tdd-logs/curated-starts-red.json",
+      "quality/reviews/2026-10-14-contracts/tdd-logs/final-gates.json",
+      "quality/reviews/2026-10-14-contracts/tdd-logs/highlights-green.json",
+      "quality/reviews/2026-10-14-contracts/tdd-logs/marker-red.json",
+      "quality/reviews/2026-10-14-contracts/tdd-logs/normalization-red.json"
+    ],
+    "maintained_metadata_parsed": [
+      "quality/annotations.json",
+      "quality/regression-gates/all-rules.json",
+      "quality/regression-gates/production.json"
+    ],
+    "git_objects_read": "The same three maintained metadata files and the six selected historical adjudicated report files at commit 478f71b; current HEAD identity only.",
+    "hash_only_exposure": "Exact bytes of every one of the 72 artifact paths explicitly named in the historical freeze; the two new raw review files named in accepted adjudication; and candidate-freeze binding targets. Hash-only files were not decoded or displayed.",
+    "directory_inventory": "Paths under quality/reviews/2026-10-14-contracts were listed; Markdown readings, README and EXECUTION contents were not opened.",
+    "parent_summary_exposure": "Before inspection, the assignment supplied expected totals, span changes, remaining G038/V015/C009 differences, the contextual C004 exclusion and the 3686-test gate count. A later parent message identified resolution.json and its intended four dispositions.",
+    "log_exposure": "Stored TDD stdout includes test names, failure traces, short test-source excerpts and curated corpus diagnostic quotations. The underlying test or corpus source files were not opened for semantic inspection.",
+    "detector_source_opened": false,
+    "external_annotation_manifests_opened": false,
+    "corpus_originals_decoded_or_displayed": false,
+    "old_initial_review_contents_opened": false,
+    "reserved_holdout_opened": false,
+    "tests_opened_or_run": false,
+    "detector_or_evaluator_executed_or_imported": false,
+    "git_mutations": false,
+    "writes": "This evidence-review.json only.",
+    "tooling": "RTK-prefixed shell calls ran Python standard-library JSON, hashing and comparison helpers plus read-only Git show/rev-parse operations. No project module was imported."
+  },
+  "integrity_checks": {
+    "candidate_freeze_and_all_seven_bindings_match": true,
+    "all_72_artifacts_named_by_historical_freeze_match_by_hash": true,
+    "both_new_raw_reviews_match_accepted_adjudication_hashes": true,
+    "all_six_candidate_and_six_baseline_report_hashes_match_summary": true,
+    "six_historical_reports_byte_identical_to_478f71b": true,
+    "report_manifest_source_packet_and_contract_hashes_match_historical_freeze": true,
+    "historical_frozen_labels_and_raw_reviews_preserved_by_hash": true
+  },
+  "runtime_record_checks": {
+    "candidate_commit": "81b9ee393718b66b687fa6f3d63b02b20e53d6c7",
+    "current_HEAD_matches_candidate_commit": true,
+    "source_sha256": "2ca3c350f213c5205c581fe2ec123f13e558727ad5203f010637165ec898e0f3",
+    "source_files_count": 46,
+    "six_report_runtime_records_equal_candidate_freeze_runtime": true,
+    "summary_source_sha_matches_six_reports": true,
+    "tdd_highlights_source_sha_matches_candidate_records": true,
+    "limit": "Runtime source identity was cross-checked between stored records. Detector/evaluator bytes were not opened or independently rehashed; the stored test runtime records are not a fresh execution attestation."
+  },
+  "report_checks": [
+    {
+      "cohort": "authored-challenge",
+      "mode": "all-rules",
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 13
+      },
+      "precision_denominator": 13,
+      "recall_denominator": 13,
+      "exact_spans": 10,
+      "span_denominator": 13,
+      "historical_exact_spans": 9,
+      "unreviewed_count": 4,
+      "reviewed_prose_words": 182,
+      "metric_source_group_counts": {
+        "density": 1,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "cohort": "authored-challenge",
+      "mode": "production",
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "precision_denominator": 0,
+      "recall_denominator": 0,
+      "exact_spans": 0,
+      "span_denominator": 0,
+      "historical_exact_spans": 0,
+      "unreviewed_count": 2,
+      "reviewed_prose_words": 0,
+      "metric_source_group_counts": {
+        "density": 0,
+        "precision": 0,
+        "recall": 0
+      }
+    },
+    {
+      "cohort": "authored-local-links",
+      "mode": "all-rules",
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 3
+      },
+      "precision_denominator": 3,
+      "recall_denominator": 3,
+      "exact_spans": 3,
+      "span_denominator": 3,
+      "historical_exact_spans": 3,
+      "unreviewed_count": 1,
+      "reviewed_prose_words": 29,
+      "metric_source_group_counts": {
+        "density": 1,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "cohort": "authored-local-links",
+      "mode": "production",
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "precision_denominator": 0,
+      "recall_denominator": 0,
+      "exact_spans": 0,
+      "span_denominator": 0,
+      "historical_exact_spans": 0,
+      "unreviewed_count": 1,
+      "reviewed_prose_words": 0,
+      "metric_source_group_counts": {
+        "density": 0,
+        "precision": 0,
+        "recall": 0
+      }
+    },
+    {
+      "cohort": "natural",
+      "mode": "all-rules",
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "precision_denominator": 0,
+      "recall_denominator": 0,
+      "exact_spans": 0,
+      "span_denominator": 0,
+      "historical_exact_spans": 0,
+      "unreviewed_count": 21,
+      "reviewed_prose_words": 2368,
+      "metric_source_group_counts": {
+        "density": 2,
+        "precision": 0,
+        "recall": 0
+      }
+    },
+    {
+      "cohort": "natural",
+      "mode": "production",
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      },
+      "precision_denominator": 0,
+      "recall_denominator": 0,
+      "exact_spans": 0,
+      "span_denominator": 0,
+      "historical_exact_spans": 0,
+      "unreviewed_count": 9,
+      "reviewed_prose_words": 0,
+      "metric_source_group_counts": {
+        "density": 0,
+        "precision": 0,
+        "recall": 0
+      }
+    }
+  ],
+  "natural_context_check": {
+    "historical_C004_contextual_emissions": 1,
+    "candidate_C004_contextual_emissions": 0,
+    "unchanged_context_dependent_scope": {
+      "path": "originals/0005.py",
+      "rule_id": "C004",
+      "line": 78,
+      "column": 1,
+      "end_line": 82,
+      "end_column": 10,
+      "status": "context-dependent"
+    },
+    "annotation_scopes_equal_historical_report": true,
+    "candidate_precision_denominator": 0,
+    "candidate_recall_denominator": 0,
+    "candidate_precision": null,
+    "candidate_recall": null,
+    "interpretation": "The contextual emission disappears under the finite executable-message criterion. The frozen unresolved region remains excluded from clean or positive coverage; emission absence does not establish correctness or completion."
+  },
+  "retained_authored_span_differences": [
+    {
+      "rule_id": "G038",
+      "line": 3,
+      "candidate_columns": [
+        20,
+        26
+      ],
+      "historical_expected_columns": [
+        17,
+        26
+      ],
+      "accepted_text": "faster",
+      "historical_expected_text": "is faster"
+    },
+    {
+      "rule_id": "V015",
+      "line": 5,
+      "candidate_columns": [
+        25,
+        33
+      ],
+      "historical_expected_columns": [
+        17,
+        33
+      ],
+      "accepted_text": "the best",
+      "historical_expected_text": "remains the best"
+    },
+    {
+      "rule_id": "C009",
+      "line": 8,
+      "candidate_columns": [
+        14,
+        20
+      ],
+      "historical_expected_columns": [
+        12,
+        20
+      ],
+      "accepted_text": "extras",
+      "historical_expected_text": "**extras"
+    }
+  ],
+  "resolution_checks": {
+    "artifact": "quality/reviews/2026-10-14-contracts/resolution.json",
+    "candidate_historical_and_adjudication_hashes_match": true,
+    "all_four_candidate_previous_and_expected_coordinates_match_reports": true,
+    "all_four_text_labels_agree_with_accepted_adjudication": true,
+    "only_TODO_newly_agrees_with_historical_exact_span": true,
+    "TODO_candidate_extent": {
+      "line": 11,
+      "column": 7,
+      "end_line": 11,
+      "end_column": 11
+    },
+    "TODO_previous_extent": {
+      "line": 11,
+      "column": 5,
+      "end_line": 11,
+      "end_column": 11
+    },
+    "limit": "Coordinates were independently compared in stored reports. Text labels were checked against accepted contract evidence, without reopening original source to re-slice them."
+  },
+  "curated_migration_checks": {
+    "base_commit": "478f71b",
+    "manifest": "quality/annotations.json",
+    "only_manifest_changes": [
+      {
+        "source": "quality/corpus/python-docs.py",
+        "rule_id": "C004",
+        "line": 38,
+        "column": [
+          5,
+          7
+        ]
+      },
+      {
+        "source": "quality/corpus/python-docs.py",
+        "rule_id": "C004",
+        "line": 39,
+        "column": [
+          5,
+          7
+        ]
+      },
+      {
+        "source": "quality/corpus/python-docs.py",
+        "rule_id": "C004",
+        "line": 40,
+        "column": [
+          5,
+          7
+        ]
+      }
+    ],
+    "all_other_manifest_metadata_equal": true,
+    "only_change_in_each_gate": "corpus.manifest_sha256 is rebound to the maintained manifest after the three coordinate changes.",
+    "gate_paths": [
+      "quality/regression-gates/all-rules.json",
+      "quality/regression-gates/production.json"
+    ],
+    "before_and_after_hashes_match_curated_migration_record": true,
+    "counts_negatives_mismatch_allowlists_policy_and_source_bindings_equal": true,
+    "migration_input_and_reviewer_hashes_match_record": true,
+    "limit": "Metadata differences/hashes were independently checked against Git. Curated source text was not opened or independently hashed; source bindings remain identical in the maintained metadata."
+  },
+  "tdd_and_gate_checks": {
+    "all_eight_internal_stdout_hashes_match": true,
+    "referenced_log_and_stdout_hashes_match_records": true,
+    "C004_focused_passed": 471,
+    "C004_earlier_full_gate_passed": 3679,
+    "marker_red_failed": 8,
+    "highlight_focused_passed": 1414,
+    "curated_start_red": {
+      "failed": 1,
+      "passed": 3685,
+      "new_FP_FN_pairs": 3
+    },
+    "final_command_from_record": "rtk proxy make check dogfood rule-quality-regression",
+    "final_log": "quality/reviews/2026-10-14-contracts/tdd-logs/final-gates.json",
+    "recorded_final_exit_code": 0,
+    "final_pytest_passed": 3686,
+    "final_mypy_source_files": 31,
+    "all_rules_gate": {
+      "result": "PASS",
+      "exact_known_mismatches": 6,
+      "resolved": 0
+    },
+    "production_gate": {
+      "result": "PASS",
+      "exact_known_mismatches": 4,
+      "resolved": 0
+    },
+    "limit": "Stored command/log evidence only. No tests were rerun; process exit status and execution order were not independently observed."
+  },
+  "claim_checks": {
+    "summary_and_resolution_keep_development_scope": true,
+    "no_perfect_authored_span_claim_supported": true,
+    "natural_precision_and_recall_unavailable": true,
+    "production_zero_eligible_coverage_retained": true,
+    "no_independent_human_or_population_effectiveness_claim": true,
+    "no_actionable_overclaim_found_in_inspected_JSON_records": true,
+    "limit": "README, EXECUTION and other prose documents were outside this audit reading scope. This finding concerns the inspected JSON evidence only."
+  },
+  "limitations": [
+    "The audit began with expected outcomes and accepted contract decisions already disclosed. It is not an independent first review.",
+    "Authored challenge and native-link evidence share one author group; repeated agents add no source groups. The observed sample rates do not justify population inference.",
+    "The three historical G038/V015/C009 exact-span differences remain visible public-contract differences. Historical expectations were not rewritten to manufacture exact agreement.",
+    "Natural and production zero denominators provide no precision or recall estimate. The natural zero reviewed false-warning density is not evidence of detector effectiveness.",
+    "The audit preserves the distinction between checking stored evidence and independently reproducing detector behavior, source mapping or test execution."
+  ],
+  "actionable_findings": [],
+  "output": "quality/reviews/2026-10-14-contracts/evidence-review.json",
+  "report_checks_verified_fields": "For all six reports: hashes, summary totals/metrics/counters/groups/native context, precision and recall denominators/rates, list counts, and exact-span numerator/denominator. All checks passed."
+}

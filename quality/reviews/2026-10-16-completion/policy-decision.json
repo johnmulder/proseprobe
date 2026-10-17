@@ -1,0 +1,299 @@
+{
+  "actor_type": "agent-assisted",
+  "changed_policy_fields": [],
+  "decision": "retain-current-policy",
+  "freeze_commit": "32eeaf1",
+  "holdout_opened": false,
+  "human_annotation_created": false,
+  "human_meaning_preservation": null,
+  "limits": [
+    "One convenience-selected natural source in one group; two fragment-free clean destinations.",
+    "No predicted positive or positive label supplies a precision or recall denominator.",
+    "Whole-source uncertainty requires at least five contributing source groups.",
+    "Production excludes the INFO M012 rule; two clean cases are policy exclusions.",
+    "Human usefulness and revision outcomes remain unavailable.",
+    "Existing authored challenges and natural agent evidence remain separate and unchanged."
+  ],
+  "paired_revision_count": 0,
+  "paired_revision_usefulness": null,
+  "population_effectiveness_claim": false,
+  "promotions": [],
+  "reports": [
+    {
+      "metrics": {
+        "false_warnings_per_1000_prose_words": 0.0,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 30,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "path": "quality/reviews/2026-10-16-completion/reports/natural.all-rules.json",
+      "policy": {
+        "exclude": [
+          "venv/**",
+          ".venv/**",
+          "node_modules/**",
+          ".git/**"
+        ],
+        "ignore": [],
+        "include": [
+          "*.md",
+          "*.mdx",
+          "*.markdown",
+          "*.py"
+        ],
+        "local_link_exclude": [],
+        "local_links": true,
+        "markdown_anchor_style": "github",
+        "min_confidence": "low",
+        "per_file_ignores": [],
+        "profile": null,
+        "project_root": "verified-native-context",
+        "select": [
+          "V",
+          "S",
+          "T",
+          "G",
+          "C",
+          "M"
+        ],
+        "severity": "info",
+        "severity_overrides": {},
+        "source_path": null,
+        "thresholds": {
+          "anaphora_abuse": 3,
+          "bold_overuse": 3,
+          "citation_name_drop": 3,
+          "em_dash_overuse": 5,
+          "gerund_fragment_litany": 3,
+          "historical_analogy_stacking": 3,
+          "inline_header_lists": 3,
+          "invented_concept_labels": 2,
+          "nominalization_overload": 3,
+          "passive_voice_overuse": 5,
+          "rule_of_three": 3,
+          "sentence_length_max": 40,
+          "short_punchy_fragments": 3,
+          "wall_of_text_sentences": 6
+        },
+        "vocabulary": {
+          "additional": [],
+          "allowed": [],
+          "allowed_phrases": [
+            "All notable changes",
+            "Critical issue"
+          ]
+        }
+      },
+      "reviewed_source_groups": 1,
+      "sha256": "4c00ae9909a98e9063ba0bd69d6317743205fe3471217e55d9a828b5c73cee07",
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 1,
+          "dominant_denominator_share": 1.0,
+          "group_counts": {
+            "markdown-it/markdown-it": {
+              "denominator": 30,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": 0.0,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "too few contributing source groups (1 < 5)"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {
+            "markdown-it/markdown-it": {
+              "denominator": 0,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {
+            "markdown-it/markdown-it": {
+              "denominator": 0,
+              "numerator": 0
+            }
+          },
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "source_groups": 1,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 2,
+        "negatives_total": 2,
+        "true_positives": 0
+      }
+    },
+    {
+      "metrics": {
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": 0,
+        "recall": null,
+        "recall_denominator": 0,
+        "recall_interval_95": null,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "path": "quality/reviews/2026-10-16-completion/reports/natural.production.json",
+      "policy": {
+        "exclude": [
+          "venv/**",
+          ".venv/**",
+          "node_modules/**",
+          ".git/**"
+        ],
+        "ignore": [],
+        "include": [
+          "*.md",
+          "*.mdx",
+          "*.markdown",
+          "*.py"
+        ],
+        "local_link_exclude": [],
+        "local_links": true,
+        "markdown_anchor_style": "github",
+        "min_confidence": "low",
+        "per_file_ignores": [],
+        "profile": null,
+        "project_root": "verified-native-context",
+        "select": [
+          "V",
+          "S",
+          "T",
+          "G",
+          "C",
+          "M"
+        ],
+        "severity": "warning",
+        "severity_overrides": {},
+        "source_path": null,
+        "thresholds": {
+          "anaphora_abuse": 3,
+          "bold_overuse": 3,
+          "citation_name_drop": 3,
+          "em_dash_overuse": 5,
+          "gerund_fragment_litany": 3,
+          "historical_analogy_stacking": 3,
+          "inline_header_lists": 3,
+          "invented_concept_labels": 2,
+          "nominalization_overload": 3,
+          "passive_voice_overuse": 5,
+          "rule_of_three": 3,
+          "sentence_length_max": 40,
+          "short_punchy_fragments": 3,
+          "wall_of_text_sentences": 6
+        },
+        "vocabulary": {
+          "additional": [],
+          "allowed": [],
+          "allowed_phrases": [
+            "All notable changes",
+            "Critical issue"
+          ]
+        }
+      },
+      "reviewed_source_groups": 0,
+      "sha256": "ae34525125f847bf552b7b6b848e87a3dfb53415cf4f755097d89f9a2b4b2498",
+      "source_group_intervals": {
+        "density": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "precision": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        },
+        "recall": {
+          "confidence_level": 0.95,
+          "contributing_groups_count": 0,
+          "dominant_denominator_share": null,
+          "group_counts": {},
+          "interval_95": null,
+          "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+          "minimum_contributing_groups": 5,
+          "point_estimate": null,
+          "replicates": 2000,
+          "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+          "seed": 20261010,
+          "unavailable_reason": "no eligible denominator observations"
+        }
+      },
+      "source_groups": 1,
+      "totals": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "negatives_passed": 0,
+        "negatives_total": 0,
+        "true_positives": 0
+      }
+    }
+  ],
+  "runtime_source_sha256": "b471e21df1ccbc55ff64bc3ef5ec1dcd33c051d22cdff2ce2302c24d89fa2dd4",
+  "unchanged_artifacts": {
+    ".proseprobe-baseline.json": "9140f16ef9e3678bc59c1826750d54da4583463f89502fdb707a82927ec437f2",
+    "quality/external/extension-freeze.json": "f20e2657d3dbed097f698b9dcd98b4c5cd94ac4190304a4b173d2d57d5ec2d81",
+    "quality/external/extension-sources.json": "1f3a26861f1321747802a9e5b574ae78201b996cdd70ccec9a18094fe052cbbf",
+    "quality/external/split-freeze.json": "0c078a48b7d8545241141c0eb4efaab25c705a78b03962d99394e60bfd1b97d0",
+    "quality/regression-gates/all-rules.json": "cda181b90acdc6ef7e30a5c4ca50b1aa040f11ebea632ebb0a2b262dfe6971bd",
+    "quality/regression-gates/production.json": "628eb27b02e86a7f9fd5d6209042ee6121456420e4f7977a9af05cd92200861d",
+    "quality/sources.json": "2dcadd8fb3bb278ee09a9ff2685b00c7a7c6efde3f0221ae69efcccc825d3ade"
+  },
+  "version": 1
+}

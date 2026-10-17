@@ -1,0 +1,549 @@
+{
+  "annotation_path": "quality/reviews/2026-10-10-interactive/R002/annotations.reviewed.json",
+  "cached_text_path": "downloads/evaluation/blind/interactive-2026-10-10-R002-v1/R002.txt",
+  "contracts_sha256": "44574c524e1f13596b150e5e38f44f47bc4690abced12be954e34c810d5da657",
+  "format": "markdown",
+  "guidance_sha256": "84595a91a337156caa08e449035a6bd818c3360827c74982b2f8183e25495920",
+  "packet_path": "originals/0000.md",
+  "packet_root": "downloads/evaluation/blind/interactive-2026-10-10-R002-v1",
+  "pair_group": "github/docs:content/rest/about-the-rest-api/about-the-openapi-description-for-the-rest-api.md",
+  "phase": "initial-blind",
+  "reading_id": "R002",
+  "region": {
+    "column": 1,
+    "end_column": 260,
+    "end_line": 40,
+    "line": 16
+  },
+  "remaining_source_lines": [],
+  "rendered_sha256": "c038056c5a2bafc1cb8cb142c74262283c0397be4a8c3c2dedde26f4a952b817",
+  "rendered_text": "Blind reading R002: GitHub Docs, development split.\nAttribution: GitHub, Inc. and GitHub Docs contributors; CC BY 4.0.\nReview the displayed passage for the same three contracts:\nG038: comparisons should identify their comparison target.\nV015: best/fastest claims should identify a comparison scope.\nV016: absolute reliability/security claims need stated tested bounds.\nTemplate variables are literal source and have not been expanded.\nUse the earlier guidance; other rules and omitted text stay unreviewed.\nRules: G038, V015, V016\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL16 C  1- 17 | ## About OpenAPI\nL17 C  1-  1 | \nL18 C  1- 64 | OpenAPI is a specification for describing REST API interfaces. \nL18 C 64-129 | It describes the API without requiring access to the source code \nL18 C129-194 | or additional documentation. The specification is both human and \nL18 C194-251 | machine readable. For more information, see [the OpenAPI \nL18 C251-265 | specification \nL18 C265-318 | documentation](https://spec.openapis.org/oas/v3.1.0).\nL19 C  1-  1 | \nL20 C  1- 63 | ## About {% data variables.product.company_short %}'s OpenAPI \nL20 C 63- 74 | description\nL21 C  1-  1 | \nL22 C  1- 66 | {% data variables.product.company_short %}'s OpenAPI description \nL22 C 66-122 | of the REST API is publicly available. You can find the \nL22 C122-153 | description in the open source \nL22 C153-218 | [github/rest-api-description](https://github.com/github/rest-api-\nL22 C218-242 | description) repository.\nL23 C  1-  1 | \nL24 C  1- 66 | {% data variables.product.company_short %} provides both 3.0 and \nL24 C 66- 91 | 3.1 OpenAPI descriptions.\nL25 C  1-  1 | \nL26 C  1- 63 | For each description, there is a version for each product: {% \nL26 C 63-116 | data variables.product.prodname_free_user %}/{% data \nL26 C116-158 | variables.product.prodname_pro %}/{% data \nL26 C158-221 | variables.product.prodname_team %} (`api.github.com`), {% data \nL26 C221-280 | variables.product.prodname_ghe_cloud %} (`ghec`), and each \nL26 C280-340 | version of {% data variables.product.prodname_ghe_server %} \nL26 C340-353 | (`ghes-X.X`).\nL27 C  1-  1 | \nL28 C  1- 64 | For each product, if date-based versioning is supported, there \nL28 C 64-124 | is also a description for each date-based version. For more \nL28 C124-141 | information, see \nL28 C141-192 | [AUTOTITLE](/rest/about-the-rest-api/api-versions).\nL29 C  1-  1 | \nL30 C  1- 65 | Each description is available in a bundled or in a dereferenced \nL30 C 65-124 | format. The bundled format uses `$ref` to refer to OpenAPI \nL30 C124-187 | components that are shared between endpoints. The dereferenced \nL30 C187-234 | format includes the fully expanded description.\nL31 C  1-  1 | \nL32 C  1- 65 | ## Using the {% data variables.product.company_short %} OpenAPI \nL32 C 65- 76 | description\nL33 C  1-  1 | \nL34 C  1- 66 | Because the OpenAPI description is machine readable, you can use \nL34 C 66- 87 | it to do things like:\nL35 C  1-  1 | \nL36 C  1- 54 | * Generate libraries to facilitate using the REST API\nL37 C  1- 58 | * Validate and test an integration that uses the REST API\nL38 C  1- 60 | * Explore and interact with the REST API using third-party \nL38 C 60- 94 | tools, such as Insomnia or Postman\nL39 C  1-  1 | \nL40 C  1- 66 | For example, {% data variables.product.company_short %} uses the \nL40 C 66-124 | OpenAPI description to generate the Octokit SDKs. {% data \nL40 C124-181 | variables.product.company_short %} also uses the OpenAPI \nL40 C181-246 | description to generate the REST API reference documentation for \nL40 C246-260 | each endpoint.\n```\n\nReply separately for G038, V015 and V016:\nNo issue; or quote the issue and explain why; or say context needed.\nIf you did not check a rule, say not reviewed.\nYour response covers this displayed passage and these rules only.\nPlease also give a reviewer name/ID (an alias is fine), and say whether\nyou have previously seen detector outputs for these external samples.\n",
+  "response_path": "quality/reviews/2026-10-10-interactive/R002.response.json",
+  "review_status": "human clean judgments recorded; region-only annotation validated",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 17,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "## About OpenAPI"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 17,
+      "line": 17,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 16,
+      "source_line_ending": "",
+      "text": "OpenAPI is a specification for describing REST API interfaces. "
+    },
+    {
+      "column": 64,
+      "end_column": 129,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 17,
+      "source_line_ending": "",
+      "text": "It describes the API without requiring access to the source code "
+    },
+    {
+      "column": 129,
+      "end_column": 194,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 18,
+      "source_line_ending": "",
+      "text": "or additional documentation. The specification is both human and "
+    },
+    {
+      "column": 194,
+      "end_column": 251,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 19,
+      "source_line_ending": "",
+      "text": "machine readable. For more information, see [the OpenAPI "
+    },
+    {
+      "column": 251,
+      "end_column": 265,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 20,
+      "source_line_ending": "",
+      "text": "specification "
+    },
+    {
+      "column": 265,
+      "end_column": 318,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "documentation](https://spec.openapis.org/oas/v3.1.0)."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 19,
+      "line": 19,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 20,
+      "line": 20,
+      "reading_line": 23,
+      "source_line_ending": "",
+      "text": "## About {% data variables.product.company_short %}'s OpenAPI "
+    },
+    {
+      "column": 63,
+      "end_column": 74,
+      "end_line": 20,
+      "line": 20,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "description"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 21,
+      "line": 21,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 26,
+      "source_line_ending": "",
+      "text": "{% data variables.product.company_short %}'s OpenAPI description "
+    },
+    {
+      "column": 66,
+      "end_column": 122,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 27,
+      "source_line_ending": "",
+      "text": "of the REST API is publicly available. You can find the "
+    },
+    {
+      "column": 122,
+      "end_column": 153,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 28,
+      "source_line_ending": "",
+      "text": "description in the open source "
+    },
+    {
+      "column": 153,
+      "end_column": 218,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 29,
+      "source_line_ending": "",
+      "text": "[github/rest-api-description](https://github.com/github/rest-api-"
+    },
+    {
+      "column": 218,
+      "end_column": 242,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": "description) repository."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 23,
+      "line": 23,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 24,
+      "line": 24,
+      "reading_line": 32,
+      "source_line_ending": "",
+      "text": "{% data variables.product.company_short %} provides both 3.0 and "
+    },
+    {
+      "column": 66,
+      "end_column": 91,
+      "end_line": 24,
+      "line": 24,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "3.1 OpenAPI descriptions."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 25,
+      "line": 25,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 35,
+      "source_line_ending": "",
+      "text": "For each description, there is a version for each product: {% "
+    },
+    {
+      "column": 63,
+      "end_column": 116,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 36,
+      "source_line_ending": "",
+      "text": "data variables.product.prodname_free_user %}/{% data "
+    },
+    {
+      "column": 116,
+      "end_column": 158,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 37,
+      "source_line_ending": "",
+      "text": "variables.product.prodname_pro %}/{% data "
+    },
+    {
+      "column": 158,
+      "end_column": 221,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 38,
+      "source_line_ending": "",
+      "text": "variables.product.prodname_team %} (`api.github.com`), {% data "
+    },
+    {
+      "column": 221,
+      "end_column": 280,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 39,
+      "source_line_ending": "",
+      "text": "variables.product.prodname_ghe_cloud %} (`ghec`), and each "
+    },
+    {
+      "column": 280,
+      "end_column": 340,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 40,
+      "source_line_ending": "",
+      "text": "version of {% data variables.product.prodname_ghe_server %} "
+    },
+    {
+      "column": 340,
+      "end_column": 353,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "(`ghes-X.X`)."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 43,
+      "source_line_ending": "",
+      "text": "For each product, if date-based versioning is supported, there "
+    },
+    {
+      "column": 64,
+      "end_column": 124,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 44,
+      "source_line_ending": "",
+      "text": "is also a description for each date-based version. For more "
+    },
+    {
+      "column": 124,
+      "end_column": 141,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 45,
+      "source_line_ending": "",
+      "text": "information, see "
+    },
+    {
+      "column": 141,
+      "end_column": 192,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "[AUTOTITLE](/rest/about-the-rest-api/api-versions)."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 29,
+      "line": 29,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 48,
+      "source_line_ending": "",
+      "text": "Each description is available in a bundled or in a dereferenced "
+    },
+    {
+      "column": 65,
+      "end_column": 124,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 49,
+      "source_line_ending": "",
+      "text": "format. The bundled format uses `$ref` to refer to OpenAPI "
+    },
+    {
+      "column": 124,
+      "end_column": 187,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 50,
+      "source_line_ending": "",
+      "text": "components that are shared between endpoints. The dereferenced "
+    },
+    {
+      "column": 187,
+      "end_column": 234,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "format includes the fully expanded description."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 31,
+      "line": 31,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 53,
+      "source_line_ending": "",
+      "text": "## Using the {% data variables.product.company_short %} OpenAPI "
+    },
+    {
+      "column": 65,
+      "end_column": 76,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "description"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 33,
+      "line": 33,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 34,
+      "line": 34,
+      "reading_line": 56,
+      "source_line_ending": "",
+      "text": "Because the OpenAPI description is machine readable, you can use "
+    },
+    {
+      "column": 66,
+      "end_column": 87,
+      "end_line": 34,
+      "line": 34,
+      "reading_line": 57,
+      "source_line_ending": "\n",
+      "text": "it to do things like:"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 35,
+      "line": 35,
+      "reading_line": 58,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 54,
+      "end_line": 36,
+      "line": 36,
+      "reading_line": 59,
+      "source_line_ending": "\n",
+      "text": "* Generate libraries to facilitate using the REST API"
+    },
+    {
+      "column": 1,
+      "end_column": 58,
+      "end_line": 37,
+      "line": 37,
+      "reading_line": 60,
+      "source_line_ending": "\n",
+      "text": "* Validate and test an integration that uses the REST API"
+    },
+    {
+      "column": 1,
+      "end_column": 60,
+      "end_line": 38,
+      "line": 38,
+      "reading_line": 61,
+      "source_line_ending": "",
+      "text": "* Explore and interact with the REST API using third-party "
+    },
+    {
+      "column": 60,
+      "end_column": 94,
+      "end_line": 38,
+      "line": 38,
+      "reading_line": 62,
+      "source_line_ending": "\n",
+      "text": "tools, such as Insomnia or Postman"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 39,
+      "line": 39,
+      "reading_line": 63,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 40,
+      "line": 40,
+      "reading_line": 64,
+      "source_line_ending": "",
+      "text": "For example, {% data variables.product.company_short %} uses the "
+    },
+    {
+      "column": 66,
+      "end_column": 124,
+      "end_line": 40,
+      "line": 40,
+      "reading_line": 65,
+      "source_line_ending": "",
+      "text": "OpenAPI description to generate the Octokit SDKs. {% data "
+    },
+    {
+      "column": 124,
+      "end_column": 181,
+      "end_line": 40,
+      "line": 40,
+      "reading_line": 66,
+      "source_line_ending": "",
+      "text": "variables.product.company_short %} also uses the OpenAPI "
+    },
+    {
+      "column": 181,
+      "end_column": 246,
+      "end_line": 40,
+      "line": 40,
+      "reading_line": 67,
+      "source_line_ending": "",
+      "text": "description to generate the REST API reference documentation for "
+    },
+    {
+      "column": 246,
+      "end_column": 260,
+      "end_line": 40,
+      "line": 40,
+      "reading_line": 68,
+      "source_line_ending": "\n",
+      "text": "each endpoint."
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "V015",
+    "V016"
+  ],
+  "sha256": "5bbbf5299d36f473d32424e20294e120ac575a5b92093730ce99f365705e1683",
+  "source_group": "github/docs",
+  "source_id": "github/docs:content/rest/about-the-rest-api/about-the-openapi-description-for-the-rest-api.md",
+  "source_provenance": {
+    "attribution": "GitHub, Inc. and GitHub Docs contributors",
+    "format": "markdown",
+    "id": "github/docs:content/rest/about-the-rest-api/about-the-openapi-description-for-the-rest-api.md",
+    "license": "CC-BY-4.0",
+    "license_url": "https://github.com/github/docs/blob/be38ec5d78e24172587e61b3c6ff40ace1865c71/LICENSE",
+    "locator": "content/rest/about-the-rest-api/about-the-openapi-description-for-the-rest-api.md",
+    "native_labels": "none",
+    "pair_group": "github/docs:content/rest/about-the-rest-api/about-the-openapi-description-for-the-rest-api.md",
+    "path": "markdown/github/docs/content/rest/about-the-rest-api/about-the-openapi-description-for-the-rest-api.md",
+    "review_status": "unreviewed",
+    "revision": "be38ec5d78e24172587e61b3c6ff40ace1865c71",
+    "sha256": "5bbbf5299d36f473d32424e20294e120ac575a5b92093730ce99f365705e1683",
+    "source_group": "github/docs",
+    "split": "development",
+    "transformation": "none; full raw Markdown document",
+    "url": "https://raw.githubusercontent.com/github/docs/be38ec5d78e24172587e61b3c6ff40ace1865c71/content/rest/about-the-rest-api/about-the-openapi-description-for-the-rest-api.md"
+  },
+  "split": "development",
+  "tracked_unreviewed_manifest": "quality/reviews/2026-10-10-interactive/R002/annotations.unreviewed.json",
+  "version": 1
+}

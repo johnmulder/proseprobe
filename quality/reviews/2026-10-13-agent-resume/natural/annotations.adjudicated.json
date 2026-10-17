@@ -1,0 +1,436 @@
+{
+  "files": {
+    "originals/0000.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 18,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 24,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 70,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 24,
+          "column": 70,
+          "end_line": 28,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 28,
+          "column": 1,
+          "end_line": 28,
+          "end_column": 72,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 28,
+          "column": 72,
+          "end_line": 32,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 32,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 73,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 32,
+          "column": 73,
+          "end_line": 38,
+          "end_column": 117,
+          "note": "Reviewed remaining eligible literal native source and intervening whitespace through the authorized exclusive endpoint; no supported issue. No generated expansion is included."
+        }
+      ],
+      "reviewed_rules": [],
+      "sha256": "ab4a60280784e5b915bb2b1353ceb0a5cffefcbe5148c53b901d7861d41c52a1",
+      "source_group": "github/docs",
+      "source_id": "github/docs:content/actions/how-tos/write-workflows/choose-what-workflows-do/use-jobs.md"
+    },
+    "originals/0001.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 7,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 7,
+          "column": 1,
+          "end_line": 7,
+          "end_column": 54,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 7,
+          "column": 54,
+          "end_line": 24,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 24,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 55,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 24,
+          "column": 55,
+          "end_line": 236,
+          "end_column": 27,
+          "note": "Reviewed remaining eligible literal native source and intervening whitespace through the authorized exclusive endpoint; no supported issue. No generated expansion is included."
+        },
+        {
+          "rules": [
+            "M011"
+          ],
+          "status": "unsupported",
+          "line": 1,
+          "column": 1,
+          "end_line": 236,
+          "end_column": 27,
+          "note": "The complete native document has Liquid/generated-content cues and is conservatively unsupported for M011 under the published contract. No generated heading or anchor targets are inferred."
+        }
+      ],
+      "reviewed_rules": [],
+      "sha256": "e4656dfdd2cff448e23fd8115b70b78efd0ac8863897b9df161ffc26dec12ded",
+      "source_group": "github/docs",
+      "source_id": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md"
+    },
+    "originals/0002.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 14,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 14,
+          "column": 1,
+          "end_line": 14,
+          "end_column": 64,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 14,
+          "column": 64,
+          "end_line": 22,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 22,
+          "column": 1,
+          "end_line": 22,
+          "end_column": 38,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 22,
+          "column": 38,
+          "end_line": 26,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 26,
+          "column": 1,
+          "end_line": 26,
+          "end_column": 340,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 26,
+          "column": 340,
+          "end_line": 32,
+          "end_column": 1,
+          "note": "Reviewed eligible literal native source and intervening whitespace for the declared rules; no supported issue. Headings, code, metadata and other excluded syntax do not create claim coverage."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 32,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 272,
+          "note": "This complete source line contains unexpanded Liquid data or variable content. Generated prose and its possible attachment to native wording are unavailable; no positive or clean expansion judgment is assigned."
+        },
+        {
+          "rules": [
+            "M011"
+          ],
+          "status": "unsupported",
+          "line": 1,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 272,
+          "note": "The complete native document has Liquid/generated-content cues and is conservatively unsupported for M011 under the published contract. No generated heading or anchor targets are inferred."
+        }
+      ],
+      "reviewed_rules": [],
+      "sha256": "d85335cdf9f9c882db139b6653bd77e640dda92eca9bc6e8136a5a0bf5ae0ef2",
+      "source_group": "github/docs",
+      "source_id": "github/docs:content/migrations/overview/mannequins-and-user-activity.md"
+    },
+    "originals/0003.py": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009",
+        "C010"
+      ],
+      "sha256": "67d49be35d009efea35054f2b2cd23145854eb1b2df1cb442ea7f2f04bf6de0c",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/certs.py"
+    },
+    "originals/0004.py": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009",
+        "C010"
+      ],
+      "sha256": "9cc4329abe21b37d93a95a3901b0ab99c24486f3d487bc57965bb2ab0b252e24",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/_internal_utils.py"
+    },
+    "originals/0005.py": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [
+        {
+          "rules": [
+            "C004"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 78,
+          "end_column": 1,
+          "note": "Reviewed comments and actual executable statements before MockRequest.add_header with complete static module context; no context-free marker or incomplete placeholder. Intervening whitespace is included."
+        },
+        {
+          "rules": [
+            "C004"
+          ],
+          "status": "context-dependent",
+          "line": 78,
+          "column": 1,
+          "end_line": 82,
+          "end_column": 10,
+          "note": "MockRequest.add_header is a real concrete NotImplementedError, but its owning docstring declares deliberate interface rejection and its message names the implemented add_unredirected_header alternative. The published placeholder contract does not settle whether this intentional rejection counts. No positive or clean label is assigned pending contract clarification."
+        },
+        {
+          "rules": [
+            "C004"
+          ],
+          "status": "reviewed",
+          "line": 82,
+          "column": 10,
+          "end_line": 561,
+          "end_column": 21,
+          "note": "Reviewed all remaining comments and actual executable statements, including the line ending and separator after add_header; no context-free marker or incomplete placeholder. Specific implemented error paths do not establish an incomplete placeholder."
+        }
+      ],
+      "reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C009",
+        "C010"
+      ],
+      "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py"
+    }
+  },
+  "review": {
+    "packet_index": {
+      "path": "index.json",
+      "sha256": "e3c970e0eefb5864fb8bb8b89ecdf93fc5708182faa4b49ed91c4e7bc5256546"
+    },
+    "policy": {
+      "min_confidence": "low",
+      "mode": "all-rules",
+      "profile": "default",
+      "severity": "info"
+    },
+    "protocol_revision": "agent-resume-adjudicated-v1",
+    "reviewers": [
+      "codex-agent:/root/blind_resume_a",
+      "codex-agent:/root/blind_resume_b",
+      "codex-agent:/root/agent_review_adjudicator"
+    ],
+    "rule_contracts": {
+      "path": "contracts.json",
+      "sha256": "059a18caf770f2d388e9902d1e0647bc0d6e5eaba6be5409f4b31af126634887"
+    }
+  },
+  "version": 3
+}

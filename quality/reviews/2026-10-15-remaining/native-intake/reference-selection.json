@@ -1,0 +1,391 @@
+{
+  "eligible_reference_count": 0,
+  "excluded_destination_count": 53,
+  "excluded_destinations": [
+    {
+      "column": 88,
+      "destination": "https://github.com/markdown-it/markdown-it/actions/workflows/ci.yml",
+      "end_column": 155,
+      "line": 3,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 75,
+      "destination": "https://www.npmjs.org/package/markdown-it",
+      "end_column": 116,
+      "line": 4,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 113,
+      "destination": "https://coveralls.io/github/markdown-it/markdown-it?branch=master",
+      "end_column": 178,
+      "line": 5,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 55,
+      "destination": "https://gitter.im/markdown-it/markdown-it",
+      "end_column": 96,
+      "line": 6,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 15,
+      "destination": "https://markdown-it.github.io",
+      "end_column": 44,
+      "line": 10,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 35,
+      "destination": "http://spec.commonmark.org/",
+      "end_column": 62,
+      "line": 12,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 10,
+      "destination": "https://github.com/markdown-it/markdown-it/tree/master/docs/security.md",
+      "end_column": 81,
+      "line": 15,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 33,
+      "destination": "https://www.npmjs.org/browse/keyword/markdown-it-plugin",
+      "end_column": 88,
+      "line": 16,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 113,
+      "destination": "https://www.npmjs.org/browse/keyword/markdown-it",
+      "end_column": 161,
+      "line": 16,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 13,
+      "destination": "#install",
+      "end_column": 21,
+      "line": 20,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 20,
+      "destination": "#usage-examples",
+      "end_column": 35,
+      "line": 21,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 14,
+      "destination": "#simple",
+      "end_column": 21,
+      "line": 22,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 37,
+      "destination": "#init-with-presets-and-options",
+      "end_column": 67,
+      "line": 23,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 20,
+      "destination": "#plugins-load",
+      "end_column": 33,
+      "line": 24,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 27,
+      "destination": "#syntax-highlighting",
+      "end_column": 47,
+      "line": 25,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 15,
+      "destination": "#linkify",
+      "end_column": 23,
+      "line": 26,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 9,
+      "destination": "#api",
+      "end_column": 13,
+      "line": 27,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 23,
+      "destination": "#syntax-extensions",
+      "end_column": 41,
+      "line": 28,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 20,
+      "destination": "#manage-rules",
+      "end_column": 33,
+      "line": 29,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 15,
+      "destination": "#benchmark",
+      "end_column": 25,
+      "line": 30,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 32,
+      "destination": "#markdown-it-for-enterprise",
+      "end_column": 59,
+      "line": 31,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 13,
+      "destination": "#authors",
+      "end_column": 21,
+      "line": 32,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 25,
+      "destination": "#references--thanks",
+      "end_column": 44,
+      "line": 33,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 19,
+      "destination": "http://www.jsdelivr.com/#!markdown-it",
+      "end_column": 56,
+      "line": 45,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 19,
+      "destination": "https://cdnjs.com/libraries/markdown-it",
+      "end_column": 58,
+      "line": 46,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 25,
+      "destination": "https://markdown-it.github.io/markdown-it/",
+      "end_column": 67,
+      "line": 53,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 22,
+      "destination": "https://github.com/markdown-it/markdown-it/tree/master/docs",
+      "end_column": 81,
+      "line": 55,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 12,
+      "destination": "https://markdown-it.github.io/markdown-it/#MarkdownIt.new",
+      "end_column": 69,
+      "line": 87,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 35,
+      "destination": "https://github.com/markdown-it/linkify-it",
+      "end_column": 76,
+      "line": 200,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 23,
+      "destination": "https://markdown-it.github.io/markdown-it/",
+      "end_column": 65,
+      "line": 210,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 20,
+      "destination": "https://github.com/markdown-it/markdown-it/tree/master/docs",
+      "end_column": 79,
+      "line": 213,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 12,
+      "destination": "https://help.github.com/articles/organizing-information-with-tables/",
+      "end_column": 80,
+      "line": 220,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 19,
+      "destination": "https://help.github.com/articles/basic-writing-and-formatting-syntax/#styling-text",
+      "end_column": 101,
+      "line": 221,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 15,
+      "destination": "https://github.com/markdown-it/markdown-it-sub",
+      "end_column": 61,
+      "line": 225,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 17,
+      "destination": "https://github.com/markdown-it/markdown-it-sup",
+      "end_column": 63,
+      "line": 226,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 14,
+      "destination": "https://github.com/markdown-it/markdown-it-footnote",
+      "end_column": 65,
+      "line": 227,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 21,
+      "destination": "https://github.com/markdown-it/markdown-it-deflist",
+      "end_column": 71,
+      "line": 228,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 18,
+      "destination": "https://github.com/markdown-it/markdown-it-abbr",
+      "end_column": 65,
+      "line": 229,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 11,
+      "destination": "https://github.com/markdown-it/markdown-it-emoji",
+      "end_column": 59,
+      "line": 230,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 22,
+      "destination": "https://github.com/markdown-it/markdown-it-container",
+      "end_column": 74,
+      "line": 231,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 12,
+      "destination": "https://github.com/markdown-it/markdown-it-ins",
+      "end_column": 58,
+      "line": 232,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 10,
+      "destination": "https://github.com/markdown-it/markdown-it-mark",
+      "end_column": 57,
+      "line": 233,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 20,
+      "destination": "https://www.npmjs.org/browse/keyword/markdown-it-plugin",
+      "end_column": 75,
+      "line": 234,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 23,
+      "destination": "lib/parser_core.mjs",
+      "end_column": 42,
+      "line": 261,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 24,
+      "destination": "lib/parser_block.mjs",
+      "end_column": 44,
+      "line": 262,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 25,
+      "destination": "lib/parser_inline.mjs",
+      "end_column": 46,
+      "line": 263,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 70,
+      "destination": "https://github.com/markdown-it/markdown-it/blob/master/benchmark/implementations/current-commonmark/index.mjs",
+      "end_column": 179,
+      "line": 284,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 334,
+      "destination": "https://tidelift.com/subscription/pkg/npm-markdown-it?utm_source=npm-markdown-it&utm_medium=referral&utm_campaign=enterprise&utm_term=repo",
+      "end_column": 472,
+      "line": 296,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 34,
+      "destination": "https://github.com/rlidwka",
+      "end_column": 60,
+      "line": 301,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 33,
+      "destination": "https://github.com/puzrin",
+      "end_column": 58,
+      "line": 302,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 33,
+      "destination": "https://github.com/jgm",
+      "end_column": 55,
+      "line": 310,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 24,
+      "destination": "https://github.com/digitalmoksha/motion-markdown-it",
+      "end_column": 75,
+      "line": 323,
+      "reason": "production-resolver-exclusion"
+    },
+    {
+      "column": 20,
+      "destination": "https://github.com/ExecutableBookProject/markdown-it-py",
+      "end_column": 75,
+      "line": 324,
+      "reason": "production-resolver-exclusion"
+    }
+  ],
+  "inventory_entries": 174,
+  "no_source_or_target_predictions": true,
+  "normalized_duplicate_evidence": "unavailable",
+  "references": [],
+  "required_targets": [],
+  "selection_sha256": "7e3ca1224804240c97320f4d60851fc7289c03f4df0aa3f25222340e62c45e4c",
+  "source_blob_id": "6c79f3c5d8b361ffd120fa9df367d4da26170de3",
+  "source_bytes": 10183,
+  "source_exact_reserved_hash_match": false,
+  "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:README.md",
+  "source_lines": 324,
+  "source_sha256": "20f360aac0f6640b04a731c93de7e23889c4db5255e2ebc32594c184814abd51",
+  "static_context": "supported",
+  "version": 1
+}

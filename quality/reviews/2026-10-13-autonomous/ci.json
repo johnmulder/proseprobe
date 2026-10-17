@@ -1,0 +1,493 @@
+{
+  "candidate_definition": "Commit da85375176693a609419abbe1c90425b1a079816 containing frozen source-bound reviews, reports and corrected denominator wording; subsequent recorder commit changes only evidence documentation.",
+  "client_date": "2026-10-13",
+  "client_timezone": "America/Denver",
+  "conclusion": "success",
+  "default_branch_merged": false,
+  "headSha": "da85375176693a609419abbe1c90425b1a079816",
+  "implementation_sha256": "30bfc8f451d15b00342a9e48f3da9fe8e859c0832961f1838be74c20a6e84d3d",
+  "jobs": [
+    {
+      "completedAt": "2026-10-14T02:29:12Z",
+      "conclusion": "success",
+      "databaseId": 115648105844,
+      "name": "test (3.12)",
+      "startedAt": "2026-10-14T02:27:44Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-14T02:27:46Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-14T02:27:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:47Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v6",
+          "number": 2,
+          "startedAt": "2026-10-14T02:27:46Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:47Z",
+          "conclusion": "success",
+          "name": "Set up Python 3.12",
+          "number": 3,
+          "startedAt": "2026-10-14T02:27:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:02Z",
+          "conclusion": "success",
+          "name": "Install dependencies",
+          "number": 4,
+          "startedAt": "2026-10-14T02:27:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:02Z",
+          "conclusion": "success",
+          "name": "Lint with ruff",
+          "number": 5,
+          "startedAt": "2026-10-14T02:28:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:04Z",
+          "conclusion": "success",
+          "name": "Type check with mypy",
+          "number": 6,
+          "startedAt": "2026-10-14T02:28:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:29:07Z",
+          "conclusion": "success",
+          "name": "Run tests with coverage threshold",
+          "number": 7,
+          "startedAt": "2026-10-14T02:28:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:29:11Z",
+          "conclusion": "success",
+          "name": "Upload coverage to Codecov",
+          "number": 8,
+          "startedAt": "2026-10-14T02:29:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:29:11Z",
+          "conclusion": "success",
+          "name": "Post Set up Python 3.12",
+          "number": 15,
+          "startedAt": "2026-10-14T02:29:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:29:11Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v6",
+          "number": 16,
+          "startedAt": "2026-10-14T02:29:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:29:11Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 17,
+          "startedAt": "2026-10-14T02:29:11Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/johnmulder/proseprobe/actions/runs/38501135502/job/115648105844"
+    },
+    {
+      "completedAt": "2026-10-14T02:28:57Z",
+      "conclusion": "success",
+      "databaseId": 115648106160,
+      "name": "test (3.13)",
+      "startedAt": "2026-10-14T02:27:45Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-14T02:27:47Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-14T02:27:46Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:48Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v6",
+          "number": 2,
+          "startedAt": "2026-10-14T02:27:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:48Z",
+          "conclusion": "success",
+          "name": "Set up Python 3.13",
+          "number": 3,
+          "startedAt": "2026-10-14T02:27:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:59Z",
+          "conclusion": "success",
+          "name": "Install dependencies",
+          "number": 4,
+          "startedAt": "2026-10-14T02:27:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:59Z",
+          "conclusion": "success",
+          "name": "Lint with ruff",
+          "number": 5,
+          "startedAt": "2026-10-14T02:27:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:01Z",
+          "conclusion": "success",
+          "name": "Type check with mypy",
+          "number": 6,
+          "startedAt": "2026-10-14T02:27:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:50Z",
+          "conclusion": "success",
+          "name": "Run tests with coverage threshold",
+          "number": 7,
+          "startedAt": "2026-10-14T02:28:01Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:54Z",
+          "conclusion": "success",
+          "name": "Upload coverage to Codecov",
+          "number": 8,
+          "startedAt": "2026-10-14T02:28:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:54Z",
+          "conclusion": "success",
+          "name": "Post Set up Python 3.13",
+          "number": 15,
+          "startedAt": "2026-10-14T02:28:54Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:54Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v6",
+          "number": 16,
+          "startedAt": "2026-10-14T02:28:54Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:54Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 17,
+          "startedAt": "2026-10-14T02:28:54Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/johnmulder/proseprobe/actions/runs/38501135502/job/115648106160"
+    },
+    {
+      "completedAt": "2026-10-14T02:28:58Z",
+      "conclusion": "success",
+      "databaseId": 115648106170,
+      "name": "test (3.11)",
+      "startedAt": "2026-10-14T02:27:45Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-14T02:27:47Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-14T02:27:46Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:48Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v6",
+          "number": 2,
+          "startedAt": "2026-10-14T02:27:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:48Z",
+          "conclusion": "success",
+          "name": "Set up Python 3.11",
+          "number": 3,
+          "startedAt": "2026-10-14T02:27:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:57Z",
+          "conclusion": "success",
+          "name": "Install dependencies",
+          "number": 4,
+          "startedAt": "2026-10-14T02:27:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:57Z",
+          "conclusion": "success",
+          "name": "Lint with ruff",
+          "number": 5,
+          "startedAt": "2026-10-14T02:27:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:58Z",
+          "conclusion": "success",
+          "name": "Type check with mypy",
+          "number": 6,
+          "startedAt": "2026-10-14T02:27:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:51Z",
+          "conclusion": "success",
+          "name": "Run tests with coverage threshold",
+          "number": 7,
+          "startedAt": "2026-10-14T02:27:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:55Z",
+          "conclusion": "success",
+          "name": "Upload coverage to Codecov",
+          "number": 8,
+          "startedAt": "2026-10-14T02:28:51Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:55Z",
+          "conclusion": "success",
+          "name": "Post Set up Python 3.11",
+          "number": 15,
+          "startedAt": "2026-10-14T02:28:55Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:55Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v6",
+          "number": 16,
+          "startedAt": "2026-10-14T02:28:55Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:55Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 17,
+          "startedAt": "2026-10-14T02:28:55Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/johnmulder/proseprobe/actions/runs/38501135502/job/115648106170"
+    },
+    {
+      "completedAt": "2026-10-14T02:28:04Z",
+      "conclusion": "success",
+      "databaseId": 115648106192,
+      "name": "lint-docs",
+      "startedAt": "2026-10-14T02:27:45Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-14T02:27:46Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-14T02:27:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:48Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v6",
+          "number": 2,
+          "startedAt": "2026-10-14T02:27:46Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:48Z",
+          "conclusion": "success",
+          "name": "Set up Python",
+          "number": 3,
+          "startedAt": "2026-10-14T02:27:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:57Z",
+          "conclusion": "success",
+          "name": "Install ProseProbe",
+          "number": 4,
+          "startedAt": "2026-10-14T02:27:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:58Z",
+          "conclusion": "success",
+          "name": "Dogfood - check own docs",
+          "number": 5,
+          "startedAt": "2026-10-14T02:27:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:27:59Z",
+          "conclusion": "success",
+          "name": "Measure rule quality",
+          "number": 6,
+          "startedAt": "2026-10-14T02:27:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:02Z",
+          "conclusion": "success",
+          "name": "Check reviewed quality regressions",
+          "number": 7,
+          "startedAt": "2026-10-14T02:27:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:02Z",
+          "conclusion": "success",
+          "name": "Post Set up Python",
+          "number": 13,
+          "startedAt": "2026-10-14T02:28:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:03Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v6",
+          "number": 14,
+          "startedAt": "2026-10-14T02:28:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:28:03Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-10-14T02:28:03Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/johnmulder/proseprobe/actions/runs/38501135502/job/115648106192"
+    },
+    {
+      "completedAt": "2026-10-14T02:29:26Z",
+      "conclusion": "success",
+      "databaseId": 115648542668,
+      "name": "build",
+      "startedAt": "2026-10-14T02:29:15Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-14T02:29:17Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-14T02:29:16Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:29:18Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v6",
+          "number": 2,
+          "startedAt": "2026-10-14T02:29:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:29:18Z",
+          "conclusion": "success",
+          "name": "Set up Python",
+          "number": 3,
+          "startedAt": "2026-10-14T02:29:18Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:29:20Z",
+          "conclusion": "success",
+          "name": "Install build tools",
+          "number": 4,
+          "startedAt": "2026-10-14T02:29:18Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:29:23Z",
+          "conclusion": "success",
+          "name": "Build package",
+          "number": 5,
+          "startedAt": "2026-10-14T02:29:20Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:29:24Z",
+          "conclusion": "success",
+          "name": "Upload artifacts",
+          "number": 6,
+          "startedAt": "2026-10-14T02:29:23Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:29:24Z",
+          "conclusion": "success",
+          "name": "Post Set up Python",
+          "number": 11,
+          "startedAt": "2026-10-14T02:29:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:29:24Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v6",
+          "number": 12,
+          "startedAt": "2026-10-14T02:29:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-14T02:29:24Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 13,
+          "startedAt": "2026-10-14T02:29:24Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/johnmulder/proseprobe/actions/runs/38501135502/job/115648542668"
+    }
+  ],
+  "pull_request": "https://github.com/johnmulder/proseprobe/pull/1",
+  "recorded_at_utc": "2026-10-14T02:38:53.396781+00:00",
+  "release_published": false,
+  "schema_version": 1,
+  "status": "completed",
+  "superseded_run": {
+    "disposition": "cancelled after corrected candidate was submitted; never counted as passing evidence",
+    "head_sha": "cc232047a6374db6c56e6b463f98aa93eb4e0ce8",
+    "id": 38500554146
+  },
+  "url": "https://github.com/johnmulder/proseprobe/actions/runs/38501135502"
+}

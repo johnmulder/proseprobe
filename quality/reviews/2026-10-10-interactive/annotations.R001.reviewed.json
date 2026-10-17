@@ -1,0 +1,48 @@
+{
+  "files": {
+    "originals/0000.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [
+        {
+          "column": 1,
+          "end_column": 330,
+          "end_line": 21,
+          "line": 19,
+          "note": "The session user reported no issues for each declared rule in R001. Literal judgments and the V016 spelling transcription are preserved in R001.response.json. No omitted text or other rules were reviewed.",
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed"
+        }
+      ],
+      "reviewed_rules": [],
+      "sha256": "6e7b819515fb72b89f1e16a3c7c7b31039b684b9f4adb8bed0c618a7806ec186",
+      "source_group": "github/docs",
+      "source_id": "github/docs:content/rest/codespaces/repository-secrets.md"
+    }
+  },
+  "review": {
+    "packet_index": {
+      "path": "index.json",
+      "sha256": "67a458ae35f25585f00f66802ec3f381926d79f8b0488fe68203f5a33e42775d"
+    },
+    "policy": {
+      "min_confidence": "low",
+      "mode": "all-rules",
+      "profile": "default",
+      "severity": "info"
+    },
+    "protocol_revision": "interactive-blind-development-v1",
+    "reviewers": [
+      "human-session-user-2026-10-10"
+    ],
+    "rule_contracts": {
+      "path": "contracts.json",
+      "sha256": "44574c524e1f13596b150e5e38f44f47bc4690abced12be954e34c810d5da657"
+    }
+  },
+  "version": 3
+}

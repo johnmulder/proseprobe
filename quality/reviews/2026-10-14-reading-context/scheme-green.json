@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "scope": "Scheme-relative directory rejected;1passed",
+  "stdout": ".                                                                        [100%]\n1 passed, 39 deselected in 0.69s\n",
+  "stdout_sha256": "bf76d51cd1b5a6a86eadbe0d26a119ca3ad508267ddbbeee936f6038bfdbf079",
+  "version": 1
+}

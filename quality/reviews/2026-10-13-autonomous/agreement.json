@@ -1,0 +1,123 @@
+{
+  "agreements_count": 15,
+  "chance_adjusted_agreement": null,
+  "chance_adjusted_reason": "all reviewed dispositions are clean; no category variation",
+  "disagreements_count": 0,
+  "evidence_kind": "agent-assisted development; not independent human agreement",
+  "expected_positive_spans_agent_a": 0,
+  "expected_positive_spans_agent_b": 0,
+  "limits": "same engine family, public-project training familiarity unknown; repeated reviews do not add source support",
+  "rows": [
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "G038",
+      "same": true,
+      "source_id": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "V015",
+      "same": true,
+      "source_id": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "V016",
+      "same": true,
+      "source_id": "github/docs:content/site-policy/site-policy-deprecated/github-enterprise-service-level-agreement.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "G038",
+      "same": true,
+      "source_id": "github/docs:content/support/contacting-github-support/using-copilot-in-github-support.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "V015",
+      "same": true,
+      "source_id": "github/docs:content/support/contacting-github-support/using-copilot-in-github-support.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "V016",
+      "same": true,
+      "source_id": "github/docs:content/support/contacting-github-support/using-copilot-in-github-support.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "G038",
+      "same": true,
+      "source_id": "github/docs:content/copilot/how-tos/copilot-on-github/customize-copilot/customize-copilot-overview.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "V015",
+      "same": true,
+      "source_id": "github/docs:content/copilot/how-tos/copilot-on-github/customize-copilot/customize-copilot-overview.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "V016",
+      "same": true,
+      "source_id": "github/docs:content/copilot/how-tos/copilot-on-github/customize-copilot/customize-copilot-overview.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "G038",
+      "same": true,
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:README.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "V015",
+      "same": true,
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:README.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "V016",
+      "same": true,
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:README.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "G038",
+      "same": true,
+      "source_id": "fastapi/fastapi:40e33e492dbf4af6172997f4e3238a32e56cbe26:README.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "V015",
+      "same": true,
+      "source_id": "fastapi/fastapi:40e33e492dbf4af6172997f4e3238a32e56cbe26:README.md"
+    },
+    {
+      "agent_a": "no issue",
+      "agent_b": "no issue",
+      "rule": "V016",
+      "same": true,
+      "source_id": "fastapi/fastapi:40e33e492dbf4af6172997f4e3238a32e56cbe26:README.md"
+    }
+  ],
+  "source_files_count": 5,
+  "source_groups_count": 3,
+  "units": "unique source/rule complete eligible-prose reviews",
+  "units_count": 15,
+  "unresolved_eligible_prose_judgments": 0,
+  "version": 1
+}

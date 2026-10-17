@@ -1,0 +1,52 @@
+{
+  "rules": {
+    "G038": {
+      "applies_to": [
+        "markdown",
+        "python"
+      ],
+      "category": "Grammar",
+      "config_key": null,
+      "content_scope": "prose",
+      "default_confidence": "low",
+      "default_severity": "info",
+      "description": "Detects predicate comparatives without an attached comparison target",
+      "id": "G038",
+      "name": "Undefined Comparative",
+      "profiles": []
+    },
+    "V015": {
+      "applies_to": [
+        "markdown",
+        "python"
+      ],
+      "category": "Vocabulary",
+      "config_key": null,
+      "content_scope": "prose",
+      "default_confidence": "low",
+      "default_severity": "info",
+      "description": "Detects curated superlative claims lacking local comparison",
+      "id": "V015",
+      "name": "Unbounded Superlative",
+      "profiles": []
+    },
+    "V016": {
+      "applies_to": [
+        "markdown",
+        "python"
+      ],
+      "category": "Vocabulary",
+      "config_key": null,
+      "content_scope": "prose",
+      "default_confidence": "medium",
+      "default_severity": "info",
+      "description": "Detects absolute reliability and security claims",
+      "id": "V016",
+      "name": "Absolute Reliability Claim",
+      "profiles": [
+        "technical-docs"
+      ]
+    }
+  },
+  "version": 1
+}

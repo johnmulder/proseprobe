@@ -1,0 +1,48 @@
+{
+  "checked_at_utc": "2026-10-14T06:08:00.702640+00:00",
+  "code_changed_after_gate": false,
+  "command": "rtk proxy make check dogfood rule-quality-regression",
+  "curated_regression": {
+    "all-rules": {
+      "false_negatives": 0,
+      "false_positives": 6,
+      "gate": "PASS",
+      "known_mismatches_retained": 6,
+      "true_positives": 366
+    },
+    "production": {
+      "false_negatives": 0,
+      "false_positives": 4,
+      "gate": "PASS",
+      "known_mismatches_retained": 4,
+      "true_positives": 106
+    }
+  },
+  "exit_code": 0,
+  "gate_run_head": "8601af5",
+  "limits": [
+    "Local package Mypy gate covers 31 source files; full strict benchmark typing is not claimed.",
+    "Curated regression fixtures are separate from reserved external holdout; reserved external holdout remains unopened.",
+    "Local gates do not establish CI success on these new commits.",
+    "Commit hooks and baseline prose checks are run for authored documentation; source originals and challenge originals are excluded."
+  ],
+  "log": "quality/reviews/2026-10-13-agent-resume/local-gates.log",
+  "log_sha256": "f60550a7f6a518096648b9c427d38343a8cb59bb118f0051aa4086191ecae76a",
+  "mypy": {
+    "package_source_files": 31,
+    "passed": true
+  },
+  "pytest": {
+    "failed": 0,
+    "passed": 3640
+  },
+  "review_validation": {
+    "feedback_bindings_checked": 32,
+    "frozen_artifacts_checked": 72,
+    "prompt_bindings_rows_limits_checked": 16,
+    "reports_checked": 18,
+    "runtime_matches_freeze": true
+  },
+  "runtime_source_sha256": "acd8107edffa140f83f7861ccae5cd0b55a64e3a017da8285dd0e8626ab044c3",
+  "version": 1
+}

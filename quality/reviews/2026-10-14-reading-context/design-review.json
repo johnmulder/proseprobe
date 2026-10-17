@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "reading_id": "D001",
+  "review_kind": "bounded_engineering_design_review",
+  "verdict": "adequate_with_small_clarifications",
+  "design_sha256": "c2ad4620688c865590f99d1d3c3d0e1be3510f7064ce16ea6a960ee6fb0c84e5",
+  "actual_exposure": {
+    "files_read": [
+      "/Users/johnmulder/.codex/RTK.md",
+      "quality/reviews/2026-10-14-reading-context/design-reading.md",
+      "quality/reviews/2026-10-14-reading-context/inputs.json",
+      "/private/tmp/proseprobe-D001.txt"
+    ],
+    "direct_reading_sha256": "c2ad4620688c865590f99d1d3c3d0e1be3510f7064ce16ea6a960ee6fb0c84e5",
+    "inputs_sha256": "f1760412f05abea17f1820526a4c28ec734ffb4cd85fd3b362b9096a5c5d5536",
+    "source_or_tests_read": false,
+    "old_labels_read": false,
+    "external_manifests_read": false,
+    "holdout_opened": false,
+    "project_code_executed_or_imported": false,
+    "git_changed": false,
+    "limits": "This assesses the stated design only. It does not establish implementation correctness, blind-label independence, reviewer coverage, or human effectiveness."
+  },
+  "answers": {
+    "required_evidence_accessible": "Yes, as specified: complete static Python headers and owners, explicit module scope, complete Markdown source and target companions, derived inventories, and revision-bound missing-target evidence supply the relevant context without executing source or resolving new references. This conclusion depends on pagination remaining complete and losslessly mapped.",
+    "full_context_avoids_anchor_position_guesses": "Yes. Original Markdown makes explicit anchors and examples inspectable, while derived heading rows and the supported anchor-ID set describe parser output. Keep the set labeled as membership; it cannot establish the occurrence count or source position of an anchor.",
+    "missing_provenance": "Clarify how chunks of a source line wider than the page are mapped: retain the original line and start/end Unicode-column spans, or an equivalent exact reversible mapping. A source row alone is insufficient to pinpoint a wrapped substring. Bind the mapping with the page/index hashes already proposed.",
+    "unsafe_scope_expansion": "None apparent. The explicit offline VerifiedReferenceContext precondition and source/renderer/reference matching keep reference context bounded. Do not expand this task into verification of arbitrary caller-forged proof objects or new filesystem/network resolution.",
+    "needless_machinery": "None required beyond the proposed benchmark builder, finite linked pages, mappings, and digest bindings. Full-source companions avoid a production parser API expansion. Preserve the existing builder and frozen packets."
+  },
+  "smallest_correction": [
+    "Specify reversible source-column mapping for wrapped long lines, including the column unit and preservation of original LF/CRLF bytes.",
+    "Reject an impossible page envelope explicitly before returning a bundle when repeated instructions, questions, absolute links, or other mandatory metadata cannot fit 80 lines by 80 code points. Do not truncate, omit mandatory context, return a partial bundle, or paginate without making progress."
+  ],
+  "essential_failing_tests_before_coding": [
+    "A focus in a nested Python owner receives enclosing class/function headers, decorators, async syntax and complete multiline signatures; colon-bearing defaults or annotations do not end the header early. Module scope is explicit and malformed/unsupported input fails.",
+    "Long raw lines with non-ASCII characters, repeated substrings and CRLF round-trip exactly through chunk maps while every complete page satisfies both bounds; wrapped positions identify the original substring unambiguously.",
+    "Oversized caller instructions/questions or absolute output links cause a clear finite failure rather than truncation, partial output or no-progress pagination.",
+    "Markdown with duplicate headings, explicit HTML anchors and relevant examples retains full source companions, ordered duplicate heading rows and membership-only anchor IDs; generated/unsupported input fails rather than yielding a misleading empty inventory.",
+    "M012 rejects mismatched source bytes/ID, renderer, incomplete reference declarations, unknown/unbound targets and unsupported target content; valid targets expose complete bytes/hash/inventory and pinned absence retains its native provenance bindings without new resolution.",
+    "Multiple pages have complete index coverage, correct roles/order/previous-next links and bound source maps; a changed page/context/index value changes its appropriate hash/digest, with existing build_reading behavior and frozen packets unchanged."
+  ]
+}

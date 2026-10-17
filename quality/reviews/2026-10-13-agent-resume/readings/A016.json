@@ -1,0 +1,500 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A016.txt",
+  "packet_path": "originals/0005.py",
+  "pair_group": "psf/requests:src/requests/cookies.py",
+  "reading_id": "A016",
+  "region": {
+    "column": 1,
+    "end_column": 12,
+    "end_line": 200,
+    "line": 161
+  },
+  "rendered_sha256": "8e4c8adecd524a60048b7930e0cca4f359e30107d4fc215c0317c780c1a2187f",
+  "rendered_text": "Blind agent reading A016: natural.\nReading file: [A016](/private/tmp/proseprobe-A016.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL161 C 1-21 |             continue\nL162 C 1-53 |         if path is not None and path != cookie.path:\nL163 C 1-21 |             continue\nL164 C 1-56 |         clearables.append((cookie.domain, cookie.path, \nL164 C56-69 | cookie.name))\nL165 C 1- 1 | \nL166 C 1-42 |     for domain, path, name in clearables:\nL167 C 1-44 |         cookiejar.clear(domain, path, name)\nL168 C 1- 1 | \nL169 C 1- 1 | \nL170 C 1-41 | class CookieConflictError(RuntimeError):\nL171 C 1-66 |     \"\"\"There are two cookies that meet the criteria specified in \nL171 C66-81 | the cookie jar.\nL172 C 1-65 |     Use .get and .set and include domain and path args in order \nL172 C65-85 | to be more specific.\nL173 C 1- 8 |     \"\"\"\nL174 C 1- 1 | \nL175 C 1- 1 | \nL176 C 1-62 | class RequestsCookieJar(cookielib.CookieJar, MutableMapping):\nL177 C 1-64 |     \"\"\"Compatibility class; is a http.cookiejar.CookieJar, but \nL177 C64-78 | exposes a dict\nL178 C 1-15 |     interface.\nL179 C 1- 1 | \nL180 C 1-65 |     This is the CookieJar we create by default for requests and \nL180 C65-78 | sessions that\nL181 C 1-54 |     don't specify one, since some clients may expect \nL181 C54-74 | response.cookies and\nL182 C 1-48 |     session.cookies to support dict operations.\nL183 C 1- 1 | \nL184 C 1-63 |     Requests does not use the dict interface internally; it's \nL184 C63-71 | just for\nL185 C 1-64 |     compatibility with external client code. All requests code \nL185 C64-75 | should work\nL186 C 1-58 |     out of the box with externally provided instances of \nL186 C58-77 | ``CookieJar``, e.g.\nL187 C 1-44 |     ``LWPCookieJar`` and ``FileCookieJar``.\nL188 C 1- 1 | \nL189 C 1-58 |     Unlike a regular CookieJar, this class is pickleable.\nL190 C 1- 1 | \nL191 C 1-67 |     .. warning:: dictionary operations that are normally O(1) may \nL191 C67-75 | be O(n).\nL192 C 1- 8 |     \"\"\"\nL193 C 1- 1 | \nL194 C 1-63 |     def get(self, name, default=None, domain=None, path=None):\nL195 C 1-67 |         \"\"\"Dict-like get() that also supports optional domain and \nL195 C67-79 | path args in\nL196 C 1-66 |         order to resolve naming collisions from using one cookie \nL196 C66-74 | jar over\nL197 C 1-26 |         multiple domains.\nL198 C 1- 1 | \nL199 C 1-50 |         .. warning:: operation is O(n), not O(1).\nL200 C 1-12 |         \"\"\"\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 161,
+      "line": 161,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "            continue"
+    },
+    {
+      "column": 1,
+      "end_column": 53,
+      "end_line": 162,
+      "line": 162,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "        if path is not None and path != cookie.path:"
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 163,
+      "line": 163,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "            continue"
+    },
+    {
+      "column": 1,
+      "end_column": 56,
+      "end_line": 164,
+      "line": 164,
+      "reading_line": 16,
+      "source_line_ending": "",
+      "text": "        clearables.append((cookie.domain, cookie.path, "
+    },
+    {
+      "column": 56,
+      "end_column": 69,
+      "end_line": 164,
+      "line": 164,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "cookie.name))"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 165,
+      "line": 165,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 42,
+      "end_line": 166,
+      "line": 166,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "    for domain, path, name in clearables:"
+    },
+    {
+      "column": 1,
+      "end_column": 44,
+      "end_line": 167,
+      "line": 167,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "        cookiejar.clear(domain, path, name)"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 168,
+      "line": 168,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 169,
+      "line": 169,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 41,
+      "end_line": 170,
+      "line": 170,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "class CookieConflictError(RuntimeError):"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 171,
+      "line": 171,
+      "reading_line": 24,
+      "source_line_ending": "",
+      "text": "    \"\"\"There are two cookies that meet the criteria specified in "
+    },
+    {
+      "column": 66,
+      "end_column": 81,
+      "end_line": 171,
+      "line": 171,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": "the cookie jar."
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 172,
+      "line": 172,
+      "reading_line": 26,
+      "source_line_ending": "",
+      "text": "    Use .get and .set and include domain and path args in order "
+    },
+    {
+      "column": 65,
+      "end_column": 85,
+      "end_line": 172,
+      "line": 172,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "to be more specific."
+    },
+    {
+      "column": 1,
+      "end_column": 8,
+      "end_line": 173,
+      "line": 173,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "    \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 174,
+      "line": 174,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 175,
+      "line": 175,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 62,
+      "end_line": 176,
+      "line": 176,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "class RequestsCookieJar(cookielib.CookieJar, MutableMapping):"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 177,
+      "line": 177,
+      "reading_line": 32,
+      "source_line_ending": "",
+      "text": "    \"\"\"Compatibility class; is a http.cookiejar.CookieJar, but "
+    },
+    {
+      "column": 64,
+      "end_column": 78,
+      "end_line": 177,
+      "line": 177,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "exposes a dict"
+    },
+    {
+      "column": 1,
+      "end_column": 15,
+      "end_line": 178,
+      "line": 178,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "    interface."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 179,
+      "line": 179,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 180,
+      "line": 180,
+      "reading_line": 36,
+      "source_line_ending": "",
+      "text": "    This is the CookieJar we create by default for requests and "
+    },
+    {
+      "column": 65,
+      "end_column": 78,
+      "end_line": 180,
+      "line": 180,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": "sessions that"
+    },
+    {
+      "column": 1,
+      "end_column": 54,
+      "end_line": 181,
+      "line": 181,
+      "reading_line": 38,
+      "source_line_ending": "",
+      "text": "    don't specify one, since some clients may expect "
+    },
+    {
+      "column": 54,
+      "end_column": 74,
+      "end_line": 181,
+      "line": 181,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": "response.cookies and"
+    },
+    {
+      "column": 1,
+      "end_column": 48,
+      "end_line": 182,
+      "line": 182,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": "    session.cookies to support dict operations."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 183,
+      "line": 183,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 184,
+      "line": 184,
+      "reading_line": 42,
+      "source_line_ending": "",
+      "text": "    Requests does not use the dict interface internally; it's "
+    },
+    {
+      "column": 63,
+      "end_column": 71,
+      "end_line": 184,
+      "line": 184,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "just for"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 185,
+      "line": 185,
+      "reading_line": 44,
+      "source_line_ending": "",
+      "text": "    compatibility with external client code. All requests code "
+    },
+    {
+      "column": 64,
+      "end_column": 75,
+      "end_line": 185,
+      "line": 185,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": "should work"
+    },
+    {
+      "column": 1,
+      "end_column": 58,
+      "end_line": 186,
+      "line": 186,
+      "reading_line": 46,
+      "source_line_ending": "",
+      "text": "    out of the box with externally provided instances of "
+    },
+    {
+      "column": 58,
+      "end_column": 77,
+      "end_line": 186,
+      "line": 186,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "``CookieJar``, e.g."
+    },
+    {
+      "column": 1,
+      "end_column": 44,
+      "end_line": 187,
+      "line": 187,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "    ``LWPCookieJar`` and ``FileCookieJar``."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 188,
+      "line": 188,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 58,
+      "end_line": 189,
+      "line": 189,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": "    Unlike a regular CookieJar, this class is pickleable."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 190,
+      "line": 190,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 191,
+      "line": 191,
+      "reading_line": 52,
+      "source_line_ending": "",
+      "text": "    .. warning:: dictionary operations that are normally O(1) may "
+    },
+    {
+      "column": 67,
+      "end_column": 75,
+      "end_line": 191,
+      "line": 191,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": "be O(n)."
+    },
+    {
+      "column": 1,
+      "end_column": 8,
+      "end_line": 192,
+      "line": 192,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "    \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 193,
+      "line": 193,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 194,
+      "line": 194,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": "    def get(self, name, default=None, domain=None, path=None):"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 195,
+      "line": 195,
+      "reading_line": 57,
+      "source_line_ending": "",
+      "text": "        \"\"\"Dict-like get() that also supports optional domain and "
+    },
+    {
+      "column": 67,
+      "end_column": 79,
+      "end_line": 195,
+      "line": 195,
+      "reading_line": 58,
+      "source_line_ending": "\n",
+      "text": "path args in"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 196,
+      "line": 196,
+      "reading_line": 59,
+      "source_line_ending": "",
+      "text": "        order to resolve naming collisions from using one cookie "
+    },
+    {
+      "column": 66,
+      "end_column": 74,
+      "end_line": 196,
+      "line": 196,
+      "reading_line": 60,
+      "source_line_ending": "\n",
+      "text": "jar over"
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 197,
+      "line": 197,
+      "reading_line": 61,
+      "source_line_ending": "\n",
+      "text": "        multiple domains."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 198,
+      "line": 198,
+      "reading_line": 62,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 50,
+      "end_line": 199,
+      "line": 199,
+      "reading_line": 63,
+      "source_line_ending": "\n",
+      "text": "        .. warning:: operation is O(n), not O(1)."
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 200,
+      "line": 200,
+      "reading_line": 64,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+  "split": "development",
+  "version": 1
+}

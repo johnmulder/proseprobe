@@ -1,0 +1,182 @@
+{
+  "agent_packet_and_final_code_review_hashes_verified": true,
+  "artifacts_sha256": {
+    "quality/reviews/2026-10-14-reading-context/EXECUTION.md": "f2c5073f0614b362bdc957effccc92116584f509c445ea36d49ef642c33fc3c8",
+    "quality/reviews/2026-10-14-reading-context/README.md": "4e253271b932d389949b946ff110176aca9ec5b28ed04435b4915849b6daa847",
+    "quality/reviews/2026-10-14-reading-context/boundary-red.json": "020a9d5329b40a962530804b2d37bb7505d40075b8baa7b221c62228b4867217",
+    "quality/reviews/2026-10-14-reading-context/code-review-followup.json": "90ed2c2cfbb556933781db75e52bcf4e93d2b7271cd9dc94c8757bd3bc06aad6",
+    "quality/reviews/2026-10-14-reading-context/code-review.json": "7f45b73ce066895052c9017e1ac395ff205e57b9ea406256593bbead525fa1c4",
+    "quality/reviews/2026-10-14-reading-context/design-reading.md": "c2ad4620688c865590f99d1d3c3d0e1be3510f7064ce16ea6a960ee6fb0c84e5",
+    "quality/reviews/2026-10-14-reading-context/design-review.json": "2b1f9af0e51ff487c42fd1c355f95200640d943333d6083c18173d55460efba7",
+    "quality/reviews/2026-10-14-reading-context/entity-green.json": "cc32a3c06755919acbd5265efe0865a112e7c6d9e75a0229a48a6d723e6c67ba",
+    "quality/reviews/2026-10-14-reading-context/entity-red.json": "1a2c1e92bb1b0c8cf2a2ca67d88945e498ce05dfabb2eb2fcd8dc812370af864",
+    "quality/reviews/2026-10-14-reading-context/examples/index.json": "52e8ef0f83c8a6a58f16c4bfa22dd0d5bb5a9e4524951a4b615e51ea5a083f59",
+    "quality/reviews/2026-10-14-reading-context/examples/p32d5b-links.json": "0e2d247fd3a247dbf3629b80cb79f77bab73f7f9878557e20173cebb0f546f51",
+    "quality/reviews/2026-10-14-reading-context/examples/p32d5b-python.json": "a7f42823181d19d8af4ae955e91c0016846393e786e9d9704f819cc48c27f984",
+    "quality/reviews/2026-10-14-reading-context/examples/selection.json": "3136dcc4ca60ec84a55a3a0499740b728347d8b1b654e6724611e46db9506f88",
+    "quality/reviews/2026-10-14-reading-context/final-gates.json": "b41b93cfa68a9cfdbdd9d1e0ba6466b01a5ebee825f327eb7687bb04c200ed07",
+    "quality/reviews/2026-10-14-reading-context/final-green.json": "3e771b6394d9ec58c2138f520335119ce1cebfb2e3fb55a5b3c6fb54b7f5b0aa",
+    "quality/reviews/2026-10-14-reading-context/inputs.json": "f1760412f05abea17f1820526a4c28ec734ffb4cd85fd3b362b9096a5c5d5536",
+    "quality/reviews/2026-10-14-reading-context/markdown-green.json": "d557a7d5ea4a1d74fb3ad26bf83b86d789f3ccc5fd96a2516e288d1e448be171",
+    "quality/reviews/2026-10-14-reading-context/markdown-red.json": "f8ee1178e9912b54c20357cb0a0bfc81f84c8c013e7e73add733615842f4d0f4",
+    "quality/reviews/2026-10-14-reading-context/packet-review.json": "54e910f9550e3d07fd6a8e1a36b780065e88e02615e1b8c226448da3c4a7eb71",
+    "quality/reviews/2026-10-14-reading-context/python-gates.json": "8743b8f9f09c71150319ffa2cc4328aaa8387f366e8b36b6c9642f23c9aa609e",
+    "quality/reviews/2026-10-14-reading-context/python-green.json": "2127f4df5f492859d01629fd8c4297bef567f73f38a6199018755187532c8cbb",
+    "quality/reviews/2026-10-14-reading-context/python-red.json": "5f2fce95e8107303da44aeabe95dc15ee20c52dfddf0dd8fd7864c66ff76e39c",
+    "quality/reviews/2026-10-14-reading-context/review-green.json": "4c5fbd327ed758aa354ebf735e66bda75c61d52f7559e5bcbdb58bcde2d2c12a",
+    "quality/reviews/2026-10-14-reading-context/review-red.json": "745db05018b90085ada9c5133bc5c880694fe631f80a5aefa43de45bd77c3e23",
+    "quality/reviews/2026-10-14-reading-context/scheme-green.json": "ce0b3e1735651fd00bb0d306d6c1dcd9870f22426ea7d2ff666b5b541e47105d",
+    "quality/reviews/2026-10-14-reading-context/scheme-red.json": "5fd837ee1d28a433dd21a0a149aa5969557f157fab7e3398c036fdac7b8d5973",
+    "quality/reviews/2026-10-14-reading-context/tabs-green.json": "7c31dfd81ae6eefb53e1a29f3027d911a0c5fd5844eeca3bb94f18dc3b2594a1",
+    "quality/reviews/2026-10-14-reading-context/tabs-red.json": "2411657886448292f2362c74ce956ed3ec1386007c850505a865764301339725",
+    "quality/reviews/2026-10-14-reading-context/tdd-markdown.json": "f82e7bddacbe6bcc798879c88de8121cc9d7b4682a5c47ceb414659ef835f5eb",
+    "quality/reviews/2026-10-14-reading-context/tdd-python.json": "5f42356ad68fdb0bbcc69553cd342d5ed39434b2c690d69e6e47678c3173f13f"
+  },
+  "baseline_prose_check_passed": true,
+  "exact_log_envelopes_verified": 13,
+  "examples": [
+    {
+      "bundle": "quality/reviews/2026-10-14-reading-context/examples/p32d5b-python.json",
+      "canonical_hashes_valid": true,
+      "deterministic_rebuild_equal": true,
+      "pages": [
+        {
+          "lines": 18,
+          "max_codepoints": 73,
+          "path": "/private/tmp/p32d5b-python-0001.txt"
+        },
+        {
+          "lines": 19,
+          "max_codepoints": 75,
+          "path": "/private/tmp/p32d5b-python-0002.txt"
+        }
+      ],
+      "raw_rows_and_complete_markdown_reconstruction_valid": true
+    },
+    {
+      "bundle": "quality/reviews/2026-10-14-reading-context/examples/p32d5b-links.json",
+      "canonical_hashes_valid": true,
+      "deterministic_rebuild_equal": true,
+      "pages": [
+        {
+          "lines": 20,
+          "max_codepoints": 79,
+          "path": "/private/tmp/p32d5b-links-0001.txt"
+        },
+        {
+          "lines": 23,
+          "max_codepoints": 79,
+          "path": "/private/tmp/p32d5b-links-0002.txt"
+        },
+        {
+          "lines": 21,
+          "max_codepoints": 73,
+          "path": "/private/tmp/p32d5b-links-0003.txt"
+        },
+        {
+          "lines": 33,
+          "max_codepoints": 75,
+          "path": "/private/tmp/p32d5b-links-0004.txt"
+        },
+        {
+          "lines": 27,
+          "max_codepoints": 76,
+          "path": "/private/tmp/p32d5b-links-0005.txt"
+        },
+        {
+          "lines": 22,
+          "max_codepoints": 75,
+          "path": "/private/tmp/p32d5b-links-0006.txt"
+        }
+      ],
+      "raw_rows_and_complete_markdown_reconstruction_valid": true
+    }
+  ],
+  "focused_tests_passed": 169,
+  "full_tests_passed": 3755,
+  "historical_comparison": {
+    "base": "42ab414",
+    "changed_files": [],
+    "scope": [
+      ":(exclude)quality/README.md",
+      ":(exclude)quality/reviews/2026-10-14-reading-context/**",
+      "src",
+      ".proseprobe-baseline.json"
+    ]
+  },
+  "independent_human_effectiveness_claims": false,
+  "inventory_scope": "All session files except validation.json itself; records do not include their own hash.",
+  "native_authored_reference_proof_revalidated": true,
+  "reserved_holdout_opened": false,
+  "runtime": {
+    "git": {
+      "head": "36b36f22deaaf9cb0465083721e203ef2e3c85ae",
+      "scope": [
+        "benchmarks",
+        "src/proseprobe"
+      ],
+      "staged_dirty": false,
+      "tracked_worktree_dirty": false,
+      "untracked_python_files": []
+    },
+    "identity_scope": "package and evaluator Python source names and exact bytes; caches, corpora and documents excluded",
+    "package_version": "0.1.0",
+    "source_files": [
+      "evaluator/__init__.py",
+      "evaluator/bench_rules.py",
+      "evaluator/corpora.py",
+      "evaluator/evaluation_identity.py",
+      "evaluator/memory_probe.py",
+      "evaluator/native_link_context.py",
+      "evaluator/native_reference_context.py",
+      "evaluator/paired_quality.py",
+      "evaluator/quality_scoring.py",
+      "evaluator/regression_gate.py",
+      "evaluator/review_context.py",
+      "evaluator/review_readings.py",
+      "evaluator/rule_quality.py",
+      "evaluator/source_intervals.py",
+      "evaluator/startup_probe.py",
+      "evaluator/usefulness.py",
+      "package/__init__.py",
+      "package/__main__.py",
+      "package/_ansi.py",
+      "package/_rule_docs.py",
+      "package/cli.py",
+      "package/config.py",
+      "package/core/__init__.py",
+      "package/core/baseline.py",
+      "package/core/linter.py",
+      "package/core/policy.py",
+      "package/core/reporter.py",
+      "package/data/__init__.py",
+      "package/data/code_patterns.py",
+      "package/data/patterns.py",
+      "package/data/phrases.py",
+      "package/data/style_patterns.py",
+      "package/data/vocabulary.py",
+      "package/parsers/__init__.py",
+      "package/parsers/markdown.py",
+      "package/parsers/prose.py",
+      "package/parsers/python.py",
+      "package/profiles.py",
+      "package/rules/__init__.py",
+      "package/rules/_phrases.py",
+      "package/rules/base.py",
+      "package/rules/code.py",
+      "package/rules/grammar.py",
+      "package/rules/markup.py",
+      "package/rules/struct.py",
+      "package/rules/style.py",
+      "package/rules/vocab.py"
+    ],
+    "source_files_count": 47,
+    "source_roots": {
+      "evaluator": "/Users/johnmulder/Experiments/proseprobe/benchmarks",
+      "package": "/Users/johnmulder/Experiments/proseprobe/src/proseprobe"
+    },
+    "source_sha256": "b471e21df1ccbc55ff64bc3ef5ec1dcd33c051d22cdff2ce2302c24d89fa2dd4"
+  },
+  "stage": "R04",
+  "version": 1
+}

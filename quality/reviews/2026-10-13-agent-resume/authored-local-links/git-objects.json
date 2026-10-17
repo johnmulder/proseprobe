@@ -1,0 +1,32 @@
+{
+  "objects": [
+    {
+      "kind": "commit",
+      "object_id": "ce2e2844bd9a3ca5b5a74ae41828c65f454c973b",
+      "raw_base64": "dHJlZSBiNzQ2NGEwNGU3MzM5NTA4OTU4Y2RiMDFkZWY2Yjk3NzRhMWYzOWQ5CmF1dGhvciBQcm9zZVByb2JlIGFnZW50IGNoYWxsZW5nZSA8YWdlbnQtY2hhbGxlbmdlQGV4YW1wbGUuaW52YWxpZD4gMTc5MTk1NjMzNSAtMDYwMApjb21taXR0ZXIgUHJvc2VQcm9iZSBhZ2VudCBjaGFsbGVuZ2UgPGFnZW50LWNoYWxsZW5nZUBleGFtcGxlLmludmFsaWQ+IDE3OTE5NTYzMzUgLTA2MDAKCkNyZWF0ZSBsb2NhbCBsaW5rIHJldmlldyBjaGFsbGVuZ2UK",
+      "raw_sha256": "24c1c2407bd1b7c0c8239c1a064a98d907b189f5b603c7d737bf0522565a6afd"
+    },
+    {
+      "kind": "tree",
+      "object_id": "b7464a04e7339508958cdb01def6b9774a1f39d9",
+      "raw_base64": "MTAwNjQ0IGVudHJ5Lm1kAIIz5lNhgAXNVTTi8tYnE+JoUxeZMTAwNjQ0IHNldHVwLm1kAEgO9MkS0DjlGic0EfiSP/pinrAk",
+      "raw_sha256": "a5c555145c5752a528653dd1719a9aab6f9880db51ba7b76b103e4123cdfe0ef"
+    },
+    {
+      "kind": "blob",
+      "object_id": "8233e653618005cd5534e2f2d62713e268531799",
+      "raw_base64": "IyBXb3JrZmxvdwoKUmVhZCBbaW5zdGFsbGF0aW9uXShzZXR1cC5tZCNpbnN0YWxsKSBiZWZvcmUgcnVubmluZyB0aGUgY2xpZW50LgpSZWFkIFtjb25maWd1cmF0aW9uXShzZXR1cC5tZCNjb25maWd1cmF0aW9uKSBmb3IgYWRkaXRpb25hbCBzZXR0aW5ncy4KUmVhZCBbbWlncmF0aW9uXShtaXNzaW5nLm1kKSBiZWZvcmUgdXBncmFkaW5nLgpSZWFkIFtvdmVydmlld10oI3dvcmtmbG93KSB0byByZXR1cm4gdG8gdGhpcyBwYWdlLgpSZWFkIFtsaW1pdGF0aW9uc10oI2xpbWl0YXRpb25zKSBiZWZvcmUgY2hhbmdpbmcgdGhlIGNvbmZpZ3VyYXRpb24uCg==",
+      "raw_sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1"
+    },
+    {
+      "kind": "blob",
+      "object_id": "480ef4c912d038e51a273411f8923ffa629eb024",
+      "raw_base64": "IyBJbnN0YWxsCgpJbnN0YWxsIHRoZSBjbGllbnQgd2l0aCB0aGUgcGFja2FnZSBtYW5hZ2VyLgoKYGBgbWFya2Rvd24KIyBDb25maWd1cmF0aW9uCmBgYAoKIyMgQ29uZmlndXJhdGlvbiBub3RlcwoKVGhlIGNvbmZpZ3VyYXRpb24gaGVhZGluZyBpbnNpZGUgdGhlIGV4YW1wbGUgZG9lcyBub3QgY3JlYXRlIGEgc2VjdGlvbi4K",
+      "raw_sha256": "30e40d742a09cb169b0abac6b3fb5a5fc1cafd287b3c61d7cad9a6cee1decfbb"
+    }
+  ],
+  "purpose": "offline recovery of the complete pinned synthetic Git context if its ignored cache is lost",
+  "revision": "ce2e2844bd9a3ca5b5a74ae41828c65f454c973b",
+  "source_bytes_population": "root-authored challenge only; no natural or holdout objects",
+  "version": 1
+}

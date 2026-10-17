@@ -1,0 +1,125 @@
+{
+  "rules": {
+    "C004": {
+      "applies_to": [
+        "python"
+      ],
+      "category": "Code",
+      "config_key": null,
+      "content_scope": "raw",
+      "default_confidence": "medium",
+      "default_severity": "info",
+      "description": "Detects context-free markers, generic TODOs, and boilerplate",
+      "id": "C004",
+      "name": "Formulaic Placeholders",
+      "profiles": [
+        "technical-docs"
+      ]
+    },
+    "C009": {
+      "applies_to": [
+        "python"
+      ],
+      "category": "Code",
+      "config_key": null,
+      "content_scope": "raw",
+      "default_confidence": "high",
+      "default_severity": "info",
+      "description": "Detects Sphinx parameter names or explicit kinds that conflict with signatures",
+      "id": "C009",
+      "name": "Stale Docstring Parameter",
+      "profiles": []
+    },
+    "C010": {
+      "applies_to": [
+        "python"
+      ],
+      "category": "Code",
+      "config_key": null,
+      "content_scope": "raw",
+      "default_confidence": "medium",
+      "default_severity": "info",
+      "description": "Detects explicit None annotations conflicting with Sphinx int return types",
+      "id": "C010",
+      "name": "Explicit Return Type Conflict",
+      "profiles": []
+    },
+    "G038": {
+      "applies_to": [
+        "markdown",
+        "python"
+      ],
+      "category": "Grammar",
+      "config_key": null,
+      "content_scope": "prose",
+      "default_confidence": "low",
+      "default_severity": "info",
+      "description": "Detects predicate comparatives without an attached comparison target",
+      "id": "G038",
+      "name": "Undefined Comparative",
+      "profiles": []
+    },
+    "G039": {
+      "applies_to": [
+        "markdown",
+        "python"
+      ],
+      "category": "Grammar",
+      "config_key": null,
+      "content_scope": "prose",
+      "default_confidence": "high",
+      "default_severity": "info",
+      "description": "Detects repeated adjacent function words",
+      "id": "G039",
+      "name": "Repeated Function Word",
+      "profiles": []
+    },
+    "M011": {
+      "applies_to": [
+        "markdown"
+      ],
+      "category": "Markup",
+      "config_key": "markdown_anchor_style",
+      "content_scope": "non_code",
+      "default_confidence": "high",
+      "default_severity": "info",
+      "description": "Detects unresolved same-document links under the GitHub anchor policy",
+      "id": "M011",
+      "name": "Unresolved Same-Document Fragment",
+      "profiles": []
+    },
+    "V015": {
+      "applies_to": [
+        "markdown",
+        "python"
+      ],
+      "category": "Vocabulary",
+      "config_key": null,
+      "content_scope": "prose",
+      "default_confidence": "low",
+      "default_severity": "info",
+      "description": "Detects curated superlative claims lacking local comparison",
+      "id": "V015",
+      "name": "Unbounded Superlative",
+      "profiles": []
+    },
+    "V016": {
+      "applies_to": [
+        "markdown",
+        "python"
+      ],
+      "category": "Vocabulary",
+      "config_key": null,
+      "content_scope": "prose",
+      "default_confidence": "medium",
+      "default_severity": "info",
+      "description": "Detects absolute reliability and security claims",
+      "id": "V016",
+      "name": "Absolute Reliability Claim",
+      "profiles": [
+        "technical-docs"
+      ]
+    }
+  },
+  "version": 1
+}

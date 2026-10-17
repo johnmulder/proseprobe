@@ -1,0 +1,445 @@
+{
+  "eligible_reference_count": 0,
+  "excluded_destination_count": 35,
+  "reserved_holdout_bytes_opened": false,
+  "scope": "Production static extraction and target-path eligibility only; no diagnostic check, target existence judgment, labels or predictions",
+  "selection_sha256": "1ccd1fd8c1a805e3b22e6d3dd8991bdd88c646bd8bce5d8f9d6ca06699f95116",
+  "source_count": 12,
+  "sources": [
+    {
+      "anchor_membership_count": 1,
+      "bytes": 346,
+      "cache_path": "native-continuation/2026-10-15/requests/.github/CODE_OF_CONDUCT.md",
+      "exact_holdout_hash_match": false,
+      "excluded_destinations": [
+        {
+          "column": 36,
+          "destination": "https://www.python.org/psf/codeofconduct/",
+          "end_column": 77,
+          "line": 6,
+          "reason": "production-resolver-exclusion"
+        }
+      ],
+      "lines": 6,
+      "native_path": ".github/CODE_OF_CONDUCT.md",
+      "normalized_duplicate_evidence": "unavailable; no reserved bytes read",
+      "references": [],
+      "sha256": "0216c86755ca264f605593cc82deadc13c3e84b97a60bf461fcda7b4b8b23242",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/CODE_OF_CONDUCT.md",
+      "static_context": "supported"
+    },
+    {
+      "anchor_membership_count": 3,
+      "bytes": 2885,
+      "cache_path": "native-continuation/2026-10-15/requests/.github/CONTRIBUTING.md",
+      "exact_holdout_hash_match": false,
+      "excluded_destinations": [
+        {
+          "column": 27,
+          "destination": "https://requests.readthedocs.io/en/latest/dev/contributing/",
+          "end_column": 86,
+          "line": 4,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 41,
+          "destination": "https://stackoverflow.com/",
+          "end_column": 67,
+          "line": 13,
+          "reason": "production-resolver-exclusion"
+        }
+      ],
+      "lines": 54,
+      "native_path": ".github/CONTRIBUTING.md",
+      "normalized_duplicate_evidence": "unavailable; no reserved bytes read",
+      "references": [],
+      "sha256": "6ce203a20b7bc3c87eccdb9be5888bded1bcb7743a598b3cf91b7be65f41f4e0",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/CONTRIBUTING.md",
+      "static_context": "supported"
+    },
+    {
+      "anchor_membership_count": 4,
+      "bytes": 394,
+      "cache_path": "native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE.md",
+      "exact_holdout_hash_match": false,
+      "excluded_destinations": [],
+      "lines": 28,
+      "native_path": ".github/ISSUE_TEMPLATE.md",
+      "normalized_duplicate_evidence": "unavailable; no reserved bytes read",
+      "references": [],
+      "sha256": "24ac47c35e70fb3c7dfb2b768ac3ae49f6ea997b96beca4fe489f279429509ca",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/ISSUE_TEMPLATE.md",
+      "static_context": "supported"
+    },
+    {
+      "anchor_membership_count": 4,
+      "bytes": 548,
+      "cache_path": "native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE/Bug_report.md",
+      "exact_holdout_hash_match": false,
+      "excluded_destinations": [],
+      "lines": 36,
+      "native_path": ".github/ISSUE_TEMPLATE/Bug_report.md",
+      "normalized_duplicate_evidence": "unavailable; no reserved bytes read",
+      "references": [],
+      "sha256": "4887dbec17c9e2fd703c0c8ae3e20882f9be53f7fe4a36d61c130838576afe35",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/ISSUE_TEMPLATE/Bug_report.md",
+      "static_context": "supported"
+    },
+    {
+      "anchor_membership_count": 0,
+      "bytes": 249,
+      "cache_path": "native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE/Custom.md",
+      "exact_holdout_hash_match": false,
+      "excluded_destinations": [
+        {
+          "column": 42,
+          "destination": "https://stackoverflow.com/questions/tagged/python-requests",
+          "end_column": 100,
+          "line": 10,
+          "reason": "production-resolver-exclusion"
+        }
+      ],
+      "lines": 10,
+      "native_path": ".github/ISSUE_TEMPLATE/Custom.md",
+      "normalized_duplicate_evidence": "unavailable; no reserved bytes read",
+      "references": [],
+      "sha256": "3f1a2a5591714c25485a4ce6679cec328962f4fd223ce02e2ddeaf43c86f1496",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/ISSUE_TEMPLATE/Custom.md",
+      "static_context": "supported"
+    },
+    {
+      "anchor_membership_count": 0,
+      "bytes": 194,
+      "cache_path": "native-continuation/2026-10-15/requests/.github/ISSUE_TEMPLATE/Feature_request.md",
+      "exact_holdout_hash_match": false,
+      "excluded_destinations": [],
+      "lines": 10,
+      "native_path": ".github/ISSUE_TEMPLATE/Feature_request.md",
+      "normalized_duplicate_evidence": "unavailable; no reserved bytes read",
+      "references": [],
+      "sha256": "97d416c863d8090ae33909cbf90693aca37a23108d5d8e30003b28eaa7b64e40",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/ISSUE_TEMPLATE/Feature_request.md",
+      "static_context": "supported"
+    },
+    {
+      "anchor_membership_count": 3,
+      "bytes": 4209,
+      "cache_path": "native-continuation/2026-10-15/requests/.github/SECURITY.md",
+      "exact_holdout_hash_match": false,
+      "excluded_destinations": [
+        {
+          "column": 31,
+          "destination": "mailto:nate.prewitt@gmail.com",
+          "end_column": 60,
+          "line": 4,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 12,
+          "destination": "mailto:sethmichaellarson@gmail.com",
+          "end_column": 46,
+          "line": 5,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 70,
+          "destination": "https://keybase.io/nateprewitt",
+          "end_column": 100,
+          "line": 10,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 70,
+          "destination": "https://keybase.io/sethmlarson",
+          "end_column": 100,
+          "line": 12,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 38,
+          "destination": "https://keybase.io",
+          "end_column": 56,
+          "line": 14,
+          "reason": "production-resolver-exclusion"
+        }
+      ],
+      "lines": 93,
+      "native_path": ".github/SECURITY.md",
+      "normalized_duplicate_evidence": "unavailable; no reserved bytes read",
+      "references": [],
+      "sha256": "d829bca715473cd6460083460346f8f4dd223fc282908fa5f001f8bc0f594892",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:.github/SECURITY.md",
+      "static_context": "supported"
+    },
+    {
+      "anchor_membership_count": 158,
+      "bytes": 60368,
+      "cache_path": "native-continuation/2026-10-15/requests/HISTORY.md",
+      "exact_holdout_hash_match": false,
+      "excluded_destinations": [
+        {
+          "column": 62,
+          "destination": "https://github.com/psf/requests/security/advisories/GHSA-j8r2-6x86-q33q",
+          "end_column": 133,
+          "line": 108,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 24,
+          "destination": "https://nvd.nist.gov/vuln/detail/CVE-2023-32681",
+          "end_column": 71,
+          "line": 109,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 32,
+          "destination": "https://bugfuzz.com",
+          "end_column": 51,
+          "line": 1007,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 28,
+          "destination": "https://github.com/shazow/urllib3/pull/540",
+          "end_column": 70,
+          "line": 1038,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 28,
+          "destination": "https://github.com/shazow/urllib3/pull/544",
+          "end_column": 70,
+          "line": 1040,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 28,
+          "destination": "https://github.com/shazow/urllib3/pull/549",
+          "end_column": 70,
+          "line": 1056,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 28,
+          "destination": "https://github.com/shazow/urllib3/pull/534",
+          "end_column": 70,
+          "line": 1058,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 28,
+          "destination": "https://github.com/shazow/urllib3/pull/526",
+          "end_column": 70,
+          "line": 1060,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 28,
+          "destination": "https://github.com/shazow/urllib3/pull/535",
+          "end_column": 70,
+          "line": 1062,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 28,
+          "destination": "https://github.com/shazow/urllib3/pull/551",
+          "end_column": 70,
+          "line": 1068,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 15,
+          "destination": "https://github.com/psf/requests/issues/2249",
+          "end_column": 58,
+          "line": 1129,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 15,
+          "destination": "https://github.com/psf/requests/pull/2258",
+          "end_column": 56,
+          "line": 1137,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 15,
+          "destination": "https://github.com/psf/requests/pull/2238",
+          "end_column": 56,
+          "line": 1139,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 15,
+          "destination": "https://github.com/psf/requests/pull/2244",
+          "end_column": 56,
+          "line": 1144,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 15,
+          "destination": "https://github.com/psf/requests/issues/2240",
+          "end_column": 58,
+          "line": 1146,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 14,
+          "destination": "https://github.com/psf/requests/issues/2241",
+          "end_column": 57,
+          "line": 1147,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 15,
+          "destination": "https://github.com/psf/requests/pull/2245/",
+          "end_column": 57,
+          "line": 1152,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 15,
+          "destination": "https://github.com/psf/requests/pull/2227/",
+          "end_column": 57,
+          "line": 1154,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 15,
+          "destination": "https://github.com/psf/requests/pull/2248/",
+          "end_column": 57,
+          "line": 1156,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 17,
+          "destination": "https://github.com/kennethreitz/grequests",
+          "end_column": 58,
+          "line": 1529,
+          "reason": "production-resolver-exclusion"
+        }
+      ],
+      "lines": 1982,
+      "native_path": "HISTORY.md",
+      "normalized_duplicate_evidence": "unavailable; no reserved bytes read",
+      "references": [],
+      "sha256": "0eb3e62434380d747997cd019e03d4a502e5e77021554735db19b1cde419a679",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:HISTORY.md",
+      "static_context": "supported"
+    },
+    {
+      "anchor_membership_count": 1,
+      "bytes": 343,
+      "cache_path": "native-continuation/2026-10-15/requests/tests/certs/README.md",
+      "exact_holdout_hash_match": false,
+      "excluded_destinations": [
+        {
+          "column": 13,
+          "destination": "./expired",
+          "end_column": 22,
+          "line": 8,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 10,
+          "destination": "./mtls",
+          "end_column": 16,
+          "line": 9,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 11,
+          "destination": "./valid",
+          "end_column": 18,
+          "line": 10,
+          "reason": "production-resolver-exclusion"
+        }
+      ],
+      "lines": 10,
+      "native_path": "tests/certs/README.md",
+      "normalized_duplicate_evidence": "unavailable; no reserved bytes read",
+      "references": [],
+      "sha256": "a902fe53d4cc6224b59532e47d94fc42726b2227462e801538aa50a7888d38f3",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:tests/certs/README.md",
+      "static_context": "supported"
+    },
+    {
+      "anchor_membership_count": 1,
+      "bytes": 228,
+      "cache_path": "native-continuation/2026-10-15/requests/tests/certs/expired/README.md",
+      "exact_holdout_hash_match": false,
+      "excluded_destinations": [
+        {
+          "column": 48,
+          "destination": "./ca",
+          "end_column": 52,
+          "line": 3,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 25,
+          "destination": "./server",
+          "end_column": 33,
+          "line": 4,
+          "reason": "production-resolver-exclusion"
+        }
+      ],
+      "lines": 11,
+      "native_path": "tests/certs/expired/README.md",
+      "normalized_duplicate_evidence": "unavailable; no reserved bytes read",
+      "references": [],
+      "sha256": "80690554d2353ab1c348bee8df833bdf7b3cd1cb8d728b4380221f34b5881eeb",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:tests/certs/expired/README.md",
+      "static_context": "supported"
+    },
+    {
+      "anchor_membership_count": 1,
+      "bytes": 180,
+      "cache_path": "native-continuation/2026-10-15/requests/tests/certs/mtls/README.md",
+      "exact_holdout_hash_match": false,
+      "excluded_destinations": [],
+      "lines": 4,
+      "native_path": "tests/certs/mtls/README.md",
+      "normalized_duplicate_evidence": "unavailable; no reserved bytes read",
+      "references": [],
+      "sha256": "57dd4ec5bd44f1d2e1bc2de7e6cb292eb62f2236d34fd889a46d81a19dbde9f7",
+      "source_group": "psf/requests",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:tests/certs/mtls/README.md",
+      "static_context": "supported"
+    },
+    {
+      "anchor_membership_count": 21,
+      "bytes": 24131,
+      "cache_path": "extension/sources/fastapi/fastapi/README.md",
+      "exact_holdout_hash_match": false,
+      "excluded_destinations": [
+        {
+          "column": 155,
+          "destination": "#performance",
+          "end_column": 167,
+          "line": 34,
+          "reason": "production-resolver-exclusion"
+        }
+      ],
+      "lines": 499,
+      "native_path": "README.md",
+      "normalized_duplicate_evidence": "unavailable; no reserved bytes read",
+      "references": [],
+      "sha256": "4fd6beb4d1c0bbe7c3ff56b18a3d106efaa7edd33f6c13ed357bd8a4e942a7f6",
+      "source_group": "fastapi/fastapi",
+      "source_id": "fastapi/fastapi:40e33e492dbf4af6172997f4e3238a32e56cbe26:README.md",
+      "static_context": "supported"
+    }
+  ],
+  "supported_source_count": 12,
+  "version": 1
+}

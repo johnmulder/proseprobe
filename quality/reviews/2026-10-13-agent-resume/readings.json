@@ -1,0 +1,215 @@
+{
+  "readings": [
+    {
+      "id": "A001",
+      "lines": 47,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A001.json",
+      "sha256": "da90b489a53f5e994e1cecdda987eca6b11c34d0708b80bc595de3df08c820ab"
+    },
+    {
+      "id": "A002",
+      "lines": 67,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A002.json",
+      "sha256": "939a8ee7a07583bf031f45568c56a3f4656b4c952c60dfb7501d53ab42b2cc55"
+    },
+    {
+      "id": "A003",
+      "lines": 64,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A003.json",
+      "sha256": "f70d6e610c788b1be823c8b0b795f7ac6439a41a69c2947ea2a89e85f3604800"
+    },
+    {
+      "id": "A004",
+      "lines": 71,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A004.json",
+      "sha256": "346f2ff1a9302fd1f72f6354b549260b04491566fc1fd89d66ce3c60cfc35556"
+    },
+    {
+      "id": "A005",
+      "lines": 65,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A005.json",
+      "sha256": "b6688766077172f4e5af788e1b7f40d99625c66a511cf857ba1cf94d0e3220f7"
+    },
+    {
+      "id": "A006",
+      "lines": 64,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A006.json",
+      "sha256": "d383bc22b4aef3a96bd970d32c8207e3babf2dcd853c9114fce357e4cd8bfd83"
+    },
+    {
+      "id": "A007",
+      "lines": 58,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A007.json",
+      "sha256": "15369a849aeb6a481f697ac9b76989357b211f8153eace8689954f79de878c2d"
+    },
+    {
+      "id": "A008",
+      "lines": 76,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A008.json",
+      "sha256": "84050318edbd55e13e9d2decd8c1fc17f44d63d0d9e5591cf839e89f852ac239"
+    },
+    {
+      "id": "A009",
+      "lines": 37,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A009.json",
+      "sha256": "172894201a5b9c513187cd8fd7526fe021bbc5652271a8e024c8f5f3dabf3358"
+    },
+    {
+      "id": "A010",
+      "lines": 61,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A010.json",
+      "sha256": "a6d11a46e58b727331255ba84f080dc4ca7bd5576f71fa4b597f4ac140e2eff9"
+    },
+    {
+      "id": "A011",
+      "lines": 27,
+      "max_width": 78,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A011.json",
+      "sha256": "99b9bdf7b9d27bbbdbbe4c4debacfea52816f0fa8c139d02ab5604249a381cc0"
+    },
+    {
+      "id": "A012",
+      "lines": 63,
+      "max_width": 79,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A012.json",
+      "sha256": "cf92d03aa7afbf716d5f7fcabae72c027a1f300ebebc58f3e42ea46c00564e7f"
+    },
+    {
+      "id": "A013",
+      "lines": 62,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A013.json",
+      "sha256": "bbf49bdc2628e74fe1ef1adc6dad12a127facbf1a52b15558bea8cd437fa3e55"
+    },
+    {
+      "id": "A014",
+      "lines": 61,
+      "max_width": 78,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A014.json",
+      "sha256": "159c0d9b20d9061c6637479ed9ddd5fc6265d09d85f292d83a13a062f8f9c073"
+    },
+    {
+      "id": "A015",
+      "lines": 64,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A015.json",
+      "sha256": "a05ba9311a4fee71f4c3aad2a17258b41847986077358654ae22d7537590bafd"
+    },
+    {
+      "id": "A016",
+      "lines": 69,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A016.json",
+      "sha256": "8e4c8adecd524a60048b7930e0cca4f359e30107d4fc215c0317c780c1a2187f"
+    },
+    {
+      "id": "A017",
+      "lines": 63,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A017.json",
+      "sha256": "88e7cf7b217b5de22ad1f6fbfaf20fd07323097b815091d243052ff02537537e"
+    },
+    {
+      "id": "A018",
+      "lines": 62,
+      "max_width": 78,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A018.json",
+      "sha256": "a6da00aca1bb70bcc07b183fb8d694a00555aa16b47405dbd3e6e942f62df100"
+    },
+    {
+      "id": "A019",
+      "lines": 60,
+      "max_width": 79,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A019.json",
+      "sha256": "9fa13aa8b190643b186bd8ed1a14d635a36774385383cb73209f856465f3809a"
+    },
+    {
+      "id": "A020",
+      "lines": 63,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A020.json",
+      "sha256": "3eb9027d52b7a3d1d9111f980554a118b77a1ef4e0f85f4af1f58de60af82178"
+    },
+    {
+      "id": "A021",
+      "lines": 64,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A021.json",
+      "sha256": "c3536be60ad5211a1d0a580982036997c68b2dc891f641f5430a2041fc022dc7"
+    },
+    {
+      "id": "A022",
+      "lines": 61,
+      "max_width": 80,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A022.json",
+      "sha256": "dbc0d13cc675366cc22cbae007816a9ef93b4e016d08685b1260a00a1287d5bc"
+    },
+    {
+      "id": "A023",
+      "lines": 60,
+      "max_width": 78,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A023.json",
+      "sha256": "f1306d356a0b74a533b89f43156b9d405381fc0c3a216cb154a2753a39c0413f"
+    },
+    {
+      "id": "A024",
+      "lines": 61,
+      "max_width": 78,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A024.json",
+      "sha256": "b2dbe4a8d3172412dd3c2ea90b3ab56fc0d51713f1aa1806ded1d1c39a4ed6b3"
+    },
+    {
+      "id": "A025",
+      "lines": 63,
+      "max_width": 78,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A025.json",
+      "sha256": "bce6faf6c1fb151bbaad1bf3708b6d3abfca78c47329bf05229b8a96710f9d6d"
+    },
+    {
+      "id": "A026",
+      "lines": 18,
+      "max_width": 71,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A026.json",
+      "sha256": "c51eee5917df785249a72df8e3e3e0131963263f77dd5a48e94a46f710f6052d"
+    },
+    {
+      "id": "A027",
+      "lines": 38,
+      "max_width": 76,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A027.json",
+      "sha256": "3ba6ac15f81b2f39c23551d2a30de75da518d17899101a1fe2ba2efeae9e6643"
+    },
+    {
+      "id": "A028",
+      "lines": 57,
+      "max_width": 73,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A028.json",
+      "sha256": "98f01f623ff22668c7f64508250a2fce1ee67568e05e3982f1e1d2be0823daa3"
+    },
+    {
+      "id": "A029",
+      "lines": 21,
+      "max_width": 71,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A029.json",
+      "sha256": "70ceeb443bdf196c92da1eebaead127add64a31762f8b0cc1c30dbb146433545"
+    },
+    {
+      "id": "A030",
+      "lines": 25,
+      "max_width": 79,
+      "path": "quality/reviews/2026-10-13-agent-resume/readings/A030.json",
+      "sha256": "a16351014a78d712c7e70c356e500e619b1bb62eee980248f032f3f69ea0d4ad"
+    }
+  ],
+  "version": 1
+}

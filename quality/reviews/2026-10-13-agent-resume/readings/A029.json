@@ -1,0 +1,68 @@
+{
+  "cohort": "authored-challenge",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A029.txt",
+  "packet_path": "originals/0001.py",
+  "pair_group": "agent-authored-pilot:documentation.py",
+  "reading_id": "A029",
+  "region": {
+    "column": 1,
+    "end_column": 24,
+    "end_line": 44,
+    "line": 41
+  },
+  "rendered_sha256": "70ceeb443bdf196c92da1eebaead127add64a31762f8b0cc1c30dbb146433545",
+  "rendered_text": "Blind agent reading A029: authored-challenge.\nReading file: [A029](/private/tmp/proseprobe-A029.txt)\nAttribution: Root agent authored challenge; project MIT license.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL41 C 1-33 |     :param payload: Input bytes.\nL42 C 1-16 |     :rtype: int\nL43 C 1- 8 |     \"\"\"\nL44 C 1-24 |     return str(payload)\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 41,
+      "line": 41,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "    :param payload: Input bytes."
+    },
+    {
+      "column": 1,
+      "end_column": 16,
+      "end_line": 42,
+      "line": 42,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "    :rtype: int"
+    },
+    {
+      "column": 1,
+      "end_column": 8,
+      "end_line": 43,
+      "line": 43,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "    \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 24,
+      "end_line": 44,
+      "line": 44,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "    return str(payload)"
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+  "source_group": "agent-authored-pilot",
+  "source_id": "agent-authored-pilot:documentation.py",
+  "split": "development",
+  "version": 1
+}

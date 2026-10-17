@@ -8,11 +8,24 @@ import hashlib
 import json
 import sys
 from collections import defaultdict
+from contextlib import ExitStack
 from dataclasses import asdict, replace
 from pathlib import Path
 from typing import Any
 
 from benchmarks.evaluation_identity import runtime_identity
+from benchmarks.native_link_context import (
+    NativeContextError,
+    materialize_native_context,
+)
+from benchmarks.native_reference_context import (
+    VerifiedReferenceContext,
+    annotation_native_sources,
+    native_markdown_text,
+    preflight_native_review,
+    reference_context_evidence,
+    validate_reference_context,
+)
 from benchmarks.quality_scoring import (
     ActualFinding,
     AnnotationError,
@@ -31,6 +44,7 @@ from benchmarks.quality_scoring import (
     score_breakdowns,
     score_findings,
     total_metrics,
+    validate_review_bindings,
     validate_source_bindings,
     wilson_interval,
 )
@@ -159,6 +173,7 @@ def prepare_evaluation_scan(
     severity: str | None = None,
     min_confidence: str | None = None,
     project_root: Path | None = None,
+    markdown_anchor_style: str | None = None,
 ) -> tuple[Config, Linter, list[Rule]]:
     """Construct isolated legacy or production policy without config discovery."""
     overrides = (config is not None, profile, select, ignore, severity, min_confidence)
@@ -169,6 +184,8 @@ def prepare_evaluation_scan(
         if any(overrides):
             raise ValueError("all-rules mode cannot be combined with policy overrides")
         base = Config(markdown_anchor_style="github")
+        if markdown_anchor_style is not None:
+            base.markdown_anchor_style = markdown_anchor_style
         if project_root is not None:
             base.local_links = True
             base.project_root = str(project_root.resolve())
@@ -180,6 +197,8 @@ def prepare_evaluation_scan(
     if mode != "production":
         raise ValueError(f"unknown evaluation mode: {mode}")
     base = config if config is not None else Config()
+    if markdown_anchor_style is not None:
+        base.markdown_anchor_style = markdown_anchor_style
     if project_root is not None:
         base.local_links = True
         base.project_root = str(project_root.resolve())
@@ -250,12 +269,29 @@ def collect_findings(
     *,
     linter: Linter | None = None,
     min_confidence: str = "low",
+    native_context: VerifiedReferenceContext | None = None,
+    native_root: Path | None = None,
 ) -> tuple[ActualFinding, ...]:
     """Collect findings under explicit policy or the legacy all-rules default."""
     if linter is None:
         _config, linter, _rules = prepare_evaluation_scan()
     validate_source_bindings(annotations, repo_root)
     verified = dict(annotations.verified_sources)
+    native_sources = {}
+    if native_context is not None:
+        if (
+            native_root is None
+            or not linter.config.local_links
+            or linter.config.project_root != str(native_root.resolve())
+            or linter.config.markdown_anchor_style != native_context.renderer
+            or linter.config.local_link_exclude
+        ):
+            raise AnnotationError(
+                "bound native scan requires its exact private root and renderer"
+            )
+        native_sources = annotation_native_sources(annotations, native_context)
+    elif native_root is not None:
+        raise AnnotationError("native scan root requires verified reference context")
     if annotations.verified_sources:
         issues_by_file = {}
         for path in linter.discover_files(list(annotations.files)):
@@ -268,7 +304,20 @@ def collect_findings(
                 raise AnnotationError(
                     f"{relative}: cached reviewed source SHA-256 differs"
                 )
-            issues = linter.check_content(source_bytes.decode("utf-8"), path)
+            if native_context is not None:
+                native_path, native_bytes = native_sources[relative]
+                if source_bytes != native_bytes:
+                    raise AnnotationError(
+                        "reviewed source snapshot differs from verified native bytes"
+                    )
+                assert native_root is not None
+                issues = linter._check_content(
+                    native_markdown_text(native_bytes),
+                    path,
+                    source_path=native_root.resolve() / native_path,
+                )
+            else:
+                issues = linter.check_content(source_bytes.decode("utf-8"), path)
             if issues:
                 issues_by_file[path] = issues
     else:
@@ -348,6 +397,7 @@ def format_json_report(
     manifest_path: Path,
     repo_root: Path,
     gate: dict[str, object] | None = None,
+    local_link_context: dict[str, Any] | None = None,
 ) -> str:
     """Report counts with explicit policy and reproducible corpus provenance."""
     root = repo_root.resolve()
@@ -361,6 +411,8 @@ def format_json_report(
     runtime = runtime_identity()
     policy = asdict(config)
     policy["source_path"] = str(config.source_path) if config.source_path else None
+    if local_link_context is not None:
+        policy["project_root"] = "verified-native-context"
     totals = {
         name: sum(getattr(metrics, name) for metrics in score.metrics.values())
         for name in asdict(RuleMetrics())
@@ -412,7 +464,9 @@ def format_json_report(
             if any(item.match_region is not None for item in eligible.expected)
             else "exact-start",
             "policy": policy,
-            "local_link_context": {
+            "local_link_context": local_link_context
+            if local_link_context is not None
+            else {
                 "root": config.project_root,
                 "enabled": config.local_links,
                 "target_binding": "unavailable"
@@ -536,12 +590,31 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="require version-three source-bound annotations",
     )
+    parser.add_argument(
+        "--native-repository",
+        type=Path,
+        help="offline pinned Git object repository for the bound review artifact",
+    )
+    parser.add_argument(
+        "--source-manifest",
+        type=Path,
+        help="frozen acquisition metadata for the bound native review artifact",
+    )
+    parser.add_argument(
+        "--native-cache-root",
+        type=Path,
+        help="cache root containing the exact bound native source and target bytes",
+    )
     args = parser.parse_args(argv)
     mode = args.mode or (
         "production"
         if any((args.profile, args.severity, args.min_confidence, args.project_root))
         else "all-rules"
     )
+    stack = ExitStack()
+    native_context = None
+    native_root = None
+    local_link_context = None
     try:
         config, linter, rules = prepare_evaluation_scan(
             mode=mode,
@@ -555,8 +628,77 @@ def main(argv: list[str] | None = None) -> int:
     rule_ids = {rule.id for rule in rules}
     try:
         registry_ids = {rule.id for rule in get_all_rules()}
-        annotations = load_annotations(args.manifest, args.root, registry_ids)
-        if args.require_bound and config.local_links:
+        native_inputs = (
+            args.native_repository,
+            args.source_manifest,
+            args.native_cache_root,
+        )
+        native_preflight = preflight_native_review(args.manifest, args.source_manifest)
+        if native_preflight is not None:
+            if not all(native_inputs):
+                raise AnnotationError(
+                    "bound review requires all offline native context validation inputs"
+                )
+            if args.project_root is not None or args.gate is not None:
+                raise AnnotationError(
+                    "bound native context cannot combine with project-root or a curated regression gate"
+                )
+
+            def guard_native_metadata() -> None:
+                current = preflight_native_review(args.manifest, args.source_manifest)
+                if current is None or current[0] != native_preflight[0]:
+                    raise AnnotationError(
+                        "native review metadata differs from preflight"
+                    )
+
+            native_context = validate_reference_context(
+                native_preflight[1],
+                args.source_manifest,
+                args.native_cache_root,
+                args.native_repository,
+                metadata_guard=guard_native_metadata,
+            )
+            if (
+                hashlib.sha256(args.source_manifest.read_bytes()).hexdigest()
+                != native_context.native.manifest_sha256
+            ):
+                raise NativeContextError(
+                    "source manifest SHA-256 differs after native validation"
+                )
+        elif any(native_inputs):
+            raise AnnotationError(
+                "offline native context inputs require a hash-bound review artifact"
+            )
+        annotations = (
+            load_annotations(
+                args.manifest,
+                args.root,
+                registry_ids,
+                required_manifest_sha256=native_preflight[0],
+            )
+            if native_preflight is not None
+            else load_annotations(args.manifest, args.root, registry_ids)
+        )
+        if native_context is not None:
+            annotation_native_sources(annotations, native_context)
+            native_root = stack.enter_context(
+                materialize_native_context(native_context.native)
+            ).resolve()
+            config, linter, rules = prepare_evaluation_scan(
+                mode=mode,
+                profile=args.profile,
+                severity=args.severity,
+                min_confidence=args.min_confidence,
+                project_root=native_root,
+                markdown_anchor_style=native_context.renderer,
+            )
+            rule_ids = {rule.id for rule in rules}
+            assert annotations.review_provenance is not None
+            local_link_context = reference_context_evidence(
+                native_context,
+                annotations.review_provenance["native_context"]["sha256"],
+            )
+        if args.require_bound and config.local_links and native_context is None:
             raise AnnotationError(
                 "strict source-bound evaluation cannot enable local_links: native target paths/bytes are not bound"
             )
@@ -579,7 +721,12 @@ def main(argv: list[str] | None = None) -> int:
             annotations = bind_gate_sources(annotations, gate_record, args.root)
         eligible = eligible_annotations(annotations, args.root, linter, rules)
         actual = collect_findings(
-            annotations, args.root, linter=linter, min_confidence=config.min_confidence
+            annotations,
+            args.root,
+            linter=linter,
+            min_confidence=config.min_confidence,
+            native_context=native_context,
+            native_root=native_root,
         )
         if mode == "all-rules":
             by_id = {rule.id: rule for rule in rules}
@@ -604,6 +751,16 @@ def main(argv: list[str] | None = None) -> int:
             load_gate_record(
                 args.gate, annotations, args.manifest, args.root, mode, config, rules
             )
+        if native_context is not None:
+            validate_review_bindings(annotations, args.manifest)
+            guard_native_metadata()
+            if (
+                hashlib.sha256(args.source_manifest.read_bytes()).hexdigest()
+                != native_context.native.manifest_sha256
+            ):
+                raise NativeContextError(
+                    "source manifest SHA-256 differs before report publication"
+                )
         output = (
             format_json_report(
                 score,
@@ -614,15 +771,31 @@ def main(argv: list[str] | None = None) -> int:
                 manifest_path=args.manifest,
                 repo_root=args.root,
                 gate=gate_result,
+                local_link_context=local_link_context,
             )
             if args.format == "json"
             else format_report(score)
         )
-    except (AnnotationError, ConfigError, OSError, UnicodeDecodeError) as exc:
+        if native_context is not None:
+            validate_review_bindings(annotations, args.manifest)
+            guard_native_metadata()
+    except (
+        AnnotationError,
+        ConfigError,
+        NativeContextError,
+        OSError,
+        UnicodeDecodeError,
+    ) as exc:
         print(f"Rule quality error: {exc}", file=sys.stderr)
         return 2
+    finally:
+        stack.close()
     if args.format == "text":
-        if config.local_links:
+        if local_link_context is not None:
+            print(
+                f"Local link context: verified native reference closure; renderer: {local_link_context['renderer']}; artifact SHA-256: {local_link_context['artifact_sha256']}; inventory SHA-256: {local_link_context['inventory_sha256']}; excluded destinations: {local_link_context['excluded_destinations_count']}"
+            )
+        elif config.local_links:
             print(
                 f"Local link context: {config.project_root}; target binding: unavailable (native-context-not-bound)"
             )

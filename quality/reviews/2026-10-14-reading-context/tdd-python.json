@@ -1,0 +1,103 @@
+{
+  "focused_passed": 52,
+  "full_suite_passed": 3710,
+  "genuine_red_cases": [
+    "decorator-only owning context",
+    "canonical rule scope missing on each page"
+  ],
+  "initial_21_cases": "characterization GREEN; draft implementation preceded completed tests",
+  "logs": [
+    {
+      "command": "pytest tests/test_review_context.py -k 'every_linked_page_repeats_canonical_rule_scope or decorator'",
+      "exit_code": 1,
+      "log": "quality/reviews/2026-10-14-reading-context/python-red.json",
+      "sha256": "5f2fce95e8107303da44aeabe95dc15ee20c52dfddf0dd8fd7864c66ff76e39c"
+    },
+    {
+      "command": "pytest tests/test_review_readings.py tests/test_review_context.py",
+      "exit_code": 0,
+      "log": "quality/reviews/2026-10-14-reading-context/python-green.json",
+      "sha256": "2127f4df5f492859d01629fd8c4297bef567f73f38a6199018755187532c8cbb"
+    },
+    {
+      "command": "make check dogfood rule-quality-regression",
+      "exit_code": 0,
+      "log": "quality/reviews/2026-10-14-reading-context/python-gates.json",
+      "sha256": "8743b8f9f09c71150319ffa2cc4328aaa8387f366e8b36b6c9642f23c9aa609e"
+    }
+  ],
+  "runtime": {
+    "git": {
+      "head": "5cce78ec0ad37a5b0d079748b4df59560b9c216f",
+      "scope": [
+        "benchmarks",
+        "src/proseprobe"
+      ],
+      "staged_dirty": false,
+      "tracked_worktree_dirty": true,
+      "untracked_python_files": [
+        "benchmarks/review_context.py"
+      ]
+    },
+    "identity_scope": "package and evaluator Python source names and exact bytes; caches, corpora and documents excluded",
+    "package_version": "0.1.0",
+    "source_files": [
+      "evaluator/__init__.py",
+      "evaluator/bench_rules.py",
+      "evaluator/corpora.py",
+      "evaluator/evaluation_identity.py",
+      "evaluator/memory_probe.py",
+      "evaluator/native_link_context.py",
+      "evaluator/native_reference_context.py",
+      "evaluator/paired_quality.py",
+      "evaluator/quality_scoring.py",
+      "evaluator/regression_gate.py",
+      "evaluator/review_context.py",
+      "evaluator/review_readings.py",
+      "evaluator/rule_quality.py",
+      "evaluator/source_intervals.py",
+      "evaluator/startup_probe.py",
+      "evaluator/usefulness.py",
+      "package/__init__.py",
+      "package/__main__.py",
+      "package/_ansi.py",
+      "package/_rule_docs.py",
+      "package/cli.py",
+      "package/config.py",
+      "package/core/__init__.py",
+      "package/core/baseline.py",
+      "package/core/linter.py",
+      "package/core/policy.py",
+      "package/core/reporter.py",
+      "package/data/__init__.py",
+      "package/data/code_patterns.py",
+      "package/data/patterns.py",
+      "package/data/phrases.py",
+      "package/data/style_patterns.py",
+      "package/data/vocabulary.py",
+      "package/parsers/__init__.py",
+      "package/parsers/markdown.py",
+      "package/parsers/prose.py",
+      "package/parsers/python.py",
+      "package/profiles.py",
+      "package/rules/__init__.py",
+      "package/rules/_phrases.py",
+      "package/rules/base.py",
+      "package/rules/code.py",
+      "package/rules/grammar.py",
+      "package/rules/markup.py",
+      "package/rules/struct.py",
+      "package/rules/style.py",
+      "package/rules/vocab.py"
+    ],
+    "source_files_count": 47,
+    "source_roots": {
+      "evaluator": "/Users/johnmulder/Experiments/proseprobe/benchmarks",
+      "package": "/Users/johnmulder/Experiments/proseprobe/src/proseprobe"
+    },
+    "source_sha256": "2a0083d882b06d680a7803bc80de3c770d4ce3569bca1bcdc2ea26949b236bfb"
+  },
+  "stage": "R01",
+  "targeted_strict_typing": "review_context.py and review_readings.py; silent dependency imports",
+  "version": 1
+}

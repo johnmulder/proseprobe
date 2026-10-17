@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "session_date": "2026-10-13",
+  "reviewer_id": "codex-agent:/root/blind_agent_b",
+  "actor_type": "agent",
+  "human": false,
+  "independent_human_evidence": false,
+  "review_kind": "blind agent-assisted development judgment",
+  "packet_root": "downloads/evaluation/blind/autonomous-development-2026-10-13-v1",
+  "annotation_path": "quality/reviews/2026-10-13-autonomous/annotations.agent-b.json",
+  "rules": [
+    "G038",
+    "V015",
+    "V016"
+  ],
+  "exposure": {
+    "read": [
+      "quality/reviews/2026-10-13-autonomous/selection.json",
+      "quality/reviews/2026-10-13-autonomous/contracts.json",
+      "quality/reviews/2026-10-13-autonomous/annotations.unreviewed.json",
+      "quality/reviews/2026-10-13-autonomous/index.json",
+      "docs/rules.md sections G038, V015, V016",
+      "the full original source of originals/0000.md through originals/0004.md",
+      "quality/reviews/2026-10-10-interactive/guidance.v1.md (invented training examples only)"
+    ],
+    "detectors_run": false,
+    "detector_implementation_or_tests_read": false,
+    "detector_findings_read": false,
+    "other_reviewer_labels_read": false,
+    "interactive_human_responses_read": false,
+    "holdout_bytes_read": false,
+    "source_modifications": false,
+    "limitations": [
+      "The agent recognizes Requests and FastAPI as publicly familiar projects. Prior model training exposure cannot be measured or excluded.",
+      "These agent judgments are development evidence only and do not establish independent human effectiveness.",
+      "The review covers literal eligible prose in the frozen Markdown originals. Linked external content, unresolved Liquid replacement text, HTML attributes and rendered browser output were not inspected or inferred."
+    ]
+  },
+  "method": {
+    "coverage": "Read all five complete original files and manually evaluated eligible prose against all three requested contracts.",
+    "negative_cases": "Left empty; no separate hand-authored near-miss span records.",
+    "offsets": "No expected positive spans. No endpoint guesses were required.",
+    "scope_policy": "Frontmatter, fenced code, template directives, headings, literal UI labels, examples/demonstrations and markup-only attributes do not become substantive claim findings. Original visible prose was reviewed without expanding Liquid or fetching linked context."
+  },
+  "counts": {
+    "files": 5,
+    "full_file_rule_reviews": 15,
+    "expected": 0,
+    "negative_cases": 0
+  },
+  "sources": {
+    "originals/0000.md": {
+      "scope_status": "full eligible original prose reviewed; frontmatter and HTML markup excluded",
+      "reasoning": {
+        "G038": "No eligible predicate comparative lacked an attached target. The service-credit table states exact numerical thresholds, including less than or equal to 99.9%, greater than 99.0%, and less than 99.0%; those are explicit comparisons and must be preserved.",
+        "V015": "No curated best/fastest or most-reliable predicate claim appears in eligible prose.",
+        "V016": "The guarantee is expressly 99.9% uptime over a calendar quarter, with definitions, exclusions and remedies. It is a bounded commitment, not one of the curated universal reliability/security claims. Preserve the defined quoted terms and numerical bounds."
+      },
+      "uncertainties": []
+    },
+    "originals/0001.md": {
+      "scope_status": "full eligible literal original prose reviewed; frontmatter and unresolved Liquid expansions not evaluated",
+      "reasoning": {
+        "G038": "No eligible predicate comparative is asserted. Further reading is a heading, not a comparative claim.",
+        "V015": "Best practices is a heading. It will do its best describes attempted assistance rather than ranking the feature above a comparison set. Neither is an unbounded curated superlative predicate.",
+        "V016": "The text explicitly allows inability to answer, misunderstanding and an irrelevant response. No never-fails, always-succeeds, eliminates-all-errors or 100%-secure claim occurs in eligible literal prose."
+      },
+      "uncertainties": [
+        "Liquid substitutions were not expanded. No finding or clean judgment is inferred for replacement text absent from the frozen original."
+      ]
+    },
+    "originals/0002.md": {
+      "scope_status": "full eligible literal original prose reviewed; frontmatter, fenced examples and unresolved Liquid expansions not evaluated",
+      "reasoning": {
+        "G038": "No eligible predicate comparative lacks a comparison target.",
+        "V015": "No curated superlative predicate appears in eligible prose.",
+        "V016": "Instructions being used automatically, answers being grounded in curated sources, and answers using only curated context are descriptions of behavior, not the curated absolute failure/success/error/security claims. Always follow occurs within the fenced agent example, which is excluded."
+      },
+      "uncertainties": [
+        "Liquid substitutions were not expanded. External linked instructions and rendered behavior were not assessed."
+      ]
+    },
+    "originals/0003.md": {
+      "scope_status": "full eligible original prose reviewed; fenced code, image link markup and headings excluded",
+      "reasoning": {
+        "G038": "No eligible predicate comparative lacks an attached target.",
+        "V015": "One of the most downloaded Python packages today names the relevant package class and is a popularity statement outside the curated best/fastest or most-reliable predicate forms. Supported Features & Best–Practices is a heading.",
+        "V016": "Put your trust in this code and robust and reliable applications are qualitative endorsements, not the four curated absolute reliability/security claims. The weekly download and dependent repository counts must be preserved and do not substitute for reliability testing."
+      },
+      "uncertainties": []
+    },
+    "originals/0004.md": {
+      "scope_status": "full eligible original prose reviewed; HTML attributes, code blocks and demonstration sections excluded",
+      "reasoning": {
+        "G038": "No eligible predicate comparative lacks an attached target. Fewer bugs and less time are feature-label/fragments rather than predicate comparative assertions. More complex and more complete occur as attributive descriptions within example material.",
+        "V015": "The first fastest statement names Python frameworks available as the comparison scope. The Performance paragraph names independent TechEmpower benchmarks and Python frameworks, then explicitly places the result below Starlette and Uvicorn. Neither statement lacks a local comparison set. A sponsor title containing best-in-class is both attribute-only text and an explicitly excluded phrase.",
+        "V016": "No curated universal failure/success/error/security claim appears in eligible original prose. Installation ensure it works in all terminals is an instruction about shell quoting, not one of those four claim forms. The 100% progress display is fenced console content, not a security claim. Error reduction is about 40%, expressly a partial estimate, and must not be rewritten as an absolute claim."
+      },
+      "uncertainties": [
+        "HTML attribute-only marketing text and browser-rendered output are outside this literal prose judgment. Linked benchmark pages and the reliability of the reported measurements were not assessed. The internal-development-team test note does not independently validate any broader claim; no broader validation was inferred."
+      ]
+    }
+  },
+  "disputed_judgments": [],
+  "qualification": "Zero expected findings means zero violations of these three narrow contracts in reviewed eligible original prose. It is not a finding that every promotional or universal statement in the documents is substantiated.",
+  "validation": {
+    "status": "passed",
+    "validator": "benchmarks.quality_scoring.load_annotations",
+    "annotation_version": 3,
+    "packet_root": "downloads/evaluation/blind/autonomous-development-2026-10-13-v1",
+    "rules": [
+      "G038",
+      "V015",
+      "V016"
+    ],
+    "detectors_run": false
+  },
+  "frozen": true
+}

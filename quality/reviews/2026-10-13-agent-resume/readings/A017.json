@@ -1,0 +1,446 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A017.txt",
+  "packet_path": "originals/0005.py",
+  "pair_group": "psf/requests:src/requests/cookies.py",
+  "reading_id": "A017",
+  "region": {
+    "column": 1,
+    "end_column": 37,
+    "end_line": 240,
+    "line": 201
+  },
+  "rendered_sha256": "88e7cf7b217b5de22ad1f6fbfaf20fd07323097b815091d243052ff02537537e",
+  "rendered_text": "Blind agent reading A017: natural.\nReading file: [A017](/private/tmp/proseprobe-A017.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL201 C 1-13 |         try:\nL202 C 1-64 |             return self._find_no_duplicates(name, domain, path)\nL203 C 1-25 |         except KeyError:\nL204 C 1-27 |             return default\nL205 C 1- 1 | \nL206 C 1-42 |     def set(self, name, value, **kwargs):\nL207 C 1-67 |         \"\"\"Dict-like set() that also supports optional domain and \nL207 C67-79 | path args in\nL208 C 1-66 |         order to resolve naming collisions from using one cookie \nL208 C66-74 | jar over\nL209 C 1-26 |         multiple domains.\nL210 C 1-12 |         \"\"\"\nL211 C 1-65 |         # support client code that unsets cookies by assignment \nL211 C65-81 | of a None value:\nL212 C 1-26 |         if value is None:\nL213 C 1-35 |             remove_cookie_by_name(\nL214 C 1-58 |                 self, name, domain=kwargs.get(\"domain\"), \nL214 C58-81 | path=kwargs.get(\"path\")\nL215 C 1-14 |             )\nL216 C 1-19 |             return\nL217 C 1- 1 | \nL218 C 1-38 |         if isinstance(value, Morsel):\nL219 C 1-40 |             c = morsel_to_cookie(value)\nL220 C 1-14 |         else:\nL221 C 1-53 |             c = create_cookie(name, value, **kwargs)\nL222 C 1-27 |         self.set_cookie(c)\nL223 C 1-17 |         return c\nL224 C 1- 1 | \nL225 C 1-24 |     def iterkeys(self):\nL226 C 1-67 |         \"\"\"Dict-like iterkeys() that returns an iterator of names \nL226 C67-77 | of cookies\nL227 C 1-22 |         from the jar.\nL228 C 1- 1 | \nL229 C 1-51 |         .. seealso:: itervalues() and iteritems().\nL230 C 1-12 |         \"\"\"\nL231 C 1-34 |         for cookie in iter(self):\nL232 C 1-30 |             yield cookie.name\nL233 C 1- 1 | \nL234 C 1-20 |     def keys(self):\nL235 C 1-61 |         \"\"\"Dict-like keys() that returns a list of names of \nL235 C61-77 | cookies from the\nL236 C 1-13 |         jar.\nL237 C 1- 1 | \nL238 C 1-43 |         .. seealso:: values() and items().\nL239 C 1-12 |         \"\"\"\nL240 C 1-37 |         return list(self.iterkeys())\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 13,
+      "end_line": 201,
+      "line": 201,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "        try:"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 202,
+      "line": 202,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "            return self._find_no_duplicates(name, domain, path)"
+    },
+    {
+      "column": 1,
+      "end_column": 25,
+      "end_line": 203,
+      "line": 203,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "        except KeyError:"
+    },
+    {
+      "column": 1,
+      "end_column": 27,
+      "end_line": 204,
+      "line": 204,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "            return default"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 205,
+      "line": 205,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 42,
+      "end_line": 206,
+      "line": 206,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "    def set(self, name, value, **kwargs):"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 207,
+      "line": 207,
+      "reading_line": 19,
+      "source_line_ending": "",
+      "text": "        \"\"\"Dict-like set() that also supports optional domain and "
+    },
+    {
+      "column": 67,
+      "end_column": 79,
+      "end_line": 207,
+      "line": 207,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "path args in"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 208,
+      "line": 208,
+      "reading_line": 21,
+      "source_line_ending": "",
+      "text": "        order to resolve naming collisions from using one cookie "
+    },
+    {
+      "column": 66,
+      "end_column": 74,
+      "end_line": 208,
+      "line": 208,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "jar over"
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 209,
+      "line": 209,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "        multiple domains."
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 210,
+      "line": 210,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 211,
+      "line": 211,
+      "reading_line": 25,
+      "source_line_ending": "",
+      "text": "        # support client code that unsets cookies by assignment "
+    },
+    {
+      "column": 65,
+      "end_column": 81,
+      "end_line": 211,
+      "line": 211,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "of a None value:"
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 212,
+      "line": 212,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "        if value is None:"
+    },
+    {
+      "column": 1,
+      "end_column": 35,
+      "end_line": 213,
+      "line": 213,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "            remove_cookie_by_name("
+    },
+    {
+      "column": 1,
+      "end_column": 58,
+      "end_line": 214,
+      "line": 214,
+      "reading_line": 29,
+      "source_line_ending": "",
+      "text": "                self, name, domain=kwargs.get(\"domain\"), "
+    },
+    {
+      "column": 58,
+      "end_column": 81,
+      "end_line": 214,
+      "line": 214,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": "path=kwargs.get(\"path\")"
+    },
+    {
+      "column": 1,
+      "end_column": 14,
+      "end_line": 215,
+      "line": 215,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "            )"
+    },
+    {
+      "column": 1,
+      "end_column": 19,
+      "end_line": 216,
+      "line": 216,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "            return"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 217,
+      "line": 217,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 38,
+      "end_line": 218,
+      "line": 218,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "        if isinstance(value, Morsel):"
+    },
+    {
+      "column": 1,
+      "end_column": 40,
+      "end_line": 219,
+      "line": 219,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "            c = morsel_to_cookie(value)"
+    },
+    {
+      "column": 1,
+      "end_column": 14,
+      "end_line": 220,
+      "line": 220,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "        else:"
+    },
+    {
+      "column": 1,
+      "end_column": 53,
+      "end_line": 221,
+      "line": 221,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": "            c = create_cookie(name, value, **kwargs)"
+    },
+    {
+      "column": 1,
+      "end_column": 27,
+      "end_line": 222,
+      "line": 222,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "        self.set_cookie(c)"
+    },
+    {
+      "column": 1,
+      "end_column": 17,
+      "end_line": 223,
+      "line": 223,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": "        return c"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 224,
+      "line": 224,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 24,
+      "end_line": 225,
+      "line": 225,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "    def iterkeys(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 226,
+      "line": 226,
+      "reading_line": 42,
+      "source_line_ending": "",
+      "text": "        \"\"\"Dict-like iterkeys() that returns an iterator of names "
+    },
+    {
+      "column": 67,
+      "end_column": 77,
+      "end_line": 226,
+      "line": 226,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "of cookies"
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 227,
+      "line": 227,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "        from the jar."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 228,
+      "line": 228,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 51,
+      "end_line": 229,
+      "line": 229,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "        .. seealso:: itervalues() and iteritems()."
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 230,
+      "line": 230,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 34,
+      "end_line": 231,
+      "line": 231,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "        for cookie in iter(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 30,
+      "end_line": 232,
+      "line": 232,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": "            yield cookie.name"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 233,
+      "line": 233,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 234,
+      "line": 234,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "    def keys(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 61,
+      "end_line": 235,
+      "line": 235,
+      "reading_line": 52,
+      "source_line_ending": "",
+      "text": "        \"\"\"Dict-like keys() that returns a list of names of "
+    },
+    {
+      "column": 61,
+      "end_column": 77,
+      "end_line": 235,
+      "line": 235,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": "cookies from the"
+    },
+    {
+      "column": 1,
+      "end_column": 13,
+      "end_line": 236,
+      "line": 236,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "        jar."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 237,
+      "line": 237,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 43,
+      "end_line": 238,
+      "line": 238,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": "        .. seealso:: values() and items()."
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 239,
+      "line": 239,
+      "reading_line": 57,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 37,
+      "end_line": 240,
+      "line": 240,
+      "reading_line": 58,
+      "source_line_ending": "\n",
+      "text": "        return list(self.iterkeys())"
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+  "split": "development",
+  "version": 1
+}

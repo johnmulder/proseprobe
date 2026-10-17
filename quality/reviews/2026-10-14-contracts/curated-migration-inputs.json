@@ -1,0 +1,31 @@
+{
+  "artifacts": {
+    "quality/annotations.json": "d4dd393c6219a0782689860a0ce55eae03c26955e6e95c56fdaff6f6e361eeb3",
+    "quality/corpus/python-docs.py": "af67578bc7deed33971709e9389124935c59a8d4fdebd6a838c689639df22b94",
+    "quality/regression-gates/all-rules.json": "be202a54f054f6f5998a295129753e213a7e7b09c4d443ddc90f53b99e0785e2",
+    "quality/regression-gates/production.json": "f8ec3b37b0bfe1cf32ed890328de1782864b68f15bc47504e15241acd19b7cac"
+  },
+  "base_commit": "478f71b",
+  "frozen_external_edits": false,
+  "proposed_expected_column": 7,
+  "reading": "quality/reviews/2026-10-14-contracts/readings/K005.md",
+  "reading_sha256": "d0f175f92d14108f377dfd7f931daaa456e8655aa6920be5a5538386c16221b6",
+  "target_expected_entries": [
+    {
+      "column": 5,
+      "line": 38,
+      "rule_id": "C004"
+    },
+    {
+      "column": 5,
+      "line": 39,
+      "rule_id": "C004"
+    },
+    {
+      "column": 5,
+      "line": 40,
+      "rule_id": "C004"
+    }
+  ],
+  "version": 1
+}

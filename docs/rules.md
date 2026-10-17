@@ -509,6 +509,8 @@ Detects curated superlative claims such as `is the best`, `was fastest`, and
 `remains the most reliable` when the matched claim does not name a comparison
 set or scope. Findings are low-confidence informational
 diagnostics on the exact superlative phrase.
+For `remains the best`, the highlight is `the best`, including its article and
+excluding the predicate verb. Wrapped phrases retain their original whitespace.
 
 **Example (unbounded):**
 ```markdown
@@ -1939,6 +1941,8 @@ At low confidence, detects curated predicate comparatives such as `is faster`,
 `was worse`, and `remains more reliable` without an attached comparison target.
 The rule reports only the exact comparative phrase. A standalone number, figure
 reference, ordinal or single-row table does not name a comparator.
+For `is faster`, the highlight is `faster`; the predicate verb is recognition
+context. Wrapped phrases retain their original internal whitespace.
 
 Direct named/set comparisons qualify. Two narrow context forms also qualify:
 an immediately preceding `Comparison target: NAME` or `Compared with NAME`
@@ -2061,8 +2065,22 @@ def helper():
 Detects context-free `TODO`, `FIXME`, and `XXX` comments, formulaic TODO
 patterns, and placeholder code. Specific maintenance comments remain valid.
 
-Code-only findings require a parsed raise statement; strings and comments that
-mention that statement remain valid. Inline `pass` and ellipsis checks require
+Code-only findings require a parsed `raise NotImplementedError(...)` with exactly
+one positional string literal and no keyword arguments. Its complete message
+must match `todo`, `fixme`, `xxx`, `add logic here`, `unfinished`, or
+`not implemented yet` after ASCII whitespace is collapsed and trimmed, case is
+folded, and at most one final period is removed. No further trimming occurs.
+Substring matches, bare/empty errors, computed messages and other call shapes
+remain outside this branch. Implicitly joined and escaped literals use their
+decoded value; the highlight retains the complete original raise/call and
+excludes any `from` cause. Recognition is syntactic and does not prove a runtime
+exception binding or an author's intent.
+
+A `NotImplementedError` alone does not establish unfinished work. Detailed
+rejection messages such as `Use add_unredirected_header() for cookie headers`
+and issue-specific work descriptions remain outside the finite message set.
+A nonmatch does not prove a complete implementation. Strings and comments that
+mention a raise remain valid. Inline `pass` and ellipsis checks require
 the actual statement beside the comment. Source spans use character columns
 and cover multiline calls. Malformed source retains recognized comment markers
 without guessing executable placeholders.
@@ -2073,6 +2091,11 @@ literal imports prove `abc.abstractmethod`, `typing.overload`, or an undecorated
 method wrappers are supported. Rebinding, type-parameter shadowing, namespace mutations, unknown decorators
 and computed bases prevent the exemption. Generic TODO comments still receive
 normal comment-marker checks; concrete incomplete methods remain eligible.
+
+Context-free comment findings highlight only the original `TODO`, `FIXME` or
+`XXX` marker token. The span omits `#`, whitespace and a trailing colon.
+Code-attached marker hints keep their existing token spans. Other formulaic
+comment patterns retain their matched-phrase spans.
 
 **Example (bad):**
 ```python
@@ -2164,6 +2187,10 @@ remain valid for ordinary and variadic names; forwarded unstarred keywords throu
 finding on the declared name. Source parameter kinds are
 preserved separately from C007's existing normalized tuple. A normal parameter
 named `self` or `cls` is valid.
+The highlight excludes attached `*` or `**` even for a kind conflict; the
+diagnostic names the complete starred declaration and both conflicting kinds.
+For `:param **extras:`, the highlight is `extras`. The owning signature is
+required evidence rather than part of the highlighted source unit.
 
 This experimental rule uses informational severity and high confidence.
 Delegated keywords through `**kwargs`, unknown decorators, module/class

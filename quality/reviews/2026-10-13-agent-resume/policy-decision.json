@@ -1,0 +1,75 @@
+{
+  "actor_type": "agent-assisted",
+  "bindings": {
+    "quality/reviews/2026-10-13-agent-resume/freeze.json": "5d234b2877a646ea51164db038ffef04cdd89474de29dbb69a3012699fdb6b94",
+    "quality/reviews/2026-10-13-agent-resume/local-checks.json": "00a401c8b2e30c0e7b22d46287835faf87c6f09c5ed669db7a1970cc143658fe",
+    "quality/reviews/2026-10-13-agent-resume/location-observations.json": "b817d335fa80e5bdad94bad376d2d364e9e481ef266361f3ba4afb565e925cdc",
+    "quality/reviews/2026-10-13-agent-resume/report-summary.json": "5da2a7c0f81d158ead1ff3ef5320d269ea1522885b02aec50b6b39a99db22eb9",
+    "quality/reviews/2026-10-13-agent-resume/trigger-prompts.json": "0d5e4e4bb717997fa40be25e499ce9f1824ab43bc0d53ab6e1c00f99007861dd",
+    "quality/reviews/2026-10-13-agent-resume/usefulness-summary.json": "2d01d8bcd73a50026d19942a4363aa96e7af4e54cd685835a476cfaebbe5adc4",
+    "quality/reviews/2026-10-13-agent-resume/usefulness.agent-a.json": "54952ad603e108b5a80396bc91e610445d6f6e637593b4632e071b556ec2a25b",
+    "quality/reviews/2026-10-13-agent-resume/usefulness.agent-b.json": "6b7c6ca29ae1ca88ebe18f7dc84ccad60e7a58e84493ffedc7e58579be1080f9"
+  },
+  "confidence_changed": false,
+  "decided_at_utc": "2026-10-14T06:08:00.702913+00:00",
+  "decision": "retain-current-policy",
+  "defaults_changed": false,
+  "experimental_status_changed": false,
+  "findings": [
+    {
+      "decision": "retain challenge evidence separately",
+      "reason": "Accepted 13 claim/documentation and 3 native-link events match; one author group and implementation familiarity prevent natural-population inference.",
+      "topic": "challenge detection"
+    },
+    {
+      "decision": "effectiveness unavailable",
+      "reason": "Six source units from two groups contain zero accepted positive events or eligible judged predictions. C004 intentional rejection remains context-dependent; other-rule emissions are unreviewed.",
+      "topic": "natural evidence"
+    },
+    {
+      "decision": "retain unresolved contract question",
+      "next_plan_action": "P32D.6d",
+      "reason": "Clarify intentional unsupported-operation contracts before changing this guard label or rule behavior; preserve the raw A FP and B/adjudicated contextual judgments.",
+      "topic": "C004 boundary"
+    },
+    {
+      "decision": "retain four differences without label refresh",
+      "next_plan_action": "P32D.5a",
+      "reason": "G038/V015 predicates, C004 comment marker and C009 stars differ from emitted highlights. A span contract must distinguish semantic event support from exact endpoint expectations.",
+      "topic": "highlight boundaries"
+    },
+    {
+      "decision": "retain complete-source prerequisites",
+      "next_plan_action": "P32D.5b",
+      "reason": "Triggered Python windows omit owning signatures and local-link windows omit targets. Reviewers used full permitted sources and pinned context; windows alone do not support these judgments.",
+      "topic": "review context"
+    },
+    {
+      "decision": "retain separate raw ratings and missing semantic evidence",
+      "reason": "Helpfulness is yes for 13/16 and 12/16; fit and acceptance have contextual/unreviewed answers. All 32 meaning-preservation votes are unresolved; no revised text was supplied.",
+      "topic": "usefulness"
+    },
+    {
+      "decision": "retain unchanged selection",
+      "reason": "INFO target rules are excluded from production eligible coverage. Empty metrics cannot justify default, severity or confidence changes.",
+      "topic": "production profile"
+    },
+    {
+      "decision": "retain deferred prerequisites",
+      "reason": "Agent judgments meet the delegated development-review request. Independent human annotation, semantic usefulness, source-group support, and holdout predeclaration remain required for independent effectiveness claims.",
+      "topic": "independent evaluation"
+    }
+  ],
+  "freeze_commit": "8601af5",
+  "holdout_opened": false,
+  "human_annotation_created": false,
+  "independent_human_claim": false,
+  "population_effectiveness_claim": false,
+  "promotions": [],
+  "reports_commit": "3cdf4ca",
+  "rules_changed": [],
+  "runtime_source_sha256": "acd8107edffa140f83f7861ccae5cd0b55a64e3a017da8285dd0e8626ab044c3",
+  "severity_changed": false,
+  "thresholds_changed": false,
+  "version": 1
+}

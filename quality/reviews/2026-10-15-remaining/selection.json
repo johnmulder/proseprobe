@@ -1,0 +1,117 @@
+{
+  "base_commit": "0242296",
+  "completion_policy": "Use existing validators for data-only work. Add failing tests only if a real implementation defect needs a behavior change. Zero eligible references cannot supply M012 precision/recall.",
+  "declared_on": "2026-10-15",
+  "detector_predictions": "withheld; reference enumeration only",
+  "fastapi": {
+    "action": "enumerate declared static local destinations before acquiring any native context",
+    "native_repository_cached": false,
+    "sample": {
+      "attribution": "Sebasti\u00e1n Ram\u00edrez and FastAPI contributors",
+      "dialect": "README; embedded HTML supported only by extraction contract",
+      "format": "markdown",
+      "id": "fastapi/fastapi:40e33e492dbf4af6172997f4e3238a32e56cbe26:README.md",
+      "license": "MIT",
+      "license_sha256": "4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e",
+      "license_url": "https://github.com/fastapi/fastapi/blob/40e33e492dbf4af6172997f4e3238a32e56cbe26/LICENSE",
+      "locator": "README.md",
+      "native_labels": "none",
+      "pair_group": "fastapi/fastapi:README.md",
+      "path": "extension/sources/fastapi/fastapi/README.md",
+      "renderer": "GitHub Markdown",
+      "review_status": "unreviewed",
+      "revision": "40e33e492dbf4af6172997f4e3238a32e56cbe26",
+      "sha256": "4fd6beb4d1c0bbe7c3ff56b18a3d106efaa7edd33f6c13ed357bd8a4e942a7f6",
+      "source_group": "fastapi/fastapi",
+      "split": "development",
+      "transformation": "none; complete native UTF-8 source",
+      "url": "https://raw.githubusercontent.com/fastapi/fastapi/40e33e492dbf4af6172997f4e3238a32e56cbe26/README.md"
+    },
+    "source_manifest": "quality/external/extension-sources.json",
+    "source_manifest_sha256": "1f3a26861f1321747802a9e5b574ae78201b996cdd70ccec9a18094fe052cbbf"
+  },
+  "holdout_guard": "Only metadata hashes/identities may be read; JFLEG/ASSET references remain unopened. Compare selected SHA256 against every reserved row before structural parsing.",
+  "input_metadata_sha256": {
+    "quality/external/extension-selection.json": "71ee3fa89ada0d184fee22fdda76fcd72a934c10839f6be12e114868e63f432a",
+    "quality/external/extension-sources.json": "1f3a26861f1321747802a9e5b574ae78201b996cdd70ccec9a18094fe052cbbf",
+    "quality/external/split-freeze.json": "0c078a48b7d8545241141c0eb4efaab25c705a78b03962d99394e60bfd1b97d0",
+    "quality/sources.json": "2dcadd8fb3bb278ee09a9ff2685b00c7a7c6efde3f0221ae69efcccc825d3ade"
+  },
+  "no_new_source_network_acquisition": true,
+  "population": "Convenience selection of already cached wholly-development projects; no representative or human effectiveness claim",
+  "preserve_existing_manifests_splits_and_reviews": true,
+  "requests": {
+    "attribution_artifact": "quality/reviews/2026-10-13-human-resume/native-context/attribution.json",
+    "attribution_artifact_sha256": "6e5c65d85a633b091622bf71eebd3cb7ef77b9f7f2be546bf6439e69f76ef89a",
+    "excluded_previous_source": "README.md; already enumerated with zero supported references",
+    "inventory_artifact": "quality/reviews/2026-10-13-human-resume/native-context/requests-context-v1.json",
+    "inventory_artifact_sha256": "4ecf27ff6a7f873e5a778050e9bb0d876c1cf5d8bac8eeb409dbd5bb37f32592",
+    "inventory_sha256": "85ca40bc9d9f04a7c686b908ab1605f64938630c44190bdfe8e62020db8b017e",
+    "renderer": "github",
+    "repository_cache": "downloads/evaluation/native-context/requests-0e322af-v1.git",
+    "revision": "0e322af87745eff34caffe4df68456ebc20d9068",
+    "selected": [
+      {
+        "mode": "100644",
+        "object_id": "ff7f10665a52188f3483981c57b5827058b29c4b",
+        "path": ".github/CODE_OF_CONDUCT.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "3470dfee835a73525fdc118574ed18d3385c432b",
+        "path": ".github/CONTRIBUTING.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "060d9262a5e763c78a707222600a02f4c3b5fd66",
+        "path": ".github/ISSUE_TEMPLATE.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "cb87bd6b67572c2d25d1fb94e17fe483dbc0da9b",
+        "path": ".github/ISSUE_TEMPLATE/Bug_report.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "332c3aea9764662b5efdb9a325d5359f6be4bf86",
+        "path": ".github/ISSUE_TEMPLATE/Custom.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "544113ae1c5c2a67d27cbfbbe9b405ff47e6ebba",
+        "path": ".github/ISSUE_TEMPLATE/Feature_request.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9021d429d8615902efbf2cd206823f25df6c8d6a",
+        "path": ".github/SECURITY.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e51a7ee2c231c6f1ed0adcd16c198e6a412a9c75",
+        "path": "HISTORY.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4bf7002e0b17e14449cd116daf2406760022eebb",
+        "path": "tests/certs/README.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "f7234f8820f7ffc749eb45ba12529647704ab297",
+        "path": "tests/certs/expired/README.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9a3df4623eedff71c276ecfa7f0c46f485f649a0",
+        "path": "tests/certs/mtls/README.md"
+      }
+    ],
+    "source_group": "psf/requests",
+    "split": "development"
+  },
+  "reserved_holdout_opened": false,
+  "scope": "P30.18d.1/.2 bounded local-reference preparation; remaining-task prerequisite audit",
+  "selected_before_new_blob_or_source_reads": true,
+  "version": 1
+}

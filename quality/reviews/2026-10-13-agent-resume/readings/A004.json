@@ -1,0 +1,516 @@
+{
+  "cohort": "natural",
+  "format": "markdown",
+  "linked_text_path": "/private/tmp/proseprobe-A004.txt",
+  "packet_path": "originals/0001.md",
+  "pair_group": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md",
+  "reading_id": "A004",
+  "region": {
+    "column": 1,
+    "end_column": 69,
+    "end_line": 120,
+    "line": 81
+  },
+  "rendered_sha256": "346f2ff1a9302fd1f72f6354b549260b04491566fc1fd89d66ce3c60cfc35556",
+  "rendered_text": "Blind agent reading A004: natural.\nReading file: [A004](/private/tmp/proseprobe-A004.txt)\nAttribution: GitHub Docs contributors; CC BY 4.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, M011\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL 81 C 1-57 | can either be a QL pack (or bundle of packs containing a\nL 82 C 1-66 | `.codeqlmanifest.json` file at the root) or the immediate parent \nL 82 C66-72 | of one\nL 83 C 1-26 | or more such directories.\nL 84 C 1- 1 | \nL 85 C 1-66 | If the path contains more than one directory, their order defines\nL 86 C 1-67 | precedence between them: when a pack name that must be resolved is\nL 87 C 1-64 | matched in more than one of the directory trees, the one given \nL 87 C64-69 | first\nL 88 C 1- 6 | wins.\nL 89 C 1- 1 | \nL 90 C 1-66 | Pointing this at a checkout of the open-source CodeQL repository \nL 90 C66-71 | ought\nL 91 C 1-60 | to work when querying one of the languages that live there.\nL 92 C 1- 1 | \nL 93 C 1-66 | If you have checked out the CodeQL repository as a sibling of the\nL 94 C 1-64 | unpacked CodeQL toolchain, you don't need to give this option; \nL 94 C64-68 | such\nL 95 C 1-63 | sibling directories will always be searched for QL packs that \nL 95 C63-72 | cannot be\nL 96 C 1-64 | found otherwise. (If this default does not work, it is strongly\nL 97 C 1-61 | recommended to set up `--search-path` once and for all in a \nL 97 C61-69 | per-user\nL 98 C 1-21 | configuration file).\nL 99 C 1- 1 | \nL100 C 1-46 | (Note: On Windows the path separator is `;`).\nL101 C 1- 1 | \nL102 C 1-43 | #### `--additional-packs=<dir>[:<dir>...]`\nL103 C 1- 1 | \nL104 C 1-65 | If this list of directories is given, they will be searched for \nL104 C65-70 | packs\nL105 C 1-61 | before the ones in `--search-path`. The order between these \nL105 C61-68 | doesn't\nL106 C 1-65 | matter; it is an error if a pack name is found in two different \nL106 C65-71 | places\nL107 C 1-19 | through this list.\nL108 C 1- 1 | \nL109 C 1-66 | This is useful if you're temporarily developing a new version of \nL109 C66-72 | a pack\nL110 C 1-65 | that also appears in the default path. On the other hand, it is \nL110 C65-69 | _not\nL111 C 1-61 | recommended_ to override this option in a config file; some \nL111 C61-69 | internal\nL112 C 1-67 | actions will add this option on the fly, overriding any configured\nL113 C 1- 7 | value.\nL114 C 1- 1 | \nL115 C 1-46 | (Note: On Windows the path separator is `;`).\nL116 C 1- 1 | \nL117 C 1-39 | #### `--library-path=<dir>[:<dir>...]`\nL118 C 1- 1 | \nL119 C 1-67 | \\[Advanced] An optional list of directories that will be added to \nL119 C67-70 | the\nL120 C 1-67 | raw import search path for QL libraries. This should only be used \nL120 C67-69 | if\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 57,
+      "end_line": 81,
+      "line": 81,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "can either be a QL pack (or bundle of packs containing a"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 82,
+      "line": 82,
+      "reading_line": 14,
+      "source_line_ending": "",
+      "text": "`.codeqlmanifest.json` file at the root) or the immediate parent "
+    },
+    {
+      "column": 66,
+      "end_column": 72,
+      "end_line": 82,
+      "line": 82,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "of one"
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 83,
+      "line": 83,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "or more such directories."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 84,
+      "line": 84,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 85,
+      "line": 85,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "If the path contains more than one directory, their order defines"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 86,
+      "line": 86,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "precedence between them: when a pack name that must be resolved is"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 87,
+      "line": 87,
+      "reading_line": 20,
+      "source_line_ending": "",
+      "text": "matched in more than one of the directory trees, the one given "
+    },
+    {
+      "column": 64,
+      "end_column": 69,
+      "end_line": 87,
+      "line": 87,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "first"
+    },
+    {
+      "column": 1,
+      "end_column": 6,
+      "end_line": 88,
+      "line": 88,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "wins."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 89,
+      "line": 89,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 90,
+      "line": 90,
+      "reading_line": 24,
+      "source_line_ending": "",
+      "text": "Pointing this at a checkout of the open-source CodeQL repository "
+    },
+    {
+      "column": 66,
+      "end_column": 71,
+      "end_line": 90,
+      "line": 90,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": "ought"
+    },
+    {
+      "column": 1,
+      "end_column": 60,
+      "end_line": 91,
+      "line": 91,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "to work when querying one of the languages that live there."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 92,
+      "line": 92,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 93,
+      "line": 93,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "If you have checked out the CodeQL repository as a sibling of the"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 94,
+      "line": 94,
+      "reading_line": 29,
+      "source_line_ending": "",
+      "text": "unpacked CodeQL toolchain, you don't need to give this option; "
+    },
+    {
+      "column": 64,
+      "end_column": 68,
+      "end_line": 94,
+      "line": 94,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": "such"
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 95,
+      "line": 95,
+      "reading_line": 31,
+      "source_line_ending": "",
+      "text": "sibling directories will always be searched for QL packs that "
+    },
+    {
+      "column": 63,
+      "end_column": 72,
+      "end_line": 95,
+      "line": 95,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "cannot be"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 96,
+      "line": 96,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "found otherwise. (If this default does not work, it is strongly"
+    },
+    {
+      "column": 1,
+      "end_column": 61,
+      "end_line": 97,
+      "line": 97,
+      "reading_line": 34,
+      "source_line_ending": "",
+      "text": "recommended to set up `--search-path` once and for all in a "
+    },
+    {
+      "column": 61,
+      "end_column": 69,
+      "end_line": 97,
+      "line": 97,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "per-user"
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 98,
+      "line": 98,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "configuration file)."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 99,
+      "line": 99,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 46,
+      "end_line": 100,
+      "line": 100,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "(Note: On Windows the path separator is `;`)."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 101,
+      "line": 101,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 43,
+      "end_line": 102,
+      "line": 102,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": "#### `--additional-packs=<dir>[:<dir>...]`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 103,
+      "line": 103,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 104,
+      "line": 104,
+      "reading_line": 42,
+      "source_line_ending": "",
+      "text": "If this list of directories is given, they will be searched for "
+    },
+    {
+      "column": 65,
+      "end_column": 70,
+      "end_line": 104,
+      "line": 104,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "packs"
+    },
+    {
+      "column": 1,
+      "end_column": 61,
+      "end_line": 105,
+      "line": 105,
+      "reading_line": 44,
+      "source_line_ending": "",
+      "text": "before the ones in `--search-path`. The order between these "
+    },
+    {
+      "column": 61,
+      "end_column": 68,
+      "end_line": 105,
+      "line": 105,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": "doesn't"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 106,
+      "line": 106,
+      "reading_line": 46,
+      "source_line_ending": "",
+      "text": "matter; it is an error if a pack name is found in two different "
+    },
+    {
+      "column": 65,
+      "end_column": 71,
+      "end_line": 106,
+      "line": 106,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "places"
+    },
+    {
+      "column": 1,
+      "end_column": 19,
+      "end_line": 107,
+      "line": 107,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "through this list."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 108,
+      "line": 108,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 109,
+      "line": 109,
+      "reading_line": 50,
+      "source_line_ending": "",
+      "text": "This is useful if you're temporarily developing a new version of "
+    },
+    {
+      "column": 66,
+      "end_column": 72,
+      "end_line": 109,
+      "line": 109,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "a pack"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 110,
+      "line": 110,
+      "reading_line": 52,
+      "source_line_ending": "",
+      "text": "that also appears in the default path. On the other hand, it is "
+    },
+    {
+      "column": 65,
+      "end_column": 69,
+      "end_line": 110,
+      "line": 110,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": "_not"
+    },
+    {
+      "column": 1,
+      "end_column": 61,
+      "end_line": 111,
+      "line": 111,
+      "reading_line": 54,
+      "source_line_ending": "",
+      "text": "recommended_ to override this option in a config file; some "
+    },
+    {
+      "column": 61,
+      "end_column": 69,
+      "end_line": 111,
+      "line": 111,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": "internal"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 112,
+      "line": 112,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": "actions will add this option on the fly, overriding any configured"
+    },
+    {
+      "column": 1,
+      "end_column": 7,
+      "end_line": 113,
+      "line": 113,
+      "reading_line": 57,
+      "source_line_ending": "\n",
+      "text": "value."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 114,
+      "line": 114,
+      "reading_line": 58,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 46,
+      "end_line": 115,
+      "line": 115,
+      "reading_line": 59,
+      "source_line_ending": "\n",
+      "text": "(Note: On Windows the path separator is `;`)."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 116,
+      "line": 116,
+      "reading_line": 60,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 39,
+      "end_line": 117,
+      "line": 117,
+      "reading_line": 61,
+      "source_line_ending": "\n",
+      "text": "#### `--library-path=<dir>[:<dir>...]`"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 118,
+      "line": 118,
+      "reading_line": 62,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 119,
+      "line": 119,
+      "reading_line": 63,
+      "source_line_ending": "",
+      "text": "\\[Advanced] An optional list of directories that will be added to "
+    },
+    {
+      "column": 67,
+      "end_column": 70,
+      "end_line": 119,
+      "line": 119,
+      "reading_line": 64,
+      "source_line_ending": "\n",
+      "text": "the"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 120,
+      "line": 120,
+      "reading_line": 65,
+      "source_line_ending": "",
+      "text": "raw import search path for QL libraries. This should only be used "
+    },
+    {
+      "column": 67,
+      "end_column": 69,
+      "end_line": 120,
+      "line": 120,
+      "reading_line": 66,
+      "source_line_ending": "\n",
+      "text": "if"
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "M011"
+  ],
+  "sha256": "e4656dfdd2cff448e23fd8115b70b78efd0ac8863897b9df161ffc26dec12ded",
+  "source_group": "github/docs",
+  "source_id": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md",
+  "split": "development",
+  "version": 1
+}

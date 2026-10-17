@@ -1,0 +1,17 @@
+{
+  "context": {
+    "originals/0000.md": {
+      "format": "markdown",
+      "pair_group": "github/docs:content/actions/how-tos/write-workflows/choose-what-workflows-do/use-jobs.md",
+      "source_group": "github/docs",
+      "split": "development"
+    }
+  },
+  "files": {
+    "originals/0000.md": {
+      "sha256": "ab4a60280784e5b915bb2b1353ceb0a5cffefcbe5148c53b901d7861d41c52a1",
+      "source_id": "github/docs:content/actions/how-tos/write-workflows/choose-what-workflows-do/use-jobs.md"
+    }
+  },
+  "version": 1
+}

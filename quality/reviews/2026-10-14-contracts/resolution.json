@@ -1,0 +1,144 @@
+{
+  "C004_rejection_resolution": {
+    "candidate_executable_finding": false,
+    "classification": "outside finite executable-placeholder criterion",
+    "historical_context_dependent_label_preserved": true,
+    "original_source_sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+    "reason": "Specific alternative-operation instruction is not an exact accepted generic message. No intent or implementation-completeness inference is needed.",
+    "region": "L78-L82",
+    "source": "psf/requests:src/requests/cookies.py"
+  },
+  "adjudication_sha256": "091d3bb6eb4fb22d810f43b261de395534f6a3df94fa17ddd4bdf62efd10a650",
+  "candidate_commit": "81b9ee3",
+  "candidate_report_sha256": "717ab2e99824fb406de967d6f449b6ecd52989e7d9d209707261647345e923b0",
+  "four_questions_resolved": true,
+  "highlight_dispositions": [
+    {
+      "accepted_unit": "comparative phrase without predicate verb",
+      "candidate_actual": {
+        "column": 20,
+        "end_column": 26,
+        "end_line": 3,
+        "line": 3
+      },
+      "candidate_actual_text": "faster",
+      "candidate_matches_historical_exact_span": false,
+      "decision": "retain-current-highlight",
+      "historical_expected": {
+        "column": 17,
+        "end_column": 26,
+        "end_line": 3,
+        "line": 3
+      },
+      "historical_expected_text": "is faster",
+      "historical_labels_modified": false,
+      "line": 3,
+      "path": "originals/0000.md",
+      "previous_actual": {
+        "column": 20,
+        "end_column": 26,
+        "end_line": 3,
+        "line": 3
+      },
+      "previous_actual_text": "faster",
+      "rule_id": "G038",
+      "semantic_event_matched": true
+    },
+    {
+      "accepted_unit": "superlative phrase including article, without predicate verb",
+      "candidate_actual": {
+        "column": 25,
+        "end_column": 33,
+        "end_line": 5,
+        "line": 5
+      },
+      "candidate_actual_text": "the best",
+      "candidate_matches_historical_exact_span": false,
+      "decision": "retain-current-highlight",
+      "historical_expected": {
+        "column": 17,
+        "end_column": 33,
+        "end_line": 5,
+        "line": 5
+      },
+      "historical_expected_text": "remains the best",
+      "historical_labels_modified": false,
+      "line": 5,
+      "path": "originals/0000.md",
+      "previous_actual": {
+        "column": 25,
+        "end_column": 33,
+        "end_line": 5,
+        "line": 5
+      },
+      "previous_actual_text": "the best",
+      "rule_id": "V015",
+      "semantic_event_matched": true
+    },
+    {
+      "accepted_unit": "context-free marker token without comment syntax",
+      "candidate_actual": {
+        "column": 7,
+        "end_column": 11,
+        "end_line": 11,
+        "line": 11
+      },
+      "candidate_actual_text": "TODO",
+      "candidate_matches_historical_exact_span": true,
+      "decision": "correct-marker-highlight",
+      "historical_expected": {
+        "column": 7,
+        "end_column": 11,
+        "end_line": 11,
+        "line": 11
+      },
+      "historical_expected_text": "TODO",
+      "historical_labels_modified": false,
+      "line": 11,
+      "path": "originals/0001.py",
+      "previous_actual": {
+        "column": 5,
+        "end_column": 11,
+        "end_line": 11,
+        "line": 11
+      },
+      "previous_actual_text": "# TODO",
+      "rule_id": "C004",
+      "semantic_event_matched": true
+    },
+    {
+      "accepted_unit": "identifier without stars; full kind conflict stated in message",
+      "candidate_actual": {
+        "column": 14,
+        "end_column": 20,
+        "end_line": 8,
+        "line": 8
+      },
+      "candidate_actual_text": "extras",
+      "candidate_matches_historical_exact_span": false,
+      "decision": "retain-current-highlight",
+      "historical_expected": {
+        "column": 12,
+        "end_column": 20,
+        "end_line": 8,
+        "line": 8
+      },
+      "historical_expected_text": "**extras",
+      "historical_labels_modified": false,
+      "line": 8,
+      "path": "originals/0001.py",
+      "previous_actual": {
+        "column": 14,
+        "end_column": 20,
+        "end_line": 8,
+        "line": 8
+      },
+      "previous_actual_text": "extras",
+      "rule_id": "C009",
+      "semantic_event_matched": true
+    }
+  ],
+  "historical_report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+  "scope": "Agent-adjudicated development contract and candidate regression comparison; no human or population effectiveness claim",
+  "version": 1
+}

@@ -1,0 +1,32 @@
+{
+  "files": {
+    "originals/0000.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [],
+      "sha256": "ab4a60280784e5b915bb2b1353ceb0a5cffefcbe5148c53b901d7861d41c52a1",
+      "source_group": "github/docs",
+      "source_id": "github/docs:content/actions/how-tos/write-workflows/choose-what-workflows-do/use-jobs.md"
+    }
+  },
+  "review": {
+    "packet_index": {
+      "path": "index.json",
+      "sha256": "52e97e9ddc6460d13e36b5b75588cf1289b242d78d0de95e034a81187bea10bd"
+    },
+    "policy": {
+      "min_confidence": "low",
+      "mode": "all-rules",
+      "profile": "default",
+      "severity": "info"
+    },
+    "protocol_revision": "human-resume-blind-development-v1",
+    "reviewers": [],
+    "rule_contracts": {
+      "path": "contracts.json",
+      "sha256": "44574c524e1f13596b150e5e38f44f47bc4690abced12be954e34c810d5da657"
+    }
+  },
+  "version": 3
+}

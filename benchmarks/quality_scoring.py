@@ -112,6 +112,8 @@ class Annotations:
     review_provenance: dict[str, Any] | None = None
     verified_sources: tuple[tuple[str, bytes], ...] = ()
     usefulness: tuple[UsefulnessRating, ...] = ()
+    native_context: dict[str, Any] | None = None
+    annotation_manifest_sha256: str | None = None
 
 
 def validate_source_bindings(annotations: Annotations, repo_root: Path) -> None:
@@ -121,6 +123,25 @@ def validate_source_bindings(annotations: Annotations, repo_root: Path) -> None:
         if actual != binding["sha256"]:
             raise AnnotationError(
                 f"{relative}: SHA-256 differs from reviewed source {binding['source_id']} ({binding['sha256']})"
+            )
+
+
+def validate_review_bindings(annotations: Annotations, manifest_path: Path) -> None:
+    """Reject changed source-bound annotation and referenced review artifacts."""
+    if annotations.annotation_manifest_sha256 is None:
+        return
+    if (
+        hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+        != annotations.annotation_manifest_sha256
+    ):
+        raise AnnotationError("annotation manifest SHA-256 differs from loaded review")
+    assert annotations.review_provenance is not None
+    for name in ("packet_index", "rule_contracts", "native_context"):
+        if name in annotations.review_provenance:
+            _review_artifact(
+                annotations.review_provenance[name],
+                manifest_path.parent,
+                f"manifest.review.{name}",
             )
 
 
@@ -223,7 +244,9 @@ def _review_artifact(value: Any, root: Path, context: str) -> dict[str, Any]:
         raise AnnotationError(f"{context}: invalid artifact JSON") from exc
 
 
-def _review_header(value: Any, root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
+def _review_header(
+    value: Any, root: Path
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any] | None]:
     header = _mapping(value, "manifest.review")
     _keys(
         header,
@@ -234,6 +257,7 @@ def _review_header(value: Any, root: Path) -> tuple[dict[str, Any], dict[str, An
             "policy",
             "reviewers",
         },
+        optional={"native_context"},
         context="manifest.review",
     )
     _text(header["protocol_revision"], "manifest.review.protocol_revision")
@@ -311,7 +335,14 @@ def _review_header(value: Any, root: Path) -> tuple[dict[str, Any], dict[str, An
         raise AnnotationError(
             "reviewed rule contracts differ from current declared contracts; review affected labels before migration"
         )
-    return header, index
+    native_context = (
+        _review_artifact(
+            header["native_context"], root, "manifest.review.native_context"
+        )
+        if "native_context" in header
+        else None
+    )
+    return header, index, native_context
 
 
 def _location(
@@ -453,13 +484,25 @@ def _negative_conflicts(negative: NegativeCase, expected: ExpectedFinding) -> bo
 
 
 def load_annotations(
-    manifest_path: Path, repo_root: Path, rule_ids: set[str]
+    manifest_path: Path,
+    repo_root: Path,
+    rule_ids: set[str],
+    *,
+    required_manifest_sha256: str | None = None,
 ) -> Annotations:
     """Load legacy annotations or sparse scopes with optional reviewed-byte binding."""
     from benchmarks.usefulness import load_usefulness
 
     try:
-        raw = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest_bytes = manifest_path.read_bytes()
+        if (
+            required_manifest_sha256 is not None
+            and hashlib.sha256(manifest_bytes).hexdigest() != required_manifest_sha256
+        ):
+            raise AnnotationError(
+                "annotation manifest SHA-256 differs from native preflight"
+            )
+        raw = json.loads(manifest_bytes.decode("utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise AnnotationError(
             f"{manifest_path}: invalid JSON or unreadable manifest: {exc}"
@@ -476,10 +519,10 @@ def load_annotations(
         raise AnnotationError("manifest.version must be 1, 2 or 3")
     if version == 3 and "review" not in root:
         raise AnnotationError("manifest missing review header")
-    review, packet_index = (
+    review, packet_index, native_context = (
         _review_header(root["review"], manifest_path.parent)
         if version == 3
-        else (None, {})
+        else (None, {}, None)
     )
     files_data = _mapping(root["files"], "manifest.files")
     if not files_data:
@@ -799,6 +842,8 @@ def load_annotations(
         review,
         tuple(verified_sources),
         tuple(usefulness),
+        native_context,
+        hashlib.sha256(manifest_bytes).hexdigest() if version == 3 else None,
     )
 
 

@@ -1,0 +1,283 @@
+{
+  "version": 1,
+  "reviewer": {
+    "id": "agent-b",
+    "actor": "Codex agent /root/contracts_reviewer_b",
+    "actor_type": "agent",
+    "human_review": false,
+    "independent_review": true,
+    "other_reviewer_consultation": false
+  },
+  "purpose": "Exposed development contract decisions; not blind evaluation or evidence of human effectiveness.",
+  "exposure": {
+    "instructions_read": [
+      "/Users/johnmulder/.codex/RTK.md"
+    ],
+    "task_material_read": [
+      "quality/reviews/2026-10-14-contracts/readings/K001.md",
+      "quality/reviews/2026-10-14-contracts/readings/K002.md",
+      "quality/reviews/2026-10-14-contracts/readings/K003.md",
+      "quality/reviews/2026-10-14-contracts/readings/K004.md",
+      "quality/reviews/2026-10-14-contracts/inputs.json"
+    ],
+    "prior_diagnostics_visible": true,
+    "prior_span_differences_visible": true,
+    "prior_adjudication_summary_visible": true,
+    "referenced_hash_targets_opened": false,
+    "linked_temporary_views_opened": false,
+    "detector_source_opened": false,
+    "tests_opened_or_run": false,
+    "other_agent_results_opened": false,
+    "historical_annotations_opened": false,
+    "reserved_holdout_opened": false,
+    "product_code_executed_or_imported": false,
+    "git_mutations": false,
+    "source_limit": "Only the four supplied readings and inputs.json were read as task evidence. RTK.md was read for shell instructions. The wrapped Requests docstring was treated as display context, not a source modification.",
+    "historical_artifact_policy": "All decisions below are new proposals. No historical frozen artifact was changed."
+  },
+  "shared_span_convention": {
+    "coordinates": "Original source coordinates, one-based and end-exclusive; columns count Unicode code points, not UTF-8 bytes or rendered display width.",
+    "evidence_vs_highlight": "Recognition may use the whole predicate, owning signature, enclosing function, or comparison context. A highlight contains the smallest complete source expression that names the reported feature.",
+    "contiguous_multiline_spans": "If the selected phrase crosses a physical newline, keep its original newline and indentation inside the span. Do not normalize the returned source text.",
+    "punctuation": "Exclude surrounding sentence punctuation and structural delimiters unless a character is intrinsic to the reported expression. Parameter-kind stars are intrinsic; a Python comment introducer is structural."
+  },
+  "readings": [
+    {
+      "id": "K001",
+      "rule": "C004",
+      "disputed_span_disposition": "CHANGE: select TODO, not # TODO; exclude the hash and separating whitespace.",
+      "decision": "Use explicit finite positive placeholder evidence. NotImplementedError alone does not establish an unfinished implementation.",
+      "contract_status": "The published parsed-raise and abstract/typing exemption commitments remain. Which messages count needs a documented contract addition; the reading does not supply a pre-existing exhaustive message contract.",
+      "finite_executable_contract": {
+        "eligibility": "An executable placeholder finding requires an actual parsed raise recognized as raising NotImplementedError under the rule's established syntactic recognition. Apply recognized abstract and typing stub exemptions first. A nearby comment can independently contain a marker, but cannot turn an arbitrary raise into an executable finding.",
+        "message_evidence": "Require a statically available string literal in the raised exception's first positional argument. Compare its whole normalized value against the closed set below. Do not search substrings, infer future work from an issue number, or infer incompleteness from the exception class.",
+        "normalization": "Trim and collapse ASCII whitespace, case-fold, and remove at most one final period. Do not remove other words or punctuation.",
+        "closed_normalized_message_set": [
+          "todo",
+          "fixme",
+          "xxx",
+          "add logic here",
+          "unfinished",
+          "not implemented yet",
+          "to be implemented",
+          "implementation pending"
+        ],
+        "no_positive_evidence": "Emit no executable C004 finding for every other message or unavailable message value. This is a bounded no-finding result, not a claim that the operation is complete or that its author's intention is known.",
+        "scope_note": "This is a conservative initial finite set, not a claim that the supplied reading already publishes these exact phrases. Any expansion should be separately justified with positive and intentional-rejection counterexamples."
+      },
+      "classifications": [
+        {
+          "case": "Requests add_header raise with message Cookie headers should be added with add_unredirected_header()",
+          "executable_C004": false,
+          "rationale": "The message directs callers to a supported alternative and has no positive placeholder phrase. It is outside the closed set regardless of the docstring. The adjacent implemented method is useful context, but the decision does not need a guess about the author's plans."
+        },
+        {
+          "case": "pending(): comment TODO and raise NotImplementedError(\"Add logic here\")",
+          "executable_C004": true,
+          "independent_comment_C004": true,
+          "rationale": "The raise has an exact positive message and the comment has an explicit marker. Either source occurrence has its own evidence. Presentation or deduplication must not silently enlarge the comment's source span to include the raise."
+        },
+        {
+          "case": "later(): raise NotImplementedError(\"unfinished\")",
+          "executable_C004": true,
+          "rationale": "The whole literal is one explicitly accepted formulaic placeholder. No nearby TODO comment is required."
+        },
+        {
+          "case": "specific(): raise NotImplementedError(\"Retry logic is planned after issue #42\")",
+          "executable_C004": false,
+          "rationale": "This may describe deferred work, but it is outside the finite formulaic set. Adding semantic patterns for planned work would be a different, broader contract."
+        }
+      ],
+      "highlight_contract": {
+        "comment_marker": "Highlight exactly TODO, FIXME, or XXX, using the original marker spelling. Exclude the comment introducer, indentation, separating spaces, any following colon or punctuation, and explanation text.",
+        "accepted_supplied_text": "TODO",
+        "rejected_supplied_text": "# TODO",
+        "boundaries": "Recognize a marker as a complete lexical token rather than as a substring of identifiers or longer words; keep the exact marker token as the span even if recognition considers nearby text.",
+        "formulaic_literal": "For a supported ordinary literal spelling, select the formulaic message payload, excluding string delimiters, surrounding whitespace, and the one optional final period. Mapping must retain original source spelling and whitespace. Escaped or concatenated spellings require explicit mapping support before claiming exact highlights for them.",
+        "mismatch_classification": "The TODO difference is a highlight-contract mismatch. Selecting the marker is the useful contract; the reading alone does not establish that the old hash marker span violated an already published exact-span promise."
+      },
+      "counterexamples_and_limits": [
+        "raise NotImplementedError and raise NotImplementedError() are insufficient by themselves; they can be intentional interface rejection.",
+        "Messages such as Operation unsupported, Use the async API instead, and This backend does not implement streaming remain negative, even though they use limitation language.",
+        "Not implemented as a complete message remains outside this conservative set: it supplies less temporal evidence than not implemented yet. This boundary must be explicit rather than left to reviewer intent guesses.",
+        "The exact accepted word unfinished could still be chosen for intentional rejection. The contract reports a lexical placeholder cue, not proven human intent. A finite list cannot eliminate this ambiguity.",
+        "A function returning the string unfinished, an assignment to NotImplementedError, a commented-out raise, and prose mentioning a raise do not satisfy the parsed-raise requirement.",
+        "A variable message, a dynamic f-string, an arbitrary exception alias, or a longer issue-specific message is unsupported positive evidence under this decision. No code execution or general alias inference is needed.",
+        "An accepted literal in a recognized abstract/typing stub stays exempt. An exemption belonging to another function must not leak into the owning function."
+      ],
+      "proposed_regression_tests": [
+        "Pin the four supplied raises independently, including Requests negative and issue-specific planned work negative.",
+        "Pin each exact accepted message; case and ASCII-whitespace variants; one final period accepted; additional words, unsupported punctuation, and substring matches rejected.",
+        "Pin bare/no-argument NotImplementedError, explicit unsupported-operation messages, dynamic messages, ordinary string uses, and commented-out code as no executable finding.",
+        "Pin abstract/typing exemptions and function ownership with the same accepted literal in an exempt and a non-exempt function.",
+        "For # TODO, # TODO: detail, an indented comment, and a trailing inline comment, assert the source slice equals TODO exactly. Add corresponding FIXME and XXX cases plus token-boundary near misses.",
+        "Separate recognition assertions from source mapping assertions for Unicode before a marker, tabs, multiline literal whitespace, and any supported escaped or adjacent-literal representation. Do not silently promise unsupported mapping behavior."
+      ]
+    },
+    {
+      "id": "K002",
+      "rule": "G038",
+      "disputed_span_disposition": "RETAIN current C20-C26 faster; reject frozen C17-C26 is faster.",
+      "decision": "Keep the exact comparative expression as the highlight; omit the predicate verb.",
+      "accepted_span": {
+        "line": 3,
+        "start_column": 20,
+        "end_column": 26,
+        "text": "faster"
+      },
+      "rejected_span": {
+        "start_column": 17,
+        "end_column": 26,
+        "text": "is faster"
+      },
+      "rationale": "The diagnostic names the comparative faster, and the published contract explicitly promises the exact comparative phrase. The verb is evidence that the comparative is predicative, but contributes no comparative content. For an analytic comparative, more or less belongs to the phrase because reliable alone does not encode the comparison.",
+      "classification": "Annotation-contract mismatch: the supplied current span satisfies the published promise. The frozen longer endpoint is not evidence of a code defect.",
+      "highlight_contract": {
+        "included": "The exact curated comparative expression, including more or less when that word is part of the expression.",
+        "excluded": "Copulas and linking verbs, subject, sentence punctuation, and any comparison target or surrounding evidence.",
+        "other_forms": [
+          {
+            "source": "remains more reliable",
+            "highlight": "more reliable"
+          },
+          {
+            "source": "was worse",
+            "highlight": "worse"
+          },
+          {
+            "source": "is more\nreliable",
+            "highlight": "more\nreliable"
+          }
+        ],
+        "recognition_scope": "Use predicate and attached-target context to determine whether an eligible comparative is undefined. That context must not expand the highlighted characters."
+      },
+      "counterexamples_and_limits": [
+        "A comparison target such as faster than the previous release can suppress the undefined-comparison finding while leaving the comparative's lexical extent unchanged.",
+        "A curated comparative mentioned outside a predicate need not be eligible; the span contract does not broaden recognition to every occurrence.",
+        "Do not include remains merely because a frozen annotation includes is. Verb length or tense must not change the highlighted unit."
+      ],
+      "proposed_regression_tests": [
+        "Assert exact L3 C20-C26 and source text faster for the supplied line.",
+        "Pin the three other forms to the exact texts above, including original newline and indentation when present.",
+        "Pair the same comparative with and without an attached target; assert eligibility separately from span selection.",
+        "Check a prefix containing Unicode, an indented line, and terminal punctuation so source mapping cannot accidentally use bytes or absorb punctuation."
+      ]
+    },
+    {
+      "id": "K003",
+      "rule": "V015",
+      "disputed_span_disposition": "RETAIN current C25-C33 the best; reject frozen C17-C33 remains the best.",
+      "decision": "Keep the exact superlative expression with its article when present; omit the predicate verb.",
+      "accepted_span": {
+        "line": 5,
+        "start_column": 25,
+        "end_column": 33,
+        "text": "the best"
+      },
+      "rejected_span": {
+        "start_column": 17,
+        "end_column": 33,
+        "text": "remains the best"
+      },
+      "rationale": "The existing promise expressly includes an article and expressly limits the span to the superlative phrase. The supplied current diagnostic and span agree. The linking verb supplies predicate context but does not belong to that phrase.",
+      "classification": "Annotation-contract mismatch: retaining the current endpoints preserves the explicit published commitment. No code defect is demonstrated by the supplied span.",
+      "highlight_contract": {
+        "included": "The superlative expression, its article when present, and most or least when part of the superlative construction.",
+        "excluded": "The linking verb, subject, sentence punctuation, and comparison-scope evidence outside the superlative phrase.",
+        "other_forms": [
+          {
+            "source": "is fastest",
+            "highlight": "fastest"
+          },
+          {
+            "source": "was the most reliable",
+            "highlight": "the most reliable"
+          },
+          {
+            "source": "is the\nmost reliable",
+            "highlight": "the\nmost reliable"
+          }
+        ],
+        "recognition_scope": "The comparison scope can occur elsewhere in the predicate or surrounding context. Keep INFO severity and low confidence; exact highlighting supplies no basis to increase either."
+      },
+      "counterexamples_and_limits": [
+        "A stated scope such as the best of these three tested parsers can make the claim bounded; it does not make the verb part of the superlative.",
+        "An article-free fastest remains a complete superlative. The article inclusion promise does not authorize adding an absent article or including a verb instead.",
+        "This decision concerns recognized superlatives. It does not add a new detector for every occurrence of most."
+      ],
+      "proposed_regression_tests": [
+        "Assert exact L5 C25-C33 and source text the best for the supplied line.",
+        "Pin the article-free, analytic, and multiline forms above, including the original intervening whitespace.",
+        "Pair an unbounded and an explicitly scoped claim to verify that evidence scope and highlighted source extent remain separate.",
+        "Verify Unicode prefix mapping, punctuation exclusion, article retention, INFO severity, and low confidence."
+      ]
+    },
+    {
+      "id": "K004",
+      "rule": "C009",
+      "disputed_span_disposition": "CHANGE current C14-C20 extras to C12-C20 **extras through an explicit contract amendment; retain the unstarred attempts span.",
+      "decision": "Use the complete declared parameter token: include any leading * or ** for both kind conflicts and absent names.",
+      "accepted_kind_conflict_span": {
+        "line": 8,
+        "start_column": 12,
+        "end_column": 20,
+        "text": "**extras"
+      },
+      "other_supplied_finding": {
+        "declared_token": "attempts",
+        "highlight": "attempts",
+        "rationale": "The token is unstarred, so the complete token is already just its identifier. The replacement name target is evidence from the signature and is not part of this span."
+      },
+      "contract_status": "This is a deliberate clarification/amendment to the docs' declared-name wording. The present identifier-only span is defensible under that wording; it is not an unambiguous pre-existing implementation bug. Update the published highlight promise and candidate tests together before treating the amended endpoints as required.",
+      "rationale": "The stars encode the exact kind assertion being diagnosed, so extras alone hides the relevant syntactic distinction. A complete declared token is the smallest self-contained unit that shows both identity and explicit kind. Including its stars for absent names as well avoids making the source unit depend on a later signature lookup.",
+      "highlight_contract": {
+        "included": "The declared identifier and any directly attached leading * or ** in the documentation field.",
+        "excluded": "The :param introducer, optional type expression, surrounding whitespace, trailing colon, description, and all characters from the owning signature.",
+        "kind_conflicts": [
+          {
+            "documentation": ":param **extras: Additional positional values.",
+            "signature": "def fetch(target, *extras) -> None:",
+            "highlight": "**extras",
+            "diagnostic": "The documentation explicitly declares keyword variadic arguments; the owning signature declares positional variadic arguments. Description wording is not needed to prove the conflict."
+          },
+          {
+            "documentation": ":param *options:",
+            "signature": "def f(**options):",
+            "highlight": "*options",
+            "diagnostic": "The documentation explicitly declares positional variadic arguments; the owning signature declares keyword variadic arguments."
+          }
+        ],
+        "absent_name": "When *options or **options has no matching identifier in the owning signature, highlight the complete starred token and describe the absent name. Do not assert a kind conflict against an unrelated parameter.",
+        "unstarred_names": "An unstarred declaration with a matching variadic identifier does not explicitly assert a contrary star kind. A bare name alone is not sufficient evidence of an explicit-kind mismatch.",
+        "ownership": "Resolve against the actual owning function or method. Neither the nearest unrelated signature nor wording in the description changes the owning signature or the declared token."
+      },
+      "counterexamples_and_limits": [
+        "A **extras documentation token paired with **extras in the signature has no explicit-kind conflict, even if its prose incorrectly says positional values. That prose disagreement is outside this explicit-kind check.",
+        "A bare extras paired with *extras or **extras must not be treated as an explicit ordinary-parameter declaration solely because the documentation omitted stars.",
+        "For a missing starred token, the absence finding is supported; a positional-versus-keyword conflict is not established because no corresponding signature parameter exists.",
+        "Stars in a description or a type expression are not attached parameter-kind markers and must not be absorbed into the highlighted name token.",
+        "Malformed or multiply starred declarations outside the supported field grammar should not acquire valid-name semantics merely through stripping stars. Unsupported parsing cases need an explicit policy."
+      ],
+      "proposed_regression_tests": [
+        "Assert L8 C12-C20 and exact source **extras for the supplied mismatch. Keep the attempts finding on exactly attempts.",
+        "Assert *options against **options and **options against *options, then add matching-kind and unstarred-name controls.",
+        "Test missing *missing and **missing tokens: full token spans, absent-name content, no invented kind conflict.",
+        "For supported typed fields such as :param int **extras:, exclude int and whitespace while retaining **extras. Include stars in a type expression or description as a counterexample.",
+        "Put a Unicode identifier in a conflicting starred declaration and Unicode text before an inline field. Assert original source code-point columns and exact slices, not UTF-8 byte offsets.",
+        "Test a one-line docstring with :param *options: and a conventional indented multiline docstring. Quotes, indentation, and field delimiters stay outside the span.",
+        "Use adjacent functions and nested functions or methods with different variadic kinds to pin ownership. Assert message semantics and exact source location independently."
+      ]
+    }
+  ],
+  "implementation_and_validation": {
+    "implementation_performed": false,
+    "regression_tests_executed": false,
+    "regression_test_status": "Proposals only; no detector source, test files, or code execution were used.",
+    "open_contract_work": [
+      "Document the finite C004 message set and normalization rather than implying semantic intent detection.",
+      "Document C004 comment spans as exact marker tokens.",
+      "Retain published G038 and V015 phrase spans; revise only new candidate annotations that disagree.",
+      "Publish the C009 complete-declared-token amendment before treating its longer source span as mandatory."
+    ]
+  }
+}

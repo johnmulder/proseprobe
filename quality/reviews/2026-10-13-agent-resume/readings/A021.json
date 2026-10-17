@@ -1,0 +1,455 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A021.txt",
+  "packet_path": "originals/0005.py",
+  "pair_group": "psf/requests:src/requests/cookies.py",
+  "reading_id": "A021",
+  "region": {
+    "column": 1,
+    "end_column": 36,
+    "end_line": 400,
+    "line": 361
+  },
+  "rendered_sha256": "c3536be60ad5211a1d0a580982036997c68b2dc891f641f5430a2041fc022dc7",
+  "rendered_text": "Blind agent reading A021: natural.\nReading file: [A021](/private/tmp/proseprobe-A021.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL361 C 1-33 |             for cookie in other:\nL362 C 1-51 |                 self.set_cookie(copy.copy(cookie))\nL363 C 1-14 |         else:\nL364 C 1-34 |             super().update(other)\nL365 C 1- 1 | \nL366 C 1-51 |     def _find(self, name, domain=None, path=None):\nL367 C 1-63 |         \"\"\"Requests uses this method internally to get cookie \nL367 C63-70 | values.\nL368 C 1- 1 | \nL369 C 1-61 |         If there are conflicting cookies, _find arbitrarily \nL369 C61-73 | chooses one.\nL370 C 1-65 |         See _find_no_duplicates if you want an exception thrown \nL370 C65-77 | if there are\nL371 C 1-29 |         conflicting cookies.\nL372 C 1- 1 | \nL373 C 1-56 |         :param name: a string containing name of cookie\nL374 C 1-63 |         :param domain: (optional) string containing domain of \nL374 C63-69 | cookie\nL375 C 1-65 |         :param path: (optional) string containing path of cookie\nL376 C 1-30 |         :return: cookie.value\nL377 C 1-12 |         \"\"\"\nL378 C 1-34 |         for cookie in iter(self):\nL379 C 1-36 |             if cookie.name == name:\nL380 C 1-62 |                 if domain is None or cookie.domain == domain:\nL381 C 1-60 |                     if path is None or cookie.path == path:\nL382 C 1-44 |                         return cookie.value\nL383 C 1- 1 | \nL384 C 1-60 |         raise KeyError(f\"name={name!r}, domain={domain!r}, \nL384 C60-75 | path={path!r}\")\nL385 C 1- 1 | \nL386 C 1-65 |     def _find_no_duplicates(self, name, domain=None, path=None):\nL387 C 1-66 |         \"\"\"Both ``__get_item__`` and ``get`` call this function: \nL387 C66-76 | it's never\nL388 C 1-36 |         used elsewhere in Requests.\nL389 C 1- 1 | \nL390 C 1-56 |         :param name: a string containing name of cookie\nL391 C 1-63 |         :param domain: (optional) string containing domain of \nL391 C63-69 | cookie\nL392 C 1-65 |         :param path: (optional) string containing path of cookie\nL393 C 1-49 |         :raises KeyError: if cookie is not found\nL394 C 1-67 |         :raises CookieConflictError: if there are multiple cookies\nL395 C 1-59 |             that match name and optionally domain and path\nL396 C 1-30 |         :return: cookie.value\nL397 C 1-12 |         \"\"\"\nL398 C 1-24 |         toReturn = None\nL399 C 1-34 |         for cookie in iter(self):\nL400 C 1-36 |             if cookie.name == name:\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 361,
+      "line": 361,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "            for cookie in other:"
+    },
+    {
+      "column": 1,
+      "end_column": 51,
+      "end_line": 362,
+      "line": 362,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "                self.set_cookie(copy.copy(cookie))"
+    },
+    {
+      "column": 1,
+      "end_column": 14,
+      "end_line": 363,
+      "line": 363,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "        else:"
+    },
+    {
+      "column": 1,
+      "end_column": 34,
+      "end_line": 364,
+      "line": 364,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "            super().update(other)"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 365,
+      "line": 365,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 51,
+      "end_line": 366,
+      "line": 366,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "    def _find(self, name, domain=None, path=None):"
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 367,
+      "line": 367,
+      "reading_line": 19,
+      "source_line_ending": "",
+      "text": "        \"\"\"Requests uses this method internally to get cookie "
+    },
+    {
+      "column": 63,
+      "end_column": 70,
+      "end_line": 367,
+      "line": 367,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "values."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 368,
+      "line": 368,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 61,
+      "end_line": 369,
+      "line": 369,
+      "reading_line": 22,
+      "source_line_ending": "",
+      "text": "        If there are conflicting cookies, _find arbitrarily "
+    },
+    {
+      "column": 61,
+      "end_column": 73,
+      "end_line": 369,
+      "line": 369,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "chooses one."
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 370,
+      "line": 370,
+      "reading_line": 24,
+      "source_line_ending": "",
+      "text": "        See _find_no_duplicates if you want an exception thrown "
+    },
+    {
+      "column": 65,
+      "end_column": 77,
+      "end_line": 370,
+      "line": 370,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": "if there are"
+    },
+    {
+      "column": 1,
+      "end_column": 29,
+      "end_line": 371,
+      "line": 371,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "        conflicting cookies."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 372,
+      "line": 372,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 56,
+      "end_line": 373,
+      "line": 373,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "        :param name: a string containing name of cookie"
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 374,
+      "line": 374,
+      "reading_line": 29,
+      "source_line_ending": "",
+      "text": "        :param domain: (optional) string containing domain of "
+    },
+    {
+      "column": 63,
+      "end_column": 69,
+      "end_line": 374,
+      "line": 374,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": "cookie"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 375,
+      "line": 375,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "        :param path: (optional) string containing path of cookie"
+    },
+    {
+      "column": 1,
+      "end_column": 30,
+      "end_line": 376,
+      "line": 376,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "        :return: cookie.value"
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 377,
+      "line": 377,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 34,
+      "end_line": 378,
+      "line": 378,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "        for cookie in iter(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 36,
+      "end_line": 379,
+      "line": 379,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "            if cookie.name == name:"
+    },
+    {
+      "column": 1,
+      "end_column": 62,
+      "end_line": 380,
+      "line": 380,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "                if domain is None or cookie.domain == domain:"
+    },
+    {
+      "column": 1,
+      "end_column": 60,
+      "end_line": 381,
+      "line": 381,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": "                    if path is None or cookie.path == path:"
+    },
+    {
+      "column": 1,
+      "end_column": 44,
+      "end_line": 382,
+      "line": 382,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "                        return cookie.value"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 383,
+      "line": 383,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 60,
+      "end_line": 384,
+      "line": 384,
+      "reading_line": 40,
+      "source_line_ending": "",
+      "text": "        raise KeyError(f\"name={name!r}, domain={domain!r}, "
+    },
+    {
+      "column": 60,
+      "end_column": 75,
+      "end_line": 384,
+      "line": 384,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "path={path!r}\")"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 385,
+      "line": 385,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 386,
+      "line": 386,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "    def _find_no_duplicates(self, name, domain=None, path=None):"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 387,
+      "line": 387,
+      "reading_line": 44,
+      "source_line_ending": "",
+      "text": "        \"\"\"Both ``__get_item__`` and ``get`` call this function: "
+    },
+    {
+      "column": 66,
+      "end_column": 76,
+      "end_line": 387,
+      "line": 387,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": "it's never"
+    },
+    {
+      "column": 1,
+      "end_column": 36,
+      "end_line": 388,
+      "line": 388,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "        used elsewhere in Requests."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 389,
+      "line": 389,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 56,
+      "end_line": 390,
+      "line": 390,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "        :param name: a string containing name of cookie"
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 391,
+      "line": 391,
+      "reading_line": 49,
+      "source_line_ending": "",
+      "text": "        :param domain: (optional) string containing domain of "
+    },
+    {
+      "column": 63,
+      "end_column": 69,
+      "end_line": 391,
+      "line": 391,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": "cookie"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 392,
+      "line": 392,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "        :param path: (optional) string containing path of cookie"
+    },
+    {
+      "column": 1,
+      "end_column": 49,
+      "end_line": 393,
+      "line": 393,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": "        :raises KeyError: if cookie is not found"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 394,
+      "line": 394,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": "        :raises CookieConflictError: if there are multiple cookies"
+    },
+    {
+      "column": 1,
+      "end_column": 59,
+      "end_line": 395,
+      "line": 395,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "            that match name and optionally domain and path"
+    },
+    {
+      "column": 1,
+      "end_column": 30,
+      "end_line": 396,
+      "line": 396,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": "        :return: cookie.value"
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 397,
+      "line": 397,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 24,
+      "end_line": 398,
+      "line": 398,
+      "reading_line": 57,
+      "source_line_ending": "\n",
+      "text": "        toReturn = None"
+    },
+    {
+      "column": 1,
+      "end_column": 34,
+      "end_line": 399,
+      "line": 399,
+      "reading_line": 58,
+      "source_line_ending": "\n",
+      "text": "        for cookie in iter(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 36,
+      "end_line": 400,
+      "line": 400,
+      "reading_line": 59,
+      "source_line_ending": "\n",
+      "text": "            if cookie.name == name:"
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+  "split": "development",
+  "version": 1
+}

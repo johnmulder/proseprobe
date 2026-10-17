@@ -1,0 +1,41 @@
+{
+  "files": {
+    "originals/0000.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [],
+      "sha256": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48",
+      "source_group": "agent-authored-pilot",
+      "source_id": "agent-authored-pilot:claims.md"
+    },
+    "originals/0001.py": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [],
+      "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+      "source_group": "agent-authored-pilot",
+      "source_id": "agent-authored-pilot:documentation.py"
+    }
+  },
+  "review": {
+    "packet_index": {
+      "path": "index.json",
+      "sha256": "2eef722e1bc2794bff37ed83e7520d46965dc1bcc3c0c469ac8cb77984b6c25f"
+    },
+    "policy": {
+      "min_confidence": "low",
+      "mode": "all-rules",
+      "profile": "default",
+      "severity": "info"
+    },
+    "protocol_revision": "agent-resume-development-v1",
+    "reviewers": [],
+    "rule_contracts": {
+      "path": "contracts.json",
+      "sha256": "059a18caf770f2d388e9902d1e0647bc0d6e5eaba6be5409f4b31af126634887"
+    }
+  },
+  "version": 3
+}

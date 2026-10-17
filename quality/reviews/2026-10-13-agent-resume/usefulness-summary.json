@@ -1,0 +1,471 @@
+{
+  "actor_type": "agent",
+  "authored_source_group_count": 1,
+  "concrete_revisions_reviewed": 0,
+  "freeze_commit": "8601af5",
+  "human_usefulness": false,
+  "initial_labels_unchanged": true,
+  "limitations": [
+    "Two separately prompted agents rate the same 16 authored findings; 32 votes do not add 32 source observations or independent source groups.",
+    "Rates are not pooled across natural and authored populations. No natural diagnostic or concrete revision has a usefulness judgment in this batch.",
+    "yes_no_denominator excludes context-dependent, unresolved, and unreviewed answers; all statuses and total ratings remain explicit.",
+    "All meaning-preservation statuses are unresolved because no concrete revision was supplied. Advice acceptance is not acceptance of an implemented edit.",
+    "Null suggestions have unreviewed fit and acceptance. Helpful diagnostic judgments remain separate.",
+    "Agent usefulness judgments are not independent human usefulness or representative population evidence. Reviewer correlation is unquantified."
+  ],
+  "natural_findings_reviewed": 0,
+  "phase": "post-freeze-triggered",
+  "question_status_agreement": {
+    "finding_helpful": {
+      "denominator": 16,
+      "different_prompt_ids": [
+        "T006"
+      ],
+      "different_status": 1,
+      "same_status": 15,
+      "scope": "descriptive agreement only; no human reliability claim"
+    },
+    "meaning_preserved": {
+      "denominator": 16,
+      "different_prompt_ids": [],
+      "different_status": 0,
+      "same_status": 16,
+      "scope": "descriptive agreement only; no human reliability claim"
+    },
+    "reviewer_accepts": {
+      "denominator": 16,
+      "different_prompt_ids": [
+        "T006",
+        "T015"
+      ],
+      "different_status": 2,
+      "same_status": 14,
+      "scope": "descriptive agreement only; no human reliability claim"
+    },
+    "suggestion_fits_sentence": {
+      "denominator": 16,
+      "different_prompt_ids": [
+        "T003",
+        "T010",
+        "T014",
+        "T015"
+      ],
+      "different_status": 4,
+      "same_status": 12,
+      "scope": "descriptive agreement only; no human reliability claim"
+    }
+  },
+  "rating_records": 32,
+  "reports_commit": "3cdf4ca",
+  "reviewers": [
+    {
+      "all_authored_counts": {
+        "finding_helpful": {
+          "statuses": {
+            "context-dependent": 3,
+            "no": 0,
+            "unresolved": 0,
+            "unreviewed": 0,
+            "yes": 13
+          },
+          "total_ratings": 16,
+          "yes_no_denominator": 13
+        },
+        "meaning_preserved": {
+          "statuses": {
+            "context-dependent": 0,
+            "no": 0,
+            "unresolved": 16,
+            "unreviewed": 0,
+            "yes": 0
+          },
+          "total_ratings": 16,
+          "yes_no_denominator": 0
+        },
+        "reviewer_accepts": {
+          "statuses": {
+            "context-dependent": 4,
+            "no": 0,
+            "unresolved": 0,
+            "unreviewed": 2,
+            "yes": 10
+          },
+          "total_ratings": 16,
+          "yes_no_denominator": 10
+        },
+        "suggestion_fits_sentence": {
+          "statuses": {
+            "context-dependent": 4,
+            "no": 0,
+            "unresolved": 0,
+            "unreviewed": 2,
+            "yes": 10
+          },
+          "total_ratings": 16,
+          "yes_no_denominator": 10
+        }
+      },
+      "cohorts": {
+        "authored-challenge": {
+          "findings": 13,
+          "questions": {
+            "finding_helpful": {
+              "statuses": {
+                "context-dependent": 3,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 10
+              },
+              "total_ratings": 13,
+              "yes_no_denominator": 10
+            },
+            "meaning_preserved": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 13,
+                "unreviewed": 0,
+                "yes": 0
+              },
+              "total_ratings": 13,
+              "yes_no_denominator": 0
+            },
+            "reviewer_accepts": {
+              "statuses": {
+                "context-dependent": 3,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 2,
+                "yes": 8
+              },
+              "total_ratings": 13,
+              "yes_no_denominator": 8
+            },
+            "suggestion_fits_sentence": {
+              "statuses": {
+                "context-dependent": 2,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 2,
+                "yes": 9
+              },
+              "total_ratings": 13,
+              "yes_no_denominator": 9
+            }
+          },
+          "source_groups": 1
+        },
+        "authored-local-links": {
+          "findings": 3,
+          "questions": {
+            "finding_helpful": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 3
+              },
+              "total_ratings": 3,
+              "yes_no_denominator": 3
+            },
+            "meaning_preserved": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 3,
+                "unreviewed": 0,
+                "yes": 0
+              },
+              "total_ratings": 3,
+              "yes_no_denominator": 0
+            },
+            "reviewer_accepts": {
+              "statuses": {
+                "context-dependent": 1,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 2
+              },
+              "total_ratings": 3,
+              "yes_no_denominator": 2
+            },
+            "suggestion_fits_sentence": {
+              "statuses": {
+                "context-dependent": 2,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 1
+              },
+              "total_ratings": 3,
+              "yes_no_denominator": 1
+            }
+          },
+          "source_groups": 1
+        },
+        "natural": {
+          "findings": 0,
+          "questions": {
+            "finding_helpful": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 0
+              },
+              "total_ratings": 0,
+              "yes_no_denominator": 0
+            },
+            "meaning_preserved": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 0
+              },
+              "total_ratings": 0,
+              "yes_no_denominator": 0
+            },
+            "reviewer_accepts": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 0
+              },
+              "total_ratings": 0,
+              "yes_no_denominator": 0
+            },
+            "suggestion_fits_sentence": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 0
+              },
+              "total_ratings": 0,
+              "yes_no_denominator": 0
+            }
+          },
+          "source_groups": 0
+        }
+      },
+      "path": "quality/reviews/2026-10-13-agent-resume/usefulness.agent-a.json",
+      "reviewer_id": "codex-agent:/root/agent_usefulness_a",
+      "sha256": "54952ad603e108b5a80396bc91e610445d6f6e637593b4632e071b556ec2a25b"
+    },
+    {
+      "all_authored_counts": {
+        "finding_helpful": {
+          "statuses": {
+            "context-dependent": 4,
+            "no": 0,
+            "unresolved": 0,
+            "unreviewed": 0,
+            "yes": 12
+          },
+          "total_ratings": 16,
+          "yes_no_denominator": 12
+        },
+        "meaning_preserved": {
+          "statuses": {
+            "context-dependent": 0,
+            "no": 0,
+            "unresolved": 16,
+            "unreviewed": 0,
+            "yes": 0
+          },
+          "total_ratings": 16,
+          "yes_no_denominator": 0
+        },
+        "reviewer_accepts": {
+          "statuses": {
+            "context-dependent": 4,
+            "no": 0,
+            "unresolved": 0,
+            "unreviewed": 2,
+            "yes": 10
+          },
+          "total_ratings": 16,
+          "yes_no_denominator": 10
+        },
+        "suggestion_fits_sentence": {
+          "statuses": {
+            "context-dependent": 0,
+            "no": 0,
+            "unresolved": 0,
+            "unreviewed": 2,
+            "yes": 14
+          },
+          "total_ratings": 16,
+          "yes_no_denominator": 14
+        }
+      },
+      "cohorts": {
+        "authored-challenge": {
+          "findings": 13,
+          "questions": {
+            "finding_helpful": {
+              "statuses": {
+                "context-dependent": 4,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 9
+              },
+              "total_ratings": 13,
+              "yes_no_denominator": 9
+            },
+            "meaning_preserved": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 13,
+                "unreviewed": 0,
+                "yes": 0
+              },
+              "total_ratings": 13,
+              "yes_no_denominator": 0
+            },
+            "reviewer_accepts": {
+              "statuses": {
+                "context-dependent": 4,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 2,
+                "yes": 7
+              },
+              "total_ratings": 13,
+              "yes_no_denominator": 7
+            },
+            "suggestion_fits_sentence": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 2,
+                "yes": 11
+              },
+              "total_ratings": 13,
+              "yes_no_denominator": 11
+            }
+          },
+          "source_groups": 1
+        },
+        "authored-local-links": {
+          "findings": 3,
+          "questions": {
+            "finding_helpful": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 3
+              },
+              "total_ratings": 3,
+              "yes_no_denominator": 3
+            },
+            "meaning_preserved": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 3,
+                "unreviewed": 0,
+                "yes": 0
+              },
+              "total_ratings": 3,
+              "yes_no_denominator": 0
+            },
+            "reviewer_accepts": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 3
+              },
+              "total_ratings": 3,
+              "yes_no_denominator": 3
+            },
+            "suggestion_fits_sentence": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 3
+              },
+              "total_ratings": 3,
+              "yes_no_denominator": 3
+            }
+          },
+          "source_groups": 1
+        },
+        "natural": {
+          "findings": 0,
+          "questions": {
+            "finding_helpful": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 0
+              },
+              "total_ratings": 0,
+              "yes_no_denominator": 0
+            },
+            "meaning_preserved": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 0
+              },
+              "total_ratings": 0,
+              "yes_no_denominator": 0
+            },
+            "reviewer_accepts": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 0
+              },
+              "total_ratings": 0,
+              "yes_no_denominator": 0
+            },
+            "suggestion_fits_sentence": {
+              "statuses": {
+                "context-dependent": 0,
+                "no": 0,
+                "unresolved": 0,
+                "unreviewed": 0,
+                "yes": 0
+              },
+              "total_ratings": 0,
+              "yes_no_denominator": 0
+            }
+          },
+          "source_groups": 0
+        }
+      },
+      "path": "quality/reviews/2026-10-13-agent-resume/usefulness.agent-b.json",
+      "reviewer_id": "codex-agent:/root/agent_usefulness_b",
+      "sha256": "6b7c6ca29ae1ca88ebe18f7dc84ccad60e7a58e84493ffedc7e58579be1080f9"
+    }
+  ],
+  "trigger_prompts_sha256": "0d5e4e4bb717997fa40be25e499ce9f1824ab43bc0d53ab6e1c00f99007861dd",
+  "unique_findings": 16,
+  "version": 1
+}

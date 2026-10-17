@@ -1,0 +1,167 @@
+{
+  "agent_reviews": [
+    "code-review.json",
+    "code-review-followup.json"
+  ],
+  "curated_mismatches": {
+    "all_rules": 6,
+    "production": 4
+  },
+  "final_focused_passed": 169,
+  "final_full_suite_passed": 3755,
+  "logs": [
+    {
+      "exit_code": 1,
+      "log": "quality/reviews/2026-10-14-reading-context/markdown-red.json",
+      "scope": "Markdown/native initial tests; 27failed,1passed",
+      "sha256": "f8ee1178e9912b54c20357cb0a0bfc81f84c8c013e7e73add733615842f4d0f4"
+    },
+    {
+      "exit_code": 0,
+      "log": "quality/reviews/2026-10-14-reading-context/markdown-green.json",
+      "scope": "Markdown/native focused tests;28passed",
+      "sha256": "d557a7d5ea4a1d74fb3ad26bf83b86d789f3ccc5fd96a2516e288d1e448be171"
+    },
+    {
+      "exit_code": 1,
+      "log": "quality/reviews/2026-10-14-reading-context/boundary-red.json",
+      "scope": "Physical link breaks and silently ignored Markdown context;4failed",
+      "sha256": "020a9d5329b40a962530804b2d37bb7505d40075b8baa7b221c62228b4867217"
+    },
+    {
+      "exit_code": 1,
+      "log": "quality/reviews/2026-10-14-reading-context/review-red.json",
+      "scope": "Agent concrete findings;8failed,2passed",
+      "sha256": "745db05018b90085ada9c5133bc5c880694fe631f80a5aefa43de45bd77c3e23"
+    },
+    {
+      "exit_code": 0,
+      "log": "quality/reviews/2026-10-14-reading-context/review-green.json",
+      "scope": "Agent findings corrected;10passed",
+      "sha256": "4c5fbd327ed758aa354ebf735e66bda75c61d52f7559e5bcbdb58bcde2d2c12a"
+    },
+    {
+      "exit_code": 1,
+      "log": "quality/reviews/2026-10-14-reading-context/tabs-red.json",
+      "scope": "Mixed indentation;1failed,5passed",
+      "sha256": "2411657886448292f2362c74ce956ed3ec1386007c850505a865764301339725"
+    },
+    {
+      "exit_code": 0,
+      "log": "quality/reviews/2026-10-14-reading-context/tabs-green.json",
+      "scope": "Mixed indentation corrected;6passed",
+      "sha256": "7c31dfd81ae6eefb53e1a29f3027d911a0c5fd5844eeca3bb94f18dc3b2594a1"
+    },
+    {
+      "exit_code": 1,
+      "log": "quality/reviews/2026-10-14-reading-context/entity-red.json",
+      "scope": "Entity-spelling destination;1failed,4passed",
+      "sha256": "1a2c1e92bb1b0c8cf2a2ca67d88945e498ce05dfabb2eb2fcd8dc812370af864"
+    },
+    {
+      "exit_code": 0,
+      "log": "quality/reviews/2026-10-14-reading-context/entity-green.json",
+      "scope": "Entity-spelling destination rejected;5passed",
+      "sha256": "cc32a3c06755919acbd5265efe0865a112e7c6d9e75a0229a48a6d723e6c67ba"
+    },
+    {
+      "exit_code": 1,
+      "log": "quality/reviews/2026-10-14-reading-context/scheme-red.json",
+      "scope": "Scheme-relative directory;1failed",
+      "sha256": "5fd837ee1d28a433dd21a0a149aa5969557f157fab7e3398c036fdac7b8d5973"
+    },
+    {
+      "exit_code": 0,
+      "log": "quality/reviews/2026-10-14-reading-context/scheme-green.json",
+      "scope": "Scheme-relative directory rejected;1passed",
+      "sha256": "ce0b3e1735651fd00bb0d306d6c1dcd9870f22426ea7d2ff666b5b541e47105d"
+    },
+    {
+      "exit_code": 0,
+      "log": "quality/reviews/2026-10-14-reading-context/final-green.json",
+      "scope": "pytest -o addopts= tests/test_review_readings.py tests/test_review_context.py tests/test_review_markdown_context.py tests/test_native_reference_context.py -q",
+      "sha256": "3e771b6394d9ec58c2138f520335119ce1cebfb2e3fb55a5b3c6fb54b7f5b0aa"
+    },
+    {
+      "exit_code": 0,
+      "log": "quality/reviews/2026-10-14-reading-context/final-gates.json",
+      "scope": "make check dogfood rule-quality-regression",
+      "sha256": "b41b93cfa68a9cfdbdd9d1e0ba6466b01a5ebee825f327eb7687bb04c200ed07"
+    }
+  ],
+  "production_rules_changed": false,
+  "reserved_holdout_opened": false,
+  "runtime": {
+    "git": {
+      "head": "06e5613925e267b493fbec5e72090e5657b93b21",
+      "scope": [
+        "benchmarks",
+        "src/proseprobe"
+      ],
+      "staged_dirty": false,
+      "tracked_worktree_dirty": true,
+      "untracked_python_files": []
+    },
+    "identity_scope": "package and evaluator Python source names and exact bytes; caches, corpora and documents excluded",
+    "package_version": "0.1.0",
+    "source_files": [
+      "evaluator/__init__.py",
+      "evaluator/bench_rules.py",
+      "evaluator/corpora.py",
+      "evaluator/evaluation_identity.py",
+      "evaluator/memory_probe.py",
+      "evaluator/native_link_context.py",
+      "evaluator/native_reference_context.py",
+      "evaluator/paired_quality.py",
+      "evaluator/quality_scoring.py",
+      "evaluator/regression_gate.py",
+      "evaluator/review_context.py",
+      "evaluator/review_readings.py",
+      "evaluator/rule_quality.py",
+      "evaluator/source_intervals.py",
+      "evaluator/startup_probe.py",
+      "evaluator/usefulness.py",
+      "package/__init__.py",
+      "package/__main__.py",
+      "package/_ansi.py",
+      "package/_rule_docs.py",
+      "package/cli.py",
+      "package/config.py",
+      "package/core/__init__.py",
+      "package/core/baseline.py",
+      "package/core/linter.py",
+      "package/core/policy.py",
+      "package/core/reporter.py",
+      "package/data/__init__.py",
+      "package/data/code_patterns.py",
+      "package/data/patterns.py",
+      "package/data/phrases.py",
+      "package/data/style_patterns.py",
+      "package/data/vocabulary.py",
+      "package/parsers/__init__.py",
+      "package/parsers/markdown.py",
+      "package/parsers/prose.py",
+      "package/parsers/python.py",
+      "package/profiles.py",
+      "package/rules/__init__.py",
+      "package/rules/_phrases.py",
+      "package/rules/base.py",
+      "package/rules/code.py",
+      "package/rules/grammar.py",
+      "package/rules/markup.py",
+      "package/rules/struct.py",
+      "package/rules/style.py",
+      "package/rules/vocab.py"
+    ],
+    "source_files_count": 47,
+    "source_roots": {
+      "evaluator": "/Users/johnmulder/Experiments/proseprobe/benchmarks",
+      "package": "/Users/johnmulder/Experiments/proseprobe/src/proseprobe"
+    },
+    "source_sha256": "b471e21df1ccbc55ff64bc3ef5ec1dcd33c051d22cdff2ce2302c24d89fa2dd4"
+  },
+  "runtime_scope": "Final GREEN and gates only; earlier RED/GREEN logs retain their actual phase, not a claimed final-source binding.",
+  "stage": "R02",
+  "targeted_strict_typing": "review_context.py and review_readings.py, strict with silent dependency imports;passed",
+  "version": 1
+}

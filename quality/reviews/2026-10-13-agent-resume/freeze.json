@@ -1,0 +1,358 @@
+{
+  "actor_type": "agent",
+  "artifacts": {
+    "downloads/evaluation/agent-authored/agent-resume-2026-10-13-v1/setup.md": {
+      "sha256": "30e40d742a09cb169b0abac6b3fb5a5fc1cafd287b3c61d7cad9a6cee1decfbb"
+    },
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0000.md": {
+      "sha256": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48"
+    },
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0001.py": {
+      "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218"
+    },
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-local-links/originals/0000.md": {
+      "sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1"
+    },
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/natural/originals/0000.md": {
+      "sha256": "ab4a60280784e5b915bb2b1353ceb0a5cffefcbe5148c53b901d7861d41c52a1"
+    },
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/natural/originals/0001.md": {
+      "sha256": "e4656dfdd2cff448e23fd8115b70b78efd0ac8863897b9df161ffc26dec12ded"
+    },
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/natural/originals/0002.md": {
+      "sha256": "d85335cdf9f9c882db139b6653bd77e640dda92eca9bc6e8136a5a0bf5ae0ef2"
+    },
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/natural/originals/0003.py": {
+      "sha256": "67d49be35d009efea35054f2b2cd23145854eb1b2df1cb442ea7f2f04bf6de0c"
+    },
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/natural/originals/0004.py": {
+      "sha256": "9cc4329abe21b37d93a95a3901b0ab99c24486f3d487bc57965bb2ab0b252e24"
+    },
+    "downloads/evaluation/blind/agent-resume-2026-10-13-v1/natural/originals/0005.py": {
+      "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c"
+    },
+    "quality/reviews/2026-10-13-agent-resume/adjudication.json": {
+      "sha256": "a7b5ea0fa263fec091913d6079c3e3d7e3a0c78cb6bd68e23c8db1d10fd8b200"
+    },
+    "quality/reviews/2026-10-13-agent-resume/agreement.json": {
+      "sha256": "e95e95a15da52abe9bbc444560257e0ef11275ec5c9a5a3aef69791a0108ec6c"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-challenge/annotations.adjudicated.json": {
+      "sha256": "5a9476bf68beb379887a7565a5234825390d8e9bccba57d86d370306b5d2c9cf"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-challenge/annotations.agent-a.json": {
+      "sha256": "860ef36ac41fb6a781ba8bd99370bf4acb041fcff3147b44dea09e6f3a3d05a8"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-challenge/annotations.agent-b.json": {
+      "sha256": "4b211109d80fd0f482e1e36ec4b53c1d38242fc1571c2e2e0007ff72a1c109fe"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-challenge/annotations.unreviewed.json": {
+      "sha256": "fc41447c58b45b96ae56deabc0d2eb5c18402bc0fa29870c733bbdbbf10dae52"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-challenge/contracts.json": {
+      "sha256": "059a18caf770f2d388e9902d1e0647bc0d6e5eaba6be5409f4b31af126634887"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-challenge/index.json": {
+      "sha256": "2eef722e1bc2794bff37ed83e7520d46965dc1bcc3c0c469ac8cb77984b6c25f"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-local-links/annotations.adjudicated.json": {
+      "sha256": "5cf95f8cb54c4acc85f94aa2f5e0683429f0a9d453adce07967d2b38452b5425"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-local-links/annotations.agent-a.json": {
+      "sha256": "6b0b6caf350841eb92244534b74293da94f2540df9ad2278f586a0807c38bdcd"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-local-links/annotations.agent-b.json": {
+      "sha256": "1c6da72645a09f47eb53c57dd955b39daf89e88e20ec9504024bbfbdc7088e54"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-local-links/annotations.unreviewed.json": {
+      "sha256": "a1281ae79ed1ee5490bcc5e0ee3aa506bf7318a2ad229337428dbab00ac5265e"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-local-links/contracts.json": {
+      "sha256": "27650a79822ed908ff5e31d443cd1a7cc9171ee0a673abb93df095116b7b5800"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-local-links/git-objects.json": {
+      "sha256": "01c54e75b899c2aca2a1a13a1d993a1f442a4f5eedacbce4c323bb179f52a3e0"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-local-links/index.json": {
+      "sha256": "e82569b45e40a826b380bc580e60907f9ec2b98c93a9dcc6097f35a5f4a399f7"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-local-links/native-context.json": {
+      "sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528"
+    },
+    "quality/reviews/2026-10-13-agent-resume/authored-native-sources.json": {
+      "sha256": "6d905cfe606c2b55818a3e3e457244271b0ce893aedcdd10559ccfc5d7dbcb7a"
+    },
+    "quality/reviews/2026-10-13-agent-resume/challenge-originals.json": {
+      "sha256": "065868c38a6ffb5476ed15a3fea019513eb2b4c05dfd0325bb8c7aa3505ce8d0"
+    },
+    "quality/reviews/2026-10-13-agent-resume/guidance.json": {
+      "sha256": "2d5025be7d2a121223f4f0659a4454fb33f0c243605dae896bd35d3c74587821"
+    },
+    "quality/reviews/2026-10-13-agent-resume/inputs.json": {
+      "sha256": "7d59f3d24ea0c6e18f243810c1def10f73aaf9529dc01b37fbc0bc3044adf906"
+    },
+    "quality/reviews/2026-10-13-agent-resume/licenses.json": {
+      "sha256": "b16be2509aa2b69d4877d835c088133055510791a994ac0dd8a9a616735498b6"
+    },
+    "quality/reviews/2026-10-13-agent-resume/natural/annotations.adjudicated.json": {
+      "sha256": "fa1f3c704c3b429935724b2cb9ebdfdf782da91abec83a5f19431bc4a997d920"
+    },
+    "quality/reviews/2026-10-13-agent-resume/natural/annotations.agent-a.json": {
+      "sha256": "6f341565336f57da5d5cdc4030851130e0f204590cb6dad7e6d406031703faca"
+    },
+    "quality/reviews/2026-10-13-agent-resume/natural/annotations.agent-b.json": {
+      "sha256": "78ef88a20671c636bba6d650d4295baa8a0e194af04e1fa5fe867e050aec97a4"
+    },
+    "quality/reviews/2026-10-13-agent-resume/natural/annotations.unreviewed.json": {
+      "sha256": "5cc36ca0b4bd2f1e8099b4fe91adf6438a19e157e34920cf697bd85cd3071e83"
+    },
+    "quality/reviews/2026-10-13-agent-resume/natural/contracts.json": {
+      "sha256": "059a18caf770f2d388e9902d1e0647bc0d6e5eaba6be5409f4b31af126634887"
+    },
+    "quality/reviews/2026-10-13-agent-resume/natural/index.json": {
+      "sha256": "e3c970e0eefb5864fb8bb8b89ecdf93fc5708182faa4b49ed91c4e7bc5256546"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings.json": {
+      "sha256": "c7463d81ca881b77d48eb53f51d64527a400d49e0babf2238e258829a2acefcc"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A001.json": {
+      "sha256": "6d4088c5a401ad3edb0b949245bfdb085fde13082e2a263d11b8fd228a703aa1"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A002.json": {
+      "sha256": "e09607e5bde559276677cdf93a1128f483b39d18d0a135a25a029d451864c8d6"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A003.json": {
+      "sha256": "965ab441221f043b9404d50cc24ac389dd99f1af1bec92e324de79af014e5553"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A004.json": {
+      "sha256": "31fde279bd45d520be95dd7ee5cc8fa886eded6485987b9afc7c4bec1b338abe"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A005.json": {
+      "sha256": "94d5e9fe8ea67b5ff1c8ae426553552dead64f12ac71cb3e4b832ac212043cab"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A006.json": {
+      "sha256": "d5c68f6779a9e8319eb2c540f1709c0dc628415d8885412d9b2535ba32c8e7c6"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A007.json": {
+      "sha256": "689e2e53d7fd261a057df04faebccaf2ef51577a66874e0985dcda390256cd3b"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A008.json": {
+      "sha256": "655e7c57a225d045d2742fbae9b48d94a56528e45a89b9d3e3ed957e034d620b"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A009.json": {
+      "sha256": "552742139ef029585a1866ba7b5791de3a1c6bf50462796dccaec4dfc8cc4668"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A010.json": {
+      "sha256": "23db70ae6a25b1a07670f673c7728c0a736597fd4b71d1e7b20449dfc9ef7485"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A011.json": {
+      "sha256": "c6b9b89b8ef05b867e375ae84346e1fb5b1125647da64a1650ebd54f6fcbc5fc"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A012.json": {
+      "sha256": "3dc20951749740b57fd05a4ed3f42ce5eac8f43663db1aa30d6ccbc2c0127200"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A013.json": {
+      "sha256": "e9b5802a96a29b809da18b267121f42eef4c5562c079d4bc97c6ce80ea7a52c7"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A014.json": {
+      "sha256": "547aeaacc1833762e3c43c358c1b561f9bf72fef1029dcd942700ce7adfe1b75"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A015.json": {
+      "sha256": "9949c68ae88c73b0f3cddc1c73a7662bf8e8103bda1b2c825870c64c5ad57b45"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A016.json": {
+      "sha256": "5d0bad73589bce73ca74fe0c89afeee65ffaa5b6e5925393b72c2a8d9fbe948e"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A017.json": {
+      "sha256": "842f0dadfcf4a41b83aa04d60645d5ffbf2830e1095082e19fcede2670bff260"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A018.json": {
+      "sha256": "259ee9b559e617614b359a6b81f84d7a295a769fbc6fb3afe242e4b05dd43c27"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A019.json": {
+      "sha256": "03fd24695763179242bc02afed5d227a1a4875c26e6f99a1e27f1f8914267aeb"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A020.json": {
+      "sha256": "cb1bfda1be06bec35332a9fa52a7076d9d9f81acadee9591307c936b9570d045"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A021.json": {
+      "sha256": "a86528ae5cb256dc05587e846632d94c33b9066a4c4a679fab5165bd237f7bcb"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A022.json": {
+      "sha256": "9df6589ec05663d9299ff4f12bee8c559f97a936c5d2f05c21784042b7f67b56"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A023.json": {
+      "sha256": "a37b7dc6e76a7e495fc9d7a4a5be7e51e32a12b52c3458e34b27a5355ca0b0de"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A024.json": {
+      "sha256": "686c2be6a6207f824031692885f58a6a84c1bbb56e6f9ccd3844706a348abc82"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A025.json": {
+      "sha256": "75ea6c89a20e973fd616f7ff5794b39cc94debfd701b09f340c0620831c1b3fb"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A026.json": {
+      "sha256": "1c5b50b861989040099b1f1895b309cbc5a9f0d27cee58e9f4451b08f5412695"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A027.json": {
+      "sha256": "49b5454f87d8cbd149cd14c8f52f8c1c27d29119a5bc0353e9b317c3199c11e6"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A028.json": {
+      "sha256": "342b3d9b9c4734a4943fa91a79b5a9715f9ef7124f67d4f3837601809af5e7da"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A029.json": {
+      "sha256": "c14e96101814e7f96dea80c231cfb939380833b6132542f323da03859b8395af"
+    },
+    "quality/reviews/2026-10-13-agent-resume/readings/A030.json": {
+      "sha256": "eace985143873770c2a2af2d1e3c9e5698dd9facdafa00e3cc0b8a4f6ed7320d"
+    },
+    "quality/reviews/2026-10-13-agent-resume/review-matrix.json": {
+      "sha256": "7f25956fb1c28d3fde65a6e77f47a7d7ebed77496802d13eb4b8567e3e31e513"
+    },
+    "quality/reviews/2026-10-13-agent-resume/review.agent-a.json": {
+      "sha256": "71423d6059f085f420b3b34492176a0ee9b9fcc0cca9e4bf0992cf36087face7"
+    },
+    "quality/reviews/2026-10-13-agent-resume/review.agent-b.json": {
+      "sha256": "c21ce3aea315b2033f69f60daa72a40b1b0f9ccb293d1409e91facb487040141"
+    },
+    "quality/reviews/2026-10-13-agent-resume/selection.json": {
+      "sha256": "9474c8379cc8fa84effde77b94c1cd66e9ad9691fdeade93fab61415817b77ab"
+    }
+  },
+  "auxiliary_exposure": "disclosed in adjudication.json; excluded from labels; primary A/B saw no predictions",
+  "counts": {
+    "authored-challenge": {
+      "adjudicated": {
+        "expected": 13,
+        "files": 2,
+        "negative_cases": 0
+      },
+      "agent-a": {
+        "expected": 13,
+        "files": 2,
+        "negative_cases": 0
+      },
+      "agent-b": {
+        "expected": 13,
+        "files": 2,
+        "negative_cases": 0
+      }
+    },
+    "authored-local-links": {
+      "adjudicated": {
+        "expected": 3,
+        "files": 1,
+        "negative_cases": 0
+      },
+      "agent-a": {
+        "expected": 3,
+        "files": 1,
+        "negative_cases": 0
+      },
+      "agent-b": {
+        "expected": 3,
+        "files": 1,
+        "negative_cases": 0
+      }
+    },
+    "natural": {
+      "adjudicated": {
+        "expected": 0,
+        "files": 6,
+        "negative_cases": 0
+      },
+      "agent-a": {
+        "expected": 0,
+        "files": 6,
+        "negative_cases": 0
+      },
+      "agent-b": {
+        "expected": 0,
+        "files": 6,
+        "negative_cases": 0
+      }
+    }
+  },
+  "evaluation_modes": [
+    "all-rules",
+    "production"
+  ],
+  "frozen_at_utc": "2026-10-14T05:53:18.087983+00:00",
+  "holdout_opened": false,
+  "human_annotation": false,
+  "independent_human_evidence": false,
+  "independent_population_claim": false,
+  "phase": "accepted agent labels before predictions",
+  "policy_changes": false,
+  "populations": "natural and authored challenge reports remain separate; repeated agents do not add source groups",
+  "production_policy": "unchanged default severity/confidence/profile; bound local cohort supplies explicit native renderer/context only",
+  "runtime": {
+    "git": {
+      "head": "2426eeb3aebd466d2a1401620c7515244a8f9956",
+      "scope": [
+        "benchmarks",
+        "src/proseprobe"
+      ],
+      "staged_dirty": false,
+      "tracked_worktree_dirty": false,
+      "untracked_python_files": []
+    },
+    "identity_scope": "package and evaluator Python source names and exact bytes; caches, corpora and documents excluded",
+    "package_version": "0.1.0",
+    "source_files": [
+      "evaluator/__init__.py",
+      "evaluator/bench_rules.py",
+      "evaluator/corpora.py",
+      "evaluator/evaluation_identity.py",
+      "evaluator/memory_probe.py",
+      "evaluator/native_link_context.py",
+      "evaluator/native_reference_context.py",
+      "evaluator/paired_quality.py",
+      "evaluator/quality_scoring.py",
+      "evaluator/regression_gate.py",
+      "evaluator/review_readings.py",
+      "evaluator/rule_quality.py",
+      "evaluator/source_intervals.py",
+      "evaluator/startup_probe.py",
+      "evaluator/usefulness.py",
+      "package/__init__.py",
+      "package/__main__.py",
+      "package/_ansi.py",
+      "package/_rule_docs.py",
+      "package/cli.py",
+      "package/config.py",
+      "package/core/__init__.py",
+      "package/core/baseline.py",
+      "package/core/linter.py",
+      "package/core/policy.py",
+      "package/core/reporter.py",
+      "package/data/__init__.py",
+      "package/data/code_patterns.py",
+      "package/data/patterns.py",
+      "package/data/phrases.py",
+      "package/data/style_patterns.py",
+      "package/data/vocabulary.py",
+      "package/parsers/__init__.py",
+      "package/parsers/markdown.py",
+      "package/parsers/prose.py",
+      "package/parsers/python.py",
+      "package/profiles.py",
+      "package/rules/__init__.py",
+      "package/rules/_phrases.py",
+      "package/rules/base.py",
+      "package/rules/code.py",
+      "package/rules/grammar.py",
+      "package/rules/markup.py",
+      "package/rules/struct.py",
+      "package/rules/style.py",
+      "package/rules/vocab.py"
+    ],
+    "source_files_count": 46,
+    "source_roots": {
+      "evaluator": "/Users/johnmulder/Experiments/proseprobe/benchmarks",
+      "package": "/Users/johnmulder/Experiments/proseprobe/src/proseprobe"
+    },
+    "source_sha256": "acd8107edffa140f83f7861ccae5cd0b55a64e3a017da8285dd0e8626ab044c3"
+  },
+  "uncertainty": "whole-group intervals unavailable below five contributing groups; rates unavailable at zero denominators",
+  "version": 1
+}

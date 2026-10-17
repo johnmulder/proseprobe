@@ -1,0 +1,27 @@
+{
+  "eligible_reference_count": "unknown",
+  "holdout_opened": false,
+  "inventory_artifact": "quality/reviews/2026-10-15-remaining/native-intake/inventory.json",
+  "inventory_artifact_sha256": "b74d85e58356021559e1e1e3eb1a8e6eecb9493315d86e3c7fd8c89efd8c6f43",
+  "license": "MIT; same pinned LICENSE retained alongside artifacts",
+  "native_inventory_entry": {
+    "mode": "100644",
+    "object_id": "4a3ef556c8fd23eeb8bc5e44e734ddf7e66c88f6",
+    "path": "docs/README.md"
+  },
+  "native_path": "docs/README.md",
+  "original_selection_sha256": "7e3ca1224804240c97320f4d60851fc7289c03f4df0aa3f25222340e62c45e4c",
+  "pair_group": "markdown-it/markdown-it:docs/README.md",
+  "prediction_generation": "withheld; structural eligibility/context only",
+  "prior_source_scope": "Root README eligibility complete:0 supported local references;53 exclusions. Preserve its original declaration and result.",
+  "revision": "0fe7ccb4b7f30236fb05f623be6924961d296d3d",
+  "scope": "This source and exactly its supported target closure; target choices are frozen before target bytes",
+  "selected_before_reference_enumeration": true,
+  "selected_before_source_bytes": true,
+  "selection_basis": "One documentation index from the already acquired pinned file inventory, before reading index content; no further source recursion",
+  "source_group": "markdown-it/markdown-it",
+  "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+  "split": "development",
+  "stage": "P30.18d.1/.2 additional metadata-declared source batch",
+  "version": 1
+}

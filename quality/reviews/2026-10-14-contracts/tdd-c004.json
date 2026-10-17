@@ -1,0 +1,114 @@
+{
+  "adjudication_sha256": "091d3bb6eb4fb22d810f43b261de395534f6a3df94fa17ddd4bdf62efd10a650",
+  "evidence_format": "Exact stdout is JSON encoded so formatting hooks preserve trailing whitespace.",
+  "focused_passed": 471,
+  "full_gate": {
+    "all_rules_known_mismatches": 6,
+    "command": "rtk proxy make check dogfood rule-quality-regression",
+    "exit_code": 0,
+    "log": "quality/reviews/2026-10-14-contracts/tdd-logs/c004-gates.json",
+    "log_sha256": "f27bca9cd1ba7ecc57b150a6a4749833076e2ec85057fbce702ec89f690ced77",
+    "package_mypy_files": 31,
+    "production_known_mismatches": 4,
+    "pytest_passed": 3679,
+    "stdout_sha256": "e2bc501a439be1a6ab3217c6cb715b18cf3dff311d1d33006b074e404ed11b59"
+  },
+  "historical_labels_modified": false,
+  "records": [
+    {
+      "command": "rtk proxy .venv/bin/pytest tests/test_rules/test_code.py tests/test_cli.py -q -k 'specific_or_ambiguous or normalization_does_not_broaden or executable_message_requires_one or excluded_raise_does_not_consume or placeholder_contract_distinguishes'",
+      "exit_code": 1,
+      "log": "quality/reviews/2026-10-14-contracts/tdd-logs/c004-expanded-red.json",
+      "log_sha256": "b61639b6bbe1fe64b1d7f671d910c41b2ab1f56a53ba9ea6b30c4dd20d350a6d",
+      "stage": "c004-expanded-red",
+      "stdout_sha256": "c40c8d3f652a1d9b86bcf60b3a62181a5344627cab3998e9f8b10134d227cc65"
+    },
+    {
+      "command": "rtk proxy .venv/bin/pytest tests/test_rules/test_code.py -q -k normalization_does_not_broaden",
+      "exit_code": 1,
+      "log": "quality/reviews/2026-10-14-contracts/tdd-logs/normalization-red.json",
+      "log_sha256": "4b2ff1b9d9ddbb7df8a65af997ded85484b55c9b3e97b14277a69f9dca786f89",
+      "stage": "normalization-red",
+      "stdout_sha256": "59e533ce41f92e2ab6bb018847cec7940ab344daa55d6e5fe99256125a5d40b5"
+    },
+    {
+      "command": "rtk proxy .venv/bin/pytest -o addopts='' tests/test_rules/test_code.py tests/test_cli.py -q",
+      "exit_code": 0,
+      "log": "quality/reviews/2026-10-14-contracts/tdd-logs/c004-green.json",
+      "log_sha256": "dba4fbaa22f28ed36638e6f02583d809f819bb8c3b3374bcad42255459802ff0",
+      "stage": "c004-green",
+      "stdout_sha256": "9d7f7223d00171a2262ccea3c2eb8e9344680be448a948f1cf8db9b58696a423"
+    }
+  ],
+  "runtime": {
+    "git": {
+      "head": "0b31b34a7d0ec572339f86cab0592b23ba5ed73c",
+      "scope": [
+        "benchmarks",
+        "src/proseprobe"
+      ],
+      "staged_dirty": true,
+      "tracked_worktree_dirty": true,
+      "untracked_python_files": []
+    },
+    "identity_scope": "package and evaluator Python source names and exact bytes; caches, corpora and documents excluded",
+    "package_version": "0.1.0",
+    "source_files": [
+      "evaluator/__init__.py",
+      "evaluator/bench_rules.py",
+      "evaluator/corpora.py",
+      "evaluator/evaluation_identity.py",
+      "evaluator/memory_probe.py",
+      "evaluator/native_link_context.py",
+      "evaluator/native_reference_context.py",
+      "evaluator/paired_quality.py",
+      "evaluator/quality_scoring.py",
+      "evaluator/regression_gate.py",
+      "evaluator/review_readings.py",
+      "evaluator/rule_quality.py",
+      "evaluator/source_intervals.py",
+      "evaluator/startup_probe.py",
+      "evaluator/usefulness.py",
+      "package/__init__.py",
+      "package/__main__.py",
+      "package/_ansi.py",
+      "package/_rule_docs.py",
+      "package/cli.py",
+      "package/config.py",
+      "package/core/__init__.py",
+      "package/core/baseline.py",
+      "package/core/linter.py",
+      "package/core/policy.py",
+      "package/core/reporter.py",
+      "package/data/__init__.py",
+      "package/data/code_patterns.py",
+      "package/data/patterns.py",
+      "package/data/phrases.py",
+      "package/data/style_patterns.py",
+      "package/data/vocabulary.py",
+      "package/parsers/__init__.py",
+      "package/parsers/markdown.py",
+      "package/parsers/prose.py",
+      "package/parsers/python.py",
+      "package/profiles.py",
+      "package/rules/__init__.py",
+      "package/rules/_phrases.py",
+      "package/rules/base.py",
+      "package/rules/code.py",
+      "package/rules/grammar.py",
+      "package/rules/markup.py",
+      "package/rules/struct.py",
+      "package/rules/style.py",
+      "package/rules/vocab.py"
+    ],
+    "source_files_count": 46,
+    "source_roots": {
+      "evaluator": "/Users/johnmulder/Experiments/proseprobe/benchmarks",
+      "package": "/Users/johnmulder/Experiments/proseprobe/src/proseprobe"
+    },
+    "source_sha256": "4290319f4c1eb5fd7f8e502ad076756b8b1dc7a1a7ed43d8ae89a92481aa9713"
+  },
+  "scope": "development contract regression; no effectiveness claim",
+  "tests_before_behavior": true,
+  "version": 1
+}

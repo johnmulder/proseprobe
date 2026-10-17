@@ -1,0 +1,561 @@
+{
+  "cohort": "natural",
+  "format": "markdown",
+  "linked_text_path": "/private/tmp/proseprobe-A008.txt",
+  "packet_path": "originals/0002.md",
+  "pair_group": "github/docs:content/migrations/overview/mannequins-and-user-activity.md",
+  "reading_id": "A008",
+  "region": {
+    "column": 1,
+    "end_column": 272,
+    "end_line": 32,
+    "line": 1
+  },
+  "rendered_sha256": "84050318edbd55e13e9d2decd8c1fc17f44d63d0d9e5591cf839e89f852ac239",
+  "rendered_text": "Blind agent reading A008: natural.\nReading file: [A008](/private/tmp/proseprobe-A008.txt)\nAttribution: GitHub Docs contributors; CC BY 4.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, M011\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL 1 C  1-  4 | ---\nL 2 C  1- 36 | title: Mannequins and user activity\nL 3 C  1- 61 | intro: Mannequins are placeholder identities that users can \nL 3 C 61- 87 | reclaim after a migration.\nL 4 C  1- 10 | versions:\nL 5 C  1- 11 |   fpt: '*'\nL 6 C  1- 12 |   ghes: '*'\nL 7 C  1- 12 |   ghec: '*'\nL 8 C  1- 10 | category:\nL 9 C  1- 24 |   - Plan your migration\nL10 C  1-  4 | ---\nL11 C  1-  1 | \nL12 C  1- 24 | ## What are mannequins?\nL13 C  1-  1 | \nL14 C  1- 64 | {% data reusables.enterprise-migration-tool.about-mannequins %}\nL15 C  1-  1 | \nL16 C  1- 62 | Each mannequin only has a display name, which comes from the \nL16 C 62-124 | display name in the source repository. Mannequins do not have \nL16 C124-188 | organization membership or repository access. Mannequins always \nL16 C188-250 | use the same avatar, a ghost octocat, and include a mannequin \nL16 C250-283 | label following the display name.\nL17 C  1-  1 | \nL18 C  1- 66 | ![Screenshot of the header of an issue comment. The commenter is \nL18 C 66-131 | labeled as a mannequin, and the \"Mannequin\" label is outlined in \nL18 C131-136 | dark \nL18 C136-201 | orange.](/assets/images/help/github-enterprise-importer/mannequin\nL18 C201-214 | -example.png)\nL19 C  1-  1 | \nL20 C  1- 66 | Reclaiming is optional and can happen any time after a migration \nL20 C 66-129 | is finished. For this reason, you can allow your team to begin \nL20 C129-180 | working in migrated repositories before reclaiming.\nL21 C  1-  1 | \nL22 C  1- 38 | {% data reusables.elm.git-activity %}\nL23 C  1-  1 | \nL24 C  1- 33 | ## How can I reclaim mannequins?\nL25 C  1-  1 | \nL26 C  1- 63 | {% data reusables.enterprise-migration-tool.how-to-reclaim %} \nL26 C 63- 85 | For instructions, see \nL26 C 85-150 | [AUTOTITLE](/migrations/using-github-enterprise-importer/completi\nL26 C150-215 | ng-your-migration-with-github-enterprise-importer/reclaiming-mann\nL26 C215-257 | equins-for-github-enterprise-importer) or \nL26 C257-322 | [AUTOTITLE](/migrations/elm/complete-your-migration#reattribute-a\nL26 C322-340 | ctivity-to-users).\nL27 C  1-  1 | \nL28 C  1- 61 | By default, reclaiming a mannequin will send an attribution \nL28 C 61-122 | invitation to the target user. The target user can choose to \nL28 C122-154 | accept or reject the invitation.\nL29 C  1-  1 | \nL30 C  1- 53 | After a user accepts an attribution invitation, all \nL30 C 53-114 | contributions previously attributed to the mannequin will be \nL30 C114-179 | attributed to the user instead. In future migrations to the same \nL30 C179-243 | organization, any contributions from the same mannequin will be \nL30 C243-285 | automatically reclaimed for the same user.\nL31 C  1-  1 | \nL32 C  1- 35 | If your organization uses {% data \nL32 C 35- 96 | variables.product.prodname_emus %} and you choose to reclaim \nL32 C 96-159 | mannequins with the {% data variables.product.prodname_cli %}, \nL32 C159-219 | you can optionally skip the invitation process, immediately \nL32 C219-272 | reclaiming the mannequin without the user's approval.\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 4,
+      "end_line": 1,
+      "line": 1,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "---"
+    },
+    {
+      "column": 1,
+      "end_column": 36,
+      "end_line": 2,
+      "line": 2,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "title: Mannequins and user activity"
+    },
+    {
+      "column": 1,
+      "end_column": 61,
+      "end_line": 3,
+      "line": 3,
+      "reading_line": 15,
+      "source_line_ending": "",
+      "text": "intro: Mannequins are placeholder identities that users can "
+    },
+    {
+      "column": 61,
+      "end_column": 87,
+      "end_line": 3,
+      "line": 3,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "reclaim after a migration."
+    },
+    {
+      "column": 1,
+      "end_column": 10,
+      "end_line": 4,
+      "line": 4,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "versions:"
+    },
+    {
+      "column": 1,
+      "end_column": 11,
+      "end_line": 5,
+      "line": 5,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "  fpt: '*'"
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 6,
+      "line": 6,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "  ghes: '*'"
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 7,
+      "line": 7,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "  ghec: '*'"
+    },
+    {
+      "column": 1,
+      "end_column": 10,
+      "end_line": 8,
+      "line": 8,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "category:"
+    },
+    {
+      "column": 1,
+      "end_column": 24,
+      "end_line": 9,
+      "line": 9,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "  - Plan your migration"
+    },
+    {
+      "column": 1,
+      "end_column": 4,
+      "end_line": 10,
+      "line": 10,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "---"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 11,
+      "line": 11,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 24,
+      "end_line": 12,
+      "line": 12,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": "## What are mannequins?"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 13,
+      "line": 13,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 14,
+      "line": 14,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "{% data reusables.enterprise-migration-tool.about-mannequins %}"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 15,
+      "line": 15,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 62,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 29,
+      "source_line_ending": "",
+      "text": "Each mannequin only has a display name, which comes from the "
+    },
+    {
+      "column": 62,
+      "end_column": 124,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 30,
+      "source_line_ending": "",
+      "text": "display name in the source repository. Mannequins do not have "
+    },
+    {
+      "column": 124,
+      "end_column": 188,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 31,
+      "source_line_ending": "",
+      "text": "organization membership or repository access. Mannequins always "
+    },
+    {
+      "column": 188,
+      "end_column": 250,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 32,
+      "source_line_ending": "",
+      "text": "use the same avatar, a ghost octocat, and include a mannequin "
+    },
+    {
+      "column": 250,
+      "end_column": 283,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "label following the display name."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 17,
+      "line": 17,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 35,
+      "source_line_ending": "",
+      "text": "![Screenshot of the header of an issue comment. The commenter is "
+    },
+    {
+      "column": 66,
+      "end_column": 131,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 36,
+      "source_line_ending": "",
+      "text": "labeled as a mannequin, and the \"Mannequin\" label is outlined in "
+    },
+    {
+      "column": 131,
+      "end_column": 136,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 37,
+      "source_line_ending": "",
+      "text": "dark "
+    },
+    {
+      "column": 136,
+      "end_column": 201,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 38,
+      "source_line_ending": "",
+      "text": "orange.](/assets/images/help/github-enterprise-importer/mannequin"
+    },
+    {
+      "column": 201,
+      "end_column": 214,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": "-example.png)"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 19,
+      "line": 19,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 20,
+      "line": 20,
+      "reading_line": 41,
+      "source_line_ending": "",
+      "text": "Reclaiming is optional and can happen any time after a migration "
+    },
+    {
+      "column": 66,
+      "end_column": 129,
+      "end_line": 20,
+      "line": 20,
+      "reading_line": 42,
+      "source_line_ending": "",
+      "text": "is finished. For this reason, you can allow your team to begin "
+    },
+    {
+      "column": 129,
+      "end_column": 180,
+      "end_line": 20,
+      "line": 20,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "working in migrated repositories before reclaiming."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 21,
+      "line": 21,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 38,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": "{% data reusables.elm.git-activity %}"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 23,
+      "line": 23,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 24,
+      "line": 24,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "## How can I reclaim mannequins?"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 25,
+      "line": 25,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 49,
+      "source_line_ending": "",
+      "text": "{% data reusables.enterprise-migration-tool.how-to-reclaim %} "
+    },
+    {
+      "column": 63,
+      "end_column": 85,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 50,
+      "source_line_ending": "",
+      "text": "For instructions, see "
+    },
+    {
+      "column": 85,
+      "end_column": 150,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 51,
+      "source_line_ending": "",
+      "text": "[AUTOTITLE](/migrations/using-github-enterprise-importer/completi"
+    },
+    {
+      "column": 150,
+      "end_column": 215,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 52,
+      "source_line_ending": "",
+      "text": "ng-your-migration-with-github-enterprise-importer/reclaiming-mann"
+    },
+    {
+      "column": 215,
+      "end_column": 257,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 53,
+      "source_line_ending": "",
+      "text": "equins-for-github-enterprise-importer) or "
+    },
+    {
+      "column": 257,
+      "end_column": 322,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 54,
+      "source_line_ending": "",
+      "text": "[AUTOTITLE](/migrations/elm/complete-your-migration#reattribute-a"
+    },
+    {
+      "column": 322,
+      "end_column": 340,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": "ctivity-to-users)."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 61,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 57,
+      "source_line_ending": "",
+      "text": "By default, reclaiming a mannequin will send an attribution "
+    },
+    {
+      "column": 61,
+      "end_column": 122,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 58,
+      "source_line_ending": "",
+      "text": "invitation to the target user. The target user can choose to "
+    },
+    {
+      "column": 122,
+      "end_column": 154,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 59,
+      "source_line_ending": "\n",
+      "text": "accept or reject the invitation."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 29,
+      "line": 29,
+      "reading_line": 60,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 53,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 61,
+      "source_line_ending": "",
+      "text": "After a user accepts an attribution invitation, all "
+    },
+    {
+      "column": 53,
+      "end_column": 114,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 62,
+      "source_line_ending": "",
+      "text": "contributions previously attributed to the mannequin will be "
+    },
+    {
+      "column": 114,
+      "end_column": 179,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 63,
+      "source_line_ending": "",
+      "text": "attributed to the user instead. In future migrations to the same "
+    },
+    {
+      "column": 179,
+      "end_column": 243,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 64,
+      "source_line_ending": "",
+      "text": "organization, any contributions from the same mannequin will be "
+    },
+    {
+      "column": 243,
+      "end_column": 285,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 65,
+      "source_line_ending": "\n",
+      "text": "automatically reclaimed for the same user."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 31,
+      "line": 31,
+      "reading_line": 66,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 35,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 67,
+      "source_line_ending": "",
+      "text": "If your organization uses {% data "
+    },
+    {
+      "column": 35,
+      "end_column": 96,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 68,
+      "source_line_ending": "",
+      "text": "variables.product.prodname_emus %} and you choose to reclaim "
+    },
+    {
+      "column": 96,
+      "end_column": 159,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 69,
+      "source_line_ending": "",
+      "text": "mannequins with the {% data variables.product.prodname_cli %}, "
+    },
+    {
+      "column": 159,
+      "end_column": 219,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 70,
+      "source_line_ending": "",
+      "text": "you can optionally skip the invitation process, immediately "
+    },
+    {
+      "column": 219,
+      "end_column": 272,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 71,
+      "source_line_ending": "\n",
+      "text": "reclaiming the mannequin without the user's approval."
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "M011"
+  ],
+  "sha256": "d85335cdf9f9c882db139b6653bd77e640dda92eca9bc6e8136a5a0bf5ae0ef2",
+  "source_group": "github/docs",
+  "source_id": "github/docs:content/migrations/overview/mannequins-and-user-activity.md",
+  "split": "development",
+  "version": 1
+}

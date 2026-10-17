@@ -1,0 +1,864 @@
+{
+  "excluded_destinations": {
+    "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:README.md": [
+      {
+        "column": 164,
+        "destination": "https://github.com/psf/requests/network/dependents?package_id=UGFja2FnZS01NzA4OTExNg%3D%3D",
+        "end_column": 254,
+        "line": 22,
+        "reason": "production-resolver-exclusion"
+      },
+      {
+        "column": 63,
+        "destination": "https://pepy.tech/project/requests",
+        "end_column": 97,
+        "line": 24,
+        "reason": "production-resolver-exclusion"
+      },
+      {
+        "column": 78,
+        "destination": "https://pypi.org/project/requests",
+        "end_column": 111,
+        "line": 25,
+        "reason": "production-resolver-exclusion"
+      },
+      {
+        "column": 80,
+        "destination": "https://github.com/psf/requests/graphs/contributors",
+        "end_column": 131,
+        "line": 26,
+        "reason": "production-resolver-exclusion"
+      },
+      {
+        "column": 62,
+        "destination": "https://requests.readthedocs.io",
+        "end_column": 93,
+        "line": 56,
+        "reason": "production-resolver-exclusion"
+      },
+      {
+        "column": 84,
+        "destination": "https://requests.readthedocs.io",
+        "end_column": 115,
+        "line": 58,
+        "reason": "production-resolver-exclusion"
+      },
+      {
+        "column": 14,
+        "destination": "https://github.com/psf/requests/issues/2690",
+        "end_column": 57,
+        "line": 64,
+        "reason": "production-resolver-exclusion"
+      },
+      {
+        "column": 84,
+        "destination": "https://kennethreitz.org",
+        "end_column": 108,
+        "line": 78,
+        "reason": "production-resolver-exclusion"
+      },
+      {
+        "column": 207,
+        "destination": "https://www.python.org/psf",
+        "end_column": 233,
+        "line": 78,
+        "reason": "production-resolver-exclusion"
+      }
+    ]
+  },
+  "native_context": {
+    "inventory": [
+      {
+        "mode": "100644",
+        "object_id": "b5008b2b2f770e2b846bfa3852e4b5ff0b27e88a",
+        "path": ".coveragerc"
+      },
+      {
+        "mode": "100644",
+        "object_id": "db51a967bfe68d079f4379a23968023372b6e7f6",
+        "path": ".git-blame-ignore-revs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "275aee12adc60bb8ea537ec6c83ef2ca0333d805",
+        "path": ".github"
+      },
+      {
+        "mode": "100644",
+        "object_id": "ff7f10665a52188f3483981c57b5827058b29c4b",
+        "path": ".github/CODE_OF_CONDUCT.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "3470dfee835a73525fdc118574ed18d3385c432b",
+        "path": ".github/CONTRIBUTING.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "603c7ff9c3151fc55c050522c94b224d4bc2ea53",
+        "path": ".github/FUNDING.yml"
+      },
+      {
+        "mode": "040000",
+        "object_id": "c2719e4895fd0a9b188c924635043900a8069040",
+        "path": ".github/ISSUE_TEMPLATE"
+      },
+      {
+        "mode": "100644",
+        "object_id": "060d9262a5e763c78a707222600a02f4c3b5fd66",
+        "path": ".github/ISSUE_TEMPLATE.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "cb87bd6b67572c2d25d1fb94e17fe483dbc0da9b",
+        "path": ".github/ISSUE_TEMPLATE/Bug_report.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "332c3aea9764662b5efdb9a325d5359f6be4bf86",
+        "path": ".github/ISSUE_TEMPLATE/Custom.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "544113ae1c5c2a67d27cbfbbe9b405ff47e6ebba",
+        "path": ".github/ISSUE_TEMPLATE/Feature_request.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9021d429d8615902efbf2cd206823f25df6c8d6a",
+        "path": ".github/SECURITY.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "2be85338e3a7033ae53dbe11ea8897bc120b9652",
+        "path": ".github/dependabot.yml"
+      },
+      {
+        "mode": "040000",
+        "object_id": "f91c2b608526a7090e25eb4a8d593ebde0e76efd",
+        "path": ".github/workflows"
+      },
+      {
+        "mode": "100644",
+        "object_id": "bedc75ea5b9c53f1c8760ae69ac54ab487166dc1",
+        "path": ".github/workflows/close-issues.yml"
+      },
+      {
+        "mode": "100644",
+        "object_id": "b6d544640be9c9175f04a89fd40f93df073c5157",
+        "path": ".github/workflows/codeql-analysis.yml"
+      },
+      {
+        "mode": "100644",
+        "object_id": "46a7862eacb4b8f2dee5ebc16eac23f5f904da3a",
+        "path": ".github/workflows/lint.yml"
+      },
+      {
+        "mode": "100644",
+        "object_id": "7d5a3c6525646fd421c4a284f3dd76486fbbfce3",
+        "path": ".github/workflows/lock-issues.yml"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c35af968c47cae08ce08b424d430b69e189de248",
+        "path": ".github/workflows/run-tests.yml"
+      },
+      {
+        "mode": "100644",
+        "object_id": "de61154e3eb2b9b54dada59d9b820db6bfef8055",
+        "path": ".gitignore"
+      },
+      {
+        "mode": "100644",
+        "object_id": "0a0515cf87a37464c11056127db6cc617b2f31ec",
+        "path": ".pre-commit-config.yaml"
+      },
+      {
+        "mode": "100644",
+        "object_id": "0e2c719e08549d4bd8123abc65686e57780ccc5f",
+        "path": ".readthedocs.yaml"
+      },
+      {
+        "mode": "100644",
+        "object_id": "6e017c9a915b56273db2f63107a676336f4764b5",
+        "path": "AUTHORS.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e51a7ee2c231c6f1ed0adcd16c198e6a412a9c75",
+        "path": "HISTORY.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "67db8588217f266eb561f75fae738656325deac9",
+        "path": "LICENSE"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9dd81e6f0f72a1f1dd1bc1f6105f94ae26574ec3",
+        "path": "MANIFEST.in"
+      },
+      {
+        "mode": "100644",
+        "object_id": "192b926853138bfde739920fa4d147fcd419a2ec",
+        "path": "Makefile"
+      },
+      {
+        "mode": "100644",
+        "object_id": "1ff62db688277b77c83c1766dac7f165364d3528",
+        "path": "NOTICE"
+      },
+      {
+        "mode": "100644",
+        "object_id": "79cf54d1e158db157703d67e7670400621c521f4",
+        "path": "README.md"
+      },
+      {
+        "mode": "040000",
+        "object_id": "71429b4ec9488c8ab07a3709dcfa537cc3abbc64",
+        "path": "docs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+        "path": "docs/.nojekyll"
+      },
+      {
+        "mode": "100644",
+        "object_id": "08a2acf6dcaaf4fbdc0422fe7cca72a30a1e2a0a",
+        "path": "docs/Makefile"
+      },
+      {
+        "mode": "040000",
+        "object_id": "f9aa5f5e821074d5008bd1997ba6315072844db8",
+        "path": "docs/_static"
+      },
+      {
+        "mode": "100644",
+        "object_id": "465e8a9a60ee532b287f1c052ca0dda7ec737d54",
+        "path": "docs/_static/custom.css"
+      },
+      {
+        "mode": "100644",
+        "object_id": "d2b8a6975c904f4c9b0f4b733b0c47dedd5b2cc1",
+        "path": "docs/_static/requests-sidebar.png"
+      },
+      {
+        "mode": "040000",
+        "object_id": "9dd40a2ec5a826aaac5acd7042c9e34d1ca4febc",
+        "path": "docs/_templates"
+      },
+      {
+        "mode": "100644",
+        "object_id": "eca5dffcb54a21b9b930d14b5f423a718b9c979e",
+        "path": "docs/_templates/hacks.html"
+      },
+      {
+        "mode": "100644",
+        "object_id": "607bf92c4e31951864788278661a02f8962e1aab",
+        "path": "docs/_templates/sidebarintro.html"
+      },
+      {
+        "mode": "100644",
+        "object_id": "71eb82e726475ac4ebaac0b87067325da6200b80",
+        "path": "docs/_templates/sidebarlogo.html"
+      },
+      {
+        "mode": "040000",
+        "object_id": "2504b45699ab70d3d8ea4c0975f2dc036588f2cb",
+        "path": "docs/_themes"
+      },
+      {
+        "mode": "100644",
+        "object_id": "66b6e4c2f3b55b25afd9716f9d3c5afb47b15d4e",
+        "path": "docs/_themes/.gitignore"
+      },
+      {
+        "mode": "100644",
+        "object_id": "3d1e04a257aa9a7a51fbd87e3dc7cbef01f5b97b",
+        "path": "docs/_themes/LICENSE"
+      },
+      {
+        "mode": "100644",
+        "object_id": "33f47449c11d241e36c83d7f95d819bbe56e2c8f",
+        "path": "docs/_themes/flask_theme_support.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "34959dd6f1f60a9682a85a5b683d45d9a7d1a76f",
+        "path": "docs/api.rst"
+      },
+      {
+        "mode": "040000",
+        "object_id": "0cb4d1e10531f2cb8541a788e65fe080262d0992",
+        "path": "docs/community"
+      },
+      {
+        "mode": "100644",
+        "object_id": "b6ea654e60b83ce0f54ac0c25c7c09788b6be8fc",
+        "path": "docs/community/faq.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c75c71f6a2dcb1c1c30fde955ce42e883e174508",
+        "path": "docs/community/out-there.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "517f4b189520bfc9160ef1aba6435b949a62a532",
+        "path": "docs/community/recommended.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4aa98f755e4c598ae7f2b819f536e65b25455af6",
+        "path": "docs/community/release-process.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "ee905f543dfd20f1f487b7dbf9f87641e18d1f81",
+        "path": "docs/community/support.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c787c45bcf1bf1baa148dc2e6508c686bd08e47f",
+        "path": "docs/community/updates.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "6a9c7d94d37f61a962cf255d0d985fa30a5dcadb",
+        "path": "docs/community/vulnerabilities.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "edbd72ba8236299f7bde93dff4edf4abdab7aba0",
+        "path": "docs/conf.py"
+      },
+      {
+        "mode": "040000",
+        "object_id": "59f538a7ffddaeeb1d2ed4944aedf1475dcfcb5a",
+        "path": "docs/dev"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e9799a91421af6ca0639a8e85a55a9834fdeb0de",
+        "path": "docs/dev/authors.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "961f7c3abadd6f39009cc6d70d51ac77d0410a12",
+        "path": "docs/dev/contributing.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "289250c2a4e0aa1b7450c8a0888b4efb00e66cbd",
+        "path": "docs/index.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9eaf9b88930578b9da103662becd0d1a9a1c6c53",
+        "path": "docs/make.bat"
+      },
+      {
+        "mode": "100644",
+        "object_id": "2af334d57b7103158612d79e5d786fc29e2f380e",
+        "path": "docs/requirements.txt"
+      },
+      {
+        "mode": "040000",
+        "object_id": "67d4e00ecf8e55f206fd48a3dc2aa0bd54b6a5a8",
+        "path": "docs/user"
+      },
+      {
+        "mode": "100644",
+        "object_id": "ff3a3d0f268c4356f095ffd11570eba7af054a80",
+        "path": "docs/user/advanced.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "0737bd319a2a53dea3c99a663df701221ed68efe",
+        "path": "docs/user/authentication.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "7fa9a606d22ca46a101d5b976f5bad2905137f98",
+        "path": "docs/user/install.rst"
+      },
+      {
+        "mode": "100644",
+        "object_id": "33c2732c7f2b6c61b0bdf1ce1e75508ccecfae9a",
+        "path": "docs/user/quickstart.rst"
+      },
+      {
+        "mode": "040000",
+        "object_id": "39b04299670e5b43bfbe489756eeaba58418e655",
+        "path": "ext"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c38aa5c3f55a389eb2c015eb40cd67f2c15d633c",
+        "path": "ext/LICENSE"
+      },
+      {
+        "mode": "100644",
+        "object_id": "f92cc3b17bbcf77090195253310a900c650174dd",
+        "path": "ext/flower-of-life.jpg"
+      },
+      {
+        "mode": "100644",
+        "object_id": "53210649cc70879045fb1a005aaa8913e267b661",
+        "path": "ext/kr-compressed.png"
+      },
+      {
+        "mode": "100644",
+        "object_id": "b18d76bfe0310aa112724d7378113c39df8e705d",
+        "path": "ext/kr.png"
+      },
+      {
+        "mode": "100644",
+        "object_id": "3bc0d5c130dbd3efad60aea25b406df5e312a5b8",
+        "path": "ext/psf-compressed.png"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c5815e260a00e55a5928f3de9692a9afb0a00bce",
+        "path": "ext/psf.png"
+      },
+      {
+        "mode": "100644",
+        "object_id": "cb4bc642419dafc4c23610733534d2552984c76c",
+        "path": "ext/requests-logo-compressed.png"
+      },
+      {
+        "mode": "100644",
+        "object_id": "7da8cb7380af9a19fb905a263ca247676ccbbd06",
+        "path": "ext/requests-logo.ai"
+      },
+      {
+        "mode": "100644",
+        "object_id": "cb4bc642419dafc4c23610733534d2552984c76c",
+        "path": "ext/requests-logo.png"
+      },
+      {
+        "mode": "100644",
+        "object_id": "80406e7c06fc0d7c961fdd2bc1c6f8d7f69c1a54",
+        "path": "ext/requests-logo.svg"
+      },
+      {
+        "mode": "100644",
+        "object_id": "149016d3b1d3d783f166384e51cb8cb96f66d5c7",
+        "path": "ext/ss-compressed.png"
+      },
+      {
+        "mode": "100644",
+        "object_id": "149016d3b1d3d783f166384e51cb8cb96f66d5c7",
+        "path": "ext/ss.png"
+      },
+      {
+        "mode": "100644",
+        "object_id": "1b7901e1559544ac387713b7c45e9ebe165cce83",
+        "path": "pyproject.toml"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e80b18581e22ba92f743ba336eb423c3b412ce87",
+        "path": "requirements-dev.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "8d44e0e14b1901923d71a3c1cb02d4e1e55f77a6",
+        "path": "setup.cfg"
+      },
+      {
+        "mode": "100755",
+        "object_id": "1b0eb377b4c84736b2c77ef0a5bd343815eec409",
+        "path": "setup.py"
+      },
+      {
+        "mode": "040000",
+        "object_id": "50439f3461064d263722d14b3f65c4795f0a28f1",
+        "path": "src"
+      },
+      {
+        "mode": "040000",
+        "object_id": "f07354fd754ceaccb1ea0e96a6cc5a6e2451f197",
+        "path": "src/requests"
+      },
+      {
+        "mode": "100644",
+        "object_id": "051cda1340effaa0706b46dd68ac002ceda3d45c",
+        "path": "src/requests/__init__.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "2c105aca7d48ce1c35a456785cc75f97f076a426",
+        "path": "src/requests/__version__.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "f2cf635e2937ee9b123a1498c5c5f723a6e20084",
+        "path": "src/requests/_internal_utils.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9a58b1602532f9bee41afb0dfadaa7eb548e98c1",
+        "path": "src/requests/adapters.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "5960744552e7f8eea815429e7bdad38b0cc2741d",
+        "path": "src/requests/api.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4a7ce6dc1460e0de8aa0c38ea9123faa69bd5110",
+        "path": "src/requests/auth.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "be422c3e91e43bacf60ff3302688df0b28742333",
+        "path": "src/requests/certs.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "095de1b6cae2f460174af54efa975411645f40c6",
+        "path": "src/requests/compat.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "f69d0cda9e1c893401015a09f2db2de5a5960fd2",
+        "path": "src/requests/cookies.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "83986b489849131efeb7f286b328961205256fd8",
+        "path": "src/requests/exceptions.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "8fbcd6560a8fe2c8a07e3bd1441a81e0db9cb689",
+        "path": "src/requests/help.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "d181ba2ec2e55d274897315887b78fbdca757da8",
+        "path": "src/requests/hooks.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "8f56ca7d23a9a12084df80cb649e019572308cfe",
+        "path": "src/requests/models.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "5ab3d8e250de8475cb22553f564e5444e02c7460",
+        "path": "src/requests/packages.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "b387bc36df7bc064b502adcb3c1a4527dd401fda",
+        "path": "src/requests/sessions.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c7945a2f06897ed980cc575df2f48d9e6c1a9f7e",
+        "path": "src/requests/status_codes.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "188e13e4829591facb23ae0e2eda84b9807cb818",
+        "path": "src/requests/structures.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "ae6c42f6cb48d2beaa3b7352bc1d130db3e4e3be",
+        "path": "src/requests/utils.py"
+      },
+      {
+        "mode": "040000",
+        "object_id": "3dc191e29f9a4c9a94bad4972206e114b8322338",
+        "path": "tests"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c8561a080180f510b235bde44e0361835586af15",
+        "path": "tests/__init__.py"
+      },
+      {
+        "mode": "040000",
+        "object_id": "2de454fdef3809710d40c52582f9562ccd9ae9e2",
+        "path": "tests/certs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4bf7002e0b17e14449cd116daf2406760022eebb",
+        "path": "tests/certs/README.md"
+      },
+      {
+        "mode": "040000",
+        "object_id": "46fda79dcefdabd6d6330727487efcfcc9afd487",
+        "path": "tests/certs/expired"
+      },
+      {
+        "mode": "100644",
+        "object_id": "d5a51da5419a81188fb92f6c28868c622baee829",
+        "path": "tests/certs/expired/Makefile"
+      },
+      {
+        "mode": "100644",
+        "object_id": "f7234f8820f7ffc749eb45ba12529647704ab297",
+        "path": "tests/certs/expired/README.md"
+      },
+      {
+        "mode": "040000",
+        "object_id": "c7dfa811af48c9a35472c94330dac308e18cf304",
+        "path": "tests/certs/expired/ca"
+      },
+      {
+        "mode": "100644",
+        "object_id": "098193f88d9bacd97a91aecaf874ac584977ac94",
+        "path": "tests/certs/expired/ca/Makefile"
+      },
+      {
+        "mode": "100644",
+        "object_id": "507b1f5623f8d8f04c772281a0fea8af261ab644",
+        "path": "tests/certs/expired/ca/ca-private.key"
+      },
+      {
+        "mode": "100644",
+        "object_id": "8c4b823053e13b174538075b623899639f5a367e",
+        "path": "tests/certs/expired/ca/ca.cnf"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c332b7cb7b321e617966cf3c0a3939852c72e514",
+        "path": "tests/certs/expired/ca/ca.crt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "fab68405ed30093291a848dc095edfe75fab707c",
+        "path": "tests/certs/expired/ca/ca.srl"
+      },
+      {
+        "mode": "040000",
+        "object_id": "4832c537476ea082da0832e67c67081cc7ba66bb",
+        "path": "tests/certs/expired/server"
+      },
+      {
+        "mode": "100644",
+        "object_id": "79914ee1dbf2eca48ba265e03899cc555cdc925a",
+        "path": "tests/certs/expired/server/Makefile"
+      },
+      {
+        "mode": "100644",
+        "object_id": "a773fc679f22e1a538f171535463e1fd116b61ac",
+        "path": "tests/certs/expired/server/cert.cnf"
+      },
+      {
+        "mode": "100644",
+        "object_id": "5e3c1776472cb6ad7caebe011ca0608943ba567b",
+        "path": "tests/certs/expired/server/server.csr"
+      },
+      {
+        "mode": "100644",
+        "object_id": "27ddafd1ca44327f85e6db4d25d84411a7549339",
+        "path": "tests/certs/expired/server/server.key"
+      },
+      {
+        "mode": "100644",
+        "object_id": "05a2a4dac809bb6863e628e53b5d0d5f389c145e",
+        "path": "tests/certs/expired/server/server.pem"
+      },
+      {
+        "mode": "040000",
+        "object_id": "ed64fbd5245799ae22432381111ab0464d56a068",
+        "path": "tests/certs/mtls"
+      },
+      {
+        "mode": "100644",
+        "object_id": "399a906da795e1deef237cf6e10035e503b8cf04",
+        "path": "tests/certs/mtls/Makefile"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9a3df4623eedff71c276ecfa7f0c46f485f649a0",
+        "path": "tests/certs/mtls/README.md"
+      },
+      {
+        "mode": "040000",
+        "object_id": "0ba852ca13676139b5e590aa73a6a46618892ca1",
+        "path": "tests/certs/mtls/client"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9c6c388be1111d062ee21566c6c4188ec7fe1f9e",
+        "path": "tests/certs/mtls/client/Makefile"
+      },
+      {
+        "mode": "120000",
+        "object_id": "85c8e8f2c2ce668cc9fb0d32a01b7ad341874c37",
+        "path": "tests/certs/mtls/client/ca"
+      },
+      {
+        "mode": "100644",
+        "object_id": "338e2527bac76d691937e63af86462992579853e",
+        "path": "tests/certs/mtls/client/cert.cnf"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9a5713d5c797a72399ee4217f7c5bb359f491728",
+        "path": "tests/certs/mtls/client/client.csr"
+      },
+      {
+        "mode": "100644",
+        "object_id": "81071253997bad4d929cecabaab58cd9c44d1b05",
+        "path": "tests/certs/mtls/client/client.key"
+      },
+      {
+        "mode": "100644",
+        "object_id": "0a11d4d472c4e7a33c52cb0b5190293b07c7f885",
+        "path": "tests/certs/mtls/client/client.pem"
+      },
+      {
+        "mode": "040000",
+        "object_id": "ad95826e39998bcc74c2671322f1c5a4193e4c90",
+        "path": "tests/certs/valid"
+      },
+      {
+        "mode": "120000",
+        "object_id": "46f26c398207fffebbc6c25a355891773d81560c",
+        "path": "tests/certs/valid/ca"
+      },
+      {
+        "mode": "040000",
+        "object_id": "bbeab754023bd5df9353f437cac7d81db06ae45a",
+        "path": "tests/certs/valid/server"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9ce6778c0f229d16d4682333923e7566dc2c8607",
+        "path": "tests/certs/valid/server/Makefile"
+      },
+      {
+        "mode": "100644",
+        "object_id": "f9a01cd8b4ba0e745f7ee866e4651bba009ab8c6",
+        "path": "tests/certs/valid/server/cert.cnf"
+      },
+      {
+        "mode": "100644",
+        "object_id": "000d1facb29024b81b602114e2fd154848a914b6",
+        "path": "tests/certs/valid/server/server.csr"
+      },
+      {
+        "mode": "100644",
+        "object_id": "d6afaf59fe445a2d66049498681d27a06c0ec800",
+        "path": "tests/certs/valid/server/server.key"
+      },
+      {
+        "mode": "100644",
+        "object_id": "0168cd3e3fbb04b5e69f1f86483077416370563c",
+        "path": "tests/certs/valid/server/server.pem"
+      },
+      {
+        "mode": "100644",
+        "object_id": "7618aa157bafb93329426b92f13d9c982f33b18b",
+        "path": "tests/compat.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "530a4c2a5f9917d62ffed2e2eecfdb8164655740",
+        "path": "tests/conftest.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "6c55d5a130bcbef6aa8765e45679ec6a2fd47449",
+        "path": "tests/test_adapters.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "5fca6207efa3fbcb2d15485334830502fe636ccf",
+        "path": "tests/test_help.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "7445525ec857ee0474e0f340911c3cdcbc49555c",
+        "path": "tests/test_hooks.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "859d07e8a594b2a80acae666949971f6ead90299",
+        "path": "tests/test_lowlevel.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "b55cb68c452742325c2efcca6a345f3de27c249e",
+        "path": "tests/test_packages.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "b4e9fe92ae46281475d8391581ceebb2ae0c564d",
+        "path": "tests/test_requests.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e2fd5baaf27237ce0b63dc3df9955e6c7d08d863",
+        "path": "tests/test_structures.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c73a3f1f59cc5cb487e444cc20d3fc65191e0802",
+        "path": "tests/test_testserver.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "5e9b56ea644e7855cc1bf7eea4acc0575b8a5d76",
+        "path": "tests/test_utils.py"
+      },
+      {
+        "mode": "040000",
+        "object_id": "50bdac0e6a7cfebffa450f1757efdd704e754d19",
+        "path": "tests/testserver"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "path": "tests/testserver/__init__.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "da1b65608e34cbb3b4dcdf45a865a8e3b305abc7",
+        "path": "tests/testserver/server.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "6cb75bfb6ad8a6c5519accd8a7e7c80d01809afa",
+        "path": "tests/utils.py"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c438ef316a860794bb8df4d374f943ce577ef5f4",
+        "path": "tox.ini"
+      }
+    ],
+    "inventory_sha256": "85ca40bc9d9f04a7c686b908ab1605f64938630c44190bdfe8e62020db8b017e",
+    "manifest_sha256": "1f3a26861f1321747802a9e5b574ae78201b996cdd70ccec9a18094fe052cbbf",
+    "revision": "0e322af87745eff34caffe4df68456ebc20d9068",
+    "source_group": "psf/requests",
+    "sources": {
+      "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:README.md": {
+        "blob_id": "79cf54d1e158db157703d67e7670400621c521f4",
+        "cache_path": "extension/sources/psf/requests/README.md",
+        "native_path": "README.md",
+        "sha256": "4f7bfa1b3f7c87268767235307d0bcae78997a96ca00a3b31062e5b9a295ed7c"
+      }
+    },
+    "target_scope": "explicitly-declared",
+    "targets": {},
+    "version": 1
+  },
+  "reference_scope": "production-static-local-markdown-v1",
+  "references": {
+    "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:README.md": []
+  },
+  "renderer": "github",
+  "version": 2
+}

@@ -1,0 +1,1253 @@
+{
+  "version": 1,
+  "actor_type": "agent",
+  "human": false,
+  "reviewer_id": "codex-agent:/root/blind_resume_a",
+  "protocol_revision": "agent-resume-blind-v1",
+  "judgment_complete": true,
+  "predictions_exposed": false,
+  "detector_execution": false,
+  "human_annotation_inferred": false,
+  "exposure": {
+    "statement": "This independent agent task began without parent task history or findings. I read only the permitted review metadata, published contract guidance, all 30 bounded reading JSONs, cohort index/contracts/unreviewed templates, selected originals as static text, the permitted native-context inventory/sources/targets sections, and setup.md target text, plus the required RTK shell instructions. No ProseProbe detector, source implementation, tests, previous review session, predictions/reports, other reviewer file, or reserved holdout was read or run before judgment.",
+    "allowed_shared_instructions": [
+      "User AGENTS.md text",
+      "/Users/johnmulder/.codex/RTK.md"
+    ],
+    "context_clarifications": "The parent supplied only region schema and the exact permitted native-context path; no findings or other reviewer judgments were supplied.",
+    "blind_input_prose_checking": false,
+    "reviewed_modules_executed_or_imported": false,
+    "annotation_validation": "Only benchmarks.quality_scoring.load_annotations was invoked after source judgment and labels were frozen. All three tracked manifests passed. No detectors or scorers were run. An initial import attempt lacked the package search path; the permitted importer then used PYTHONPATH=src. A stale cache-template provenance header failed SHA validation and was replaced with the corresponding permitted tracked unreviewed-template header; judgments stayed unchanged."
+  },
+  "population_limits": {
+    "natural": "Development natural text only. R005 coverage is confined to original L18 C1-L38 C117 and G038/V015/V016. Other selected natural originals were reviewed exhaustively for eligible declared rules with missing generated expansions excluded.",
+    "authored": "Root-authored development challenges remain a separate population/source group. Their author has implementation familiarity; this sparse packet supports no natural-text, human-review or general effectiveness claim.",
+    "local_links": "Only the pinned synthetic inventory, source/target metadata and original target text were used. Parser-derived references/exclusions were not inspected. The renderer is github.",
+    "human": "These are agent judgments, never independent human annotations.",
+    "unsupported": "Generated Markdown M011 scopes and decode's broader scalar pair are explicitly unsupported; generated prose is unavailable."
+  },
+  "readings_read": [
+    "A001",
+    "A002",
+    "A003",
+    "A004",
+    "A005",
+    "A006",
+    "A007",
+    "A008",
+    "A009",
+    "A010",
+    "A011",
+    "A012",
+    "A013",
+    "A014",
+    "A015",
+    "A016",
+    "A017",
+    "A018",
+    "A019",
+    "A020",
+    "A021",
+    "A022",
+    "A023",
+    "A024",
+    "A025",
+    "A026",
+    "A027",
+    "A028",
+    "A029",
+    "A030"
+  ],
+  "static_complete_python_context": [
+    "natural/originals/0003.py",
+    "natural/originals/0004.py",
+    "natural/originals/0005.py",
+    "authored-challenge/originals/0001.py"
+  ],
+  "sources": [
+    {
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:claims.md",
+      "sha256": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48",
+      "readings": [
+        "A027"
+      ],
+      "selected_region": null,
+      "reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "M011"
+      ],
+      "regions": [],
+      "dispositions": [
+        {
+          "rule_id": "G038",
+          "disposition": "issues",
+          "expected_ids": [
+            "A-authored-challenge-0000.md-G038-3-17"
+          ],
+          "region_statuses": [],
+          "rationale": "L3 is the supported undefined claim. L4 names Atlas directly. L13 is a question, L14 hypothetical, and L15 discusses the literal phrase, so those claims are excluded."
+        },
+        {
+          "rule_id": "G039",
+          "disposition": "issues",
+          "expected_ids": [
+            "A-authored-challenge-0000.md-G039-11-10"
+          ],
+          "region_statuses": [],
+          "rationale": "Only the duplicated tail in \"Read the the configuration\" is in the closed vocabulary. \"had had\" is an explicitly out-of-vocabulary grammatical construction."
+        },
+        {
+          "rule_id": "V015",
+          "disposition": "issues",
+          "expected_ids": [
+            "A-authored-challenge-0000.md-V015-5-17"
+          ],
+          "region_statuses": [],
+          "rationale": "L5 is unbounded. L6 directly supplies \"Among the three parsers in our benchmark\" as its comparison set."
+        },
+        {
+          "rule_id": "V016",
+          "disposition": "issues",
+          "expected_ids": [
+            "A-authored-challenge-0000.md-V016-7-21",
+            "A-authored-challenge-0000.md-V016-9-41",
+            "A-authored-challenge-0000.md-V016-10-31"
+          ],
+          "region_statuses": [],
+          "rationale": "L7 and L9 are unqualified universal assertions; L10 has only vague testing scope. L8 attaches its own numbered population \"Across 1,000 test runs\" and is suppressed."
+        },
+        {
+          "rule_id": "M011",
+          "disposition": "issues",
+          "expected_ids": [
+            "A-authored-challenge-0000.md-M011-17-35"
+          ],
+          "region_statuses": [],
+          "rationale": "Under the GitHub renderer, \"## Scope\" creates scope and no heading creates limits. The two native link destinations were checked separately."
+        }
+      ]
+    },
+    {
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0001.py",
+      "source_id": "agent-authored-pilot:documentation.py",
+      "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+      "readings": [
+        "A028",
+        "A029"
+      ],
+      "selected_region": null,
+      "reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009"
+      ],
+      "regions": [
+        {
+          "rules": [
+            "C010"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 38,
+          "end_column": 1,
+          "note": "Reviewed the supported return declarations in fetch, Reader.read and checked with complete static import/binding context."
+        },
+        {
+          "rules": [
+            "C010"
+          ],
+          "status": "unsupported",
+          "line": 38,
+          "column": 1,
+          "end_line": 44,
+          "end_column": 24,
+          "note": "decode has -> str and :rtype: int, an excluded scalar pair; C010 supports only unquoted -> None versus physical :rtype: int."
+        }
+      ],
+      "dispositions": [
+        {
+          "rule_id": "G038",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "All comments and docstrings have no curated predicate comparative."
+        },
+        {
+          "rule_id": "G039",
+          "disposition": "issues",
+          "expected_ids": [
+            "A-authored-challenge-0001.py-G039-26-17"
+          ],
+          "region_statuses": [],
+          "rationale": "Only the duplicated tail of \"Read the the input file\" is supported."
+        },
+        {
+          "rule_id": "V015",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "All comments and docstrings have no curated superlative claim."
+        },
+        {
+          "rule_id": "V016",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "All comments and docstrings have no curated absolute reliability phrase."
+        },
+        {
+          "rule_id": "C004",
+          "disposition": "issues",
+          "expected_ids": [
+            "A-authored-challenge-0001.py-C004-11-7",
+            "A-authored-challenge-0001.py-C004-12-5"
+          ],
+          "region_statuses": [],
+          "rationale": "fetch has two distinct issues: a generic TODO comment and an executable formulaic NotImplementedError. Reader.read has an imported, unshadowed abc.abstractmethod decorator, so its otherwise empty ellipsis is exempt. The issue-specific retry maintenance TODO remains valid."
+        },
+        {
+          "rule_id": "C009",
+          "disposition": "issues",
+          "expected_ids": [
+            "A-authored-challenge-0001.py-C009-7-12",
+            "A-authored-challenge-0001.py-C009-8-12"
+          ],
+          "region_statuses": [],
+          "rationale": "fetch has two distinct stale fields: attempts is absent, while **extras states the wrong variadic kind. checked's path/*extras/**options agree; its unstarred timeout is conservatively forwarded through **options. decode's payload agrees."
+        },
+        {
+          "rule_id": "C010",
+          "disposition": "issues in supported scope; unsupported region excluded",
+          "expected_ids": [
+            "A-authored-challenge-0001.py-C010-9-13"
+          ],
+          "region_statuses": [
+            "reviewed",
+            "unsupported"
+          ],
+          "rationale": "fetch's physical int field contradicts -> None. Reader.read and checked declare None consistently. decode's -> str versus int is outside the published supported scalar pair and is explicitly unsupported."
+        }
+      ]
+    },
+    {
+      "cohort": "authored-local-links",
+      "packet_path": "originals/0000.md",
+      "source_id": "agent-authored-pilot:entry.md",
+      "sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+      "readings": [
+        "A030"
+      ],
+      "selected_region": null,
+      "reviewed_rules": [
+        "M011",
+        "M012"
+      ],
+      "regions": [],
+      "dispositions": [
+        {
+          "rule_id": "M011",
+          "disposition": "issues",
+          "expected_ids": [
+            "A-authored-local-links-0000.md-M011-7-20"
+          ],
+          "region_statuses": [],
+          "rationale": "Workflow creates #workflow, while no source target creates #limitations. Cross-file fragments remain M012's responsibility."
+        },
+        {
+          "rule_id": "M012",
+          "disposition": "issues",
+          "expected_ids": [
+            "A-authored-local-links-0000.md-M012-4-22",
+            "A-authored-local-links-0000.md-M012-5-18"
+          ],
+          "region_statuses": [],
+          "rationale": "The literal setup.md#install target resolves. setup.md#configuration fails because Configuration occurs only in a fenced example, while the real heading is Configuration notes. The permitted complete pinned inventory and target status verify missing.md is absent."
+        }
+      ]
+    },
+    {
+      "cohort": "natural",
+      "packet_path": "originals/0000.md",
+      "source_id": "github/docs:content/actions/how-tos/write-workflows/choose-what-workflows-do/use-jobs.md",
+      "sha256": "ab4a60280784e5b915bb2b1353ceb0a5cffefcbe5148c53b901d7861d41c52a1",
+      "readings": [
+        "A001"
+      ],
+      "selected_region": {
+        "column": 1,
+        "end_column": 117,
+        "end_line": 38,
+        "line": 18
+      },
+      "reviewed_rules": [],
+      "regions": [
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 18,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 1,
+          "note": "Reviewed the literal native source in the declared R005 region; no supported claims."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 24,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 70,
+          "note": "The Liquid reusable is unexpanded; its generated prose is unavailable."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 24,
+          "column": 70,
+          "end_line": 28,
+          "end_column": 1,
+          "note": "Reviewed literal headings and whitespace; no supported claims."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 28,
+          "column": 1,
+          "end_line": 28,
+          "end_column": 72,
+          "note": "The Liquid reusable is unexpanded; its generated prose is unavailable."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 28,
+          "column": 72,
+          "end_line": 32,
+          "end_column": 1,
+          "note": "Reviewed literal headings and whitespace; no supported claims."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 32,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 73,
+          "note": "The Liquid reusable is unexpanded; its generated prose is unavailable."
+        },
+        {
+          "rules": [
+            "G038",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 32,
+          "column": 73,
+          "end_line": 38,
+          "end_column": 117,
+          "note": "Reviewed the native matrix-strategy instruction and link through the exclusive declared endpoint; no supported claims."
+        }
+      ],
+      "dispositions": [
+        {
+          "rule_id": "G038",
+          "disposition": "reviewed native source; generated regions context-dependent",
+          "expected_ids": [],
+          "region_statuses": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "rationale": "The reviewed native instructions have no curated predicate comparative. Headings and raw Liquid directives supply no eligible claim; unexpanded reusables remain context-dependent."
+        },
+        {
+          "rule_id": "V015",
+          "disposition": "reviewed native source; generated regions context-dependent",
+          "expected_ids": [],
+          "region_statuses": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "rationale": "The reviewed native instructions have no curated superlative claim; no expansion of the three job-setting reusables was read."
+        },
+        {
+          "rule_id": "V016",
+          "disposition": "reviewed native source; generated regions context-dependent",
+          "expected_ids": [],
+          "region_statuses": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "rationale": "The reviewed native instructions contain none of the four absolute phrases; absent reusable prose remains context-dependent."
+        }
+      ]
+    },
+    {
+      "cohort": "natural",
+      "packet_path": "originals/0001.md",
+      "source_id": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md",
+      "sha256": "e4656dfdd2cff448e23fd8115b70b78efd0ac8863897b9df161ffc26dec12ded",
+      "readings": [
+        "A002",
+        "A003",
+        "A004",
+        "A005",
+        "A006",
+        "A007"
+      ],
+      "selected_region": null,
+      "reviewed_rules": [],
+      "regions": [
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 1,
+          "note": "Reviewed all eligible native text before the reusable; frontmatter, headings, code and markup are excluded by each contract as applicable."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 24,
+          "column": 1,
+          "end_line": 24,
+          "end_column": 55,
+          "note": "The version-note Liquid reusable is absent as rendered prose; no claim about its expansion is made."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 24,
+          "column": 55,
+          "end_line": 236,
+          "end_column": 27,
+          "note": "Reviewed all remaining eligible native prose, including wrapped sentence boundaries; no supported selected claim or repeated-word findings."
+        },
+        {
+          "rules": [
+            "M011"
+          ],
+          "status": "unsupported",
+          "line": 1,
+          "column": 1,
+          "end_line": 236,
+          "end_column": 27,
+          "note": "Liquid and generated-content cues make the complete document unsupported for M011; rendered target expansion is unavailable."
+        }
+      ],
+      "dispositions": [
+        {
+          "rule_id": "G038",
+          "disposition": "reviewed native source; generated regions context-dependent",
+          "expected_ids": [],
+          "region_statuses": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "rationale": "The complete eligible native command manual has no curated predicate comparative. \"using the simpler\" describes an option and is not a predicate comparative. The version-note expansion remains unavailable."
+        },
+        {
+          "rule_id": "G039",
+          "disposition": "reviewed native source; generated regions context-dependent",
+          "expected_ids": [],
+          "region_statuses": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "rationale": "Eligible native prose has no adjacent repeated word from the closed vocabulary, including across physical line wraps. The version-note expansion remains unavailable."
+        },
+        {
+          "rule_id": "V015",
+          "disposition": "reviewed native source; generated regions context-dependent",
+          "expected_ids": [],
+          "region_statuses": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "rationale": "The native manual contains no curated superlative claim. Its headings, syntax examples and option names are outside claim detection; the reusable expansion remains unavailable."
+        },
+        {
+          "rule_id": "V016",
+          "disposition": "reviewed native source; generated regions context-dependent",
+          "expected_ids": [],
+          "region_statuses": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "rationale": "Native text such as \"will always be searched\" is outside the four curated phrases; no supported absolute reliability claim appears. The reusable expansion remains unavailable."
+        },
+        {
+          "rule_id": "M011",
+          "disposition": "unsupported",
+          "expected_ids": [],
+          "region_statuses": [
+            "unsupported"
+          ],
+          "rationale": "\"autogenerated: codeql-cli\", \"Content after this section is automatically generated\" and Liquid cues establish an unsupported generated Markdown document for this rule."
+        }
+      ]
+    },
+    {
+      "cohort": "natural",
+      "packet_path": "originals/0002.md",
+      "source_id": "github/docs:content/migrations/overview/mannequins-and-user-activity.md",
+      "sha256": "d85335cdf9f9c882db139b6653bd77e640dda92eca9bc6e8136a5a0bf5ae0ef2",
+      "readings": [
+        "A008"
+      ],
+      "selected_region": null,
+      "reviewed_rules": [],
+      "regions": [
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 1,
+          "column": 1,
+          "end_line": 14,
+          "end_column": 1,
+          "note": "Reviewed eligible native text before the first reusable; no supported findings."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 14,
+          "column": 1,
+          "end_line": 14,
+          "end_column": 64,
+          "note": "The about-mannequins Liquid reusable is unexpanded."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 14,
+          "column": 64,
+          "end_line": 22,
+          "end_column": 1,
+          "note": "Reviewed eligible native prose and screenshot alt text; no supported findings."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 22,
+          "column": 1,
+          "end_line": 22,
+          "end_column": 38,
+          "note": "The git-activity Liquid reusable is unexpanded."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 22,
+          "column": 38,
+          "end_line": 26,
+          "end_column": 1,
+          "note": "Reviewed native heading and intervening markup; no supported findings."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 26,
+          "column": 1,
+          "end_line": 26,
+          "end_column": 63,
+          "note": "The how-to-reclaim Liquid reusable is unexpanded; following literal instruction remains reviewed separately."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "reviewed",
+          "line": 26,
+          "column": 63,
+          "end_line": 32,
+          "end_column": 1,
+          "note": "Reviewed native instruction, attribution invitation and reclamation prose; no supported findings."
+        },
+        {
+          "rules": [
+            "G038",
+            "G039",
+            "V015",
+            "V016"
+          ],
+          "status": "context-dependent",
+          "line": 32,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 272,
+          "note": "The final conditional contains two unavailable Liquid product-name expansions; no rendered-prose coverage is claimed."
+        },
+        {
+          "rules": [
+            "M011"
+          ],
+          "status": "unsupported",
+          "line": 1,
+          "column": 1,
+          "end_line": 32,
+          "end_column": 272,
+          "note": "The document has Liquid generated-content cues; M011 cannot establish complete rendered targets under its published contract."
+        }
+      ],
+      "dispositions": [
+        {
+          "rule_id": "G038",
+          "disposition": "reviewed native source; generated regions context-dependent",
+          "expected_ids": [],
+          "region_statuses": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "rationale": "Eligible literal prose has no curated predicate comparative. Reusable and product-name expansions remain unavailable; those spans are context-dependent."
+        },
+        {
+          "rule_id": "G039",
+          "disposition": "reviewed native source; generated regions context-dependent",
+          "expected_ids": [],
+          "region_statuses": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "rationale": "Eligible literal prose has no closed-vocabulary repeated function-word run. The display chunks are reconstructed by original coordinates; missing expansions are excluded."
+        },
+        {
+          "rule_id": "V015",
+          "disposition": "reviewed native source; generated regions context-dependent",
+          "expected_ids": [],
+          "region_statuses": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "rationale": "Eligible literal prose has no curated superlative claim. No rendered content from the Liquid references is assumed."
+        },
+        {
+          "rule_id": "V016",
+          "disposition": "reviewed native source; generated regions context-dependent",
+          "expected_ids": [],
+          "region_statuses": [
+            "context-dependent",
+            "reviewed"
+          ],
+          "rationale": "\"Mannequins always use the same avatar\" does not use one of the four curated reliability phrases. No eligible literal phrase matches; Liquid expansions remain unavailable."
+        },
+        {
+          "rule_id": "M011",
+          "disposition": "unsupported",
+          "expected_ids": [],
+          "region_statuses": [
+            "unsupported"
+          ],
+          "rationale": "The Liquid reusable and variable directives are generated-content cues; the complete document is unsupported for same-document anchor validation."
+        }
+      ]
+    },
+    {
+      "cohort": "natural",
+      "packet_path": "originals/0003.py",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/certs.py",
+      "sha256": "67d49be35d009efea35054f2b2cd23145854eb1b2df1cb442ea7f2f04bf6de0c",
+      "readings": [
+        "A009"
+      ],
+      "selected_region": null,
+      "reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009",
+        "C010"
+      ],
+      "regions": [],
+      "dispositions": [
+        {
+          "rule_id": "G038",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "The complete module docstring has no curated predicate comparative; executable statements and non-docstring strings are outside prose claim scope."
+        },
+        {
+          "rule_id": "G039",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "The module docstring and shebang have no adjacent repeated function words from the closed vocabulary."
+        },
+        {
+          "rule_id": "V015",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "The complete module docstring has no curated superlative phrase; \"preferred default CA certificate bundle\" is not a supported superlative construction."
+        },
+        {
+          "rule_id": "V016",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "The complete module docstring has no curated absolute reliability phrase."
+        },
+        {
+          "rule_id": "C004",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "The complete static module has no context-free comment marker or actual placeholder statement."
+        },
+        {
+          "rule_id": "C009",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "There are no source-defined function owners or Sphinx parameter fields; the module docstring is outside stale function-parameter checking."
+        },
+        {
+          "rule_id": "C010",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "There is no source-defined annotated return owner or physical Sphinx int return field that forms the supported contradiction."
+        }
+      ]
+    },
+    {
+      "cohort": "natural",
+      "packet_path": "originals/0004.py",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/_internal_utils.py",
+      "sha256": "9cc4329abe21b37d93a95a3901b0ab99c24486f3d487bc57965bb2ab0b252e24",
+      "readings": [
+        "A010",
+        "A011"
+      ],
+      "selected_region": null,
+      "reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009",
+        "C010"
+      ],
+      "regions": [],
+      "dispositions": [
+        {
+          "rule_id": "G038",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "The complete module/function docstrings have no curated predicate comparative; regex strings and executable code are excluded."
+        },
+        {
+          "rule_id": "G039",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "Eligible docstrings have no repeated function-word run from the closed set."
+        },
+        {
+          "rule_id": "V015",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "Eligible docstrings have no curated superlative claim; \"extremely few external helpers\" is not one."
+        },
+        {
+          "rule_id": "V016",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "Eligible docstrings have no curated absolute reliability claim."
+        },
+        {
+          "rule_id": "C004",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "The complete module contains no context-free comment marker or executable placeholder statement."
+        },
+        {
+          "rule_id": "C009",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "The typed field \":param str u_string:\" names the actual unicode_is_ascii parameter u_string; the other function has no Sphinx parameter declarations to check."
+        },
+        {
+          "rule_id": "C010",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "Neither function has -> None. The bool field in unicode_is_ascii does not form the supported None/int contradiction, and no missing return annotation is inferred."
+        }
+      ]
+    },
+    {
+      "cohort": "natural",
+      "packet_path": "originals/0005.py",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+      "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+      "readings": [
+        "A012",
+        "A013",
+        "A014",
+        "A015",
+        "A016",
+        "A017",
+        "A018",
+        "A019",
+        "A020",
+        "A021",
+        "A022",
+        "A023",
+        "A024",
+        "A025",
+        "A026"
+      ],
+      "selected_region": null,
+      "reviewed_rules": [
+        "G038",
+        "G039",
+        "V015",
+        "V016",
+        "C004",
+        "C009",
+        "C010"
+      ],
+      "regions": [],
+      "dispositions": [
+        {
+          "rule_id": "G038",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "All native comments/docstrings were reviewed. \"to be more specific\" is an infinitive instruction and \"the more explicit get() method\" is an attributive adjective, not a curated predicate comparative."
+        },
+        {
+          "rule_id": "G039",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "All native comments/docstrings, including physical wrap boundaries, have no adjacent repeated function word from the closed set."
+        },
+        {
+          "rule_id": "V015",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "All native comments/docstrings contain no curated superlative claim."
+        },
+        {
+          "rule_id": "V016",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "Native wording including \"it's never used elsewhere in Requests\" and \"sent on every request\" is outside the four curated reliability phrases."
+        },
+        {
+          "rule_id": "C004",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "The NotImplementedError in MockRequest.add_header is a deliberate rejection of an unsupported interface operation: the owning docstring says \"cookiejar has no legitimate use for this method; add it back if you find one.\" and its message directs callers to \"add_unredirected_header()\", implemented immediately below. I judged it a specific operation guard, not a formulaic implementation placeholder. No generic markers, pass/ellipsis placeholder comments or other placeholder statements appear."
+        },
+        {
+          "rule_id": "C009",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "Every physical Sphinx parameter name was checked against its own function signature: headers, jar/request/response, both name/domain/path sets, cookie_dict/cookiejar/overwrite and cookiejar/cookies all agree. Module/class prose and functions without such fields do not create stale declarations."
+        },
+        {
+          "rule_id": "C010",
+          "disposition": "reviewed clean",
+          "expected_ids": [],
+          "region_statuses": [],
+          "rationale": "No function uses -> None, so the physical str, bool, dict and CookieJar fields never form the supported explicit None/int pair. No broader return-type contradiction is inferred."
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "A-authored-challenge-0000.md-G038-3-17",
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0000.md",
+      "rule_id": "G038",
+      "line": 3,
+      "column": 17,
+      "end_line": 3,
+      "end_column": 26,
+      "quote": "is faster",
+      "rationale": "The declarative claim supplies no comparison target; the next sentence is a separate claim, not an attached comparator."
+    },
+    {
+      "id": "A-authored-challenge-0000.md-V015-5-17",
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0000.md",
+      "rule_id": "V015",
+      "line": 5,
+      "column": 17,
+      "end_line": 5,
+      "end_column": 33,
+      "quote": "remains the best",
+      "rationale": "This superlative names no local comparison set; the following benchmark sentence qualifies its own separate claim."
+    },
+    {
+      "id": "A-authored-challenge-0000.md-V016-7-21",
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0000.md",
+      "rule_id": "V016",
+      "line": 7,
+      "column": 21,
+      "end_line": 7,
+      "end_column": 32,
+      "quote": "never fails",
+      "rationale": "An absolute reliability claim with no numbered test population or explicitly tested configuration in its own sentence."
+    },
+    {
+      "id": "A-authored-challenge-0000.md-V016-9-41",
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0000.md",
+      "rule_id": "V016",
+      "line": 9,
+      "column": 41,
+      "end_line": 9,
+      "end_column": 52,
+      "quote": "never fails",
+      "rationale": "The preceding sentence reports 1,000 tests but does not qualify the separate universal assertion."
+    },
+    {
+      "id": "A-authored-challenge-0000.md-V016-10-31",
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0000.md",
+      "rule_id": "V016",
+      "line": 10,
+      "column": 31,
+      "end_line": 10,
+      "end_column": 46,
+      "quote": "always succeeds",
+      "rationale": "In tests is vague local testing scope rather than a numbered population or explicitly tested configuration; retain a low-confidence review prompt."
+    },
+    {
+      "id": "A-authored-challenge-0000.md-G039-11-10",
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0000.md",
+      "rule_id": "G039",
+      "line": 11,
+      "column": 10,
+      "end_line": 11,
+      "end_column": 13,
+      "quote": "the",
+      "rationale": "Adjacent repeated function word the; the finding covers the duplicated tail."
+    },
+    {
+      "id": "A-authored-challenge-0000.md-M011-17-35",
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0000.md",
+      "rule_id": "M011",
+      "line": 17,
+      "column": 35,
+      "end_line": 17,
+      "end_column": 42,
+      "quote": "#limits",
+      "rationale": "No heading or supported explicit anchor creates limits in this native Markdown document; Scope resolves the separate #scope link."
+    },
+    {
+      "id": "A-authored-challenge-0001.py-C009-7-12",
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0001.py",
+      "rule_id": "C009",
+      "line": 7,
+      "column": 12,
+      "end_line": 7,
+      "end_column": 20,
+      "quote": "attempts",
+      "rationale": "fetch declares target and variadic positional extras; attempts is absent from its owning signature and there is no **kwargs delegation."
+    },
+    {
+      "id": "A-authored-challenge-0001.py-C009-8-12",
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0001.py",
+      "rule_id": "C009",
+      "line": 8,
+      "column": 12,
+      "end_line": 8,
+      "end_column": 20,
+      "quote": "**extras",
+      "rationale": "The explicit ** kind contradicts the signature, where extras is variadic positional *extras. Both the name and its declared kind are part of the semantic issue."
+    },
+    {
+      "id": "A-authored-challenge-0001.py-C010-9-13",
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0001.py",
+      "rule_id": "C010",
+      "line": 9,
+      "column": 13,
+      "end_line": 9,
+      "end_column": 16,
+      "quote": "int",
+      "rationale": "The physical Sphinx int return field conflicts with fetch's unquoted -> None annotation. No decorator, generator or rebinding blocks this supported pair; neither declaration is assumed to be intended."
+    },
+    {
+      "id": "A-authored-challenge-0001.py-C004-11-7",
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0001.py",
+      "rule_id": "C004",
+      "line": 11,
+      "column": 7,
+      "end_line": 11,
+      "end_column": 11,
+      "quote": "TODO",
+      "rationale": "This comment contains a context-free TODO marker with no specific maintenance task."
+    },
+    {
+      "id": "A-authored-challenge-0001.py-C004-12-5",
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0001.py",
+      "rule_id": "C004",
+      "line": 12,
+      "column": 5,
+      "end_line": 12,
+      "end_column": 48,
+      "quote": "raise NotImplementedError(\"Add logic here\")",
+      "rationale": "This is an actual executable raise statement in a concrete undecorated function, with a formulaic implementation message; it is separate from the preceding TODO comment."
+    },
+    {
+      "id": "A-authored-challenge-0001.py-G039-26-17",
+      "cohort": "authored-challenge",
+      "packet_path": "originals/0001.py",
+      "rule_id": "G039",
+      "line": 26,
+      "column": 17,
+      "end_line": 26,
+      "end_column": 20,
+      "quote": "the",
+      "rationale": "The function docstring repeats adjacent function word the; the finding covers the duplicated tail."
+    },
+    {
+      "id": "A-authored-local-links-0000.md-M012-4-22",
+      "cohort": "authored-local-links",
+      "packet_path": "originals/0000.md",
+      "rule_id": "M012",
+      "line": 4,
+      "column": 22,
+      "end_line": 4,
+      "end_column": 44,
+      "quote": "setup.md#configuration",
+      "rationale": "setup.md exists. Its real headings create install and configuration-notes; Configuration appears only in a fenced Markdown example and creates no configuration target."
+    },
+    {
+      "id": "A-authored-local-links-0000.md-M012-5-18",
+      "cohort": "authored-local-links",
+      "packet_path": "originals/0000.md",
+      "rule_id": "M012",
+      "line": 5,
+      "column": 18,
+      "end_line": 5,
+      "end_column": 28,
+      "quote": "missing.md",
+      "rationale": "The pinned synthetic inventory contains only entry.md and setup.md, and the permitted target metadata verifies missing.md is absent."
+    },
+    {
+      "id": "A-authored-local-links-0000.md-M011-7-20",
+      "cohort": "authored-local-links",
+      "packet_path": "originals/0000.md",
+      "rule_id": "M011",
+      "line": 7,
+      "column": 20,
+      "end_line": 7,
+      "end_column": 32,
+      "quote": "#limitations",
+      "rationale": "The source has the Workflow heading and no limitations heading or supported explicit anchor; this same-document destination is unresolved."
+    }
+  ],
+  "uncertainties": [
+    {
+      "cohort": "natural",
+      "packet_path": "originals/0005.py",
+      "rule_id": "C004",
+      "line": 80,
+      "column": 9,
+      "end_line": 82,
+      "end_column": 10,
+      "quote": "raise NotImplementedError(\n            \"Cookie headers should be added with add_unredirected_header()\"\n        )",
+      "judgment": "reviewed clean",
+      "note": "The source explains an intentional unsupported operation with a real implemented alternative. I interpret formulaic placeholders as excluding this deliberate guard; the published contract does not explicitly settle whether every concrete NotImplementedError should be reported. This is a substantive agent uncertainty, not an abstract-method exemption."
+    },
+    {
+      "cohort": "natural",
+      "packet_path": "originals/0000.md",
+      "rule_ids": [
+        "G038",
+        "V015",
+        "V016"
+      ],
+      "judgment": "context-dependent",
+      "note": "The three job-setting reusables are absent as rendered text; only the original declared region and literal eligible source are reviewed."
+    },
+    {
+      "cohort": "natural",
+      "packet_paths": [
+        "originals/0001.md",
+        "originals/0002.md"
+      ],
+      "rule_ids": [
+        "G038",
+        "G039",
+        "V015",
+        "V016"
+      ],
+      "judgment": "context-dependent",
+      "note": "No claims or clean expansion judgments are inferred for the absent version note, mannequin reusables or product names."
+    }
+  ],
+  "counts": {
+    "readings": 30,
+    "sources": 9,
+    "source_rule_dispositions": 48,
+    "expected": 16,
+    "expected_by_cohort": {
+      "authored-challenge": 13,
+      "authored-local-links": 3,
+      "natural": 0
+    },
+    "expected_by_rule": {
+      "C004": 2,
+      "C009": 2,
+      "C010": 1,
+      "G038": 1,
+      "G039": 2,
+      "M011": 2,
+      "M012": 2,
+      "V015": 1,
+      "V016": 3
+    },
+    "negative_cases": 0
+  },
+  "annotation_freeze_sha256": {
+    "authored-challenge": "443349a79eca679ce025105bf6ec34f6a69fa3e16ca4a8768c79f19911936639",
+    "authored-local-links": "f73acf705c546133e4cc16857b6974545a0799dfad5a80e775563220d13263c6",
+    "natural": "4231aee3371f152cb2f051d3c7b0ff0bc298c6349e6246e663f6db566c3c2f1b"
+  },
+  "validation": {
+    "validator": "benchmarks.quality_scoring.load_annotations",
+    "results": [
+      {
+        "cohort": "authored-challenge",
+        "manifest": "quality/reviews/2026-10-13-agent-resume/authored-challenge/annotations.agent-a.json",
+        "status": "passed"
+      },
+      {
+        "cohort": "authored-local-links",
+        "manifest": "quality/reviews/2026-10-13-agent-resume/authored-local-links/annotations.agent-a.json",
+        "status": "passed"
+      },
+      {
+        "cohort": "natural",
+        "manifest": "quality/reviews/2026-10-13-agent-resume/natural/annotations.agent-a.json",
+        "status": "passed"
+      }
+    ],
+    "judgment_changed_after_validation": false,
+    "structural_repairs": [
+      "Replaced cache provenance headers with the permitted tracked unreviewed-template headers."
+    ]
+  },
+  "deliverable_annotation_paths": {
+    "authored-challenge": "quality/reviews/2026-10-13-agent-resume/authored-challenge/annotations.agent-a.json",
+    "authored-local-links": "quality/reviews/2026-10-13-agent-resume/authored-local-links/annotations.agent-a.json",
+    "natural": "quality/reviews/2026-10-13-agent-resume/natural/annotations.agent-a.json"
+  },
+  "final_annotation_sha256": {
+    "authored-challenge": "860ef36ac41fb6a781ba8bd99370bf4acb041fcff3147b44dea09e6f3a3d05a8",
+    "authored-local-links": "6b0b6caf350841eb92244534b74293da94f2540df9ad2278f586a0807c38bdcd",
+    "natural": "6f341565336f57da5d5cdc4030851130e0f204590cb6dad7e6d406031703faca"
+  }
+}

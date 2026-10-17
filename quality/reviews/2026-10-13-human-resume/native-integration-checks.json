@@ -1,0 +1,29 @@
+{
+  "additional_strict_types": "native helpers and new reference tests passed with follow-imports=silent; four pre-existing benchmark dependency errors not claimed passing",
+  "command": "make check dogfood rule-quality-regression",
+  "curated_all_rules": {
+    "fn": 0,
+    "fp": 6,
+    "gate": "passed; six exact known mismatches retained",
+    "tp": 366
+  },
+  "curated_production": {
+    "fn": 0,
+    "fp": 4,
+    "gate": "passed; four exact known mismatches retained",
+    "tp": 106
+  },
+  "dogfood": "passed; existing baseline unchanged",
+  "exit_code": 0,
+  "generated_rule_docs": "current",
+  "log_location": "/private/tmp/proseprobe-native-integration-gates-exact.log",
+  "log_sha256": "103be86a34b688dcef2b8429581b15200146d3047688a6f026702a11e414def5",
+  "mypy": "repository package target passed; 31 source files",
+  "native_preparation_synthetic_tests": 55,
+  "new_reference_synthetic_tests": 72,
+  "ruff": "passed",
+  "scope": "synthetic engineering regression checks; no natural or holdout predictions",
+  "stage": "P30.18b",
+  "tests_passed": 3640,
+  "version": 1
+}

@@ -1,0 +1,42 @@
+{
+  "actor_role": "human user",
+  "contracts_sha256": "44574c524e1f13596b150e5e38f44f47bc4690abced12be954e34c810d5da657",
+  "coverage": "exact displayed region and three declared rules only",
+  "guidance": {
+    "delivery": "assistant guidance message in this conversation, before this human answer",
+    "path": "guidance.v1.md",
+    "sha256": "84595a91a337156caa08e449035a6bd818c3360827c74982b2f8183e25495920"
+  },
+  "literal_response": "No issues for all three rules in this region.",
+  "literal_response_sha256": "b682287a42f6bb0f12cd619a3dcb1753aa2ebd1afcf9d943a44f31543ee5426e",
+  "phase": "initial-blind",
+  "prediction_exposure_in_session": "none",
+  "reading_id": "R002",
+  "recorded_at_utc": "2026-10-11T02:53:41.769917+00:00",
+  "region": {
+    "column": 1,
+    "end_column": 260,
+    "end_line": 40,
+    "line": 16
+  },
+  "rendered_sha256": "c038056c5a2bafc1cb8cb142c74262283c0397be4a8c3c2dedde26f4a952b817",
+  "reviewer_id": "human-session-user-2026-10-10",
+  "reviewer_provenance": "reviewer.json; name unavailable, previous exposure unknown, independence unverified",
+  "rule_judgments": {
+    "G038": {
+      "literal_basis": "No issues for all three rules in this region.",
+      "status": "no issue"
+    },
+    "V015": {
+      "literal_basis": "No issues for all three rules in this region.",
+      "status": "no issue"
+    },
+    "V016": {
+      "literal_basis": "No issues for all three rules in this region.",
+      "status": "no issue"
+    }
+  },
+  "source_id": "github/docs:content/rest/about-the-rest-api/about-the-openapi-description-for-the-rest-api.md",
+  "source_sha256": "5bbbf5299d36f473d32424e20294e120ac575a5b92093730ce99f365705e1683",
+  "version": 1
+}

@@ -1,0 +1,428 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A010.txt",
+  "packet_path": "originals/0004.py",
+  "pair_group": "psf/requests:src/requests/_internal_utils.py",
+  "reading_id": "A010",
+  "region": {
+    "column": 1,
+    "end_column": 1,
+    "end_line": 40,
+    "line": 1
+  },
+  "rendered_sha256": "a6d11a46e58b727331255ba84f080dc4ca7bd5576f71fa4b597f4ac140e2eff9",
+  "rendered_text": "Blind agent reading A010: natural.\nReading file: [A010](/private/tmp/proseprobe-A010.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL 1 C 1- 4 | \"\"\"\nL 2 C 1-25 | requests._internal_utils\nL 3 C 1-15 | ~~~~~~~~~~~~~~\nL 4 C 1- 1 | \nL 5 C 1-68 | Provides utility functions that are consumed internally by Requests\nL 6 C 1-64 | which depend on extremely few external helpers (such as compat)\nL 7 C 1- 4 | \"\"\"\nL 8 C 1-10 | import re\nL 9 C 1- 1 | \nL10 C 1-32 | from .compat import builtin_str\nL11 C 1- 1 | \nL12 C 1-63 | _VALID_HEADER_NAME_RE_BYTE = re.compile(rb\"^[^:\\s][^:\\r\\n]*$\")\nL13 C 1-61 | _VALID_HEADER_NAME_RE_STR = re.compile(r\"^[^:\\s][^:\\r\\n]*$\")\nL14 C 1-62 | _VALID_HEADER_VALUE_RE_BYTE = re.compile(rb\"^\\S[^\\r\\n]*$|^$\")\nL15 C 1-60 | _VALID_HEADER_VALUE_RE_STR = re.compile(r\"^\\S[^\\r\\n]*$|^$\")\nL16 C 1- 1 | \nL17 C 1-54 | _HEADER_VALIDATORS_STR = (_VALID_HEADER_NAME_RE_STR, \nL17 C54-81 | _VALID_HEADER_VALUE_RE_STR)\nL18 C 1-56 | _HEADER_VALIDATORS_BYTE = (_VALID_HEADER_NAME_RE_BYTE, \nL18 C56-84 | _VALID_HEADER_VALUE_RE_BYTE)\nL19 C 1-22 | HEADER_VALIDATORS = {\nL20 C 1-36 |     bytes: _HEADER_VALIDATORS_BYTE,\nL21 C 1-33 |     str: _HEADER_VALIDATORS_STR,\nL22 C 1- 2 | }\nL23 C 1- 1 | \nL24 C 1- 1 | \nL25 C 1-48 | def to_native_string(string, encoding=\"ascii\"):\nL26 C 1-61 |     \"\"\"Given a string object, regardless of type, returns a \nL26 C61-78 | representation of\nL27 C 1-66 |     that string in the native string type, encoding and decoding \nL27 C66-71 | where\nL28 C 1-57 |     necessary. This assumes ASCII unless told otherwise.\nL29 C 1- 8 |     \"\"\"\nL30 C 1-40 |     if isinstance(string, builtin_str):\nL31 C 1-21 |         out = string\nL32 C 1-10 |     else:\nL33 C 1-38 |         out = string.decode(encoding)\nL34 C 1- 1 | \nL35 C 1-15 |     return out\nL36 C 1- 1 | \nL37 C 1- 1 | \nL38 C 1-32 | def unicode_is_ascii(u_string):\nL39 C 1-67 |     \"\"\"Determine if unicode string only contains ASCII characters.\nL40 C 1- 1 | \n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 4,
+      "end_line": 1,
+      "line": 1,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 25,
+      "end_line": 2,
+      "line": 2,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "requests._internal_utils"
+    },
+    {
+      "column": 1,
+      "end_column": 15,
+      "end_line": 3,
+      "line": 3,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "~~~~~~~~~~~~~~"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 4,
+      "line": 4,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 68,
+      "end_line": 5,
+      "line": 5,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "Provides utility functions that are consumed internally by Requests"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 6,
+      "line": 6,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "which depend on extremely few external helpers (such as compat)"
+    },
+    {
+      "column": 1,
+      "end_column": 4,
+      "end_line": 7,
+      "line": 7,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 10,
+      "end_line": 8,
+      "line": 8,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "import re"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 9,
+      "line": 9,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 32,
+      "end_line": 10,
+      "line": 10,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "from .compat import builtin_str"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 11,
+      "line": 11,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 12,
+      "line": 12,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "_VALID_HEADER_NAME_RE_BYTE = re.compile(rb\"^[^:\\s][^:\\r\\n]*$\")"
+    },
+    {
+      "column": 1,
+      "end_column": 61,
+      "end_line": 13,
+      "line": 13,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": "_VALID_HEADER_NAME_RE_STR = re.compile(r\"^[^:\\s][^:\\r\\n]*$\")"
+    },
+    {
+      "column": 1,
+      "end_column": 62,
+      "end_line": 14,
+      "line": 14,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "_VALID_HEADER_VALUE_RE_BYTE = re.compile(rb\"^\\S[^\\r\\n]*$|^$\")"
+    },
+    {
+      "column": 1,
+      "end_column": 60,
+      "end_line": 15,
+      "line": 15,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "_VALID_HEADER_VALUE_RE_STR = re.compile(r\"^\\S[^\\r\\n]*$|^$\")"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 54,
+      "end_line": 17,
+      "line": 17,
+      "reading_line": 29,
+      "source_line_ending": "",
+      "text": "_HEADER_VALIDATORS_STR = (_VALID_HEADER_NAME_RE_STR, "
+    },
+    {
+      "column": 54,
+      "end_column": 81,
+      "end_line": 17,
+      "line": 17,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": "_VALID_HEADER_VALUE_RE_STR)"
+    },
+    {
+      "column": 1,
+      "end_column": 56,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 31,
+      "source_line_ending": "",
+      "text": "_HEADER_VALIDATORS_BYTE = (_VALID_HEADER_NAME_RE_BYTE, "
+    },
+    {
+      "column": 56,
+      "end_column": 84,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "_VALID_HEADER_VALUE_RE_BYTE)"
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 19,
+      "line": 19,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "HEADER_VALIDATORS = {"
+    },
+    {
+      "column": 1,
+      "end_column": 36,
+      "end_line": 20,
+      "line": 20,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "    bytes: _HEADER_VALIDATORS_BYTE,"
+    },
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 21,
+      "line": 21,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "    str: _HEADER_VALIDATORS_STR,"
+    },
+    {
+      "column": 1,
+      "end_column": 2,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "}"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 23,
+      "line": 23,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 24,
+      "line": 24,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 48,
+      "end_line": 25,
+      "line": 25,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": "def to_native_string(string, encoding=\"ascii\"):"
+    },
+    {
+      "column": 1,
+      "end_column": 61,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 40,
+      "source_line_ending": "",
+      "text": "    \"\"\"Given a string object, regardless of type, returns a "
+    },
+    {
+      "column": 61,
+      "end_column": 78,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "representation of"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 42,
+      "source_line_ending": "",
+      "text": "    that string in the native string type, encoding and decoding "
+    },
+    {
+      "column": 66,
+      "end_column": 71,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "where"
+    },
+    {
+      "column": 1,
+      "end_column": 57,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "    necessary. This assumes ASCII unless told otherwise."
+    },
+    {
+      "column": 1,
+      "end_column": 8,
+      "end_line": 29,
+      "line": 29,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": "    \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 40,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "    if isinstance(string, builtin_str):"
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 31,
+      "line": 31,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "        out = string"
+    },
+    {
+      "column": 1,
+      "end_column": 10,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "    else:"
+    },
+    {
+      "column": 1,
+      "end_column": 38,
+      "end_line": 33,
+      "line": 33,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": "        out = string.decode(encoding)"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 34,
+      "line": 34,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 15,
+      "end_line": 35,
+      "line": 35,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "    return out"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 36,
+      "line": 36,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 37,
+      "line": 37,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 32,
+      "end_line": 38,
+      "line": 38,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "def unicode_is_ascii(u_string):"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 39,
+      "line": 39,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": "    \"\"\"Determine if unicode string only contains ASCII characters."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 40,
+      "line": 40,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": ""
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "9cc4329abe21b37d93a95a3901b0ab99c24486f3d487bc57965bb2ab0b252e24",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/_internal_utils.py",
+  "split": "development",
+  "version": 1
+}

@@ -136,6 +136,60 @@ Preserve source bytes during annotation. After a deliberate source or contract
 change, review affected labels and issue a new versioned packet with its real
 review provenance. Do not refresh checksums to make an old review appear current.
 
+## Bounded context readings
+
+`benchmarks.review_context.build_contextual_readings()` adds linked context
+pages beside a selected development-source region. The original
+`benchmarks.review_readings.build_reading()` keeps its version 1 behavior.
+Each new page repeats the declared rules, instructions and questions, and has
+an absolute reading link, adjacent links, role, ordinal and context digest.
+Every page fits 80 lines of 80 Unicode code points, including that envelope.
+
+For Python, the context includes raw enclosing class/function headers,
+decorators, async declarations and multiline signatures. Trailing indented
+suite comments retain their owners; module scope is explicit. These are lexical
+headers, not proof of imported bindings or runtime behavior. Reviewed code is
+never executed. Unsupported syntax or physical line separators are refused;
+supported source bytes use LF or CRLF.
+
+For M011/M012, pass `markdown_anchor_style="github"`. The builder includes
+the complete original Markdown source, an ordered heading inventory and sorted
+anchor-ID membership under the production static parser. Membership does not
+claim anchor occurrence counts. Full companions retain fenced examples and
+explicit-anchor evidence. Generated or unsupported inventories are refused.
+
+M012 also requires `native_context` from the existing offline
+`validate_reference_context()` validator. The builder checks the selected
+source identity, group, bytes and renderer, then includes every referenced
+target's immutable bytes and inventory, or its pinned absence provenance.
+Empty files remain present. The builder never reopens target paths or resolves
+new references. This internal API trusts validator-produced immutable objects;
+constructing a context object yourself does not establish absence.
+
+Pass a short absolute `link_directory` and a short `reading_id`. Directory
+names with control characters, angle brackets, URI delimiters, percent escapes,
+ampersands, backslashes or a leading double slash are rejected. Context paginates
+without truncation. Oversized repeated instructions, questions or links fail
+before a bundle is returned. Source rows retain reversible original columns
+and endings; derived inventory rows are labeled separately.
+
+Source columns start at 1 and their endpoints are exclusive; adjacent chunks
+share a boundary without overlapping. Derived metadata wraps for display and
+must be read through the bundle's structured fields when exact values matter.
+Include these conventions in the caller's review instructions when asking for
+precise spans. Python owner association is derived parser evidence; header-only
+companions do not show the intervening body. Pinned target absence describes
+the validated inventory, not a live filesystem check.
+
+Persist every page's exact `rendered_text` at its returned `path` and freeze
+the complete JSON bundle, including its ordered page list and canonical hashes.
+Use JSON to preserve exact trailing spaces through repository hooks.
+The builder returns text and does not write files. Context pages grant no
+reviewed coverage or clean labels. The
+[P32D.5b record](reviews/2026-10-14-reading-context/README.md) retains examples,
+agent reviews and test evidence; none supplies independent human effectiveness
+evidence.
+
 ## Updating the corpus
 
 1. Add or edit the smallest source excerpt that covers the behavior.
@@ -246,11 +300,60 @@ link coverage unsupported until native paths and required targets are preserved
 and bound. Their existing source-byte binding alone cannot establish cross-file
 link truth or independent M012 effectiveness.
 
-Enabled local-link reports explicitly declare target/native-context binding
-unavailable. `--require-bound` and source-bound version 3 strict gates reject
-that enabled context until a target/native-path binding contract is available,
-even with zero cross-file findings. Curated report-only optional measurements
-remain available; the default reviewed gates keep the feature off.
+Local-link reports using only `--project-root` declare target/native-context
+binding unavailable. `--require-bound` rejects that unbound context even with
+zero cross-file findings. Curated report-only optional measurements remain
+available; the default reviewed gates keep the feature off.
+
+`benchmarks/native_link_context.py` prepares offline native context for a single
+development repository at an exact SHA-1 Git commit. Its builder binds source
+metadata, native locators, complete tree inventory and explicitly declared
+Markdown target bytes or verified upstream absence. Validation checks the
+frozen bindings again and retains immutable bytes; materialization creates a
+private tree with native paths and removes it afterward. Cache symlinks,
+unsupported Git contexts, stale bytes and filesystem aliases fail explicitly.
+Confined cache reads require POSIX directory-descriptor support.
+
+The version 1 preparation artifact proves only explicitly declared targets.
+`benchmarks/native_reference_context.py` adds a version 2 artifact with every
+supported literal local Markdown reference, its original source coordinates,
+normalized native target and renderer, plus extracted resolver exclusions.
+Validation recomputes the complete reference map; each required target must
+have verified bytes or pinned inventory absence. Sources and GitHub fragment
+targets with generated markup fail as unsupported. LF and CRLF parser input is
+normalized while exact byte bindings remain; bare-CR sources are unsupported.
+Remote URLs, queries, images, escaping paths and non-Markdown targets retain
+M012's existing scope exclusions. No renderer expansion or target recursion is
+performed.
+
+An optional version 3 `review.native_context` reference names the version 2
+artifact using the existing `path`/`sha256` artifact contract. Its presence
+requires all three offline validation inputs:
+
+```sh
+rtk proxy .venv/bin/python -m benchmarks.rule_quality \
+  --manifest review/annotations.json --root review/originals-root \
+  --require-bound --format json --native-repository cache/repository.git \
+  --source-manifest acquisition/sources.json --native-cache-root cache
+```
+
+The evaluator checks development metadata and exact source IDs, hashes and
+groups before reading native or packet source bytes. It materializes a private
+native tree, scans immutable source snapshots and maps findings back to reviewed
+packet paths. It records renderer, artifact/inventory identities,
+reference and target counts, and resolver exclusions. The temporary directory
+does not become the report's reproducibility identity. Bound native context
+cannot combine with a separate `--project-root` or curated regression gate.
+Existing version 3 packets without this artifact keep their original behavior.
+Late changes to the native-bound annotation manifest or its index, contracts
+and context artifact reject publication of the report.
+
+Verified target evidence enables a supported scan; human reviewed coverage and
+independent usefulness evidence remain separate prerequisites.
+
+The [Requests development snapshot](reviews/2026-10-13-human-resume/native-context/README.md)
+has complete structural closure but zero supported local references. It has no
+human M012 labels or natural predictions and cannot supply effectiveness rates.
 
 ## Human suggestion usefulness
 

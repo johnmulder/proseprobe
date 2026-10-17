@@ -1,0 +1,16 @@
+{
+  "attribution": "Requests authors and contributors",
+  "context_distribution": "bindings and hashes only; no native source or target bytes committed",
+  "license": "Apache-2.0",
+  "license_blob_id": "67db8588217f266eb561f75fae738656325deac9",
+  "license_cache": "downloads/evaluation/extension/licenses/psf/requests/LICENSE",
+  "license_sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b",
+  "license_url": "https://github.com/psf/requests/blob/0e322af87745eff34caffe4df68456ebc20d9068/LICENSE",
+  "notice_blob_id": "1ff62db688277b77c83c1766dac7f165364d3528",
+  "notice_cache": "downloads/evaluation/native-context/requests-context-v1/NOTICE",
+  "notice_sha256": "f5110972dedad2b4e9d314518daf3b7d72d6e02e499acd802181de6f74571dcc",
+  "notice_url": "https://github.com/psf/requests/blob/0e322af87745eff34caffe4df68456ebc20d9068/NOTICE",
+  "repository": "psf/requests",
+  "revision": "0e322af87745eff34caffe4df68456ebc20d9068",
+  "version": 1
+}

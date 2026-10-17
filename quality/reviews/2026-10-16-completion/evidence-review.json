@@ -1,0 +1,204 @@
+{
+  "actionable_issues": [],
+  "actor_type": "agent",
+  "actual_exposure": {
+    "human_annotation_created": false,
+    "human_usefulness_inferred": false,
+    "population_effectiveness_claim": false,
+    "prior_assessment": "Previously inspected development review summaries, evaluator/schema code, native metadata, historical agent review records, and truncated source/target snippets and derived inventories from the prepared reading bundle; disclosed to root before blind reviewer selection.",
+    "reserved_data": "Only reserved source metadata was available through the existing guarded native validator and prior source-metadata inspection; no reserved source bytes were opened.",
+    "source_text_manual_review": "This audit validates bytes and recorded judgments; it does not claim a fresh blind editorial reannotation or a manual complete rereading of all target prose.",
+    "this_audit": "Read both raw current reviews, selection, freeze, agreement/adjudication, accepted annotation manifests and report metadata. Programmatically read and hash all 13 actual supplied reading files and canonical bundle; existing validators read the selected source, two targets and offline Git proof; two detector report rebuilds exposed current predictions."
+  },
+  "actual_pages_verified": [
+    {
+      "path": "/private/tmp/remain-md-0001.txt",
+      "sha256": "0dd528969f9d560b2c375aba0b82ae4a979161bc756d7c804bc4185b459fdb74"
+    },
+    {
+      "path": "/private/tmp/remain-md-0002.txt",
+      "sha256": "a2d3f435875bff41fd96c11c8a99c3a7f402ea9faf26eed55322cd152f64d0eb"
+    },
+    {
+      "path": "/private/tmp/remain-md-0003.txt",
+      "sha256": "0f0d7a08deb3572cdde55ce4108a1499d061d5a70c5a42a12cae5dbd4acf5f5c"
+    },
+    {
+      "path": "/private/tmp/remain-md-0004.txt",
+      "sha256": "cfd3a4be9ec2749e7b0db257ddfec4db0ddcf7c6bb11a08c557835022071f8bc"
+    },
+    {
+      "path": "/private/tmp/remain-md-0005.txt",
+      "sha256": "73b5abe6a56ac00854db86b1679ac3fa63e62f90ff2afbfb791d5d765cbcee54"
+    },
+    {
+      "path": "/private/tmp/remain-md-0006.txt",
+      "sha256": "5c242d678c155ffef2791abee51d5c58410d82915ae4c0a85882c9e775c962e0"
+    },
+    {
+      "path": "/private/tmp/remain-md-0007.txt",
+      "sha256": "642a491d57ed74ec88698777bf6d59ab5b8cc224cb6146b13961f3ebaf79f091"
+    },
+    {
+      "path": "/private/tmp/remain-md-0008.txt",
+      "sha256": "608aec93a76676a1250e13efb66a58f813f0e327536bc9991a4ba6e0f38ed1ab"
+    },
+    {
+      "path": "/private/tmp/remain-md-0009.txt",
+      "sha256": "f18b1f6542d2d6ef6b05c54475c6410aeecd2111ffb655ba04a9b5f5d1a08ca5"
+    },
+    {
+      "path": "/private/tmp/remain-md-0010.txt",
+      "sha256": "c5f35141fa1b0c98f72c50aa86c323df417e9c2537f3592c86af2107bc1b318a"
+    },
+    {
+      "path": "/private/tmp/remain-md-0011.txt",
+      "sha256": "fb74b43c6c04c8566a0b3e3fc3ac99f5333d7534b0202cf187798c76c36ddd21"
+    },
+    {
+      "path": "/private/tmp/remain-md-0012.txt",
+      "sha256": "929b3c2fa316798c8439719b32cae063f854100a2b460865bd9e67413aff7056"
+    },
+    {
+      "path": "/private/tmp/remain-md-0013.txt",
+      "sha256": "5c1d24cf193bc79ca0b6b2358ebc2036496c1355db187e426c6928f3eb153f25"
+    }
+  ],
+  "checks": {
+    "actual_page_bytes_match_both_reviews_and_canonical_rendered_texts": true,
+    "all_12_frozen_binding_digests_match_worktree_and_freeze_commit": true,
+    "all_three_accepted_v3_manifests_load_and_validate": true,
+    "annotation_native_source_identity_hash_and_group_bindings_validate": true,
+    "both_original_raw_reviews_preserved_at_freeze_commit": true,
+    "both_report_runtime_heads_equal_freeze_commit": true,
+    "both_reports_independently_rebuilt_in_memory": true,
+    "current_runtime_source_digest_equals_freeze_digest": true,
+    "each_actual_page_within_80_lines_and_80_codepoints": true,
+    "each_review_has_all_13_actual_reading_paths_in_order": true,
+    "freeze_commit_contains_frozen_labels_and_no_reports": true,
+    "full_parsed_json_report_equality_with_recorded_reports": true,
+    "native_git_inventory_source_target_blobs_and_reference_closure_validate": true,
+    "policy_or_detector_source_changes_inferred": false,
+    "precision_recall_and_span_accuracy_unavailable_at_zero_denominators": true,
+    "raw_clean_destination_spans_match_both_annotation_manifests": true,
+    "raw_reviewers_distinct_and_honestly_identified_as_agents": true,
+    "report_comparison_differing_keys": [],
+    "reports_do_not_infer_human_or_population_effectiveness": true,
+    "reserved_holdout_source_bytes_opened": false,
+    "reviewed_contract_index_and_license_inputs_hash_match": true,
+    "selection_reading_bundle_sha256_matches": true,
+    "source_sha256_and_review_artifact_bindings_validate": true
+  },
+  "decision": "accept",
+  "freeze_bindings_count": 12,
+  "freeze_commit": "32eeaf11078910d89682e858e4b76d3aaaca33fa",
+  "freeze_sha256": "ce05316a64a58e01f504c61f95a6dc54ef38aa458dc4b047b9e85aa8019f1beb",
+  "frozen_bindings_sha256": {
+    "quality/reviews/2026-10-16-completion/adjudication.json": "d48197feb7497d0391c39464dedb4dbe4d193108c3a8847d90f4f781ec5eb4d6",
+    "quality/reviews/2026-10-16-completion/agreement.json": "2289872ac0d2bbe8d3fd8bc4bf4531016f5aad070f0c321667115735d453b81b",
+    "quality/reviews/2026-10-16-completion/natural/annotations.adjudicated.json": "e075a887e8fe2be5e2f045c1f870b53fc95888976139a196e3855159339fe5da",
+    "quality/reviews/2026-10-16-completion/natural/annotations.agent-a.json": "cfa02a0742a0bd2946497bb89eb16336b3da7fa2cd61d36256fe4eb61366d801",
+    "quality/reviews/2026-10-16-completion/natural/annotations.agent-b.json": "4b96b299cd471563b07521e3fee829330517a33d61c6e1da114de6d11eaa02b1",
+    "quality/reviews/2026-10-16-completion/natural/annotations.unreviewed.json": "0966a487ac9dc19e6186f7e4abd740b4541b8824d82fb07d3a730f796584262a",
+    "quality/reviews/2026-10-16-completion/natural/contracts.json": "0de847c5f043e60c0eb24bfa1e063cd7337713d4783cb6fa454247b828506f90",
+    "quality/reviews/2026-10-16-completion/natural/index.json": "9bbf0a3a5a9dd3b09cd9d1beccf8b716100bbe634bf2d9ffda50ed3a5c3a8286",
+    "quality/reviews/2026-10-16-completion/natural/native-context.json": "ad02d614546d3d4a63ac6d54425f2b1a02722fa112c290737420ffd1d10ae9e9",
+    "quality/reviews/2026-10-16-completion/review.agent-a.json": "7f8f98cec33f994655648dcfcff5c22b1077def375dd001c059c675d520eb59e",
+    "quality/reviews/2026-10-16-completion/review.agent-b.json": "67dfa46a9006f79ef410ea482f1e23fdb8a4b6459eb8af6371566cd472804c71",
+    "quality/reviews/2026-10-16-completion/selection.json": "9776a5955e58cd669e8175df48581a8195a6ac40337ca5592137488a80fed722"
+  },
+  "limitations": [
+    "One natural source and one group provide two clean fragment-free local-file cases, no positive M012 issue, and no fragment-membership cases.",
+    "The two remote HTTPS destinations are resolver exclusions; neither remote validity nor live hosting behavior was judged.",
+    "Both agents saw supplied target-presence metadata and derived inventories. Their original exposure declarations are preserved; root was exposed and reconciled matching judgments rather than serving as a blind reviewer.",
+    "The all-rules report passes 2/2 clean negatives with 0 TP/FP/FN, 30 reviewed prose words, and unavailable precision/recall/span accuracy. Production has zero eligible coverage, 0/0 negatives, and unavailable rates.",
+    "Whole-source-group uncertainty is unavailable with one contributing density group and no precision/recall denominators. Descriptive agent agreement is not human reliability or population effectiveness.",
+    "No triggered diagnostic or revised text exists in this batch; usefulness and semantic meaning preservation are unavailable.",
+    "Commit contents and recorded report runtime verify the declared freeze dependency; historical first-read and first-prediction timing remains the operation/provenance record, not an independently observable clock proof.",
+    "Native validators reprove the supplied offline pinned Git objects and exact byte bindings. This audit did not fetch live upstream content or reconsider source reuse terms.",
+    "This acceptance does not cover later README/PLAN edits, wheel-smoke.json, full repository test gates or merge/release actions."
+  ],
+  "native_proof": {
+    "cache_root": "downloads/evaluation",
+    "excluded_destination_count": 2,
+    "inventory_entries": 174,
+    "repository": "downloads/evaluation/native-context/markdown-it-14.1.0-v1.git",
+    "revision": "0fe7ccb4b7f30236fb05f623be6924961d296d3d",
+    "source_count": 1,
+    "source_manifest": "quality/reviews/2026-10-15-remaining/native-intake/source-metadata.json",
+    "source_manifest_sha256": "458da9b4e6646e9fef275852f844d637f13eca1b64b338dae26e06c3f1d73adb",
+    "supported_reference_count": 2,
+    "target_count": 2,
+    "validation_api": "validate_reference_context(bundle, source_manifest, cache_root, repository); annotation_native_sources(annotations, context)"
+  },
+  "report_rebuild": {
+    "capture": "stdout captured and parsed in memory; no report file overwritten",
+    "command_template": "rtk proxy .venv/bin/python -m benchmarks.rule_quality --manifest quality/reviews/2026-10-16-completion/natural/annotations.adjudicated.json --root downloads/evaluation/review-packets/2026-10-16-natural --mode MODE --format json --require-bound --native-repository downloads/evaluation/native-context/markdown-it-14.1.0-v1.git --source-manifest quality/reviews/2026-10-15-remaining/native-intake/source-metadata.json --native-cache-root downloads/evaluation",
+    "comparison": "Every top-level parsed JSON key and value, including runtime, policy, annotations, counts, native proof, coverage, intervals, usefulness and raw outcomes, matched exactly.",
+    "reports": [
+      {
+        "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: too few contributing source groups (1 < 5)",
+        "metrics": {
+          "false_warnings_per_1000_prose_words": 0.0,
+          "precision": null,
+          "precision_denominator": 0,
+          "precision_interval_95": null,
+          "prose_words": 30,
+          "recall": null,
+          "recall_denominator": 0,
+          "recall_interval_95": null,
+          "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+        },
+        "mode": "all-rules",
+        "path": "quality/reviews/2026-10-16-completion/reports/natural.all-rules.json",
+        "reviewed_source_group_count": 1,
+        "runtime_head": "32eeaf11078910d89682e858e4b76d3aaaca33fa",
+        "sha256": "4c00ae9909a98e9063ba0bd69d6317743205fe3471217e55d9a828b5c73cee07",
+        "source_group_count": 1,
+        "span_accuracy": null,
+        "span_accuracy_denominator": 0,
+        "totals": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "negatives_passed": 2,
+          "negatives_total": 2,
+          "true_positives": 0
+        }
+      },
+      {
+        "cluster_interval_reason": "precision: no eligible denominator observations; recall: no eligible denominator observations; density: no eligible denominator observations",
+        "metrics": {
+          "false_warnings_per_1000_prose_words": null,
+          "precision": null,
+          "precision_denominator": 0,
+          "precision_interval_95": null,
+          "prose_words": 0,
+          "recall": null,
+          "recall_denominator": 0,
+          "recall_interval_95": null,
+          "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+        },
+        "mode": "production",
+        "path": "quality/reviews/2026-10-16-completion/reports/natural.production.json",
+        "reviewed_source_group_count": 0,
+        "runtime_head": "32eeaf11078910d89682e858e4b76d3aaaca33fa",
+        "sha256": "ae34525125f847bf552b7b6b848e87a3dfb53415cf4f755097d89f9a2b4b2498",
+        "source_group_count": 1,
+        "span_accuracy": null,
+        "span_accuracy_denominator": 0,
+        "totals": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "negatives_passed": 0,
+          "negatives_total": 0,
+          "true_positives": 0
+        }
+      }
+    ]
+  },
+  "reviewer_id": "codex-agent:/root/quality_completion",
+  "scope": "Independent engineering evidence audit of the frozen natural M012 agent development evaluation; later README/PLAN prose and wheel smoke records are outside this acceptance.",
+  "verified_runtime_source_sha256": "b471e21df1ccbc55ff64bc3ef5ec1dcd33c051d22cdff2ce2302c24d89fa2dd4",
+  "version": 1,
+  "writes": "Only this evidence-review.json was written under the parent instruction; no commit and no historical artifact changes."
+}

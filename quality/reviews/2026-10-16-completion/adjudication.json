@@ -1,0 +1,26 @@
+{
+  "actor": "codex-agent:/root",
+  "changed_original_judgments": false,
+  "decisions": [
+    {
+      "column": 45,
+      "destination": "architecture.md",
+      "disposition": "clean",
+      "end_column": 60,
+      "line": 9,
+      "rationale": "Both original agent reviews independently read full selected source and target bytes and agree this fragment-free literal sibling Markdown target exists at the pinned revision."
+    },
+    {
+      "column": 43,
+      "destination": "development.md",
+      "disposition": "clean",
+      "end_column": 57,
+      "line": 10,
+      "rationale": "Both original agent reviews independently read full selected source and target bytes and agree this fragment-free literal sibling Markdown target exists at the pinned revision."
+    }
+  ],
+  "disagreements": [],
+  "human_labels_created": false,
+  "role": "reconcile matching original judgments and validate bindings; root is not a blind reviewer",
+  "version": 1
+}

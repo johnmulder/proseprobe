@@ -1,0 +1,663 @@
+{
+  "version": 1,
+  "reviewer_id": "codex-agent:/root/agent_usefulness_b",
+  "actor_type": "agent",
+  "human": false,
+  "human_usefulness": false,
+  "phase": "post-freeze-triggered",
+  "initial_labels_unchanged": true,
+  "actual_exposure": {
+    "read_files": [
+      "/Users/johnmulder/.codex/RTK.md",
+      "quality/reviews/2026-10-13-agent-resume/trigger-prompts.json",
+      "quality/reviews/2026-10-13-agent-resume/guidance.json",
+      "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0000.md",
+      "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0001.py",
+      "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-local-links/originals/0000.md",
+      "downloads/evaluation/agent-authored/agent-resume-2026-10-13-v1/setup.md",
+      "quality/reviews/2026-10-13-agent-resume/review-matrix.json",
+      "quality/reviews/2026-10-13-agent-resume/authored-local-links/native-context.json [only native_context.inventory, native_context.sources, native_context.targets extracted]"
+    ],
+    "exposed_material": "Exact emitted diagnostics, rule contract guidance, prompt windows and metadata, all three referenced original files, the allowed native setup target, and review-matrix paths/context. The matrix also included natural-cohort path/context metadata; no natural source content was read. Subsequently permitted native-context inventory, sources, and targets records were extracted; no other subfields were displayed or used.",
+    "verification_performed": "Direct SHA-256 checks of allowed source bytes and rendered prompt text; direct code-point slicing of diagnostic ranges; comparison of all displayed row text with the declared originals.",
+    "independence": "This is an independent post-freeze agent review, not an initial blind annotation or a human review. No other reviewer feedback or initial annotation record was read.",
+    "prohibited_exposure": "No detector implementation, tests, old review sessions, reserved holdout, detector execution, scorer execution, or concrete rewrite was read or produced.",
+    "native_absence_evidence": "The root supplied the complete pinned synthetic inventory as verified before initial freeze. Its inventory and targets records establish missing.md absence; this is source context, not a prediction-truth label."
+  },
+  "limitations": [
+    "All sixteen findings are in root-authored challenge cohorts; these judgments do not establish usefulness for natural prose or human readers.",
+    "No concrete revision is supplied. Meaning preservation is unresolved for every rating; advice fit is not proof of an implemented correction.",
+    "C004 emits null suggestions in T008 and T009. Suggestion fit is unreviewed for those items, rather than treating absence of advice as bad advice.",
+    "The exact diagnostic and report hashes are copied from the prompt packet. Reports were not opened and those two digest classes were not independently recomputed.",
+    "Adjacent comparison and testing context can reduce the practical value of some claim warnings even when the exact sentence matches the published contract.",
+    "Source windows omit some owning signatures, target documents, and heading inventories. Full permitted originals and setup.md supplied the relevant context; T011 still highlights the name without its stars.",
+    "Native target existence is supported by the separately permitted pinned inventory, not by an independent directory or Git inspection. Only its inventory, sources, and targets subfields were extracted.",
+    "Reviewer acceptance concerns the emitted suggestion/advice. T008 and T009 therefore have unreviewed acceptance as well as unreviewed suggestion fit."
+  ],
+  "ratings": [
+    {
+      "id": "T001",
+      "cohort": "authored-challenge",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0000.md",
+      "source_sha256": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48",
+      "finding": {
+        "column": 20,
+        "confidence": "low",
+        "end_column": 26,
+        "end_line": 3,
+        "line": 3,
+        "message": "Undefined comparative: 'faster'",
+        "rule_id": "G038",
+        "severity": "info",
+        "suggestion": "Name the comparison target"
+      },
+      "diagnostic_sha256": "7c2f0b6fb41c8359466978c8697e3225523ce7011a534308cc7dcbd2a2cee236",
+      "report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "rendered_sha256": "b8d4e7946d3f6efe927b16a6334284ebf43c1fa631ee833630a1741cd247b020",
+      "prompt_id": "T001",
+      "finding_helpful": "context-dependent",
+      "finding_helpful_reason": "The sentence leaves its comparator unstated, but the next sentence names Atlas. The cue helps if this claim must stand alone; a reader of the full paragraph may already infer that target.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "Naming the intended comparator fits this performance claim and addresses the stated ambiguity.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "No comparator or concrete revision is supplied for this sentence, so the intended comparison and preserved meaning have not been tested.",
+      "reviewer_accepts": "context-dependent",
+      "reviewer_accepts_reason": "I would accept naming the intended comparator when this sentence must stand alone; in this contiguous note the following explicit comparison may make that advice redundant.",
+      "context_notes": [
+        "The span is exactly faster. The adjacent sentence supplies a possible comparator, and the full source identifies the parser and deployment as fictional."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "faster",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T002",
+      "cohort": "authored-challenge",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0000.md",
+      "source_sha256": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48",
+      "finding": {
+        "column": 10,
+        "confidence": "high",
+        "end_column": 13,
+        "end_line": null,
+        "line": 11,
+        "message": "Repeated function word: 'the'",
+        "rule_id": "G039",
+        "severity": "info",
+        "suggestion": "Keep one occurrence"
+      },
+      "diagnostic_sha256": "b5d1efc07df0e3777284334367b240caae1f29045ee390dfce870315b39eb4f8",
+      "report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "rendered_sha256": "4e4a7ab2973bac825a7c4b726ffdee8e7f114a064fc67e9b16e916b6b33ba4bd",
+      "prompt_id": "T002",
+      "finding_helpful": "yes",
+      "finding_helpful_reason": "The instruction contains adjacent the the with no quotation or naming context suggesting intentional repetition.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "Keeping one article addresses the duplication in this instruction.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "The advice is plausibly meaning-preserving, but no concrete revised sentence is supplied or tested.",
+      "reviewer_accepts": "yes",
+      "reviewer_accepts_reason": "I accept the advice to keep one article in this apparent duplicated-word instruction.",
+      "context_notes": [
+        "The span selects only the duplicated tail the; the preceding article is visible in the source and prompt."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "the",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T003",
+      "cohort": "authored-challenge",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0000.md",
+      "source_sha256": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48",
+      "finding": {
+        "column": 35,
+        "confidence": "high",
+        "end_column": 42,
+        "end_line": null,
+        "line": 17,
+        "message": "No same-document target for '#limits'",
+        "rule_id": "M011",
+        "severity": "info",
+        "suggestion": "Use an existing heading fragment or explicit anchor"
+      },
+      "diagnostic_sha256": "08b41262fae7a37868108365bbb67546b26e4aa2b6c4dfeb0103ec58edfd92e2",
+      "report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "rendered_sha256": "89c64aa2cfa60064305c6b0f64a91213203579c54e5940b117d7e277fe499c63",
+      "prompt_id": "T003",
+      "finding_helpful": "yes",
+      "finding_helpful_reason": "The full Markdown source has a Scope heading but no Limits heading or explicit limits anchor, so the limits link lacks a static target.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "Checking the destination against the intended heading or anchor fits this navigation sentence.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "No destination change or added target is supplied. Pointing to an arbitrary existing section would not necessarily retain the intended limits reference.",
+      "reviewer_accepts": "yes",
+      "reviewer_accepts_reason": "I accept checking or providing the intended heading or anchor; a working destination must still correspond to the promised limits content.",
+      "context_notes": [
+        "The span is exactly #limits. The prompt window cannot establish absence of targets elsewhere; the complete source resolves that question."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "#limits",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T004",
+      "cohort": "authored-challenge",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0000.md",
+      "source_sha256": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48",
+      "finding": {
+        "column": 25,
+        "confidence": "low",
+        "end_column": 33,
+        "end_line": 5,
+        "line": 5,
+        "message": "Unbounded superlative: 'the best'",
+        "rule_id": "V015",
+        "severity": "info",
+        "suggestion": "Name the comparison set and supporting evidence"
+      },
+      "diagnostic_sha256": "65d5ebd0becf8c33353185804e1c3c8051463df269d3fb9bb999063805554c28",
+      "report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "rendered_sha256": "62d3ac3f69d469b7cbdceb915aa895c9703efca68cdb77ef3ab9d6d6e38ce55b",
+      "prompt_id": "T004",
+      "finding_helpful": "context-dependent",
+      "finding_helpful_reason": "The matched sentence has no explicit comparison set, but the following sentence names three benchmark parsers. The cue is useful for an independently read claim and less useful if those sentences share one scope.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "A comparison set and evidence are relevant to a best claim, although the available source does not provide the benchmark results.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "No revised claim, selected comparison set, or evidence is supplied; adding them could narrow or otherwise alter the intended assertion.",
+      "reviewer_accepts": "context-dependent",
+      "reviewer_accepts_reason": "I would accept naming the set and evidence for an independently read claim; the nearby bounded version may already provide scope, and the document purpose determines whether more supporting evidence is needed.",
+      "context_notes": [
+        "The span is exactly the best. The following sentence names the benchmark set; the full source identifies the subject as fictional."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "the best",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T005",
+      "cohort": "authored-challenge",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0000.md",
+      "source_sha256": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48",
+      "finding": {
+        "column": 21,
+        "confidence": "medium",
+        "end_column": 32,
+        "end_line": 7,
+        "line": 7,
+        "message": "Absolute reliability claim: 'never fails'",
+        "rule_id": "V016",
+        "severity": "info",
+        "suggestion": "State the tested scope and observed result"
+      },
+      "diagnostic_sha256": "eb6ad63b8cec59ca21410f5afce1b28a7a2d2f2d7ad9511af7c2041e958cd82e",
+      "report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "rendered_sha256": "3e7687f66591b6b6670a82dc3b7a5828f11cb1578e2c74e7e69aff869f41aa4b",
+      "prompt_id": "T005",
+      "finding_helpful": "yes",
+      "finding_helpful_reason": "Never fails is a universal reliability assertion. The neighboring finite-test sentence does not establish that universal result.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "Stating what was tested and observed fits a deployment reliability claim and gives the reader a checkable scope.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "No rewritten claim or verified observation is supplied. Replacing a universal assertion with a finite observation changes its scope and requires author judgment.",
+      "reviewer_accepts": "yes",
+      "reviewer_accepts_reason": "I accept stating the actual tested scope and observed result as advice, provided the author supplies truthful evidence rather than inferring a result from the warning.",
+      "context_notes": [
+        "The span is exactly never fails. Nearby sentences mention 1,000 test runs, which are useful context but are not part of this assertion."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "never fails",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T006",
+      "cohort": "authored-challenge",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0000.md",
+      "source_sha256": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48",
+      "finding": {
+        "column": 41,
+        "confidence": "medium",
+        "end_column": 52,
+        "end_line": 9,
+        "line": 9,
+        "message": "Absolute reliability claim: 'never fails'",
+        "rule_id": "V016",
+        "severity": "info",
+        "suggestion": "State the tested scope and observed result"
+      },
+      "diagnostic_sha256": "a35ef558c852ee46ecf8641a971cba97fdcf223a67efaeee163030b9f2f7c369",
+      "report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "rendered_sha256": "dbb19e94fb33d62556e4fce346342c0eb80abd60be0a60865693dc2461047c4f",
+      "prompt_id": "T006",
+      "finding_helpful": "context-dependent",
+      "finding_helpful_reason": "The universal wording is worth checking, but We ran 1,000 tests immediately precedes it in the same line and can pragmatically supply a finite context.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "Attaching the tested population and observed result explicitly would fit this reliability sentence and reduce ambiguity.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "No revised sentence is supplied, and the review cannot determine whether the intended assertion is universal or limited to the preceding tests.",
+      "reviewer_accepts": "context-dependent",
+      "reviewer_accepts_reason": "I would accept explicitly attaching the test scope when precision or independent quotation matters; the preceding finite-test sentence can make the advice redundant in continuous reading.",
+      "context_notes": [
+        "The span is exactly never fails. It omits the preceding sentence We ran 1,000 tests, though that context remains visible in the prompt."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "never fails",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T007",
+      "cohort": "authored-challenge",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0000.md",
+      "source_sha256": "6bb892061e25f3c3f5e055ea5dc00c2a050d6f031a8a7abc2d7b7310d02dbf48",
+      "finding": {
+        "column": 31,
+        "confidence": "low",
+        "end_column": 46,
+        "end_line": 10,
+        "line": 10,
+        "message": "Absolute reliability claim: 'always succeeds'",
+        "rule_id": "V016",
+        "severity": "info",
+        "suggestion": "State the tested scope and observed result"
+      },
+      "diagnostic_sha256": "b8993920651c29809c2ace8b5cd01b170896d5c37e1d9de80aa7f6970da6661c",
+      "report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "rendered_sha256": "5077c6fac2da51eaf0757b4783add14a5cab41a42d42c9799078bdc2aea77849",
+      "prompt_id": "T007",
+      "finding_helpful": "context-dependent",
+      "finding_helpful_reason": "In tests already limits the domain, and the previous line mentions 1,000 tests. Clarifying the exact population helps, but a reader may already understand this as an observed test result.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "A tested scope and observed result fit the sentence, especially if it is reused apart from the neighboring test count.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "No concrete revision or identified test configuration is supplied, so preserved scope and meaning remain untested.",
+      "reviewer_accepts": "context-dependent",
+      "reviewer_accepts_reason": "I would accept making the test scope precise if this sentence is reused or the surrounding context is ambiguous; In tests and the nearby test count may already suffice for this note.",
+      "context_notes": [
+        "The span is exactly always succeeds. The leading In tests modifier is important context outside the highlight but visible in the same source line."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "always succeeds",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T008",
+      "cohort": "authored-challenge",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0001.py",
+      "source_sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+      "finding": {
+        "column": 5,
+        "confidence": "medium",
+        "end_column": 11,
+        "end_line": null,
+        "line": 11,
+        "message": "Formulaic placeholder: marker without context",
+        "rule_id": "C004",
+        "severity": "info",
+        "suggestion": null
+      },
+      "diagnostic_sha256": "bf395c0acf7c311c51f9e0c35f872e01845020d0ace52b9302a7d71816005893",
+      "report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "rendered_sha256": "f7b75107292baeff6e6ffa5bfcf105a4c5a384a6710bfef8335ab6779d4c47a4",
+      "prompt_id": "T008",
+      "finding_helpful": "yes",
+      "finding_helpful_reason": "The standalone TODO does not say what remains to be done. The enclosing concrete fetch function is incomplete, so the marker gives a maintainer little additional direction.",
+      "suggestion_fits_sentence": "unreviewed",
+      "suggestion_fits_sentence_reason": "The emitted suggestion is null; there is no advice to assess for fit. This is not a rejection of a supplied suggestion.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "Neither a replacement comment nor a concrete implementation is supplied, so meaning preservation cannot be assessed.",
+      "reviewer_accepts": "unreviewed",
+      "reviewer_accepts_reason": "The emitted suggestion is null. Acceptance refers to supplied advice, so no nonexistent suggestion is accepted or rejected; finding helpfulness is judged separately.",
+      "context_notes": [
+        "The span covers the complete # TODO marker. The full module confirms fetch is concrete; the abstract Reader method is a separate owner."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "# TODO",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T009",
+      "cohort": "authored-challenge",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0001.py",
+      "source_sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+      "finding": {
+        "column": 5,
+        "confidence": "medium",
+        "end_column": 48,
+        "end_line": null,
+        "line": 12,
+        "message": "Formulaic placeholder: template error",
+        "rule_id": "C004",
+        "severity": "info",
+        "suggestion": null
+      },
+      "diagnostic_sha256": "25cdb8d1418fc224c4de88afa3952a87499bce19f30f81dc1726accba236d1f0",
+      "report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "rendered_sha256": "4108492b0a157eb76e4eb960a38290440e0fae0cd43544c68f92ef2f1e6dba34",
+      "prompt_id": "T009",
+      "finding_helpful": "yes",
+      "finding_helpful_reason": "The concrete function raises NotImplementedError with Add logic here, which exposes an incomplete operation without explaining the intended work.",
+      "suggestion_fits_sentence": "unreviewed",
+      "suggestion_fits_sentence_reason": "The emitted suggestion is null; no suggested action or wording is available to judge.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "No implementation or revised error is supplied, and the source does not establish the intended operation.",
+      "reviewer_accepts": "unreviewed",
+      "reviewer_accepts_reason": "The emitted suggestion is null. Acceptance refers to supplied advice, so no nonexistent suggestion is accepted or rejected; finding helpfulness is judged separately.",
+      "context_notes": [
+        "The span covers the full raise statement. The prompt window omits the owning function declaration; the complete module confirms this is not the abstract Reader method."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "raise NotImplementedError(\"Add logic here\")",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T010",
+      "cohort": "authored-challenge",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0001.py",
+      "source_sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+      "finding": {
+        "column": 12,
+        "confidence": "high",
+        "end_column": 20,
+        "end_line": null,
+        "line": 7,
+        "message": "Docstring parameter 'attempts' is absent from the function signature",
+        "rule_id": "C009",
+        "severity": "info",
+        "suggestion": "Update the field to match the parameter name, or remove it"
+      },
+      "diagnostic_sha256": "27f7e5a390705eddf01a02929b92baa26c6577634782b1524468fb8ba29107e6",
+      "report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "rendered_sha256": "1b9bd0d2528c4926cdcf568cb42f13ae4af9cbda88984d4ee2efd935a1186cf6",
+      "prompt_id": "T010",
+      "finding_helpful": "yes",
+      "finding_helpful_reason": "The owning fetch signature contains target and variadic positional extras, with no attempts parameter or variadic keyword receiver.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "Updating or removing the stale field is appropriate review advice if the signature is authoritative; the parameter description must also agree with the chosen contract.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "No revision is supplied, and the source does not show whether the attempts documentation or the signature reflects the intended API.",
+      "reviewer_accepts": "yes",
+      "reviewer_accepts_reason": "I accept updating or removing the stale field after checking the intended API contract; a name-only change would still need its description checked.",
+      "context_notes": [
+        "The span is exactly attempts. The prompt window omits def fetch(target, *extras) -> None, which is essential evidence available in the complete source."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "attempts",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T011",
+      "cohort": "authored-challenge",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0001.py",
+      "source_sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+      "finding": {
+        "column": 14,
+        "confidence": "high",
+        "end_column": 20,
+        "end_line": null,
+        "line": 8,
+        "message": "Docstring parameter '**extras' declares variadic keyword arguments, but the function signature declares variadic positional arguments",
+        "rule_id": "C009",
+        "severity": "info",
+        "suggestion": "Check the field's stars and the parameter kind in the signature"
+      },
+      "diagnostic_sha256": "629550eee3f92bf602716a36043aa0fccd96f09139c2032292f4c69b8a432917",
+      "report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "rendered_sha256": "be2077fb6a018436a47faa6f2f7bc85c1bc356b2c0ab86fa1df79b01a4e13831",
+      "prompt_id": "T011",
+      "finding_helpful": "yes",
+      "finding_helpful_reason": "The field declares **extras, while the signature has *extras and the description itself says positional values. The parameter kinds conflict.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "Checking both the stars and the signature directly addresses this field rather than guessing the intended API.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "No revised declaration is supplied. The reviewer has not tested which parameter-kind declaration the author intends to keep.",
+      "reviewer_accepts": "yes",
+      "reviewer_accepts_reason": "I accept the advice to check the stars against the signature because it directly investigates the parameter-kind conflict.",
+      "context_notes": [
+        "The span selects extras only and excludes the leading ** kind marker. The stars are visible in the row but should be considered with the name; the owning *extras signature is outside the prompt window."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "extras",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T012",
+      "cohort": "authored-challenge",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0001.py",
+      "source_sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+      "finding": {
+        "column": 13,
+        "confidence": "medium",
+        "end_column": 16,
+        "end_line": null,
+        "line": 9,
+        "message": "Explicit return declarations conflict: annotation 'None', Sphinx type 'int'",
+        "rule_id": "C010",
+        "severity": "info",
+        "suggestion": "Check both explicit return declarations"
+      },
+      "diagnostic_sha256": "56ec34e894216b2a5eb2701e32cd059d59386868a584d1b69f5b54a44cf0c782",
+      "report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "rendered_sha256": "b8b86b8fc0824029ffbed56c874f7b2e35f58226848f31b4fa3278030f3c4175",
+      "prompt_id": "T012",
+      "finding_helpful": "yes",
+      "finding_helpful_reason": "The owning function explicitly annotates None while its docstring explicitly declares int. The declarations disagree even though the current body only raises.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "Checking both declarations fits the conflict and avoids assuming which one expresses the intended return contract.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "No corrected annotation or field is supplied, and the incomplete body cannot establish the intended return value.",
+      "reviewer_accepts": "yes",
+      "reviewer_accepts_reason": "I accept the advice to check both explicit return declarations because it avoids guessing which declaration is authoritative.",
+      "context_notes": [
+        "The span is exactly int. The conflicting -> None annotation is outside the displayed window and was confirmed in the full owning declaration."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "int",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T013",
+      "cohort": "authored-challenge",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-challenge/originals/0001.py",
+      "source_sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+      "finding": {
+        "column": 17,
+        "confidence": "high",
+        "end_column": 20,
+        "end_line": null,
+        "line": 26,
+        "message": "Repeated function word: 'the'",
+        "rule_id": "G039",
+        "severity": "info",
+        "suggestion": "Keep one occurrence"
+      },
+      "diagnostic_sha256": "d38cf8d1dfbabe65cf3c68e478f5367d7da11ca65e77746ff7eb79ce4c914d31",
+      "report_sha256": "063bc166b4dac29381bef504bd7058eaa744d72216a576ecf1cf6608b812f32b",
+      "rendered_sha256": "e60019c0550ba457b883b5299b72d005d4772474845d6fcefb9cab182a309eac",
+      "prompt_id": "T013",
+      "finding_helpful": "yes",
+      "finding_helpful_reason": "The checked docstring repeats the adjacent article in an ordinary input-file instruction.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "Keeping one article addresses the apparent duplicate without requiring a new factual claim.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "Although removing a duplicate article is likely benign, no concrete revised docstring is supplied or tested.",
+      "reviewer_accepts": "yes",
+      "reviewer_accepts_reason": "I accept keeping one article in this apparent duplicated-word docstring sentence.",
+      "context_notes": [
+        "The span selects only the duplicated tail the; both articles are visible in the same prompt row."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "the",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T014",
+      "cohort": "authored-local-links",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-local-links/originals/0000.md",
+      "source_sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+      "finding": {
+        "column": 20,
+        "confidence": "high",
+        "end_column": 32,
+        "end_line": null,
+        "line": 7,
+        "message": "No same-document target for '#limitations'",
+        "rule_id": "M011",
+        "severity": "info",
+        "suggestion": "Use an existing heading fragment or explicit anchor"
+      },
+      "diagnostic_sha256": "17c08054368895ca96c74b07bf297b5db4353f1be77df7911ecd2bb8aec16daf",
+      "report_sha256": "f60c36da37c0f3b8b2ab557147612f7200d002a9cea20f8398558dfd77958eb7",
+      "rendered_sha256": "9fed2ef36c181d659af38e504d36063be24aa4e925c5bbdf4bb79577d6326ec4",
+      "prompt_id": "T014",
+      "finding_helpful": "yes",
+      "finding_helpful_reason": "The complete document contains the Workflow heading and no limitations heading or explicit anchor, leaving this limitations destination unresolved.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "An intended existing heading or explicit anchor is relevant to this link, provided it corresponds to the limitations content the sentence promises.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "No destination or target-content revision is supplied. An arbitrary working anchor would not prove preservation of the limitations reference.",
+      "reviewer_accepts": "yes",
+      "reviewer_accepts_reason": "I accept checking or providing an intended heading or anchor that corresponds to the limitations content promised by the link.",
+      "context_notes": [
+        "The span is exactly #limitations. The window does not show the heading inventory; the full source confirms the available Workflow target."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "#limitations",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T015",
+      "cohort": "authored-local-links",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-local-links/originals/0000.md",
+      "source_sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+      "finding": {
+        "column": 22,
+        "confidence": "medium",
+        "end_column": 44,
+        "end_line": null,
+        "line": 4,
+        "message": "No GitHub fragment target for 'setup.md#configuration'",
+        "rule_id": "M012",
+        "severity": "info",
+        "suggestion": "Check the file path, selected renderer, and target access"
+      },
+      "diagnostic_sha256": "820b61bcdef4f1439ebe53fad32edc8cc3af1d6ccddb3337c2866274bf08666a",
+      "report_sha256": "f60c36da37c0f3b8b2ab557147612f7200d002a9cea20f8398558dfd77958eb7",
+      "rendered_sha256": "1be5e6c3acf5742e523b3d3018684e8520bb051fb0cfe649a8ebb485bfa5fd3c",
+      "prompt_id": "T015",
+      "finding_helpful": "yes",
+      "finding_helpful_reason": "The allowed native setup document has Install and Configuration notes headings. Configuration appears only inside a fenced example, so it supplies no configuration section target under the declared GitHub policy.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "Checking the path and selected renderer fits this cross-file link. The observed issue is specifically the fragment target, so the advice is useful but broad.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "No corrected destination or target revision is supplied. The intended configuration content and its correspondence to any replacement target have not been tested.",
+      "reviewer_accepts": "yes",
+      "reviewer_accepts_reason": "I accept checking the path, renderer, and target access for this cross-file link, although the confirmed issue is specifically the missing fragment target.",
+      "context_notes": [
+        "The span covers the full setup.md#configuration destination. The prompt omits the target document, so setup.md was required to distinguish fenced example text from real headings."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "setup.md#configuration",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    },
+    {
+      "id": "T016",
+      "cohort": "authored-local-links",
+      "source_path": "downloads/evaluation/blind/agent-resume-2026-10-13-v1/authored-local-links/originals/0000.md",
+      "source_sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+      "finding": {
+        "column": 18,
+        "confidence": "medium",
+        "end_column": 28,
+        "end_line": null,
+        "line": 5,
+        "message": "No local Markdown file for 'missing.md'",
+        "rule_id": "M012",
+        "severity": "info",
+        "suggestion": "Check the file path, selected renderer, and target access"
+      },
+      "diagnostic_sha256": "4c9659dc6c69359a550ac72cdba900b94b5b919675c35f00b55555c1310a2d79",
+      "report_sha256": "f60c36da37c0f3b8b2ab557147612f7200d002a9cea20f8398558dfd77958eb7",
+      "rendered_sha256": "f94e82c862e828274e70a25d0a8eb4ee992a46435730ee3c92d6e77c85404d19",
+      "prompt_id": "T016",
+      "finding_helpful": "yes",
+      "finding_helpful_reason": "The supplied complete pinned native inventory contains only entry.md and setup.md and records missing.md as absent. The migration instruction therefore points to an unavailable local file.",
+      "suggestion_fits_sentence": "yes",
+      "suggestion_fits_sentence_reason": "Checking the file path and access directly fits the migration link and is useful while target existence is unverified.",
+      "meaning_preserved": "unresolved",
+      "meaning_preserved_reason": "No corrected path, restored file, or concrete revision is supplied; its relation to the intended migration guidance has not been tested.",
+      "reviewer_accepts": "yes",
+      "reviewer_accepts_reason": "I accept the advice to check the path and target access because the permitted native inventory establishes the missing migration file; selecting or restoring the intended target still needs author judgment.",
+      "context_notes": [
+        "The span is exactly missing.md. The source window alone cannot prove absence; the separately permitted native_context inventory and targets records establish absence in the pinned project."
+      ],
+      "boundary_review": {
+        "verified_against_original": true,
+        "exact_highlighted_text": "missing.md",
+        "source_rows_verified": true,
+        "character_endpoint_policy": "1-based code-point columns; exclusive end",
+        "interpretation": "A null end_line denotes the finding line; copied finding metadata is unchanged."
+      }
+    }
+  ]
+}

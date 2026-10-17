@@ -1,0 +1,67 @@
+{
+  "context": {
+    "originals/0000.md": {
+      "format": "markdown",
+      "pair_group": "github/docs:content/actions/how-tos/write-workflows/choose-what-workflows-do/use-jobs.md",
+      "source_group": "github/docs",
+      "split": "development"
+    },
+    "originals/0001.md": {
+      "format": "markdown",
+      "pair_group": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md",
+      "source_group": "github/docs",
+      "split": "development"
+    },
+    "originals/0002.md": {
+      "format": "markdown",
+      "pair_group": "github/docs:content/migrations/overview/mannequins-and-user-activity.md",
+      "source_group": "github/docs",
+      "split": "development"
+    },
+    "originals/0003.py": {
+      "format": "python",
+      "pair_group": "psf/requests:src/requests/certs.py",
+      "source_group": "psf/requests",
+      "split": "development"
+    },
+    "originals/0004.py": {
+      "format": "python",
+      "pair_group": "psf/requests:src/requests/_internal_utils.py",
+      "source_group": "psf/requests",
+      "split": "development"
+    },
+    "originals/0005.py": {
+      "format": "python",
+      "pair_group": "psf/requests:src/requests/cookies.py",
+      "source_group": "psf/requests",
+      "split": "development"
+    }
+  },
+  "files": {
+    "originals/0000.md": {
+      "sha256": "ab4a60280784e5b915bb2b1353ceb0a5cffefcbe5148c53b901d7861d41c52a1",
+      "source_id": "github/docs:content/actions/how-tos/write-workflows/choose-what-workflows-do/use-jobs.md"
+    },
+    "originals/0001.md": {
+      "sha256": "e4656dfdd2cff448e23fd8115b70b78efd0ac8863897b9df161ffc26dec12ded",
+      "source_id": "github/docs:content/code-security/reference/code-scanning/codeql/codeql-cli-manual/resolve-library-path.md"
+    },
+    "originals/0002.md": {
+      "sha256": "d85335cdf9f9c882db139b6653bd77e640dda92eca9bc6e8136a5a0bf5ae0ef2",
+      "source_id": "github/docs:content/migrations/overview/mannequins-and-user-activity.md"
+    },
+    "originals/0003.py": {
+      "sha256": "67d49be35d009efea35054f2b2cd23145854eb1b2df1cb442ea7f2f04bf6de0c",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/certs.py"
+    },
+    "originals/0004.py": {
+      "sha256": "9cc4329abe21b37d93a95a3901b0ab99c24486f3d487bc57965bb2ab0b252e24",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/_internal_utils.py"
+    },
+    "originals/0005.py": {
+      "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+      "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py"
+    }
+  },
+  "version": 1
+}

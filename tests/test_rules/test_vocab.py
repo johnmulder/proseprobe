@@ -1611,6 +1611,19 @@ class TestUnboundedSuperlative:
         assert issue.confidence is Confidence.LOW
         assert issue.suggestion == "Name the comparison set and supporting evidence"
 
+    def test_reviewed_sentence_excludes_the_predicate_verb(self) -> None:
+        source = "The Nova parser remains the best."
+
+        [issue] = UnboundedSuperlativeRule().check(source, "guide.md")
+
+        assert (issue.line, issue.column, issue.end_line, issue.end_column) == (
+            1,
+            25,
+            1,
+            33,
+        )
+        assert source[issue.column - 1 : issue.end_column - 1] == "the best"
+
     def test_preserves_a_wrapped_source_span(self) -> None:
         source = "Atlas is the most\nreliable option."
 

@@ -1,0 +1,7 @@
+{
+  "exit_code": 1,
+  "scope": "Scheme-relative directory;1failed",
+  "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________ test_scheme_relative_directory_is_not_a_local_absolute_link __________\n\ntmp_path = PosixPath('/private/var/folders/_w/2hhnnvfn0t35trg9pykzr5yw0000gn/T/pytest-of-johnmulder/pytest-686/test_scheme_relative_directory0')\n\n    def test_scheme_relative_directory_is_not_a_local_absolute_link(tmp_path: Path) -> None:\n        source = _source(tmp_path, b\"value = 1\\n\")\n    \n>       with pytest.raises(CorpusError, match=r\"directory|link\"):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE CorpusError\n\ntests/test_review_context.py:475: Failed\n=========================== short test summary info ============================\nFAILED tests/test_review_context.py::test_scheme_relative_directory_is_not_a_local_absolute_link\n1 failed, 39 deselected in 0.12s\n",
+  "stdout_sha256": "06f959932ba6f0e623b8694564dee3174aee5308782c2e45e1bfdb6c8a09b721",
+  "version": 1
+}

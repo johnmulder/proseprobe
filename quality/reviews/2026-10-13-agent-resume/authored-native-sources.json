@@ -1,0 +1,20 @@
+{
+  "samples": [
+    {
+      "attribution": "Codex root agent for the ProseProbe project",
+      "format": "markdown",
+      "id": "agent-authored-pilot:entry.md",
+      "license": "MIT",
+      "locator": "entry.md",
+      "pair_group": "agent-authored-pilot:entry.md",
+      "path": "agent-authored/agent-resume-2026-10-13-v1/entry.md",
+      "population": "root-authored challenge; separate from natural sources",
+      "review_status": "unreviewed",
+      "revision": "ce2e2844bd9a3ca5b5a74ae41828c65f454c973b",
+      "sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+      "source_group": "agent-authored-pilot",
+      "split": "development"
+    }
+  ],
+  "version": 1
+}

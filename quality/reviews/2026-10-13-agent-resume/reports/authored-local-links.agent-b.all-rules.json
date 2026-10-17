@@ -1,0 +1,4091 @@
+{
+  "annotation_completeness": "explicit-scopes",
+  "annotation_scopes": [
+    {
+      "note": "",
+      "path": "originals/0000.md",
+      "rules": [
+        "M011",
+        "M012"
+      ],
+      "span": null,
+      "status": "reviewed"
+    }
+  ],
+  "breakdowns": {
+    "confidence": {
+      "high": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "false_warnings_per_1000_prose_words": null,
+        "precision": 1.0,
+        "precision_denominator": 1,
+        "precision_interval_95": [
+          0.20654931437723745,
+          1
+        ],
+        "prose_words": null,
+        "recall": null,
+        "recall_denominator": null,
+        "recall_interval_95": null,
+        "recall_unavailable_reason": "missed expectations have no predicted confidence; use policy-threshold recall",
+        "true_positives": 1,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "low": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": null,
+        "recall": null,
+        "recall_denominator": null,
+        "recall_interval_95": null,
+        "recall_unavailable_reason": "missed expectations have no predicted confidence; use policy-threshold recall",
+        "true_positives": 0,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "medium": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "false_warnings_per_1000_prose_words": null,
+        "precision": 1.0,
+        "precision_denominator": 2,
+        "precision_interval_95": [
+          0.34238022750665303,
+          1
+        ],
+        "prose_words": null,
+        "recall": null,
+        "recall_denominator": null,
+        "recall_interval_95": null,
+        "recall_unavailable_reason": "missed expectations have no predicted confidence; use policy-threshold recall",
+        "true_positives": 2,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      },
+      "unassigned": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "false_warnings_per_1000_prose_words": null,
+        "precision": null,
+        "precision_denominator": 0,
+        "precision_interval_95": null,
+        "prose_words": null,
+        "recall": null,
+        "recall_denominator": null,
+        "recall_interval_95": null,
+        "recall_unavailable_reason": "missed expectations have no predicted confidence; use policy-threshold recall",
+        "true_positives": 0,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      }
+    },
+    "context": {
+      "markdown": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "false_warnings_per_1000_prose_words": null,
+        "precision": 1.0,
+        "precision_denominator": 3,
+        "precision_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "prose_words": null,
+        "recall": 1.0,
+        "recall_denominator": 3,
+        "recall_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "true_positives": 3,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      }
+    },
+    "format": {
+      "markdown": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "false_warnings_per_1000_prose_words": null,
+        "precision": 1.0,
+        "precision_denominator": 3,
+        "precision_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "prose_words": null,
+        "recall": 1.0,
+        "recall_denominator": 3,
+        "recall_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "true_positives": 3,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      }
+    },
+    "profile": {
+      "default": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "false_warnings_per_1000_prose_words": null,
+        "precision": 1.0,
+        "precision_denominator": 3,
+        "precision_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "prose_words": null,
+        "recall": 1.0,
+        "recall_denominator": 3,
+        "recall_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "true_positives": 3,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      }
+    },
+    "severity": {
+      "info": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "false_warnings_per_1000_prose_words": null,
+        "precision": 1.0,
+        "precision_denominator": 3,
+        "precision_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "prose_words": null,
+        "recall": 1.0,
+        "recall_denominator": 3,
+        "recall_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "true_positives": 3,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      }
+    },
+    "source_group": {
+      "agent-authored-pilot": {
+        "false_negatives": 0,
+        "false_positives": 0,
+        "false_warnings_per_1000_prose_words": null,
+        "precision": 1.0,
+        "precision_denominator": 3,
+        "precision_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "prose_words": null,
+        "recall": 1.0,
+        "recall_denominator": 3,
+        "recall_interval_95": [
+          0.4385029682449546,
+          1
+        ],
+        "true_positives": 3,
+        "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+      }
+    }
+  },
+  "cluster_interval": null,
+  "cluster_interval_reason": "precision: too few contributing source groups (1 < 5); recall: too few contributing source groups (1 < 5); density: too few contributing source groups (1 < 5)",
+  "context_dependent": [],
+  "context_dependent_count": 0,
+  "corpus": {
+    "expected_count": 3,
+    "files": {
+      "originals/0000.md": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1"
+    },
+    "files_count": 1,
+    "manifest_sha256": "1c6da72645a09f47eb53c57dd955b39daf89e88e20ec9504024bbfbdc7088e54",
+    "negative_count": 0,
+    "reviewed_source_identities": {
+      "originals/0000.md": {
+        "sha256": "bfc862b522cf90207aa1d4f82b7b02a05a04de1e884bbd85c9903c8e86eb94a1",
+        "source_id": "agent-authored-pilot:entry.md"
+      }
+    }
+  },
+  "exact_start_rules": {
+    "C001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C009": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G009": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G011": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G012": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G013": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G014": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G015": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G016": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G017": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G019": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G022": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G024": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G025": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G029": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G031": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G037": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G038": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G039": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M009": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M011": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 1
+    },
+    "M012": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 2
+    },
+    "S001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S009": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S011": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S012": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S013": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S014": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S015": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S016": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S017": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S018": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S019": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S020": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S021": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S022": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S025": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S028": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S029": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T012": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T013": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T014": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T015": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T016": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V009": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V011": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V013": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V014": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V015": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V016": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V017": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    }
+  },
+  "exact_start_totals": {
+    "false_negatives": 0,
+    "false_positives": 0,
+    "negatives_passed": 0,
+    "negatives_total": 0,
+    "true_positives": 3
+  },
+  "excluded_expected": 0,
+  "excluded_negatives": 0,
+  "false_negatives": [],
+  "false_positives": [],
+  "gate": null,
+  "local_link_context": {
+    "artifact_sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528",
+    "enabled": true,
+    "excluded_destinations": {
+      "agent-authored-pilot:entry.md": [
+        {
+          "column": 17,
+          "destination": "#workflow",
+          "end_column": 26,
+          "line": 6,
+          "reason": "production-resolver-exclusion"
+        },
+        {
+          "column": 20,
+          "destination": "#limitations",
+          "end_column": 32,
+          "line": 7,
+          "reason": "production-resolver-exclusion"
+        }
+      ]
+    },
+    "excluded_destinations_count": 2,
+    "inventory_sha256": "c44fa8f57f5c69e06f90e8d9a015e52073836bc1aab165d4df4762ecbbba9c92",
+    "reason": null,
+    "reference_scope": "production-static-local-markdown-v1",
+    "references_count": 3,
+    "renderer": "github",
+    "revision": "ce2e2844bd9a3ca5b5a74ae41828c65f454c973b",
+    "root": null,
+    "source_group": "agent-authored-pilot",
+    "source_manifest_sha256": "6d905cfe606c2b55818a3e3e457244271b0ce893aedcdd10559ccfc5d7dbcb7a",
+    "sources_count": 1,
+    "target_binding": "verified-native-reference-closure",
+    "targets_count": 2
+  },
+  "locations": {
+    "C001": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "C002": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "C003": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "C004": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "C006": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "C007": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "C008": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "C009": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "C010": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G001": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G002": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G003": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G004": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G005": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G006": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G007": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G008": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G009": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G010": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G011": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G012": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G013": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G014": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G015": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G016": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G017": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G019": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G022": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G024": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G025": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G029": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G031": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G037": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G038": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "G039": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M001": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M002": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M003": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M004": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M005": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M006": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M007": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M008": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M009": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M010": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "M011": {
+      "exact_spans": 1,
+      "exact_starts": 1,
+      "expected_spans": 1,
+      "matches": 1,
+      "missing_actual_spans": 0,
+      "span_total": 1
+    },
+    "M012": {
+      "exact_spans": 2,
+      "exact_starts": 2,
+      "expected_spans": 2,
+      "matches": 2,
+      "missing_actual_spans": 0,
+      "span_total": 2
+    },
+    "S001": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S002": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S003": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S004": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S005": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S006": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S007": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S008": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S009": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S010": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S011": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S012": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S013": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S014": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S015": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S016": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S017": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S018": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S019": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S020": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S021": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S022": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S025": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S028": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "S029": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T001": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T002": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T003": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T004": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T005": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T006": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T007": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T008": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T010": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T012": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T013": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T014": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T015": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "T016": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V001": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V002": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V003": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V004": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V005": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V006": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V007": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V008": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V009": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V010": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V011": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V013": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V014": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V015": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V016": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    },
+    "V017": {
+      "exact_spans": 0,
+      "exact_starts": 0,
+      "expected_spans": 0,
+      "matches": 0,
+      "missing_actual_spans": 0,
+      "span_total": 0
+    }
+  },
+  "macro_precision": 1.0,
+  "macro_recall": 1.0,
+  "matches": [
+    {
+      "actual": {
+        "column": 20,
+        "confidence": "high",
+        "context": "markdown",
+        "end_column": 32,
+        "end_line": null,
+        "line": 7,
+        "message": "No same-document target for '#limitations'",
+        "path": "originals/0000.md",
+        "rule_id": "M011",
+        "severity": "info",
+        "suggestion": "Use an existing heading fragment or explicit anchor"
+      },
+      "expected": {
+        "column": 20,
+        "context": "markdown",
+        "end_column": 32,
+        "end_line": 7,
+        "identity": "agent-b-authored-local-links-0000-M011-001",
+        "line": 7,
+        "match_region": {
+          "column": 20,
+          "end_column": 32,
+          "end_line": 7,
+          "line": 7
+        },
+        "note": "The complete source has a Workflow heading and no Limitations heading or supported HTML anchor, so this same-document destination is unresolved.",
+        "path": "originals/0000.md",
+        "rule_id": "M011",
+        "severity": "info"
+      }
+    },
+    {
+      "actual": {
+        "column": 22,
+        "confidence": "medium",
+        "context": "markdown",
+        "end_column": 44,
+        "end_line": null,
+        "line": 4,
+        "message": "No GitHub fragment target for 'setup.md#configuration'",
+        "path": "originals/0000.md",
+        "rule_id": "M012",
+        "severity": "info",
+        "suggestion": "Check the file path, selected renderer, and target access"
+      },
+      "expected": {
+        "column": 22,
+        "context": "markdown",
+        "end_column": 44,
+        "end_line": 4,
+        "identity": "agent-b-authored-local-links-0000-M012-001",
+        "line": 4,
+        "match_region": {
+          "column": 22,
+          "end_column": 44,
+          "end_line": 4,
+          "line": 4
+        },
+        "note": "setup.md exists, but its # Configuration heading is inside a fenced code example and creates no target. The actual native headings yield install and configuration-notes; configuration is unresolved under GitHub policy.",
+        "path": "originals/0000.md",
+        "rule_id": "M012",
+        "severity": "info"
+      }
+    },
+    {
+      "actual": {
+        "column": 18,
+        "confidence": "medium",
+        "context": "markdown",
+        "end_column": 28,
+        "end_line": null,
+        "line": 5,
+        "message": "No local Markdown file for 'missing.md'",
+        "path": "originals/0000.md",
+        "rule_id": "M012",
+        "severity": "info",
+        "suggestion": "Check the file path, selected renderer, and target access"
+      },
+      "expected": {
+        "column": 18,
+        "context": "markdown",
+        "end_column": 28,
+        "end_line": 5,
+        "identity": "agent-b-authored-local-links-0000-M012-002",
+        "line": 5,
+        "match_region": {
+          "column": 18,
+          "end_column": 28,
+          "end_line": 5,
+          "line": 5
+        },
+        "note": "The complete pinned synthetic inventory contains entry.md and setup.md, and explicitly declares missing.md absent. This literal relative Markdown target is unresolved.",
+        "path": "originals/0000.md",
+        "rule_id": "M012",
+        "severity": "info"
+      }
+    }
+  ],
+  "metric_source_group_counts": {
+    "density": 1,
+    "precision": 1,
+    "recall": 1
+  },
+  "metrics": {
+    "false_warnings_per_1000_prose_words": 0.0,
+    "precision": 1.0,
+    "precision_denominator": 3,
+    "precision_interval_95": [
+      0.4385029682449546,
+      1
+    ],
+    "prose_words": 29,
+    "recall": 1.0,
+    "recall_denominator": 3,
+    "recall_interval_95": [
+      0.4385029682449546,
+      1
+    ],
+    "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+  },
+  "mode": "all-rules",
+  "policy": {
+    "exclude": [
+      "venv/**",
+      ".venv/**",
+      "node_modules/**",
+      ".git/**"
+    ],
+    "ignore": [],
+    "include": [
+      "*.md",
+      "*.mdx",
+      "*.markdown",
+      "*.py"
+    ],
+    "local_link_exclude": [],
+    "local_links": true,
+    "markdown_anchor_style": "github",
+    "min_confidence": "low",
+    "per_file_ignores": [],
+    "profile": null,
+    "project_root": "verified-native-context",
+    "select": [
+      "V",
+      "S",
+      "T",
+      "G",
+      "C",
+      "M"
+    ],
+    "severity": "info",
+    "severity_overrides": {},
+    "source_path": null,
+    "thresholds": {
+      "anaphora_abuse": 3,
+      "bold_overuse": 3,
+      "citation_name_drop": 3,
+      "em_dash_overuse": 5,
+      "gerund_fragment_litany": 3,
+      "historical_analogy_stacking": 3,
+      "inline_header_lists": 3,
+      "invented_concept_labels": 2,
+      "nominalization_overload": 3,
+      "passive_voice_overuse": 5,
+      "rule_of_three": 3,
+      "sentence_length_max": 40,
+      "short_punchy_fragments": 3,
+      "wall_of_text_sentences": 6
+    },
+    "vocabulary": {
+      "additional": [],
+      "allowed": [],
+      "allowed_phrases": [
+        "All notable changes",
+        "Critical issue"
+      ]
+    }
+  },
+  "precision_rules_count": 2,
+  "prose_words_by_context": {
+    "comment": 0,
+    "docstring": 0,
+    "markdown": 29
+  },
+  "recall_rules_count": 2,
+  "review_provenance": {
+    "native_context": {
+      "path": "native-context.json",
+      "sha256": "2e7c5f9276952d2bf34793c7a8f9da9dc1541fa37c749ede04876a81a5cf0528"
+    },
+    "packet_index": {
+      "path": "index.json",
+      "sha256": "e82569b45e40a826b380bc580e60907f9ec2b98c93a9dcc6097f35a5f4a399f7"
+    },
+    "policy": {
+      "min_confidence": "low",
+      "mode": "all-rules",
+      "profile": "default",
+      "severity": "info"
+    },
+    "protocol_revision": "agent-resume-blind-v1",
+    "reviewers": [
+      "codex-agent:/root/blind_resume_b"
+    ],
+    "rule_contracts": {
+      "path": "contracts.json",
+      "sha256": "27650a79822ed908ff5e31d443cd1a7cc9171ee0a673abb93df095116b7b5800"
+    }
+  },
+  "reviewed_coverage": {
+    "agent-authored-pilot": {
+      "files_count": 1,
+      "prose_words": 29,
+      "prose_words_by_context": {
+        "comment": 0,
+        "docstring": 0,
+        "markdown": 29
+      },
+      "reviewed_regions_count": 1
+    }
+  },
+  "reviewed_source_group_count": 1,
+  "revision": "8601af5ed316a241fcb4a72786aed762bfb276a3",
+  "rule_metrics": {
+    "C001": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "C002": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "C003": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "C004": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "C006": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "C007": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "C008": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "C009": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "C010": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G001": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G002": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G003": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G004": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G005": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G006": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G007": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G008": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G009": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G010": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G011": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G012": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G013": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G014": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G015": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G016": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G017": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G019": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G022": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G024": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G025": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G029": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G031": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G037": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G038": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "G039": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M001": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M002": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M003": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M004": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M005": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M006": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M007": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M008": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M009": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M010": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M011": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": 1.0,
+      "precision_denominator": 1,
+      "precision_interval_95": [
+        0.20654931437723745,
+        1
+      ],
+      "prose_words": null,
+      "recall": 1.0,
+      "recall_denominator": 1,
+      "recall_interval_95": [
+        0.20654931437723745,
+        1
+      ],
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "M012": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": 1.0,
+      "precision_denominator": 2,
+      "precision_interval_95": [
+        0.34238022750665303,
+        1
+      ],
+      "prose_words": null,
+      "recall": 1.0,
+      "recall_denominator": 2,
+      "recall_interval_95": [
+        0.34238022750665303,
+        1
+      ],
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S001": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S002": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S003": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S004": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S005": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S006": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S007": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S008": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S009": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S010": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S011": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S012": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S013": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S014": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S015": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S016": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S017": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S018": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S019": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S020": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S021": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S022": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S025": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S028": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "S029": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T001": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T002": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T003": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T004": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T005": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T006": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T007": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T008": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T010": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T012": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T013": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T014": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T015": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "T016": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V001": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V002": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V003": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V004": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V005": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V006": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V007": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V008": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V009": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V010": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V011": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V013": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V014": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V015": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V016": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    },
+    "V017": {
+      "false_warnings_per_1000_prose_words": null,
+      "precision": null,
+      "precision_denominator": 0,
+      "precision_interval_95": null,
+      "prose_words": null,
+      "recall": null,
+      "recall_denominator": 0,
+      "recall_interval_95": null,
+      "uncertainty_scope": "reviewed sample; independence assumed, no population or cluster inference"
+    }
+  },
+  "rules": {
+    "C001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C009": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "C010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G009": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G011": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G012": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G013": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G014": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G015": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G016": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G017": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G019": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G022": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G024": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G025": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G029": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G031": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G037": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G038": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "G039": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M009": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "M011": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 1
+    },
+    "M012": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 2
+    },
+    "S001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S009": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S011": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S012": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S013": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S014": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S015": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S016": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S017": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S018": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S019": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S020": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S021": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S022": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S025": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S028": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "S029": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T012": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T013": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T014": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T015": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "T016": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V001": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V002": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V003": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V004": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V005": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V006": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V007": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V008": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V009": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V010": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V011": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V013": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V014": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V015": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V016": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    },
+    "V017": {
+      "false_negatives": 0,
+      "false_positives": 0,
+      "negatives_passed": 0,
+      "negatives_total": 0,
+      "true_positives": 0
+    }
+  },
+  "runtime": {
+    "git": {
+      "head": "8601af5ed316a241fcb4a72786aed762bfb276a3",
+      "scope": [
+        "benchmarks",
+        "src/proseprobe"
+      ],
+      "staged_dirty": false,
+      "tracked_worktree_dirty": false,
+      "untracked_python_files": []
+    },
+    "identity_scope": "package and evaluator Python source names and exact bytes; caches, corpora and documents excluded",
+    "package_version": "0.1.0",
+    "source_files": [
+      "evaluator/__init__.py",
+      "evaluator/bench_rules.py",
+      "evaluator/corpora.py",
+      "evaluator/evaluation_identity.py",
+      "evaluator/memory_probe.py",
+      "evaluator/native_link_context.py",
+      "evaluator/native_reference_context.py",
+      "evaluator/paired_quality.py",
+      "evaluator/quality_scoring.py",
+      "evaluator/regression_gate.py",
+      "evaluator/review_readings.py",
+      "evaluator/rule_quality.py",
+      "evaluator/source_intervals.py",
+      "evaluator/startup_probe.py",
+      "evaluator/usefulness.py",
+      "package/__init__.py",
+      "package/__main__.py",
+      "package/_ansi.py",
+      "package/_rule_docs.py",
+      "package/cli.py",
+      "package/config.py",
+      "package/core/__init__.py",
+      "package/core/baseline.py",
+      "package/core/linter.py",
+      "package/core/policy.py",
+      "package/core/reporter.py",
+      "package/data/__init__.py",
+      "package/data/code_patterns.py",
+      "package/data/patterns.py",
+      "package/data/phrases.py",
+      "package/data/style_patterns.py",
+      "package/data/vocabulary.py",
+      "package/parsers/__init__.py",
+      "package/parsers/markdown.py",
+      "package/parsers/prose.py",
+      "package/parsers/python.py",
+      "package/profiles.py",
+      "package/rules/__init__.py",
+      "package/rules/_phrases.py",
+      "package/rules/base.py",
+      "package/rules/code.py",
+      "package/rules/grammar.py",
+      "package/rules/markup.py",
+      "package/rules/struct.py",
+      "package/rules/style.py",
+      "package/rules/vocab.py"
+    ],
+    "source_files_count": 46,
+    "source_roots": {
+      "evaluator": "/Users/johnmulder/Experiments/proseprobe/benchmarks",
+      "package": "/Users/johnmulder/Experiments/proseprobe/src/proseprobe"
+    },
+    "source_sha256": "acd8107edffa140f83f7861ccae5cd0b55a64e3a017da8285dd0e8626ab044c3"
+  },
+  "schema_version": 3,
+  "scoring": "reviewed-semantic",
+  "source_binding": "sha256-utf8",
+  "source_group_count": 1,
+  "source_group_intervals": {
+    "density": {
+      "confidence_level": 0.95,
+      "contributing_groups_count": 1,
+      "dominant_denominator_share": 1.0,
+      "group_counts": {
+        "agent-authored-pilot": {
+          "denominator": 29,
+          "numerator": 0
+        }
+      },
+      "interval_95": null,
+      "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+      "minimum_contributing_groups": 5,
+      "point_estimate": 0.0,
+      "replicates": 2000,
+      "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+      "seed": 20261010,
+      "unavailable_reason": "too few contributing source groups (1 < 5)"
+    },
+    "precision": {
+      "confidence_level": 0.95,
+      "contributing_groups_count": 1,
+      "dominant_denominator_share": 1.0,
+      "group_counts": {
+        "agent-authored-pilot": {
+          "denominator": 3,
+          "numerator": 3
+        }
+      },
+      "interval_95": null,
+      "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+      "minimum_contributing_groups": 5,
+      "point_estimate": 1.0,
+      "replicates": 2000,
+      "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+      "seed": 20261010,
+      "unavailable_reason": "too few contributing source groups (1 < 5)"
+    },
+    "recall": {
+      "confidence_level": 0.95,
+      "contributing_groups_count": 1,
+      "dominant_denominator_share": 1.0,
+      "group_counts": {
+        "agent-authored-pilot": {
+          "denominator": 3,
+          "numerator": 3
+        }
+      },
+      "interval_95": null,
+      "method": "whole-source-group percentile bootstrap; ratio of summed counts",
+      "minimum_contributing_groups": 5,
+      "point_estimate": 1.0,
+      "replicates": 2000,
+      "scope": "conditional on observed identified pilot source groups; no representative-population proof",
+      "seed": 20261010,
+      "unavailable_reason": "too few contributing source groups (1 < 5)"
+    }
+  },
+  "span_accuracy": 1.0,
+  "span_accuracy_denominator": 3,
+  "totals": {
+    "false_negatives": 0,
+    "false_positives": 0,
+    "negatives_passed": 0,
+    "negatives_total": 0,
+    "true_positives": 3
+  },
+  "unreviewed": [
+    {
+      "column": 1,
+      "confidence": "medium",
+      "context": "markdown",
+      "end_column": null,
+      "end_line": null,
+      "line": 3,
+      "message": "Anaphora: 5 consecutive sentences starting with 'Read'",
+      "path": "originals/0000.md",
+      "rule_id": "S010",
+      "severity": "warning",
+      "suggestion": null
+    }
+  ],
+  "unreviewed_count": 1,
+  "unscored_expected": [],
+  "unsupported": [],
+  "unsupported_count": 0,
+  "usefulness": {
+    "automatic_rescan": {
+      "evidence_kind": "recorded observations with declared policy/runtime hashes; no current run verified",
+      "new_warning_count": 0,
+      "observations_count": 0,
+      "semantic_usefulness_inferred": false,
+      "targeted_issue_resolved_count": 0
+    },
+    "dimensions": {
+      "finding_helpful": {
+        "binary_denominator": 0,
+        "context_dependent_count": 0,
+        "no_count": 0,
+        "positive_rate": null,
+        "unresolved_count": 0,
+        "unreviewed_count": 4,
+        "yes_count": 0
+      },
+      "meaning_preserved": {
+        "binary_denominator": 0,
+        "context_dependent_count": 0,
+        "no_count": 0,
+        "positive_rate": null,
+        "unresolved_count": 0,
+        "unreviewed_count": 4,
+        "yes_count": 0
+      },
+      "reviewer_accepts": {
+        "binary_denominator": 0,
+        "context_dependent_count": 0,
+        "no_count": 0,
+        "positive_rate": null,
+        "unresolved_count": 0,
+        "unreviewed_count": 4,
+        "yes_count": 0
+      },
+      "suggestion_fits_sentence": {
+        "binary_denominator": 0,
+        "context_dependent_count": 0,
+        "no_count": 0,
+        "positive_rate": null,
+        "unresolved_count": 0,
+        "unreviewed_count": 4,
+        "yes_count": 0
+      }
+    },
+    "distinct_prompts_count": 4,
+    "emitted_findings_count": 4,
+    "linked_findings_count": 0,
+    "linked_ratings_count": 0,
+    "ratings": [],
+    "responding_reviewers_count": 0,
+    "unavailable_reason": "no current-linked source-bound human ratings",
+    "unlinked_ratings_count": 0,
+    "unreviewed_findings_count": 4
+  },
+  "version": "0.1.0"
+}

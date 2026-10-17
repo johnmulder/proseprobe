@@ -1,0 +1,14 @@
+{
+  "artifacts_sha256": {
+    "quality/reviews/2026-10-15-remaining/audit-reading.json": "7d8ea185dd5f92a2b9e095dcb3470f36404961e21179ef1994f0f14855507dcf",
+    "quality/reviews/2026-10-15-remaining/eligibility.json": "85a7723e916ebe4d9bd8256e8eaf52a000f47f7832dbb3820b5eccdc4f90f66c",
+    "quality/reviews/2026-10-15-remaining/native-source-metadata.json": "3797e099cf7b64217800d964f6f1741fc04563b9b50099c3a63cb0ae1775fddd",
+    "quality/reviews/2026-10-15-remaining/preparation-validation.json": "7693201c09970ad755f42bd9163995aa70719e05dc0b35cf7d1198427f456de4",
+    "quality/reviews/2026-10-15-remaining/prerequisite-audit.json": "25642c64240504377e0827474a464b60a697c56fd69d2aba138841f8049e551f",
+    "quality/reviews/2026-10-15-remaining/requests-context-v1.json": "223408124b3998f3a810b2384d6862800bd9edf2a60f3097e3997967857aa15a",
+    "quality/reviews/2026-10-15-remaining/selection.json": "1ccd1fd8c1a805e3b22e6d3dd8991bdd88c646bd8bce5d8f9d6ca06699f95116"
+  },
+  "reading_sha256": "6a89c4030c57315c98dfe8ccae76ef48f06cc0db2eb267bb780716c4f9c05bf8",
+  "scope": "Agent engineering audit; no independent human labels or reserved holdout review",
+  "version": 1
+}

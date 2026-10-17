@@ -1,0 +1,64 @@
+{
+  "adapter_added": false,
+  "checked_on": "2026-10-13",
+  "corpus_downloaded": false,
+  "dataset": "README simplification replication package",
+  "disposition": "excluded; explicit corpus reuse terms unresolved",
+  "evidence": [
+    {
+      "http_status": 200,
+      "result": "open access; generic other-open license ID; no specific license description; archive advertised",
+      "sha256": "9698c634128c4fe1c2323645cec075538e5643898d0f9508db060b1aef00a390",
+      "url": "https://zenodo.org/api/records/8265001"
+    },
+    {
+      "entries": 71,
+      "http_status": 200,
+      "result": "no LICENSE/COPYING/NOTICE paths",
+      "sha256": "8a876055d765b711e0af36351dd9fd68b560797316440c14de6a56453380d594",
+      "tree": "af49142d1dc60c347ffa86e53d5878304f2122f5",
+      "truncated": false,
+      "url": "https://api.github.com/repos/Haoyu-Gao/READMESimplification/git/trees/v1.0.0?recursive=1"
+    },
+    {
+      "entries": 71,
+      "http_status": 200,
+      "result": "no LICENSE/COPYING/NOTICE paths; repository API license null",
+      "sha256": "59e85dcbbdb90a71025c27b1c9a67e05a453661cf9d9924493120bf9dec7791d",
+      "tree": "a9b8e399acd49d2890c6b175a4197eeea1f9de30",
+      "truncated": false,
+      "url": "https://api.github.com/repos/Haoyu-Gao/READMESimplification/git/trees/main?recursive=1"
+    },
+    {
+      "http_status": 200,
+      "result": "no explicit reuse terms",
+      "sha256": "6ec01d09523f0201901f11adbe53fff23058b281005019b80e5732ef74e0d828",
+      "url": "https://raw.githubusercontent.com/Haoyu-Gao/READMESimplification/v1.0.0/README.md"
+    },
+    {
+      "result": "article license is separate from package/source reuse terms; native commit categories and alignment are not independently reviewed clarity labels",
+      "url": "https://arxiv.org/html/2308.09940v1"
+    }
+  ],
+  "investigator": "codex-agent:/root/autonomous_dataset_terms",
+  "m012": {
+    "current_guard": "enabled local_links rejects --require-bound",
+    "decision": "retain guarded unsupported state; independent review unavailable; missing cached files cannot prove missing upstream target",
+    "development_markdown_metadata_sources": 52,
+    "future_tests": [
+      "stale targets",
+      "incomplete inventory",
+      "path escapes",
+      "symlink escapes",
+      "unsupported contexts"
+    ],
+    "independent_scoring": "unavailable",
+    "missing_requirements": [
+      "native filesystem path binding",
+      "complete pinned target inventory binding",
+      "referenced target byte or verified upstream absence binding"
+    ]
+  },
+  "timezone": "America/Denver",
+  "version": 1
+}

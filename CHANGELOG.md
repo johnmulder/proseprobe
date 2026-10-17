@@ -57,6 +57,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Limited C004 executable placeholders to a finite set of complete literal
+  messages; specific rejection instructions no longer qualify. Bare comment
+  markers now highlight the marker token without comment syntax or punctuation.
 - Validated full prose predicates and attached comparison evidence against
   original source; classified executable placeholders through Python syntax
   and recognized narrow abstract/typing contracts.

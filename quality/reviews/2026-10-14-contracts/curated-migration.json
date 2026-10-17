@@ -1,0 +1,75 @@
+{
+  "agent_review_sha256": "8658c27b2f2d81332771cb6d1c03925a2f799b0b6cabac0874144603746e1802",
+  "base_commit": "478f71b",
+  "baseline_changed": false,
+  "contract": "Reviewed current curated location maintenance; no semantic labels, expected counts, negatives or allowlisted mismatches changed.",
+  "gates": [
+    {
+      "after_sha256": "cda181b90acdc6ef7e30a5c4ca50b1aa040f11ebea632ebb0a2b262dfe6971bd",
+      "before_sha256": "be202a54f054f6f5998a295129753e213a7e7b09c4d443ddc90f53b99e0785e2",
+      "mismatches_unchanged": true,
+      "only_changed_field": "corpus.manifest_sha256",
+      "path": "quality/regression-gates/all-rules.json",
+      "policy_unchanged": true,
+      "source_bindings_unchanged": true
+    },
+    {
+      "after_sha256": "628eb27b02e86a7f9fd5d6209042ee6121456420e4f7977a9af05cd92200861d",
+      "before_sha256": "f8ec3b37b0bfe1cf32ed890328de1782864b68f15bc47504e15241acd19b7cac",
+      "mismatches_unchanged": true,
+      "only_changed_field": "corpus.manifest_sha256",
+      "path": "quality/regression-gates/production.json",
+      "policy_unchanged": true,
+      "source_bindings_unchanged": true
+    }
+  ],
+  "historical_frozen_external_labels_changed": false,
+  "input_sha256": "badc8b27587a85889b7cc6de6641d58be6ed55ac3fbdab47a04508df7f2f9743",
+  "manifest": {
+    "after_sha256": "10d9f7dface45352076b3187c7b027d105ea56bfc0aba4f406e0e988446316b6",
+    "all_other_entries_unchanged": true,
+    "before_sha256": "d4dd393c6219a0782689860a0ce55eae03c26955e6e95c56fdaff6f6e361eeb3",
+    "changes": [
+      {
+        "after": {
+          "column": 7,
+          "line": 38,
+          "rule_id": "C004"
+        },
+        "before": {
+          "column": 5,
+          "line": 38,
+          "rule_id": "C004"
+        }
+      },
+      {
+        "after": {
+          "column": 7,
+          "line": 39,
+          "rule_id": "C004"
+        },
+        "before": {
+          "column": 5,
+          "line": 39,
+          "rule_id": "C004"
+        }
+      },
+      {
+        "after": {
+          "column": 7,
+          "line": 40,
+          "rule_id": "C004"
+        },
+        "before": {
+          "column": 5,
+          "line": 40,
+          "rule_id": "C004"
+        }
+      }
+    ],
+    "path": "quality/annotations.json"
+  },
+  "source_path": "quality/corpus/python-docs.py",
+  "source_sha256": "af67578bc7deed33971709e9389124935c59a8d4fdebd6a838c689639df22b94",
+  "version": 1
+}

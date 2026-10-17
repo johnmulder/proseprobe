@@ -1,0 +1,298 @@
+{
+  "cohort": "natural",
+  "format": "markdown",
+  "linked_text_path": "/private/tmp/proseprobe-A001.txt",
+  "packet_path": "originals/0000.md",
+  "pair_group": "github/docs:content/actions/how-tos/write-workflows/choose-what-workflows-do/use-jobs.md",
+  "reading_id": "A001",
+  "region": {
+    "column": 1,
+    "end_column": 117,
+    "end_line": 38,
+    "line": 18
+  },
+  "rendered_sha256": "da90b489a53f5e994e1cecdda987eca6b11c34d0708b80bc595de3df08c820ab",
+  "rendered_text": "Blind agent reading A001: natural.\nReading file: [A001](/private/tmp/proseprobe-A001.txt)\nAttribution: GitHub Docs contributors; CC BY 4.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, V015, V016\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL18 C  1- 17 | ## Prerequisites\nL19 C  1-  1 | \nL20 C  1- 66 | To implement jobs in your workflows, you need to understand what \nL20 C 66- 80 | jobs are. See \nL20 C 80-145 | [AUTOTITLE](/actions/get-started/understand-github-actions#jobs).\nL21 C  1-  1 | \nL22 C  1- 27 | ## Setting an ID for a job\nL23 C  1-  1 | \nL24 C  1-  9 | {% data \nL24 C  9- 70 | reusables.actions.jobs.section-using-jobs-in-a-workflow-id %}\nL25 C  1-  1 | \nL26 C  1- 28 | ## Setting a name for a job\nL27 C  1-  1 | \nL28 C  1-  9 | {% data \nL28 C  9- 72 | reusables.actions.jobs.section-using-jobs-in-a-workflow-name %}\nL29 C  1-  1 | \nL30 C  1- 30 | ## Defining prerequisite jobs\nL31 C  1-  1 | \nL32 C  1-  9 | {% data \nL32 C  9- 73 | reusables.actions.jobs.section-using-jobs-in-a-workflow-needs %}\nL33 C  1-  1 | \nL34 C  1- 55 | ## Using a matrix to run jobs with different variables\nL35 C  1-  1 | \nL36 C  1- 59 | To automatically run a job with different combinations of \nL36 C 59-118 | variables, such as operating systems or language versions, \nL36 C118-162 | define a `matrix` strategy in your workflow.\nL37 C  1-  1 | \nL38 C  1- 27 | For more information, see \nL38 C 27- 92 | [AUTOTITLE](/actions/how-tos/write-workflows/choose-what-workflow\nL38 C 92-117 | s-do/run-job-variations).\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 17,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "## Prerequisites"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 19,
+      "line": 19,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 20,
+      "line": 20,
+      "reading_line": 15,
+      "source_line_ending": "",
+      "text": "To implement jobs in your workflows, you need to understand what "
+    },
+    {
+      "column": 66,
+      "end_column": 80,
+      "end_line": 20,
+      "line": 20,
+      "reading_line": 16,
+      "source_line_ending": "",
+      "text": "jobs are. See "
+    },
+    {
+      "column": 80,
+      "end_column": 145,
+      "end_line": 20,
+      "line": 20,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "[AUTOTITLE](/actions/get-started/understand-github-actions#jobs)."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 21,
+      "line": 21,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 27,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "## Setting an ID for a job"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 23,
+      "line": 23,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 9,
+      "end_line": 24,
+      "line": 24,
+      "reading_line": 21,
+      "source_line_ending": "",
+      "text": "{% data "
+    },
+    {
+      "column": 9,
+      "end_column": 70,
+      "end_line": 24,
+      "line": 24,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "reusables.actions.jobs.section-using-jobs-in-a-workflow-id %}"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 25,
+      "line": 25,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 28,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "## Setting a name for a job"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 9,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 26,
+      "source_line_ending": "",
+      "text": "{% data "
+    },
+    {
+      "column": 9,
+      "end_column": 72,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "reusables.actions.jobs.section-using-jobs-in-a-workflow-name %}"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 29,
+      "line": 29,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 30,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": "## Defining prerequisite jobs"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 31,
+      "line": 31,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 9,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 31,
+      "source_line_ending": "",
+      "text": "{% data "
+    },
+    {
+      "column": 9,
+      "end_column": 73,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "reusables.actions.jobs.section-using-jobs-in-a-workflow-needs %}"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 33,
+      "line": 33,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 55,
+      "end_line": 34,
+      "line": 34,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "## Using a matrix to run jobs with different variables"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 35,
+      "line": 35,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 59,
+      "end_line": 36,
+      "line": 36,
+      "reading_line": 36,
+      "source_line_ending": "",
+      "text": "To automatically run a job with different combinations of "
+    },
+    {
+      "column": 59,
+      "end_column": 118,
+      "end_line": 36,
+      "line": 36,
+      "reading_line": 37,
+      "source_line_ending": "",
+      "text": "variables, such as operating systems or language versions, "
+    },
+    {
+      "column": 118,
+      "end_column": 162,
+      "end_line": 36,
+      "line": 36,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "define a `matrix` strategy in your workflow."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 37,
+      "line": 37,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 27,
+      "end_line": 38,
+      "line": 38,
+      "reading_line": 40,
+      "source_line_ending": "",
+      "text": "For more information, see "
+    },
+    {
+      "column": 27,
+      "end_column": 92,
+      "end_line": 38,
+      "line": 38,
+      "reading_line": 41,
+      "source_line_ending": "",
+      "text": "[AUTOTITLE](/actions/how-tos/write-workflows/choose-what-workflow"
+    },
+    {
+      "column": 92,
+      "end_column": 117,
+      "end_line": 38,
+      "line": 38,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": "s-do/run-job-variations)."
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "V015",
+    "V016"
+  ],
+  "sha256": "ab4a60280784e5b915bb2b1353ceb0a5cffefcbe5148c53b901d7861d41c52a1",
+  "source_group": "github/docs",
+  "source_id": "github/docs:content/actions/how-tos/write-workflows/choose-what-workflows-do/use-jobs.md",
+  "split": "development",
+  "version": 1
+}

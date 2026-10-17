@@ -1,0 +1,806 @@
+{
+  "version": 1,
+  "actor": {
+    "id": "/root/contracts_reviewer_a",
+    "role": "independent agent contract reviewer",
+    "human": false
+  },
+  "review_kind": "contract design after diagnostic exposure; not blind effectiveness evidence",
+  "actual_exposure": {
+    "read_files": [
+      "/Users/johnmulder/.codex/RTK.md",
+      "quality/reviews/2026-10-14-contracts/readings/K001.md",
+      "quality/reviews/2026-10-14-contracts/readings/K002.md",
+      "quality/reviews/2026-10-14-contracts/readings/K003.md",
+      "quality/reviews/2026-10-14-contracts/readings/K004.md",
+      "quality/reviews/2026-10-14-contracts/inputs.json"
+    ],
+    "diagnostic_exposure": "The readings disclose prior diagnostic text, current and frozen expected spans, and summarized prior judgments. The assignment also identifies this as exposed development review.",
+    "original_artifact_contents_opened": false,
+    "detector_source_opened": false,
+    "detector_tests_opened": false,
+    "other_reviewer_outputs_opened": false,
+    "old_annotation_files_opened": false,
+    "reserved_holdout_opened": false,
+    "reviewed_code_executed": false,
+    "git_mutations": false,
+    "limits": [
+      "Published contracts were available only as quoted in the four bounded readings; inputs.json supplies hashes and metadata, not the underlying artifacts.",
+      "The Requests docstring shown in K001 is explicitly display-wrapped. I did not inspect or reinterpret the byte-bound original.",
+      "This records proposed contracts and test cases, not measured implementation behavior or new historical labels."
+    ]
+  },
+  "coordinate_convention": {
+    "proposal": "One-based source lines and Unicode-code-point columns, with an exclusive end. Preserve the original characters and internal newlines in a highlighted phrase.",
+    "basis": "The supplied examples use one-based, end-exclusive columns. Unicode-code-point mapping is an explicit proposal to pin with tests, not a claim about unseen implementation.",
+    "tests_below": "Source fragments are authored contract fixtures. Their spans are relative to the exact supplied source_lines."
+  },
+  "readings": [
+    {
+      "id": "K001",
+      "rule": "C004",
+      "decision": "Use narrow syntactic evidence for executable placeholders; select only the marker lexeme for context-free comment markers.",
+      "rationale": "A NotImplementedError raise alone does not establish unfinished implementation: the Requests example rejects one operation and names its replacement. A finite generic-message list gives reproducible positive evidence without trying to interpret arbitrary English or infer the author's intent. Nonmatches are abstentions for this branch, not proof of intentional rejection.",
+      "proposed_contract": {
+        "executable_positive_criterion": {
+          "preconditions": [
+            "There is a successfully parsed Python ast.Raise.",
+            "Its exc is a call whose callee is the simple name NotImplementedError.",
+            "The call has exactly one positional argument, no keyword arguments, and that argument is an ast.Constant whose value is str.",
+            "The raise is outside the existing recognized abstract/typing-stub exemptions."
+          ],
+          "message_normalization": [
+            "Strip leading and trailing whitespace and replace each internal run of whitespace with one ASCII space.",
+            "Lowercase ASCII A-Z.",
+            "Remove at most one final ASCII period or exclamation mark, then remove any resulting trailing space.",
+            "Match the entire remaining string against the finite allowlist; do not perform substring, stemming, similarity, or intent classification."
+          ],
+          "complete_initial_allowlist": [
+            "todo",
+            "fixme",
+            "xxx",
+            "not implemented",
+            "not implemented yet",
+            "unimplemented",
+            "unfinished",
+            "implement me",
+            "implement this",
+            "add logic here"
+          ],
+          "interpretation": "A match is evidence of a formulaic placeholder, subject to documented exemptions. It is not a claim that all uses of that wording have the same human intent.",
+          "negative_or_unsupported": "Any other raise shape or message produces no executable C004 finding under this proposed branch. Independent prose/comment rules may still apply.",
+          "future_extensions": "Any allowlist expansion is a contract change requiring a positive fixture and nearby nonmatching counterexamples."
+        },
+        "evidence_for_rejection": "A concrete replacement instruction such as add_unredirected_header() is useful human evidence that the shown raise is deliberate rejection. The executable rule need not prove that: its entire message fails the generic allowlist. No general English detector for intentional rejection is proposed.",
+        "comment_highlight": {
+          "unit": "The exact source characters of the eligible TODO, FIXME, or XXX marker token.",
+          "exclude": [
+            "indentation",
+            "comment introducer #",
+            "spaces before or after the token",
+            "a trailing colon or other surrounding punctuation",
+            "newline"
+          ],
+          "preserve": "Keep original case and exact source positions.",
+          "recognition_scope": "This resolves highlighting for markers already recognized as context-free. It does not authorize treating every detailed TODO comment as context-free or adding new decorated-marker syntax."
+        },
+        "executable_highlight_limit": "No competing executable-raise span is supplied, so this review does not prescribe or change that span.",
+        "no_message_policy": "A bare raise NotImplementedError or a zero-argument NotImplementedError() has no message evidence. Exclude it from this executable-message branch; an empty reason is insufficient to distinguish an implementation gap from a deliberate prohibition."
+      },
+      "classifications": [
+        {
+          "example": "Requests add_header",
+          "raise_text": "raise NotImplementedError(\"Cookie headers should be added with add_unredirected_header()\")",
+          "result": "no executable C004 finding",
+          "reason": "The literal message is outside the allowlist and states a concrete alternative. The classification does not depend on the wrapped docstring or on runtime behavior."
+        },
+        {
+          "example": "pending",
+          "raise_text": "raise NotImplementedError(\"Add logic here\")",
+          "result": "executable C004 finding",
+          "reason": "The complete normalized literal is add logic here. The separate context-free TODO marker is independently eligible; deduplication/counting is not adjudicated here."
+        },
+        {
+          "example": "later",
+          "raise_text": "raise NotImplementedError(\"unfinished\")",
+          "result": "executable C004 finding",
+          "reason": "The complete normalized literal is unfinished."
+        },
+        {
+          "example": "specific",
+          "raise_text": "raise NotImplementedError(\"Retry logic is planned after issue #42\")",
+          "result": "no executable C004 finding",
+          "reason": "The message carries specific work and an issue reference and is not an exact generic-list member. Do not infer either a finished implementation or deliberate rejection from this nonmatch."
+        }
+      ],
+      "span_resolution": {
+        "supplied_difference": "# TODO versus TODO",
+        "accepted_text": "TODO",
+        "accepted_span_in_shown_pending_fixture": {
+          "line": 2,
+          "start_column": 7,
+          "end_column": 11
+        },
+        "classification": "The marker-only choice needs an explicit contract clarification; the excerpt does not already specify a comment highlight unit.",
+        "reason": "The marker is the actionable lexical evidence. Selecting # or indentation adds source syntax unrelated to the diagnostic."
+      },
+      "regression_tests": [
+        {
+          "id": "bare_context_free_marker",
+          "source_lines": [
+            "def pending():",
+            "    # TODO",
+            "    pass"
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 2,
+              "column": 7
+            },
+            "end": {
+              "line": 2,
+              "column": 11
+            },
+            "text": "TODO"
+          },
+          "expected_comment_marker": true
+        },
+        {
+          "id": "marker_trailing_colon",
+          "source_lines": [
+            "# TODO:"
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 3
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "text": "TODO"
+          },
+          "expected_comment_marker": true,
+          "recognition_note": "Only punctuation follows the marker; it remains context-free."
+        },
+        {
+          "id": "fixme_marker",
+          "source_lines": [
+            "    # FIXME"
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 7
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            },
+            "text": "FIXME"
+          },
+          "expected_comment_marker": true
+        },
+        {
+          "id": "xxx_marker",
+          "source_lines": [
+            "# XXX"
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 3
+            },
+            "end": {
+              "line": 1,
+              "column": 6
+            },
+            "text": "XXX"
+          },
+          "expected_comment_marker": true
+        },
+        {
+          "id": "specific_todo_content",
+          "source_lines": [
+            "# TODO: retry after issue #42"
+          ],
+          "expected_context_free_marker_finding": false
+        },
+        {
+          "id": "marker_word_boundary",
+          "source_lines": [
+            "# TODOish"
+          ],
+          "expected_context_free_marker_finding": false
+        },
+        {
+          "id": "positive_generic_messages",
+          "message_values": [
+            "Add logic here",
+            "unfinished",
+            "  NOT  IMPLEMENTED YET!  "
+          ],
+          "expected_executable_finding": true
+        },
+        {
+          "id": "no_substring_matching",
+          "message_values": [
+            "unfinished retry policy after issue #42",
+            "not implemented for this transport",
+            "Do not implement this operation",
+            "Cookie headers should be added with add_unredirected_header()"
+          ],
+          "expected_executable_finding": false
+        },
+        {
+          "id": "no_message_evidence",
+          "raise_forms": [
+            "raise NotImplementedError",
+            "raise NotImplementedError()",
+            "raise NotImplementedError(\"\")"
+          ],
+          "expected_executable_finding": false
+        },
+        {
+          "id": "dynamic_message",
+          "raise_forms": [
+            "raise NotImplementedError(reason)",
+            "raise NotImplementedError(f\"unfinished {feature}\")"
+          ],
+          "expected_executable_finding": false
+        },
+        {
+          "id": "exception_class_boundary",
+          "raise_forms": [
+            "raise ValueError(\"unfinished\")",
+            "raise RuntimeError(\"Add logic here\")"
+          ],
+          "expected_executable_finding": false
+        },
+        {
+          "id": "parsed_raise_required",
+          "source_lines": [
+            "\"raise NotImplementedError('unfinished')\""
+          ],
+          "expected_executable_finding": false
+        },
+        {
+          "id": "recognized_stub_exemption",
+          "context": "An otherwise qualifying generic-message raise in an already recognized abstract/typing stub",
+          "expected_executable_finding": false
+        },
+        {
+          "id": "raise_cause",
+          "raise_forms": [
+            "raise NotImplementedError(\"unfinished\") from exc"
+          ],
+          "expected_executable_finding": true
+        }
+      ],
+      "excluded_or_unsupported_cases": [
+        "Arbitrary natural-language intent, issue-specific future work, and whether a detailed rejection is justified.",
+        "Bare or zero-argument raises and empty literal messages under the message-evidence branch.",
+        "Dynamic values, formatted strings, keyword arguments, exception aliases, qualified callees, and custom exception classes.",
+        "Whether a simple NotImplementedError name is runtime-shadowed; without binding analysis this remains a syntactic heuristic and must not be represented as runtime certainty.",
+        "New decorated-marker recognition such as bracketed markers, exact executable-expression highlighting, and duplicate suppression.",
+        "A recognized-stub exemption must remain authoritative even when its literal message matches the allowlist."
+      ]
+    },
+    {
+      "id": "K002",
+      "rule": "G038",
+      "decision": "Retain the current faster span.",
+      "rationale": "The public contract explicitly promises the exact comparative phrase. In the supplied sentence the comparative is faster; is supplies predicate structure. The wording and selected token already direct attention to the claim that needs a comparison target.",
+      "span_resolution": {
+        "accepted": {
+          "line": 3,
+          "start_column": 20,
+          "end_column": 26,
+          "text": "faster"
+        },
+        "rejected": {
+          "line": 3,
+          "start_column": 17,
+          "end_column": 26,
+          "text": "is faster"
+        },
+        "classification": "Annotation-contract mismatch, not an established detector code defect.",
+        "action": "Use faster for new contract fixtures. Preserve the historical frozen annotation as historical evidence."
+      },
+      "proposed_contract": {
+        "highlight": "Select the entire matched curated comparative expression, including degree words such as more, but excluding the preceding copula or predicate verb, adjacent spaces, and terminal punctuation.",
+        "recognition_and_evidence": "Predicate recognition and comparison-target checks may inspect the full predicate and nearby context. That larger evidence scope does not enlarge the source highlight.",
+        "multiline": "Include original internal whitespace/newlines when they separate words belonging to the matched comparative expression.",
+        "confidence": "Retain the published low-confidence status."
+      },
+      "regression_tests": [
+        {
+          "id": "supplied_sentence",
+          "source_lines": [
+            "The Nova parser is faster."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 20
+            },
+            "end": {
+              "line": 1,
+              "column": 26
+            },
+            "text": "faster"
+          }
+        },
+        {
+          "id": "multiword_comparative",
+          "source_lines": [
+            "The Nova parser remains more reliable."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 25
+            },
+            "end": {
+              "line": 1,
+              "column": 38
+            },
+            "text": "more reliable"
+          }
+        },
+        {
+          "id": "past_copula",
+          "source_lines": [
+            "The Nova parser was worse."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 26
+            },
+            "text": "worse"
+          }
+        },
+        {
+          "id": "multiline_phrase",
+          "source_lines": [
+            "The Nova parser is more",
+            "reliable."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 20
+            },
+            "end": {
+              "line": 2,
+              "column": 9
+            },
+            "text": "more\nreliable"
+          }
+        },
+        {
+          "id": "attached_target",
+          "source_lines": [
+            "The Nova parser is faster than the old parser."
+          ],
+          "expected_finding": false
+        },
+        {
+          "id": "nearby_target_evidence",
+          "description": "Supply an example that the existing contract recognizes as having its target in nearby context, and assert no finding; do not infer a new context window from this review."
+        },
+        {
+          "id": "phrase_boundaries",
+          "description": "Assert that preceding verb, outer spaces, and final period are excluded from every positive span."
+        }
+      ],
+      "excluded_or_unsupported_cases": [
+        "The unseen curated comparative vocabulary and exact nearby-context window are not redesigned here.",
+        "No conclusion is drawn about coverage of arbitrary comparative language.",
+        "A local regression fixture is a contract-design artifact, not a corrected historical label or effectiveness result."
+      ]
+    },
+    {
+      "id": "K003",
+      "rule": "V015",
+      "decision": "Retain the current the best span.",
+      "rationale": "The public contract explicitly includes the article when present and selects the exact superlative phrase. The current highlight follows that wording. remains establishes a predicate but does not belong to the superlative phrase.",
+      "span_resolution": {
+        "accepted": {
+          "line": 5,
+          "start_column": 25,
+          "end_column": 33,
+          "text": "the best"
+        },
+        "rejected": {
+          "line": 5,
+          "start_column": 17,
+          "end_column": 33,
+          "text": "remains the best"
+        },
+        "classification": "Annotation-contract mismatch, not an established detector code defect.",
+        "action": "Use the best for new contract fixtures. Preserve the historical frozen annotation as historical evidence."
+      },
+      "proposed_contract": {
+        "highlight": "Select the matched superlative expression, including its attached article and degree words when present; exclude the preceding copula/predicate verb, outer whitespace, and punctuation.",
+        "recognition_and_evidence": "Determine whether a comparison scope bounds the claim using the required owning predicate and context. Scope evidence may lie outside the source highlight.",
+        "multiline": "Retain internal newlines and indentation belonging to the contiguous source phrase rather than normalizing the highlighted text.",
+        "severity_and_confidence": "Retain low-confidence INFO."
+      },
+      "regression_tests": [
+        {
+          "id": "supplied_sentence",
+          "source_lines": [
+            "The Nova parser remains the best."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 25
+            },
+            "end": {
+              "line": 1,
+              "column": 33
+            },
+            "text": "the best"
+          }
+        },
+        {
+          "id": "no_article",
+          "source_lines": [
+            "The Nova parser is fastest."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 20
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            },
+            "text": "fastest"
+          }
+        },
+        {
+          "id": "multiword_superlative",
+          "source_lines": [
+            "The Nova parser was the most reliable."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 38
+            },
+            "text": "the most reliable"
+          }
+        },
+        {
+          "id": "multiline_phrase",
+          "source_lines": [
+            "The Nova parser is the",
+            "most reliable."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 20
+            },
+            "end": {
+              "line": 2,
+              "column": 14
+            },
+            "text": "the\nmost reliable"
+          }
+        },
+        {
+          "id": "bounded_scope",
+          "source_lines": [
+            "The Nova parser is the fastest of the three tested parsers."
+          ],
+          "expected_finding": false
+        },
+        {
+          "id": "article_and_verb_boundaries",
+          "description": "Assert inclusion of the attached article, exclusion of the predicate verb, and no invented article in the no-article fixture."
+        }
+      ],
+      "excluded_or_unsupported_cases": [
+        "The exact recognized superlative vocabulary and all possible scope-bearing contexts were not supplied.",
+        "This does not propose recognizing unrelated forms merely to improve historical score.",
+        "The current span is justified by the public contract independently of whether either prior reviewer preferred a larger phrase."
+      ]
+    },
+    {
+      "id": "K004",
+      "rule": "C009",
+      "decision": "Retain name-only highlights for both parameter-kind conflicts and absent names.",
+      "rationale": "The public contract says the diagnostic is on the declared name. Selecting extras identifies the declaration consistently with stale-name findings; the diagnostic message can explicitly describe the ** versus * mismatch. Including markers only for one subtype would require a new highlight convention without a necessary UX benefit.",
+      "span_resolution": {
+        "accepted": {
+          "line": 8,
+          "start_column": 14,
+          "end_column": 20,
+          "text": "extras"
+        },
+        "rejected": {
+          "line": 8,
+          "start_column": 12,
+          "end_column": 20,
+          "text": "**extras"
+        },
+        "classification": "Annotation-contract mismatch under the published name-only contract.",
+        "action": "Keep the current supplied span. Use name-only spans in new contract fixtures and leave frozen labels immutable.",
+        "marker_policy": "Neither kind-conflict-only nor always: exclude * and ** from all C009 parameter-name highlights."
+      },
+      "proposed_contract": {
+        "normalized_lookup": "Use the base identifier to look up the parameter in the owning signature; retain any written * or ** separately as kind evidence.",
+        "kind_conflict": "When the base name exists and an explicit documented kind conflicts with the owning signature, report that conflict on the source identifier. Message text must name the documented and actual kinds.",
+        "absent_name": "When the base name does not exist in the owning signature, report an absent/stale name on that identifier. Do not invent a kind conflict against a nonexistent signature parameter.",
+        "unstarred_name": "Do not infer an explicit kind mismatch from omission of stars alone; the published mismatch condition requires explicit * or ** evidence.",
+        "typed_fields": "Exclude the field's type expression, whitespace, colon delimiters, and star markers from the highlighted identifier.",
+        "mapping": "Map to the exact Python source occurrence. Preserve identifier spelling and Unicode characters; do not locate by global name search or confuse prose/type occurrences with the declaration name.",
+        "ownership": "Associate a field with its own function/method signature before comparing names or kinds. A neighboring or outer signature must not supply the match.",
+        "independent_diagnostics": "The rtype mismatch in the supplied docstring is outside this span decision."
+      },
+      "classifications": [
+        {
+          "example": ":param **extras: against *extras",
+          "result": "kind-conflict finding",
+          "highlight": "extras",
+          "message_evidence": "Declared keyword-variadic; signature positional-variadic."
+        },
+        {
+          "example": ":param *options: against **options",
+          "result": "kind-conflict finding",
+          "highlight": "options",
+          "message_evidence": "Declared positional-variadic; signature keyword-variadic."
+        },
+        {
+          "example": ":param attempts: with no attempts parameter",
+          "result": "absent-name finding",
+          "highlight": "attempts"
+        },
+        {
+          "example": ":param **missing: with no missing parameter",
+          "result": "absent-name finding only",
+          "highlight": "missing",
+          "reason": "There is no actual kind to compare."
+        },
+        {
+          "example": ":param extras: against *extras",
+          "result": "no explicit-kind-conflict finding",
+          "reason": "The base name exists and no explicit kind is declared."
+        },
+        {
+          "example": ":param **options: against **options",
+          "result": "no parameter-name/kind finding"
+        }
+      ],
+      "regression_tests": [
+        {
+          "id": "kind_conflict",
+          "source_lines": [
+            "def fetch(target, *extras):",
+            "    \"\"\"Fetch.",
+            "",
+            "    :param **extras: Additional values.",
+            "    \"\"\""
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 4,
+              "column": 14
+            },
+            "end": {
+              "line": 4,
+              "column": 20
+            },
+            "text": "extras"
+          },
+          "selection_occurrence": "the field occurrence, not the signature occurrence",
+          "expected_subtype": "kind_conflict"
+        },
+        {
+          "id": "inverse_kind_conflict",
+          "source_lines": [
+            "    :param *options: Values."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 13
+            },
+            "end": {
+              "line": 1,
+              "column": 20
+            },
+            "text": "options"
+          },
+          "owner_signature": "def f(**options):",
+          "expected_subtype": "kind_conflict"
+        },
+        {
+          "id": "unstarred_missing",
+          "source_lines": [
+            "    :param attempts: Number of attempts."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 12
+            },
+            "end": {
+              "line": 1,
+              "column": 20
+            },
+            "text": "attempts"
+          },
+          "owner_signature": "def f(target):",
+          "expected_subtype": "absent_name"
+        },
+        {
+          "id": "starred_missing",
+          "source_lines": [
+            "    :param **missing: Values."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 14
+            },
+            "end": {
+              "line": 1,
+              "column": 21
+            },
+            "text": "missing"
+          },
+          "owner_signature": "def f(target):",
+          "expected_subtype": "absent_name",
+          "expected_kind_conflict": false
+        },
+        {
+          "id": "typed_field",
+          "source_lines": [
+            "    :param str **extras: Values."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 18
+            },
+            "end": {
+              "line": 1,
+              "column": 24
+            },
+            "text": "extras"
+          },
+          "owner_signature": "def f(*extras):",
+          "expected_subtype": "kind_conflict"
+        },
+        {
+          "id": "unicode_identifier",
+          "source_lines": [
+            "    :param **café: Values."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 14
+            },
+            "end": {
+              "line": 1,
+              "column": 18
+            },
+            "text": "café"
+          },
+          "owner_signature": "def f(*café):",
+          "expected_subtype": "kind_conflict",
+          "mapping_assertion": "Columns count Unicode code points, not UTF-8 bytes."
+        },
+        {
+          "id": "unicode_before_identifier",
+          "source_lines": [
+            "    :param État **extras: Values."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 19
+            },
+            "end": {
+              "line": 1,
+              "column": 25
+            },
+            "text": "extras"
+          },
+          "owner_signature": "def f(*extras):",
+          "expected_subtype": "kind_conflict",
+          "mapping_assertion": "Non-ASCII type text before the name must not shift the highlight by its encoded byte length."
+        },
+        {
+          "id": "inline_docstring",
+          "source_lines": [
+            "    \"\"\":param **extras: Values.\"\"\""
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 17
+            },
+            "end": {
+              "line": 1,
+              "column": 23
+            },
+            "text": "extras"
+          },
+          "owner_signature": "def f(*extras):",
+          "expected_subtype": "kind_conflict",
+          "mapping_assertion": "Account for opening quotes on the same source line."
+        },
+        {
+          "id": "matching_explicit_kind",
+          "owner_signature": "def f(**options):",
+          "source_lines": [
+            "    :param **options: Values."
+          ],
+          "expected_name_or_kind_finding": false
+        },
+        {
+          "id": "omitted_star_not_kind_assertion",
+          "owner_signature": "def f(*extras):",
+          "source_lines": [
+            "    :param extras: Values."
+          ],
+          "expected_kind_conflict": false
+        },
+        {
+          "id": "repeat_name_in_type_or_description",
+          "owner_signature": "def f(*extras):",
+          "source_lines": [
+            "    :param extras.Type **extras: extras data."
+          ],
+          "expected_highlight": {
+            "start": {
+              "line": 1,
+              "column": 26
+            },
+            "end": {
+              "line": 1,
+              "column": 32
+            },
+            "text": "extras"
+          },
+          "expected_subtype": "kind_conflict",
+          "mapping_assertion": "Highlight the field identifier occurrence after the marker, not the earlier type or later prose occurrence."
+        },
+        {
+          "id": "owning_signature",
+          "description": "Create two neighboring or nested functions with differently kinded options; assert that each docstring compares only with its owning signature and highlights its own field occurrence."
+        }
+      ],
+      "excluded_or_unsupported_cases": [
+        "Malformed Sphinx fields, undocumented typed-field syntaxes, and alternate docstring styles are not made supported by this review.",
+        "Runtime call semantics and whether the explanatory prose matches intended behavior are outside explicit name/kind comparison.",
+        "Escaped or concatenated Python string-literal source mapping is not specified by these fixtures; add separate mapping fixtures before claiming coverage.",
+        "The Unicode and inline cases are required mapping proposals, not claims that an unseen parser already supports every form."
+      ]
+    }
+  ],
+  "independence": {
+    "other_reviewers_consulted": false,
+    "judgments": "Formed from the four bounded readings and public-contract excerpts, with disclosed prior diagnostics; no attempt was made to recover other reviewers' full decisions.",
+    "historical_artifacts_modified": false,
+    "only_output": "quality/reviews/2026-10-14-contracts/review.agent-a.json"
+  }
+}

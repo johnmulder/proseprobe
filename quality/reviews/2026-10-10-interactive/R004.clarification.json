@@ -1,0 +1,18 @@
+{
+  "actor_role": "human user",
+  "capture_note": "Historical human clarification recorded when changing to unattended mode; receipt time unavailable.",
+  "captured_at_utc": "2026-10-14T02:14:40.712497+00:00",
+  "labels_inferred": false,
+  "literal_response": "tell me the region.",
+  "reading_id": "R004",
+  "region": {
+    "column": 1,
+    "end_column": 389,
+    "end_line": 32,
+    "line": 23
+  },
+  "rendered_sha256": "5349909bdc01867fb14f9ab20a478ac407e8375bf01811b1bd51626de897398a",
+  "response_kind": "clarification request; no issue judgment",
+  "source_sha256": "4fe410984681f95a867f894f67523cfa461e039a9b7d43fc7bce297178c7dec1",
+  "version": 1
+}

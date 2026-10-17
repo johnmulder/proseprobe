@@ -1,0 +1,36 @@
+{
+  "files": {
+    "originals/0000.md": {
+      "expected": [],
+      "negative_cases": [],
+      "regions": [],
+      "reviewed_rules": [],
+      "sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68",
+      "source_group": "markdown-it/markdown-it",
+      "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md"
+    }
+  },
+  "review": {
+    "native_context": {
+      "path": "native-context.json",
+      "sha256": "ad02d614546d3d4a63ac6d54425f2b1a02722fa112c290737420ffd1d10ae9e9"
+    },
+    "packet_index": {
+      "path": "index.json",
+      "sha256": "9bbf0a3a5a9dd3b09cd9d1beccf8b716100bbe634bf2d9ffda50ed3a5c3a8286"
+    },
+    "policy": {
+      "min_confidence": "low",
+      "mode": "all-rules",
+      "profile": "default",
+      "severity": "info"
+    },
+    "protocol_revision": "unreviewed-template-v1",
+    "reviewers": [],
+    "rule_contracts": {
+      "path": "contracts.json",
+      "sha256": "0de847c5f043e60c0eb24bfa1e063cd7337713d4783cb6fa454247b828506f90"
+    }
+  },
+  "version": 3
+}

@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "phase": "agent-assisted-blind-development",
+  "reviewer_id": "codex-agent:/root/blind_agent_a",
+  "actor_type": "agent",
+  "human": false,
+  "independent_human_evidence": false,
+  "review_date": "2026-10-13",
+  "rules": [
+    "G038",
+    "V015",
+    "V016"
+  ],
+  "packet_root": "downloads/evaluation/blind/autonomous-development-2026-10-13-v1",
+  "review_scope": "Exhaustive reading of each of the five complete, unchanged original Markdown sources for the three specified contracts. Full-file reviewed_rules refers to eligible native prose, with the contracts' syntax and example exclusions; it does not certify rendered template expansions or linked documents.",
+  "method": "An actual Codex agent read the complete native source texts and made qualitative editorial judgments using only the frozen contracts, their published rule explanations, and invented examples in the permitted interactive guidance. No detector or rule implementation was run or consulted.",
+  "exposure": {
+    "source_bytes_read": [
+      "originals/0000.md",
+      "originals/0001.md",
+      "originals/0002.md",
+      "originals/0003.md",
+      "originals/0004.md"
+    ],
+    "metadata_read": [
+      "quality/reviews/2026-10-13-autonomous/selection.json",
+      "quality/reviews/2026-10-13-autonomous/contracts.json",
+      "quality/reviews/2026-10-13-autonomous/annotations.unreviewed.json",
+      "quality/reviews/2026-10-13-autonomous/index.json"
+    ],
+    "guidance_read": [
+      "docs/rules.md: G038, V015, V016 sections only",
+      "quality/reviews/2026-10-10-interactive/guidance.v1.md"
+    ],
+    "instruction_read": "/Users/johnmulder/.codex/RTK.md",
+    "detector_implementation_read": false,
+    "detectors_run": false,
+    "prediction_or_findings_exposure": false,
+    "other_reviewer_labels_read": false,
+    "interactive_human_responses_read": false,
+    "holdout_bytes_read": false,
+    "blindness_status": "Predictions and other reviewer judgments were withheld throughout labeling. The agent knew the three target rule contracts and the source metadata. This is agent-assisted development judgment and is not independent human effectiveness evidence."
+  },
+  "sources": {
+    "originals/0000.md": {
+      "scope_status": "reviewed_complete_eligible_native_prose",
+      "expected_issue_count": 0,
+      "rules": {
+        "G038": "No issue. The credit table's 'greater than 99.0%' and 'less than 99.0%' state explicit numerical comparison targets. The definition and formulas identify their variables. No predicate comparative with a missing target occurs in eligible prose.",
+        "V015": "No issue. No eligible curated best/fastest superlative claim occurs.",
+        "V016": "No issue. The 99.9% quarterly uptime commitment is explicitly numerical, temporal, service-scoped and subject to the stated exclusions; it is not a universal no-failure or security claim. The 100% storage expression is an arithmetic baseline minus average error rate, not '100% secure'."
+      },
+      "scope_notes": "Frontmatter is excluded. Quoted SLA defined terms, service names, percentages, and calculations were preserved as written. The legal agreement's external definitions and status-page contents were not opened or inferred.",
+      "uncertain_judgments": []
+    },
+    "originals/0001.md": {
+      "scope_status": "reviewed_complete_eligible_native_prose",
+      "expected_issue_count": 0,
+      "rules": {
+        "G038": "No issue. The eligible support instructions contain no targetless predicate comparative.",
+        "V015": "No issue. 'Best practices' is a heading. 'It will do its best to provide accurate information' describes effort rather than ranking a product as the best; it is not a curated superlative claim needing a comparison population.",
+        "V016": "No issue. Capability descriptions are explicitly accompanied by inability and fallback-ticket cases. Neither successful response wording nor a button label asserts universal reliability or security."
+      },
+      "scope_notes": "Frontmatter and Liquid template tokens were not treated as authored prose. The full surrounding native prose was reviewed, but expanded reusable/template values and external AUTOTITLE/link contents remain unavailable and unreviewed.",
+      "uncertain_judgments": []
+    },
+    "originals/0002.md": {
+      "scope_status": "reviewed_complete_eligible_native_prose",
+      "expected_issue_count": 0,
+      "rules": {
+        "G038": "No issue. No eligible predicate comparative is present in the complete native prose.",
+        "V015": "No issue. No eligible best/fastest ranking claim is present.",
+        "V016": "No issue. Statements that instructions provide persistent context and are used automatically, or that answers use curated context, describe the feature's behavior. They do not assert that it never fails, always succeeds, eliminates all errors, or is absolutely secure. The quickstart's projected outcomes are not unconditional reliability claims."
+      },
+      "scope_notes": "Frontmatter, the fenced prompt and agent template, and template directives are excluded. The custom-agent example's imperative 'Always follow' concerns a requested working convention, not an observed reliability guarantee. Rendered template expansions and linked content were unavailable and not inferred.",
+      "uncertain_judgments": []
+    },
+    "originals/0003.md": {
+      "scope_status": "reviewed_complete_eligible_native_prose",
+      "expected_issue_count": 0,
+      "rules": {
+        "G038": "No issue. 'Extremely easily' is not a comparative; no targetless predicate comparative occurs.",
+        "V015": "No issue. 'One of the most downloaded Python packages today' identifies a population and timeframe, and is not an unbounded curated best/fastest claim. The nearby download and dependent-repository numbers were not used as substitutes for scope. The Best–Practices heading is excluded.",
+        "V016": "No issue. 'You may certainly put your trust in this code' and readiness for robust and reliable applications are promotional reassurance/capability descriptions, but they do not assert universal success, zero errors, or absolute security under this contract."
+      },
+      "scope_notes": "Fenced examples, inline code, links and badge/image syntax retain their normal exclusions. No linked package metrics, external docs or image contents were opened. The native prose was reviewed in full.",
+      "uncertain_judgments": []
+    },
+    "originals/0004.md": {
+      "scope_status": "reviewed_complete_eligible_native_prose",
+      "expected_issue_count": 0,
+      "rules": {
+        "G038": "No issue. The performance description explicitly names NodeJS and Go as peers. Feature fragments such as 'Less time debugging', 'Fewer bugs', 'more complex Item model', and 'more complete example' are not predicate comparatives covered by G038. No targetless curated predicate comparative occurs in eligible prose.",
+        "V015": "No issue. Both 'one of the fastest Python frameworks available' claims name their comparison population. The performance section additionally identifies TechEmpower benchmarks and the named higher-ranked Starlette and Uvicorn. The introductory ranking has its own Python-framework scope; its distant link was not counted as establishing a missing local scope. 'Best-in-class' in sponsor markup is expressly excluded by the published contract.",
+        "V016": "No issue. The error-reduction claim is explicitly about 40%, not elimination of all errors. 'Ready for production', validation behavior and supported-security features are ordinary capability claims. The installation note's instruction to quote an argument so it works in all terminals describes command syntax portability rather than a universal reliability/security guarantee. The 'All this would also work' wording is inside the example discussion and is hypothetical. No eligible absolute claim under V016 occurs."
+      },
+      "scope_notes": "The entire source, including native visible text inside embedded HTML, was read. HTML attributes/comments, fenced code and console output, inline code, example sections and headings were treated according to syntax/contract exclusions. The Opinions quotations contain no relevant targeted claim; they were not converted into detector-derived expectations. Remote links, screenshots and benchmark results were not opened or independently validated.",
+      "uncertain_judgments": []
+    }
+  },
+  "disputed_judgments": "Other reviewers' labels were not read; no disagreements were assessed during this blind pass.",
+  "context_limitations": [
+    "The supplied Markdown contains unexpanded GitHub Liquid variables, reusable content and AUTOTITLE links. Those unseen expansions cannot receive clean labels from this review.",
+    "The review checks only the three specified prose contracts. It does not verify numeric, legal, performance, compatibility, or promotional facts.",
+    "This convenience sample is development-only and cannot establish population performance, holdout results or independent human effectiveness."
+  ],
+  "negative_cases": "Left empty; explanatory nonissue judgments are qualitative review notes, not newly authored near-miss annotation cases.",
+  "validation": {
+    "schema": "v3",
+    "validator": "benchmarks.quality_scoring.load_annotations",
+    "result": "passed",
+    "annotation_path": "quality/reviews/2026-10-13-autonomous/annotations.agent-a.json",
+    "packet_root": "downloads/evaluation/blind/autonomous-development-2026-10-13-v1",
+    "rule_ids": [
+      "G038",
+      "V015",
+      "V016"
+    ],
+    "expected_issues": 0,
+    "negative_cases": 0,
+    "reviewed_file_rule_pairs": 15,
+    "note": "Only the annotation loader was invoked. No ProseProbe run, prediction generation or detector evaluation was performed. The initial default-Python import lacked the src package path; adding PYTHONPATH=src allowed validation."
+  }
+}

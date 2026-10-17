@@ -1,0 +1,212 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A009.txt",
+  "packet_path": "originals/0003.py",
+  "pair_group": "psf/requests:src/requests/certs.py",
+  "reading_id": "A009",
+  "region": {
+    "column": 1,
+    "end_column": 19,
+    "end_line": 17,
+    "line": 1
+  },
+  "rendered_sha256": "172894201a5b9c513187cd8fd7526fe021bbc5652271a8e024c8f5f3dabf3358",
+  "rendered_text": "Blind agent reading A009: natural.\nReading file: [A009](/private/tmp/proseprobe-A009.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL 1 C 1-22 | #!/usr/bin/env python\nL 2 C 1- 1 | \nL 3 C 1- 4 | \"\"\"\nL 4 C 1-15 | requests.certs\nL 5 C 1-15 | ~~~~~~~~~~~~~~\nL 6 C 1- 1 | \nL 7 C 1-66 | This module returns the preferred default CA certificate bundle. \nL 7 C66-74 | There is\nL 8 C 1-45 | only one \u2014 the one from the certifi package.\nL 9 C 1- 1 | \nL10 C 1-68 | If you are packaging Requests, e.g., for a Linux distribution or a \nL10 C68-75 | managed\nL11 C 1-67 | environment, you can change the definition of where() to return a \nL11 C67-77 | separately\nL12 C 1-20 | packaged CA bundle.\nL13 C 1- 4 | \"\"\"\nL14 C 1-26 | from certifi import where\nL15 C 1- 1 | \nL16 C 1-27 | if __name__ == \"__main__\":\nL17 C 1-19 |     print(where())\n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 1,
+      "line": 1,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "#!/usr/bin/env python"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 2,
+      "line": 2,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 4,
+      "end_line": 3,
+      "line": 3,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 15,
+      "end_line": 4,
+      "line": 4,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "requests.certs"
+    },
+    {
+      "column": 1,
+      "end_column": 15,
+      "end_line": 5,
+      "line": 5,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "~~~~~~~~~~~~~~"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 6,
+      "line": 6,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 7,
+      "line": 7,
+      "reading_line": 19,
+      "source_line_ending": "",
+      "text": "This module returns the preferred default CA certificate bundle. "
+    },
+    {
+      "column": 66,
+      "end_column": 74,
+      "end_line": 7,
+      "line": 7,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "There is"
+    },
+    {
+      "column": 1,
+      "end_column": 45,
+      "end_line": 8,
+      "line": 8,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "only one \u2014 the one from the certifi package."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 9,
+      "line": 9,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 68,
+      "end_line": 10,
+      "line": 10,
+      "reading_line": 23,
+      "source_line_ending": "",
+      "text": "If you are packaging Requests, e.g., for a Linux distribution or a "
+    },
+    {
+      "column": 68,
+      "end_column": 75,
+      "end_line": 10,
+      "line": 10,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "managed"
+    },
+    {
+      "column": 1,
+      "end_column": 67,
+      "end_line": 11,
+      "line": 11,
+      "reading_line": 25,
+      "source_line_ending": "",
+      "text": "environment, you can change the definition of where() to return a "
+    },
+    {
+      "column": 67,
+      "end_column": 77,
+      "end_line": 11,
+      "line": 11,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "separately"
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 12,
+      "line": 12,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "packaged CA bundle."
+    },
+    {
+      "column": 1,
+      "end_column": 4,
+      "end_line": 13,
+      "line": 13,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 14,
+      "line": 14,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": "from certifi import where"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 15,
+      "line": 15,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 27,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "if __name__ == \"__main__\":"
+    },
+    {
+      "column": 1,
+      "end_column": 19,
+      "end_line": 17,
+      "line": 17,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "    print(where())"
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "67d49be35d009efea35054f2b2cd23145854eb1b2df1cb442ea7f2f04bf6de0c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/certs.py",
+  "split": "development",
+  "version": 1
+}

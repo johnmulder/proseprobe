@@ -1,10 +1,50 @@
 # Blind review protocol
 
-Independent annotation and effectiveness claims are deferred by user request.
-This protocol and its selection records prepare the future review; they contain
-no human labels. Use the unchanged original source identities and frozen split
+Human development review resumed by user request on 2026-10-10. Interactive
+readings include at most 80 lines of 80 characters, including instructions and
+questions. Accepted labels and independent effectiveness claims retain their
+review prerequisites. Use unchanged original source identities and frozen split
 assignments. Implementers must not inspect holdout prose, labels or predictions
 while tuning the candidate.
+
+On 2026-10-13 the user requested unattended completion. Preserve the three
+recorded human scopes and retire unanswered requests without inferred labels.
+Separate blind agent reviews may supply development evidence, with actual agent
+identifiers, exposure records and immutable original judgments. Multiple agents
+do not supply independent human annotation, agreement or semantic-usefulness
+evidence. Freeze each declared development batch before showing predictions.
+Keep independent claims and the reserved holdout deferred when their human
+prerequisites remain unavailable. The unattended session records the selection,
+bindings, reports and policy decisions under
+`quality/reviews/2026-10-13-autonomous/`.
+
+The user subsequently resumed interactive human review. Keep the unattended
+records frozen and start a fresh declared development batch. Exclude previously
+scanned source IDs and native byte hashes when selecting fresh blind readings.
+Record the returning human's alias and passage-specific prior prediction
+exposure; unknown exposure remains unknown. Include a direct reading link within
+the presentation limit. The resumed batch and source bindings are recorded in
+`quality/reviews/2026-10-13-human-resume/`. Do not generate predictions for its
+source until accepted initial batch labels are frozen.
+
+The user then requested agents as reviewers. Retire pending human questions
+without inferring answers and reuse R005's exact scope in separate agent records.
+Use two fresh contexts with predictions and other judgments withheld, preserve
+original labels, and record any third-agent adjudication separately. Keep
+root-authored challenges distinct from natural sources and document author
+implementation familiarity. Agent suggestion judgments stay outside the human
+usefulness schema. Independent human claims and holdout prerequisites remain.
+
+## Current autonomous merge scope
+
+On 2026-10-16 the user requested plans that complete without human interaction.
+The active [merge plan](../../PLAN.md) uses separate agent judgments for the
+prepared development batch and retains all original review provenance. A missing
+human judgment remains unavailable. Independent human research, reserved holdout
+evaluation, optional acquisition and publication are outside this task's scope.
+Requirements for scientific claims, source reuse and publication still apply
+to any future work. Retaining the current policy is a complete
+decision when evidence does not support promotion; it needs no human response.
 
 ## First pass
 
@@ -87,8 +127,25 @@ representative population coverage. Too few groups and zero denominators
 produce unavailable intervals with reasons.
 
 Independent quality targets, semantic conclusions, candidate promotion and the
-one-time holdout run remain deferred. Declare populations, targets, minimum
+one-time holdout run await accepted development evidence. Declare populations, targets, minimum
 sample/group support and the treatment of unavailable metrics before that run.
 Freeze the candidate and initial adjudicated labels first. If holdout evidence
 causes tuning, classify inspected material as development and reserve fresh
 source groups. Do not reuse it silently for another independent claim.
+
+
+## Interactive source presentation
+
+Record the reading's source identity/hash, declared contracts, exact original
+region and complete rendered-text hash before asking for judgments. Show explicit
+physical line and exclusive character ranges for display continuations; preserve
+literal chunks and original line endings in the reading map. The original bytes
+stay unchanged. Reject an oversized reading instead of silently truncating it.
+
+Retain literal answers separately from proposed annotation mappings. Confirm any
+agent-derived interpretation or coordinates before accepting labels. A clean
+answer covers only the displayed region and named rules; omitted text and rules
+remain unreviewed. Missing context remains unsupported or context-dependent.
+One session user supplies one review; independent double annotation requires a
+second human reviewer. Keep predictions and native revisions withheld until the
+accepted initial labels for the declared review batch are frozen.

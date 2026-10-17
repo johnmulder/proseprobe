@@ -1,0 +1,446 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A025.txt",
+  "packet_path": "originals/0005.py",
+  "pair_group": "psf/requests:src/requests/cookies.py",
+  "reading_id": "A025",
+  "region": {
+    "column": 1,
+    "end_column": 1,
+    "end_line": 560,
+    "line": 521
+  },
+  "rendered_sha256": "bce6faf6c1fb151bbaad1bf3708b6d3abfca78c47329bf05229b8a96710f9d6d",
+  "rendered_text": "Blind agent reading A025: natural.\nReading file: [A025](/private/tmp/proseprobe-A025.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL521 C 1-54 | def cookiejar_from_dict(cookie_dict, cookiejar=None, \nL521 C54-70 | overwrite=True):\nL522 C 1-56 |     \"\"\"Returns a CookieJar from a key/value dictionary.\nL523 C 1- 1 | \nL524 C 1-59 |     :param cookie_dict: Dict of key/values to insert into \nL524 C59-69 | CookieJar.\nL525 C 1-65 |     :param cookiejar: (optional) A cookiejar to add the cookies \nL525 C65-68 | to.\nL526 C 1-61 |     :param overwrite: (optional) If False, will not replace \nL526 C61-68 | cookies\nL527 C 1-42 |         already in the jar with new ones.\nL528 C 1-22 |     :rtype: CookieJar\nL529 C 1- 8 |     \"\"\"\nL530 C 1-26 |     if cookiejar is None:\nL531 C 1-40 |         cookiejar = RequestsCookieJar()\nL532 C 1- 1 | \nL533 C 1-32 |     if cookie_dict is not None:\nL534 C 1-63 |         names_from_jar = [cookie.name for cookie in cookiejar]\nL535 C 1-33 |         for name in cookie_dict:\nL536 C 1-58 |             if overwrite or (name not in names_from_jar):\nL537 C 1-58 |                 cookiejar.set_cookie(create_cookie(name, \nL537 C58-77 | cookie_dict[name]))\nL538 C 1- 1 | \nL539 C 1-21 |     return cookiejar\nL540 C 1- 1 | \nL541 C 1- 1 | \nL542 C 1-39 | def merge_cookies(cookiejar, cookies):\nL543 C 1-64 |     \"\"\"Add cookies to cookiejar and returns a merged CookieJar.\nL544 C 1- 1 | \nL545 C 1-62 |     :param cookiejar: CookieJar object to add the cookies to.\nL546 C 1-64 |     :param cookies: Dictionary or CookieJar object to be added.\nL547 C 1-22 |     :rtype: CookieJar\nL548 C 1- 8 |     \"\"\"\nL549 C 1-55 |     if not isinstance(cookiejar, cookielib.CookieJar):\nL550 C 1-62 |         raise ValueError(\"You can only merge into CookieJar\")\nL551 C 1- 1 | \nL552 C 1-34 |     if isinstance(cookies, dict):\nL553 C 1-50 |         cookiejar = cookiejar_from_dict(cookies, \nL553 C50-87 | cookiejar=cookiejar, overwrite=False)\nL554 C 1-51 |     elif isinstance(cookies, cookielib.CookieJar):\nL555 C 1-13 |         try:\nL556 C 1-38 |             cookiejar.update(cookies)\nL557 C 1-31 |         except AttributeError:\nL558 C 1-42 |             for cookie_in_jar in cookies:\nL559 C 1-52 |                 cookiejar.set_cookie(cookie_in_jar)\nL560 C 1- 1 | \n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 54,
+      "end_line": 521,
+      "line": 521,
+      "reading_line": 13,
+      "source_line_ending": "",
+      "text": "def cookiejar_from_dict(cookie_dict, cookiejar=None, "
+    },
+    {
+      "column": 54,
+      "end_column": 70,
+      "end_line": 521,
+      "line": 521,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "overwrite=True):"
+    },
+    {
+      "column": 1,
+      "end_column": 56,
+      "end_line": 522,
+      "line": 522,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "    \"\"\"Returns a CookieJar from a key/value dictionary."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 523,
+      "line": 523,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 59,
+      "end_line": 524,
+      "line": 524,
+      "reading_line": 17,
+      "source_line_ending": "",
+      "text": "    :param cookie_dict: Dict of key/values to insert into "
+    },
+    {
+      "column": 59,
+      "end_column": 69,
+      "end_line": 524,
+      "line": 524,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "CookieJar."
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 525,
+      "line": 525,
+      "reading_line": 19,
+      "source_line_ending": "",
+      "text": "    :param cookiejar: (optional) A cookiejar to add the cookies "
+    },
+    {
+      "column": 65,
+      "end_column": 68,
+      "end_line": 525,
+      "line": 525,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "to."
+    },
+    {
+      "column": 1,
+      "end_column": 61,
+      "end_line": 526,
+      "line": 526,
+      "reading_line": 21,
+      "source_line_ending": "",
+      "text": "    :param overwrite: (optional) If False, will not replace "
+    },
+    {
+      "column": 61,
+      "end_column": 68,
+      "end_line": 526,
+      "line": 526,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "cookies"
+    },
+    {
+      "column": 1,
+      "end_column": 42,
+      "end_line": 527,
+      "line": 527,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "        already in the jar with new ones."
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 528,
+      "line": 528,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "    :rtype: CookieJar"
+    },
+    {
+      "column": 1,
+      "end_column": 8,
+      "end_line": 529,
+      "line": 529,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": "    \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 530,
+      "line": 530,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "    if cookiejar is None:"
+    },
+    {
+      "column": 1,
+      "end_column": 40,
+      "end_line": 531,
+      "line": 531,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "        cookiejar = RequestsCookieJar()"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 532,
+      "line": 532,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 32,
+      "end_line": 533,
+      "line": 533,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": "    if cookie_dict is not None:"
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 534,
+      "line": 534,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": "        names_from_jar = [cookie.name for cookie in cookiejar]"
+    },
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 535,
+      "line": 535,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "        for name in cookie_dict:"
+    },
+    {
+      "column": 1,
+      "end_column": 58,
+      "end_line": 536,
+      "line": 536,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "            if overwrite or (name not in names_from_jar):"
+    },
+    {
+      "column": 1,
+      "end_column": 58,
+      "end_line": 537,
+      "line": 537,
+      "reading_line": 33,
+      "source_line_ending": "",
+      "text": "                cookiejar.set_cookie(create_cookie(name, "
+    },
+    {
+      "column": 58,
+      "end_column": 77,
+      "end_line": 537,
+      "line": 537,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "cookie_dict[name]))"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 538,
+      "line": 538,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 539,
+      "line": 539,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "    return cookiejar"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 540,
+      "line": 540,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 541,
+      "line": 541,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 39,
+      "end_line": 542,
+      "line": 542,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": "def merge_cookies(cookiejar, cookies):"
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 543,
+      "line": 543,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": "    \"\"\"Add cookies to cookiejar and returns a merged CookieJar."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 544,
+      "line": 544,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 62,
+      "end_line": 545,
+      "line": 545,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": "    :param cookiejar: CookieJar object to add the cookies to."
+    },
+    {
+      "column": 1,
+      "end_column": 64,
+      "end_line": 546,
+      "line": 546,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "    :param cookies: Dictionary or CookieJar object to be added."
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 547,
+      "line": 547,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "    :rtype: CookieJar"
+    },
+    {
+      "column": 1,
+      "end_column": 8,
+      "end_line": 548,
+      "line": 548,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": "    \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 55,
+      "end_line": 549,
+      "line": 549,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "    if not isinstance(cookiejar, cookielib.CookieJar):"
+    },
+    {
+      "column": 1,
+      "end_column": 62,
+      "end_line": 550,
+      "line": 550,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "        raise ValueError(\"You can only merge into CookieJar\")"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 551,
+      "line": 551,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 34,
+      "end_line": 552,
+      "line": 552,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": "    if isinstance(cookies, dict):"
+    },
+    {
+      "column": 1,
+      "end_column": 50,
+      "end_line": 553,
+      "line": 553,
+      "reading_line": 50,
+      "source_line_ending": "",
+      "text": "        cookiejar = cookiejar_from_dict(cookies, "
+    },
+    {
+      "column": 50,
+      "end_column": 87,
+      "end_line": 553,
+      "line": 553,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "cookiejar=cookiejar, overwrite=False)"
+    },
+    {
+      "column": 1,
+      "end_column": 51,
+      "end_line": 554,
+      "line": 554,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": "    elif isinstance(cookies, cookielib.CookieJar):"
+    },
+    {
+      "column": 1,
+      "end_column": 13,
+      "end_line": 555,
+      "line": 555,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": "        try:"
+    },
+    {
+      "column": 1,
+      "end_column": 38,
+      "end_line": 556,
+      "line": 556,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "            cookiejar.update(cookies)"
+    },
+    {
+      "column": 1,
+      "end_column": 31,
+      "end_line": 557,
+      "line": 557,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": "        except AttributeError:"
+    },
+    {
+      "column": 1,
+      "end_column": 42,
+      "end_line": 558,
+      "line": 558,
+      "reading_line": 56,
+      "source_line_ending": "\n",
+      "text": "            for cookie_in_jar in cookies:"
+    },
+    {
+      "column": 1,
+      "end_column": 52,
+      "end_line": 559,
+      "line": 559,
+      "reading_line": 57,
+      "source_line_ending": "\n",
+      "text": "                cookiejar.set_cookie(cookie_in_jar)"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 560,
+      "line": 560,
+      "reading_line": 58,
+      "source_line_ending": "\n",
+      "text": ""
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+  "split": "development",
+  "version": 1
+}

@@ -1,0 +1,25 @@
+{
+  "command": "make check dogfood rule-quality-regression",
+  "curated_all_rules": {
+    "fn": 0,
+    "fp": 6,
+    "gate": "passed; six exact known mismatches retained",
+    "tp": 366
+  },
+  "curated_production": {
+    "fn": 0,
+    "fp": 4,
+    "gate": "passed; four exact known mismatches retained",
+    "tp": 106
+  },
+  "dogfood": "passed; existing baseline unchanged",
+  "exit_code": 0,
+  "generated_rule_docs": "current",
+  "log_location": "/private/tmp/proseprobe-autonomous-gates.log",
+  "log_sha256": "aa232cdf8a74a508146d32fa444c41f69cd0f56f9af5a913f0cb6343d4094d18",
+  "mypy": "passed; 31 source files",
+  "ruff": "passed",
+  "scope": "engineering regression checks; no external holdout evaluation",
+  "tests_passed": 3513,
+  "version": 1
+}

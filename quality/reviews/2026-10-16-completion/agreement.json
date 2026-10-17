@@ -1,0 +1,20 @@
+{
+  "actor_type": "agent",
+  "agree_clean": 2,
+  "agree_positive": 0,
+  "disagreements": 0,
+  "human_agreement_measured": false,
+  "raw_reviews": {
+    "quality/reviews/2026-10-16-completion/review.agent-a.json": "7f8f98cec33f994655648dcfcff5c22b1077def375dd001c059c675d520eb59e",
+    "quality/reviews/2026-10-16-completion/review.agent-b.json": "67dfa46a9006f79ef410ea482f1e23fdb8a4b6459eb8af6371566cd472804c71"
+  },
+  "reviewed_sources": 1,
+  "reviewers": [
+    "codex-agent:/root/blind_m012_a",
+    "codex-agent:/root/blind_m012_b"
+  ],
+  "source_groups": 1,
+  "supported_reference_judgment_pairs": 2,
+  "unresolved": 0,
+  "version": 1
+}

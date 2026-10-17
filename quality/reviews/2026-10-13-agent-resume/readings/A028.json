@@ -1,0 +1,392 @@
+{
+  "cohort": "authored-challenge",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A028.txt",
+  "packet_path": "originals/0001.py",
+  "pair_group": "agent-authored-pilot:documentation.py",
+  "reading_id": "A028",
+  "region": {
+    "column": 1,
+    "end_column": 1,
+    "end_line": 40,
+    "line": 1
+  },
+  "rendered_sha256": "98f01f623ff22668c7f64508250a2fce1ee67568e05e3982f1e1d2be0823daa3",
+  "rendered_text": "Blind agent reading A028: authored-challenge.\nReading file: [A028](/private/tmp/proseprobe-A028.txt)\nAttribution: Root agent authored challenge; project MIT license.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL 1 C 1-36 | from abc import ABC, abstractmethod\nL 2 C 1- 1 | \nL 3 C 1- 1 | \nL 4 C 1-36 | def fetch(target, *extras) -> None:\nL 5 C 1-23 |     \"\"\"Fetch a record.\nL 6 C 1- 1 | \nL 7 C 1-41 |     :param attempts: Number of attempts.\nL 8 C 1-51 |     :param **extras: Additional positional values.\nL 9 C 1-16 |     :rtype: int\nL10 C 1- 8 |     \"\"\"\nL11 C 1-11 |     # TODO\nL12 C 1-48 |     raise NotImplementedError(\"Add logic here\")\nL13 C 1- 1 | \nL14 C 1- 1 | \nL15 C 1-19 | class Reader(ABC):\nL16 C 1-20 |     @abstractmethod\nL17 C 1-28 |     def read(self) -> None:\nL18 C 1-26 |         \"\"\"Read a record.\nL19 C 1- 1 | \nL20 C 1-21 |         :rtype: None\nL21 C 1-12 |         \"\"\"\nL22 C 1-12 |         ...\nL23 C 1- 1 | \nL24 C 1- 1 | \nL25 C 1-47 | def checked(path, *extras, **options) -> None:\nL26 C 1-32 |     \"\"\"Read the the input file.\nL27 C 1- 1 | \nL28 C 1-29 |     :param path: Input path.\nL29 C 1-50 |     :param *extras: Additional positional values.\nL30 C 1-49 |     :param **options: Additional keyword values.\nL31 C 1-46 |     :param timeout: Forwarded keyword option.\nL32 C 1-17 |     :rtype: None\nL33 C 1- 8 |     \"\"\"\nL34 C 1-61 |     # TODO: Add retry logic for network failures (issue #42)\nL35 C 1-16 |     return None\nL36 C 1- 1 | \nL37 C 1- 1 | \nL38 C 1-28 | def decode(payload) -> str:\nL39 C 1-25 |     \"\"\"Decode a payload.\nL40 C 1- 1 | \n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 36,
+      "end_line": 1,
+      "line": 1,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "from abc import ABC, abstractmethod"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 2,
+      "line": 2,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 3,
+      "line": 3,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 36,
+      "end_line": 4,
+      "line": 4,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": "def fetch(target, *extras) -> None:"
+    },
+    {
+      "column": 1,
+      "end_column": 23,
+      "end_line": 5,
+      "line": 5,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "    \"\"\"Fetch a record."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 6,
+      "line": 6,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 41,
+      "end_line": 7,
+      "line": 7,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "    :param attempts: Number of attempts."
+    },
+    {
+      "column": 1,
+      "end_column": 51,
+      "end_line": 8,
+      "line": 8,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "    :param **extras: Additional positional values."
+    },
+    {
+      "column": 1,
+      "end_column": 16,
+      "end_line": 9,
+      "line": 9,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "    :rtype: int"
+    },
+    {
+      "column": 1,
+      "end_column": 8,
+      "end_line": 10,
+      "line": 10,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "    \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 11,
+      "end_line": 11,
+      "line": 11,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "    # TODO"
+    },
+    {
+      "column": 1,
+      "end_column": 48,
+      "end_line": 12,
+      "line": 12,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": "    raise NotImplementedError(\"Add logic here\")"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 13,
+      "line": 13,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 14,
+      "line": 14,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 19,
+      "end_line": 15,
+      "line": 15,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "class Reader(ABC):"
+    },
+    {
+      "column": 1,
+      "end_column": 20,
+      "end_line": 16,
+      "line": 16,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": "    @abstractmethod"
+    },
+    {
+      "column": 1,
+      "end_column": 28,
+      "end_line": 17,
+      "line": 17,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": "    def read(self) -> None:"
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 18,
+      "line": 18,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": "        \"\"\"Read a record."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 19,
+      "line": 19,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 20,
+      "line": 20,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "        :rtype: None"
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 21,
+      "line": 21,
+      "reading_line": 33,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 22,
+      "line": 22,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "        ..."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 23,
+      "line": 23,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 24,
+      "line": 24,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 47,
+      "end_line": 25,
+      "line": 25,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": "def checked(path, *extras, **options) -> None:"
+    },
+    {
+      "column": 1,
+      "end_column": 32,
+      "end_line": 26,
+      "line": 26,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": "    \"\"\"Read the the input file."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 27,
+      "line": 27,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 29,
+      "end_line": 28,
+      "line": 28,
+      "reading_line": 40,
+      "source_line_ending": "\n",
+      "text": "    :param path: Input path."
+    },
+    {
+      "column": 1,
+      "end_column": 50,
+      "end_line": 29,
+      "line": 29,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "    :param *extras: Additional positional values."
+    },
+    {
+      "column": 1,
+      "end_column": 49,
+      "end_line": 30,
+      "line": 30,
+      "reading_line": 42,
+      "source_line_ending": "\n",
+      "text": "    :param **options: Additional keyword values."
+    },
+    {
+      "column": 1,
+      "end_column": 46,
+      "end_line": 31,
+      "line": 31,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "    :param timeout: Forwarded keyword option."
+    },
+    {
+      "column": 1,
+      "end_column": 17,
+      "end_line": 32,
+      "line": 32,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "    :rtype: None"
+    },
+    {
+      "column": 1,
+      "end_column": 8,
+      "end_line": 33,
+      "line": 33,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": "    \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 61,
+      "end_line": 34,
+      "line": 34,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "    # TODO: Add retry logic for network failures (issue #42)"
+    },
+    {
+      "column": 1,
+      "end_column": 16,
+      "end_line": 35,
+      "line": 35,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "    return None"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 36,
+      "line": 36,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 37,
+      "line": 37,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 28,
+      "end_line": 38,
+      "line": 38,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": "def decode(payload) -> str:"
+    },
+    {
+      "column": 1,
+      "end_column": 25,
+      "end_line": 39,
+      "line": 39,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "    \"\"\"Decode a payload."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 40,
+      "line": 40,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": ""
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "cb7cc206eb225cd360e184854ef42ba9197001195e6c9d84e30b33b41f366218",
+  "source_group": "agent-authored-pilot",
+  "source_id": "agent-authored-pilot:documentation.py",
+  "split": "development",
+  "version": 1
+}

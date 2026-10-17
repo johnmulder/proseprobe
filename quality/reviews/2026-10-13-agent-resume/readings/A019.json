@@ -1,0 +1,419 @@
+{
+  "cohort": "natural",
+  "format": "python",
+  "linked_text_path": "/private/tmp/proseprobe-A019.txt",
+  "packet_path": "originals/0005.py",
+  "pair_group": "psf/requests:src/requests/cookies.py",
+  "reading_id": "A019",
+  "region": {
+    "column": 1,
+    "end_column": 1,
+    "end_line": 320,
+    "line": 281
+  },
+  "rendered_sha256": "9fa13aa8b190643b186bd8ed1a14d635a36774385383cb73209f856465f3809a",
+  "rendered_text": "Blind agent reading A019: natural.\nReading file: [A019](/private/tmp/proseprobe-A019.txt)\nAttribution: Requests authors/contributors; Apache-2.0.\nUse the frozen contracts and source context; predictions are withheld.\nCheck every applicable named rule, retaining exact spans and reasons.\nOther chunks of this source are available as signature/binding context.\nMissing generated context stays unsupported or context-dependent.\nRules: G038, G039, V015, V016, C004, C009, C010\nRows are display chunks; L/C ranges refer to original code points.\nCharacter endpoints are exclusive; original line endings are mapped.\n\n```text\nL281 C 1-45 |             if cookie.domain not in domains:\nL282 C 1-46 |                 domains.append(cookie.domain)\nL283 C 1-23 |         return domains\nL284 C 1- 1 | \nL285 C 1-26 |     def list_paths(self):\nL286 C 1-63 |         \"\"\"Utility method to list all the paths in the jar.\"\"\"\nL287 C 1-19 |         paths = []\nL288 C 1-34 |         for cookie in iter(self):\nL289 C 1-41 |             if cookie.path not in paths:\nL290 C 1-42 |                 paths.append(cookie.path)\nL291 C 1-21 |         return paths\nL292 C 1- 1 | \nL293 C 1-32 |     def multiple_domains(self):\nL294 C 1-66 |         \"\"\"Returns True if there are multiple domains in the jar.\nL295 C 1-33 |         Returns False otherwise.\nL296 C 1- 1 | \nL297 C 1-21 |         :rtype: bool\nL298 C 1-12 |         \"\"\"\nL299 C 1-21 |         domains = []\nL300 C 1-34 |         for cookie in iter(self):\nL301 C 1-63 |             if cookie.domain is not None and cookie.domain in \nL301 C63-71 | domains:\nL302 C 1-28 |                 return True\nL303 C 1-42 |             domains.append(cookie.domain)\nL304 C 1-56 |         return False  # there is only one domain in jar\nL305 C 1- 1 | \nL306 C 1-48 |     def get_dict(self, domain=None, path=None):\nL307 C 1-65 |         \"\"\"Takes as an argument an optional domain and path and \nL307 C65-80 | returns a plain\nL308 C 1-66 |         old Python dict of name-value pairs of cookies that meet \nL308 C66-69 | the\nL309 C 1-22 |         requirements.\nL310 C 1- 1 | \nL311 C 1-21 |         :rtype: dict\nL312 C 1-12 |         \"\"\"\nL313 C 1-24 |         dictionary = {}\nL314 C 1-34 |         for cookie in iter(self):\nL315 C 1-65 |             if (domain is None or cookie.domain == domain) and (\nL316 C 1-52 |                 path is None or cookie.path == path\nL317 C 1-15 |             ):\nL318 C 1-55 |                 dictionary[cookie.name] = cookie.value\nL319 C 1-26 |         return dictionary\nL320 C 1- 1 | \n```\n\nRecord each issue with rule, exact source span, quote and reason.\nOtherwise record reviewed clean, unsupported, or context-dependent.\nThese are agent judgments; no human annotation is implied.\n",
+  "rows": [
+    {
+      "column": 1,
+      "end_column": 45,
+      "end_line": 281,
+      "line": 281,
+      "reading_line": 13,
+      "source_line_ending": "\n",
+      "text": "            if cookie.domain not in domains:"
+    },
+    {
+      "column": 1,
+      "end_column": 46,
+      "end_line": 282,
+      "line": 282,
+      "reading_line": 14,
+      "source_line_ending": "\n",
+      "text": "                domains.append(cookie.domain)"
+    },
+    {
+      "column": 1,
+      "end_column": 23,
+      "end_line": 283,
+      "line": 283,
+      "reading_line": 15,
+      "source_line_ending": "\n",
+      "text": "        return domains"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 284,
+      "line": 284,
+      "reading_line": 16,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 285,
+      "line": 285,
+      "reading_line": 17,
+      "source_line_ending": "\n",
+      "text": "    def list_paths(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 286,
+      "line": 286,
+      "reading_line": 18,
+      "source_line_ending": "\n",
+      "text": "        \"\"\"Utility method to list all the paths in the jar.\"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 19,
+      "end_line": 287,
+      "line": 287,
+      "reading_line": 19,
+      "source_line_ending": "\n",
+      "text": "        paths = []"
+    },
+    {
+      "column": 1,
+      "end_column": 34,
+      "end_line": 288,
+      "line": 288,
+      "reading_line": 20,
+      "source_line_ending": "\n",
+      "text": "        for cookie in iter(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 41,
+      "end_line": 289,
+      "line": 289,
+      "reading_line": 21,
+      "source_line_ending": "\n",
+      "text": "            if cookie.path not in paths:"
+    },
+    {
+      "column": 1,
+      "end_column": 42,
+      "end_line": 290,
+      "line": 290,
+      "reading_line": 22,
+      "source_line_ending": "\n",
+      "text": "                paths.append(cookie.path)"
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 291,
+      "line": 291,
+      "reading_line": 23,
+      "source_line_ending": "\n",
+      "text": "        return paths"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 292,
+      "line": 292,
+      "reading_line": 24,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 32,
+      "end_line": 293,
+      "line": 293,
+      "reading_line": 25,
+      "source_line_ending": "\n",
+      "text": "    def multiple_domains(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 294,
+      "line": 294,
+      "reading_line": 26,
+      "source_line_ending": "\n",
+      "text": "        \"\"\"Returns True if there are multiple domains in the jar."
+    },
+    {
+      "column": 1,
+      "end_column": 33,
+      "end_line": 295,
+      "line": 295,
+      "reading_line": 27,
+      "source_line_ending": "\n",
+      "text": "        Returns False otherwise."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 296,
+      "line": 296,
+      "reading_line": 28,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 297,
+      "line": 297,
+      "reading_line": 29,
+      "source_line_ending": "\n",
+      "text": "        :rtype: bool"
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 298,
+      "line": 298,
+      "reading_line": 30,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 299,
+      "line": 299,
+      "reading_line": 31,
+      "source_line_ending": "\n",
+      "text": "        domains = []"
+    },
+    {
+      "column": 1,
+      "end_column": 34,
+      "end_line": 300,
+      "line": 300,
+      "reading_line": 32,
+      "source_line_ending": "\n",
+      "text": "        for cookie in iter(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 63,
+      "end_line": 301,
+      "line": 301,
+      "reading_line": 33,
+      "source_line_ending": "",
+      "text": "            if cookie.domain is not None and cookie.domain in "
+    },
+    {
+      "column": 63,
+      "end_column": 71,
+      "end_line": 301,
+      "line": 301,
+      "reading_line": 34,
+      "source_line_ending": "\n",
+      "text": "domains:"
+    },
+    {
+      "column": 1,
+      "end_column": 28,
+      "end_line": 302,
+      "line": 302,
+      "reading_line": 35,
+      "source_line_ending": "\n",
+      "text": "                return True"
+    },
+    {
+      "column": 1,
+      "end_column": 42,
+      "end_line": 303,
+      "line": 303,
+      "reading_line": 36,
+      "source_line_ending": "\n",
+      "text": "            domains.append(cookie.domain)"
+    },
+    {
+      "column": 1,
+      "end_column": 56,
+      "end_line": 304,
+      "line": 304,
+      "reading_line": 37,
+      "source_line_ending": "\n",
+      "text": "        return False  # there is only one domain in jar"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 305,
+      "line": 305,
+      "reading_line": 38,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 48,
+      "end_line": 306,
+      "line": 306,
+      "reading_line": 39,
+      "source_line_ending": "\n",
+      "text": "    def get_dict(self, domain=None, path=None):"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 307,
+      "line": 307,
+      "reading_line": 40,
+      "source_line_ending": "",
+      "text": "        \"\"\"Takes as an argument an optional domain and path and "
+    },
+    {
+      "column": 65,
+      "end_column": 80,
+      "end_line": 307,
+      "line": 307,
+      "reading_line": 41,
+      "source_line_ending": "\n",
+      "text": "returns a plain"
+    },
+    {
+      "column": 1,
+      "end_column": 66,
+      "end_line": 308,
+      "line": 308,
+      "reading_line": 42,
+      "source_line_ending": "",
+      "text": "        old Python dict of name-value pairs of cookies that meet "
+    },
+    {
+      "column": 66,
+      "end_column": 69,
+      "end_line": 308,
+      "line": 308,
+      "reading_line": 43,
+      "source_line_ending": "\n",
+      "text": "the"
+    },
+    {
+      "column": 1,
+      "end_column": 22,
+      "end_line": 309,
+      "line": 309,
+      "reading_line": 44,
+      "source_line_ending": "\n",
+      "text": "        requirements."
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 310,
+      "line": 310,
+      "reading_line": 45,
+      "source_line_ending": "\n",
+      "text": ""
+    },
+    {
+      "column": 1,
+      "end_column": 21,
+      "end_line": 311,
+      "line": 311,
+      "reading_line": 46,
+      "source_line_ending": "\n",
+      "text": "        :rtype: dict"
+    },
+    {
+      "column": 1,
+      "end_column": 12,
+      "end_line": 312,
+      "line": 312,
+      "reading_line": 47,
+      "source_line_ending": "\n",
+      "text": "        \"\"\""
+    },
+    {
+      "column": 1,
+      "end_column": 24,
+      "end_line": 313,
+      "line": 313,
+      "reading_line": 48,
+      "source_line_ending": "\n",
+      "text": "        dictionary = {}"
+    },
+    {
+      "column": 1,
+      "end_column": 34,
+      "end_line": 314,
+      "line": 314,
+      "reading_line": 49,
+      "source_line_ending": "\n",
+      "text": "        for cookie in iter(self):"
+    },
+    {
+      "column": 1,
+      "end_column": 65,
+      "end_line": 315,
+      "line": 315,
+      "reading_line": 50,
+      "source_line_ending": "\n",
+      "text": "            if (domain is None or cookie.domain == domain) and ("
+    },
+    {
+      "column": 1,
+      "end_column": 52,
+      "end_line": 316,
+      "line": 316,
+      "reading_line": 51,
+      "source_line_ending": "\n",
+      "text": "                path is None or cookie.path == path"
+    },
+    {
+      "column": 1,
+      "end_column": 15,
+      "end_line": 317,
+      "line": 317,
+      "reading_line": 52,
+      "source_line_ending": "\n",
+      "text": "            ):"
+    },
+    {
+      "column": 1,
+      "end_column": 55,
+      "end_line": 318,
+      "line": 318,
+      "reading_line": 53,
+      "source_line_ending": "\n",
+      "text": "                dictionary[cookie.name] = cookie.value"
+    },
+    {
+      "column": 1,
+      "end_column": 26,
+      "end_line": 319,
+      "line": 319,
+      "reading_line": 54,
+      "source_line_ending": "\n",
+      "text": "        return dictionary"
+    },
+    {
+      "column": 1,
+      "end_column": 1,
+      "end_line": 320,
+      "line": 320,
+      "reading_line": 55,
+      "source_line_ending": "\n",
+      "text": ""
+    }
+  ],
+  "rule_ids": [
+    "G038",
+    "G039",
+    "V015",
+    "V016",
+    "C004",
+    "C009",
+    "C010"
+  ],
+  "sha256": "6cd8be8aa123e0d3d9d34fa86feac7bf392f39bccdde5129830de0ea9692dd7c",
+  "source_group": "psf/requests",
+  "source_id": "psf/requests:0e322af87745eff34caffe4df68456ebc20d9068:src/requests/cookies.py",
+  "split": "development",
+  "version": 1
+}

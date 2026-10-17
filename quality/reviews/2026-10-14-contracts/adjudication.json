@@ -1,0 +1,256 @@
+{
+  "version": 1,
+  "actor": {
+    "id": "/root/contracts_adjudicator",
+    "role": "agent contract adjudicator",
+    "human_review": false,
+    "independent_first_review": false
+  },
+  "purpose": "Resolve exposed development contract disagreements. This is neither blind evaluation nor evidence of human effectiveness.",
+  "actual_exposure": {
+    "instruction_files_read": [
+      "/Users/johnmulder/.codex/RTK.md"
+    ],
+    "task_evidence_files_read": [
+      "quality/reviews/2026-10-14-contracts/readings/K001.md",
+      "quality/reviews/2026-10-14-contracts/readings/K002.md",
+      "quality/reviews/2026-10-14-contracts/readings/K003.md",
+      "quality/reviews/2026-10-14-contracts/readings/K004.md",
+      "quality/reviews/2026-10-14-contracts/inputs.json",
+      "quality/reviews/2026-10-14-contracts/review.agent-a.json",
+      "quality/reviews/2026-10-14-contracts/review.agent-b.json"
+    ],
+    "parent_summary_exposure": "The assignment summarized both reviewers' agreements and C009 disagreement, proposed the six-message C004 intersection and strict call shape, and required existing whole raise/call highlighting and immutable historical labels. The complete new reviews were then read before this decision.",
+    "prior_diagnostics_visible": true,
+    "prior_span_differences_visible": true,
+    "prior_adjudication_summary_visible": true,
+    "both_new_reviews_read": true,
+    "public_contract_source": "Quoted excerpts in K001-K004 only; docs/rules.md itself was not opened.",
+    "referenced_hash_targets_opened": false,
+    "linked_temporary_views_opened": false,
+    "detector_source_opened": false,
+    "tests_opened_or_run": false,
+    "old_annotation_files_opened": false,
+    "reserved_holdout_opened": false,
+    "subject_code_executed_or_imported": false,
+    "git_mutations": false,
+    "tooling": "File reads, SHA-256 hashing of the two permitted new review files, and writing this new adjudication only. No detector, test, or evaluation code was executed.",
+    "limits": [
+      "The wrapped Requests docstring is display context, not a changed or inspected byte-bound original.",
+      "The public contracts and old outcomes are known only through the supplied bounded readings.",
+      "These are accepted development criteria and test requirements, not observations that the unseen implementation already satisfies them."
+    ]
+  },
+  "original_review_provenance": {
+    "agent_a": {
+      "path": "quality/reviews/2026-10-14-contracts/review.agent-a.json",
+      "sha256": "734f1250e4c984b5b66038b098b2343ecaa3186dfa9cadff44012410cf7aa49e",
+      "modified_by_adjudicator": false
+    },
+    "agent_b": {
+      "path": "quality/reviews/2026-10-14-contracts/review.agent-b.json",
+      "sha256": "b26efe53f6ea71cd87018a29a0060edc1c9a96658e7ffbc19181ac1dd558ecce",
+      "modified_by_adjudicator": false
+    }
+  },
+  "historical_artifact_policy": {
+    "frozen_labels_mutable": false,
+    "frozen_artifacts_modified": false,
+    "new_candidate_contracts_separate": true,
+    "effectiveness_claims": false
+  },
+  "shared_span_convention": {
+    "coordinates": "Original source, one-based lines and Unicode-code-point columns, end-exclusive.",
+    "source_fidelity": "A highlight must equal its exact original source slice. Preserve internal whitespace, indentation, and newlines inside a selected multiline phrase.",
+    "evidence_scope": "The owning signature, predicate, surrounding context, or decoded literal can supply evidence without enlarging the highlighted source unit.",
+    "implementation_status": "Unicode and multiline mapping are contract requirements to test, not verified claims about the unseen implementation."
+  },
+  "decisions": [
+    {
+      "id": "K001",
+      "rule": "C004",
+      "decision": "Require finite positive literal-message evidence for executable placeholders, and highlight only the eligible context-free comment marker.",
+      "contract_status": "Clarify the previously unspecified positive-message evidence and comment highlight unit. Preserve parsed-raise and recognized abstract/typing-stub exemptions.",
+      "accepted_executable_criteria": {
+        "preconditions": [
+          "Successfully parse an actual Python raise statement.",
+          "Its exception is a call to the simple name NotImplementedError.",
+          "The call has exactly one positional argument and no keyword arguments; the argument is a literal AST Constant whose value is str.",
+          "Apply existing recognized abstract/typing-stub exemptions to the owning function before reporting."
+        ],
+        "closed_normalized_message_set": [
+          "todo",
+          "fixme",
+          "xxx",
+          "add logic here",
+          "unfinished",
+          "not implemented yet"
+        ],
+        "normalization_in_order": [
+          "Trim ASCII whitespace and collapse each internal run of ASCII whitespace to one U+0020 space. ASCII whitespace means U+0009 through U+000D and U+0020 only.",
+          "Apply Unicode casefold to the resulting string.",
+          "Remove at most one final ASCII period U+002E, if present.",
+          "Compare the entire result exactly with the closed set. Perform no additional trimming, punctuation removal, substring matching, stemming, similarity matching, or intent inference."
+        ],
+        "normalization_boundaries": [
+          "Uppercase and ASCII whitespace variants, including leading and trailing ASCII whitespace, are accepted when they normalize to a member.",
+          "An attached single final period is accepted; exclamation marks, two final periods, extra words, and Unicode whitespace do not receive special normalization.",
+          "The value unfinished . is not accepted: removing its final period leaves a trailing space and therefore no exact set member."
+        ],
+        "call_shape_boundaries": [
+          "Bare NotImplementedError, a zero-argument call, empty strings, additional positional arguments, keyword arguments, variables, bytes, f-strings, qualified callees, aliases, and other exception classes do not satisfy this branch.",
+          "A raise cause does not change the exception-call criterion: raise NotImplementedError(\"unfinished\") from exc qualifies outside exemptions.",
+          "Literal decoding and parser-supported adjacent literal concatenation may supply a Constant str value. They do not introduce message-payload source highlighting."
+        ],
+        "nonmatch_meaning": "Emit no executable C004 finding for every other shape or message. A nonmatch does not prove completion or intentional rejection; independent existing comment/prose checks may still apply.",
+        "extension_policy": "Do not add messages to preserve old test fixtures or improve historical scores. Any vocabulary or shape expansion requires separate justification, positive fixtures, and intentional-rejection near misses."
+      },
+      "supplied_classifications": [
+        {
+          "case": "Requests add_header",
+          "executable_finding": false,
+          "reason": "The complete message Cookie headers should be added with add_unredirected_header() is outside the closed set. Its concrete replacement instruction supports the human reading of deliberate rejection, but classification needs no intent guess or wrapped docstring."
+        },
+        {
+          "case": "pending",
+          "executable_finding": true,
+          "independent_context_free_comment_marker": true,
+          "reason": "Add logic here is accepted positive message evidence; the separate TODO marker has its own evidence and source span."
+        },
+        {
+          "case": "later",
+          "executable_finding": true,
+          "reason": "unfinished is an exact accepted message without needing a nearby marker."
+        },
+        {
+          "case": "specific",
+          "executable_finding": false,
+          "reason": "Retry logic is planned after issue #42 is outside the finite formulaic set. Do not infer arbitrary work intent from planned or an issue reference."
+        }
+      ],
+      "highlight_resolution": {
+        "disposition": "CHANGE the supplied comment highlight from # TODO to TODO.",
+        "accepted": {
+          "coordinate_basis": "The authored pending fragment in K001, with def pending() as line 1.",
+          "start": {"line": 2, "column": 7},
+          "end": {"line": 2, "column": 11},
+          "text": "TODO"
+        },
+        "rejected": {
+          "start": {"line": 2, "column": 5},
+          "end": {"line": 2, "column": 11},
+          "text": "# TODO"
+        },
+        "reason": "The eligible marker token is the diagnostic evidence; the comment introducer, whitespace, colon, and punctuation add no marker content.",
+        "recognition_limit": "Preserve existing context-free marker eligibility and token boundaries. This decision does not make every detailed TODO comment context-free or add decorated marker syntax.",
+        "executable_highlight": "Retain the existing whole original raise/call highlight unit. The literal message supplies recognition evidence only; reject agent B's proposed message-payload highlight and do not add a new decoded-payload mapping branch.",
+        "classification": "An explicit highlight-contract clarification, not proof that the old comment span violated an already published exact-span promise."
+      },
+      "review_disagreement_resolution": "Use the conservative intersection of the two message lists, agent A's exact single-literal/no-keyword call shape, and the specified ASCII-whitespace/casefold/single-period normalization. Exclude both reviewers' nonshared vocabulary and A's exclamation removal. Preserve existing whole raise/call mapping rather than B's new payload mapping."
+    },
+    {
+      "id": "K002",
+      "rule": "G038",
+      "decision": "RETAIN the exact comparative phrase and exclude the predicate verb.",
+      "highlight_resolution": {
+        "accepted": {
+          "start": {"line": 3, "column": 20},
+          "end": {"line": 3, "column": 26},
+          "text": "faster"
+        },
+        "rejected": {
+          "start": {"line": 3, "column": 17},
+          "end": {"line": 3, "column": 26},
+          "text": "is faster"
+        },
+        "reason": "The published promise explicitly selects the exact comparative phrase. faster carries comparative content; is supplies predicate evidence. Both reviewers agree, and a larger highlight is unnecessary to explain the missing target.",
+        "classification": "Annotation-contract mismatch; the supplied current span demonstrates no code defect."
+      },
+      "accepted_criteria": "Highlight the complete recognized comparative expression, including degree words such as more when integral; exclude the linking verb, outer spaces, punctuation, target, and surrounding evidence. Retain low confidence and existing recognition/context boundaries.",
+      "other_required_highlights": [
+        {"source": "remains more reliable", "highlight": "more reliable"},
+        {"source": "was worse", "highlight": "worse"},
+        {"source": "is more\nreliable", "highlight": "more\nreliable"}
+      ]
+    },
+    {
+      "id": "K003",
+      "rule": "V015",
+      "decision": "RETAIN the exact superlative phrase, including its article when present, and exclude the predicate verb.",
+      "highlight_resolution": {
+        "accepted": {
+          "start": {"line": 5, "column": 25},
+          "end": {"line": 5, "column": 33},
+          "text": "the best"
+        },
+        "rejected": {
+          "start": {"line": 5, "column": 17},
+          "end": {"line": 5, "column": 33},
+          "text": "remains the best"
+        },
+        "reason": "The published promise explicitly includes the article and limits the span to the superlative phrase. remains supplies predicate structure. Both reviewers agree; expanding the span would contradict a precise public commitment without adding necessary diagnostic content.",
+        "classification": "Annotation-contract mismatch; the supplied current span demonstrates no code defect."
+      },
+      "accepted_criteria": "Highlight the recognized superlative phrase with its attached article and degree words when present; exclude the linking verb, outer spaces, punctuation, and external comparison-scope evidence. Retain INFO severity, low confidence, and existing recognition/context boundaries.",
+      "other_required_highlights": [
+        {"source": "is fastest", "highlight": "fastest"},
+        {"source": "was the most reliable", "highlight": "the most reliable"},
+        {"source": "is the\nmost reliable", "highlight": "the\nmost reliable"}
+      ]
+    },
+    {
+      "id": "K004",
+      "rule": "C009",
+      "decision": "RETAIN identifier-only highlights for explicit kind conflicts and absent names. Do not amend the public promise to a complete starred token.",
+      "highlight_resolution": {
+        "accepted": {
+          "start": {"line": 8, "column": 14},
+          "end": {"line": 8, "column": 20},
+          "text": "extras"
+        },
+        "rejected": {
+          "start": {"line": 8, "column": 12},
+          "end": {"line": 8, "column": 20},
+          "text": "**extras"
+        },
+        "reason": "The public contract says the declared name, which supports the current identifier span. The identifier consistently locates the declaration for both a stale name and a kind conflict; diagnostic text can state the documented ** versus signature * distinction. Full-token highlighting is a plausible alternative, but the supplied development judgments contain no user evidence that makes changing the existing promise necessary.",
+        "classification": "Annotation-contract mismatch under the existing declared-name promise; no demonstrated implementation defect."
+      },
+      "review_disagreement_resolution": "Accept agent A's name-only policy. Agent B correctly identifies the stars as kind evidence and explicitly admits its choice requires an amendment. Preserve that evidence in the message and lookup while retaining the published highlight unit; this is the justified smallest contract change.",
+      "accepted_criteria": {
+        "lookup": "Compare the base identifier with the actual owning signature; keep attached * or ** separately as explicit kind evidence.",
+        "kind_conflict": "When the base name exists and its explicitly written star kind conflicts, report on the exact source identifier. State the documented and actual kinds in diagnostic content.",
+        "absent_name": "When the base identifier is absent, report that missing/stale name on its identifier only, including when documentation writes *missing or **missing. Do not invent a kind conflict against a nonexistent parameter.",
+        "unstarred_name": "Omitted stars do not alone assert an explicit conflicting kind.",
+        "mapping": "Exclude stars, the :param introducer, optional type expression, whitespace, delimiters, and description. Select the declaration's identifier occurrence, preserving Unicode spelling; never use a global text match.",
+        "ownership": "Compare only with the field's owning function or method signature. The supplied return-type issue remains outside this decision."
+      },
+      "required_controls": [
+        {"declaration": ":param *options:", "signature": "def f(**options):", "result": "kind conflict", "highlight": "options"},
+        {"declaration": ":param attempts:", "signature": "def f(target):", "result": "absent name", "highlight": "attempts"},
+        {"declaration": ":param **missing:", "signature": "def f(target):", "result": "absent name only", "highlight": "missing"},
+        {"declaration": ":param extras:", "signature": "def f(*extras):", "result": "no explicit kind conflict"},
+        {"declaration": ":param **options:", "signature": "def f(**options):", "result": "no name or kind finding"}
+      ]
+    }
+  ],
+  "test_requirements": [
+    "Add new development fixtures that pin all four accepted exact coordinates and source slices; retain every historical frozen annotation unchanged.",
+    "For C004, independently pin Requests negative, Add logic here positive, unfinished positive, and issue-specific planned work negative. Test every one of the six accepted messages and exact normalization boundaries: ASCII whitespace, casefold, one attached final period, two periods, exclamation, Unicode whitespace, extra words, and no substring matching.",
+    "For C004, test strict call shape with zero, one, and multiple positional arguments; keyword arguments; nonliteral and f-string values; bytes; aliases; qualified callees; other exception types; and a raise cause. Ordinary strings, assignments, commented-out code, and prose mentioning raises must not satisfy parsed-raise eligibility.",
+    "Keep protected-stub tests non-vacuous: put an accepted positive message in each recognized exempt shape and pair it with a nonexempt owning function using the same message. Pin neighboring and nested ownership so exemptions cannot leak. Existing test fixtures may change to accepted positive messages without expanding the contract vocabulary.",
+    "For C004 markers, pin TODO, FIXME, and XXX source slices, indentation, punctuation, trailing inline placement, token-boundary near misses, and detailed content that remains outside existing context-free eligibility. Preserve existing whole raise/call spans, including multiline literals; do not assert payload-only highlights.",
+    "For G038 and V015, pin the supplied spans, one-word and analytic phrases, article inclusion, verb exclusion, original multiline whitespace, Unicode prefixes, indentation, and punctuation exclusion. Pair eligible unbounded claims with supported attached-target or explicit-scope controls; keep recognition evidence and highlight extents separate.",
+    "For C009, test both star-kind mismatch directions, matching kinds, unstarred variadic names, absent unstarred and starred names, optional types, repeated names in types/descriptions, Unicode identifiers and prefixes, inline and multiline docstrings, and adjacent/nested owners. Assert message semantics separately from exact identifier-only source slices.",
+    "Run the repository's required acceptance gate after implementation. These adjudication requirements have not been executed and make no claim about current implementation behavior."
+  ],
+  "unresolved_risks_and_limits": [
+    "Finite lexical cues can still occur in deliberate rejection and miss real unfinished code. The contract reports accepted placeholder wording, not proven author intent.",
+    "The strict simple-name and literal-call criterion is syntactic; runtime shadowing is unresolved, and aliases or richer static shapes are deliberately unsupported.",
+    "Name-only C009 highlights leave kind markers outside the selected range. Clear diagnostic text is required; a later usability study could justify a separately published amendment, but no such evidence is available here.",
+    "Parser support and exact Unicode, escape, concatenation, and multiline source mapping were not inspected. Any implementation claims require focused tests; C004 payload mapping is not part of this contract.",
+    "Exact comparative/superlative vocabulary, context windows, unsupported field grammar, new decorated comment syntax, and duplicate suppression are not redesigned by this decision.",
+    "No reserved holdout was opened, no old label was repaired, and no effectiveness result follows from selecting these development criteria."
+  ],
+  "output": "quality/reviews/2026-10-14-contracts/adjudication.json"
+}
