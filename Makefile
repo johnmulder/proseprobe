@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help install dev test test-tdd test-spec test-cov lint typecheck format check all clean build dogfood quick benchmark rule-quality rule-quality-regression rule-docs rule-docs-check test-tropes test-tropes-integration doc-audit spec-verify coverage-analyze startup-check perf-check memory-check nfr-check
+.PHONY: help install dev test test-tdd test-spec test-cov lint typecheck format check merge-check all clean build dogfood quick benchmark rule-quality rule-quality-regression rule-docs rule-docs-check test-tropes test-tropes-integration doc-audit spec-verify coverage-analyze startup-check perf-check memory-check nfr-check
 
 VENV ?= .venv
 VENV_BIN = $(VENV)/bin
@@ -39,6 +39,7 @@ help: ## Show available development commands
 	@echo "  lint                 Run ruff"
 	@echo "  typecheck            Run mypy"
 	@echo "  check                Run lint, typecheck, and tests"
+	@echo "  merge-check          Run deterministic merge acceptance checks"
 	@echo "  all                  Alias for check"
 	@echo ""
 	@echo "Maintenance:"
@@ -96,6 +97,8 @@ format: ## Format code
 
 # Run all checks
 check: rule-docs-check lint typecheck test ## Run generated-doc, lint, type, and test checks
+
+merge-check: doc-audit lint typecheck coverage-analyze dogfood rule-quality-regression spec-verify ## Run deterministic merge acceptance checks
 
 # Clean build artifacts
 clean: ## Remove generated artifacts

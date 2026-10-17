@@ -59,6 +59,9 @@ jobs:
       - name: Dogfood - check own docs
         run: make dogfood
 
+      - name: Verify generated docs, documentation structure, and CLI contract
+        run: make doc-audit spec-verify
+
       - name: Measure rule quality
         run: make rule-quality
 
