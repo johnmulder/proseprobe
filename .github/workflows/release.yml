@@ -55,6 +55,7 @@ jobs:
         run: gh release upload "${GITHUB_REF_NAME}" dist/* --clobber
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
 
   pypi-publish:
     name: Publish distributions to PyPI

@@ -7,6 +7,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 from proseprobe.profiles import EXPERIMENTAL_RULES, PROFILES
+from proseprobe.rules import get_rule_metadata
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_MARKDOWN = (
@@ -223,6 +224,13 @@ def test_changelog_release_counts_match_current_project() -> None:
     assert "596 tests passing" not in changelog
 
 
+def test_readme_feature_count_matches_registry() -> None:
+    """The feature summary should advertise the current registered rule count."""
+    readme = (ROOT / "README.md").read_text()
+
+    assert f"**{len(get_rule_metadata())} detection rules**" in readme
+
+
 def _toml_blocks(path: Path) -> list[str]:
     text = path.read_text()
     return re.findall(r"```toml\n(.*?)\n```", text, flags=re.DOTALL)
@@ -263,6 +271,16 @@ def test_release_workflow_uses_trusted_publishing() -> None:
     assert "PYPI_TOKEN" not in workflow
     assert "workflow_dispatch" not in workflow
     assert "push:" not in workflow
+
+
+def test_release_upload_declares_repository_context() -> None:
+    """Artifact uploads should resolve the repository without a Git checkout."""
+    workflow = (ROOT / ".github" / "workflows" / "release.yml").read_text()
+    upload_job = workflow.split("  github-release:", 1)[1].split("  pypi-publish:", 1)[
+        0
+    ]
+
+    assert "GH_REPO: ${{ github.repository }}" in upload_job
 
 
 def test_agent_skill_uses_portable_minimal_structure() -> None:
