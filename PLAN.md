@@ -19,7 +19,7 @@ and LOCNESS stay excluded. Additional acquisition, independent human research,
 rule promotion and publication are outside this merge task. Closing those
 branches of the old plan does not assert that their prerequisites were met.
 
-For behavior changes, demonstrate a failing test before the correction and run
+For behavior changes, show a failing test before the correction and run
 related checks. Data work uses the existing binding and coverage validators.
 Freeze new accepted development labels before generating predictions. Never
 load reserved source bytes while selecting or validating development records.
@@ -33,7 +33,7 @@ load reserved source bytes while selecting or validating development records.
 - [x] A3. Obtain two separate agent M012 reviews of the prepared Markdown-it
   development packet, retain both originals and freeze accepted coverage before
   predictions. Validate source, targets, contracts and reviewer provenance.
-- [ ] A4. Run bound development reports under all-rules and unchanged production
+- [x] A4. Run bound development reports under all-rules and unchanged production
   policy. Record actual support, unavailable metrics and the decision on policy.
 - [ ] A5. Pass the merge checks, build and validate both distributions, smoke-test
   the installed wheel and run available nonfunctional probes. Record commands,
