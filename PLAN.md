@@ -35,10 +35,10 @@ load reserved source bytes while selecting or validating development records.
   predictions. Validate source, targets, contracts and reviewer provenance.
 - [x] A4. Run bound development reports under all-rules and unchanged production
   policy. Record actual support, unavailable metrics and the decision on policy.
-- [ ] A5. Pass the merge checks, build and validate both distributions, smoke-test
+- [x] A5. Pass the merge checks, build and validate both distributions, smoke-test
   the installed wheel and run available nonfunctional probes. Record commands,
   results and environment limits without claiming an unrun remote matrix.
-- [ ] A6. Record merge readiness, check the final diff and clean worktree, and
+- [x] A6. Record merge readiness, check the final diff and clean worktree, and
   commit the completion evidence. No human response is required to finish A1–A6.
 
 The exact remote CI matrix must still run on the eventual pull request commit.

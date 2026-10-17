@@ -1,0 +1,232 @@
+{
+  "artifacts": {
+    "dist/proseprobe-0.1.0-py3-none-any.whl": {
+      "bytes": 114350,
+      "sha256": "1128df8e8de0b052f7eecdaa745c860c7afad9d0c2a1427ae3807cb0e34647e6"
+    },
+    "dist/proseprobe-0.1.0.tar.gz": {
+      "bytes": 1185524,
+      "sha256": "d91bc310c384f89646a919ea74dc76832d10ee2926977aa87bce82c5b3cfd43d"
+    }
+  },
+  "package_contents": "typing marker and license present; wheel excludes evaluation data; sdist excludes caches and virtualenv",
+  "results": [
+    {
+      "isolated_install": true,
+      "outside_checkout": true,
+      "python": "Python 3.11.15",
+      "results": [
+        {
+          "command": [
+            "<isolated-venv>/bin/proseprobe",
+            "version"
+          ],
+          "exit_code": 0,
+          "output": "proseprobe 0.1.0"
+        },
+        {
+          "command": [
+            "<isolated-venv>/bin/proseprobe",
+            "check",
+            "--help"
+          ],
+          "exit_code": 0,
+          "output": "usage: proseprobe check [-h] [--select SELECT]\n                        [--profile {academic,business,general,journalism,technical-docs}]\n                        [--ignore IGNORE] [--config CONFIG]\n                        [--severity {error,warning,info}]\n                        [--min-confidence {high,medium,low}] [--hide-low]\n                        [--baseline BASELINE] [--quiet] [--verbose]\n                        [--filename FILENAME] [--show-config]\n                        [--format {text,json,jsonl,sarif}]\n                        [--generate-baseline]\n                        paths [paths ...]\n\npositional arguments:\n  paths                 Files or directories to check\n\noptions:\n  -h, --help            Show this help message and exit\n  --select SELECT, -s SELECT\n                        Rules to enable (comma-separated)\n  --profile {academic,business,general,journalism,technical-docs}\n                        Built-in rule profile\n  --ignore IGNORE, -i IGNORE\n                        Rules to disable (comma-separated)\n  --config CONFIG, -c CONFIG\n                        Path to configuration file\n  --severity {error,warning,info}\n                        Minimum severity: error, warning, info\n  --min-confidence {high,medium,low}\n                        Minimum confidence: high, medium, low\n  --hide-low            Hide low-confidence issues (shorthand for --min-\n                        confidence medium)\n  --baseline BASELINE, -b BASELINE\n                        Baseline file for only-new-issues mode\n  --quiet, -q           Only output errors\n  --verbose, -v         Show additional diagnostic info\n  --filename FILENAME   Virtual path and file type when reading standard input\n                        from '-'\n  --show-config         Display configuration and exit\n  --format {text,json,jsonl,sarif}, -f {text,json,jsonl,sarif}\n                        Output format: text, json, jsonl, sarif\n  --generate-baseline   Generate baseline file from current issues"
+        },
+        {
+          "command": [
+            "<isolated-venv>/bin/python",
+            "-m",
+            "proseprobe",
+            "version"
+          ],
+          "exit_code": 0,
+          "output": "proseprobe 0.1.0"
+        },
+        {
+          "command": [
+            "<isolated-venv>/bin/python",
+            "-c",
+            "import proseprobe; print(proseprobe.__file__)"
+          ],
+          "exit_code": 0,
+          "output": "<temp>/venv/lib/python3.11/site-packages/proseprobe/__init__.py"
+        },
+        {
+          "command": [
+            "proseprobe",
+            "check",
+            "<temp>/probe.md",
+            "--select",
+            "V001",
+            "--format",
+            "jsonl"
+          ],
+          "diagnostics": [
+            {
+              "column": 4,
+              "confidence": "medium",
+              "end_column": 11,
+              "end_line": null,
+              "line": 1,
+              "message": "Overused word: 'utilize' \u2192 consider 'use'",
+              "path": "<temp>/probe.md",
+              "rule_id": "V001",
+              "schema_version": 1,
+              "severity": "warning",
+              "suggestion": "use",
+              "version": "0.1.0"
+            }
+          ],
+          "exit_code": 1,
+          "expected_exit_code": 1
+        }
+      ]
+    },
+    {
+      "isolated_install": true,
+      "outside_checkout": true,
+      "python": "Python 3.12.15",
+      "results": [
+        {
+          "command": [
+            "<isolated-venv>/bin/proseprobe",
+            "version"
+          ],
+          "exit_code": 0,
+          "output": "proseprobe 0.1.0"
+        },
+        {
+          "command": [
+            "<isolated-venv>/bin/proseprobe",
+            "check",
+            "--help"
+          ],
+          "exit_code": 0,
+          "output": "usage: proseprobe check [-h] [--select SELECT]\n                        [--profile {academic,business,general,journalism,technical-docs}]\n                        [--ignore IGNORE] [--config CONFIG]\n                        [--severity {error,warning,info}]\n                        [--min-confidence {high,medium,low}] [--hide-low]\n                        [--baseline BASELINE] [--quiet] [--verbose]\n                        [--filename FILENAME] [--show-config]\n                        [--format {text,json,jsonl,sarif}]\n                        [--generate-baseline]\n                        paths [paths ...]\n\npositional arguments:\n  paths                 Files or directories to check\n\noptions:\n  -h, --help            Show this help message and exit\n  --select SELECT, -s SELECT\n                        Rules to enable (comma-separated)\n  --profile {academic,business,general,journalism,technical-docs}\n                        Built-in rule profile\n  --ignore IGNORE, -i IGNORE\n                        Rules to disable (comma-separated)\n  --config CONFIG, -c CONFIG\n                        Path to configuration file\n  --severity {error,warning,info}\n                        Minimum severity: error, warning, info\n  --min-confidence {high,medium,low}\n                        Minimum confidence: high, medium, low\n  --hide-low            Hide low-confidence issues (shorthand for --min-\n                        confidence medium)\n  --baseline BASELINE, -b BASELINE\n                        Baseline file for only-new-issues mode\n  --quiet, -q           Only output errors\n  --verbose, -v         Show additional diagnostic info\n  --filename FILENAME   Virtual path and file type when reading standard input\n                        from '-'\n  --show-config         Display configuration and exit\n  --format {text,json,jsonl,sarif}, -f {text,json,jsonl,sarif}\n                        Output format: text, json, jsonl, sarif\n  --generate-baseline   Generate baseline file from current issues"
+        },
+        {
+          "command": [
+            "<isolated-venv>/bin/python",
+            "-m",
+            "proseprobe",
+            "version"
+          ],
+          "exit_code": 0,
+          "output": "proseprobe 0.1.0"
+        },
+        {
+          "command": [
+            "<isolated-venv>/bin/python",
+            "-c",
+            "import proseprobe; print(proseprobe.__file__)"
+          ],
+          "exit_code": 0,
+          "output": "/private<temp>/venv/lib/python3.12/site-packages/proseprobe/__init__.py"
+        },
+        {
+          "command": [
+            "proseprobe",
+            "check",
+            "<temp>/probe.md",
+            "--select",
+            "V001",
+            "--format",
+            "jsonl"
+          ],
+          "diagnostics": [
+            {
+              "column": 4,
+              "confidence": "medium",
+              "end_column": 11,
+              "end_line": null,
+              "line": 1,
+              "message": "Overused word: 'utilize' \u2192 consider 'use'",
+              "path": "<temp>/probe.md",
+              "rule_id": "V001",
+              "schema_version": 1,
+              "severity": "warning",
+              "suggestion": "use",
+              "version": "0.1.0"
+            }
+          ],
+          "exit_code": 1,
+          "expected_exit_code": 1
+        }
+      ]
+    },
+    {
+      "isolated_install": true,
+      "outside_checkout": true,
+      "python": "Python 3.13.16",
+      "results": [
+        {
+          "command": [
+            "<isolated-venv>/bin/proseprobe",
+            "version"
+          ],
+          "exit_code": 0,
+          "output": "proseprobe 0.1.0"
+        },
+        {
+          "command": [
+            "<isolated-venv>/bin/proseprobe",
+            "check",
+            "--help"
+          ],
+          "exit_code": 0,
+          "output": "usage: proseprobe check [-h] [--select SELECT]\n                        [--profile {academic,business,general,journalism,technical-docs}]\n                        [--ignore IGNORE] [--config CONFIG]\n                        [--severity {error,warning,info}]\n                        [--min-confidence {high,medium,low}] [--hide-low]\n                        [--baseline BASELINE] [--quiet] [--verbose]\n                        [--filename FILENAME] [--show-config]\n                        [--format {text,json,jsonl,sarif}]\n                        [--generate-baseline]\n                        paths [paths ...]\n\npositional arguments:\n  paths                 Files or directories to check\n\noptions:\n  -h, --help            Show this help message and exit\n  --select, -s SELECT   Rules to enable (comma-separated)\n  --profile {academic,business,general,journalism,technical-docs}\n                        Built-in rule profile\n  --ignore, -i IGNORE   Rules to disable (comma-separated)\n  --config, -c CONFIG   Path to configuration file\n  --severity {error,warning,info}\n                        Minimum severity: error, warning, info\n  --min-confidence {high,medium,low}\n                        Minimum confidence: high, medium, low\n  --hide-low            Hide low-confidence issues (shorthand for --min-\n                        confidence medium)\n  --baseline, -b BASELINE\n                        Baseline file for only-new-issues mode\n  --quiet, -q           Only output errors\n  --verbose, -v         Show additional diagnostic info\n  --filename FILENAME   Virtual path and file type when reading standard input\n                        from '-'\n  --show-config         Display configuration and exit\n  --format, -f {text,json,jsonl,sarif}\n                        Output format: text, json, jsonl, sarif\n  --generate-baseline   Generate baseline file from current issues"
+        },
+        {
+          "command": [
+            "<isolated-venv>/bin/python",
+            "-m",
+            "proseprobe",
+            "version"
+          ],
+          "exit_code": 0,
+          "output": "proseprobe 0.1.0"
+        },
+        {
+          "command": [
+            "<isolated-venv>/bin/python",
+            "-c",
+            "import proseprobe; print(proseprobe.__file__)"
+          ],
+          "exit_code": 0,
+          "output": "/private<temp>/venv/lib/python3.13/site-packages/proseprobe/__init__.py"
+        },
+        {
+          "command": [
+            "proseprobe",
+            "check",
+            "<temp>/probe.md",
+            "--select",
+            "V001",
+            "--format",
+            "jsonl"
+          ],
+          "diagnostics": [
+            {
+              "column": 4,
+              "confidence": "medium",
+              "end_column": 11,
+              "end_line": null,
+              "line": 1,
+              "message": "Overused word: 'utilize' \u2192 consider 'use'",
+              "path": "<temp>/probe.md",
+              "rule_id": "V001",
+              "schema_version": 1,
+              "severity": "warning",
+              "suggestion": "use",
+              "version": "0.1.0"
+            }
+          ],
+          "exit_code": 1,
+          "expected_exit_code": 1
+        }
+      ]
+    }
+  ],
+  "version": 1
+}

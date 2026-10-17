@@ -42,8 +42,8 @@ The active [merge plan](../../PLAN.md) uses separate agent judgments for the
 prepared development batch and retains all original review provenance. A missing
 human judgment remains unavailable. Independent human research, reserved holdout
 evaluation, optional acquisition and publication are outside this task's scope.
-Their scientific, licensing and publishing requirements remain in force if those
-activities are undertaken later. Retaining the current policy is a complete
+Requirements for scientific claims, source reuse and publication still apply
+to any future work. Retaining the current policy is a complete
 decision when evidence does not support promotion; it needs no human response.
 
 ## First pass

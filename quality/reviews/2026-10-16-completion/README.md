@@ -100,3 +100,38 @@ for mode in all-rules production; do
     --native-cache-root downloads/evaluation
 done
 ```
+
+## Merge readiness
+
+No local engineering blocker remains. Fetched `origin/master` is
+`854718295345864d7356001571b5b9f22a14df1d` and is an ancestor of this branch.
+The complete diff passes whitespace checks. The full current local test gate
+covers 3,758 collected cases with 96.29% branch-inclusive coverage, above 90%.
+Generated documentation, lint, typing, public-doc dogfood, document structure,
+CLI contracts and both exact reviewed regression gates pass. The six all-rules
+and four production curated mismatches remain visible and unchanged.
+
+The [gate receipts](checks.json) retain full command outputs, environment and
+source identity. Startup is 61.1 ms against 100 ms; the 10,000-file memory probe
+checks every file and peaks at 23.8 MB against 100 MB. The throughput report is
+retained with its environment and workload/policy identities.
+
+Both distributions build without isolation from installed build dependencies
+and pass strict Twine validation. Package inspection confirms license and typing
+metadata, excludes development data from the wheel and excludes caches from the
+source archive. The [wheel smoke record](wheel-smoke.json) retains isolated
+installs outside the checkout, CLI/module/import checks and a real expected
+V001 diagnostic on Python 3.11, 3.12 and 3.13.
+
+A separate agent [evidence check](evidence-review.json) accepts the label freeze,
+review bindings and native proof, then exactly rebuilds both parsed JSON reports.
+Its scope excludes later prose edits and package/gate receipts. All original
+reviews, source manifests, split freezes, baseline and regression ledgers retain
+their existing provenance and bytes.
+
+The remaining integration requirement is the GitHub Python 3.11/3.12/3.13 CI
+matrix on the eventual pull request commit. Local verification cannot certify
+that remote result. Public release keeps its separate package, ownership and
+trusted-publishing gates. No release, tag, acquisition permission or independent
+human outcome was inferred. All A1–A6 work in the autonomous merge plan is
+complete; the next action is normal branch integration after CI.
