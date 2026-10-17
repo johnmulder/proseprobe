@@ -1,0 +1,29 @@
+{
+  "holdout_opened": false,
+  "human_annotation": false,
+  "packet_root": "downloads/evaluation/review-packets/2026-10-16-natural",
+  "predictions_withheld": true,
+  "prepared_reading_bundle": "quality/reviews/2026-10-15-remaining/native-intake/readings.json",
+  "prepared_readings_sha256": "c0caa2ba8bac0541d87638e1c057caedf99410f9bc4b2be62a72c28a36020c33",
+  "root_prior_exposure": "source excerpts, native metadata and reading metadata; root is not a blind reviewer",
+  "scope": "M012, complete selected source with its pinned target closure",
+  "source": {
+    "attribution": "Vitaly Puzrin, Alex Kocharin and markdown-it contributors",
+    "format": "markdown",
+    "id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+    "license": "MIT",
+    "license_url": "https://raw.githubusercontent.com/markdown-it/markdown-it/0fe7ccb4b7f30236fb05f623be6924961d296d3d/LICENSE",
+    "locator": "docs/README.md",
+    "pair_group": "markdown-it/markdown-it:docs/README.md",
+    "path": "native-continuation/2026-10-15/markdown-it/docs/README.md",
+    "renderer": "GitHub Markdown",
+    "review_status": "unreviewed",
+    "revision": "0fe7ccb4b7f30236fb05f623be6924961d296d3d",
+    "sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68",
+    "source_group": "markdown-it/markdown-it",
+    "split": "development",
+    "transformation": "none; complete pinned UTF-8 Markdown source"
+  },
+  "stage": "agent development annotation before predictions",
+  "version": 1
+}

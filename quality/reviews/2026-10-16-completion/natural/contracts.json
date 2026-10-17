@@ -1,0 +1,19 @@
+{
+  "rules": {
+    "M012": {
+      "applies_to": [
+        "markdown"
+      ],
+      "category": "Markup",
+      "config_key": "local_links",
+      "content_scope": "non_code",
+      "default_confidence": "medium",
+      "default_severity": "info",
+      "description": "Checks literal local Markdown files and supported GitHub fragments",
+      "id": "M012",
+      "name": "Unresolved Local Markdown Target",
+      "profiles": []
+    }
+  },
+  "version": 1
+}
