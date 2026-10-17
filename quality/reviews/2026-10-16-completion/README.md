@@ -38,3 +38,35 @@ metadata and source excerpts, so it will not supply a blind natural annotation.
 Fresh reviewers receive the supplied source/target packet and contracts without
 predictions or one another's judgments. Their agent identities and actual
 exposure will remain explicit.
+
+## Implemented merge corrections
+
+`ba3adf9` adds `make merge-check` and closes CI's documentation/CLI gate gap.
+Three intended contract tests failed first; the related 38 tests then passed.
+`950875d` supplies explicit repository identity to the checkout-free release
+upload job and corrects README's stale rule count to 102. Two regression tests
+failed first, then 152 related tests passed. No release was triggered.
+
+## Natural link annotation freeze
+
+Two fresh agents read all thirteen linked pages of the prepared Markdown-it
+packet, including the complete source and both targets. Each reconstructed and
+hashed those bytes and independently judged both selected local destinations
+clean. The original [agent A](review.agent-a.json) and
+[agent B](review.agent-b.json) records retain exact inputs, exposures and reasons.
+The [agreement record](agreement.json) has two agreeing clean judgments, zero
+positive judgments and zero disagreements across one source in one group.
+The root reconciled matching judgments without changing either original.
+
+The accepted version 3 manifests retain explicit exhaustive M012 source coverage
+and two clean destination cases. Two remote URLs remain resolver exclusions.
+Target outgoing references are context, not additional selected samples. Existing
+source, native Git proof, target closure, annotation and binding validators pass.
+The [freeze](freeze.json) precedes the first diagnostic run for this batch.
+The local copy of the native proof is required by packet artifact confinement;
+it is byte-identical to the previously frozen preparation artifact.
+
+The agents' attribution to the pinned upstream revision relies on supplied
+provenance; the separate offline Git validator checks its objects and inventory.
+No human review, live target check, fragment example or population estimate is
+claimed. This finishes the delegated development annotation scope.

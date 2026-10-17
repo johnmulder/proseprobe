@@ -1,0 +1,945 @@
+{
+  "excluded_destinations": {
+    "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md": [
+      {
+        "column": 10,
+        "destination": "https://github.com/markdown-it/markdown-it#markdown-it",
+        "end_column": 64,
+        "line": 4,
+        "reason": "production-resolver-exclusion"
+      },
+      {
+        "column": 12,
+        "destination": "https://markdown-it.github.io/markdown-it/",
+        "end_column": 54,
+        "line": 5,
+        "reason": "production-resolver-exclusion"
+      }
+    ]
+  },
+  "native_context": {
+    "inventory": [
+      {
+        "mode": "100644",
+        "object_id": "d1deb2cb4ced5985dcb9a83ef1349613f9cb59d3",
+        "path": ".editorconfig"
+      },
+      {
+        "mode": "100644",
+        "object_id": "457b2fceb56564e790a879dcccdd6a9740ea0afd",
+        "path": ".eslintrc.yml"
+      },
+      {
+        "mode": "100644",
+        "object_id": "205021e49dd1f7342400b8e1254cc4e310fcc4a1",
+        "path": ".gitattributes"
+      },
+      {
+        "mode": "040000",
+        "object_id": "ad67ee093faa825a2598da9e361860be6336dace",
+        "path": ".github"
+      },
+      {
+        "mode": "100644",
+        "object_id": "d7e09e238ec22b7f455d4a1a7ff49da5e2af7757",
+        "path": ".github/FUNDING.yml"
+      },
+      {
+        "mode": "040000",
+        "object_id": "d7fb71a73af3c0b84018a535f4a32b8abd44f433",
+        "path": ".github/ISSUE_TEMPLATE"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9ecb043a62797b32e35f5bddefafa1fd49848bf8",
+        "path": ".github/ISSUE_TEMPLATE/bug_report.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "6380ce2a5cfac491a38e99287828bdf47ea60ff5",
+        "path": ".github/ISSUE_TEMPLATE/development-question.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "3f31f7b049a1d403b5855f8df430584130633959",
+        "path": ".github/ISSUE_TEMPLATE/feature_request.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "91b3bba2b74f71f8ebf43e7b863b75e228c42dd5",
+        "path": ".github/ISSUE_TEMPLATE/question.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "b4bceaf2140034d4a6327f6db5b655c9e981fd6e",
+        "path": ".github/dependabot.yml"
+      },
+      {
+        "mode": "040000",
+        "object_id": "b90696ff447c8576bccc8da9a1fef60ca737748f",
+        "path": ".github/workflows"
+      },
+      {
+        "mode": "100644",
+        "object_id": "241583b6c3f6ad281ed695e75f71101cc3cb3ac8",
+        "path": ".github/workflows/ci.yml"
+      },
+      {
+        "mode": "100644",
+        "object_id": "078b4d8c3d71fd97ce29ab53ce7318700eeefb34",
+        "path": ".gitignore"
+      },
+      {
+        "mode": "100644",
+        "object_id": "63918f522e72721ebb2d8c852da8afc72ce047c4",
+        "path": ".ndocrc"
+      },
+      {
+        "mode": "100644",
+        "object_id": "77653829e23d6d77057dc2267566d1c2a71cf603",
+        "path": "CHANGELOG.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "2f75aed87a7363cc409ef6218a1fc14efa913c8e",
+        "path": "CONTRIBUTING.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "7ffa058cb78f8fb9beb974d9fd429004d2d2e585",
+        "path": "LICENSE"
+      },
+      {
+        "mode": "100644",
+        "object_id": "6c79f3c5d8b361ffd120fa9df367d4da26170de3",
+        "path": "README.md"
+      },
+      {
+        "mode": "040000",
+        "object_id": "d089a0090bcb7ad1687741df7e168d29c7a88f17",
+        "path": "benchmark"
+      },
+      {
+        "mode": "100755",
+        "object_id": "c08e83e6a989ec89b654deacb51f9744a8bddee9",
+        "path": "benchmark/benchmark.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "eccfd64bfc563dfff91da9361b548ed6e8cbfd37",
+        "path": "benchmark/implementations"
+      },
+      {
+        "mode": "040000",
+        "object_id": "e9db98368db5b3c69626c46f03f3a5407e71c46e",
+        "path": "benchmark/implementations/commonmark-reference"
+      },
+      {
+        "mode": "100644",
+        "object_id": "1e9b452038ec035ab59af896748a71c802e08989",
+        "path": "benchmark/implementations/commonmark-reference/index.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "0bdc051a3cfefe8a4f967edb3e08524d3ec18b14",
+        "path": "benchmark/implementations/current"
+      },
+      {
+        "mode": "040000",
+        "object_id": "58fde00f73702ce971598531cd8dc09fa1927a82",
+        "path": "benchmark/implementations/current-commonmark"
+      },
+      {
+        "mode": "100644",
+        "object_id": "47d2a342de8219eb52e16ff9baabaf1f55b71c46",
+        "path": "benchmark/implementations/current-commonmark/index.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "abbc23136d166b05d5efbe51518d811dad5842ce",
+        "path": "benchmark/implementations/current/index.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "e7fce3fb045848ac3ece571f60538402fc6ad94c",
+        "path": "benchmark/implementations/markdown-it-2.2.1-commonmark"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4b9f18b24d642bbc324d862056e1188974b59395",
+        "path": "benchmark/implementations/markdown-it-2.2.1-commonmark/index.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "60f29442cfa4f098848eb66916ded464d2af0652",
+        "path": "benchmark/implementations/marked"
+      },
+      {
+        "mode": "100644",
+        "object_id": "ac4e1e205c6f6b1b08d3e5b148acd149430e86ae",
+        "path": "benchmark/implementations/marked/index.mjs"
+      },
+      {
+        "mode": "100755",
+        "object_id": "eca9993472e0a50d826155f9326a985d29c14dc3",
+        "path": "benchmark/profile.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "474caa3deb65d74b82e53f705436d43ea4dd2118",
+        "path": "benchmark/samples"
+      },
+      {
+        "mode": "100644",
+        "object_id": "196c806ee31472277f16f52f65f13621668879ca",
+        "path": "benchmark/samples/README.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "33e382afc338c2b97da6fb15de08651dadc212ff",
+        "path": "benchmark/samples/block-bq-flat.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "7ddcffa400937cc68a64840a3e68e09ce9351ea8",
+        "path": "benchmark/samples/block-bq-nested.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "2b1554f42720cc134a8e3410b664cf16d11e6ff1",
+        "path": "benchmark/samples/block-code.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "5fe8b3c3408fa24469f8998b11780d8b3ed1b0e1",
+        "path": "benchmark/samples/block-fences.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "fd985587976994bd48e817af41021909bd39f19f",
+        "path": "benchmark/samples/block-heading.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e1bad6f4dd0ffec279a062aa9076176ab29c87ce",
+        "path": "benchmark/samples/block-hr.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "ff7f8fa6a0d638109f700304421b18b69975e5f5",
+        "path": "benchmark/samples/block-html.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e5c0d99d4fc34514e9e2f4de8f22202e93e080c3",
+        "path": "benchmark/samples/block-lheading.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "14149dbf33b4688181034701c46cdf25af5f22af",
+        "path": "benchmark/samples/block-list-flat.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "d30aed3b8859812a6317c81fe4bfbd985978ecaa",
+        "path": "benchmark/samples/block-list-nested.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c83dccb6f15c4d7f53c7c75ab4a0e7122742c745",
+        "path": "benchmark/samples/block-ref-flat.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "00ff675c8715d01243af1fe7104fb1053fb45ee1",
+        "path": "benchmark/samples/block-ref-list.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "1e10a8c213ae76bcf17219f38ae98541357dcffa",
+        "path": "benchmark/samples/block-ref-nested.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "5fd6321c1dddfcdebcca947d53d2528c2ac91d21",
+        "path": "benchmark/samples/block-tables.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "0f71482d6beda9eb2c3594c5ec63463ea6a67510",
+        "path": "benchmark/samples/inline-autolink.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "a6ec6e1fb0637390626347685cf06892b3c19372",
+        "path": "benchmark/samples/inline-backticks.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "b7668a54ee953c9496e420fbf489b798e9f671f2",
+        "path": "benchmark/samples/inline-em-flat.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "6bb0a0d3bdca7bec6516155dec7e4b067caceb44",
+        "path": "benchmark/samples/inline-em-nested.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "b6d21da9842a16a0dc84464ed8a65f1cc1f486b6",
+        "path": "benchmark/samples/inline-em-worst.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "da095edbf29dbff0e4c4e6e8d2d7738c56cdf62a",
+        "path": "benchmark/samples/inline-entity.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4e1bb396bef697f0ffcb09709d108aca46f7b95e",
+        "path": "benchmark/samples/inline-escape.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "f6e63419e8a4e73433ac51255847664b00fac440",
+        "path": "benchmark/samples/inline-html.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "5117db8794dd277f55ba83cb3fca32b75b9f19fd",
+        "path": "benchmark/samples/inline-links-flat.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4e7dc8579e839e8e6015437d55abccec1ec4aafc",
+        "path": "benchmark/samples/inline-links-nested.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "068a807d91761121cbd7f597c5c0e7686f8f0ac3",
+        "path": "benchmark/samples/inline-newlines.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "eccb898b66437228fb05a6238d347f536c4c0d2a",
+        "path": "benchmark/samples/lorem1.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "dc989ea75e12803a4e76e55206acd8131e7aa38d",
+        "path": "benchmark/samples/rawtabs.md"
+      },
+      {
+        "mode": "040000",
+        "object_id": "983cbf76163aaf1ebd775ffd465d2b229b6d1837",
+        "path": "bin"
+      },
+      {
+        "mode": "100755",
+        "object_id": "84626f1f4debddabf6919a2c288f13b3acb0a8bf",
+        "path": "bin/markdown-it.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "3178e8be1c81c8fc5ca15d9d5c3e9d97d8a9ada0",
+        "path": "docs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "f8abedfc4fdafeed29e812237884c2943ed4fe07",
+        "path": "docs/4.0_migration.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "d2055ebb442f463264042f9451a1a4a5e198369f",
+        "path": "docs/5.0_migration.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4a3ef556c8fd23eeb8bc5e44e734ddf7e66c88f6",
+        "path": "docs/README.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "a3cccdbb69208e81a02da7d4404f026682da983a",
+        "path": "docs/architecture.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "782b75c447d5938209348a7efc4da95f1737533f",
+        "path": "docs/development.md"
+      },
+      {
+        "mode": "040000",
+        "object_id": "aa5d4c116495626355fb06fae76bc39223784add",
+        "path": "docs/examples"
+      },
+      {
+        "mode": "100644",
+        "object_id": "ae101f9c34cea60c5fbe039a2b7af8efc1d535c5",
+        "path": "docs/examples/renderer_rules.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "7d6234dc96c4aa72270798c055237f258f30b9ad",
+        "path": "docs/security.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "f7ba45f9f05fd74a315428fba4cdc8d15fd0486d",
+        "path": "index.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "7bcb2c91a50b5410296525d4a8997370210e393d",
+        "path": "lib"
+      },
+      {
+        "mode": "040000",
+        "object_id": "cdee7f2d89f1d57d66a686b63f15aa39c9b508b1",
+        "path": "lib/common"
+      },
+      {
+        "mode": "100644",
+        "object_id": "1e27a7f602ec26b5a7042549e5755f6adf88c996",
+        "path": "lib/common/html_blocks.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "ccfbf87b46839a2542eea9f07977cb8fc4a8d3a8",
+        "path": "lib/common/html_re.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "b78c9b0dde87d302beafd84ed234bb2feea9676f",
+        "path": "lib/common/utils.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "435888e18e8e5dd88bd3757a867956b76cb5d7ed",
+        "path": "lib/helpers"
+      },
+      {
+        "mode": "100644",
+        "object_id": "7ea30af9a05a53f45927213ac5e9298b7d5e3e93",
+        "path": "lib/helpers/index.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "6a723a68b51d99666925ffad32b3f9c2e6413006",
+        "path": "lib/helpers/parse_link_destination.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "f1a53fa1f5b95327353922557f0d96117c0c2898",
+        "path": "lib/helpers/parse_link_label.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4605647bf02e5c17b285cc62bb5923df788f3363",
+        "path": "lib/helpers/parse_link_title.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "8a8af9ddc30d7b14db51e02844a2cb32cf82124d",
+        "path": "lib/index.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "486d68fee3e91ed2c200d9ae0ea43256572c686d",
+        "path": "lib/parser_block.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "df61d67a2f9817ee6978b963e8bd666e91103bf2",
+        "path": "lib/parser_core.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c2cc6a139779955ac6fb97302e486f3ef7761669",
+        "path": "lib/parser_inline.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "c5931411b61e747fdcb48b5ede764e7e985a7e41",
+        "path": "lib/presets"
+      },
+      {
+        "mode": "100644",
+        "object_id": "7e705ad2f9b69fbbf10af716f7a61bc195d7744f",
+        "path": "lib/presets/commonmark.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "25402070ce0aaf39c9fbca0eb76ee6bc8a21ebd7",
+        "path": "lib/presets/default.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c83a48ee001f34a9c592853b7fb7cd72e9086259",
+        "path": "lib/presets/zero.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "a58914cac57cfdb44af6c3d12b943639b27fd38b",
+        "path": "lib/renderer.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "92c98e915e0b757121a783bc0aae727cb3e0bf94",
+        "path": "lib/ruler.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "a59315f9a5b4f9949e2cd168d85c10e5c404b0af",
+        "path": "lib/rules_block"
+      },
+      {
+        "mode": "100644",
+        "object_id": "b61da02ec9603b04929246f6df0490bcc0a07c7b",
+        "path": "lib/rules_block/blockquote.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e45e6f9ace655b3c20a349c9d8c779f4979e3602",
+        "path": "lib/rules_block/code.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "930f7b364e325b31c96685f04f91d956a93efb83",
+        "path": "lib/rules_block/fence.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "d2f7b79f66fe38a67d1956e546a72745c94d9c48",
+        "path": "lib/rules_block/heading.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "d467b21497a07951a742889ea2ed74a26a38c3f8",
+        "path": "lib/rules_block/hr.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "197520f67b15413733fc6b0fef7248fee1108086",
+        "path": "lib/rules_block/html_block.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "ee3b9a303ea8bec384eef93d8c469f4658933e6a",
+        "path": "lib/rules_block/lheading.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "fb53abd49ef04a2f7688e5435f523235f2a11fa2",
+        "path": "lib/rules_block/list.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "6ecdcef0d3f1dc95b945de44ed2f7a8512e11daa",
+        "path": "lib/rules_block/paragraph.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "416628645a5fa0796aad19d902d7d1d8307b9a84",
+        "path": "lib/rules_block/reference.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "3c2a87663398f36d2d37bf0055c3cd6f96e61535",
+        "path": "lib/rules_block/state_block.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "be0ba0a26a432c156fc02ce2c71fdc5743ca0a5d",
+        "path": "lib/rules_block/table.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "fb674b1d39efb2510334be8c2431096ce92f6268",
+        "path": "lib/rules_core"
+      },
+      {
+        "mode": "100644",
+        "object_id": "526cb4829e1636d014a81bbcce668f9b2555eb1f",
+        "path": "lib/rules_core/block.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "efd6c0706dd62e0a89ed0c6d4ab90d17159e3c4a",
+        "path": "lib/rules_core/inline.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "a22528038b59d8780b05376a57a26b50011f434d",
+        "path": "lib/rules_core/linkify.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "dfb67efd15bfb6dba7faa52c3525eaf05140fd37",
+        "path": "lib/rules_core/normalize.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "b18ecd93b13a598680d4c38c602359ab47c11d3d",
+        "path": "lib/rules_core/replacements.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "3b990edbc2adb6f62934142e2066212fe9a21c41",
+        "path": "lib/rules_core/smartquotes.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "a96c8fbcd1b68b50b422785696ccf211c99bdd54",
+        "path": "lib/rules_core/state_core.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "ee8f87244df0fa406b1a2c8142ce80bdf817e1ad",
+        "path": "lib/rules_core/text_join.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "b7da8db7b83e223a1539f0e866c3c56d79cfe23d",
+        "path": "lib/rules_inline"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e71e66f5cec5e3dd075244b14474d49723f77e56",
+        "path": "lib/rules_inline/autolink.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "5b926d0724645688ae55daa4a06404d601272699",
+        "path": "lib/rules_inline/backticks.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "8638d216ad06b0780298bbc38443b17f5e78b921",
+        "path": "lib/rules_inline/balance_pairs.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4e3b2735e26b0b67c2f3b1452711e35d301c2606",
+        "path": "lib/rules_inline/emphasis.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e65191df142b33d78ff61c6b00787e5a3611b907",
+        "path": "lib/rules_inline/entity.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "aa3728e3222225af065bb2fe1f3a1069f59ad863",
+        "path": "lib/rules_inline/escape.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e89ef9e340863a824af8f11fa1334c291bd5ba0c",
+        "path": "lib/rules_inline/fragments_join.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "256efadcd208f0e492ce7c3a369930268dfb87c1",
+        "path": "lib/rules_inline/html_inline.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "32cbb31117918d8dce550a35ec09b1abfb84f9f2",
+        "path": "lib/rules_inline/image.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "b1451738ef32b953e0bb546ec367bb0a35f12d87",
+        "path": "lib/rules_inline/link.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "fdc817a4a8f4f3094d5ae3d668b8baa81e415275",
+        "path": "lib/rules_inline/linkify.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "2c0e3ae7ee4ea0d2f4591f7bf34e020daf917123",
+        "path": "lib/rules_inline/newline.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "80cb3c5ab8ed596c303446032851690c0fb06c9b",
+        "path": "lib/rules_inline/state_inline.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "45f3c1bd53fc4a833dcd988673acb04e9b018d2c",
+        "path": "lib/rules_inline/strikethrough.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9be42274c599ad2211de862104b979af134000d4",
+        "path": "lib/rules_inline/text.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "706ae1d1db339fee5bfa2954da135f0d12b36916",
+        "path": "lib/token.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4d55a3e77e12af29b530a591b0d7843fbbac2542",
+        "path": "package.json"
+      },
+      {
+        "mode": "040000",
+        "object_id": "458f2e72d0398a214c8b7bbb2c1ba13cb2e9bbaa",
+        "path": "support"
+      },
+      {
+        "mode": "100644",
+        "object_id": "65da378a806afa0b2174f9c124250100f9eef18f",
+        "path": "support/api_header.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4024570437f93b5f76bdd5df1045783e1e0a0bfe",
+        "path": "support/build_demo.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9cb0217cd4d36efd4169ade4c265989fbd6c50f7",
+        "path": "support/build_doc.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "863397075bb209ba8cfeaa1124bbbb8fd047e215",
+        "path": "support/demo_template"
+      },
+      {
+        "mode": "100644",
+        "object_id": "1769fbaed15559f99730249bd249af50d14ad4a0",
+        "path": "support/demo_template/README.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "2f956adbf2e869917820ed20b723dba3d0edec6f",
+        "path": "support/demo_template/index.css"
+      },
+      {
+        "mode": "100644",
+        "object_id": "37d63f4c55dda17b6fff564a85d86b217aed076c",
+        "path": "support/demo_template/index.html"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4b634c2d44884f4d69048ccfee5a6590a7bb32a7",
+        "path": "support/demo_template/index.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "2f3f3a66d11c57c6e835197034172f5265f9f3d3",
+        "path": "support/demo_template/rollup.config.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "365cad8a5bc1b1ca3cfb48e6af6a8befa077d3e1",
+        "path": "support/demo_template/sample.md"
+      },
+      {
+        "mode": "100644",
+        "object_id": "ac558ed5b08ba4b1b6ea0ed2092ecd039a092925",
+        "path": "support/rollup.config.mjs"
+      },
+      {
+        "mode": "100755",
+        "object_id": "3e2dbe66943839693384bfbeb8eda0255f094cd4",
+        "path": "support/specsplit.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "6d8bf7952a0e6679a6bc35aa7778059948673b7d",
+        "path": "test"
+      },
+      {
+        "mode": "100644",
+        "object_id": "7680202994f5ca97dbec2c7f6914ae45072d56fa",
+        "path": "test/cjs.js"
+      },
+      {
+        "mode": "100644",
+        "object_id": "af2caed790ea6254bcfe739de95c4b00c0acdcfe",
+        "path": "test/commonmark.mjs"
+      },
+      {
+        "mode": "040000",
+        "object_id": "71db06116560cf5c13471b5a47a9ac8974763cfc",
+        "path": "test/fixtures"
+      },
+      {
+        "mode": "040000",
+        "object_id": "c77218e647ad0137b725863c9a01a2fb867bc4f4",
+        "path": "test/fixtures/commonmark"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "path": "test/fixtures/commonmark/bad.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "1dcf05d96f95298729599bbe6296971e5ef92296",
+        "path": "test/fixtures/commonmark/good.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "f1fab281e98b6006a62afcc59ed910ae4bc6741f",
+        "path": "test/fixtures/commonmark/spec.txt"
+      },
+      {
+        "mode": "040000",
+        "object_id": "bb7fe81a9c8d66240e23402a214d577fcb040615",
+        "path": "test/fixtures/markdown-it"
+      },
+      {
+        "mode": "100644",
+        "object_id": "558c0116ea482a4066ee75fad8f47b23df986557",
+        "path": "test/fixtures/markdown-it/commonmark_extras.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "57e085dfd945f94c2d055ed69e06f2b5caecad99",
+        "path": "test/fixtures/markdown-it/fatal.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "23e707aff106793570075091d199e58ebef8603c",
+        "path": "test/fixtures/markdown-it/linkify.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "6faed59b3825e63e872762c76f485bf08da2c10f",
+        "path": "test/fixtures/markdown-it/normalize.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "87fdccf86e106e4eea079a117fcd5e3ddf762b84",
+        "path": "test/fixtures/markdown-it/proto.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "afab445bdbfa65ba20514afa25fa249830a1267a",
+        "path": "test/fixtures/markdown-it/smartquotes.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "3e3b17ba6fb6ca5b7e23fea824da8a2d6e60f5c3",
+        "path": "test/fixtures/markdown-it/strikethrough.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "4737df7d65ff72649ecc8e82e7118b57418af923",
+        "path": "test/fixtures/markdown-it/tables.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9e4bd7665539b5ebde5da39487f764a89d07958c",
+        "path": "test/fixtures/markdown-it/typographer.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "7c0512e0c82cbf7ce32f1e4ca3bb4624a630e4e4",
+        "path": "test/fixtures/markdown-it/xss.txt"
+      },
+      {
+        "mode": "100644",
+        "object_id": "66b34b470c0e70b8f87da72c815024b167293c1d",
+        "path": "test/markdown-it.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "9c297e9c6f524bbfc8bb6070f9d41310d6b0e348",
+        "path": "test/misc.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "de229bab080ae32693bd45f1629e7b5e7fb531cd",
+        "path": "test/pathological.json"
+      },
+      {
+        "mode": "100644",
+        "object_id": "c2db10f5582dd0c7a74efc5228973e6cb47a352b",
+        "path": "test/pathological.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "76259c8cca6570bbd95176455f3e8c35aa309e33",
+        "path": "test/pathological_worker.js"
+      },
+      {
+        "mode": "100644",
+        "object_id": "e47d0011df239b10c09e704d626a3610b648aaae",
+        "path": "test/ruler.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "47dd951e68f2a04c225a929f10f6ab03df34c052",
+        "path": "test/token.mjs"
+      },
+      {
+        "mode": "100644",
+        "object_id": "ba78d2fb34b04d6bc05e90156aa88fa84ee7daa3",
+        "path": "test/utils.mjs"
+      }
+    ],
+    "inventory_sha256": "64fc8326ff39f0a2db702acd1a1b6fa7511b9cdfcbe69d093ca6566f44fd2188",
+    "manifest_sha256": "458da9b4e6646e9fef275852f844d637f13eca1b64b338dae26e06c3f1d73adb",
+    "revision": "0fe7ccb4b7f30236fb05f623be6924961d296d3d",
+    "source_group": "markdown-it/markdown-it",
+    "sources": {
+      "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md": {
+        "blob_id": "4a3ef556c8fd23eeb8bc5e44e734ddf7e66c88f6",
+        "cache_path": "native-continuation/2026-10-15/markdown-it/docs/README.md",
+        "native_path": "docs/README.md",
+        "sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68"
+      }
+    },
+    "target_scope": "explicitly-declared",
+    "targets": {
+      "docs/architecture.md": {
+        "blob_id": "a3cccdbb69208e81a02da7d4404f026682da983a",
+        "cache_path": "native-continuation/2026-10-15/markdown-it/docs/architecture.md",
+        "sha256": "12b59d2ffc60b698c2d87a16c012c076a79f45ca92e8a2205f43576c253f94d0",
+        "status": "present"
+      },
+      "docs/development.md": {
+        "blob_id": "782b75c447d5938209348a7efc4da95f1737533f",
+        "cache_path": "native-continuation/2026-10-15/markdown-it/docs/development.md",
+        "sha256": "25304c0e7d38b35ad8ee97a2ee68b6fecc371110ba938b98cf52bbc2ac9ec8d6",
+        "status": "present"
+      }
+    },
+    "version": 1
+  },
+  "reference_scope": "production-static-local-markdown-v1",
+  "references": {
+    "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md": [
+      {
+        "column": 45,
+        "destination": "architecture.md",
+        "end_column": 60,
+        "fragment": "",
+        "line": 9,
+        "native_path": "docs/architecture.md"
+      },
+      {
+        "column": 43,
+        "destination": "development.md",
+        "end_column": 57,
+        "fragment": "",
+        "line": 10,
+        "native_path": "docs/development.md"
+      }
+    ]
+  },
+  "renderer": "github",
+  "version": 2
+}

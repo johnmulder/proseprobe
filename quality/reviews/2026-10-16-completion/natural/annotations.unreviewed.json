@@ -12,7 +12,7 @@
   },
   "review": {
     "native_context": {
-      "path": "../../2026-10-15-remaining/native-intake/native-context-v1.json",
+      "path": "native-context.json",
       "sha256": "ad02d614546d3d4a63ac6d54425f2b1a02722fa112c290737420ffd1d10ae9e9"
     },
     "packet_index": {

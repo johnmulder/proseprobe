@@ -28,9 +28,9 @@ load reserved source bytes while selecting or validating development records.
 
 - [x] A1. Assess the branch, existing evidence and mainline; replace interactive
   completion dependencies with this finite scope and record every old plan ID.
-- [ ] A2. Close deterministic CI/local gate gaps and any concrete merge defects;
+- [x] A2. Close deterministic CI/local gate gaps and any concrete merge defects;
   keep generated documentation, coverage and reviewed regression checks enforced.
-- [ ] A3. Obtain two separate agent M012 reviews of the prepared Markdown-it
+- [x] A3. Obtain two separate agent M012 reviews of the prepared Markdown-it
   development packet, retain both originals and freeze accepted coverage before
   predictions. Validate source, targets, contracts and reviewer provenance.
 - [ ] A4. Run bound development reports under all-rules and unchanged production

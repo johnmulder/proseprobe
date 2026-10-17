@@ -1,0 +1,336 @@
+{
+  "version": 1,
+  "reviewer_id": "codex-agent:/root/blind_m012_b",
+  "actor_type": "agent",
+  "rule_ids": [
+    "M012"
+  ],
+  "inputs": {
+    "contract": {
+      "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-16-completion/natural/contracts.json",
+      "sha256": "0de847c5f043e60c0eb24bfa1e063cd7337713d4783cb6fa454247b828506f90",
+      "bytes": 459
+    },
+    "index": {
+      "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-16-completion/natural/index.json",
+      "sha256": "9bbf0a3a5a9dd3b09cd9d1beccf8b716100bbe634bf2d9ffda50ed3a5c3a8286",
+      "bytes": 476
+    },
+    "license": {
+      "path": "/Users/johnmulder/Experiments/proseprobe/quality/reviews/2026-10-15-remaining/native-intake/LICENSE",
+      "sha256": "792c48c5a849a15fdf9e37e8bcf9e6d1dd13b32b46c642a748a0a46a9919d473",
+      "bytes": 1073
+    },
+    "reading_context_sha256_declared": "bb0f0c82da2a783f1e9288667796ffd607f675459014365d5ed308a5a40b6ec4",
+    "native_inventory_sha256_declared": "64fc8326ff39f0a2db702acd1a1b6fa7511b9cdfcbe69d093ca6566f44fd2188",
+    "native_manifest_sha256_declared": "458da9b4e6646e9fef275852f844d637f13eca1b64b338dae26e06c3f1d73adb",
+    "declared_hash_reference_limit": "The context, inventory, and manifest digests are declarations inside reading 4; the original context object, inventory file, and external manifest were not opened or independently authenticated."
+  },
+  "exposure": {
+    "instructions_read": [
+      "/Users/johnmulder/.codex/RTK.md",
+      "Parent task naming M012, the selected source and the allowed reading chain."
+    ],
+    "evidence_read": [
+      "contracts.json",
+      "index.json",
+      "native-intake/LICENSE",
+      "All 13 linked /private/tmp/remain-md readings in Next order, including every source row and every target row."
+    ],
+    "preparation_hints_seen": [
+      "The focus question identified two selected references.",
+      "Reading 4 declared both native target paths present and supplied their expected hashes.",
+      "Prepared heading/anchor membership inventories and source destination coordinates were visible."
+    ],
+    "independent_work": "I read the complete source and both complete target texts, assessed the actual literal destinations, and reconstructed the original source and target UTF-8 bytes from the contiguous displayed source rows. All three computed SHA-256 digests matched their declared hashes. Prepared present/status labels were evidence, not an adopted review verdict.",
+    "detector_implementation_seen": false,
+    "detector_predictions_or_reports_seen": false,
+    "other_reviewer_judgments_seen": false,
+    "external_source_manifests_seen": false,
+    "detector_run": false,
+    "human_review_or_effectiveness_claim": false,
+    "provenance_limits": [
+      "This is an agent review, not a human review.",
+      "Origin repository and revision are accepted from the supplied offline context; no repository checkout, upstream Git object, network endpoint, or live GitHub rendering was inspected.",
+      "Computed reading-file hashes establish which supplied bytes were reviewed; matching reconstructed file hashes establish internal consistency, not independent upstream authenticity.",
+      "The contract gives a broad supported-fragment description rather than a detailed renderer algorithm. Both selected local destinations have empty fragments, so no renderer-edge-case inference was needed."
+    ]
+  },
+  "pages_read": [
+    {
+      "path": "/private/tmp/remain-md-0001.txt",
+      "sha256": "0dd528969f9d560b2c375aba0b82ae4a979161bc756d7c804bc4185b459fdb74",
+      "bytes": 1245,
+      "reading": 1,
+      "read_completely": true,
+      "role": "focus"
+    },
+    {
+      "path": "/private/tmp/remain-md-0002.txt",
+      "sha256": "a2d3f435875bff41fd96c11c8a99c3a7f402ea9faf26eed55322cd152f64d0eb",
+      "bytes": 1295,
+      "reading": 2,
+      "read_completely": true,
+      "role": "markdown-source"
+    },
+    {
+      "path": "/private/tmp/remain-md-0003.txt",
+      "sha256": "0f0d7a08deb3572cdde55ce4108a1499d061d5a70c5a42a12cae5dbd4acf5f5c",
+      "bytes": 1138,
+      "reading": 3,
+      "read_completely": true,
+      "role": "markdown-inventory"
+    },
+    {
+      "path": "/private/tmp/remain-md-0004.txt",
+      "sha256": "cfd3a4be9ec2749e7b0db257ddfec4db0ddcf7c6bb11a08c557835022071f8bc",
+      "bytes": 1853,
+      "reading": 4,
+      "read_completely": true,
+      "role": "native-context"
+    },
+    {
+      "path": "/private/tmp/remain-md-0005.txt",
+      "sha256": "73b5abe6a56ac00854db86b1679ac3fa63e62f90ff2afbfb791d5d765cbcee54",
+      "bytes": 3428,
+      "reading": 5,
+      "read_completely": true,
+      "role": "markdown-target"
+    },
+    {
+      "path": "/private/tmp/remain-md-0006.txt",
+      "sha256": "5c242d678c155ffef2791abee51d5c58410d82915ae4c0a85882c9e775c962e0",
+      "bytes": 4028,
+      "reading": 6,
+      "read_completely": true,
+      "role": "markdown-target"
+    },
+    {
+      "path": "/private/tmp/remain-md-0007.txt",
+      "sha256": "642a491d57ed74ec88698777bf6d59ab5b8cc224cb6146b13961f3ebaf79f091",
+      "bytes": 3500,
+      "reading": 7,
+      "read_completely": true,
+      "role": "markdown-target"
+    },
+    {
+      "path": "/private/tmp/remain-md-0008.txt",
+      "sha256": "608aec93a76676a1250e13efb66a58f813f0e327536bc9991a4ba6e0f38ed1ab",
+      "bytes": 3655,
+      "reading": 8,
+      "read_completely": true,
+      "role": "markdown-target"
+    },
+    {
+      "path": "/private/tmp/remain-md-0009.txt",
+      "sha256": "f18b1f6542d2d6ef6b05c54475c6410aeecd2111ffb655ba04a9b5f5d1a08ca5",
+      "bytes": 910,
+      "reading": 9,
+      "read_completely": true,
+      "role": "markdown-target"
+    },
+    {
+      "path": "/private/tmp/remain-md-0010.txt",
+      "sha256": "c5f35141fa1b0c98f72c50aa86c323df417e9c2537f3592c86af2107bc1b318a",
+      "bytes": 1664,
+      "reading": 10,
+      "read_completely": true,
+      "role": "markdown-inventory"
+    },
+    {
+      "path": "/private/tmp/remain-md-0011.txt",
+      "sha256": "fb74b43c6c04c8566a0b3e3fc3ac99f5333d7534b0202cf187798c76c36ddd21",
+      "bytes": 3812,
+      "reading": 11,
+      "read_completely": true,
+      "role": "markdown-target"
+    },
+    {
+      "path": "/private/tmp/remain-md-0012.txt",
+      "sha256": "929b3c2fa316798c8439719b32cae063f854100a2b460865bd9e67413aff7056",
+      "bytes": 3630,
+      "reading": 12,
+      "read_completely": true,
+      "role": "markdown-target"
+    },
+    {
+      "path": "/private/tmp/remain-md-0013.txt",
+      "sha256": "5c1d24cf193bc79ca0b6b2358ebc2036496c1355db187e426c6928f3eb153f25",
+      "bytes": 2103,
+      "reading": 13,
+      "read_completely": true,
+      "role": "markdown-inventory"
+    }
+  ],
+  "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+  "source_sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68",
+  "source": {
+    "natural_file": "originals/0000.md",
+    "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+    "native_path": "docs/README.md",
+    "sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68",
+    "format": "markdown",
+    "revision": "0fe7ccb4b7f30236fb05f623be6924961d296d3d",
+    "source_group": "markdown-it/markdown-it",
+    "split": "development",
+    "reconstructed_sha256": "14957e0989bbdc607e2ebe5dda0fc3eafb443f10baafe05827ba7f9581eb4b68",
+    "reconstructed_bytes": 363,
+    "source_rows_read": {
+      "start_line": 1,
+      "end_line_inclusive": 10
+    }
+  },
+  "span_convention": "Original Unicode code-point coordinates; lines and columns start at 1; end_column is exclusive. Spans cover destination text only.",
+  "whole_source_scope": {
+    "decision": "complete_supported_static_M012_coverage",
+    "source_lines_read": [
+      1,
+      10
+    ],
+    "source_bytes_hash_matched": true,
+    "inventory": "The complete source has four inline Markdown links: two absolute HTTPS links on lines 4 and 5, and two literal relative Markdown file destinations on lines 9 and 10. It has no code blocks, reference definitions, local fragment-only links, HTML destinations, generated destinations, or other local path destinations.",
+    "supported_selected_reference_count": 2,
+    "supported_selected_references_judged": 2,
+    "expected_issue_count": 0,
+    "clean_supported_reference_count": 2,
+    "unsupported_or_excluded_source_reference_count": 2,
+    "reason": "Both relative .md destinations resolve against docs/README.md to complete pinned Markdown target texts supplied at the same declared revision; both have empty fragments. Every M012-eligible destination in the complete selected source has been judged. This does not label the absolute HTTPS destinations valid."
+  },
+  "supported_references": [
+    {
+      "rule_id": "M012",
+      "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+      "span": {
+        "line": 9,
+        "column": 45,
+        "end_column": 60
+      },
+      "destination": "architecture.md",
+      "native_path": "docs/architecture.md",
+      "fragment": "",
+      "judgment": "clean",
+      "target_existence": "present_in_supplied_pinned_context",
+      "fragment_validity": "not_applicable_no_fragment",
+      "target_sha256": "12b59d2ffc60b698c2d87a16c012c076a79f45ca92e8a2205f43576c253f94d0",
+      "target_reconstructed_sha256": "12b59d2ffc60b698c2d87a16c012c076a79f45ca92e8a2205f43576c253f94d0",
+      "target_bytes": 7381,
+      "target_rows_read": {
+        "start_line": 1,
+        "end_line_inclusive": 186
+      },
+      "evidence_readings": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "reason": "Resolving the literal sibling Markdown path from docs/README.md yields docs/architecture.md. Readings 5 through 9 supply all 186 lines, reconstructed without gaps or overlaps, and their bytes hash to the target hash declared in reading 4. The destination requests no fragment; no missing file or invalid anchor is supported."
+    },
+    {
+      "rule_id": "M012",
+      "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+      "span": {
+        "line": 10,
+        "column": 43,
+        "end_column": 57
+      },
+      "destination": "development.md",
+      "native_path": "docs/development.md",
+      "fragment": "",
+      "judgment": "clean",
+      "target_existence": "present_in_supplied_pinned_context",
+      "fragment_validity": "not_applicable_no_fragment",
+      "target_sha256": "25304c0e7d38b35ad8ee97a2ee68b6fecc371110ba938b98cf52bbc2ac9ec8d6",
+      "target_reconstructed_sha256": "25304c0e7d38b35ad8ee97a2ee68b6fecc371110ba938b98cf52bbc2ac9ec8d6",
+      "target_bytes": 3967,
+      "target_rows_read": {
+        "start_line": 1,
+        "end_line_inclusive": 87
+      },
+      "evidence_readings": [
+        4,
+        11,
+        12,
+        13
+      ],
+      "reason": "Resolving the literal sibling Markdown path from docs/README.md yields docs/development.md. Readings 11 and 12 supply all 87 lines, reconstructed without gaps or overlaps, and their bytes hash to the target hash declared in reading 4. The destination requests no fragment; no missing file or invalid anchor is supported."
+    }
+  ],
+  "expected_issues": [],
+  "independent_issue_spans": [],
+  "misses": {
+    "independent_unresolved_local_target_cases": [],
+    "detector_misses_assessed": false,
+    "reason": "No independent issue was found in the supported source scope. No detector output was inspected, so detector agreement, false positives, and misses are not asserted."
+  },
+  "clean_negative_cases": [
+    {
+      "rule_id": "M012",
+      "span": {
+        "line": 9,
+        "column": 45,
+        "end_column": 60
+      },
+      "destination": "architecture.md",
+      "case": "Existing literal relative Markdown target without fragment."
+    },
+    {
+      "rule_id": "M012",
+      "span": {
+        "line": 10,
+        "column": 43,
+        "end_column": 57
+      },
+      "destination": "development.md",
+      "case": "Existing literal relative Markdown target without fragment."
+    }
+  ],
+  "exclusions": [
+    {
+      "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+      "span": {
+        "line": 4,
+        "column": 10,
+        "end_column": 64
+      },
+      "destination": "https://github.com/markdown-it/markdown-it#markdown-it",
+      "reason": "Absolute HTTPS repository URL, not a literal local Markdown file or same-file local fragment. Upstream README content and remote fragment existence were not supplied or checked; this is excluded, not a clean destination judgment."
+    },
+    {
+      "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+      "span": {
+        "line": 5,
+        "column": 12,
+        "end_column": 54
+      },
+      "destination": "https://markdown-it.github.io/markdown-it/",
+      "reason": "Absolute HTTPS API documentation URL, outside local Markdown target scope. Network availability and remote page contents were not supplied or checked; this is excluded, not a clean destination judgment."
+    },
+    {
+      "source_id": "markdown-it/markdown-it:0fe7ccb4b7f30236fb05f623be6924961d296d3d:docs/README.md",
+      "line_ranges_inclusive": [
+        [
+          1,
+          3
+        ],
+        [
+          6,
+          8
+        ]
+      ],
+      "reason": "These source lines contain prose, blanks, an inline code name, and a content label, but no M012 destination. Line 4/5/9/10 labels and surrounding prose likewise do not add destination cases."
+    },
+    {
+      "paths": [
+        "docs/architecture.md",
+        "docs/development.md"
+      ],
+      "reason": "Target documents were read in full as pinned existence and fragment context. Their outgoing references, prose, and code blocks are not occurrences in the selected docs/README.md source and were not recursively annotated as additional source cases."
+    }
+  ],
+  "unresolved": [],
+  "unresolved_scope_note": "No unresolved judgment or missing target context remains for either selected local destination. Offline upstream-authenticity and remote-URL limitations remain explicit provenance limits, not local-link findings."
+}
