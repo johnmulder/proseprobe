@@ -151,6 +151,19 @@ and generic claims in the same sentence still receive review prompts. The
 existing `robust regression` exception remains span-specific; configured
 `allowed_phrases` retains its documented whole-line exemption.
 
+An explicitly defined, single quoted headword is also preserved: for example,
+“implemented” means working functionality. Supported definition predicates are
+`means`, `denotes`, `refers to`, and `is defined as`, followed by prose. Straight
+or curly single/double quotes must pair, and ordinary wrapping is allowed.
+Only the headword is exempt; vocabulary in its definition remains reviewable.
+Code, paragraph boundaries, or separate list items cannot supply the predicate.
+This recognizes a word being defined; it does not validate the definition.
+
+Generic uses of `implement` and `demonstrate` still receive review prompts,
+including when the surrounding subject is technical. A vocabulary match alone
+does not require an edit: preserve wording whose meaning or precision would be
+lost by the suggested alternative.
+
 Ordinary blockquotes remain linted. Preserve an exact quotation with an explicit
 line-scoped suppression when its wording must remain unchanged. Inflected
 forms with an unsupported literal base-form replacement retain their finding

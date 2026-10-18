@@ -296,6 +296,108 @@ class TestAIVocabularyRule:
         assert rule.check(content, "interfaces.md") == []
 
     @pytest.mark.parametrize(
+        "quotes", [('"', '"'), ("'", "'"), ("“", "”"), ("\u2018", "\u2019")]
+    )
+    @pytest.mark.parametrize(
+        "style", ["markdown", "docstring", "comment", "blockquote"]
+    )
+    def test_preserves_explicit_quoted_term_definitions(
+        self, rule: AIVocabularyRule, quotes: tuple[str, str], style: str
+    ) -> None:
+        text = f"{quotes[0]}implemented{quotes[1]}\nmeans working functionality."
+        if style == "markdown":
+            content, filename = text, "guide.md"
+        elif style == "docstring":
+            content, filename = f'"""{text}"""', "guide.py"
+        else:
+            prefix = "# " if style == "comment" else "> "
+            content = "\n".join(prefix + line for line in text.splitlines())
+            filename = "guide.py" if style == "comment" else "guide.md"
+
+        assert rule.check(content, filename) == []
+
+    @pytest.mark.parametrize(
+        "definition",
+        [
+            "means a documented behavior exists.",
+            "denotes a documented behavior.",
+            "refers to a documented behavior.",
+            "is defined as a documented behavior.",
+        ],
+    )
+    def test_definition_exception_is_not_a_technical_word_allowlist(
+        self, rule: AIVocabularyRule, definition: str
+    ) -> None:
+        assert rule.check(f'"robust" {definition}', "terms.md") == []
+
+    @pytest.mark.parametrize(
+        "content",
+        [
+            'The team "implemented" the migration plan.',
+            '"implemented" is our preferred wording.',
+            '"implemented” means working functionality.',
+            '“implemented" means working functionality.',
+            '"already implemented" means working functionality.',
+            '"implemented" means.',
+            '"implemented"\n\nmeans working functionality.',
+            '"implemented"\n- means working functionality.',
+            '"implemented" `hidden` means working functionality.',
+            '"implemented" <code>hidden</code> means working functionality.',
+            '"implemented" means `hidden` functionality.',
+        ],
+    )
+    def test_ordinary_quotes_and_disconnected_definitions_keep_review_prompts(
+        self, rule: AIVocabularyRule, content: str
+    ) -> None:
+        [issue] = rule.check(content, "guide.md")
+
+        assert (
+            content.splitlines()[issue.line - 1][
+                issue.column - 1 : issue.end_column - 1
+            ]
+            == "implemented"
+        )
+
+    def test_definition_preserves_only_the_headword_with_exact_other_spans(
+        self, rule: AIVocabularyRule
+    ) -> None:
+        content = (
+            "Résumé: “implemented” means the project implemented the migration plan "
+            "with robust defaults."
+        )
+        issues = rule.check(content, "guide.md")
+
+        assert [(issue.column, issue.end_column) for issue in issues] == [
+            (content.rindex("implemented") + 1, content.rindex("implemented") + 12),
+            (content.index("robust") + 1, content.index("robust") + 7),
+        ]
+
+    @pytest.mark.parametrize(
+        ("content", "word", "suggestion"),
+        [
+            (
+                "Normally implement the change and pass the gate.",
+                "implement",
+                "carry out",
+            ),
+            ("No demonstrated quality advantage is recorded.", "demonstrated", None),
+            ("The script will demonstrate the workflow.", "demonstrate", "show"),
+        ],
+    )
+    def test_technical_subject_does_not_blanket_exempt_generic_verbs(
+        self,
+        rule: AIVocabularyRule,
+        content: str,
+        word: str,
+        suggestion: str | None,
+    ) -> None:
+        [issue] = rule.check(content, "workflow.md")
+
+        assert content[issue.column - 1 : issue.end_column - 1] == word
+        assert issue.suggestion == suggestion
+        assert issue.confidence is Confidence.MEDIUM
+
+    @pytest.mark.parametrize(
         "form", ["implement", "implements", "implemented", "implementing"]
     )
     def test_generic_implement_forms_keep_review_and_safe_suggestions(

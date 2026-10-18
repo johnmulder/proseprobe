@@ -252,6 +252,20 @@ class AIVocabularyRule(Rule):
         r"\b(?P<term>delve)\s+into\b", re.IGNORECASE
     )
 
+    _DEFINED_TERM_PATTERNS: ClassVar[tuple[re.Pattern[str], ...]] = tuple(
+        re.compile(
+            rf"{re.escape(opening)}(?P<term>\w+(?:-\w+)*){re.escape(closing)}"
+            r"\s+(?:means|denotes|refers\s+to|is\s+defined\s+as)\s+\w",
+            re.IGNORECASE,
+        )
+        for opening, closing in (
+            ('"', '"'),
+            ("'", "'"),
+            ("“", "”"),
+            ("\u2018", "\u2019"),
+        )
+    )
+
     @classmethod
     def _unsupported_suggestion_positions(
         cls, content: str, filename: str
@@ -269,10 +283,10 @@ class AIVocabularyRule(Rule):
         return positions
 
     @classmethod
-    def _technical_positions(
+    def _preserved_positions(
         cls, content: str, filename: str
     ) -> set[tuple[int, int, int]]:
-        """Return term spans supported by a named technical construction."""
+        """Find named technical uses and explicitly defined quoted headwords."""
         positions: set[tuple[int, int, int]] = set()
         for sentence in iter_prose_sentences(content, filename):
             raw = sentence.source_text(content)
@@ -294,6 +308,12 @@ class AIVocabularyRule(Rule):
                     end_line, end_column = sentence.source_position(end)
                     if line == end_line:
                         positions.add((line, column, end_column))
+            for pattern in cls._DEFINED_TERM_PATTERNS:
+                for match in iter_prose_regex_matches(sentence, raw, filename, pattern):
+                    start, end = match.span("term")
+                    line, column = sentence.source_position(start)
+                    _, end_column = sentence.source_position(end)
+                    positions.add((line, column, end_column))
         return positions
 
     def __init__(
@@ -318,7 +338,7 @@ class AIVocabularyRule(Rule):
     def check(self, content: str, filename: str) -> list[Issue]:
         """Check for overused vocabulary words."""
         issues: list[Issue] = []
-        technical_positions = self._technical_positions(content, filename)
+        preserved_positions = self._preserved_positions(content, filename)
         unsupported_suggestions = self._unsupported_suggestion_positions(
             content, filename
         )
@@ -335,7 +355,7 @@ class AIVocabularyRule(Rule):
                         line_num,
                         match.start() + 1,
                         match.end() + 1,
-                    ) in technical_positions:
+                    ) in preserved_positions:
                         continue
                     suggestion = VOCABULARY_SUGGESTIONS.get(word)
                     matched_word = match.group().lower()

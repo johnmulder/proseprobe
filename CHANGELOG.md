@@ -98,6 +98,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Preserved explicitly defined single quoted headwords in V001 without
+  exempting ordinary quotations, nearby vocabulary, or unrelated technical uses.
+
 - Preserved fixed separators in copula, hedge, cutoff, attribution, and stakes
   regex phrases across wrapping while retaining evidence and clause policy.
 
