@@ -234,6 +234,14 @@ class AIVocabularyRule(Rule):
         "architect": r"architect(?:s|ed|ing)\s+(?:a|an|the|our|this|that|new|scalable|robust|modern|flexible)\s+\w+",
     }
 
+    _TECHNICAL_KEY_PATTERNS: ClassVar[tuple[re.Pattern[str], ...]] = tuple(
+        re.compile(pattern, re.IGNORECASE)
+        for pattern in (
+            r"\b(?:duplicate|record(?:\s+identity)?)\s+(?P<term>key)\b(?!\s+(?:(?:[*_~\[]|<[^>\n]+>)\s*)*(?:benefits?|features?|factors?|points?|ideas?|elements?|steps?|roles?|insights?)\b)",
+            r"\b(?P<term>key)\s+paths?\b(?!\s+(?:(?:[*_~\[]|<[^>\n]+>)\s*)*(?:to|for|towards?)\b)",
+        )
+    )
+
     _TECHNICAL_PATTERNS: ClassVar[tuple[re.Pattern[str], ...]] = tuple(
         re.compile(pattern, re.IGNORECASE)
         for pattern in (
@@ -246,6 +254,15 @@ class AIVocabularyRule(Rule):
             r"\b(?P<term>implement(?:s|ed|ing)?)\s+(?:in|using)\s+(?P<quote>`{1,2})?(?:C\+\+|C#|C|Python|Rust|JavaScript|TypeScript|Java|Go|Ruby|Swift|Kotlin|Julia|Haskell)(?(quote)(?P=quote)|(?=[\s.,;:!?)]|$))",
             r"\b(?P<term>implement(?:s|ed|ing)?)\s+(?:(?:the|a|an|this|that|our)\s+)?(?:(?:same|buffer|iterator|iteration|mapping|sequence|network|binary|streaming)\s+)?(?:protocol|interface)\b",
         )
+    )
+
+    _LONG_OPTION: ClassVar[re.Pattern[str]] = re.compile(
+        r"(?:^|(?<=[\s(\"'\[{]))--[a-z0-9]+(?:[-_][a-z0-9]+)*"
+        r"(?=$|[\s=,;:!?)\]}'\"]|\.(?=\s|$))",
+        re.IGNORECASE | re.ASCII,
+    )
+    _OPTION_KEY: ClassVar[re.Pattern[str]] = re.compile(
+        r"\bkey\b", re.IGNORECASE | re.ASCII
     )
 
     _DELVE_INTO: ClassVar[re.Pattern[str]] = re.compile(
@@ -296,7 +313,7 @@ class AIVocabularyRule(Rule):
                     if chars[index] in {"#", ">"} and sentence.text[index].isspace():
                         chars[index] = " "
             context = "".join(chars)
-            for pattern in cls._TECHNICAL_PATTERNS:
+            for pattern in cls._TECHNICAL_PATTERNS + cls._TECHNICAL_KEY_PATTERNS:
                 for match in pattern.finditer(context):
                     start, end = match.span("term")
                     if (
@@ -304,10 +321,24 @@ class AIVocabularyRule(Rule):
                         != match.group("term").casefold()
                     ):
                         continue
+                    if (
+                        pattern in cls._TECHNICAL_KEY_PATTERNS
+                        and pattern.match(sentence.text, match.start()) is None
+                    ):
+                        continue
                     line, column = sentence.source_position(start)
                     end_line, end_column = sentence.source_position(end)
                     if line == end_line:
                         positions.add((line, column, end_column))
+            for option in cls._LONG_OPTION.finditer(context):
+                for match in cls._OPTION_KEY.finditer(option.group()):
+                    start = option.start() + match.start()
+                    end = option.start() + match.end()
+                    if sentence.text[start:end].casefold() != match.group().casefold():
+                        continue
+                    line, column = sentence.source_position(start)
+                    _, end_column = sentence.source_position(end)
+                    positions.add((line, column, end_column))
             for pattern in cls._DEFINED_TERM_PATTERNS:
                 for match in iter_prose_regex_matches(sentence, raw, filename, pattern):
                     start, end = match.span("term")

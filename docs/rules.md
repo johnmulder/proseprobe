@@ -151,6 +151,19 @@ and generic claims in the same sentence still receive review prompts. The
 existing `robust regression` exception remains span-specific; configured
 `allowed_phrases` retains its documented whole-line exemption.
 
+Technical uses of `key` also include `duplicate key`, `record key`,
+`record identity key`, and `key path`. The first three forms remain reviewable
+when `key` modifies `benefit`, `feature`, `factor`, `point`, `idea`, `element`,
+`step`, `role`, or `insight`, including plurals. `key path` followed by `to`,
+`for`, `toward`, or `towards` remains reviewable as ambiguous or figurative.
+Complete ASCII long-option names preserve only a whole `key` segment, as in
+`--key`, `--array-key`, or `--key-path`; option values and nearby prose are not
+exempt. Matching is case-insensitive and allows ordinary wrapping within one
+prose region, without joining separate paragraphs, list items, or code gaps.
+Bare unqualified uses such as `ignore key` and generic importance claims such
+as `key benefit` still receive review prompts. Other V001 matches in the same
+sentence remain reviewable.
+
 An explicitly defined, single quoted headword is also preserved: for example,
 “implemented” means working functionality. Supported definition predicates are
 `means`, `denotes`, `refers to`, and `is defined as`, followed by prose. Straight

@@ -83,6 +83,18 @@ conservative standard-library handling for abbreviations, decimals, URLs,
 trailing quotes, and hard prose-block boundaries; it does not require an NLP
 dependency.
 
+V001 preserves individual technical `key` occurrences in `duplicate key`,
+`record key`, `record identity key`, and `key path`, and in complete ASCII long
+options where `key` is a whole hyphen-separated segment. Matching allows ordinary
+wrapping within one prose region. Generic importance claims, ambiguous
+`key path to/for/toward(s)` forms, option values, and other vocabulary matches
+remain reviewable; the duplicate/record phrases do not exempt `key` used to
+modify generic benefit, feature, factor, point, idea, element, step, role, or
+insight nouns, including plurals. These occurrence-specific exceptions do not
+join separate paragraphs, list items, or code gaps, or change existing profiles,
+baselines, or corpus contracts. See
+[V001 rule details](docs/rules.md#v001-overused-vocabulary).
+
 ### 3.2 Rule Severity Levels
 
 | Level | Description | Default Exit Code Impact |

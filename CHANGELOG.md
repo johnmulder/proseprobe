@@ -98,6 +98,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Preserved V001 technical `key` occurrences in supported duplicate and record
+  phrases, `key path`, and complete ASCII long-option names. Generic or ambiguous
+  uses, option values, and nearby vocabulary remain reviewable. Matching stays
+  within one prose region; existing profiles, baselines, and corpus contracts
+  are unchanged.
+
 - Preserved explicitly defined single quoted headwords in V001 without
   exempting ordinary quotations, nearby vocabulary, or unrelated technical uses.
 
