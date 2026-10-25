@@ -1,75 +1,66 @@
-# Release blockers
+# Release status and blockers
 
-Last evaluated: 2026-08-15.
+Last evaluated: 2026-10-25. ProseProbe 0.1.0 remains unpublished.
 
-Complete every gate below for the exact **ProseProbe 0.1.0** release commit.
-Do not create the `v0.1.0` tag or publish a GitHub release early: publishing
-that release starts the PyPI workflow.
+## Verified source preparation
 
-## Repository gates
+The source preflight at `2fff536944bb91dff0d5012625b337b2f6979bba` completed
+with a clean worktree matching remote `master`:
 
-- [ ] Confirm the worktree is clean and `master` matches `origin/master`:
+- `make check dogfood rule-quality rule-quality-regression nfr-check` passed:
+  3,996 tests, 96.35% coverage against the 90% floor, and the existing curated
+  mismatch sets unchanged at six for all rules and four for production.
+- The [hosted CI matrix](https://github.com/johnmulder/proseprobe/actions/runs/39544639711)
+  passed for that exact source on Python 3.11, 3.12, and 3.13, including the docs
+  and build jobs.
+- The wheel and source archive built, `twine check --strict` passed, four
+  isolated-wheel command/import checks passed, and all ten packaged README URLs
+  returned HTTP 200.
+- [`LICENSE`](LICENSE) already names John Mulder as the 2026 copyright holder.
+- GitHub's `pypi` environment requires review by `johnmulder` and permits only
+  `v*` tags. The remote `release.yml` matches the reviewed workflow, uses that
+  environment, and grants `id-token: write` for trusted publishing.
+
+These results qualify the recorded source. They do not freeze a final release
+candidate after subsequent documentation or metadata changes. No release tag,
+GitHub publication, PyPI upload, or protected-environment approval was performed.
+The private pending PyPI publisher has not been verified.
+
+## Remaining release work
+
+- [ ] Finalize [`CHANGELOG.md`](CHANGELOG.md): replace the `0.1.0` `Unreleased`
+  marker with the ISO release date, add an empty `Unreleased` section, and review
+  the notes against the final diff. Update README installation guidance to the
+  intended PyPI, pipx, and `v0.1.0` pre-commit commands at the final release
+  candidate stage.
+- [ ] Freeze that final clean commit and confirm `master` matches
+  `origin/master`. Repeat the commit-sensitive local checks and require the
+  complete hosted CI matrix for the same final commit:
 
   ```console
   git status --short --branch
   git rev-parse HEAD
   git rev-parse origin/master
+  make check dogfood rule-quality rule-quality-regression nfr-check
   ```
 
-- [ ] Run the local quality and release checks on that commit:
-
-  ```console
-  make check
-  make dogfood
-  make rule-quality
-  make rule-quality-regression
-  make nfr-check
-  ```
-
-- [ ] Require the complete GitHub CI matrix to pass for the same commit on
-  Python 3.11, 3.12, and 3.13. Do not rely on the status of a different or
-  merely more recent commit.
-
-## Package gates
-
-- [ ] Build the source and wheel distributions, then validate both:
+- [ ] Build and strictly validate distributions from the final candidate.
+  Inspect its packaged README and external documentation/license links, then
+  install its wheel in a new virtual environment and run the command/import
+  smoke checks:
 
   ```console
   make build
   twine check --strict dist/*
-  ```
-
-- [ ] Inspect the packaged README rendering and confirm its documentation and
-  license links resolve outside a checkout.
-- [ ] Install the wheel in a new virtual environment and smoke-test:
-
-  ```text
   proseprobe version
   proseprobe check --help
   python -m proseprobe version
-  import proseprobe
+  python -c 'import proseprobe'
   ```
 
-## Release identity gates
-
-- [ ] Choose the legal copyright holder and add it after
-  `Copyright (c) 2026` in [`LICENSE`](LICENSE). Keep it consistent with the
-  ownership and author information the project intends to publish.
-- [ ] Replace the `0.1.0` `Unreleased` marker in
-  [`CHANGELOG.md`](CHANGELOG.md) with the ISO release date, add an empty
-  `Unreleased` section, and review the notes against the final diff.
-- [ ] Replace the README's pre-release installation guidance with the published
-  PyPI, pipx, and `v0.1.0` pre-commit commands only for the final release
-  candidate.
-- [ ] Confirm no local or remote `v0.1.0` tag or GitHub release exists before
-  creating the audited tag.
-- [ ] Confirm the PyPI JSON endpoint returns 404 immediately before
-  publication. A pending trusted publisher does not reserve the project name.
-
-## Trusted publishing gates
-
-- [ ] Create or verify the pending PyPI trusted publisher with these exact
-  values:
+- [ ] Verify the pending PyPI trusted publisher in the private PyPI account
+  with these exact values, and confirm it matches the protected GitHub workflow
+  and environment:
 
   | Field | Value |
   | --- | --- |
@@ -79,14 +70,15 @@ that release starts the PyPI workflow.
   | Workflow | `release.yml` |
   | Environment | `pypi` |
 
-- [ ] Confirm the protected GitHub `pypi` environment requires approval and
-  permits only `v*` tags.
-- [ ] Confirm the pending publisher appears in PyPI and matches the GitHub
-  workflow and environment exactly.
+- [ ] Immediately before publication, confirm no local or remote `v0.1.0` tag
+  or GitHub release exists and the PyPI JSON endpoint returns 404. A pending
+  trusted publisher does not reserve the project name. Recheck the environment
+  and workflow protections if their configuration has changed.
 
 ## Publication boundary
 
-After every gate passes, create the `v0.1.0` GitHub release from the audited
-commit. The release workflow builds once, attaches the distributions, and waits
-for approval on the protected `pypi` environment. Approving that environment
-authorizes publication to PyPI.
+Do not create `v0.1.0` or publish a GitHub release before the remaining gates
+pass for the audited commit. Publishing that GitHub release starts the PyPI
+workflow. It builds once, attaches the distributions, and waits for approval on
+the protected `pypi` environment. Approving that environment authorizes
+publication to PyPI.

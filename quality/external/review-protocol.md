@@ -35,16 +35,17 @@ root-authored challenges distinct from natural sources and document author
 implementation familiarity. Agent suggestion judgments stay outside the human
 usefulness schema. Independent human claims and holdout prerequisites remain.
 
-## Current autonomous merge scope
+## Completed autonomous merge scope
 
-On 2026-10-16 the user requested plans that complete without human interaction.
-The active [merge plan](../../PLAN.md) uses separate agent judgments for the
-prepared development batch and retains all original review provenance. A missing
-human judgment remains unavailable. Independent human research, reserved holdout
-evaluation, optional acquisition and publication are outside this task's scope.
-Requirements for scientific claims, source reuse and publication still apply
-to any future work. Retaining the current policy is a complete
-decision when evidence does not support promotion; it needs no human response.
+The autonomous merge work requested on 2026-10-16 is complete. Its
+[completion record](../reviews/2026-10-16-completion/README.md) preserves the
+separate agent judgments, development reports, and original review provenance.
+The completed working plan has been retired. A missing human judgment remains
+unavailable. Independent human research, reserved holdout evaluation, optional
+acquisition, and publication remain outside that completed engineering scope.
+The scientific claim, source reuse, and publication requirements below still
+apply to future work. Retaining the current policy remains appropriate when
+evidence does not support promotion.
 
 ## First pass
 

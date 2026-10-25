@@ -216,10 +216,16 @@ Reported conformance support applies to these source projections alone.
 
 [The detailed protocol](review-protocol.md) defines blind issue/coverage review,
 a metadata-selected double-annotation subset, separate suggestion questions,
-native-pair correspondence and predeclared group uncertainty. No reviewers or
-real annotation labels have been assigned. [The native mapping](native-edit-mapping.json)
-accepts no automated ERRANT category as rule truth; native token coordinates
-and alternate annotators remain available for contextual human review. The
+native-pair correspondence and predeclared group uncertainty. The original
+pilot's independent human review remains unfinished. Later limited human scopes
+and completed agent development batches retain their separate identities and
+limits in the [autonomous completion record](../reviews/2026-10-16-completion/README.md)
+and the session records linked by the protocol. They do not establish general
+human annotation, agreement, or usefulness outcomes.
+
+[The native mapping](native-edit-mapping.json) accepts no automated ERRANT
+category as rule truth; native token coordinates and alternate annotators
+remain available for contextual human review. The
 [ERRANT upstream description](https://github.com/chrisjbryant/errant) distinguishes
 revision edit extraction/classification from the native annotator identity.
 Independent human review, meaning judgments, holdout results and promotion

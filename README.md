@@ -20,6 +20,21 @@ Overused vocabulary, structural clichés, promotional language, and careless mar
 - 🚀 Fast, parallel file processing
 - 🧭 Directory discovery respects `.gitignore` patterns
 
+## Current status
+
+The autonomous merge work is complete on `master`. Its
+[completion record](https://github.com/johnmulder/proseprobe/blob/master/quality/reviews/2026-10-16-completion/README.md)
+preserves the engineering evidence and evaluation limits. The October 25, 2026
+source preflight at `2fff536944bb91dff0d5012625b337b2f6979bba` passed 3,996 tests,
+quality gates, and isolated package checks; the same commit passed the
+[hosted CI matrix](https://github.com/johnmulder/proseprobe/actions/runs/39544639711).
+
+Independent human annotation and suggestion-usefulness evaluation remain
+unfinished. Curated regressions and agent reviews do not establish those human
+outcomes. Publication is also pending; the
+[release status](https://github.com/johnmulder/proseprobe/blob/master/RELEASE_BLOCKERS.md)
+separates verified preparation from the remaining release work.
+
 ## Installation
 
 ProseProbe has not been published to PyPI. Install the current source revision
