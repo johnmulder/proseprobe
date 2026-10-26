@@ -255,6 +255,12 @@ minimum_severity = "warning"
 min_confidence = "low"  # low, medium, high
 ```
 
+Exclusion globs match whole path components: `*`, `?`, and bracket expressions
+stay within one component; `**` matches zero or more components. A trailing `/`
+includes all descendants. A leading `/` anchors an exclusion to each supplied
+scan root; other patterns match at any depth. An explicit file's parent directory
+is a scan root. Explicit files still respect configured exclusions.
+
 Severity overrides use a nested table:
 
 ```toml

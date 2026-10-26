@@ -141,6 +141,13 @@ exclude = ["venv/**", ".venv/**", "node_modules/**", ".git/**"]
 `include` controls files discovered from directory arguments. An explicitly
 named file bypasses `include` and `.gitignore`, but still respects `exclude`.
 
+`exclude` matches path components. `*`, `?`, and bracket expressions stay within
+one component; `**` matches zero or more components. A trailing `/` excludes a
+directory and its descendants. Patterns without a leading `/` match at any depth.
+A leading `/` anchors the pattern to each supplied scan root: `/docs/**` excludes
+root `docs/` descendants while retaining `nested/docs/` files. The parent directory
+of an explicitly named file is a scan root.
+
 ### Rule Selection
 
 ```toml

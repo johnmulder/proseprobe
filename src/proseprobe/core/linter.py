@@ -105,12 +105,15 @@ class FileDiscovery:
                 continue
 
             anchored = pattern.startswith("/")
-            if anchored:
-                pattern = pattern.lstrip("/")
-
             # Treat directory patterns as recursive globs
             if pattern.endswith("/"):
                 pattern = pattern + "**"
+            if pattern.endswith("/**"):
+                pattern = pattern + "/*"
+            if anchored:
+                pattern = pattern.lstrip("/")
+            elif not pattern.startswith("**/"):
+                pattern = f"**/{pattern}"
 
             candidates = rel_candidates if anchored else [*rel_candidates, file]
             if self._match_pattern_any(candidates, pattern):
@@ -121,10 +124,23 @@ class FileDiscovery:
     @staticmethod
     def _match_pattern_any(candidates: list[Path], pattern: str) -> bool:
         """Match a glob pattern against multiple candidates."""
+        pattern_parts = Path(pattern).parts
         for candidate in candidates:
-            if candidate.match(pattern):
-                return True
-            if not pattern.startswith("**/") and candidate.match(f"**/{pattern}"):
+            parts = candidate.parts
+            # Track how many path components the pattern has matched.
+            positions = {0}
+            for part in pattern_parts:
+                if part == "**":
+                    positions = set(range(min(positions), len(parts) + 1))
+                else:
+                    positions = {
+                        index + 1
+                        for index in positions
+                        if index < len(parts) and fnmatch.fnmatch(parts[index], part)
+                    }
+                if not positions:
+                    break
+            if len(parts) in positions:
                 return True
         return False
 
