@@ -33,14 +33,14 @@ The private pending PyPI publisher has not been verified.
   the notes against the final diff. Update README installation guidance to the
   intended PyPI, pipx, and `v0.1.0` pre-commit commands at the final release
   candidate stage.
-- [ ] Freeze that final clean commit and confirm `master` matches
-  `origin/master`. Repeat the commit-sensitive local checks and require the
+- [ ] Freeze that final clean commit and confirm `main` matches
+  `origin/main`. Repeat the commit-sensitive local checks and require the
   complete hosted CI matrix for the same final commit:
 
   ```console
   git status --short --branch
   git rev-parse HEAD
-  git rev-parse origin/master
+  git rev-parse origin/main
   make check dogfood rule-quality rule-quality-regression nfr-check
   ```
 

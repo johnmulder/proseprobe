@@ -39,7 +39,7 @@ dependencies = []
 Homepage = "https://github.com/johnmulder/proseprobe"
 Repository = "https://github.com/johnmulder/proseprobe"
 Issues = "https://github.com/johnmulder/proseprobe/issues"
-Changelog = "https://github.com/johnmulder/proseprobe/blob/master/CHANGELOG.md"
+Changelog = "https://github.com/johnmulder/proseprobe/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 dev = [
