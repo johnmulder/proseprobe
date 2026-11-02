@@ -457,7 +457,7 @@ def test_readme_links_agent_integration_guide() -> None:
 
     assert (
         "[Agent integration guide](https://github.com/johnmulder/proseprobe/"
-        "blob/master/docs/agent-integration.md)" in readme
+        "blob/main/docs/agent-integration.md)" in readme
     )
 
 
@@ -467,7 +467,7 @@ def test_readme_documents_portable_agent_skill() -> None:
 
     for statement in (
         "[Portable Agent Skill](https://github.com/johnmulder/proseprobe/"
-        "blob/master/skills/proseprobe/SKILL.md)",
+        "blob/main/skills/proseprobe/SKILL.md)",
         "The `skills/proseprobe/` directory is the copyable distribution unit.",
         "Install the `proseprobe` executable separately before using the skill.",
     ):
@@ -481,7 +481,7 @@ def test_readme_documents_codex_plugin_marketplace() -> None:
 
     for statement in (
         "[Codex plugin marketplace](https://github.com/johnmulder/proseprobe/"
-        "blob/master/.agents/plugins/marketplace.json)",
+        "blob/main/.agents/plugins/marketplace.json)",
         'codex plugin marketplace add "$PWD/.agents/plugins"',
         "codex plugin add proseprobe@proseprobe",
         "The Codex wrapper is not included in the Python wheel.",

@@ -2,8 +2,8 @@
 
 A Unix-style linter for common prose, documentation, and Markdown problems.
 
-[![CI](https://github.com/johnmulder/proseprobe/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/johnmulder/proseprobe/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/johnmulder/proseprobe/blob/master/LICENSE)
+[![CI](https://github.com/johnmulder/proseprobe/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/johnmulder/proseprobe/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/johnmulder/proseprobe/blob/main/LICENSE)
 
 ## Overview
 
@@ -22,8 +22,9 @@ Overused vocabulary, structural clichés, promotional language, and careless mar
 
 ## Current status
 
-The autonomous merge work is complete on `master`. Its
-[completion record](https://github.com/johnmulder/proseprobe/blob/master/quality/reviews/2026-10-16-completion/README.md)
+The autonomous merge work was completed on `master`; current development uses
+`main`. The
+[completion record](https://github.com/johnmulder/proseprobe/blob/main/quality/reviews/2026-10-16-completion/README.md)
 preserves the engineering evidence and evaluation limits. The October 25, 2026
 source preflight at `2fff536944bb91dff0d5012625b337b2f6979bba` passed 3,996 tests,
 quality gates, and isolated package checks; the same commit passed the
@@ -32,7 +33,7 @@ quality gates, and isolated package checks; the same commit passed the
 Independent human annotation and suggestion-usefulness evaluation remain
 unfinished. Curated regressions and agent reviews do not establish those human
 outcomes. Publication is also pending; the
-[release status](https://github.com/johnmulder/proseprobe/blob/master/RELEASE_BLOCKERS.md)
+[release status](https://github.com/johnmulder/proseprobe/blob/main/RELEASE_BLOCKERS.md)
 separates verified preparation from the remaining release work.
 
 ## Installation
@@ -53,7 +54,7 @@ proseprobe explain V001
 ```
 
 See the
-[configuration guide](https://github.com/johnmulder/proseprobe/blob/master/docs/configuration.md)
+[configuration guide](https://github.com/johnmulder/proseprobe/blob/main/docs/configuration.md)
 for watch mode, standard input, baselines, filters, output formats, and
 integrations.
 
@@ -103,7 +104,7 @@ ignore = ["T001", "T005"]
 ```
 
 The
-[configuration reference](https://github.com/johnmulder/proseprobe/blob/master/docs/configuration.md)
+[configuration reference](https://github.com/johnmulder/proseprobe/blob/main/docs/configuration.md)
 documents every setting, profile, suppression, precedence rule, and exit code.
 
 ## Development
@@ -129,11 +130,11 @@ membership, and run `make rule-docs`. Do not edit content between
 
 ## Documentation
 
-- [Technical specification](https://github.com/johnmulder/proseprobe/blob/master/SPEC.md)
-- [Rule reference](https://github.com/johnmulder/proseprobe/blob/master/docs/rules.md)
-- [Configuration reference](https://github.com/johnmulder/proseprobe/blob/master/docs/configuration.md)
-- [Agent integration guide](https://github.com/johnmulder/proseprobe/blob/master/docs/agent-integration.md)
-- [Portable Agent Skill](https://github.com/johnmulder/proseprobe/blob/master/skills/proseprobe/SKILL.md)
+- [Technical specification](https://github.com/johnmulder/proseprobe/blob/main/SPEC.md)
+- [Rule reference](https://github.com/johnmulder/proseprobe/blob/main/docs/rules.md)
+- [Configuration reference](https://github.com/johnmulder/proseprobe/blob/main/docs/configuration.md)
+- [Agent integration guide](https://github.com/johnmulder/proseprobe/blob/main/docs/agent-integration.md)
+- [Portable Agent Skill](https://github.com/johnmulder/proseprobe/blob/main/skills/proseprobe/SKILL.md)
 
 The `skills/proseprobe/` directory is the copyable distribution unit. Copy it
 into the skills location documented by your agent.
@@ -144,7 +145,7 @@ metadata.
 ### Codex plugin marketplace
 
 Codex users can install the same skill through the
-[Codex plugin marketplace](https://github.com/johnmulder/proseprobe/blob/master/.agents/plugins/marketplace.json) checked into this
+[Codex plugin marketplace](https://github.com/johnmulder/proseprobe/blob/main/.agents/plugins/marketplace.json) checked into this
 repository. From the root of a cloned checkout, run:
 
 ```bash
@@ -159,5 +160,5 @@ Start a new Codex thread after installation so it loads the skill.
 ## License
 
 MIT License. See the
-[license text](https://github.com/johnmulder/proseprobe/blob/master/LICENSE)
+[license text](https://github.com/johnmulder/proseprobe/blob/main/LICENSE)
 for details.
