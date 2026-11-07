@@ -22,12 +22,13 @@ Overused vocabulary, structural clichés, promotional language, and careless mar
 
 ## Current status
 
-The autonomous merge work was completed on `master`; current development uses
-`main`. The
-[completion record](https://github.com/johnmulder/proseprobe/blob/main/quality/reviews/2026-10-16-completion/README.md)
-preserves the engineering evidence and evaluation limits. The October 25, 2026
-source preflight at `2fff536944bb91dff0d5012625b337b2f6979bba` passed 3,996 tests,
-quality gates, and isolated package checks; the same commit passed the
+Current development uses `main`. The autonomous merge work finished on
+`master`, with engineering evidence and evaluation limits in the
+[completion record](https://github.com/johnmulder/proseprobe/blob/main/quality/reviews/2026-10-16-completion/README.md).
+
+On October 25, 2026, the source preflight at
+`2fff536944bb91dff0d5012625b337b2f6979bba` passed 3,996 tests, quality gates, and
+isolated package checks. That commit also passed the
 [hosted CI matrix](https://github.com/johnmulder/proseprobe/actions/runs/39544639711).
 
 Independent human annotation and suggestion-usefulness evaluation remain
